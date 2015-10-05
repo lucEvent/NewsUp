@@ -1,0 +1,123 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <HorizontalScrollView
+        android:id="@+id/tabbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
+
+        <LinearLayout
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#AA888888"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/icon_main"
+                style="@style/settings_tab_icon"
+                android:tag="-1" />
+
+            <ImageButton
+                android:id="@+id/icon_elpais"
+                style="@style/settings_tab_icon"
+                android:tag="0" />
+
+            <ImageButton
+                android:id="@+id/icon_as"
+                style="@style/settings_tab_icon"
+                android:tag="1" />
+
+            <ImageButton
+                android:id="@+id/icon_20m"
+                style="@style/settings_tab_icon"
+                android:tag="2" />
+
+            <ImageButton
+                android:id="@+id/icon_sport"
+                style="@style/settings_tab_icon"
+                android:tag="3" />
+
+            <ImageButton
+                android:id="@+id/icon_hs"
+                style="@style/settings_tab_icon"
+                android:tag="4" />
+
+            <ImageButton
+                android:id="@+id/icon_svd"
+                style="@style/settings_tab_icon"
+                android:tag="5" />
+
+            <ImageButton
+                android:id="@+id/icon_em"
+                style="@style/settings_tab_icon"
+                android:tag="6" />
+
+            <ImageButton
+                android:id="@+id/icon_hp"
+                style="@style/settings_tab_icon"
+                android:tag="7" />
+
+            <ImageButton
+                android:id="@+id/icon_il"
+                style="@style/settings_tab_icon"
+                android:tag="8" />
+
+            <ImageButton
+                android:id="@+id/icon_dt"
+                style="@style/settings_tab_icon"
+                android:tag="9" />
+
+            <ImageButton
+                android:id="@+id/icon_tl"
+                style="@style/settings_tab_icon"
+                android:tag="10" />
+
+            <ImageButton
+                android:id="@+id/icon_lh"
+                style="@style/settings_tab_icon"
+                android:tag="11" />
+
+            <ImageButton
+                android:id="@+id/icon_x"
+                style="@style/settings_tab_icon"
+                android:tag="12" />
+
+            <ImageButton
+                android:id="@+id/icon_eal"
+                style="@style/settings_tab_icon"
+                android:tag="13" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <TextView
+        android:id="@+id/tabtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tabbar"
+        android:background="@color/app"
+        android:drawableBottom="@drawable/bg_pressed"
+        android:padding="15dip"
+        android:text="Title"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textStyle="bold" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="2dip"
+        android:layout_below="@id/tabtitle"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:background="@color/divider_light"
+        android:translationY="-10dip" />
+
+    <FrameLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/divider"></FrameLayout>
+
+</RelativeLayout>

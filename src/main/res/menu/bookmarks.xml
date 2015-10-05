@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.newsup.BookmarksActivity">
+
+    <item
+        android:id="@+id/action_settings"
+        android:icon="@drawable/ic_clear_all"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:title="Clear all" />
+</menu>
