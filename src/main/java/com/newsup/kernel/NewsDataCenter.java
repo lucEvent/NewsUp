@@ -158,7 +158,11 @@ public class NewsDataCenter implements State {
                     // Si se ha podido leer el contenido
                     if (N.content != null) {
                         // insertar en la BD
-                        dbmanager.insertNews(site.code, N);
+                        try {
+                            dbmanager.insertNews(site.code, N);
+                        } catch (Exception e) {
+                            debug("[Error al insertar la noticia en la BD");
+                        }
                         // guardar el contenido en disco
                         sdmanager.saveNews(N);
                     } else {

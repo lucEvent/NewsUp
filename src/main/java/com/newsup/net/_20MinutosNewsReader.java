@@ -8,11 +8,6 @@ import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
 import com.newsup.kernel.list.Tags;
 
-import org.jsoup.Jsoup;
-import org.jsoup.select.Elements;
-
-import java.util.ArrayList;
-
 public class _20MinutosNewsReader extends NewsReader {
 
     public _20MinutosNewsReader(Handler handler, Context context) {
@@ -81,7 +76,7 @@ public class _20MinutosNewsReader extends NewsReader {
         SECTIONS.add(new Section("LEÓN", 0, "http://www.20minutos.es/rss/leon"));
         SECTIONS.add(new Section("LLEIDA", 0, "http://www.20minutos.es/rss/lleida"));
         SECTIONS.add(new Section("LOGROÑO", 0, "http://www.20minutos.es/rss/logrono"));
-        SECTIONS.add(new Section("LUGO", 0, "http://www.20minutos.es/rss/lugo"));
+        SECTIONS.add(new Section("LUGO", 0, "http://www.20  minutos.es/rss/lugo"));
         SECTIONS.add(new Section("MADRID", 0, "http://www.20minutos.es/rss/madrid"));
         SECTIONS.add(new Section("MÁLAGA", 0, "http://www.20minutos.es/rss/malaga"));
         SECTIONS.add(new Section("MARBELLA", 0, "http://www.20minutos.es/rss/marbella"));
@@ -114,8 +109,16 @@ public class _20MinutosNewsReader extends NewsReader {
     }
 
     protected News getNewsLastFilter(String title, String link, String description, String date, Tags categories) {
+        org.jsoup.nodes.Element root = org.jsoup.Jsoup.parse(description).select("body").get(0);
+        org.jsoup.select.Elements elements = root.children();
+        int last = elements.indexOf(root.select("[clear=all]").get(0));
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < last; ++i) {
+            sb.append(elements.get(i).outerHtml());
+        }
+
         News result = new News(title, link, "", date, categories);
-        result.content = description;
+        result.content = sb.toString();
         return result;
     }
 

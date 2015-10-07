@@ -1,5 +1,6 @@
 package com.newsup;
 
+import android.app.ActionBar;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -116,11 +117,12 @@ public class Main extends ListActivity implements State {
         newslister.clear();
 
         Site csite = sites.get(currentSite);
-        debug("[#] Settings Up " + csite.name.toUpperCase());
         datamanager.getNews(csite, sections);
         setTitle(csite.name);
         try {
-            getActionBar().setIcon(Drawable.createFromStream(getAssets().open(csite.name + ".png"), null));
+            ActionBar actionBar = getActionBar();
+            actionBar.setBackgroundDrawable(csite.color);
+            actionBar.setIcon(Drawable.createFromStream(getAssets().open(csite.name + ".png"), null));
         } catch (IOException e) {
             debug("Error setting Site Icon in the Bar");
         }
@@ -171,10 +173,11 @@ public class Main extends ListActivity implements State {
     }
 
     private void displayNews(News news) {
-        getActionBar().hide();
+        if (newsView.displayNews(news)) {
+            getActionBar().hide();
 
-        displayingNews = true;
-        newsView.displayNews(news);
+            displayingNews = true;
+        }
     }
 
     private final Handler handler = new Handler() {

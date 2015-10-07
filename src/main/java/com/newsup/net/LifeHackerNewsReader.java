@@ -21,7 +21,9 @@ public class LifeHackerNewsReader extends NewsReader {
     @Override
     protected News getNewsLastFilter(String title, String link, String description, String date, Tags categories) {
         News res = new News(title, link, "", date, categories);
-        res.content = description;
+        org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parseBodyFragment(description);
+        doc.select("img").last().remove();
+        res.content = doc.html();
         return res;
     }
 

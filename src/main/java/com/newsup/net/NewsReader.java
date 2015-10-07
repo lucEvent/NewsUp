@@ -72,6 +72,7 @@ public abstract class NewsReader implements State {
         int date2hash = "dc:date".hashCode();
         int descrhash = "description".hashCode();
         int categhash = "category".hashCode();
+        int guidhash = "guid".hashCode();
 
         Elements items = doc.getElementsByTag("item");
 
@@ -79,6 +80,8 @@ public abstract class NewsReader implements State {
             String title = "", link = "", description = "", date = "";
             ArrayList<String> categoriesList = new ArrayList<String>();
             Elements props = item.getAllElements();
+
+            //TODO Arraylist de opciones que se van quitando y lo hace mas eficiente
             for (org.jsoup.nodes.Element prop : props) {
                 int taghash = prop.tagName().hashCode();
                 if (taghash == titlehash) {
@@ -99,6 +102,12 @@ public abstract class NewsReader implements State {
                 }
                 if (taghash == categhash) {
                     categoriesList.add(prop.text());
+                    continue;
+                }
+                if (taghash == guidhash) {
+                    if (link.isEmpty()) {
+                        link = prop.text();
+                    }
                 }
             }
 
@@ -117,7 +126,8 @@ public abstract class NewsReader implements State {
             return Jsoup.connect(news.link).get();
         } catch (Exception e) {
             debug("[ERROR No se puede leer la pagina] id:" + news.id + " tit:" + news.title);
-            e.printStackTrace();
+            debug("[### URL ###] tit:" + news.link);
+            //         e.printStackTrace();
             return null;
         }
     }

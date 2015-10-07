@@ -51,9 +51,12 @@ public class BookmarksActivity extends ListActivity implements State {
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
-        getActionBar().hide();
-        displayingNews = true;
-        newsView.displayNews((News) getListAdapter().getItem(position));
+        if (newsView.displayNews((News) getListAdapter().getItem(position))) {
+            getActionBar().hide();
+
+            displayingNews = true;
+        }
+
     }
 
 

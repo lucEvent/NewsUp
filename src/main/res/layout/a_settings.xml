@@ -89,6 +89,26 @@
                 android:id="@+id/icon_eal"
                 style="@style/settings_tab_icon"
                 android:tag="13" />
+
+            <ImageButton
+                android:id="@+id/icon_ht"
+                style="@style/settings_tab_icon"
+                android:tag="14" />
+
+            <ImageButton
+                android:id="@+id/icon_ted"
+                style="@style/settings_tab_icon"
+                android:tag="15" />
+
+            <ImageButton
+                android:id="@+id/icon_cnn"
+                style="@style/settings_tab_icon"
+                android:tag="16" />
+
+            <ImageButton
+                android:id="@+id/icon_bcc"
+                style="@style/settings_tab_icon"
+                android:tag="17" />
         </LinearLayout>
     </HorizontalScrollView>
 

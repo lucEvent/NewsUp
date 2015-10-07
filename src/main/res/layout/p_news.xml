@@ -2,11 +2,14 @@
     android:id="@+id/layoutcontent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:animationCache="true"
     android:background="#FFFFFFFF">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_above="@+id/buttons">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -32,6 +35,7 @@
     </ScrollView>
 
     <LinearLayout
+        android:id="@+id/buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

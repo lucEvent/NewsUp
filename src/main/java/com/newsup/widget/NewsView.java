@@ -9,8 +9,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.newsup.R;
 import com.newsup.kernel.News;
@@ -23,7 +25,8 @@ public class NewsView {
     private NewsDataCenter dataCenter;
     private Handler handler;
 
-    private RelativeLayout view;
+    private View view;
+    private LinearLayout buttons;
 
     private WebView newsView;
     private TextView title;
@@ -34,12 +37,13 @@ public class NewsView {
         this.dataCenter = dataCenter;
         this.handler = handler;
 
-        view = (RelativeLayout) context.findViewById(R.id.layoutcontent);
+        view = context.findViewById(R.id.layoutcontent);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
             }
         });
+        buttons = (LinearLayout) context.findViewById(R.id.buttons);
 
         newsView = (WebView) view.findViewById(R.id.content);
         newsView.setOnTouchListener(onNewsViewTouchListener);
@@ -59,15 +63,23 @@ public class NewsView {
 
     private News currentNews;
 
-    public void displayNews(News news) {
+    private final String css = "<style>img, iframe { width: 100%; height: auto; }</style>";
+
+    public boolean displayNews(News news) {
         this.currentNews = news;
 
+        if (news.content == null) {
+            Toast.makeText(context, "No hay contenido", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         title.setText(news.title);
-        newsView.loadData(news.content, "text/html; charset=UTF-8", null);
+        newsView.loadData(css + news.content, "text/html; charset=UTF-8", null);
 
         setBookmarkButtonImage();
 
         view.setVisibility(RelativeLayout.VISIBLE);
+        return true;
     }
 
     private void setBookmarkButtonImage() {
@@ -128,9 +140,7 @@ public class NewsView {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                bshare.setVisibility(ImageButton.VISIBLE);
-                bbookmark.setVisibility(ImageButton.VISIBLE);
-                bclose.setVisibility(ImageButton.VISIBLE);
+                buttons.setVisibility(View.VISIBLE);
 
                 mstime = DEFAULT_WAITING_TIME;
                 if (timer.getState() == Thread.State.NEW) {
@@ -141,7 +151,7 @@ public class NewsView {
                     }
                 }
             }
-            return true;
+            return false;
         }
 
         Thread timer = new Thread(new Runnable() {
@@ -161,9 +171,8 @@ public class NewsView {
                         mainThread.post(new Runnable() {
                             @Override
                             public void run() {
-                                bbookmark.setVisibility(ImageButton.INVISIBLE);
-                                bshare.setVisibility(ImageButton.INVISIBLE);
-                                bclose.setVisibility(ImageButton.INVISIBLE);
+                                buttons.setVisibility(View.GONE);
+                                ;
                             }
                         });
                     }

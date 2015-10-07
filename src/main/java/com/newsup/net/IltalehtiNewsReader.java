@@ -10,6 +10,7 @@ import com.newsup.kernel.list.SectionList;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.net.URL;
@@ -56,13 +57,19 @@ public class IltalehtiNewsReader extends NewsReader {
         if (doc == null) return news;
 
         try {
-            org.jsoup.nodes.Element element = doc.select(".article-body").get(0);
+            org.jsoup.nodes.Element root = doc.getElementsByTag("isense").get(0);
+            Elements elements = root.children();
+            int last = elements.indexOf(root.getElementsByClass("author").get(0));
+            debug(last + "");
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i <= last; ++i) {
+                sb.append(elements.get(i).outerHtml());
+            }
 
-            news.content = element.html();
+            news.content = sb.toString();
 
         } catch (Exception e) {
             debug("[ERROR La seleccion del articulo no se ha encontrado] tit:" + news.title);
-            e.printStackTrace();
         }
         return news;
     }

@@ -7,5 +7,6 @@
     <string name="action_bookmarks">Bookmarks</string>
     <string name="title_activity_settings">Configuration</string>
     <string name="title_activity_bookmarks">Bookmark news</string>
+    <string name="title_activity_debug">DebugActivity</string>
 
 </resources>
