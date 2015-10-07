@@ -60,12 +60,11 @@ public class IltalehtiNewsReader extends NewsReader {
             org.jsoup.nodes.Element root = doc.getElementsByTag("isense").get(0);
             Elements elements = root.children();
             int last = elements.indexOf(root.getElementsByClass("author").get(0));
-            debug(last + "");
+
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i <= last; ++i) {
                 sb.append(elements.get(i).outerHtml());
             }
-
             news.content = sb.toString();
 
         } catch (Exception e) {

@@ -15,100 +15,85 @@
             android:background="#AA888888"
             android:orientation="horizontal">
 
-            <ImageButton
-                android:id="@+id/icon_main"
-                style="@style/settings_tab_icon"
-                android:tag="-1" />
+
 
             <ImageButton
-                android:id="@+id/icon_elpais"
-                style="@style/settings_tab_icon"
-                android:tag="0" />
+                android:id="@+id/icon0"
+                style="@style/settings_tab_icon" />
 
             <ImageButton
-                android:id="@+id/icon_as"
-                style="@style/settings_tab_icon"
-                android:tag="1" />
+                android:id="@+id/icon1"
+                style="@style/settings_tab_icon" />
 
             <ImageButton
-                android:id="@+id/icon_20m"
-                style="@style/settings_tab_icon"
-                android:tag="2" />
+                android:id="@+id/icon2"
+                style="@style/settings_tab_icon" />
 
             <ImageButton
-                android:id="@+id/icon_sport"
-                style="@style/settings_tab_icon"
-                android:tag="3" />
+                android:id="@+id/icon3"
+                style="@style/settings_tab_icon" />
 
             <ImageButton
-                android:id="@+id/icon_hs"
-                style="@style/settings_tab_icon"
-                android:tag="4" />
+                android:id="@+id/icon4"
+                style="@style/settings_tab_icon" />
 
             <ImageButton
-                android:id="@+id/icon_svd"
-                style="@style/settings_tab_icon"
-                android:tag="5" />
+                android:id="@+id/icon5"
+                style="@style/settings_tab_icon" />
 
             <ImageButton
-                android:id="@+id/icon_em"
-                style="@style/settings_tab_icon"
-                android:tag="6" />
+                android:id="@+id/icon6"
+                style="@style/settings_tab_icon" />
 
             <ImageButton
-                android:id="@+id/icon_hp"
-                style="@style/settings_tab_icon"
-                android:tag="7" />
+                android:id="@+id/icon7"
+                style="@style/settings_tab_icon" />
 
             <ImageButton
-                android:id="@+id/icon_il"
-                style="@style/settings_tab_icon"
-                android:tag="8" />
+                android:id="@+id/icon8"
+                style="@style/settings_tab_icon" />
 
             <ImageButton
-                android:id="@+id/icon_dt"
-                style="@style/settings_tab_icon"
-                android:tag="9" />
+                android:id="@+id/icon9"
+                style="@style/settings_tab_icon" />
 
             <ImageButton
-                android:id="@+id/icon_tl"
-                style="@style/settings_tab_icon"
-                android:tag="10" />
+                android:id="@+id/icon10"
+                style="@style/settings_tab_icon" />
 
             <ImageButton
-                android:id="@+id/icon_lh"
-                style="@style/settings_tab_icon"
-                android:tag="11" />
+                android:id="@+id/icon11"
+                style="@style/settings_tab_icon" />
 
             <ImageButton
-                android:id="@+id/icon_x"
-                style="@style/settings_tab_icon"
-                android:tag="12" />
+                android:id="@+id/icon12"
+                style="@style/settings_tab_icon" />
 
             <ImageButton
-                android:id="@+id/icon_eal"
-                style="@style/settings_tab_icon"
-                android:tag="13" />
+                android:id="@+id/icon13"
+                style="@style/settings_tab_icon" />
 
             <ImageButton
-                android:id="@+id/icon_ht"
-                style="@style/settings_tab_icon"
-                android:tag="14" />
+                android:id="@+id/icon14"
+                style="@style/settings_tab_icon" />
 
             <ImageButton
-                android:id="@+id/icon_ted"
-                style="@style/settings_tab_icon"
-                android:tag="15" />
+                android:id="@+id/icon15"
+                style="@style/settings_tab_icon" />
 
             <ImageButton
-                android:id="@+id/icon_cnn"
-                style="@style/settings_tab_icon"
-                android:tag="16" />
+                android:id="@+id/icon16"
+                style="@style/settings_tab_icon" />
 
             <ImageButton
-                android:id="@+id/icon_bcc"
-                style="@style/settings_tab_icon"
-                android:tag="17" />
+                android:id="@+id/icon17"
+                style="@style/settings_tab_icon" />
+
+            <ImageButton
+                android:id="@+id/icon18"
+                style="@style/settings_tab_icon" />
+
+
         </LinearLayout>
     </HorizontalScrollView>
 

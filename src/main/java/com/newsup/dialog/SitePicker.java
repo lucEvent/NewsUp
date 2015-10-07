@@ -1,14 +1,12 @@
 package com.newsup.dialog;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Handler;
-import android.util.Log;
 
 import com.newsup.kernel.list.SiteList;
-import com.newsup.widget.SitePickerLister;
+import com.newsup.widget.SiteLister;
 
 
 public class SitePicker extends AlertDialog.Builder implements DialogInterface.OnClickListener, DialogState {
@@ -20,8 +18,9 @@ public class SitePicker extends AlertDialog.Builder implements DialogInterface.O
         super(context);
         this.handler = handler;
 
-        this.setAdapter(new SitePickerLister(context, sites), this);
+        this.setAdapter(new SiteLister(context, sites), this);
         this.dialog = create();
+        dialog.getListView().setDivider(null);
     }
 
     @Override

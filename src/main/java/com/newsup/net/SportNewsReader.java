@@ -24,9 +24,9 @@ public class SportNewsReader extends NewsReader {
         SECTIONS.add(new Section("MADRID", -1, "http://www.sport.es/es/rss/real-madrid/rss.xml"));
         SECTIONS.add(new Section("ESPANYOL", -1, "http://www.sport.es/es/rss/espanyol/rss.xml"));
         SECTIONS.add(new Section("LIGA BBVA", -1, "http://www.sport.es/es/rss/liga-bbva/rss.xml"));
-        SECTIONS.add(new Section("LIGA ADELANTE", 0, "http://www.sport.es/es/rss/liga-adelante/rss.xml"));
+        SECTIONS.add(new Section("LIGA ADELANTE", -1, "http://www.sport.es/es/rss/liga-adelante/rss.xml"));
         SECTIONS.add(new Section("CHAMPIONS LEAGUE", -1, "http://www.sport.es/es/rss/champions/rss.xml"));
-        SECTIONS.add(new Section("EUROPA LEAGUE", 0, "http://www.sport.es/es/rss/europa-league/rss.xml"));
+        SECTIONS.add(new Section("EUROPA LEAGUE", -1, "http://www.sport.es/es/rss/europa-league/rss.xml"));
         SECTIONS.add(new Section("COPA DEL REY", -1, "http://www.sport.es/es/rss/copa-del-rey/rss.xml"));
         SECTIONS.add(new Section("SELECCIÓN", -1, "http://www.sport.es/es/rss/seleccion/rss.xml"));
         SECTIONS.add(new Section("FUTBOL CATALÀ", -1, "http://www.sport.es/es/rss/futbol-catala/rss.xml"));

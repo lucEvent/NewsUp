@@ -32,7 +32,7 @@ public final class SettingsActivity extends Activity implements DialogState {
     private TextView tabtitle;
     private ImageButton[] tabs;
 
-    private int currentTab = -999;
+    private int siteSelectedpos = -9999;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,35 +46,51 @@ public final class SettingsActivity extends Activity implements DialogState {
 
         setSitesTabBar();
 
-        displayTab(-1);
+        displayTab(0, -1);
     }
 
     private void setSitesTabBar() {
-        tabs = new ImageButton[sites.size() + 1];
-        tabs[0] = (ImageButton) findViewById(R.id.icon_main);
-        tabs[1] = (ImageButton) findViewById(R.id.icon_elpais);
-        tabs[2] = (ImageButton) findViewById(R.id.icon_as);
-        tabs[3] = (ImageButton) findViewById(R.id.icon_20m);
-        tabs[4] = (ImageButton) findViewById(R.id.icon_sport);
-        tabs[5] = (ImageButton) findViewById(R.id.icon_hs);
-        tabs[6] = (ImageButton) findViewById(R.id.icon_svd);
-        tabs[7] = (ImageButton) findViewById(R.id.icon_em);
-        tabs[8] = (ImageButton) findViewById(R.id.icon_hp);
-        tabs[9] = (ImageButton) findViewById(R.id.icon_il);
-        tabs[10] = (ImageButton) findViewById(R.id.icon_dt);
-        tabs[11] = (ImageButton) findViewById(R.id.icon_tl);
-        tabs[12] = (ImageButton) findViewById(R.id.icon_lh);
-        tabs[13] = (ImageButton) findViewById(R.id.icon_x);
-        tabs[14] = (ImageButton) findViewById(R.id.icon_eal);
-        tabs[15] = (ImageButton) findViewById(R.id.icon_ht);
-        tabs[16] = (ImageButton) findViewById(R.id.icon_ted);
-        tabs[17] = (ImageButton) findViewById(R.id.icon_cnn);
-        tabs[18] = (ImageButton) findViewById(R.id.icon_bcc);
+        debug("Num sites:" + sites.getNumSites());
+        tabs = new ImageButton[sites.getNumSites() + 1];
+        tabs[0] = (ImageButton) findViewById(R.id.icon0);
+
+        tabs[1] = (ImageButton) findViewById(R.id.icon1);
+        tabs[2] = (ImageButton) findViewById(R.id.icon2);
+        tabs[3] = (ImageButton) findViewById(R.id.icon3);
+        tabs[4] = (ImageButton) findViewById(R.id.icon4);
+        tabs[5] = (ImageButton) findViewById(R.id.icon5);
+
+        tabs[6] = (ImageButton) findViewById(R.id.icon6);
+
+        tabs[7] = (ImageButton) findViewById(R.id.icon7);
+        tabs[8] = (ImageButton) findViewById(R.id.icon8);
+        tabs[9] = (ImageButton) findViewById(R.id.icon9);
+
+        tabs[10] = (ImageButton) findViewById(R.id.icon10);
+        tabs[11] = (ImageButton) findViewById(R.id.icon11);
+        tabs[12] = (ImageButton) findViewById(R.id.icon12);
+        tabs[13] = (ImageButton) findViewById(R.id.icon13);
+
+        tabs[14] = (ImageButton) findViewById(R.id.icon14);
+        tabs[15] = (ImageButton) findViewById(R.id.icon15);
+        tabs[16] = (ImageButton) findViewById(R.id.icon16);
+        tabs[17] = (ImageButton) findViewById(R.id.icon17);
+        tabs[18] = (ImageButton) findViewById(R.id.icon18);
 
         try {
             tabs[0].setImageDrawable(Drawable.createFromStream(getAssets().open("home.png"), null));
-            for (int i = 0; i < sites.size(); ++i) {
-                tabs[i + 1].setImageDrawable(Drawable.createFromStream(getAssets().open(sites.get(i).name + ".png"), null));
+            tabs[0].setId(0);
+            tabs[0].setTag(0);
+            int tab = 1;
+            for (int sitepos = 0; sitepos < sites.size(); ++sitepos) {
+                Site site = sites.get(sitepos);
+                if (site.code != -1) {
+                    debug(tab + " Settings up " + site.name);
+                    tabs[tab].setImageDrawable(Drawable.createFromStream(getAssets().open(site.name + ".png"), null));
+                    tabs[tab].setId(tab);
+                    tabs[tab].setTag(sitepos);
+                    tab++;
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -82,30 +98,30 @@ public final class SettingsActivity extends Activity implements DialogState {
     }
 
     public void displayTab(View v) {
-        displayTab(Integer.parseInt((String) v.getTag()));
+        displayTab(v.getId(), (Integer) v.getTag());
     }
 
-    private void displayTab(int tab) {
-        if (tab == currentTab) {
+    private void displayTab(int tab, int siteSelectedpos) {
+        if (this.siteSelectedpos == siteSelectedpos) {
             return;
         }
         for (ImageButton icon : tabs) {
             icon.setSelected(false);
         }
-        tabs[tab + 1].setSelected(true);
+        tabs[tab].setSelected(true);
 
         View view;
-        if (tab == -1) {
+        if (tab == 0) {
             view = getLayoutInflater().inflate(R.layout.f_set_home, content, false);
 
             setMainSiteLogo(view, AppSettings.main_site_i);
             tabtitle.setText("Configuration Main page");
         } else {
             view = getLayoutInflater().inflate(R.layout.f_set_i, content, false);
-            tabtitle.setText("Configuration " + sites.get(tab).name);
+            tabtitle.setText("Configuration " + sites.get(siteSelectedpos).name);
         }
 
-        currentTab = tab;
+        this.siteSelectedpos = siteSelectedpos;
         content.removeAllViews();
         content.addView(view);
     }
@@ -117,16 +133,16 @@ public final class SettingsActivity extends Activity implements DialogState {
     private boolean selectSectionsOnMainPageWaiter;
 
     public void selectSectionsOnMainPage(View view) {
-        SiteSettings ssettings = data.getSettingsOf(sites.get(currentTab));
+        SiteSettings ssettings = data.getSettingsOf(sites.get(siteSelectedpos));
         Boolean[] bsections = Arrays.copyOfRange(ssettings.sectionsOnMain, 0, ssettings.sectionsOnMain.length);
-        new SectionPicker(this, sites.get(currentTab).getSections(), bsections, handler).show();
+        new SectionPicker(this, sites.get(siteSelectedpos).getSections(), bsections, handler).show();
         selectSectionsOnMainPageWaiter = true;
     }
 
     public void selectSectionsToSave(View view) {
-        SiteSettings ssettings = data.getSettingsOf(sites.get(currentTab));
+        SiteSettings ssettings = data.getSettingsOf(sites.get(siteSelectedpos));
         Boolean[] bsections = Arrays.copyOfRange(ssettings.sectionsToSave, 0, ssettings.sectionsToSave.length);
-        new SectionPicker(this, sites.get(currentTab).getSections(), bsections, handler).show();
+        new SectionPicker(this, sites.get(siteSelectedpos).getSections(), bsections, handler).show();
         selectSectionsOnMainPageWaiter = false;
     }
 
@@ -140,7 +156,7 @@ public final class SettingsActivity extends Activity implements DialogState {
                     data.setSettingsWith(AppSettings.MAIN_SITE_I, (Integer) msg.obj);
                     break;
                 case SECTIONS_PICKED:
-                    Site site = sites.get(currentTab);
+                    Site site = sites.get(siteSelectedpos);
                     Boolean[] schosen = (Boolean[]) msg.obj;
                     if (selectSectionsOnMainPageWaiter) {
                         site.settings.sectionsOnMain = schosen;

@@ -9,4 +9,11 @@
     <string name="title_activity_bookmarks">Bookmark news</string>
     <string name="title_activity_debug">DebugActivity</string>
 
+    <string name="spain">Spain</string>
+    <string name="sweden">Sweden</string>
+    <string name="finland">Finland</string>
+    <string name="international">International</string>
+    <string name="technology">Technology</string>
+
+
 </resources>

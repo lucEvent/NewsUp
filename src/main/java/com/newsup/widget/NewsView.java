@@ -172,7 +172,6 @@ public class NewsView {
                             @Override
                             public void run() {
                                 buttons.setVisibility(View.GONE);
-                                ;
                             }
                         });
                     }

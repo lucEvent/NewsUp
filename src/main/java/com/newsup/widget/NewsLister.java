@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.newsup.R;
-import com.newsup.kernel.Date;
 import com.newsup.kernel.News;
 import com.newsup.kernel.list.NewsList;
 
@@ -27,7 +26,7 @@ public class NewsLister extends ArrayAdapter<News> {
         News news = getItem(position);
 
         if (news.link == null) {
-            view = inflater.inflate(R.layout.i_group_header_list, parent, false);
+            view = inflater.inflate(R.layout.i_news_header, parent, false);
             ((TextView) view.findViewById(R.id.section_name)).setText(news.title);
         } else {
             view = inflater.inflate(R.layout.i_news, parent, false);

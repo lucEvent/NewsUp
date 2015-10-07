@@ -52,8 +52,6 @@ public class Main extends ListActivity implements State {
     private ListView drawerSiteList;
     private ListView drawerSectionList;
 
-    // **///
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

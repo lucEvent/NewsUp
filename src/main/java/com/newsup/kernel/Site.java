@@ -11,11 +11,18 @@ import com.newsup.settings.SiteSettings;
 
 public class Site extends IASite {
 
+    public static final int THEME_SPAIN = 0xFFEE3333;
+    public static final int THEME_SWEDEN = 0xFF006ca6;
+    public static final int THEME_FINLAND = 0xFF003580;
+    public static final int THEME_INTERNATIONAL = 0xFFDDDDDD;
+    public static final int THEME_TECHNOLOGY = 0xFF90c3d4;
+
     /**
      * Variables
      **/
     public final String name;
     public final ColorDrawable color;
+    public final ColorDrawable theme;
 
     public NewsList news;
     public NewsMap historial;
@@ -24,10 +31,11 @@ public class Site extends IASite {
 
     private NewsReader reader;
 
-    public Site(int code, String name, int color, NewsReader reader) {
+    public Site(int code, String name, int color, int theme, NewsReader reader) {
         super(code);
         this.name = name;
         this.color = new ColorDrawable(color);
+        this.theme = new ColorDrawable(theme);
         this.reader = reader;
         this.historial = new NewsMap();
     }

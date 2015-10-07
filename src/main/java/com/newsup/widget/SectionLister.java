@@ -1,6 +1,5 @@
 package com.newsup.widget;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,12 +23,23 @@ public class SectionLister extends ArrayAdapter<Section> {
 
     @Override
     public View getView(int position, View view, ViewGroup parent) {
-        if (view == null) {
-            view = inflater.inflate(R.layout.i_section, parent, false);
+         Section section = getItem(position);
+        if (section.level == 0) {
+            if (view == null || !view.hasOnClickListeners() || view.getId() != 0) {
+                view = inflater.inflate(R.layout.i_section_header, parent, false);
+                view.setId(0);
+            }
+        } else {
+            if (view == null || !view.hasOnClickListeners() || view.getId() != 1) {
+                view = inflater.inflate(R.layout.i_section, parent, false);
+                view.setId(1);
+            }
         }
-        Section section = getItem(position);
 
         ((TextView) view).setText(section.name);
+        if (section.link == null) {
+            view.setOnClickListener(null);
+        }
 
         return view;
     }
