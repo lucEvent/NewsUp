@@ -11,6 +11,7 @@ import com.newsup.settings.SiteSettings;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -34,11 +35,12 @@ public class SDManager {
             inputStream.close();
 
             news.content = new String(buff);
+        } catch (FileNotFoundException e) {
+            debug("[NO SE HA ENCONTRADO LA NOTICIA EN DISCO] news.id: " + news.id + " ##");
         } catch (Exception e) {
-            debug("Error en READNEWS" + news.id + "##");
+            debug("[Error en SDManager.readNews] news.id: " + news.id + " ##");
             e.printStackTrace();
         }
-
         return news;
     }
 

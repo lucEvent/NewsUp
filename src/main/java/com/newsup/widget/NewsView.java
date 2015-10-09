@@ -47,6 +47,8 @@ public class NewsView {
 
         newsView = (WebView) view.findViewById(R.id.content);
         newsView.setOnTouchListener(onNewsViewTouchListener);
+        newsView.getSettings().setJavaScriptEnabled(true);
+        newsView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
 
         title = (TextView) view.findViewById(R.id.title);
 

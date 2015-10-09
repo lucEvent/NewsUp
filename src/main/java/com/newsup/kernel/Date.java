@@ -11,11 +11,17 @@ public class Date {
 
         String[] items = date.split(" ");
         if (items.length == 1) {
-            // 2015-09-03T17:31:08+02:00
             year = Integer.parseInt(date.substring(0, 4));
             month = Integer.parseInt(date.substring(5, 7));
             day = Integer.parseInt(date.substring(8, 10));
-            time = timeToInt(date.substring(11, 19));
+
+            if (date.length() == 25) {
+                // 2015-09-03T17:31:08+02:00
+                time = timeToInt(date.substring(11, 19));
+            } else if (date.length() == 22) {
+                // 2015-10-08T16:29+02:00
+                time = timeToInt(date.substring(11, 16) + ":00");
+            }
 
         } else if (items.length == 2) {
             //2015-10-03 16:11:21

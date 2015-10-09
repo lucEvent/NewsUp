@@ -133,6 +133,11 @@ public abstract class NewsReader implements State {
     }
 
     protected Document getDocument(String rsslink) throws IOException {
+        try {
+            return Jsoup.connect(rsslink).get();
+        } catch (java.net.SocketTimeoutException e) {
+            debug("Fallo de la conexión. Intentando nuevamente");
+        }
         return Jsoup.connect(rsslink).get();
     }
 

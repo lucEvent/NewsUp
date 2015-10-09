@@ -46,7 +46,7 @@ public class SiteLister extends ArrayAdapter<Site> {
 
                 } catch (IOException e) {
                     debug("Error en SiteLister con posicion " + position);
-                    ((ImageView) view).setBackgroundResource(R.mipmap.ic_launcher);
+                    ((ImageView) view.findViewById(R.id.logo)).setBackgroundResource(R.mipmap.ic_launcher);
                 }
             }
             view.findViewById(R.id.idcolor).setBackgroundDrawable(site.theme);

@@ -24,7 +24,12 @@ public class SiteList extends ArrayList<Site> {
         add(new Site(code++, "Sport", 0xffeb3838, Site.THEME_SPAIN, new com.newsup.net.SportNewsReader(handler, context)));
 
         add(new Site(-1, context.getString(R.string.sweden), 0xFF3333EE, Site.THEME_SWEDEN, null));
+        add(new Site(code++, "Aftonbladet", 0xffffffff, Site.THEME_SWEDEN, new com.newsup.net.AftonbladetNewsReader(handler, context)));
+        add(new Site(code++, "Expressen", 0xffdb2727, Site.THEME_SWEDEN, new com.newsup.net.ExpressenNewsReader(handler, context)));
+        add(new Site(code++, "Dagens Nyheter", 0xffeb1c2a, Site.THEME_SWEDEN, new com.newsup.net.DagensNyheterNewsReader(handler, context)));
         add(new Site(code++, "Svenska Dagbladet", 0xfff5f5f5, Site.THEME_SWEDEN, new com.newsup.net.SvDNewsReader(handler, context)));
+        add(new Site(code++, "Goteborgs Posten", 0xff005c9e, Site.THEME_SWEDEN, new com.newsup.net.GoteborgsPostenNewsReader(handler, context)));
+        add(new Site(code++, "Fria Tider", 0xffffffff, Site.THEME_SWEDEN, new com.newsup.net.FriaTiderNewsReader(handler, context)));
 
         add(new Site(-1, context.getString(R.string.finland), 0xFF1010FF, Site.THEME_FINLAND, null));
         add(new Site(code++, "Helsinki times", 0xff32c8fa, Site.THEME_FINLAND, new com.newsup.net.HelsinkiTimesNewsReader(handler, context)));

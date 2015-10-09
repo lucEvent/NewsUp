@@ -16,7 +16,6 @@
             android:orientation="horizontal">
 
 
-
             <ImageButton
                 android:id="@+id/icon0"
                 style="@style/settings_tab_icon" />
@@ -91,6 +90,26 @@
 
             <ImageButton
                 android:id="@+id/icon18"
+                style="@style/settings_tab_icon" />
+
+            <ImageButton
+                android:id="@+id/icon19"
+                style="@style/settings_tab_icon" />
+
+            <ImageButton
+                android:id="@+id/icon20"
+                style="@style/settings_tab_icon" />
+
+            <ImageButton
+                android:id="@+id/icon21"
+                style="@style/settings_tab_icon" />
+
+            <ImageButton
+                android:id="@+id/icon22"
+                style="@style/settings_tab_icon" />
+
+            <ImageButton
+                android:id="@+id/icon23"
                 style="@style/settings_tab_icon" />
 
 

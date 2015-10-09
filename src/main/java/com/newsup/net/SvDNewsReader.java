@@ -9,8 +9,6 @@ import com.newsup.kernel.list.SectionList;
 import com.newsup.kernel.list.Tags;
 
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.safety.Whitelist;
 
 public class SvDNewsReader extends NewsReader {
 
@@ -18,7 +16,8 @@ public class SvDNewsReader extends NewsReader {
         super(handler, context);
 
         SECTIONS = new SectionList();
-        SECTIONS.add(new Section("HUVUDNYHETER", 0, "http://www.svd.se/?service=rss"));
+        SECTIONS.add(new Section("Huvudnyheter", 0, "http://www.svd.se/?service=rss"));
+        SECTIONS.add(new Section("Articles", 0, "http://www.svd.se/feed/articles.rss"));
 
     }
 
@@ -34,14 +33,21 @@ public class SvDNewsReader extends NewsReader {
         if (doc == null) return news;
 
         try {
-            org.jsoup.nodes.Element element = doc.getElementsByClass("Body").get(0);
+            org.jsoup.nodes.Element e = doc.select(".Body").get(0);
 
-            news.content = Jsoup.clean(element.html(), Whitelist.basic());
+            org.jsoup.select.Elements ads = e.select(".Body-ad");
+            for (org.jsoup.nodes.Element ad : ads) {
+                ad.remove();
+            }
+            e.select(".Body-pull").remove();
+
+            news.content = e.html();
 
         } catch (Exception e) {
-            debug("[ERROR La seleccion del articulo no se ha encontrado] tit:" + news.title);
+            debug("[ERROR] tit:" + news.title);
             e.printStackTrace();
         }
+
         return news;
     }
 

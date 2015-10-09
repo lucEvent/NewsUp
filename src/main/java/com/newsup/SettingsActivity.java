@@ -76,7 +76,18 @@ public final class SettingsActivity extends Activity implements DialogState {
         tabs[16] = (ImageButton) findViewById(R.id.icon16);
         tabs[17] = (ImageButton) findViewById(R.id.icon17);
         tabs[18] = (ImageButton) findViewById(R.id.icon18);
-
+        tabs[19] = (ImageButton) findViewById(R.id.icon19);
+        tabs[20] = (ImageButton) findViewById(R.id.icon20);
+        tabs[21] = (ImageButton) findViewById(R.id.icon21);
+        tabs[22] = (ImageButton) findViewById(R.id.icon22);
+        tabs[23] = (ImageButton) findViewById(R.id.icon23);
+/*        tabs[24] = (ImageButton) findViewById(R.id.icon24);
+        tabs[25] = (ImageButton) findViewById(R.id.icon25);
+        tabs[26] = (ImageButton) findViewById(R.id.icon26);
+        tabs[27] = (ImageButton) findViewById(R.id.icon27);
+        tabs[28] = (ImageButton) findViewById(R.id.icon28);
+        tabs[29] = (ImageButton) findViewById(R.id.icon29);
+*/
         try {
             tabs[0].setImageDrawable(Drawable.createFromStream(getAssets().open("home.png"), null));
             tabs[0].setId(0);
