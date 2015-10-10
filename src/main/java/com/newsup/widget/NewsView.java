@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebView;
@@ -99,6 +98,10 @@ public class NewsView {
         title.setText("");
     }
 
+    public boolean isShown() {
+        return view.isShown();
+    }
+
     private View.OnClickListener onBookmarkListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -109,6 +112,7 @@ public class NewsView {
             } else {
                 dataCenter.bookmarkNews(currentNews);
             }
+            handler.obtainMessage(State.ACTION_REFRESH_LIST, null).sendToTarget();
             setBookmarkButtonImage();
         }
     };
@@ -133,7 +137,6 @@ public class NewsView {
             close();
         }
     };
-
 
     private static final int DEFAULT_WAITING_TIME = 3000;
     private int mstime = 0;
@@ -192,7 +195,7 @@ public class NewsView {
     private Handler mainThread = new Handler();
 
     private void debug(String text) {
-        Log.d("##NewsView##", text);
+        android.util.Log.d("##NewsView##", text);
     }
 
 }

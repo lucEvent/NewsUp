@@ -10,7 +10,8 @@ public interface State {
     int SECTION_BEGIN = 3;
     int WORK_DONE = 4;
     int NEWS_READ_BOOKMARKS = 5;
-
     int ACTION_CLOSE_NEWS = 6;
+    int ACTION_REFRESH_LIST = 7;
+
 
 }

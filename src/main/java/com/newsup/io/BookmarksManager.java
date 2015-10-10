@@ -3,8 +3,6 @@ package com.newsup.io;
 import android.os.Handler;
 import android.util.Log;
 
-import com.newsup.Task;
-import com.newsup.kernel.Date;
 import com.newsup.kernel.News;
 import com.newsup.kernel.list.NewsList;
 import com.newsup.kernel.list.Tags;
@@ -23,8 +21,8 @@ public class BookmarksManager implements State {
     private static final String BOOKMARKS_DIR = "bookmarks/";
     private static final String BOOKMARKS_IND = "index.nu";
 
-    private ArrayList<Integer> bookmarkedNewsIdsList;
-    private NewsList bookmarkedNewsList;
+    private static ArrayList<Integer> bookmarkedNewsIdsList;
+    private static NewsList bookmarkedNewsList;
     private Handler handler;
 
     public BookmarksManager(Handler handler) {
@@ -47,9 +45,8 @@ public class BookmarksManager implements State {
                 int nNews = in.readInt();
                 bookmarkedNewsIdsList = new ArrayList<Integer>(nNews);
 
-                for (int i = 0; i < nNews; i++) {
+                for (int i = 0; i < nNews; i++)
                     bookmarkedNewsIdsList.add(in.readInt());
-                }
 
                 in.close();
             } catch (Exception e) {
@@ -61,12 +58,10 @@ public class BookmarksManager implements State {
     }
 
     public void bookmarkNews(News news) {
-        if (bookmarkedNewsList != null) {
-            bookmarkedNewsList.add(news);
-        }
-        if (bookmarkedNewsIdsList == null) {
-            readBookmarkedNewsIds();
-        }
+        if (bookmarkedNewsList != null) bookmarkedNewsList.add(news);
+
+        if (bookmarkedNewsIdsList == null) readBookmarkedNewsIds();
+
         bookmarkedNewsIdsList.add(news.id);
         saveBookmarksIndex();
 
@@ -90,11 +85,12 @@ public class BookmarksManager implements State {
     }
 
     public void unBookmarkNews(News news) {
-        if (bookmarkedNewsIdsList == null) {
-            readBookmarkedNewsIds();
-        }
+        if (bookmarkedNewsIdsList == null) readBookmarkedNewsIds();
+
         if (bookmarkedNewsIdsList.remove((Integer) news.id)) {
             saveBookmarksIndex();
+
+            if (bookmarkedNewsList != null) bookmarkedNewsList.remove(news);
 
             File dir = new File(SDManager.getDirectory(), BOOKMARKS_DIR);
 
@@ -125,11 +121,9 @@ public class BookmarksManager implements State {
         new Thread(new Runnable() {
             @Override
             public void run() {
-
                 if (bookmarkedNewsList == null) {
-                    if (bookmarkedNewsIdsList == null) {
-                        readBookmarkedNewsIds();
-                    }
+                    if (bookmarkedNewsIdsList == null) readBookmarkedNewsIds();
+
                     bookmarkedNewsList = new NewsList(bookmarkedNewsIdsList.size());
 
                     File dir = new File(SDManager.getDirectory(), BOOKMARKS_DIR);

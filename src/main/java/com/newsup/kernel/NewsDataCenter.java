@@ -198,22 +198,12 @@ public class NewsDataCenter implements State {
         return appSettings;
     }
 
-    private void debug(String text) {
-        android.util.Log.d("##NewsDataCenter##", text);
-    }
-
-
-    private static ArrayList<Integer> bookmarkedNewsIds;
-
     public boolean isBookmarked(News currentNews) {
-        if (bookmarkedNewsIds == null) {
-            readBookmarkedNewsIds();
-        }
-        return bookmarkedNewsIds.contains(currentNews.id);
+        return getBookmarkedNewsIds().contains(currentNews.id);
     }
 
-    private void readBookmarkedNewsIds() {
-        bookmarkedNewsIds = bmmanager.readBookmarkedNewsIds();
+    private ArrayList<Integer> getBookmarkedNewsIds() {
+        return bmmanager.readBookmarkedNewsIds();
     }
 
     public void unBookmarkNews(News currentNews) {
@@ -222,6 +212,10 @@ public class NewsDataCenter implements State {
 
     public void bookmarkNews(News currentNews) {
         bmmanager.bookmarkNews(currentNews);
+    }
+
+    private void debug(String text) {
+        android.util.Log.d("##NewsDataCenter##", text);
     }
 
 }

@@ -31,7 +31,7 @@ public class NewsLister extends ArrayAdapter<News> {
         } else {
             view = inflater.inflate(R.layout.i_news, parent, false);
             ((TextView) view.findViewById(R.id.title)).setText(news.title);
-            ((TextView) view.findViewById(R.id.date)).setText(news.date.toString());
+            ((TextView) view.findViewById(R.id.date)).setText("Hace "+news.date.getAge());
             ((TextView) view.findViewById(R.id.description)).setText(news.description);
         }
         return view;

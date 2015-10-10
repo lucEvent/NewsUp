@@ -144,16 +144,35 @@ public class Main extends ListActivity implements State {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            startActivityForResult(new Intent(this, SettingsActivity.class), 0);
-        } else if (id == R.id.action_bookmarks) {
-            startActivity(new Intent(this, BookmarksActivity.class));
-        } else {
-            return super.onOptionsItemSelected(item);
+        switch (id) {
+            case R.id.action_settings:
+                startActivityForResult(new Intent(this, SettingsActivity.class), 0);
+                break;
+            case R.id.action_bookmarks:
+                startActivity(new Intent(this, BookmarksActivity.class));
+                break;
+            case R.id.action_debug:
+                Intent i = new Intent(this, DebugActivity.class);
+                StringBuilder data = new StringBuilder();
+
+                data.append("\n## DATAMANAGER:");
+                data.append("\n   -> nSites:" + datamanager.getSites().size());
+
+                data.append("\n## LISTVIEW:");
+                data.append("\n   -> isShown:" + getListView().isShown());
+                data.append("\n   -> nNews:" + getListView().getAdapter().getCount());
+
+                data.append("\n## NEWSVIEW:");
+                data.append("\n   -> isShown:" + newsView.isShown());
+
+                i.putExtra("debug", data.toString());
+                startActivity(i);
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
         }
         return true;
     }
-
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
