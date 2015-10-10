@@ -61,12 +61,11 @@ public class DigitalTrendsNewsReader extends NewsReader {
 
     @Override
     public News readNewsContent(News news) {
-        org.jsoup.nodes.Document doc = getNewsPage(news);
-        if (doc == null) return news;
-
         try {
-            org.jsoup.nodes.Element element = doc.select(".l-content-wrap").get(0);
+            org.jsoup.nodes.Document doc = getDocument(news.link);
+            if (doc == null) return news;
 
+            org.jsoup.nodes.Element element = doc.select(".l-content-wrap").get(0);
             news.content = element.html();
 
         } catch (Exception e) {

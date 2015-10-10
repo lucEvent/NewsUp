@@ -45,10 +45,10 @@ public class ExpressenNewsReader extends NewsReader {
 
     @Override
     public News readNewsContent(News news) {
-        org.jsoup.nodes.Document doc = getNewsPage(news);
-        if (doc == null) return news;
-
         try {
+            org.jsoup.nodes.Document doc = getDocument(news.link);
+            if (doc == null) return news;
+
             org.jsoup.nodes.Element e = doc.select(".b-article__content").get(0);
             e.select(".b-soc-panel").remove();
             e.select(".b-ad__wrapper").remove();

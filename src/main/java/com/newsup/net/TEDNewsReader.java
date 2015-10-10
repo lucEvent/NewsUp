@@ -40,10 +40,10 @@ public class TEDNewsReader extends NewsReader {
 
     @Override
     public News readNewsContent(News news) {
-        org.jsoup.nodes.Document doc = getNewsPage(news);
-        if (doc == null) return news;
-
         try {
+            org.jsoup.nodes.Document doc = getDocument(news.link);
+            if (doc == null) return news;
+
             org.jsoup.select.Elements ee = doc.select(".entry-content");
             ee.select(".meta").remove();
 

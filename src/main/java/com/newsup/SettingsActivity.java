@@ -81,9 +81,9 @@ public final class SettingsActivity extends Activity implements DialogState {
         tabs[21] = (ImageButton) findViewById(R.id.icon21);
         tabs[22] = (ImageButton) findViewById(R.id.icon22);
         tabs[23] = (ImageButton) findViewById(R.id.icon23);
-/*        tabs[24] = (ImageButton) findViewById(R.id.icon24);
+        tabs[24] = (ImageButton) findViewById(R.id.icon24);
         tabs[25] = (ImageButton) findViewById(R.id.icon25);
-        tabs[26] = (ImageButton) findViewById(R.id.icon26);
+ /*       tabs[26] = (ImageButton) findViewById(R.id.icon26);
         tabs[27] = (ImageButton) findViewById(R.id.icon27);
         tabs[28] = (ImageButton) findViewById(R.id.icon28);
         tabs[29] = (ImageButton) findViewById(R.id.icon29);

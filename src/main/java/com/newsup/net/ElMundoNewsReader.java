@@ -10,7 +10,6 @@ import com.newsup.kernel.list.Tags;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.safety.Whitelist;
 import org.jsoup.select.Elements;
 
 public class ElMundoNewsReader extends NewsReader {
@@ -70,10 +69,9 @@ public class ElMundoNewsReader extends NewsReader {
 
     @Override
     public News readNewsContent(News news) {
-        org.jsoup.nodes.Document doc = getNewsPage(news);
-        if (doc == null) return news;
-
         try {
+            org.jsoup.nodes.Document doc = getDocument(news.link);
+            if (doc == null) return news;
 
             Elements elements = doc.select("#tamano");
             news.content = elements.html();

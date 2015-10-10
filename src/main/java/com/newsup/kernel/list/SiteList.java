@@ -49,6 +49,10 @@ public class SiteList extends ArrayList<Site> {
         add(new Site(code++, "Xataka", 0xff558f22, Site.THEME_TECHNOLOGY, new com.newsup.net.XatakaNewsReader(handler, context)));
         add(new Site(code++, "TED", 0xffffffff, Site.THEME_TECHNOLOGY, new com.newsup.net.TEDNewsReader(handler, context)));
 
+        add(new Site(-1, context.getString(R.string.magazines), 0xFF90c3d4, Site.THEME_MAGAZINES, null));
+        add(new Site(code++, "Make", 0xff4ecbf5, Site.THEME_MAGAZINES, new com.newsup.net.MakeNewsReader(handler, context)));
+        add(new Site(code++, "Rolling Stone", 0xff4ecbf5, Site.THEME_MAGAZINES, new com.newsup.net.RollingStoneNewsReader(handler, context)));
+
     }
 
     public int getNumSites() {

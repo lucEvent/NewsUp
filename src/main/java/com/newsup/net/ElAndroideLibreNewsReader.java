@@ -28,11 +28,10 @@ public class ElAndroideLibreNewsReader extends NewsReader {
 
     @Override
     public News readNewsContent(News news) {
-        org.jsoup.nodes.Document doc = getNewsPage(news);
-        if (doc == null) return news;
-
         try {
-           
+            org.jsoup.nodes.Document doc = getDocument(news.link);
+            if (doc == null) return news;
+
             news.content = doc.select("#singlePostContent").get(0).html();
 
         } catch (Exception e) {

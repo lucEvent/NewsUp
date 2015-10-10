@@ -26,10 +26,10 @@ public class HelsinkiTimesNewsReader extends NewsReader {
 
     @Override
     public News readNewsContent(News news) {
-        org.jsoup.nodes.Document doc = getNewsPage(news);
-        if (doc == null) return news;
-
         try {
+            org.jsoup.nodes.Document doc = getDocument(news.link);
+            if (doc == null) return news;
+
             news.content = doc.select(".item-page > p").outerHtml();
 
         } catch (Exception e) {

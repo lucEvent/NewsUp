@@ -29,10 +29,10 @@ public class SvDNewsReader extends NewsReader {
 
     @Override
     public News readNewsContent(News news) {
-        org.jsoup.nodes.Document doc = getNewsPage(news);
-        if (doc == null) return news;
-
         try {
+            org.jsoup.nodes.Document doc = getDocument(news.link);
+            if (doc == null) return news;
+
             org.jsoup.nodes.Element e = doc.select(".Body").get(0);
 
             org.jsoup.select.Elements ads = e.select(".Body-ad");

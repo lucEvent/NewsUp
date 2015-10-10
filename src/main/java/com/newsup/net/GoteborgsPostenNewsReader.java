@@ -32,10 +32,10 @@ public class GoteborgsPostenNewsReader extends NewsReader {
 
     @Override
     public News readNewsContent(News news) {
-        org.jsoup.nodes.Document doc = getNewsPage(news);
-        if (doc == null) return news;
-
         try {
+            org.jsoup.nodes.Document doc = getDocument(news.link);
+            if (doc == null) return news;
+
             org.jsoup.nodes.Element img = doc.select(".imageWrapper").get(0);
             org.jsoup.nodes.Element body = doc.select(".body").get(0);
 

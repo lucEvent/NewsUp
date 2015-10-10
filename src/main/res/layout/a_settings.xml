@@ -112,6 +112,13 @@
                 android:id="@+id/icon23"
                 style="@style/settings_tab_icon" />
 
+            <ImageButton
+                android:id="@+id/icon24"
+                style="@style/settings_tab_icon" />
+
+            <ImageButton
+                android:id="@+id/icon25"
+                style="@style/settings_tab_icon" />
 
         </LinearLayout>
     </HorizontalScrollView>

@@ -101,10 +101,11 @@ public class BCCNewsReader extends NewsReader {
 
     @Override
     public News readNewsContent(News news) {
-        org.jsoup.nodes.Document doc = getNewsPage(news);
-        if (doc == null) return news;
-
+        org.jsoup.nodes.Document doc = null;
         try {
+            doc = getDocument(news.link);
+            if (doc == null) return news;
+
             org.jsoup.nodes.Element e = doc.select(".story-body__inner").get(0);
             org.jsoup.select.Elements ads = e.select("script");
             for (org.jsoup.nodes.Element ad : ads) ad.remove();

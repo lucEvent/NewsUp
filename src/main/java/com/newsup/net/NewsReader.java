@@ -121,24 +121,13 @@ public abstract class NewsReader implements State {
         return new News(title, link, description, date, categories);
     }
 
-    protected Document getNewsPage(News news) {
+    protected Document getDocument(String pagelink) throws IOException {
         try {
-            return Jsoup.connect(news.link).get();
-        } catch (Exception e) {
-            debug("[ERROR No se puede leer la pagina] id:" + news.id + " tit:" + news.title);
-            debug("[### URL ###] tit:" + news.link);
-            //         e.printStackTrace();
-            return null;
-        }
-    }
-
-    protected Document getDocument(String rsslink) throws IOException {
-        try {
-            return Jsoup.connect(rsslink).get();
+            return Jsoup.connect(pagelink).userAgent("android").get();
         } catch (java.net.SocketTimeoutException e) {
             debug("Fallo de la conexión. Intentando nuevamente");
         }
-        return Jsoup.connect(rsslink).get();
+        return Jsoup.connect(pagelink).userAgent("android").get();
     }
 
     public abstract News readNewsContent(News news);
