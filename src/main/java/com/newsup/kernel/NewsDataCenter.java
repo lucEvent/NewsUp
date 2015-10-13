@@ -146,7 +146,6 @@ public class NewsDataCenter implements State {
 
         @Override
         public void run() {
-
             if (site.historial.isEmpty()) {
                 site.historial = dbmanager.readNews(site.code);
             }

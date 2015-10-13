@@ -127,8 +127,4 @@ public class _20MinutosNewsReader extends NewsReader {
         return news;
     }
 
-    protected void debug(String text) {
-        android.util.Log.d("##20M_NewsReader##", text);
-    }
-
 } 

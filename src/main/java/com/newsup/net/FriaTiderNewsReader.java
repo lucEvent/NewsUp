@@ -61,8 +61,4 @@ public class FriaTiderNewsReader extends NewsReader {
         return news;
     }
 
-    protected void debug(String text) {
-        android.util.Log.d("##FriaTiderNewsReader##", text);
-    }
-
 }

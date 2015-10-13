@@ -17,7 +17,6 @@ public class NewsLister extends ArrayAdapter<News> {
 
     public NewsLister(Context context, NewsList values) {
         super(context, -1, values);
-
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -31,10 +30,15 @@ public class NewsLister extends ArrayAdapter<News> {
         } else {
             view = inflater.inflate(R.layout.i_news, parent, false);
             ((TextView) view.findViewById(R.id.title)).setText(news.title);
-            ((TextView) view.findViewById(R.id.date)).setText("Hace "+news.date.getAge());
+            ((TextView) view.findViewById(R.id.date)).setText("Hace " + news.date.getAge());
             ((TextView) view.findViewById(R.id.description)).setText(news.description);
         }
         return view;
     }
+
+    private void debug(String text) {
+        android.util.Log.d(this.getClass().getSimpleName(), text);
+    }
+
 
 }

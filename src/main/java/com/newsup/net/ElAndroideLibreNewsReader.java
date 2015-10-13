@@ -41,8 +41,4 @@ public class ElAndroideLibreNewsReader extends NewsReader {
         return news;
     }
 
-    protected void debug(String text) {
-        android.util.Log.d("##ElAndroideLibreNR##", text);
-    }
-
 }

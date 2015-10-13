@@ -37,8 +37,4 @@ public class TechNewsWorldNewsReader extends NewsReader {
         return news;
     }
 
-    protected void debug(String text) {
-        android.util.Log.d("##TechNewsWorldNewsReader##", text);
-    }
-
 }

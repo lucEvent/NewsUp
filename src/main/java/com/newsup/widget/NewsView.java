@@ -8,7 +8,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,11 +24,11 @@ public class NewsView {
     private Handler handler;
 
     private View view;
-    private LinearLayout buttons;
+    private RelativeLayout buttons;
 
     private WebView newsView;
     private TextView title;
-    private ImageButton bshare, bbookmark, bclose;
+    private ImageButton bshare, bbookmark;
 
     public NewsView(Activity context, NewsDataCenter dataCenter, Handler handler) {
         this.context = context;
@@ -42,7 +41,7 @@ public class NewsView {
             public void onClick(View v) {
             }
         });
-        buttons = (LinearLayout) context.findViewById(R.id.buttons);
+        buttons = (RelativeLayout) context.findViewById(R.id.buttons);
 
         newsView = (WebView) view.findViewById(R.id.content);
         newsView.setOnTouchListener(onNewsViewTouchListener);
@@ -56,9 +55,6 @@ public class NewsView {
 
         bbookmark = (ImageButton) view.findViewById(R.id.button_bookmark);
         bbookmark.setOnClickListener(onBookmarkListener);
-
-        bclose = (ImageButton) view.findViewById(R.id.button_close);
-        bclose.setOnClickListener(onCloseListener);
 
     }
 
@@ -127,14 +123,6 @@ public class NewsView {
             sendIntent.putExtra(Intent.EXTRA_TEXT, currentNews.title + " " + currentNews.link);
             sendIntent.setType("text/plain");
             context.startActivity(Intent.createChooser(sendIntent, "Share to"));
-        }
-    };
-
-    private View.OnClickListener onCloseListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            handler.obtainMessage(State.ACTION_CLOSE_NEWS, null).sendToTarget();
-            close();
         }
     };
 

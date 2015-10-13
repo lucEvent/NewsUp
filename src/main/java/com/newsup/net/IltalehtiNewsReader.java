@@ -68,13 +68,9 @@ public class IltalehtiNewsReader extends NewsReader {
             news.content = sb.toString();
 
         } catch (Exception e) {
-            debug("[ERROR La seleccion del articulo no se ha encontrado] tit:" + news.title);
+            debug("[ERROR] title:" + news.title);
         }
         return news;
-    }
-
-    protected void debug(String text) {
-        android.util.Log.d("##IltalehtiNewsReader##", text);
     }
 
 }

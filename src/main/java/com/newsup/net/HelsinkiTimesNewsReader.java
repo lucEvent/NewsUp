@@ -33,14 +33,9 @@ public class HelsinkiTimesNewsReader extends NewsReader {
             news.content = doc.select(".item-page > p").outerHtml();
 
         } catch (Exception e) {
-            debug("[ERROR La seleccion del articulo no se ha encontrado] tit:" + news.title);
+            debug("[ERROR] title:" + news.title);
         }
-
         return news;
-    }
-
-    protected void debug(String text) {
-        android.util.Log.d("##HelsinkiTimesNR##", text);
     }
 
 }

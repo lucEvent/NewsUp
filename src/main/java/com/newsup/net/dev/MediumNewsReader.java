@@ -37,8 +37,4 @@ public class MediumNewsReader extends NewsReader {
         return news;
     }
 
-    protected void debug(String text) {
-        android.util.Log.d("##MediumNewsReader##", text);
-    }
-
 }

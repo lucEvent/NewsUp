@@ -8,8 +8,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/buttons">
+        android:layout_height="match_parent">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -34,7 +33,7 @@
         </RelativeLayout>
     </ScrollView>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -45,8 +44,9 @@
             android:id="@+id/button_bookmark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="#AA993333"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="15dip"
+            android:background="@drawable/selector_floating_button"
             android:padding="10dip"
             android:src="@drawable/ic_bookmark_border" />
 
@@ -54,20 +54,14 @@
             android:id="@+id/button_share"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="#AA993333"
+            android:layout_alignParentRight="true"
+            android:layout_margin="15dip"
+            android:background="@drawable/selector_floating_button"
             android:padding="10dip"
             android:src="@drawable/ic_share" />
 
-        <ImageButton
-            android:id="@+id/button_close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="#AA993333"
-            android:padding="10dip"
-            android:src="@drawable/ic_arrow_back" />
+        />
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

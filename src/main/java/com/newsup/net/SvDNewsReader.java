@@ -51,8 +51,4 @@ public class SvDNewsReader extends NewsReader {
         return news;
     }
 
-    protected void debug(String text) {
-        android.util.Log.d("##SvDNewsReader##", text);
-    }
-
 }

@@ -70,7 +70,7 @@ public class HuffingtonPostNewsReader extends NewsReader {
             while ((index = ee.indexOf(e)) == -1) {
                 e = e.parent();
             }
-            for ( ; index < ee.size(); index++) {
+            for (; index < ee.size(); index++) {
                 ee.get(index).remove();
             }
         } else {
@@ -88,11 +88,6 @@ public class HuffingtonPostNewsReader extends NewsReader {
     @Override
     public News readNewsContent(News news) {
         return news;
-    }
-
-    @Override
-    protected void debug(String text) {
-        android.util.Log.d("##HuffingtonPostNR##", text);
     }
 
 }

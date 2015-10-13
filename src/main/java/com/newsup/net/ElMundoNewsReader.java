@@ -77,14 +77,10 @@ public class ElMundoNewsReader extends NewsReader {
             news.content = elements.html();
 
         } catch (Exception e) {
-            debug("[ERROR La seleccion del articulo no se ha encontrado] tit:" + news.title);
+            debug("[ERROR] title:" + news.title);
             e.printStackTrace();
         }
         return news;
-    }
-
-    protected void debug(String text) {
-        android.util.Log.d("##EMNewsReader##", text);
     }
 
 }

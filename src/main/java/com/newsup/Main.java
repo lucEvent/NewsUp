@@ -13,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.newsup.kernel.News;
@@ -36,27 +35,26 @@ public class Main extends ListActivity implements State {
     /**
      * Display layer
      **/
-    private NewsLister newslister;
-    private NewsView newsView;
+    private static NewsLister newslister;
+    private static NewsView newsView;
 
     /**
      * Kernel layer
      **/
-    private NewsDataCenter datamanager;
-    private SiteList sites;
-    private int currentSite;
-    private boolean displayingNews;
+    private static NewsDataCenter datamanager;
+    private static SiteList sites;
+    private static int currentSite;
+    private static boolean displayingNews;
 
     // *****///
-    private DrawerLayout mDrawerLayout;
-    private ListView drawerSiteList;
-    private ListView drawerSectionList;
+    private static DrawerLayout mDrawerLayout;
+    private static ListView drawerSiteList;
+    private static ListView drawerSectionList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a_main);
-
 
         newslister = new NewsLister(this, new NewsList());
         newslister.setNotifyOnChange(true);
@@ -73,7 +71,7 @@ public class Main extends ListActivity implements State {
 
         drawerSiteList = (ListView) findViewById(R.id.site_drawer);
         drawerSiteList.setAdapter(new SiteLister(this, sites));
-        drawerSiteList.setOnItemClickListener(new OnItemClickListener() {
+        drawerSiteList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -92,7 +90,7 @@ public class Main extends ListActivity implements State {
         drawerSectionList = (ListView) findViewById(R.id.section_drawer);
         drawerSectionList.setAdapter(new SectionLister(this, new SectionList()));
         ((SectionLister) drawerSectionList.getAdapter()).addAll(sites.get(currentSite).getSections());
-        drawerSectionList.setOnItemClickListener(new OnItemClickListener() {
+        drawerSectionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -105,12 +103,10 @@ public class Main extends ListActivity implements State {
             }
 
         });
-
     }
 
-
     private void displaySiteNews(int siteposition, int[] sections) {
-        closeNews(null);
+        closeNews();
         currentSite = siteposition;
         newslister.clear();
 
@@ -129,7 +125,7 @@ public class Main extends ListActivity implements State {
     @Override
     public void onBackPressed() {
         if (displayingNews) {
-            closeNews(null);
+            closeNews();
         } else {
             finish();
         }
@@ -154,16 +150,6 @@ public class Main extends ListActivity implements State {
             case R.id.action_debug:
                 Intent i = new Intent(this, DebugActivity.class);
                 StringBuilder data = new StringBuilder();
-
-                data.append("\n## DATAMANAGER:");
-                data.append("\n   -> nSites:" + datamanager.getSites().size());
-
-                data.append("\n## LISTVIEW:");
-                data.append("\n   -> isShown:" + getListView().isShown());
-                data.append("\n   -> nNews:" + getListView().getAdapter().getCount());
-
-                data.append("\n## NEWSVIEW:");
-                data.append("\n   -> isShown:" + newsView.isShown());
 
                 i.putExtra("debug", data.toString());
                 startActivity(i);
@@ -206,8 +192,7 @@ public class Main extends ListActivity implements State {
                     newslister.add((News) msg.obj);
                     break;
                 case SECTION_BEGIN:
-                    String section = (String) msg.obj;
-                    newslister.add(new News(section, null, null, null, null));
+                    newslister.add(new News((String) msg.obj, null, null, null, null));
                     break;
                 case NEWS_READ_HISTORY:
                     newslister.addAll((NewsMap) msg.obj);
@@ -215,10 +200,6 @@ public class Main extends ListActivity implements State {
                 case NO_INTERNET:
                     //TODO
                     debug("[NO INTERNET] Falta por hacer cosas");
-                    break;
-                case ACTION_CLOSE_NEWS:
-                    getActionBar().show();
-                    displayingNews = false;
                     break;
                 case ERROR:
                     debug("Error recibido por el Handler");
@@ -230,7 +211,7 @@ public class Main extends ListActivity implements State {
 
     };
 
-    public void closeNews(View v) {
+    public void closeNews() {
         getActionBar().show();
 
         displayingNews = false;
@@ -238,7 +219,7 @@ public class Main extends ListActivity implements State {
     }
 
     private void debug(String text) {
-        Log.d("##MAIN##", text);
+        Log.d("##MAIN##", "[" + this.toString() + "] " + text);
     }
 
 }

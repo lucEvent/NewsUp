@@ -126,8 +126,4 @@ public class BCCNewsReader extends NewsReader {
         return news;
     }
 
-    protected void debug(String text) {
-        android.util.Log.d("##BCCNewsReader##", text);
-    }
-
 }

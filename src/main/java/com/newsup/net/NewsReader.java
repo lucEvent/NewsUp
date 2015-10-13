@@ -110,7 +110,6 @@ public abstract class NewsReader implements State {
                     }
                 }
             }
-
             News news = getNewsLastFilter(title, link, description, date, new Tags(categoriesList));
             handler.obtainMessage(NEWS_READ, news).sendToTarget();
 
@@ -132,7 +131,9 @@ public abstract class NewsReader implements State {
 
     public abstract News readNewsContent(News news);
 
-    protected abstract void debug(String text);
+    protected final void debug(String text) {
+        android.util.Log.d("##" + this.getClass().getSimpleName() + "##", text);
+    }
 
     protected boolean internetAvailable() {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

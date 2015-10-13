@@ -73,13 +73,13 @@ public class BookmarksActivity extends ListActivity implements State {
     @Override
     public void onBackPressed() {
         if (displayingNews) {
-            closeNews(null);
+            closeNews();
         } else {
             finish();
         }
     }
 
-    public void closeNews(View v) {
+    public void closeNews() {
         getActionBar().show();
 
         displayingNews = false;
@@ -93,10 +93,6 @@ public class BookmarksActivity extends ListActivity implements State {
             switch (msg.what) {
                 case NEWS_READ_BOOKMARKS:
                     newslister.addAll((NewsList) msg.obj);
-                    break;
-                case ACTION_CLOSE_NEWS:
-                    getActionBar().show();
-                    displayingNews = false;
                     break;
                 case ACTION_REFRESH_LIST:
                     newslister.clear();

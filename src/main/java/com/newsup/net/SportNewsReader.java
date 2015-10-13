@@ -92,8 +92,4 @@ public class SportNewsReader extends NewsReader {
         return news;
     }
 
-    protected void debug(String text) {
-        android.util.Log.d("##SportNewsReader##", text);
-    }
-
 } 
