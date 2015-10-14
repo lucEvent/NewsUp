@@ -23,6 +23,7 @@ public class SiteList extends ArrayList<Site> {
         add(new Site(code++, "El Mundo", 0xffffffff, Site.THEME_SPAIN, new com.newsup.net.ElMundoNewsReader(handler, context)));
         add(new Site(code++, "As", 0xffba0202, Site.THEME_SPAIN, new com.newsup.net.AsNewsReader(handler, context)));
         add(new Site(code++, "Sport", 0xffeb3838, Site.THEME_SPAIN, new com.newsup.net.SportNewsReader(handler, context)));
+        add(new Site(code++, "El Confidencial", 0xff116d9c, Site.THEME_SPAIN, new com.newsup.net.ElConfidencialNewsReader(handler, context)));
 
         add(new Site(-1, context.getString(R.string.sweden), 0xFF3333EE, Site.THEME_SWEDEN, null));
         add(new Site(code++, "Aftonbladet", 0xffffffff, Site.THEME_SWEDEN, new com.newsup.net.AftonbladetNewsReader(handler, context)));
@@ -49,6 +50,7 @@ public class SiteList extends ArrayList<Site> {
         add(new Site(code++, "Lifehacker", 0xff94b330, Site.THEME_TECHNOLOGY, new com.newsup.net.LifeHackerNewsReader(handler, context)));
         add(new Site(code++, "Xataka", 0xff558f22, Site.THEME_TECHNOLOGY, new com.newsup.net.XatakaNewsReader(handler, context)));
         add(new Site(code++, "TED", 0xffffffff, Site.THEME_TECHNOLOGY, new com.newsup.net.TEDNewsReader(handler, context)));
+        add(new Site(code++, "Gizmodo", 0xff9c9c9c, Site.THEME_TECHNOLOGY, new com.newsup.net.GizmodoNewsReader(handler, context)));
 
         add(new Site(-1, context.getString(R.string.magazines), 0xFF90c3d4, Site.THEME_MAGAZINES, null));
         add(new Site(code++, "Make", 0xff4ecbf5, Site.THEME_MAGAZINES, new com.newsup.net.MakeNewsReader(handler, context)));

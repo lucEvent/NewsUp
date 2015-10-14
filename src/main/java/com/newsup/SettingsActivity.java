@@ -83,9 +83,9 @@ public final class SettingsActivity extends Activity implements DialogState {
         tabs[23] = (ImageButton) findViewById(R.id.icon23);
         tabs[24] = (ImageButton) findViewById(R.id.icon24);
         tabs[25] = (ImageButton) findViewById(R.id.icon25);
- /*       tabs[26] = (ImageButton) findViewById(R.id.icon26);
+        tabs[26] = (ImageButton) findViewById(R.id.icon26);
         tabs[27] = (ImageButton) findViewById(R.id.icon27);
-        tabs[28] = (ImageButton) findViewById(R.id.icon28);
+  /*      tabs[28] = (ImageButton) findViewById(R.id.icon28);
         tabs[29] = (ImageButton) findViewById(R.id.icon29);
 */
         try {
@@ -96,7 +96,6 @@ public final class SettingsActivity extends Activity implements DialogState {
             for (int sitepos = 0; sitepos < sites.size(); ++sitepos) {
                 Site site = sites.get(sitepos);
                 if (site.code != -1) {
-                    debug(tab + " Settings up " + site.name);
                     tabs[tab].setImageDrawable(Drawable.createFromStream(getAssets().open(site.name + ".png"), null));
                     tabs[tab].setId(tab);
                     tabs[tab].setTag(sitepos);

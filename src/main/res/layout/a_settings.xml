@@ -120,6 +120,14 @@
                 android:id="@+id/icon25"
                 style="@style/settings_tab_icon" />
 
+
+            <ImageButton
+                android:id="@+id/icon26"
+                style="@style/settings_tab_icon" />
+
+            <ImageButton
+                android:id="@+id/icon27"
+                style="@style/settings_tab_icon" />
         </LinearLayout>
     </HorizontalScrollView>
 
