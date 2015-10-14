@@ -122,11 +122,16 @@ public abstract class NewsReader implements State {
 
     protected Document getDocument(String pagelink) throws IOException {
         try {
-            return Jsoup.connect(pagelink).userAgent("android").get();
-        } catch (java.net.SocketTimeoutException e) {
+            return Jsoup.connect(pagelink).get();
+        } catch (Exception e) {
             debug("Fallo de la conexión. Intentando nuevamente");
         }
-        return Jsoup.connect(pagelink).userAgent("android").get();
+        try {
+            return Jsoup.connect(pagelink).userAgent("Mozilla/5.0 (Linux; Android 4.4.2; GT-I9300 Build/KVT49L) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.94 Mobile Safari/537.36").get();
+        } catch (java.net.SocketTimeoutException e) {
+            debug("No se ha podido encontrar la pagina: " + pagelink);
+        }
+        return null;
     }
 
     public abstract News readNewsContent(News news);

@@ -42,7 +42,7 @@ public class DagensNyheterNewsReader extends NewsReader {
 
     @Override
     protected News getNewsLastFilter(String title, String link, String description, String date, Tags categories) {
-        description = org.jsoup.Jsoup.parseBodyFragment(description).text();
+        description = org.jsoup.Jsoup.parse(description).text();
         return new News(title, link, description, date, categories);
 
     }

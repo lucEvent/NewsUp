@@ -5,6 +5,7 @@ import android.os.Handler;
 
 import com.newsup.R;
 import com.newsup.kernel.Site;
+import com.newsup.net.HelsinkiSanomatNewsReader;
 
 import java.util.ArrayList;
 
@@ -33,7 +34,7 @@ public class SiteList extends ArrayList<Site> {
 
         add(new Site(-1, context.getString(R.string.finland), 0xFF1010FF, Site.THEME_FINLAND, null));
         add(new Site(code++, "Helsinki times", 0xff32c8fa, Site.THEME_FINLAND, new com.newsup.net.HelsinkiTimesNewsReader(handler, context)));
-        add(new Site(code++, "Helsingin Sanomat", 0xff01133d, Site.THEME_FINLAND, new com.newsup.net.HSNewsReader(handler, context)));
+        add(new Site(code++, "Helsingin Sanomat", 0xff01133d, Site.THEME_FINLAND, new HelsinkiSanomatNewsReader(handler, context)));
         add(new Site(code++, "Iltalehti", 0xffff0000, Site.THEME_FINLAND, new com.newsup.net.IltalehtiNewsReader(handler, context)));
 
         add(new Site(-1, context.getString(R.string.international), 0xFFDDDDDD, Site.THEME_INTERNATIONAL, null));

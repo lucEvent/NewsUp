@@ -59,7 +59,6 @@ public class HuffingtonPostNewsReader extends NewsReader {
 
     @Override
     protected News getNewsLastFilter(String title, String link, String description, String date, Tags categories) {
-        debug("");
         org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(description);
         org.jsoup.select.Elements ee = doc.select("body").get(0).children();
         org.jsoup.select.Elements ads = doc.select("br[clear=\"all\"]");

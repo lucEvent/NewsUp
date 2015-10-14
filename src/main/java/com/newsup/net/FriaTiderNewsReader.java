@@ -49,10 +49,7 @@ public class FriaTiderNewsReader extends NewsReader {
             if (doc == null) return news;
 
             org.jsoup.nodes.Element e = doc.select(".node").get(0);
-
-            org.jsoup.select.Elements ads = e.select("h1,.rightbox");
-            for (org.jsoup.nodes.Element ad : ads)
-                ad.remove();
+            e.select("h1,.rightbox").remove();
 
             news.content = e.html();
         } catch (Exception e) {

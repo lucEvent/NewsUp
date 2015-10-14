@@ -37,6 +37,7 @@ public class Date {
             this.date = date;
         } else {
             // Sat, 8 Aug 2015 19:48:06
+            //Tue, 13 Oct 2015 18:04:07 +0300 //TODO
             String day = items[1].length() == 1 ? "0" + items[1] : items[1];
 
             this.date = items[3] + "-" + monthToIntString(items[2]) + "-" + day + " " + items[4];

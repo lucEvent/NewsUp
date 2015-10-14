@@ -38,7 +38,6 @@ public class IltalehtiNewsReader extends NewsReader {
 
         SECTIONS.add(new Section("Autot", 0, "http://www.iltalehti.fi/rss/autot.xml"));
         SECTIONS.add(new Section("Digi", 0, "http://www.iltalehti.fi/rss/digi.xml"));
-        SECTIONS.add(new Section("Ruoka", 0, "http://www.iltalehti.fi/rss/ruoka.xml"));
         SECTIONS.add(new Section("Terveys", 0, "http://www.iltalehti.fi/rss/terveys.xml"));
         SECTIONS.add(new Section("Tyyli.com", 0, "http://www.iltalehti.fi/rss/tyylicom.xml"));
         SECTIONS.add(new Section("Asuminen", 0, "http://www.iltalehti.fi/rss/asuminen.xml"));

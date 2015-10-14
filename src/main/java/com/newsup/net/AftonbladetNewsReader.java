@@ -48,26 +48,8 @@ public class AftonbladetNewsReader extends NewsReader {
 
             org.jsoup.nodes.Element e = doc.select("article").get(0);
 
-            org.jsoup.select.Elements ads = e.select(".abShareMenu");
-            for (org.jsoup.nodes.Element ad : ads) ad.remove();
-
-            ads = e.select(".abArticleBlockMedium");
-            for (org.jsoup.nodes.Element ad : ads) ad.remove();
-
-            ads = e.select(".abItem");
-            for (org.jsoup.nodes.Element ad : ads) ad.remove();
-
-            ads = e.select(".abBtn");
-            for (org.jsoup.nodes.Element ad : ads) ad.remove();
-
-            ads = e.select("script");
-            for (org.jsoup.nodes.Element ad : ads) ad.remove();
-
-            ads = e.select("h1");
-            for (org.jsoup.nodes.Element ad : ads) ad.remove();
-
-            ads = e.select(".abArticleTopImageBackground");
-            for (org.jsoup.nodes.Element ad : ads) ad.remove();
+            org.jsoup.select.Elements ads = e.select(".abShareMenu,.abArticleBlockMedium,.abItem,.abBtn,h1,script,.abArticleTopImageBackground");
+            ads.remove();
 
             news.content = e.html();
 

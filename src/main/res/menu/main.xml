@@ -1,14 +1,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.newsup.Main">
-
-    <item
-        android:id="@+id/action_debug"
-        android:icon="@drawable/ic_signal_wifi_off"
-        android:orderInCategory="100"
-        android:showAsAction="always"
-        android:title="@string/action_bookmarks" />
-
+    <!--
+        <item
+            android:id="@+id/action_debug"
+            android:icon="@drawable/ic_signal_wifi_off"
+            android:orderInCategory="100"
+            android:showAsAction="always"
+            android:title="@string/action_bookmarks" />
+    -->
     <item
         android:id="@+id/action_bookmarks"
         android:icon="@drawable/ic_bookmark"

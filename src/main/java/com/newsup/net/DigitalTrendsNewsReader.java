@@ -16,20 +16,22 @@ public class DigitalTrendsNewsReader extends NewsReader {
         super(handler, context);
 
         SECTIONS = new SectionList();
-        SECTIONS.add(new Section("All Digital Trends Articles", 0, "http://www.digitaltrends.com/feed/"));
+        SECTIONS.add(new Section("All Articles", 0, "http://www.digitaltrends.com/feed/"));
         SECTIONS.add(new Section("Cars", 0, "http://www.digitaltrends.com/cars/feed/"));
         SECTIONS.add(new Section("Computing", 0, "http://www.digitaltrends.com/computing/feed/"));
         SECTIONS.add(new Section("Cool Tech", 0, "http://www.digitaltrends.com/cool-tech/feed/"));
         SECTIONS.add(new Section("Gaming", 0, "http://www.digitaltrends.com/gaming/feed/"));
         SECTIONS.add(new Section("Home Theater", 0, "http://www.digitaltrends.com/home-theater/feed/"));
+
         SECTIONS.add(new Section("Mobile", 0, "http://www.digitaltrends.com/mobile/feed/"));
+        SECTIONS.add(new Section("Android Army", 1, "http://www.digitaltrends.com/android/feed/"));
+        SECTIONS.add(new Section("Apple", 1, "http://www.digitaltrends.com/apple/feed/"));
+        SECTIONS.add(new Section("Mobile World Congress", 0, "http://www.digitaltrends.com/mwc/feed/"));
+
         SECTIONS.add(new Section("Photography", 0, "http://www.digitaltrends.com/photography/feed/"));
         SECTIONS.add(new Section("Social Media", 0, "http://www.digitaltrends.com/social-media/feed/"));
         SECTIONS.add(new Section("Home", 0, "http://www.digitaltrends.com/home/feed/"));
         SECTIONS.add(new Section("Sports", 0, "http://www.digitaltrends.com/sports/feed/"));
-
-        SECTIONS.add(new Section("Android Army", 0, "http://www.digitaltrends.com/android/feed/"));
-        SECTIONS.add(new Section("Apple", 0, "http://www.digitaltrends.com/apple/feed/"));
         SECTIONS.add(new Section("Business", 0, "http://www.digitaltrends.com/business/feed/"));
         SECTIONS.add(new Section("Buying Guides", 0, "http://www.digitaltrends.com/buying-guides/feed/"));
         SECTIONS.add(new Section("CES", 0, "http://www.digitaltrends.com/ces/feed/"));
@@ -40,7 +42,6 @@ public class DigitalTrendsNewsReader extends NewsReader {
         SECTIONS.add(new Section("GDC", 0, "http://www.digitaltrends.com/gdc-show/feed/"));
         SECTIONS.add(new Section("How-to", 0, "http://www.digitaltrends.com/how-to/feed/"));
         SECTIONS.add(new Section("IFA", 0, "http://www.digitaltrends.com/ifa/feed/"));
-        SECTIONS.add(new Section("Mobile World Congress", 0, "http://www.digitaltrends.com/mwc/feed/"));
         SECTIONS.add(new Section("Movies & TV", 0, "http://www.digitaltrends.com/movies/feed/"));
         SECTIONS.add(new Section("Music", 0, "http://www.digitaltrends.com/music/feed/"));
         SECTIONS.add(new Section("Opinion", 0, "http://www.digitaltrends.com/opinion/feed/"));
@@ -65,11 +66,11 @@ public class DigitalTrendsNewsReader extends NewsReader {
             org.jsoup.nodes.Document doc = getDocument(news.link);
             if (doc == null) return news;
 
-            org.jsoup.nodes.Element element = doc.select(".l-content-wrap").get(0);
+            org.jsoup.nodes.Element element = doc.select("article").get(0);
             news.content = element.html();
 
         } catch (Exception e) {
-            debug("[ERROR La seleccion del articulo no se ha encontrado] tit:" + news.title);
+            debug("[ERROR] title:" + news.title);
             e.printStackTrace();
         }
         return news;

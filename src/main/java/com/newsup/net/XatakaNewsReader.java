@@ -30,20 +30,25 @@ public class XatakaNewsReader extends NewsReader {
 
     @Override
     protected News getNewsLastFilter(String title, String link, String description, String date, Tags categories) {
-        org.jsoup.select.Elements ee = org.jsoup.Jsoup.parseBodyFragment(description).select("body").get(0).children();
+        News res = new News(title, link, "", date, categories);
+
+        org.jsoup.select.Elements ee = org.jsoup.Jsoup.parse(description).select("body").get(0).children();
 
         StringBuilder content = new StringBuilder();
 
-        org.jsoup.nodes.Element last = ee.select("h4").get(0);
-        for (org.jsoup.nodes.Element elem : ee) {
-            if (elem == last) {
-                break;
+        org.jsoup.select.Elements elasts = ee.select("h4,br[clear=\"all\"]");
+        if (!elasts.isEmpty()) {
+            org.jsoup.nodes.Element last = elasts.get(0);
+            for (org.jsoup.nodes.Element elem : ee) {
+                if (elem == last) {
+                    break;
+                }
+                content.append(elem.outerHtml());
             }
-            content.append(elem.outerHtml());
+            res.content = content.toString();
+        } else {
+            res.content = ee.html();
         }
-
-        News res = new News(title, link, "", date, categories);
-        res.content = content.toString();
         return res;
     }
 
