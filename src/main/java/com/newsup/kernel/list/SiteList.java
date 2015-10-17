@@ -7,6 +7,7 @@ import com.newsup.kernel.Site;
 import com.newsup.net.HelsinkiSanomatNewsReader;
 
 import java.util.ArrayList;
+import java.util.TreeSet;
 
 public class SiteList extends ArrayList<Site> {
 
@@ -16,6 +17,7 @@ public class SiteList extends ArrayList<Site> {
         super();
 
         int code = 0;
+        add(new Site(-2, context.getString(R.string.mynews), 0xff9bda00, 0xff9bda00, null));//con 0xff778357
         add(new Site(-1, context.getString(R.string.spain), 0, Site.THEME_SPAIN, null));
         add(new Site(code++, "El Pais", 0xffffffff, Site.THEME_SPAIN, new com.newsup.net.ElpaisNewsReader()));
         add(new Site(code++, "20 Minutos", 0xff004594, Site.THEME_SPAIN, new com.newsup.net._20MinutosNewsReader()));
@@ -58,6 +60,10 @@ public class SiteList extends ArrayList<Site> {
         add(new Site(code++, "Make", 0xff4ecbf5, Site.THEME_MAGAZINES, new com.newsup.net.MakeNewsReader()));
         add(new Site(code++, "Rolling Stone", 0xff4ecbf5, Site.THEME_MAGAZINES, new com.newsup.net.RollingStoneNewsReader()));
 
+    }
+
+    public SiteList(TreeSet<Site> list) {
+        super(list);
     }
 
     public int getNumSites() {

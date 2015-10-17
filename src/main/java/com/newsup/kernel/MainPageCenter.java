@@ -43,7 +43,7 @@ public class MainPageCenter implements TaskMessage {
                 new NewsLoader(sites.get(isites[i]));
             }
         } else {
-            noInternetTasks();
+            new NoInternetTask();
         }
     }
 
@@ -97,6 +97,7 @@ public class MainPageCenter implements TaskMessage {
                     handler.obtainMessage(message, dataAttached).sendToTarget();
 
                     News news = (News) dataAttached;
+                    news.site = site;
                     //syncronize TODO
                     site.news.add(news);
                     newsmap.add(news);
@@ -111,20 +112,28 @@ public class MainPageCenter implements TaskMessage {
         }
     }
 
-    private void noInternetTasks() {
-        handler.obtainMessage(NO_INTERNET, null).sendToTarget();
+    private class NoInternetTask extends Thread {
 
-        SiteList sites = datacenter.getSites();
-        int[] isites = datacenter.getSettings().main_sites_i;
-        for (int i = 0; i < isites.length; ++i) {
-            Site site = sites.get(isites[i]);
-
-            site = datacenter.getSiteHistorial(site);
-
-            newsmap.addAll(site.historial);
+        private NoInternetTask() {
+            this.start();
         }
 
-        handler.obtainMessage(NEWS_READ_HISTORY, newsmap).sendToTarget();
+        @Override
+        public void run() {
+            handler.obtainMessage(NO_INTERNET, null).sendToTarget();
+
+            SiteList sites = datacenter.getSites();
+            int[] isites = datacenter.getSettings().main_sites_i;
+            for (int i = 0; i < isites.length; ++i) {
+                Site site = sites.get(isites[i]);
+
+                site = datacenter.getSiteHistorial(site);
+
+                newsmap.addAll(site.historial);
+            }
+
+            handler.obtainMessage(NEWS_READ_HISTORY, newsmap).sendToTarget();
+        }
     }
 
     private void debug(String text) {

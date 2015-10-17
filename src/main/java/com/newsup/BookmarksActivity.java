@@ -13,8 +13,8 @@ import com.newsup.io.BookmarksManager;
 import com.newsup.kernel.News;
 import com.newsup.kernel.NewsDataCenter;
 import com.newsup.kernel.list.NewsList;
+import com.newsup.lister.NewsLister;
 import com.newsup.task.TaskMessage;
-import com.newsup.widget.NewsLister;
 import com.newsup.widget.NewsView;
 
 public class BookmarksActivity extends ListActivity implements TaskMessage {

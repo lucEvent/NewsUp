@@ -1,4 +1,4 @@
-package com.newsup.widget;
+package com.newsup.lister;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.newsup.R;
@@ -41,12 +40,14 @@ public class SiteLister extends ArrayAdapter<Site> {
                 try {
                     ((TextView) view.findViewById(R.id.name)).setText(site.name);
 
-                    Drawable logo = Drawable.createFromStream(getContext().getAssets().open(site.name + ".png"), null);
-                    ((ImageView) view.findViewById(R.id.logo)).setBackgroundDrawable(logo);
-
+                    if (site.code == -2) {
+                        view.findViewById(R.id.logo).setBackgroundResource(R.mipmap.ic_launcher);
+                    } else {
+                        Drawable logo = Drawable.createFromStream(getContext().getAssets().open(site.name + ".png"), null);
+                        view.findViewById(R.id.logo).setBackgroundDrawable(logo);
+                    }
                 } catch (IOException e) {
-                    debug("Error en SiteLister con posicion " + position);
-                    ((ImageView) view.findViewById(R.id.logo)).setBackgroundResource(R.mipmap.ic_launcher);
+                    view.findViewById(R.id.logo).setBackgroundResource(R.mipmap.ic_launcher);
                 }
             }
             view.findViewById(R.id.idcolor).setBackgroundDrawable(site.theme);

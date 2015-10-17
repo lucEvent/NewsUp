@@ -1,4 +1,4 @@
-package com.newsup.widget;
+package com.newsup.lister;
 
 import android.content.Context;
 import android.view.LayoutInflater;

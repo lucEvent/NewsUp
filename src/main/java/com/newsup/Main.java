@@ -25,11 +25,11 @@ import com.newsup.kernel.list.NewsList;
 import com.newsup.kernel.list.NewsMap;
 import com.newsup.kernel.list.SectionList;
 import com.newsup.kernel.list.SiteList;
+import com.newsup.lister.NewsLister;
+import com.newsup.lister.SectionLister;
+import com.newsup.lister.SiteLister;
 import com.newsup.task.TaskMessage;
-import com.newsup.widget.NewsLister;
 import com.newsup.widget.NewsView;
-import com.newsup.widget.SectionLister;
-import com.newsup.widget.SiteLister;
 
 import java.io.IOException;
 
@@ -75,8 +75,7 @@ public class Main extends ListActivity implements TaskMessage {
         newsView = new NewsView(this, datamanager, handler);
 
         //TODO que se muestre la ultima que estaba viendo no?
-        displayMainPage();
-//        displaySiteNews(datamanager.getSettings().main_site_i, null);
+        displaySiteNews(0, null);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -93,7 +92,10 @@ public class Main extends ListActivity implements TaskMessage {
 
                 SectionLister sectionlister = (SectionLister) drawerSectionList.getAdapter();
                 sectionlister.clear();
-                sectionlister.addAll(sites.get(currentSite).getSections());
+
+                if (position != 0) {
+                    sectionlister.addAll(sites.get(currentSite).getSections());
+                }
             }
 
         });
@@ -118,23 +120,26 @@ public class Main extends ListActivity implements TaskMessage {
         });
     }
 
-    private void displayMainPage() {
-        currentSite = 0;
-        mainpagecenter.loadNews();
-    }
-
     private void displaySiteNews(int siteposition, int[] sections) {
-        closeNews();
         currentSite = siteposition;
+        closeNews();
         newslister.clear();
 
         Site csite = sites.get(currentSite);
-        datamanager.getNews(csite, sections);
+        if (siteposition == 0) {
+            mainpagecenter.loadNews();
+        } else {
+            datamanager.getNews(csite, sections);
+        }
         setTitle(csite.name);
         try {
             ActionBar actionBar = getActionBar();
             actionBar.setBackgroundDrawable(csite.color);
-            actionBar.setIcon(Drawable.createFromStream(getAssets().open(csite.name + ".png"), null));
+            if (siteposition == 0) {
+                actionBar.setIcon(R.mipmap.ic_launcher);
+            } else {
+                actionBar.setIcon(Drawable.createFromStream(getAssets().open(csite.name + ".png"), null));
+            }
         } catch (IOException e) {
             debug("Error setting Site Icon in the Bar");
         }

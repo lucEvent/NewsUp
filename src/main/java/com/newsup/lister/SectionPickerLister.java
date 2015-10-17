@@ -1,4 +1,4 @@
-package com.newsup.widget;
+package com.newsup.lister;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -29,7 +29,6 @@ public class SectionPickerLister extends ArrayAdapter<Section> implements View.O
             view.setOnClickListener(this);
         }
         CheckBox ctview = (CheckBox) view;
-        ctview.setTag(position);
         ctview.setTag(position);
         ctview.setText(getItem(position).name);
         ctview.setChecked(marks[position]);

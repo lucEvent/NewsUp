@@ -2,165 +2,68 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <HorizontalScrollView
-        android:id="@+id/tabbar"
+    <RelativeLayout
+        android:id="@+id/labels"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true">
+        android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:id="@+id/list"
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/label_myfeed"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#AA888888"
-            android:orientation="horizontal">
+            android:layout_alignBottom="@+id/divider"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/divider"
+            android:background="@drawable/selector_settings"
+            android:gravity="center"
+            android:onClick="onConfigureMyFeed"
+            android:padding="20dip"
+            android:text="Configure My Feed" />
 
+        <View
+            android:id="@+id/divider"
+            android:layout_width="1dip"
+            android:layout_height="80dp"
+            android:layout_centerHorizontal="true"
+            android:background="#FFAAAAAA" />
 
-            <ImageButton
-                android:id="@+id/icon0"
-                style="@style/settings_tab_icon" />
+        <Button
+            android:id="@+id/label_confsites"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/divider"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/divider"
+            android:background="@drawable/selector_settings"
+            android:gravity="center"
+            android:onClick="onConfigureSites"
+            android:padding="20dip"
+            android:text="Configure Sites" />
 
-            <ImageButton
-                android:id="@+id/icon1"
-                style="@style/settings_tab_icon" />
-
-            <ImageButton
-                android:id="@+id/icon2"
-                style="@style/settings_tab_icon" />
-
-            <ImageButton
-                android:id="@+id/icon3"
-                style="@style/settings_tab_icon" />
-
-            <ImageButton
-                android:id="@+id/icon4"
-                style="@style/settings_tab_icon" />
-
-            <ImageButton
-                android:id="@+id/icon5"
-                style="@style/settings_tab_icon" />
-
-            <ImageButton
-                android:id="@+id/icon6"
-                style="@style/settings_tab_icon" />
-
-            <ImageButton
-                android:id="@+id/icon7"
-                style="@style/settings_tab_icon" />
-
-            <ImageButton
-                android:id="@+id/icon8"
-                style="@style/settings_tab_icon" />
-
-            <ImageButton
-                android:id="@+id/icon9"
-                style="@style/settings_tab_icon" />
-
-            <ImageButton
-                android:id="@+id/icon10"
-                style="@style/settings_tab_icon" />
-
-            <ImageButton
-                android:id="@+id/icon11"
-                style="@style/settings_tab_icon" />
-
-            <ImageButton
-                android:id="@+id/icon12"
-                style="@style/settings_tab_icon" />
-
-            <ImageButton
-                android:id="@+id/icon13"
-                style="@style/settings_tab_icon" />
-
-            <ImageButton
-                android:id="@+id/icon14"
-                style="@style/settings_tab_icon" />
-
-            <ImageButton
-                android:id="@+id/icon15"
-                style="@style/settings_tab_icon" />
-
-            <ImageButton
-                android:id="@+id/icon16"
-                style="@style/settings_tab_icon" />
-
-            <ImageButton
-                android:id="@+id/icon17"
-                style="@style/settings_tab_icon" />
-
-            <ImageButton
-                android:id="@+id/icon18"
-                style="@style/settings_tab_icon" />
-
-            <ImageButton
-                android:id="@+id/icon19"
-                style="@style/settings_tab_icon" />
-
-            <ImageButton
-                android:id="@+id/icon20"
-                style="@style/settings_tab_icon" />
-
-            <ImageButton
-                android:id="@+id/icon21"
-                style="@style/settings_tab_icon" />
-
-            <ImageButton
-                android:id="@+id/icon22"
-                style="@style/settings_tab_icon" />
-
-            <ImageButton
-                android:id="@+id/icon23"
-                style="@style/settings_tab_icon" />
-
-            <ImageButton
-                android:id="@+id/icon24"
-                style="@style/settings_tab_icon" />
-
-            <ImageButton
-                android:id="@+id/icon25"
-                style="@style/settings_tab_icon" />
-
-
-            <ImageButton
-                android:id="@+id/icon26"
-                style="@style/settings_tab_icon" />
-
-            <ImageButton
-                android:id="@+id/icon27"
-                style="@style/settings_tab_icon" />
-
-            <ImageButton
-                android:id="@+id/icon28"
-                style="@style/settings_tab_icon" />
-        </LinearLayout>
-    </HorizontalScrollView>
-
-    <TextView
-        android:id="@+id/tabtitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tabbar"
-        android:background="@color/app"
-        android:drawableBottom="@drawable/bg_pressed"
-        android:padding="15dip"
-        android:text="Title"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textStyle="bold" />
+    </RelativeLayout>
 
     <View
-        android:id="@+id/divider"
         android:layout_width="match_parent"
-        android:layout_height="2dip"
-        android:layout_below="@id/tabtitle"
-        android:layout_marginLeft="10dip"
-        android:layout_marginRight="10dip"
-        android:background="@color/divider_light"
-        android:translationY="-10dip" />
+        android:layout_height="3dip"
+        android:layout_below="@+id/labels"
+        android:background="#FFAAAAAA" />
 
-    <FrameLayout
-        android:id="@+id/content"
+    <include
+        android:id="@+id/content_myfeed"
+        layout="@layout/f_conf_myfeed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/divider"></FrameLayout>
+        android:layout_below="@+id/labels"
+        android:layout_marginTop="3dip" />
+
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/labels"
+        android:layout_marginTop="3dip"
+        android:visibility="gone" />
 
 </RelativeLayout>

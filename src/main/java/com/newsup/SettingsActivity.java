@@ -1,187 +1,172 @@
 package com.newsup;
 
-import android.app.Activity;
-import android.graphics.drawable.Drawable;
+import android.app.ListActivity;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.newsup.dialog.DialogState;
-import com.newsup.dialog.SectionPicker;
+import com.newsup.dialog.SiteConfiguration;
 import com.newsup.dialog.SitePicker;
 import com.newsup.kernel.NewsDataCenter;
 import com.newsup.kernel.Site;
 import com.newsup.kernel.list.SiteList;
+import com.newsup.lister.SiteLister;
 import com.newsup.settings.AppSettings;
-import com.newsup.settings.SiteSettings;
 
-import java.io.IOException;
-import java.util.Arrays;
+import java.util.Comparator;
+import java.util.TreeSet;
 
-public final class SettingsActivity extends Activity implements DialogState {
+public final class SettingsActivity extends ListActivity implements DialogState {
 
     private NewsDataCenter data;
     private SiteList sites;
-    private FrameLayout content;
-    private TextView tabtitle;
-    private ImageButton[] tabs;
 
-    private int siteSelectedpos = -9999;
+    private SettingsTabManager tabManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a_settings);
 
-        data = new NewsDataCenter(this, null, null);
-        sites = data.getSites();
-        content = (FrameLayout) findViewById(R.id.content);
-        tabtitle = (TextView) findViewById(R.id.tabtitle);
+        data = new NewsDataCenter(this);
 
-        setSitesTabBar();
+        sites = filterSites();
 
-        displayTab(0, -1);
+        tabManager = new SettingsTabManager();
+
+        onConfigureMyFeed(null);
     }
 
-    private void setSitesTabBar() {
-        debug("Num sites:" + sites.getNumSites());
-        tabs = new ImageButton[sites.getNumSites() + 1];
-        tabs[0] = (ImageButton) findViewById(R.id.icon0);
-
-        tabs[1] = (ImageButton) findViewById(R.id.icon1);
-        tabs[2] = (ImageButton) findViewById(R.id.icon2);
-        tabs[3] = (ImageButton) findViewById(R.id.icon3);
-        tabs[4] = (ImageButton) findViewById(R.id.icon4);
-        tabs[5] = (ImageButton) findViewById(R.id.icon5);
-
-        tabs[6] = (ImageButton) findViewById(R.id.icon6);
-
-        tabs[7] = (ImageButton) findViewById(R.id.icon7);
-        tabs[8] = (ImageButton) findViewById(R.id.icon8);
-        tabs[9] = (ImageButton) findViewById(R.id.icon9);
-
-        tabs[10] = (ImageButton) findViewById(R.id.icon10);
-        tabs[11] = (ImageButton) findViewById(R.id.icon11);
-        tabs[12] = (ImageButton) findViewById(R.id.icon12);
-        tabs[13] = (ImageButton) findViewById(R.id.icon13);
-
-        tabs[14] = (ImageButton) findViewById(R.id.icon14);
-        tabs[15] = (ImageButton) findViewById(R.id.icon15);
-        tabs[16] = (ImageButton) findViewById(R.id.icon16);
-        tabs[17] = (ImageButton) findViewById(R.id.icon17);
-        tabs[18] = (ImageButton) findViewById(R.id.icon18);
-        tabs[19] = (ImageButton) findViewById(R.id.icon19);
-        tabs[20] = (ImageButton) findViewById(R.id.icon20);
-        tabs[21] = (ImageButton) findViewById(R.id.icon21);
-        tabs[22] = (ImageButton) findViewById(R.id.icon22);
-        tabs[23] = (ImageButton) findViewById(R.id.icon23);
-        tabs[24] = (ImageButton) findViewById(R.id.icon24);
-        tabs[25] = (ImageButton) findViewById(R.id.icon25);
-        tabs[26] = (ImageButton) findViewById(R.id.icon26);
-        tabs[27] = (ImageButton) findViewById(R.id.icon27);
-        tabs[28] = (ImageButton) findViewById(R.id.icon28);
-  /*      tabs[29] = (ImageButton) findViewById(R.id.icon29);
-*/
-        try {
-            tabs[0].setImageDrawable(Drawable.createFromStream(getAssets().open("home.png"), null));
-            tabs[0].setId(0);
-            tabs[0].setTag(0);
-            int tab = 1;
-            for (int sitepos = 0; sitepos < sites.size(); ++sitepos) {
-                Site site = sites.get(sitepos);
-                if (site.code != -1) {
-                    tabs[tab].setImageDrawable(Drawable.createFromStream(getAssets().open(site.name + ".png"), null));
-                    tabs[tab].setId(tab);
-                    tabs[tab].setTag(sitepos);
-                    tab++;
-                }
+    private SiteList filterSites() {
+        TreeSet<Site> orderedList = new TreeSet<Site>(new Comparator<Site>() {
+            @Override
+            public int compare(Site s1, Site s2) {
+                return s1.name.compareTo(s2.name);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void displayTab(View v) {
-        displayTab(v.getId(), (Integer) v.getTag());
-    }
-
-    private void displayTab(int tab, int siteSelectedpos) {
-        if (this.siteSelectedpos == siteSelectedpos) {
-            return;
-        }
-        for (ImageButton icon : tabs) {
-            icon.setSelected(false);
-        }
-        tabs[tab].setSelected(true);
-
-        View view;
-        if (tab == 0) {
-            view = getLayoutInflater().inflate(R.layout.f_set_home, content, false);
-
-            tabtitle.setText("Configuration Main page");
-        } else {
-            view = getLayoutInflater().inflate(R.layout.f_set_i, content, false);
-            tabtitle.setText("Configuration " + sites.get(siteSelectedpos).name);
-        }
-
-        this.siteSelectedpos = siteSelectedpos;
-        content.removeAllViews();
-        content.addView(view);
-    }
-
-    public void selectMainSite(View view) {
-        new SitePicker(this, sites, handler).show();
-    }
-
-    private boolean selectSectionsOnMainPageWaiter;
-
-    public void selectSectionsOnMainPage(View view) {
-        SiteSettings ssettings = data.getSettingsOf(sites.get(siteSelectedpos));
-        boolean[] bsections = Arrays.copyOfRange(ssettings.sectionsOnMain, 0, ssettings.sectionsOnMain.length);
-        new SectionPicker(this, sites.get(siteSelectedpos).getSections(), bsections, handler).show();
-        selectSectionsOnMainPageWaiter = true;
-    }
-
-    public void selectSectionsToSave(View view) {
-        SiteSettings ssettings = data.getSettingsOf(sites.get(siteSelectedpos));
-        boolean[] bsections = Arrays.copyOfRange(ssettings.sectionsToSave, 0, ssettings.sectionsToSave.length);
-        new SectionPicker(this, sites.get(siteSelectedpos).getSections(), bsections, handler).show();
-        selectSectionsOnMainPageWaiter = false;
-    }
-
-    private final Handler handler = new Handler() {
-
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case SITE_PICKED:
-                    data.setSettingsWith(AppSettings.MAIN_SITE_I, (Integer) msg.obj);
-                    break;
-                case SECTIONS_PICKED:
-                    Site site = sites.get(siteSelectedpos);
-                    boolean[] schosen = (boolean[]) msg.obj;
-                    if (selectSectionsOnMainPageWaiter) {
-                        site.settings.sectionsOnMain = schosen;
-                    } else {
-                        site.settings.sectionsToSave = schosen;
-                    }
-                    data.setSettingsOf(site);
-                    break;
-                default:
-                    debug("[][#] OPCION NO CONTEMPLADA");
+        });
+        for (Site site : data.getSites()) {
+            if (site.code >= 0) {
+                orderedList.add(site);
             }
         }
+        return new SiteList(orderedList);
+    }
 
-    };
+    public void onConfigureMyFeed(View view) {
+        tabManager.onSelectConfigureMyFeed();
+    }
+
+    public void onConfigureSites(View view) {
+        tabManager.onSelectConfigureSites();
+    }
+
+
+    private class SettingsTabManager {
+
+        private Button myfeed, confsites;
+        SettingsMyFeedManager myFeedManager;
+        SettingsSitesManager sitesManager;
+
+        SettingsTabManager() {
+            myfeed = (Button) findViewById(R.id.label_myfeed);
+            confsites = (Button) findViewById(R.id.label_confsites);
+            myFeedManager = new SettingsMyFeedManager();
+            sitesManager = new SettingsSitesManager();
+        }
+
+
+        public void onSelectConfigureMyFeed() {
+            myfeed.setSelected(true);
+            confsites.setSelected(false);
+
+            myFeedManager.setVisibility(View.VISIBLE);
+            sitesManager.setVisibility(View.GONE);
+        }
+
+        public void onSelectConfigureSites() {
+            myfeed.setSelected(false);
+            confsites.setSelected(true);
+
+            myFeedManager.setVisibility(View.GONE);
+            sitesManager.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void onConfigureSitesToShow(View view) {
+        new SitePicker(SettingsActivity.this, data);
+    }
+
+    public void onConfigureSaveTime(View view) {
+        //TODO new TimePicker(SettingsActivity.this, XXXtimeXXX, handler).show();
+    }
+
+    private class SettingsMyFeedManager {
+
+        private View content;
+        private TextView lab_sitesTitle, lab_sitesSubtitle, lab_saveTime;
+
+        SettingsMyFeedManager() {
+            content = findViewById(R.id.content_myfeed);
+            lab_sitesTitle = (TextView) content.findViewById(R.id.conf_label_sites_title);//Sites to show: 1 Site
+            lab_sitesSubtitle = (TextView) content.findViewById(R.id.conf_label_sites_subtitle);//El Pais, As,...
+            lab_saveTime = (TextView) content.findViewById(R.id.conf_label_save_time);//Never
+            setUp();
+        }
+
+        public void setUp() {
+            AppSettings settings = data.getSettings();
+            lab_sitesTitle.setText("Sites to show: " + settings.main_sites_i.length + " Sites");
+
+            SiteList sites = data.getSites();
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < settings.main_sites_i.length; ++i) {
+                if (i != 0) sb.append(", ");
+                sb.append(sites.get(settings.main_sites_i[i]).name);
+            }
+            lab_sitesSubtitle.setText(sb.toString());
+            //lab_saveTime TODO
+        }
+
+
+        public void setVisibility(int visibility) {
+            content.setVisibility(visibility);
+        }
+    }
+
+    private class SettingsSitesManager {
+
+        private View content;
+
+        SettingsSitesManager() {
+            content = getListView();
+            setListAdapter(new SiteLister(SettingsActivity.this, sites));
+        }
+
+        public void setVisibility(int visibility) {
+            content.setVisibility(visibility);
+        }
+
+    }
+
+    private SiteConfiguration siteConfigurationManager;
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        Site site = sites.get(position);
+        debug("Se ha seleccionado: " + site.name);
+        if (siteConfigurationManager == null) {
+            siteConfigurationManager = new SiteConfiguration(this, data);
+        }
+        siteConfigurationManager.set(site);
+    }
+
 
     private void debug(String text) {
         Log.d("##SettingsActivity##", text);
     }
-
 
 }

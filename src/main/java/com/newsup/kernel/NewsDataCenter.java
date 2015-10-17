@@ -40,6 +40,10 @@ public class NewsDataCenter implements TaskMessage {
     private static AppSettings appSettings;
     private static SiteList sites;
 
+    public NewsDataCenter(Context context) {
+        this(context, null, null);
+    }
+
     public NewsDataCenter(Context context, ConnectivityManager connectivityManager, Handler handler) {
         this.context = context;
         this.connectivityManager = connectivityManager;
@@ -69,7 +73,7 @@ public class NewsDataCenter implements TaskMessage {
         if (isInternetAvailable()) {
             new NewsLoader(site, sections);
         } else {
-            noInternetTasks(site);
+            new NoInternetTask(site);
         }
 
     }
@@ -128,7 +132,9 @@ public class NewsDataCenter implements TaskMessage {
         public void message(int taskMessage, Object dataAttached) {
             switch (taskMessage) {
                 case NEWS_READ:
-                    site.news.add((News) dataAttached);
+                    News news = (News) dataAttached;
+                    news.site = site;
+                    site.news.add(news);
                     handler.obtainMessage(taskMessage, dataAttached).sendToTarget();
                     break;
                 case SECTION_BEGIN:
@@ -150,27 +156,38 @@ public class NewsDataCenter implements TaskMessage {
 
     public Site getSiteHistorial(Site site) {
         if (site.historial == null || site.historial.isEmpty()) {
-            site.historial = dbmanager.readNews(site.code);
+            site.historial = dbmanager.readNews(site);
         }
         return site;
     }
 
-    private void noInternetTasks(Site site) {
-        handler.obtainMessage(NO_INTERNET, null).sendToTarget();
+    private class NoInternetTask extends Thread {
 
-        getSiteHistorial(site);
+        private final Site site;
 
-        NewsMap reorder = new NewsMap(new Comparator<News>() {
+        private NoInternetTask(Site site) {
+            this.site = site;
+            this.start();
+        }
 
-            @Override
-            public int compare(News o1, News o2) {
-                int comparison = -Date.compare(o1.date, o2.date);
-                return comparison != 0 ? comparison : (o1.id < o2.id ? -1 : (o1.id == o2.id ? 0 : 1));
-            }
-        });
-        reorder.addAll(site.historial);
+        @Override
+        public void run() {
+            handler.obtainMessage(NO_INTERNET, null).sendToTarget();
 
-        handler.obtainMessage(NEWS_READ_HISTORY, reorder).sendToTarget();
+            getSiteHistorial(site);
+
+            NewsMap reorder = new NewsMap(new Comparator<News>() {
+
+                @Override
+                public int compare(News o1, News o2) {
+                    int comparison = -Date.compare(o1.date, o2.date);
+                    return comparison != 0 ? comparison : (o1.id < o2.id ? -1 : (o1.id == o2.id ? 0 : 1));
+                }
+            });
+            reorder.addAll(site.historial);
+
+            handler.obtainMessage(NEWS_READ_HISTORY, reorder).sendToTarget();
+        }
     }
 
     public void createNews(int code, News news) {

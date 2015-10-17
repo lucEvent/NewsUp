@@ -14,6 +14,8 @@ public class News {
 
     public String content;
 
+    public Site site;
+
     public News(int id, String title, String link, String description, String date, Tags categories) {
         this(title, link, description, date, categories);
         this.id = id;
@@ -25,6 +27,10 @@ public class News {
         this.description = description;
         this.date = new Date(date);
         this.categories = categories;
+    }
+
+    public void setSite(Site site) {
+        this.site = site;
     }
 
     public void setContent(String content) {

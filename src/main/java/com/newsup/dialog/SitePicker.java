@@ -3,34 +3,45 @@ package com.newsup.dialog;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.Handler;
 
+import com.newsup.kernel.NewsDataCenter;
 import com.newsup.kernel.list.SiteList;
-import com.newsup.widget.SiteLister;
+import com.newsup.lister.SitePickerLister;
+import com.newsup.settings.AppSettings;
+import com.newsup.settings.SiteSettings;
 
 
-public class SitePicker extends AlertDialog.Builder implements DialogInterface.OnClickListener, DialogState {
+public class SitePicker extends AlertDialog.Builder implements DialogState {
 
-    private Handler handler;
-    private AlertDialog dialog;
+    private NewsDataCenter dataManager;
+    private boolean[] marks;
 
-    public SitePicker(Context context, SiteList sites, Handler handler) {
+    public SitePicker(Context context, NewsDataCenter dataManager) {
         super(context);
-        this.handler = handler;
+        this.dataManager = dataManager;
 
-        this.setAdapter(new SiteLister(context, sites), this);
-        this.dialog = create();
+        SiteList sites = dataManager.getSites();
+        AppSettings settings = dataManager.getSettings();
+        marks = settings.sitesOnLoadBooleanArray(sites.size());
+
+        setAdapter(new SitePickerLister(context, sites, marks), null);
+        setNegativeButton(android.R.string.cancel, null);
+        setPositiveButton("Done", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                saveSettings();
+            }
+        });
+
+        AlertDialog dialog = create();
         dialog.getListView().setDivider(null);
-    }
-
-    @Override
-    public void onClick(DialogInterface dialogInterface, int which) {
-        handler.obtainMessage(SITE_PICKED, which).sendToTarget();
-    }
-
-    @Override
-    public AlertDialog show() {
         dialog.show();
-        return dialog;
     }
+
+    private void saveSettings() {
+        int[] main_sites = SiteSettings.toIntegerArray(marks);
+        dataManager.setSettingsWith(AppSettings.SET_MAIN_SITE, main_sites);
+    }
+
+
 }

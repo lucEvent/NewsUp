@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.newsup.io.Database.DBNews;
 import com.newsup.kernel.News;
+import com.newsup.kernel.Site;
 import com.newsup.kernel.list.NewsMap;
 import com.newsup.kernel.list.Tags;
 
@@ -21,16 +22,17 @@ public class DBManager {
     /**
      * ******** READS *************
      **/
-    public NewsMap readNews(int sitecode) {
+    public NewsMap readNews(Site site) {
         SQLiteDatabase database = db.getReadableDatabase();
-        Cursor cursor = database.query(DBNews.db, DBNews.cols, DBNews.site_code + "=" + sitecode, null, null, null, DBNews.id + " ASC");
+        Cursor cursor = database.query(DBNews.db, DBNews.cols, DBNews.site_code + "=" + site.code, null, null, null, DBNews.id + " ASC");
 
         NewsMap result = new NewsMap();
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-
-            result.add(new News(cursor.getInt(0), cursor.getString(2), cursor.getString(3), cursor.getString(5), cursor.getString(4), new Tags(cursor.getString(6))));
+            News news = new News(cursor.getInt(0), cursor.getString(2), cursor.getString(3), cursor.getString(5), cursor.getString(4), new Tags(cursor.getString(6)));
+            news.site = site;
+            result.add(news);
 
             cursor.moveToNext();
         }

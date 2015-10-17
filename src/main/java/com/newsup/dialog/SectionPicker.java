@@ -3,23 +3,22 @@ package com.newsup.dialog;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.Handler;
 
 import com.newsup.kernel.list.SectionList;
-import com.newsup.widget.SectionPickerLister;
+import com.newsup.lister.SectionPickerLister;
+import com.newsup.task.Socket;
 
 public class SectionPicker extends AlertDialog.Builder implements DialogState {
 
-    private Handler handler;
-    private AlertDialog dialog;
+    private Socket handler;
     private boolean[] marks;
 
-    public SectionPicker(Context context, SectionList sections, boolean[] marks, Handler handler) {
+    public SectionPicker(Context context, SectionList sections, boolean[] marks, Socket handler) {
         super(context);
         this.handler = handler;
         this.marks = marks;
-        SectionPickerLister lister = new SectionPickerLister(context, sections, marks);
-        setAdapter(lister, null);
+
+        setAdapter(new SectionPickerLister(context, sections, marks), null);
         setNegativeButton("Cancel", null);
         setPositiveButton("Apply", new DialogInterface.OnClickListener() {
             @Override
@@ -28,18 +27,12 @@ public class SectionPicker extends AlertDialog.Builder implements DialogState {
             }
 
         });
-        this.dialog = create();
+        create().show();
     }
 
     private void sendResults() {
-        // Here after clicking apply button
-        handler.obtainMessage(SECTIONS_PICKED, marks).sendToTarget();
+        handler.message(SECTIONS_PICKED, marks);
     }
 
-    @Override
-    public AlertDialog show() {
-        dialog.show();
-        return dialog;
-    }
 
 }

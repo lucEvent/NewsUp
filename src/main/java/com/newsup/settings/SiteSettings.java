@@ -17,7 +17,7 @@ public class SiteSettings {
         return toIntegerArray(sectionsOnMain);
     }
 
-    private static int[] toIntegerArray(boolean[] array) {
+    public static int[] toIntegerArray(boolean[] array) {
         ArrayList<Integer> isections = new ArrayList<Integer>();
         for (int i = 0; i < array.length; ++i) if (array[i]) isections.add(i);
 
