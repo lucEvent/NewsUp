@@ -1,16 +1,13 @@
 package com.newsup.net;
 
-import android.content.Context;
-import android.os.Handler;
-
 import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
 
 public class BCCNewsReader extends NewsReader {
 
-    public BCCNewsReader(Handler handler, Context context) {
-        super(handler, context);
+    public BCCNewsReader() {
+        super();
 
         SECTIONS = new SectionList();
         SECTIONS.add(new Section("Top stories", 0, "http://feeds.bbci.co.uk/news/rss.xml"));

@@ -1,9 +1,6 @@
 package com.newsup.net;
 
 
-import android.content.Context;
-import android.os.Handler;
-
 import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
@@ -17,8 +14,8 @@ import java.net.URL;
 
 public class IltalehtiNewsReader extends NewsReader {
 
-    public IltalehtiNewsReader(Handler handler, Context context) {
-        super(handler, context);
+    public IltalehtiNewsReader() {
+        super();
 
         SECTIONS = new SectionList();
         SECTIONS.add(new Section("Uutiset", 0, "http://www.iltalehti.fi/rss/uutiset.xml"));

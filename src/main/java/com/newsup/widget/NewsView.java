@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.newsup.R;
 import com.newsup.kernel.News;
 import com.newsup.kernel.NewsDataCenter;
-import com.newsup.net.State;
+import com.newsup.task.TaskMessage;
 
 public class NewsView {
 
@@ -108,7 +108,7 @@ public class NewsView {
             } else {
                 dataCenter.bookmarkNews(currentNews);
             }
-            handler.obtainMessage(State.ACTION_REFRESH_LIST, null).sendToTarget();
+            handler.obtainMessage(TaskMessage.ACTION_REFRESH_LIST, null).sendToTarget();
             setBookmarkButtonImage();
         }
     };

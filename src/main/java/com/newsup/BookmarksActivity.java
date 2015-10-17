@@ -13,11 +13,11 @@ import com.newsup.io.BookmarksManager;
 import com.newsup.kernel.News;
 import com.newsup.kernel.NewsDataCenter;
 import com.newsup.kernel.list.NewsList;
-import com.newsup.net.State;
+import com.newsup.task.TaskMessage;
 import com.newsup.widget.NewsLister;
 import com.newsup.widget.NewsView;
 
-public class BookmarksActivity extends ListActivity implements State {
+public class BookmarksActivity extends ListActivity implements TaskMessage {
 
     private NewsLister newslister;
     private NewsView newsView;
@@ -34,7 +34,7 @@ public class BookmarksActivity extends ListActivity implements State {
         newslister.setNotifyOnChange(true);
         setListAdapter(newslister);
 
-        newsView = new NewsView(this, new NewsDataCenter(this, null), handler);
+        newsView = new NewsView(this, new NewsDataCenter(this, null, null), handler);
 
         manager = new BookmarksManager(handler);
         manager.getBookmarkedNews();

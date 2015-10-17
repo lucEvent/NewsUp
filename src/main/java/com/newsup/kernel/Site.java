@@ -16,6 +16,7 @@ public class Site extends IASite {
     public static final int THEME_FINLAND = 0xFF003580;
     public static final int THEME_INTERNATIONAL = 0xFFDDDDDD;
     public static final int THEME_TECHNOLOGY = 0xFF90c3d4;
+    public static final int THEME_BLOGS = 0xFF66AA55;
     public static final int THEME_MAGAZINES = 0xFF444444;
 
     /**

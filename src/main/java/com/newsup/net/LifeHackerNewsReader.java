@@ -1,8 +1,5 @@
 package com.newsup.net;
 
-import android.content.Context;
-import android.os.Handler;
-
 import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
@@ -10,8 +7,8 @@ import com.newsup.kernel.list.Tags;
 
 public class LifeHackerNewsReader extends NewsReader {
 
-    public LifeHackerNewsReader(Handler handler, Context context) {
-        super(handler, context);
+    public LifeHackerNewsReader() {
+        super();
 
         SECTIONS = new SectionList();
         SECTIONS.add(new Section("Main", 0, "http://feeds.gawker.com/lifehacker/vip"));

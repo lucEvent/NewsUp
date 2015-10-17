@@ -1,7 +1,6 @@
 package com.newsup.io;
 
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.os.Environment;
 
 import com.newsup.kernel.News;
@@ -18,9 +17,9 @@ import java.io.ObjectOutputStream;
 
 public class SDManager {
 
-    private ContextWrapper context;
+    private Context context;
 
-    public SDManager(ContextWrapper context) {
+    public SDManager(Context context) {
         this.context = context;
     }
 
@@ -66,8 +65,8 @@ public class SDManager {
             ObjectInputStream oinputStream = new ObjectInputStream(context.openFileInput(filename));
 
             int nitems = oinputStream.readInt();
-            result.sectionsOnMain = new Boolean[nitems];
-            result.sectionsToSave = new Boolean[nitems];
+            result.sectionsOnMain = new boolean[nitems];
+            result.sectionsToSave = new boolean[nitems];
             for (int i = 0; i < nitems; ++i) {
                 result.sectionsOnMain[i] = oinputStream.readBoolean();
                 result.sectionsToSave[i] = oinputStream.readBoolean();
@@ -76,8 +75,8 @@ public class SDManager {
 
         } catch (Exception e) {
             int size = site.getSections().size();
-            result.sectionsOnMain = new Boolean[size];
-            result.sectionsToSave = new Boolean[size];
+            result.sectionsOnMain = new boolean[size];
+            result.sectionsToSave = new boolean[size];
             result.sectionsOnMain[0] = true;
             result.sectionsToSave[0] = true;
             for (int i = 1; i < size; ++i) {
@@ -107,20 +106,22 @@ public class SDManager {
         }
     }
 
+
     public AppSettings readSettings() {
         AppSettings result = new AppSettings();
 
         try {
             ObjectInputStream oinputStream = new ObjectInputStream(context.openFileInput("sapp"));
 
-            AppSettings.main_site_i = oinputStream.readInt();
+            int nitems = oinputStream.readInt();
+            result.main_sites_i = new int[nitems];
+            for (int i = 0; i < nitems; ++i) result.main_sites_i[i] = oinputStream.readInt();
 
             oinputStream.close();
 
         } catch (Exception e) {
             // Nothing went wrong, it's just the setting up
         }
-
         return result;
     }
 
@@ -128,7 +129,8 @@ public class SDManager {
         try {
             ObjectOutputStream ooutputStream = new ObjectOutputStream(context.openFileOutput("sapp", Context.MODE_PRIVATE));
 
-            ooutputStream.writeInt(AppSettings.main_site_i);
+            ooutputStream.writeInt(settings.main_sites_i.length);
+            for (int value : settings.main_sites_i) ooutputStream.writeInt(value);
 
             ooutputStream.close();
         } catch (Exception e) {

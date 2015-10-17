@@ -1,16 +1,13 @@
 package com.newsup.net;
 
-import android.content.Context;
-import android.os.Handler;
-
 import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
 
 public class RollingStoneNewsReader extends NewsReader {
 
-    public RollingStoneNewsReader(Handler handler, Context context) {
-        super(handler, context);
+    public RollingStoneNewsReader() {
+        super();
 
         SECTIONS = new SectionList();
         SECTIONS.add(new Section("All news", 0, "http://www.rollingstone.com/news.rss"));

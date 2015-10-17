@@ -12,9 +12,9 @@ public class SectionPicker extends AlertDialog.Builder implements DialogState {
 
     private Handler handler;
     private AlertDialog dialog;
-    private Boolean[] marks;
+    private boolean[] marks;
 
-    public SectionPicker(Context context, SectionList sections, Boolean[] marks, Handler handler) {
+    public SectionPicker(Context context, SectionList sections, boolean[] marks, Handler handler) {
         super(context);
         this.handler = handler;
         this.marks = marks;

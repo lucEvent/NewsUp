@@ -1,16 +1,13 @@
 package com.newsup.net;
 
-import android.content.Context;
-import android.os.Handler;
-
 import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
 
 public class AsNewsReader extends NewsReader {
 
-    public AsNewsReader(Handler handler, Context context) {
-        super(handler, context);
+    public AsNewsReader() {
+        super();
 
         SECTIONS = new SectionList();
         SECTIONS.add(new Section("TITULARES", 0, "http://as.com/rss/diarioas/portada.xml"));

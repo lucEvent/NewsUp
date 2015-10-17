@@ -1,16 +1,13 @@
 package com.newsup.net;
 
-import android.content.Context;
-import android.os.Handler;
-
 import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
 
 public class TheLocalNewsReader extends NewsReader {
 
-    public TheLocalNewsReader(Handler handler, Context context) {
-        super(handler, context);
+    public TheLocalNewsReader() {
+        super();
 
         SECTIONS = new SectionList();
         SECTIONS.add(new Section("Austria", 0, "http://www.thelocal.at/feeds/rss.php"));

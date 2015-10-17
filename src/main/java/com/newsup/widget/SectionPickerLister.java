@@ -13,10 +13,10 @@ import com.newsup.kernel.list.SectionList;
 
 public class SectionPickerLister extends ArrayAdapter<Section> implements View.OnClickListener {
 
-    private Boolean[] marks;
+    private boolean[] marks;
     private LayoutInflater inflater;
 
-    public SectionPickerLister(Context context, SectionList values, Boolean[] marks) {
+    public SectionPickerLister(Context context, SectionList values, boolean[] marks) {
         super(context, R.layout.i_picker_section, values);
         this.marks = marks;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

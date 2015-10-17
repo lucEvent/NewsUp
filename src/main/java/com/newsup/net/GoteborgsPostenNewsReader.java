@@ -1,17 +1,14 @@
 package com.newsup.net;
 
 
-import android.content.Context;
-import android.os.Handler;
-
 import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
 
 public class GoteborgsPostenNewsReader extends NewsReader {
 
-    public GoteborgsPostenNewsReader(Handler handler, Context context) {
-        super(handler, context);
+    public GoteborgsPostenNewsReader() {
+        super();
 
         SECTIONS = new SectionList();
         SECTIONS.add(new Section("Göteborg", 0, "http://www.gp.se/1.16942"));

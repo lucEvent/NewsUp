@@ -1,8 +1,5 @@
 package com.newsup.net;
 
-import android.content.Context;
-import android.os.Handler;
-
 import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
@@ -10,8 +7,8 @@ import com.newsup.kernel.list.Tags;
 
 public class AftonbladetNewsReader extends NewsReader {
 
-    public AftonbladetNewsReader(Handler handler, Context context) {
-        super(handler, context);
+    public AftonbladetNewsReader() {
+        super();
 
         SECTIONS = new SectionList();
         SECTIONS.add(new Section("Startsidan", 0, "http://www.aftonbladet.se/rss.xml"));

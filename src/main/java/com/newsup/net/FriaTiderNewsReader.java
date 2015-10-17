@@ -1,17 +1,14 @@
 package com.newsup.net;
 
 
-import android.content.Context;
-import android.os.Handler;
-
 import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
 
 public class FriaTiderNewsReader extends NewsReader {
 
-    public FriaTiderNewsReader(Handler handler, Context context) {
-        super(handler, context);
+    public FriaTiderNewsReader() {
+        super();
 
         SECTIONS = new SectionList();
         SECTIONS.add(new Section("Nyheter", 0, "http://www.friatider.se/rss.xml"));

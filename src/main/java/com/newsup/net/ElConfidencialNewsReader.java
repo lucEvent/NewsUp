@@ -1,12 +1,11 @@
 package com.newsup.net;
 
-import android.content.Context;
-import android.os.Handler;
-
 import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
 import com.newsup.kernel.list.Tags;
+import com.newsup.task.Socket;
+import com.newsup.task.TaskMessage;
 
 import org.jsoup.select.Elements;
 
@@ -14,8 +13,8 @@ import java.util.ArrayList;
 
 public class ElConfidencialNewsReader extends NewsReader {
 
-    public ElConfidencialNewsReader(Handler handler, Context context) {
-        super(handler, context);
+    public ElConfidencialNewsReader() {
+        super();
 
         SECTIONS = new SectionList();
         SECTIONS.add(new Section("España", 0, "http://rss.elconfidencial.com/espana/"));
@@ -81,7 +80,7 @@ public class ElConfidencialNewsReader extends NewsReader {
     }
 
     @Override
-    protected void readRssPage(String rsslink) {
+    protected void readRssPage(Socket handler, String rsslink) {
         org.jsoup.nodes.Document doc;
         try {
             doc = getDocument(rsslink);
@@ -108,7 +107,7 @@ public class ElConfidencialNewsReader extends NewsReader {
             for (org.jsoup.nodes.Element prop : props) {
                 int taghash = prop.tagName().hashCode();
                 if (taghash == titlehash) {
-                    title = prop.html().replace("&lt;![CDATA[", "").replace("]]&gt;", "").replace("&amp;#039;","'");
+                    title = prop.html().replace("&lt;![CDATA[", "").replace("]]&gt;", "").replace("&amp;#039;", "'");
                     continue;
                 }
                 if (taghash == linkhash) {
@@ -128,7 +127,7 @@ public class ElConfidencialNewsReader extends NewsReader {
                     continue;
                 }
                 if (taghash == contenthash) {
-                    content = prop.html().replace("&lt;", "<").replace("&gt;", ">").replace("&amp;#039;","'");
+                    content = prop.html().replace("&lt;", "<").replace("&gt;", ">").replace("&amp;#039;", "'");
                     org.jsoup.nodes.Element con = org.jsoup.Jsoup.parse(content).select("body").get(0);
                     con.children().last().remove();
                     content = con.html();
@@ -136,7 +135,7 @@ public class ElConfidencialNewsReader extends NewsReader {
             }
             News news = new News(title, link, description, date, new Tags(categoriesList));
             news.content = content;
-            handler.obtainMessage(NEWS_READ, news).sendToTarget();
+            handler.message(TaskMessage.NEWS_READ, news);
         }
     }
 

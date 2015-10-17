@@ -6,7 +6,7 @@ import android.util.Log;
 import com.newsup.kernel.News;
 import com.newsup.kernel.list.NewsList;
 import com.newsup.kernel.list.Tags;
-import com.newsup.net.State;
+import com.newsup.task.TaskMessage;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,7 +16,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-public class BookmarksManager implements State {
+public class BookmarksManager implements TaskMessage {
 
     private static final String BOOKMARKS_DIR = "bookmarks/";
     private static final String BOOKMARKS_IND = "index.nu";

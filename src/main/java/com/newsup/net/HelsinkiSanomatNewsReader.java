@@ -1,16 +1,13 @@
 package com.newsup.net;
 
-import android.content.Context;
-import android.os.Handler;
-
 import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
 
 public class HelsinkiSanomatNewsReader extends NewsReader {
 
-    public HelsinkiSanomatNewsReader(Handler handler, Context context) {
-        super(handler, context);
+    public HelsinkiSanomatNewsReader() {
+        super();
 
         SECTIONS = new SectionList();
 

@@ -1,8 +1,5 @@
 package com.newsup.net;
 
-import android.content.Context;
-import android.os.Handler;
-
 import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
@@ -12,8 +9,8 @@ import org.jsoup.Jsoup;
 
 public class SportNewsReader extends NewsReader {
 
-    public SportNewsReader(Handler handler, Context context) {
-        super(handler, context);
+    public SportNewsReader() {
+        super();
 
         SECTIONS = new SectionList();
         SECTIONS.add(new Section("Últimas noticias", 0, "http://www.sport.es/es/rss/last_news/rss.xml"));

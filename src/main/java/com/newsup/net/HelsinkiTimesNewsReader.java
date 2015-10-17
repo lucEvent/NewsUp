@@ -1,8 +1,5 @@
 package com.newsup.net;
 
-import android.content.Context;
-import android.os.Handler;
-
 import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
@@ -10,8 +7,8 @@ import com.newsup.kernel.list.Tags;
 
 public class HelsinkiTimesNewsReader extends NewsReader {
 
-    public HelsinkiTimesNewsReader(Handler handler, Context context) {
-        super(handler, context);
+    public HelsinkiTimesNewsReader() {
+        super();
 
         SECTIONS = new SectionList();
         SECTIONS.add(new Section("Main news", 0, "http://www.helsinkitimes.fi/?format=feed&type=rss"));

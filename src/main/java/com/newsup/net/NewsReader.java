@@ -1,14 +1,11 @@
 package com.newsup.net;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.Handler;
-
 import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
 import com.newsup.kernel.list.Tags;
+import com.newsup.task.Socket;
+import com.newsup.task.TaskMessage;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -17,47 +14,25 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public abstract class NewsReader implements State {
-
-    protected Context context;
-    protected Handler handler;
+public abstract class NewsReader {
 
     public SectionList SECTIONS;
 
-    public NewsReader(Handler handler, Context context) {
-        this.handler = handler;
-        this.context = context;
+    public NewsReader() {
     }
 
-    public void readNews(int section) {
-        readNews(new int[]{section});
+    public final void readNews(int[] sections, Socket handler) {
+
+        for (int isection : sections) {
+            debug("Leyendo: " + this.getClass().getSimpleName() + ". Section: " + SECTIONS.get(isection).name);
+            Section section = SECTIONS.get(isection);
+            handler.message(TaskMessage.SECTION_BEGIN, section.name);
+            readRssPage(handler, section.link);
+        }
+
     }
 
-    public void readNews(final int[] sections) {
-        new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-
-                if (!internetAvailable()) {
-                    handler.obtainMessage(NO_INTERNET).sendToTarget();
-                    return;
-                }
-
-                for (int isection : sections) {
-                    Section section = SECTIONS.get(isection);
-                    handler.obtainMessage(SECTION_BEGIN, section.name).sendToTarget();
-                    readRssPage(section.link);
-                }
-
-                handler.obtainMessage(WORK_DONE).sendToTarget();
-
-            }
-
-        }).start();
-    }
-
-    protected void readRssPage(String rsslink) {
+    protected void readRssPage(Socket handler, String rsslink) {
         org.jsoup.nodes.Document doc;
         try {
             doc = getDocument(rsslink);
@@ -111,8 +86,7 @@ public abstract class NewsReader implements State {
                 }
             }
             News news = getNewsLastFilter(title, link, description, date, new Tags(categoriesList));
-            handler.obtainMessage(NEWS_READ, news).sendToTarget();
-
+            handler.message(TaskMessage.NEWS_READ, news);
         }
     }
 
@@ -140,10 +114,5 @@ public abstract class NewsReader implements State {
         android.util.Log.d("##" + this.getClass().getSimpleName() + "##", text);
     }
 
-    protected boolean internetAvailable() {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return activeNetwork != null && activeNetwork.isConnected();
-    }
 
 }

@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -39,7 +38,7 @@ public final class SettingsActivity extends Activity implements DialogState {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a_settings);
 
-        data = new NewsDataCenter(this, null);
+        data = new NewsDataCenter(this, null, null);
         sites = data.getSites();
         content = (FrameLayout) findViewById(R.id.content);
         tabtitle = (TextView) findViewById(R.id.tabtitle);
@@ -85,8 +84,8 @@ public final class SettingsActivity extends Activity implements DialogState {
         tabs[25] = (ImageButton) findViewById(R.id.icon25);
         tabs[26] = (ImageButton) findViewById(R.id.icon26);
         tabs[27] = (ImageButton) findViewById(R.id.icon27);
-  /*      tabs[28] = (ImageButton) findViewById(R.id.icon28);
-        tabs[29] = (ImageButton) findViewById(R.id.icon29);
+        tabs[28] = (ImageButton) findViewById(R.id.icon28);
+  /*      tabs[29] = (ImageButton) findViewById(R.id.icon29);
 */
         try {
             tabs[0].setImageDrawable(Drawable.createFromStream(getAssets().open("home.png"), null));
@@ -124,7 +123,6 @@ public final class SettingsActivity extends Activity implements DialogState {
         if (tab == 0) {
             view = getLayoutInflater().inflate(R.layout.f_set_home, content, false);
 
-            setMainSiteLogo(view, AppSettings.main_site_i);
             tabtitle.setText("Configuration Main page");
         } else {
             view = getLayoutInflater().inflate(R.layout.f_set_i, content, false);
@@ -144,14 +142,14 @@ public final class SettingsActivity extends Activity implements DialogState {
 
     public void selectSectionsOnMainPage(View view) {
         SiteSettings ssettings = data.getSettingsOf(sites.get(siteSelectedpos));
-        Boolean[] bsections = Arrays.copyOfRange(ssettings.sectionsOnMain, 0, ssettings.sectionsOnMain.length);
+        boolean[] bsections = Arrays.copyOfRange(ssettings.sectionsOnMain, 0, ssettings.sectionsOnMain.length);
         new SectionPicker(this, sites.get(siteSelectedpos).getSections(), bsections, handler).show();
         selectSectionsOnMainPageWaiter = true;
     }
 
     public void selectSectionsToSave(View view) {
         SiteSettings ssettings = data.getSettingsOf(sites.get(siteSelectedpos));
-        Boolean[] bsections = Arrays.copyOfRange(ssettings.sectionsToSave, 0, ssettings.sectionsToSave.length);
+        boolean[] bsections = Arrays.copyOfRange(ssettings.sectionsToSave, 0, ssettings.sectionsToSave.length);
         new SectionPicker(this, sites.get(siteSelectedpos).getSections(), bsections, handler).show();
         selectSectionsOnMainPageWaiter = false;
     }
@@ -162,12 +160,11 @@ public final class SettingsActivity extends Activity implements DialogState {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case SITE_PICKED:
-                    setMainSiteLogo(content, (Integer) msg.obj);
                     data.setSettingsWith(AppSettings.MAIN_SITE_I, (Integer) msg.obj);
                     break;
                 case SECTIONS_PICKED:
                     Site site = sites.get(siteSelectedpos);
-                    Boolean[] schosen = (Boolean[]) msg.obj;
+                    boolean[] schosen = (boolean[]) msg.obj;
                     if (selectSectionsOnMainPageWaiter) {
                         site.settings.sectionsOnMain = schosen;
                     } else {
@@ -181,16 +178,6 @@ public final class SettingsActivity extends Activity implements DialogState {
         }
 
     };
-
-    private void setMainSiteLogo(View view, int sitei) {
-        try {
-            Drawable logo = Drawable.createFromStream(getAssets().open(sites.get(sitei).name + ".png"), null);
-            ((Button) view.findViewById(R.id.main_site_logo)).setCompoundDrawablesWithIntrinsicBounds(null, null, logo, null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
 
     private void debug(String text) {
         Log.d("##SettingsActivity##", text);

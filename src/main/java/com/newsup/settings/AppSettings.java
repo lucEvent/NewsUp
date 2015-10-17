@@ -4,16 +4,16 @@ public class AppSettings {
 
     public static final int MAIN_SITE_I = 2;
 
-    public static int main_site_i;
+    public static int[] main_sites_i;
 
     public AppSettings() {
-        main_site_i = 2;
+        main_sites_i = new int[]{2};
     }
 
     public void setSetting(int settingcode, Object setting) {
         switch (settingcode) {
             case MAIN_SITE_I:
-                main_site_i = (Integer) setting;
+                main_sites_i = (int[]) setting;
                 break;
         }
     }

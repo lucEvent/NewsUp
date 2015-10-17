@@ -2,8 +2,10 @@ package com.newsup;
 
 import android.app.ActionBar;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.newsup.kernel.MainPageCenter;
 import com.newsup.kernel.News;
 import com.newsup.kernel.NewsDataCenter;
 import com.newsup.kernel.Site;
@@ -22,7 +25,7 @@ import com.newsup.kernel.list.NewsList;
 import com.newsup.kernel.list.NewsMap;
 import com.newsup.kernel.list.SectionList;
 import com.newsup.kernel.list.SiteList;
-import com.newsup.net.State;
+import com.newsup.task.TaskMessage;
 import com.newsup.widget.NewsLister;
 import com.newsup.widget.NewsView;
 import com.newsup.widget.SectionLister;
@@ -30,7 +33,7 @@ import com.newsup.widget.SiteLister;
 
 import java.io.IOException;
 
-public class Main extends ListActivity implements State {
+public class Main extends ListActivity implements TaskMessage {
 
     /**
      * Display layer
@@ -42,6 +45,7 @@ public class Main extends ListActivity implements State {
      * Kernel layer
      **/
     private static NewsDataCenter datamanager;
+    private static MainPageCenter mainpagecenter;
     private static SiteList sites;
     private static int currentSite;
     private static boolean displayingNews;
@@ -60,12 +64,19 @@ public class Main extends ListActivity implements State {
         newslister.setNotifyOnChange(true);
         setListAdapter(newslister);
 
-        datamanager = new NewsDataCenter(this, handler);
+
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        datamanager = new NewsDataCenter(this, cm, handler);
         sites = datamanager.getSites();
+        mainpagecenter = new MainPageCenter(this.datamanager, cm, handler);
+
 
         newsView = new NewsView(this, datamanager, handler);
 
-        displaySiteNews(datamanager.getSettings().main_site_i, null);
+        //TODO que se muestre la ultima que estaba viendo no?
+        displayMainPage();
+//        displaySiteNews(datamanager.getSettings().main_site_i, null);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -89,7 +100,9 @@ public class Main extends ListActivity implements State {
 
         drawerSectionList = (ListView) findViewById(R.id.section_drawer);
         drawerSectionList.setAdapter(new SectionLister(this, new SectionList()));
-        ((SectionLister) drawerSectionList.getAdapter()).addAll(sites.get(currentSite).getSections());
+        if (currentSite != 0) {
+            ((SectionLister) drawerSectionList.getAdapter()).addAll(sites.get(currentSite).getSections());
+        }
         drawerSectionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -103,6 +116,11 @@ public class Main extends ListActivity implements State {
             }
 
         });
+    }
+
+    private void displayMainPage() {
+        currentSite = 0;
+        mainpagecenter.loadNews();
     }
 
     private void displaySiteNews(int siteposition, int[] sections) {
@@ -154,7 +172,8 @@ public class Main extends ListActivity implements State {
                 i.putExtra("debug", data.toString());
                 startActivity(i);
                 break;
-  */          default:
+  */
+            default:
                 return super.onOptionsItemSelected(item);
         }
         return true;
@@ -183,7 +202,7 @@ public class Main extends ListActivity implements State {
         }
     }
 
-    private final Handler handler = new Handler() {
+    private static final Handler handler = new Handler() {
 
         @Override
         public void handleMessage(Message msg) {
@@ -213,13 +232,12 @@ public class Main extends ListActivity implements State {
 
     public void closeNews() {
         getActionBar().show();
-
         displayingNews = false;
         newsView.close();
     }
 
-    private void debug(String text) {
-        Log.d("##MAIN##", "[" + this.toString() + "] " + text);
+    private static void debug(String text) {
+        Log.d("##MAIN##", "[Main] " + text);
     }
 
 }

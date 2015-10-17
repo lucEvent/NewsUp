@@ -1,9 +1,9 @@
 package com.newsup.kernel;
 
 import android.content.Context;
-import android.content.ContextWrapper;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Handler;
-import android.os.Message;
 
 import com.newsup.io.BookmarksManager;
 import com.newsup.io.DBManager;
@@ -11,19 +11,21 @@ import com.newsup.io.SDManager;
 import com.newsup.kernel.list.NewsList;
 import com.newsup.kernel.list.NewsMap;
 import com.newsup.kernel.list.SiteList;
-import com.newsup.net.State;
 import com.newsup.settings.AppSettings;
 import com.newsup.settings.SiteSettings;
+import com.newsup.task.TaskMessage;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class NewsDataCenter implements State {
+public class NewsDataCenter implements TaskMessage {
 
     /**
      * Static constants
      **/
-    private Context context;
+    private final Context context;
+    private final ConnectivityManager connectivityManager;
+    private final Handler handler;
 
     /**
      * Controllers
@@ -37,118 +39,66 @@ public class NewsDataCenter implements State {
      **/
     private static AppSettings appSettings;
     private static SiteList sites;
-    private Site currentsite;
 
-    private Handler waiter;
-
-    public NewsDataCenter(ContextWrapper context, Handler waiter) {
+    public NewsDataCenter(Context context, ConnectivityManager connectivityManager, Handler handler) {
         this.context = context;
+        this.connectivityManager = connectivityManager;
+        this.handler = handler;
+
         dbmanager = new DBManager(context);
         sdmanager = new SDManager(context);
         bmmanager = new BookmarksManager(null);
 
         if (sites == null) {
-            sites = new SiteList(handler, context);
+            sites = new SiteList(context);
         }
         if (appSettings == null) {
             appSettings = sdmanager.readSettings();
         }
-        this.waiter = waiter;
     }
 
     public SiteList getSites() {
         if (sites == null) {
-            sites = new SiteList(handler, context);
+            sites = new SiteList(context);
         }
         return sites;
     }
 
-
     public void getNews(Site site, int[] sections) {
-        currentsite = site;
-        currentsite.news = new NewsList();
-        if (sections == null) {
-            Boolean[] mainSections = getSettingsOf(site).sectionsOnMain;
-            ArrayList<Integer> rsections = new ArrayList<Integer>();
-            for (int i = 0; i < mainSections.length; ++i)
-                if (mainSections[i]) rsections.add(i);
-            sections = new int[rsections.size()];
-            for (int i = 0; i < rsections.size(); ++i)
-                sections[i] = rsections.get(i);
 
+        if (isInternetAvailable()) {
+            new NewsLoader(site, sections);
+        } else {
+            noInternetTasks(site);
         }
-        debug("Leyendo de site: " + site.name);
-        site.getReader().readNews(sections);
+
     }
 
-    public News getNewsContent(News news) {
-        if (news.content == null || news.content.isEmpty()) {
-            sdmanager.readNews(news);
-        }
-        return news;
-    }
+    private class NewsLoader extends Thread implements com.newsup.task.Socket {
 
-    private final Handler handler = new Handler() {
+        private final Site site;
+        private final int[] sections;
 
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case SECTION_BEGIN:
-                    waiter.dispatchMessage(msg);
-                    break;
-                case NEWS_READ:
-                    News news = (News) msg.obj;
-                    currentsite.news.add(news);
-                    waiter.dispatchMessage(msg);
-                    break;
-                case NEWS_READ_CONTENT:
-                    // waiter.dispatchMessage(msg);
-                    break;
-                case WORK_DONE:
-                    new TaskMaintenanceNews(currentsite).start();
-                    break;
-                case NO_INTERNET:
-                    no_internet_actions();
-                    break;
-                case ERROR:
-                    debug("Error recibido por el Handler");
-                    break;
-            }
-        }
-    };
-
-    private void no_internet_actions() {
-        waiter.obtainMessage(NO_INTERNET, null).sendToTarget();
-        if (currentsite.historial.isEmpty()) {
-            currentsite.historial = dbmanager.readNews(currentsite.code);
-        }
-        NewsMap reorder = new NewsMap(new Comparator<News>() {
-
-            @Override
-            public int compare(News o1, News o2) {
-                int comparison = -Date.compare(o1.date, o2.date);
-                return comparison != 0 ? comparison : (o1.id < o2.id ? -1 : (o1.id == o2.id ? 0 : 1));
-            }
-        });
-        reorder.addAll(currentsite.historial);
-
-        waiter.obtainMessage(NEWS_READ_HISTORY, reorder).sendToTarget();
-    }
-
-    private class TaskMaintenanceNews extends Thread {
-
-        public Site site;
-
-        public TaskMaintenanceNews(Site site) {
-            super();
+        NewsLoader(Site site, int[] sections) {
             this.site = site;
+            this.sections = sections;
+            this.start();
         }
 
         @Override
         public void run() {
-            if (site.historial.isEmpty()) {
-                site.historial = dbmanager.readNews(site.code);
+            debug("Leyendo de site: " + site.name);
+            site.news = new NewsList();
+
+            int[] finalSections = sections;
+            if (finalSections == null) {
+                finalSections = getSettingsOf(site).sectionsOnMainIntegerArray();
             }
+
+            site.getReader().readNews(finalSections, this);
+
+            getSiteHistorial(site);
+
             for (News N : site.news) {
                 // Mirar si esta en el historial
                 if (site.historial.add(N)) {
@@ -173,9 +123,63 @@ public class NewsDataCenter implements State {
                 }
             }
         }
+
+        @Override
+        public void message(int taskMessage, Object dataAttached) {
+            switch (taskMessage) {
+                case NEWS_READ:
+                    site.news.add((News) dataAttached);
+                    handler.obtainMessage(taskMessage, dataAttached).sendToTarget();
+                    break;
+                case SECTION_BEGIN:
+                    handler.obtainMessage(taskMessage, dataAttached).sendToTarget();
+                    break;
+                case ERROR:
+                    debug("Error recibido por el Handler");
+                    break;
+            }
+        }
     }
 
-    ;
+    public News getNewsContent(News news) {
+        if (news.content == null || news.content.isEmpty()) {
+            sdmanager.readNews(news);
+        }
+        return news;
+    }
+
+    public Site getSiteHistorial(Site site) {
+        if (site.historial == null || site.historial.isEmpty()) {
+            site.historial = dbmanager.readNews(site.code);
+        }
+        return site;
+    }
+
+    private void noInternetTasks(Site site) {
+        handler.obtainMessage(NO_INTERNET, null).sendToTarget();
+
+        getSiteHistorial(site);
+
+        NewsMap reorder = new NewsMap(new Comparator<News>() {
+
+            @Override
+            public int compare(News o1, News o2) {
+                int comparison = -Date.compare(o1.date, o2.date);
+                return comparison != 0 ? comparison : (o1.id < o2.id ? -1 : (o1.id == o2.id ? 0 : 1));
+            }
+        });
+        reorder.addAll(site.historial);
+
+        handler.obtainMessage(NEWS_READ_HISTORY, reorder).sendToTarget();
+    }
+
+    public void createNews(int code, News news) {
+        dbmanager.insertNews(code, news);
+    }
+
+    public void saveNews(News news) {
+        sdmanager.saveNews(news);
+    }
 
     public SiteSettings getSettingsOf(Site site) {
         if (site.settings == null) {
@@ -211,6 +215,11 @@ public class NewsDataCenter implements State {
 
     public void bookmarkNews(News currentNews) {
         bmmanager.bookmarkNews(currentNews);
+    }
+
+    private boolean isInternetAvailable() {
+        NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnected();
     }
 
     private void debug(String text) {
