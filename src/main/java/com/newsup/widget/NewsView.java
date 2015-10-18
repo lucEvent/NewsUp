@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.newsup.R;
+import com.newsup.io.BookmarksManager;
 import com.newsup.kernel.News;
 import com.newsup.kernel.NewsDataCenter;
 import com.newsup.task.TaskMessage;
@@ -20,7 +21,7 @@ import com.newsup.task.TaskMessage;
 public class NewsView {
 
     private Context context;
-    private NewsDataCenter dataCenter;
+    private BookmarksManager bmManager;
     private Handler handler;
 
     private View view;
@@ -32,8 +33,8 @@ public class NewsView {
 
     public NewsView(Activity context, NewsDataCenter dataCenter, Handler handler) {
         this.context = context;
-        this.dataCenter = dataCenter;
         this.handler = handler;
+        this.bmManager = new BookmarksManager(dataCenter, null);
 
         view = context.findViewById(R.id.layoutcontent);
         view.setOnClickListener(new View.OnClickListener() {
@@ -80,7 +81,7 @@ public class NewsView {
     }
 
     private void setBookmarkButtonImage() {
-        if (dataCenter.isBookmarked(currentNews)) {
+        if (bmManager.isBookmarked(currentNews)) {
             bbookmark.setImageResource(R.drawable.ic_bookmark);
         } else {
             bbookmark.setImageResource(R.drawable.ic_bookmark_border);
@@ -103,10 +104,10 @@ public class NewsView {
         public void onClick(View v) {
             mstime = DEFAULT_WAITING_TIME;
 
-            if (dataCenter.isBookmarked(currentNews)) {
-                dataCenter.unBookmarkNews(currentNews);
+            if (bmManager.isBookmarked(currentNews)) {
+                bmManager.unBookmarkNews(currentNews);
             } else {
-                dataCenter.bookmarkNews(currentNews);
+                bmManager.bookmarkNews(currentNews);
             }
             handler.obtainMessage(TaskMessage.ACTION_REFRESH_LIST, null).sendToTarget();
             setBookmarkButtonImage();

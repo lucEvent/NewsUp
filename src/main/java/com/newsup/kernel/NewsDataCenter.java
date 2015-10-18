@@ -5,7 +5,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
 
-import com.newsup.io.BookmarksManager;
 import com.newsup.io.DBManager;
 import com.newsup.io.SDManager;
 import com.newsup.kernel.list.NewsList;
@@ -15,7 +14,6 @@ import com.newsup.settings.AppSettings;
 import com.newsup.settings.SiteSettings;
 import com.newsup.task.TaskMessage;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 
 public class NewsDataCenter implements TaskMessage {
@@ -32,7 +30,6 @@ public class NewsDataCenter implements TaskMessage {
      **/
     private DBManager dbmanager;
     private SDManager sdmanager;
-    private BookmarksManager bmmanager;
 
     /**
      * Variables
@@ -51,7 +48,6 @@ public class NewsDataCenter implements TaskMessage {
 
         dbmanager = new DBManager(context);
         sdmanager = new SDManager(context);
-        bmmanager = new BookmarksManager(null);
 
         if (sites == null) {
             sites = new SiteList(context);
@@ -137,9 +133,6 @@ public class NewsDataCenter implements TaskMessage {
                     site.news.add(news);
                     handler.obtainMessage(taskMessage, dataAttached).sendToTarget();
                     break;
-                case SECTION_BEGIN:
-                    handler.obtainMessage(taskMessage, dataAttached).sendToTarget();
-                    break;
                 case ERROR:
                     debug("Error recibido por el Handler");
                     break;
@@ -156,7 +149,12 @@ public class NewsDataCenter implements TaskMessage {
 
     public Site getSiteHistorial(Site site) {
         if (site.historial == null || site.historial.isEmpty()) {
-            site.historial = dbmanager.readNews(site);
+            try {
+                site.historial = dbmanager.readNews(site);
+            } catch (Exception e) {
+                dbmanager = new DBManager(context);
+                return getSiteHistorial(site);
+            }
         }
         return site;
     }
@@ -216,22 +214,6 @@ public class NewsDataCenter implements TaskMessage {
 
     public AppSettings getSettings() {
         return appSettings;
-    }
-
-    public boolean isBookmarked(News currentNews) {
-        return getBookmarkedNewsIds().contains(currentNews.id);
-    }
-
-    private ArrayList<Integer> getBookmarkedNewsIds() {
-        return bmmanager.readBookmarkedNewsIds();
-    }
-
-    public void unBookmarkNews(News currentNews) {
-        bmmanager.unBookmarkNews(currentNews);
-    }
-
-    public void bookmarkNews(News currentNews) {
-        bmmanager.bookmarkNews(currentNews);
     }
 
     private boolean isInternetAvailable() {

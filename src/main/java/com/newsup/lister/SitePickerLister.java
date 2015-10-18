@@ -1,7 +1,6 @@
 package com.newsup.lister;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,12 +35,7 @@ public class SitePickerLister extends ArrayAdapter<Site> implements View.OnClick
         ctview.setText(site.name);
         ctview.setChecked(marks[position + 1]);
         if (site.code != -1) {
-            try {
-                Drawable logo = Drawable.createFromStream(getContext().getAssets().open(site.name + ".png"), null);
-                ctview.setCompoundDrawablesWithIntrinsicBounds(logo, null, null, null);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            ctview.setCompoundDrawablesWithIntrinsicBounds(site.icon, null, null, null);
         } else {
             ctview.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
         }

@@ -30,13 +30,14 @@ public class BookmarksActivity extends ListActivity implements TaskMessage {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a_bookmarks);
 
-        newslister = new NewsLister(this, new NewsList());
+        newslister = new NewsLister(this);
         newslister.setNotifyOnChange(true);
         setListAdapter(newslister);
 
-        newsView = new NewsView(this, new NewsDataCenter(this, null, null), handler);
+        NewsDataCenter dataCenter = new NewsDataCenter(this, null, null);
+        newsView = new NewsView(this, dataCenter, handler);
 
-        manager = new BookmarksManager(handler);
+        manager = new BookmarksManager(dataCenter, handler);
         manager.getBookmarkedNews();
 
     }

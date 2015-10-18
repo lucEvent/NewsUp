@@ -4,7 +4,6 @@ package com.newsup.dialog;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 
@@ -14,7 +13,6 @@ import com.newsup.kernel.Site;
 import com.newsup.settings.SiteSettings;
 import com.newsup.task.Socket;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 public class SiteConfiguration extends AlertDialog.Builder implements View.OnClickListener, Socket {
@@ -62,11 +60,7 @@ public class SiteConfiguration extends AlertDialog.Builder implements View.OnCli
         this.newSettings = new SiteSettings(site.code);
 
         dialog.setTitle(site.name);
-        try {
-            dialog.setIcon(Drawable.createFromStream(context.getAssets().open(site.name + ".png"), null));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        dialog.setIcon(site.icon);
         dialog.show();
     }
 

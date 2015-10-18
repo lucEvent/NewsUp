@@ -1,8 +1,8 @@
 package com.newsup.kernel.list;
 
-import java.util.ArrayList;
-
 import com.newsup.kernel.News;
+
+import java.util.ArrayList;
 
 public class NewsList extends ArrayList<News> {
 
@@ -12,8 +12,11 @@ public class NewsList extends ArrayList<News> {
         super();
     }
 
-    public NewsList(int capacity) {
-        super(capacity);
+    public NewsList(NewsMap newsmap) {
+        super(newsmap);
     }
 
+    public NewsList(int size) {
+        super(size);
+    }
 }

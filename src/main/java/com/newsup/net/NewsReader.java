@@ -26,7 +26,6 @@ public abstract class NewsReader {
         for (int isection : sections) {
             debug("Leyendo: " + this.getClass().getSimpleName() + ". Section: " + SECTIONS.get(isection).name);
             Section section = SECTIONS.get(isection);
-            handler.message(TaskMessage.SECTION_BEGIN, section.name);
             readRssPage(handler, section.link);
         }
 

@@ -4,7 +4,10 @@ import android.os.Handler;
 import android.util.Log;
 
 import com.newsup.kernel.News;
+import com.newsup.kernel.NewsDataCenter;
+import com.newsup.kernel.Site;
 import com.newsup.kernel.list.NewsList;
+import com.newsup.kernel.list.SiteList;
 import com.newsup.kernel.list.Tags;
 import com.newsup.task.TaskMessage;
 
@@ -24,8 +27,10 @@ public class BookmarksManager implements TaskMessage {
     private static ArrayList<Integer> bookmarkedNewsIdsList;
     private static NewsList bookmarkedNewsList;
     private Handler handler;
+    private NewsDataCenter dataCenter;
 
-    public BookmarksManager(Handler handler) {
+    public BookmarksManager(NewsDataCenter dataCenter, Handler handler) {
+        this.dataCenter = dataCenter;
         this.handler = handler;
 
         File dir = new File(SDManager.getDirectory(), BOOKMARKS_DIR);
@@ -33,6 +38,10 @@ public class BookmarksManager implements TaskMessage {
             dir.mkdirs();
         }
         readBookmarkedNewsIds();
+    }
+
+    public boolean isBookmarked(News currentNews) {
+        return readBookmarkedNewsIds().contains(currentNews.id);
     }
 
     public ArrayList<Integer> readBookmarkedNewsIds() {
@@ -77,6 +86,7 @@ public class BookmarksManager implements TaskMessage {
             out.writeObject(news.date.toString());
             out.writeObject(news.categories.toString());
             out.writeObject(news.content);
+            out.writeInt(news.site.code);
 
             out.close();
         } catch (IOException e) {
@@ -138,9 +148,18 @@ public class BookmarksManager implements TaskMessage {
                             String description = (String) in.readObject();
                             String date = (String) in.readObject();
                             String categories = (String) in.readObject();
+                            int sitecode = in.readInt();
 
                             News news = new News(id, title, link, description, date, new Tags(categories));
                             news.content = (String) in.readObject();
+
+                            SiteList sites = dataCenter.getSites();
+                            for (int i = sitecode; i < sites.size(); ++i) {
+                                Site site = sites.get(i);
+                                if (site.code == sitecode) {
+                                    news.site = site;
+                                }
+                            }
 
                             bookmarkedNewsList.add(news);
                             in.close();

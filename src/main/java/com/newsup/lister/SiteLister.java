@@ -1,7 +1,6 @@
 package com.newsup.lister;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +10,6 @@ import android.widget.TextView;
 import com.newsup.R;
 import com.newsup.kernel.Site;
 import com.newsup.kernel.list.SiteList;
-
-import java.io.IOException;
 
 public class SiteLister extends ArrayAdapter<Site> {
 
@@ -37,17 +34,12 @@ public class SiteLister extends ArrayAdapter<Site> {
             } else {
                 view = inflater.inflate(R.layout.i_site, parent, false);
 
-                try {
-                    ((TextView) view.findViewById(R.id.name)).setText(site.name);
+                ((TextView) view.findViewById(R.id.name)).setText(site.name);
 
-                    if (site.code == -2) {
-                        view.findViewById(R.id.logo).setBackgroundResource(R.mipmap.ic_launcher);
-                    } else {
-                        Drawable logo = Drawable.createFromStream(getContext().getAssets().open(site.name + ".png"), null);
-                        view.findViewById(R.id.logo).setBackgroundDrawable(logo);
-                    }
-                } catch (IOException e) {
+                if (site.code == -2) {
                     view.findViewById(R.id.logo).setBackgroundResource(R.mipmap.ic_launcher);
+                } else {
+                    view.findViewById(R.id.logo).setBackgroundDrawable(site.icon);
                 }
             }
             view.findViewById(R.id.idcolor).setBackgroundDrawable(site.theme);

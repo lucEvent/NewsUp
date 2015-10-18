@@ -21,7 +21,6 @@ import com.newsup.kernel.MainPageCenter;
 import com.newsup.kernel.News;
 import com.newsup.kernel.NewsDataCenter;
 import com.newsup.kernel.Site;
-import com.newsup.kernel.list.NewsList;
 import com.newsup.kernel.list.NewsMap;
 import com.newsup.kernel.list.SectionList;
 import com.newsup.kernel.list.SiteList;
@@ -60,10 +59,9 @@ public class Main extends ListActivity implements TaskMessage {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a_main);
 
-        newslister = new NewsLister(this, new NewsList());
+        newslister = new NewsLister(this);
         newslister.setNotifyOnChange(true);
         setListAdapter(newslister);
-
 
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -214,9 +212,6 @@ public class Main extends ListActivity implements TaskMessage {
             switch (msg.what) {
                 case NEWS_READ:
                     newslister.add((News) msg.obj);
-                    break;
-                case SECTION_BEGIN:
-                    newslister.add(new News((String) msg.obj, null, null, null, null));
                     break;
                 case NEWS_READ_HISTORY:
                     newslister.addAll((NewsMap) msg.obj);

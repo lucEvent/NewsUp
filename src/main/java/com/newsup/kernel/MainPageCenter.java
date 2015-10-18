@@ -5,11 +5,8 @@ import android.net.NetworkInfo;
 import android.os.Handler;
 
 import com.newsup.kernel.list.NewsList;
-import com.newsup.kernel.list.NewsMap;
 import com.newsup.kernel.list.SiteList;
 import com.newsup.task.TaskMessage;
-
-import java.util.Comparator;
 
 public class MainPageCenter implements TaskMessage {
 
@@ -24,18 +21,9 @@ public class MainPageCenter implements TaskMessage {
         this.handler = handler;
     }
 
-    private NewsMap newsmap;
+    private static Object historialsync = new Object();
 
     public void loadNews() {
-        newsmap = new NewsMap(new Comparator<News>() {
-
-            @Override
-            public int compare(News o1, News o2) {
-                int comparison = -Date.compare(o1.date, o2.date);
-                return comparison != 0 ? comparison : (o1.id < o2.id ? -1 : (o1.id == o2.id ? 0 : 1));
-            }
-        });
-
         if (isInternetAvailable()) {
             SiteList sites = datacenter.getSites();
             int[] isites = datacenter.getSettings().main_sites_i;
@@ -63,7 +51,9 @@ public class MainPageCenter implements TaskMessage {
             int[] sections = datacenter.getSettingsOf(site).sectionsOnMainIntegerArray();
             site.getReader().readNews(sections, this);
 
-            datacenter.getSiteHistorial(site);
+            synchronized (historialsync) {
+                datacenter.getSiteHistorial(site);
+            }
 
             for (News N : site.news) {
                 // Mirar si esta en el historial
@@ -90,6 +80,7 @@ public class MainPageCenter implements TaskMessage {
             }
         }
 
+
         @Override
         public void message(int message, Object dataAttached) {
             switch (message) {
@@ -98,15 +89,10 @@ public class MainPageCenter implements TaskMessage {
 
                     News news = (News) dataAttached;
                     news.site = site;
-                    //syncronize TODO
                     site.news.add(news);
-                    newsmap.add(news);
-                    //liberar TODO
                     break;
                 case ERROR:
                     debug("Error recibido por el Handler");
-                    break;
-                case SECTION_BEGIN:
                     break;
             }
         }
@@ -129,10 +115,10 @@ public class MainPageCenter implements TaskMessage {
 
                 site = datacenter.getSiteHistorial(site);
 
-                newsmap.addAll(site.historial);
+                handler.obtainMessage(NEWS_READ_HISTORY, site.historial).sendToTarget();
+
             }
 
-            handler.obtainMessage(NEWS_READ_HISTORY, newsmap).sendToTarget();
         }
     }
 
