@@ -1,6 +1,9 @@
 package com.newsup.lister;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,29 +20,33 @@ public class SitePickerLister extends ArrayAdapter<Site> implements View.OnClick
     private LayoutInflater inflater;
 
     public SitePickerLister(Context context, SiteList values, boolean[] marks) {
-        super(context, R.layout.i_picker_section, values);
+        super(context, R.layout.i_picker, values);
         this.marks = marks;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public View getView(int position, View view, ViewGroup parent) {
-        if (view == null) {
-            view = inflater.inflate(R.layout.i_picker_section, parent, false);
-            view.setOnClickListener(this);
-        }
+        view = inflater.inflate(R.layout.i_picker, parent, false);
+
         Site site = getItem(position + 1);
 
-        CheckBox ctview = (CheckBox) view;
-        ctview.setTag(position + 1);
-        ctview.setText(site.name);
-        ctview.setChecked(marks[position + 1]);
+        CheckBox checkbox = (CheckBox) view.findViewById(R.id.checkbox);
         if (site.code != -1) {
-            ctview.setCompoundDrawablesWithIntrinsicBounds(site.icon, null, null, null);
+            checkbox.setOnClickListener(this);
+            int dp = (int) (15 * Resources.getSystem().getDisplayMetrics().density);
+            site.icon.setBounds(dp, dp, dp, dp);
+            checkbox.setCompoundDrawablesWithIntrinsicBounds(site.icon, null, null, null);
         } else {
-            ctview.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+            checkbox.setClickable(false);
+            view.setBackgroundColor(site.theme.getColor() - 0x55000000);
+            checkbox.setButtonDrawable(new ColorDrawable(0x0000));
+            checkbox.setTypeface(null, Typeface.BOLD);
         }
-        return ctview;
+        checkbox.setTag(position + 1);
+        checkbox.setText("   " + site.name);
+        checkbox.setChecked(marks[position + 1]);
+        return view;
     }
 
     @Override
@@ -53,4 +60,3 @@ public class SitePickerLister extends ArrayAdapter<Site> implements View.OnClick
         marks[position] = !marks[position];
     }
 }
-

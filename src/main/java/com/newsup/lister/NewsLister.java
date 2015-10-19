@@ -31,24 +31,21 @@ public class NewsLister extends ArrayAdapter<News> implements Comparator<News> {
 
     @Override
     public View getView(int position, View view, ViewGroup parent) {
+        if (view == null) {
+            view = inflater.inflate(R.layout.i_news, parent, false);
+        }
         News news = newslist.get(position);
 
-        if (news.link == null) {
-            view = inflater.inflate(R.layout.i_news_header, parent, false);
-            ((TextView) view.findViewById(R.id.section_name)).setText(news.title);
-        } else {
-            view = inflater.inflate(R.layout.i_news, parent, false);
-            ((TextView) view.findViewById(R.id.title)).setText(news.title);
-            ((TextView) view.findViewById(R.id.date)).setText("Hace " + news.date.getAge());
-            view.findViewById(R.id.logo).setBackgroundDrawable(news.site.icon);
+        ((TextView) view.findViewById(R.id.title)).setText(news.title);
+        ((TextView) view.findViewById(R.id.date)).setText("Hace " + news.date.getAge());
+        view.findViewById(R.id.logo).setBackgroundDrawable(news.site.icon);
 
-            String description = news.description;
-            if (description.length() > 100) {
-                int index = description.indexOf(" ", 99);
-                if (index != -1) description = description.substring(0, index) + "...";
-            }
-            ((TextView) view.findViewById(R.id.description)).setText(description);
+        String description = news.description;
+        if (description.length() > 100) {
+            int index = description.indexOf(" ", 99);
+            if (index != -1) description = description.substring(0, index) + "...";
         }
+        ((TextView) view.findViewById(R.id.description)).setText(description);
         return view;
     }
 
