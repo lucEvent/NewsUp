@@ -28,7 +28,7 @@ public class Database extends SQLiteOpenHelper {
                         site_code + " INTEGER," +
                         title + " TEXT NOT NULL," +
                         link + " TEXT NOT NULL," +
-                        date + " TEXT NOT NULL," +
+                        date + " INTEGER," +
                         description + " TEXT NOT NULL," +
                         tags + " TEXT NOT NULL" +
                 ");";

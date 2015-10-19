@@ -3,6 +3,7 @@ package com.newsup.net;
 import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
+import com.newsup.kernel.list.Tags;
 
 public class TheLocalNewsReader extends NewsReader {
 
@@ -23,11 +24,16 @@ public class TheLocalNewsReader extends NewsReader {
     }
 
     @Override
+    protected News getNewsLastFilter(String title, String link, String description, String date, Tags categories) {
+        date = date.replace(' ', 'T') + "+02:00";
+        return new News(title, link, description, date, categories);
+    }
+
+    @Override
     public News readNewsContent(News news) {
         try {
             org.jsoup.nodes.Document doc = getDocument(news.link);
             if (doc == null) return news;
-
             org.jsoup.nodes.Element element = doc.select("article").get(0);
 
             StringBuilder content = new StringBuilder();

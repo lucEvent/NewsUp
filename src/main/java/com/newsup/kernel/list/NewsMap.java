@@ -1,10 +1,10 @@
 package com.newsup.kernel.list;
 
+import com.newsup.kernel.News;
+import com.newsup.kernel.util.Date;
+
 import java.util.Comparator;
 import java.util.TreeSet;
-
-import com.newsup.kernel.Date;
-import com.newsup.kernel.News;
 
 public class NewsMap extends TreeSet<News> {
 

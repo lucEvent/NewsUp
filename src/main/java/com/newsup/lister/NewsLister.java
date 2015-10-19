@@ -8,10 +8,10 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.newsup.R;
-import com.newsup.kernel.Date;
 import com.newsup.kernel.News;
 import com.newsup.kernel.list.NewsList;
 import com.newsup.kernel.list.NewsMap;
+import com.newsup.kernel.util.Date;
 
 import java.util.Collection;
 import java.util.Comparator;

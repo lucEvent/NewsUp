@@ -10,6 +10,7 @@ import com.newsup.kernel.News;
 import com.newsup.kernel.Site;
 import com.newsup.kernel.list.NewsMap;
 import com.newsup.kernel.list.Tags;
+import com.newsup.kernel.util.Date;
 
 public class DBManager {
 
@@ -30,7 +31,14 @@ public class DBManager {
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            News news = new News(cursor.getInt(0), cursor.getString(2), cursor.getString(3), cursor.getString(5), cursor.getString(4), new Tags(cursor.getString(6)));
+            int id = cursor.getInt(0);
+            String title = cursor.getString(2);
+            String link = cursor.getString(3);
+            String description = cursor.getString(5);
+            Date date = new Date(cursor.getLong(4));
+            Tags categories = new Tags(cursor.getString(6));
+
+            News news = new News(id, title, link, description, date, categories);
             news.site = site;
             result.add(news);
 
@@ -38,7 +46,7 @@ public class DBManager {
         }
         cursor.close();
         database.close();
-        debug("[#] NEWS IN SITE_DATABASE: " + result.size());
+        debug("[#] NEWS IN " + site.name + " DATABASE: " + result.size());
         return result;
     }
 
@@ -49,7 +57,7 @@ public class DBManager {
         ContentValues values = new ContentValues();
         values.put(DBNews.title, news.title);
         values.put(DBNews.link, news.link);
-        values.put(DBNews.date, news.date.toString());
+        values.put(DBNews.date, news.date.getValue());
         values.put(DBNews.description, news.description);
         values.put(DBNews.tags, news.categories.toString());
 
@@ -66,7 +74,7 @@ public class DBManager {
         values.put(DBNews.site_code, sitecode);
         values.put(DBNews.title, news.title);
         values.put(DBNews.link, news.link);
-        values.put(DBNews.date, news.date.toString());
+        values.put(DBNews.date, news.date.getValue());
         values.put(DBNews.description, news.description);
         values.put(DBNews.tags, news.categories.toString());
 

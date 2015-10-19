@@ -5,6 +5,7 @@ import android.os.Environment;
 
 import com.newsup.kernel.News;
 import com.newsup.kernel.Site;
+import com.newsup.kernel.util.Compressor;
 import com.newsup.settings.AppSettings;
 import com.newsup.settings.SiteSettings;
 
@@ -29,11 +30,9 @@ public class SDManager {
         try {
             FileInputStream inputStream = context.openFileInput(filename);
 
-            byte[] buff = new byte[inputStream.available()];
-            inputStream.read(buff, 0, buff.length);
-            inputStream.close();
+            news.content = Compressor.decompress(inputStream);
 
-            news.content = new String(buff);
+            inputStream.close();
         } catch (FileNotFoundException e) {
             debug("[NO SE HA ENCONTRADO LA NOTICIA EN DISCO] news.id: " + news.id + " ##");
         } catch (Exception e) {
@@ -48,11 +47,13 @@ public class SDManager {
 
         try {
             FileOutputStream outputStream = context.openFileOutput(filename, Context.MODE_PRIVATE);
-            outputStream.write(news.content.getBytes());
+
+            Compressor.compress(news.content, outputStream);
+
+            outputStream.flush();
             outputStream.close();
         } catch (Exception e) {
-            debug("Error en SAVENEWS" + news.id + "## " + news.title
-            );
+            debug("Error en SAVENEWS" + news.id + "## " + news.title);
             e.printStackTrace();
         }
     }

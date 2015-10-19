@@ -4,7 +4,6 @@ import android.app.ActionBar;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,8 +28,6 @@ import com.newsup.lister.SectionLister;
 import com.newsup.lister.SiteLister;
 import com.newsup.task.TaskMessage;
 import com.newsup.widget.NewsView;
-
-import java.io.IOException;
 
 public class Main extends ListActivity implements TaskMessage {
 
@@ -130,16 +127,13 @@ public class Main extends ListActivity implements TaskMessage {
             datamanager.getNews(csite, sections);
         }
         setTitle(csite.name);
-        try {
-            ActionBar actionBar = getActionBar();
-            actionBar.setBackgroundDrawable(csite.color);
-            if (siteposition == 0) {
-                actionBar.setIcon(R.mipmap.ic_launcher);
-            } else {
-                actionBar.setIcon(Drawable.createFromStream(getAssets().open(csite.name + ".png"), null));
-            }
-        } catch (IOException e) {
-            debug("Error setting Site Icon in the Bar");
+
+        ActionBar actionBar = getActionBar();
+        actionBar.setBackgroundDrawable(csite.color);
+        if (siteposition == 0) {
+            actionBar.setIcon(R.mipmap.ic_launcher);
+        } else {
+            actionBar.setIcon(csite.icon);
         }
     }
 
