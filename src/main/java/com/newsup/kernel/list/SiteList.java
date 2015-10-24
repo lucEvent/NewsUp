@@ -62,7 +62,10 @@ public class SiteList extends ArrayList<Site> {
 
             add(new Site(-1, context.getString(R.string.magazines), 0, Site.THEME_MAGAZINES, null, null));
             add(new Site(code++, "Make", 0xff4ecbf5, Site.THEME_MAGAZINES, assets.open("make.png"), new com.newsup.net.MakeNewsReader()));
+            add(new Site(code++, "Discover", 0xff171717, Site.THEME_MAGAZINES, assets.open("discovermag.png"), new com.newsup.net.DiscoverNewsReader()));
             add(new Site(code++, "Rolling Stone", 0xff4ecbf5, Site.THEME_MAGAZINES, assets.open("rollingstone.png"), new com.newsup.net.RollingStoneNewsReader()));
+            add(new Site(code++, "People", 0xff20b3e8, Site.THEME_MAGAZINES, assets.open("people.png"), new com.newsup.net.PeopleNewsReader()));
+
         } catch (Exception e) {
             android.util.Log.d("##SiteList##", "No se ha encontrado un logo");
             e.printStackTrace();

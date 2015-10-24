@@ -85,10 +85,12 @@ public class Date {
 
     private long estimateZoneOffset(String s) {
         if (s.length() <= 3) {
-            if (s.equals("GMT")) return 0;
+            if (s.equals("GMT") || s.equals("Z")) return 0;
             if (s.equals("PDT")) return 7 * HOUR_TIME;
             if (s.equals("PST")) return 8 * HOUR_TIME;
             if (s.equals("CET")) return -HOUR_TIME;
+            if (s.equals("EDT")) return 4 * HOUR_TIME;
+            if (s.equals("EST")) return 5 * HOUR_TIME;
             debug("El zone offset no es el que se esperaba: " + s);
             return 0;
         }
@@ -99,6 +101,8 @@ public class Date {
 
     public String getAge() {
         long age = System.currentTimeMillis() - timemillis;
+
+        if (age < 0) System.out.println("Edad negativa: millis:" + timemillis);
         if (age < MINUTE_TIME) {
             return age / SECOND_TIME + " segundos";
         }

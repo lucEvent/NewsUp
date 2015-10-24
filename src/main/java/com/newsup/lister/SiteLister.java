@@ -18,7 +18,7 @@ public class SiteLister extends ArrayAdapter<Site> {
     private LayoutInflater inflater;
 
     public SiteLister(Context context, SiteList values) {
-        super(context, R.layout.i_news, values);
+        super(context, -1, values);
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.views = new View[values.size()];
     }
@@ -39,7 +39,7 @@ public class SiteLister extends ArrayAdapter<Site> {
                 if (site.code == -2) {
                     view.findViewById(R.id.logo).setBackgroundResource(R.mipmap.ic_launcher);
                 } else {
-                    view.findViewById(R.id.logo).setBackgroundDrawable(site.icon);
+                    view.findViewById(R.id.logo).setBackgroundDrawable(site.icon.getConstantState().newDrawable());
                 }
             }
             view.findViewById(R.id.idcolor).setBackgroundDrawable(site.theme);

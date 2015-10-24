@@ -11,7 +11,7 @@ public class NationalGeographicNewsReader extends NewsReader {
         super();
 
         SECTIONS = new SectionList();
-        SECTIONS.add(new Section("", 0, ""));
+        SECTIONS.add(new Section("Main news", 0, "http://news.nationalgeographic.com/rss/index.rss"));
         SECTIONS.add(new Section("", 0, ""));
         SECTIONS.add(new Section("", 0, ""));
         SECTIONS.add(new Section("", 0, ""));

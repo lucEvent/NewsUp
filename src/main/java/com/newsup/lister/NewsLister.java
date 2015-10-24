@@ -23,7 +23,7 @@ public class NewsLister extends ArrayAdapter<News> implements Comparator<News> {
     private LayoutInflater inflater;
 
     public NewsLister(Context context) {
-        super(context, -1, new NewsList());
+        super(context, R.layout.i_news, new NewsList());
         newsmap = new NewsMap(this);
         newslist = new NewsList(newsmap);
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
