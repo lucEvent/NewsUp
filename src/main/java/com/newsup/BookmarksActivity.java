@@ -1,6 +1,8 @@
 package com.newsup;
 
+import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -67,10 +69,26 @@ public class BookmarksActivity extends ListActivity implements TaskMessage {
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    removeAllEntries();
+                }
+
+            });
+            dialog.setNegativeButton(android.R.string.cancel, null);
+            dialog.setTitle(R.string.msg_remove_all_bm);
+            dialog.create().show();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void removeAllEntries() {
+        manager.removeAllEntries();
+        newslister.clear();
     }
 
     @Override

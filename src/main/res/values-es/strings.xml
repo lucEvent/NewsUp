@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">News Up</string>
+
+    <string name="settings">Configuración</string>
+    <string name="bookmarks">Favoritos</string>
+
+    <string name="mynews">Mis notícias</string>
+    <string name="spain">España</string>
+    <string name="sweden">Suecia</string>
+    <string name="finland">Finlandia</string>
+    <string name="international">Internacional</string>
+    <string name="technology">Tecnología</string>
+    <string name="blogs">Blogs</string>
+    <string name="magazines">Revistas</string>
+
+    <string name="confirm">Confirmar</string>
+    <string name="removeall">Elimina todo</string>
+    <string name="msg_remove_all_bm">Elimina todos los favoritos</string>
+
+</resources>

@@ -175,6 +175,13 @@ public class BookmarksManager implements TaskMessage {
         }).start();
     }
 
+    public void removeAllEntries() {
+        bookmarkedNewsIdsList.clear();
+        bookmarkedNewsList.clear();
+        File[] files = new File(SDManager.getDirectory(), BOOKMARKS_DIR).listFiles();
+        for (File f : files) f.delete();
+    }
+
     private void debug(String text) {
         Log.d("##BookmarksManager##", text);
     }

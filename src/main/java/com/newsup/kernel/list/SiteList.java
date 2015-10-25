@@ -29,6 +29,8 @@ public class SiteList extends ArrayList<Site> {
             add(new Site(code++, "As", 0xffba0202, Site.THEME_SPAIN, assets.open("diarioas.png"), new com.newsup.net.AsNewsReader()));
             add(new Site(code++, "Sport", 0xffeb3838, Site.THEME_SPAIN, assets.open("sport.png"), new com.newsup.net.SportNewsReader()));
             add(new Site(code++, "El Confidencial", 0xff116d9c, Site.THEME_SPAIN, assets.open("elconfidencial.png"), new com.newsup.net.ElConfidencialNewsReader()));
+            add(new Site(code++, "El Diario", 0xff0061ab, Site.THEME_SPAIN, assets.open("eldiario.png"), new com.newsup.net.ElDiarioNewsReader()));
+            add(new Site(code++, "La Razón", 0xffc7c7c7, Site.THEME_SPAIN, assets.open("larazon.png"), new com.newsup.net.LaRazonNewsReader()));
 
             add(new Site(-1, context.getString(R.string.sweden), 0xFF3333EE, Site.THEME_SWEDEN, null, null));
             add(new Site(code++, "Aftonbladet", 0xffffffff, Site.THEME_SWEDEN, assets.open("aftonbladet.png"), new com.newsup.net.AftonbladetNewsReader()));

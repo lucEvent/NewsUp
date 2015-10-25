@@ -7,5 +7,5 @@
         android:icon="@drawable/ic_clear_all"
         android:orderInCategory="100"
         android:showAsAction="always"
-        android:title="Clear all" />
+        android:title="@string/removeall" />
 </menu>
