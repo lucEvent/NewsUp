@@ -36,11 +36,7 @@ public class SiteLister extends ArrayAdapter<Site> {
 
                 ((TextView) view.findViewById(R.id.name)).setText(site.name);
 
-                if (site.code == -2) {
-                    view.findViewById(R.id.logo).setBackgroundResource(R.mipmap.ic_launcher);
-                } else {
-                    view.findViewById(R.id.logo).setBackgroundDrawable(site.icon.getConstantState().newDrawable());
-                }
+                view.findViewById(R.id.logo).setBackgroundDrawable(site.icon.getConstantState().newDrawable());
             }
             view.findViewById(R.id.idcolor).setBackgroundDrawable(site.theme);
             views[position] = view;

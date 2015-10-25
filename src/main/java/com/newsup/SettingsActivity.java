@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.newsup.dialog.DialogState;
 import com.newsup.dialog.SiteConfiguration;
@@ -16,11 +17,13 @@ import com.newsup.kernel.Site;
 import com.newsup.kernel.list.SiteList;
 import com.newsup.lister.SiteLister;
 import com.newsup.settings.AppSettings;
+import com.newsup.task.Socket;
 
+import java.text.DecimalFormat;
 import java.util.Comparator;
 import java.util.TreeSet;
 
-public final class SettingsActivity extends ListActivity implements DialogState {
+public final class SettingsActivity extends ListActivity implements Socket {
 
     private NewsDataCenter data;
     private SiteList sites;
@@ -33,6 +36,8 @@ public final class SettingsActivity extends ListActivity implements DialogState 
         setContentView(R.layout.a_settings);
 
         data = new NewsDataCenter(this);
+
+        getActionBar().setIcon(data.getSites().get(0).icon);
 
         sites = filterSites();
 
@@ -63,7 +68,6 @@ public final class SettingsActivity extends ListActivity implements DialogState 
     public void onConfigureSites(View view) {
         tabManager.onSelectConfigureSites();
     }
-
 
     private class SettingsTabManager {
 
@@ -97,27 +101,37 @@ public final class SettingsActivity extends ListActivity implements DialogState 
     }
 
     public void onConfigureSitesToShow(View view) {
-        new SitePicker(SettingsActivity.this, data);
+        new SitePicker(SettingsActivity.this, data, this);
     }
 
     public void onConfigureSaveTime(View view) {
         //TODO new TimePicker(SettingsActivity.this, XXXtimeXXX, handler).show();
+        Toast.makeText(this, "Not implemented yet", Toast.LENGTH_SHORT).show();
+    }
+
+    public void onConfigureCleanCache(View v) {
+        data.cleanCache();
+        tabManager.myFeedManager.setUpCacheSize();
     }
 
     private class SettingsMyFeedManager {
 
         private View content;
-        private TextView lab_sitesTitle, lab_sitesSubtitle, lab_saveTime;
+        private TextView lab_sitesTitle, lab_sitesSubtitle, lab_saveTime, lab_cleancache;
 
         SettingsMyFeedManager() {
             content = findViewById(R.id.content_myfeed);
             lab_sitesTitle = (TextView) content.findViewById(R.id.conf_label_sites_title);//Sites to show: 1 Site
             lab_sitesSubtitle = (TextView) content.findViewById(R.id.conf_label_sites_subtitle);//El Pais, As,...
             lab_saveTime = (TextView) content.findViewById(R.id.conf_label_save_time);//Never
-            setUp();
+            lab_cleancache = (TextView) content.findViewById(R.id.conf_label_cleancache);//10 MB
+
+            setUpMainSites();
+            setUpSaveTime();
+            setUpCacheSize();
         }
 
-        public void setUp() {
+        void setUpMainSites() {
             AppSettings settings = data.getSettings();
             lab_sitesTitle.setText("Sites to show: " + settings.main_sites_i.length + " Sites");
 
@@ -128,13 +142,20 @@ public final class SettingsActivity extends ListActivity implements DialogState 
                 sb.append(sites.get(settings.main_sites_i[i]).name);
             }
             lab_sitesSubtitle.setText(sb.toString());
-            //lab_saveTime TODO
         }
 
+        void setUpSaveTime() {
+        }
 
-        public void setVisibility(int visibility) {
+        void setUpCacheSize() {
+            double mbsize = data.getCacheSize() / 1048576.0;
+            lab_cleancache.setText(new DecimalFormat("#0.00").format(mbsize) + " MB");
+        }
+
+        void setVisibility(int visibility) {
             content.setVisibility(visibility);
         }
+
     }
 
     private class SettingsSitesManager {
@@ -146,7 +167,7 @@ public final class SettingsActivity extends ListActivity implements DialogState 
             setListAdapter(new SiteLister(SettingsActivity.this, sites));
         }
 
-        public void setVisibility(int visibility) {
+        void setVisibility(int visibility) {
             content.setVisibility(visibility);
         }
 
@@ -164,6 +185,12 @@ public final class SettingsActivity extends ListActivity implements DialogState 
         siteConfigurationManager.set(site);
     }
 
+    @Override
+    public void message(int message, Object dataAttached) {
+        if (message == DialogState.MAIN_SITES_CHANGED) {
+            tabManager.myFeedManager.setUpMainSites();
+        }
+    }
 
     private void debug(String text) {
         Log.d("##SettingsActivity##", text);

@@ -130,11 +130,7 @@ public class Main extends ListActivity implements TaskMessage {
 
         ActionBar actionBar = getActionBar();
         actionBar.setBackgroundDrawable(csite.color);
-        if (siteposition == 0) {
-            actionBar.setIcon(R.mipmap.ic_launcher);
-        } else {
-            actionBar.setIcon(csite.icon);
-        }
+        actionBar.setIcon(csite.icon);
     }
 
     @Override

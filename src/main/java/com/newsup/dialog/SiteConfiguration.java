@@ -82,7 +82,7 @@ public class SiteConfiguration extends AlertDialog.Builder implements View.OnCli
 
     @Override
     public void message(int taskMessage, Object dataAttached) {
-        if (taskMessage == DialogState.SECTIONS_PICKED) {
+        if (taskMessage == DialogState.SECTIONS_CHANGED) {
             if (selecting_sections_onload) {
                 newSettings.sectionsOnMain = (boolean[]) dataAttached;
             } else {

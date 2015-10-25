@@ -21,7 +21,7 @@ public class SiteList extends ArrayList<Site> {
 
         int code = 0;
         try {
-            add(new Site(-2, context.getString(R.string.mynews), 0xff9bda00, 0xff9bda00, null, null));//con 0xff778357
+            add(new Site(-2, context.getString(R.string.mynews), Site.THEME_APP, Site.THEME_APP, assets.open("app.png"), null));
             add(new Site(-1, context.getString(R.string.spain), 0, Site.THEME_SPAIN, null, null));
             add(new Site(code++, "El Pais", 0xffffffff, Site.THEME_SPAIN, assets.open("elpais.png"), new com.newsup.net.ElpaisNewsReader()));
             add(new Site(code++, "20 Minutos", 0xff004594, Site.THEME_SPAIN, assets.open("20minutos.png"), new com.newsup.net._20MinutosNewsReader()));

@@ -8,64 +8,53 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/selector_settings"
-            android:onClick="onConfigureSitesToShow"
-            android:orientation="vertical"
-            android:padding="20dip">
+            style="@style/settings_layout_row"
+            android:onClick="onConfigureSitesToShow">
 
             <TextView
                 android:id="@+id/conf_label_sites_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="left|center_vertical"
-                android:paddingBottom="5dip"
-                android:paddingLeft="15dip"
-                android:text="Sites to show: 1 Site"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                style="@style/settings_row_title"
+                android:text="Sites to show: 1 Site" />
 
             <TextView
                 android:id="@+id/conf_label_sites_subtitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="20dip"
-                android:text="El Pais, El Confidencial,..."
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                style="@style/settings_row_subtitle"
+                android:text="El Pais, El Confidencial,..." />
 
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dip"
-            android:layout_marginLeft="10dip"
-            android:layout_marginRight="10dip"
-            android:background="@color/divider" />
+        <View style="@style/settings_divider" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/selector_settings"
-            android:onClick="onConfigureSaveTime"
-            android:orientation="vertical"
-            android:padding="20dip">
+            style="@style/settings_layout_row"
+            android:onClick="onConfigureSaveTime">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="left|center_vertical"
-                android:paddingBottom="5dip"
-                android:paddingLeft="15dip"
-                android:text="Prefetch and save news"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                style="@style/settings_row_title"
+
+                android:text="Prefetch and save news" />
 
             <TextView
                 android:id="@+id/conf_label_save_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingLeft="20dip"
-                android:text="Never"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                style="@style/settings_row_subtitle"
+                android:text="Never" />
+
+        </LinearLayout>
+
+        <View style="@style/settings_divider" />
+
+        <LinearLayout
+            style="@style/settings_layout_row"
+            android:onClick="onConfigureCleanCache">
+
+            <TextView
+                style="@style/settings_row_title"
+                android:text="Clean caché" />
+
+            <TextView
+                android:id="@+id/conf_label_cleancache"
+                style="@style/settings_row_subtitle"
+                android:text="0 MB" />
 
         </LinearLayout>
 

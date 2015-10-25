@@ -37,6 +37,8 @@ public class BookmarksActivity extends ListActivity implements TaskMessage {
         NewsDataCenter dataCenter = new NewsDataCenter(this, null, null);
         newsView = new NewsView(this, dataCenter, handler);
 
+        getActionBar().setIcon(dataCenter.getSites().get(0).icon);
+
         manager = new BookmarksManager(dataCenter, handler);
         manager.getBookmarkedNews();
 

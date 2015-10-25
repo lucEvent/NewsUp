@@ -48,6 +48,7 @@ public class NewsView {
         newsView.setOnTouchListener(onNewsViewTouchListener);
         newsView.getSettings().setJavaScriptEnabled(true);
         newsView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+        newsView.setPersistentDrawingCache(WebView.PERSISTENT_NO_CACHE);
 
         title = (TextView) view.findViewById(R.id.title);
 
@@ -92,6 +93,9 @@ public class NewsView {
         view.setVisibility(RelativeLayout.GONE);
 
         newsView.loadUrl("about:blank");
+        newsView.clearHistory();
+        newsView.clearCache(true);
+
         title.setText("");
     }
 

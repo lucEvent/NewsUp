@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class Database extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "newsup.db";
+    public static final String DATABASE_NAME = "newsup.db";
     private static final int DATABASE_VERSION = 1;
 
     static final class DBNews {
@@ -31,7 +31,7 @@ public class Database extends SQLiteOpenHelper {
                         date + " INTEGER," +
                         description + " TEXT NOT NULL," +
                         tags + " TEXT NOT NULL" +
-                ");";
+                        ");";
     }
 
     Database(Context context) {

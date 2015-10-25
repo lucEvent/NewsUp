@@ -217,6 +217,15 @@ public class NewsDataCenter implements TaskMessage {
         return appSettings;
     }
 
+    public long getCacheSize() {
+        return sdmanager.getCacheSize();
+    }
+
+    public void cleanCache() {
+        sdmanager.cleanCache();
+        dbmanager = new DBManager(context);
+    }
+
     private boolean isInternetAvailable() {
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnected();

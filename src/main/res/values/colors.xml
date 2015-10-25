@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="drawers">#FFAAAAAA</color>
-    <color name="section_header">#CCCCCCCC</color>
+    <color name="drawers">#ffff</color>
+    <color name="section_header">#cccc</color>
+    <color name="actionBar">#FF86c700</color>
+    <color name="actionBarText">#feee</color>
 </resources>

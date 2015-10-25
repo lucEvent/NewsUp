@@ -8,7 +8,7 @@ import com.newsup.kernel.list.SectionList;
 import com.newsup.lister.SectionPickerLister;
 import com.newsup.task.Socket;
 
-public class SectionPicker extends AlertDialog.Builder implements DialogState {
+public class SectionPicker extends AlertDialog.Builder {
 
     private Socket handler;
     private boolean[] marks;
@@ -31,7 +31,7 @@ public class SectionPicker extends AlertDialog.Builder implements DialogState {
     }
 
     private void sendResults() {
-        handler.message(SECTIONS_PICKED, marks);
+        handler.message(DialogState.SECTIONS_CHANGED, marks);
     }
 
 

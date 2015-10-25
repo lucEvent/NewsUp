@@ -156,4 +156,17 @@ public class SDManager {
         return directory;
     }
 
+    public long getCacheSize() {
+        long dbsize = context.getDatabasePath(Database.DATABASE_NAME).length();
+        long size = 0;
+        File[] files = context.getFilesDir().listFiles();
+        for (File f : files) size += f.length();
+        return size + dbsize;
+    }
+
+    public void cleanCache() {
+        File[] files = context.getFilesDir().listFiles();
+        for (File f : files) f.delete();
+        context.deleteDatabase(Database.DATABASE_NAME);
+    }
 }
