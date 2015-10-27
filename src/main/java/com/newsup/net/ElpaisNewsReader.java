@@ -4,8 +4,6 @@ import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
 
-import org.jsoup.select.Elements;
-
 public class ElpaisNewsReader extends NewsReader {
 
     public ElpaisNewsReader() {
@@ -64,26 +62,45 @@ public class ElpaisNewsReader extends NewsReader {
     }
 
     @Override
+    protected News applySpecialCase(News news, String content) {
+        if (!content.isEmpty() && !content.contains("Seguir leyendo")) {
+            news.content = content;
+        }
+        return news;
+    }
+
+    @Override
     public News readNewsContent(News news) {
         try {
             org.jsoup.nodes.Document doc = getDocument(news.link);
             if (doc == null) return news;
 
-            org.jsoup.nodes.Element element = doc.select("#cuerpo_noticia").get(0);
+            org.jsoup.select.Elements e = doc.select("#cuerpo_noticia");
+            org.jsoup.select.Elements img = doc.select(".contenedor_fotonoticia_compartir");
+            if (!e.isEmpty() || !img.isEmpty()) {
+                String simg = "";
+                if (!img.isEmpty()) simg = img.select("img").outerHtml();
 
-            element.select("blockquote").remove();
+                String mas = doc.select("div[id$=\"|despiece\"]").outerHtml();
+                String links = doc.select("div[id$=\"|apoyos\"]").outerHtml();
 
-            Elements links = element.select("a");
-            for (org.jsoup.nodes.Element link : links) {
-                link.html(link.text());
+                e.select("div[id$=\"|despiece\"],div[id$=\"|apoyos\"],div[id$=\"|html\"]").remove();
+                e.select("script").remove();
+
+                news.content = simg + e.outerHtml() + mas + links;
+            } else {
+                e = doc.select(".entry-content");
+                e.select("script").remove();
+                if (!e.text().isEmpty()) {
+                    news.content = e.html();
+                } else {
+                    debug("[NO SE HA ENCONTRADO LA NOTICIA] " + news.title);
+                }
             }
-            news.content = element.html();
-
         } catch (Exception e) {
-            debug("[ERROR La seleccion del articulo no se ha encontrado] tit:" + news.title);
+            debug("[ERROR] link:" + news.link);
             e.printStackTrace();
         }
         return news;
     }
-
 }

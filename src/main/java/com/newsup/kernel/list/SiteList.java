@@ -23,8 +23,8 @@ public class SiteList extends ArrayList<Site> {
         try {
             add(new Site(-2, context.getString(R.string.mynews), Site.THEME_APP, Site.THEME_APP, assets.open("app.png"), null));
             add(new Site(-1, context.getString(R.string.spain), 0, Site.THEME_SPAIN, null, null));
-            add(new Site(code++, "El Pais", 0xffffffff, Site.THEME_SPAIN, assets.open("elpais.png"), new com.newsup.net.ElpaisNewsReader()));
-            add(new Site(code++, "20 Minutos", 0xff004594, Site.THEME_SPAIN, assets.open("20minutos.png"), new com.newsup.net._20MinutosNewsReader()));
+            add(new Site(code++, "**El Pais", 0xffffffff, Site.THEME_SPAIN, assets.open("elpais.png"), new com.newsup.net.ElpaisNewsReader()));
+            add(new Site(code++, "**20 Minutos", 0xff004594, Site.THEME_SPAIN, assets.open("20minutos.png"), new com.newsup.net._20MinutosNewsReader()));
             add(new Site(code++, "El Mundo", 0xffffffff, Site.THEME_SPAIN, assets.open("elmundo.png"), new com.newsup.net.ElMundoNewsReader()));
             add(new Site(code++, "As", 0xffba0202, Site.THEME_SPAIN, assets.open("as.png"), new com.newsup.net.AsNewsReader()));
             add(new Site(code++, "Marca", 0xff04394a, Site.THEME_SPAIN, assets.open("marca.png"), new com.newsup.net.MarcaNewsReader()));

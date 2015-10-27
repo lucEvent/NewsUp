@@ -110,22 +110,11 @@ public class _20MinutosNewsReader extends NewsReader {
 
     @Override
     protected News applySpecialCase(News news, String content) {
-        org.jsoup.nodes.Element doc = org.jsoup.Jsoup.parse(news.description).select("body").get(0);
+        org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(news.description);
+        doc.select("body > br, body > img, body > a").remove();
 
-        org.jsoup.select.Elements eelasts = doc.select("[clear=all]");
-        if (!eelasts.isEmpty()) {
-            org.jsoup.select.Elements elements = doc.children();
-
-            int last = elements.indexOf(eelasts.get(0));
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < last; ++i) {
-                sb.append(elements.get(i).outerHtml());
-            }
-            news.content = sb.toString();
-        } else {
-            news.content = doc.html();
-        }
         news.description = "";
+        news.content = doc.select("body").html();
         return news;
     }
 
