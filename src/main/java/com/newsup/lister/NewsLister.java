@@ -37,7 +37,7 @@ public class NewsLister extends ArrayAdapter<News> implements Comparator<News> {
         News news = newslist.get(position);
 
         ((TextView) view.findViewById(R.id.title)).setText(news.title);
-        ((TextView) view.findViewById(R.id.date)).setText("Hace " + news.date.getAge());
+        ((TextView) view.findViewById(R.id.date)).setText(Date.getAge(news.date));
         view.findViewById(R.id.logo).setBackgroundDrawable(news.site.icon);
 
         String description = news.description;

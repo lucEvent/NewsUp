@@ -7,17 +7,17 @@ public class News {
 
     public int id;
 
-    public final String title, link, description;
+    public final String title, link;
 
-    public Date date;
+    public long date;
 
     public final Tags categories;
 
-    public String content;
+    public String description, content;
 
     public Site site;
 
-    public News(int id, String title, String link, String description, Date date, Tags categories) {
+    public News(int id, String title, String link, String description, long date, Tags categories) {
         this.id = id;
         this.title = title;
         this.link = link;
@@ -27,7 +27,7 @@ public class News {
     }
 
     public News(String title, String link, String description, String date, Tags categories) {
-        this(-1, title, link, description, new Date(date), categories);
+        this(-1, title, link, description, Date.toDate(date), categories);
     }
 
     public void setSite(Site site) {

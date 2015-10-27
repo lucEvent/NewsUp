@@ -3,7 +3,11 @@ package com.newsup.net;
 import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
-import com.newsup.kernel.list.Tags;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
+import java.io.IOException;
 
 public class MediumNewsReader extends NewsReader {
 
@@ -109,9 +113,9 @@ public class MediumNewsReader extends NewsReader {
     }
 
     @Override
-    protected News getNewsLastFilter(String title, String link, String description, String date, Tags categories) {
-        description = org.jsoup.Jsoup.parse(description).select(".medium-feed-snippet").html();
-        return new News(title, link, description, date, categories);
+    protected News applySpecialCase(News news, String content) {
+        news.description = org.jsoup.Jsoup.parse(news.description).select(".medium-feed-snippet").html();
+        return news;
     }
 
     @Override
@@ -130,6 +134,15 @@ public class MediumNewsReader extends NewsReader {
             e.printStackTrace();
         }
         return news;
+    }
+
+    protected Document getDocument(String pagelink) throws IOException {
+        try {
+            return Jsoup.connect(pagelink).userAgent("Mozilla/5.0 (Linux; Android 4.4.2; GT-I9300 Build/KVT49L) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.94 Mobile Safari/537.36").get();
+        } catch (java.net.SocketTimeoutException e) {
+            debug("No se ha podido encontrar la pagina: " + pagelink);
+        }
+        return null;
     }
 
 }

@@ -1,6 +1,9 @@
 package com.newsup.kernel.util;
 
+import android.content.Context;
 import android.util.Log;
+
+import com.newsup.R;
 
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
@@ -14,15 +17,28 @@ public class Date {
     private static final long MONTH_TIME = 30 * DAY_TIME;
     private static final long YEAR_TIME = 365 * DAY_TIME;
 
-    private long timemillis;
+    private static String textbefore;
+    private static String textAfterSecond;
+    private static String textAfterMinute;
+    private static String textAfterHour;
+    private static String textAfterDay;
+    private static String textAfterMonth;
+    private static String textAfterYear;
 
-    public Date(Long time) {
-        timemillis = time;
+    public Date(Context context) {
+        textbefore = context.getString(R.string.datetextbefore);
+        textAfterSecond = context.getString(R.string.datetextAfterSecond);
+        textAfterMinute = context.getString(R.string.datetextAfterMinute);
+        textAfterHour = context.getString(R.string.datetextAfterHour);
+        textAfterDay = context.getString(R.string.datetextAfterDay);
+        textAfterMonth = context.getString(R.string.datetextAfterMonth);
+        textAfterYear = context.getString(R.string.datetextAfterYear);
     }
 
-    public Date(String date) {
-        if (date == null) return;
+    public static long toDate(String date) {
+        if (date == null) return -1;
         String temp;
+        long timemillis = 0;
         long zoneOffset = 0;
 
         String[] items = date.split(" ");
@@ -63,15 +79,17 @@ public class Date {
             e.printStackTrace();
         }
         timemillis += zoneOffset;
+        return timemillis;
     }
 
-    public static int compare(Date date1, Date date2) {
-        return Long.compare(date1.timemillis, date2.timemillis);
+
+    public static int compare(long date1, long date2) {
+        return Long.compare(date1, date2);
     }
 
     private static final String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
-    private String monthToIntString(String month) {
+    private static String monthToIntString(String month) {
         for (int i = 0; i < months.length; i++) {
             if (month.equals(months[i])) {
                 if (i + 1 < 10) {
@@ -83,7 +101,7 @@ public class Date {
         return "";
     }
 
-    private long estimateZoneOffset(String s) {
+    private static long estimateZoneOffset(String s) {
         if (s.length() <= 3) {
             if (s.equals("GMT") || s.equals("Z")) return 0;
             if (s.equals("PDT")) return 7 * HOUR_TIME;
@@ -99,33 +117,34 @@ public class Date {
         return plus ? -hourmillis : hourmillis;
     }
 
-    public String getAge() {
-        long age = System.currentTimeMillis() - timemillis;
+    public static String getAge(long date) {
+        long age = System.currentTimeMillis() - date;
 
-        if (age < 0) System.out.println("Edad negativa: millis:" + timemillis);
+        if (age < 0) {
+            System.out.println("Edad negativa: millis:" + date);
+            return "";
+        }
         if (age < MINUTE_TIME) {
-            return age / SECOND_TIME + " segundos";
+            return textbefore + (age / SECOND_TIME) + textAfterSecond;
         }
         if (age < HOUR_TIME) {
-            return age / MINUTE_TIME + " minutos";
+            return textbefore + (age / MINUTE_TIME) + textAfterMinute;
         }
         if (age < DAY_TIME) {
-            return age / HOUR_TIME + " horas";
+            return textbefore + (age / HOUR_TIME) + textAfterHour;
         }
         if (age < MONTH_TIME) {
-            return age / DAY_TIME + " días";
+            return textbefore + (age / DAY_TIME) + textAfterDay;
         }
         if (age < YEAR_TIME) {
-            return age / MONTH_TIME + " meses";
+            return textbefore + (age / MONTH_TIME) + textAfterMonth;
         }
-        return age / YEAR_TIME + " años";
+        return textbefore + (age / YEAR_TIME) + textAfterYear;
     }
 
-    private void debug(String text) {
+    private static void debug(String text) {
         Log.d("##DATE##", text);
     }
 
-    public long getValue() {
-        return timemillis;
-    }
+
 }

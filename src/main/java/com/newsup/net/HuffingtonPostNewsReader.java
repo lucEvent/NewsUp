@@ -4,7 +4,6 @@ package com.newsup.net;
 import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
-import com.newsup.kernel.list.Tags;
 
 public class HuffingtonPostNewsReader extends NewsReader {
 
@@ -55,8 +54,8 @@ public class HuffingtonPostNewsReader extends NewsReader {
     }
 
     @Override
-    protected News getNewsLastFilter(String title, String link, String description, String date, Tags categories) {
-        org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(description);
+    protected News applySpecialCase(News news, String content) {
+        org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(news.description);
         org.jsoup.select.Elements ee = doc.select("body").get(0).children();
         org.jsoup.select.Elements ads = doc.select("br[clear=\"all\"]");
 
@@ -76,9 +75,9 @@ public class HuffingtonPostNewsReader extends NewsReader {
             }
 
         }
-        News res = new News(title, link, "", date, categories);
-        res.content = doc.html();
-        return res;
+        news.description = "";
+        news.content = doc.html();
+        return news;
     }
 
     @Override

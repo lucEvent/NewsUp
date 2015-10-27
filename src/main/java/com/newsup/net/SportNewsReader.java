@@ -3,7 +3,6 @@ package com.newsup.net;
 import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
-import com.newsup.kernel.list.Tags;
 
 import org.jsoup.Jsoup;
 
@@ -67,9 +66,10 @@ public class SportNewsReader extends NewsReader {
 
     }
 
-    protected News getNewsLastFilter(String title, String link, String description, String date, Tags categories) {
-        description = Jsoup.parse(description).getElementsByTag("p").text();
-        return new News(title, link, description, date, categories);
+    @Override
+    protected News applySpecialCase(News news, String content) {
+        news.description = Jsoup.parse(news.description).getElementsByTag("p").text();
+        return news;
     }
 
     @Override

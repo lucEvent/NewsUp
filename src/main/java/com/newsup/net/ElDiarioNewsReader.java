@@ -3,7 +3,6 @@ package com.newsup.net;
 import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
-import com.newsup.kernel.list.Tags;
 
 public class ElDiarioNewsReader extends NewsReader {
 
@@ -23,7 +22,7 @@ public class ElDiarioNewsReader extends NewsReader {
         SECTIONS.add(new Section("Canarias", 1, "http://www.eldiario.es/rss/canariasahora/"));
 
         SECTIONS.add(new Section("Desalambre (Derechos Humanos)", 0, "http://www.eldiario.es/rss/section/10593/"));
-        SECTIONS.add(new Section("Tecnologia", 0, "http://www.eldiario.es/rss/section/60648/"));
+        //      SECTIONS.add(new Section("Tecnologia", 0, "http://www.eldiario.es/rss/section/60648/"));
         SECTIONS.add(new Section("Juegoreviews", 0, "http://www.eldiario.es/rss/section/11709/"));
         SECTIONS.add(new Section("Política", 0, "http://www.eldiario.es/rss/section/1000/"));
         SECTIONS.add(new Section("Economía", 0, "http://www.eldiario.es/rss/section/3000/"));
@@ -52,7 +51,7 @@ public class ElDiarioNewsReader extends NewsReader {
         SECTIONS.add(new Section("Aitor Riveiro", 1, "http://www.eldiario.es/rss/section/10362/"));
         SECTIONS.add(new Section("Gonzalo Cortizo", 1, "http://www.eldiario.es/rss/section/20007/"));
         SECTIONS.add(new Section("Irene Castro", 1, "http://www.eldiario.es/rss/section/10173/"));
-        SECTIONS.add(new Section("Pedro Águeda", 1, "http://www.eldiario.es/rss/section/10861/"));
+        SECTIONS.add(new Section("Pedro Ãgueda", 1, "http://www.eldiario.es/rss/section/10861/"));
         SECTIONS.add(new Section("Gonzalo Boyé", 1, "http://www.eldiario.es/rss/section/10374/"));
         SECTIONS.add(new Section("Rosa María Artal", 1, "http://www.eldiario.es/rss/section/20011/"));
         SECTIONS.add(new Section("Ruth Toledano", 1, "http://www.eldiario.es/rss/section/10018/"));
@@ -93,12 +92,12 @@ public class ElDiarioNewsReader extends NewsReader {
     }
 
     @Override
-    protected News getNewsLastFilter(String title, String link, String description, String date, Tags categories) {
-        org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(description);
+    protected News applySpecialCase(News news, String content) {
+        org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(news.description);
         doc.select("a,img[width=\"1\"],br").remove();
-        News res = new News(title, link, "", date, categories);
-        res.content = doc.select("body").html();
-        return res;
+        news.description = "";
+        news.content = doc.select("body").html();
+        return news;
     }
 
     @Override

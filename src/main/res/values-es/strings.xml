@@ -17,6 +17,33 @@
 
     <string name="confirm">Confirmar</string>
     <string name="removeall">Elimina todo</string>
+
     <string name="msg_remove_all_bm">Elimina todos los favoritos</string>
+
+    <!--  Settings -->
+    <string name="mainpage">Página principal</string>
+    <string name="confsites">Publicaciones</string>
+    <string name="prefechandsave">Descarga y guarda</string>
+    <string name="cleancache">Limpia datos</string>
+    <string name="never">Nunca</string>
+    <string name="done">Hecho</string>
+    <string name="notimplementedyet">No implementado todavía</string>
+    <string name="apply">Aplicar</string>
+    <string name="mainsections">Secciones principales</string>
+    <string name="offlinesections">Secciones offline</string>
+    <string name="mainsites">Publicaciones principales:&#160;</string>
+
+    <!-- Dates -->
+    <string name="datetextbefore">Hace&#160;</string>
+    <string name="datetextAfterSecond">&#160;segundos</string>
+    <string name="datetextAfterMinute">&#160;minutos</string>
+    <string name="datetextAfterHour">&#160;horas</string>
+    <string name="datetextAfterDay">&#160;días</string>
+    <string name="datetextAfterMonth">&#160;meses</string>
+    <string name="datetextAfterYear">&#160;años</string>
+    <string name="catalonia">Cataluña</string>
+    <string name="sharewith">Compartir con</string>
+    <string name="contentnotavailableyet">Contenido no disponible todavía</string>
+
 
 </resources>

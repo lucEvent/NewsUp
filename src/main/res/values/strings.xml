@@ -20,4 +20,29 @@
 
     <string name="msg_remove_all_bm">Remove all bookmarked news</string>
 
+    <!--  Settings -->
+    <string name="mainpage">Main page</string>
+    <string name="confsites">Newspapers</string>
+    <string name="prefechandsave">Prefetch and save news</string>
+    <string name="cleancache">Clean caché</string>
+    <string name="never">Never</string>
+    <string name="done">Done</string>
+    <string name="notimplementedyet">Not implemented yet</string>
+    <string name="apply">Apply</string>
+    <string name="mainsections">Main sections</string>
+    <string name="offlinesections">Offline sections</string>
+    <string name="mainsites">Main sites:&#160;</string>
+
+    <!-- Dates -->
+    <string name="datetextbefore"></string>
+    <string name="datetextAfterSecond">&#160;seconds ago</string>
+    <string name="datetextAfterMinute">&#160;minutes ago</string>
+    <string name="datetextAfterHour">&#160;hours ago</string>
+    <string name="datetextAfterDay">&#160;days ago</string>
+    <string name="datetextAfterMonth">&#160;months ago</string>
+    <string name="datetextAfterYear">&#160;years ago</string>
+    <string name="catalonia">Catalonia</string>
+    <string name="sharewith">Share with</string>
+    <string name="contentnotavailableyet">Content not available yet</string>
+
 </resources>

@@ -3,7 +3,6 @@ package com.newsup.net;
 import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
-import com.newsup.kernel.list.Tags;
 
 public class ElMundoNewsReader extends NewsReader {
 
@@ -44,7 +43,7 @@ public class ElMundoNewsReader extends NewsReader {
         SECTIONS.add(new Section("Deportes", 0, "http://estaticos.elmundo.es/elmundodeporte/rss/portada.xml"));
         SECTIONS.add(new Section("Fútbol", 1, "http://estaticos.elmundo.es/elmundodeporte/rss/futbol.xml"));
         SECTIONS.add(new Section("Baloncesto", 1, "http://estaticos.elmundo.es/elmundodeporte/rss/baloncesto.xml"));
-        SECTIONS.add(new Section("Ciclismo", 1, "http://estaticos.elmundo.es/elmundodeporte/rss/ciclismo.xml    "));
+        SECTIONS.add(new Section("Ciclismo", 1, "http://estaticos.elmundo.es/elmundodeporte/rss/ciclismo.xml"));
         SECTIONS.add(new Section("Golf", 1, "http://estaticos.elmundo.es/elmundodeporte/rss/golf.xml"));
         SECTIONS.add(new Section("Tenis", 1, "http://estaticos.elmundo.es/elmundodeporte/rss/tenis.xml"));
         SECTIONS.add(new Section("Motor", 1, "http://estaticos.elmundo.es/elmundodeporte/rss/motor.xml"));
@@ -58,11 +57,12 @@ public class ElMundoNewsReader extends NewsReader {
     }
 
 
-    protected News getNewsLastFilter(String title, String link, String description, String date, Tags categories) {
-        org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(description);
+    @Override
+    protected News applySpecialCase(News news, String content) {
+        org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(news.description);
         doc.select("a, img").remove();
-        description = doc.text();
-        return new News(title, link, description, date, categories);
+        news.description = doc.text();
+        return news;
     }
 
     @Override

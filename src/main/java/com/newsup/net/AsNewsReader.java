@@ -81,6 +81,12 @@ public class AsNewsReader extends NewsReader {
     }
 
     @Override
+    protected News applySpecialCase(News news, String content) {
+        if (!content.isEmpty()) news.content = content;
+        return news;
+    }
+
+    @Override
     public News readNewsContent(News news) {
         try {
             org.jsoup.nodes.Document doc = getDocument(news.link);

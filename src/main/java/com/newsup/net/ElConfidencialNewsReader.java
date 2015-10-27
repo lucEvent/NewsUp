@@ -13,6 +13,11 @@ import java.util.ArrayList;
 
 public class ElConfidencialNewsReader extends NewsReader {
 
+    private static final int EC_HASH_LINK = "id".hashCode();
+    private static final int EC_HASH_DATE = "updated".hashCode();
+    private static final int EC_HASH_DESCRIPTION = "summary".hashCode();
+    private static final int EC_HASH_CONTENT = "content".hashCode();
+
     public ElConfidencialNewsReader() {
         super();
 
@@ -90,13 +95,6 @@ public class ElConfidencialNewsReader extends NewsReader {
             return;
         }
 
-        int titlehash = "title".hashCode();
-        int linkhash = "id".hashCode();
-        int datehash = "updated".hashCode();
-        int descrhash = "summary".hashCode();
-        int categhash = "category".hashCode();
-        int contenthash = "content".hashCode();
-
         Elements items = doc.getElementsByTag("entry");
         for (org.jsoup.nodes.Element item : items) {
             String title = "", link = "", description = "", date = "", content = "";
@@ -106,27 +104,27 @@ public class ElConfidencialNewsReader extends NewsReader {
             //TODO Arraylist de opciones que se van quitando y lo hace mas eficiente
             for (org.jsoup.nodes.Element prop : props) {
                 int taghash = prop.tagName().hashCode();
-                if (taghash == titlehash) {
+                if (taghash == HASH_TITLE) {
                     title = prop.html().replace("&lt;![CDATA[", "").replace("]]&gt;", "").replace("&amp;#039;", "'");
                     continue;
                 }
-                if (taghash == linkhash) {
+                if (taghash == EC_HASH_LINK) {
                     link = prop.text();
                     continue;
                 }
-                if (taghash == datehash) {
+                if (taghash == EC_HASH_DATE) {
                     date = prop.text();
                     continue;
                 }
-                if (taghash == descrhash) {
+                if (taghash == EC_HASH_DESCRIPTION) {
                     description = prop.text();
                     continue;
                 }
-                if (taghash == categhash) {
+                if (taghash == HASH_CATEGORY) {
                     categoriesList.add(prop.text());
                     continue;
                 }
-                if (taghash == contenthash) {
+                if (taghash == EC_HASH_CONTENT) {
                     content = prop.html().replace("&lt;", "<").replace("&gt;", ">").replace("&amp;#039;", "'");
                     org.jsoup.nodes.Element con = org.jsoup.Jsoup.parse(content).select("body").get(0);
                     con.children().last().remove();

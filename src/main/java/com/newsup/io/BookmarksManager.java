@@ -9,7 +9,6 @@ import com.newsup.kernel.Site;
 import com.newsup.kernel.list.NewsList;
 import com.newsup.kernel.list.SiteList;
 import com.newsup.kernel.list.Tags;
-import com.newsup.kernel.util.Date;
 import com.newsup.task.TaskMessage;
 
 import java.io.File;
@@ -84,7 +83,7 @@ public class BookmarksManager implements TaskMessage {
             out.writeObject(news.title);
             out.writeObject(news.link);
             out.writeObject(news.description);
-            out.writeLong(news.date.getValue());
+            out.writeLong(news.date);
             out.writeObject(news.categories.toString());
             out.writeObject(news.content);
             out.writeInt(news.site.code);
@@ -151,7 +150,7 @@ public class BookmarksManager implements TaskMessage {
                             String categories = (String) in.readObject();
 
 
-                            News news = new News(id, title, link, description, new Date(date), new Tags(categories));
+                            News news = new News(id, title, link, description, date, new Tags(categories));
                             news.content = (String) in.readObject();
 
                             int sitecode = in.readInt();

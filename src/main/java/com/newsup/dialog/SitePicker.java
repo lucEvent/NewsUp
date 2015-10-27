@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 
+import com.newsup.R;
 import com.newsup.kernel.NewsDataCenter;
 import com.newsup.kernel.list.SiteList;
 import com.newsup.lister.SitePickerLister;
@@ -29,7 +30,7 @@ public class SitePicker extends AlertDialog.Builder implements DialogState {
 
         setAdapter(new SitePickerLister(context, sites, marks), null);
         setNegativeButton(android.R.string.cancel, null);
-        setPositiveButton("Done", new DialogInterface.OnClickListener() {
+        setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 saveSettings();

@@ -106,7 +106,7 @@ public final class SettingsActivity extends ListActivity implements Socket {
 
     public void onConfigureSaveTime(View view) {
         //TODO new TimePicker(SettingsActivity.this, XXXtimeXXX, handler).show();
-        Toast.makeText(this, "Not implemented yet", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.notimplementedyet, Toast.LENGTH_SHORT).show();
     }
 
     public void onConfigureCleanCache(View v) {
@@ -115,6 +115,7 @@ public final class SettingsActivity extends ListActivity implements Socket {
     }
 
     private class SettingsMyFeedManager {
+
 
         private View content;
         private TextView lab_sitesTitle, lab_sitesSubtitle, lab_saveTime, lab_cleancache;
@@ -133,7 +134,7 @@ public final class SettingsActivity extends ListActivity implements Socket {
 
         void setUpMainSites() {
             AppSettings settings = data.getSettings();
-            lab_sitesTitle.setText("Sites to show: " + settings.main_sites_i.length + " Sites");
+            lab_sitesTitle.setText(getString(R.string.mainsites) + settings.main_sites_i.length);
 
             SiteList sites = data.getSites();
             StringBuilder sb = new StringBuilder();

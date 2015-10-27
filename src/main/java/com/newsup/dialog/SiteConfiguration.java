@@ -35,7 +35,7 @@ public class SiteConfiguration extends AlertDialog.Builder implements View.OnCli
         view.findViewById(R.id.select_sections_tosave).setOnClickListener(this);
         setView(view);
 
-        setPositiveButton("Done", new DialogInterface.OnClickListener() {
+        setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 boolean changes = false;

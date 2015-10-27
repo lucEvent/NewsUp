@@ -16,6 +16,16 @@ import java.util.ArrayList;
 
 public abstract class NewsReader {
 
+    protected static final int HASH_TITLE = "title".hashCode();
+    protected static final int HASH_LINK = "link".hashCode();
+    protected static final int HASH_GUIDED = "guid".hashCode();
+    protected static final int HASH_DATE_1 = "pubdate".hashCode();
+    protected static final int HASH_DATE_2 = "dc:date".hashCode();
+    protected static final int HASH_DESCRIPTION = "description".hashCode();
+    protected static final int HASH_CATEGORY = "category".hashCode();
+    protected static final int HASH_CONTENT = "content:encoded".hashCode();
+
+
     public SectionList SECTIONS;
 
     public NewsReader() {
@@ -40,57 +50,56 @@ public abstract class NewsReader {
             e.printStackTrace();
             return;
         }
-        int titlehash = "title".hashCode();
-        int linkhash = "link".hashCode();
-        int datehash = "pubdate".hashCode();
-        int date2hash = "dc:date".hashCode();
-        int descrhash = "description".hashCode();
-        int categhash = "category".hashCode();
-        int guidhash = "guid".hashCode();
 
-        Elements items = doc.getElementsByTag("item");
+        Elements items = doc.select("item");
 
         for (org.jsoup.nodes.Element item : items) {
-            String title = "", link = "", description = "", date = "";
+            String title = "", link = "", guided = "", description = "", date = "", content = "";
             ArrayList<String> categoriesList = new ArrayList<String>();
             Elements props = item.getAllElements();
 
             //TODO Arraylist de opciones que se van quitando y lo hace mas eficiente
             for (org.jsoup.nodes.Element prop : props) {
                 int taghash = prop.tagName().hashCode();
-                if (taghash == titlehash) {
+
+                if (taghash == HASH_TITLE) {
                     title = prop.text();
                     continue;
                 }
-                if (taghash == linkhash) {
+                if (taghash == HASH_LINK) {
                     link = prop.text();
                     continue;
                 }
-                if (taghash == datehash || taghash == date2hash) {
+                if (taghash == HASH_DATE_1 || taghash == HASH_DATE_2) {
                     date = prop.text();
                     continue;
                 }
-                if (taghash == descrhash) {
+                if (taghash == HASH_DESCRIPTION) {
                     description = prop.text();
                     continue;
                 }
-                if (taghash == categhash) {
+                if (taghash == HASH_CATEGORY) {
                     categoriesList.add(prop.text());
                     continue;
                 }
-                if (taghash == guidhash) {
-                    if (link.isEmpty()) {
-                        link = prop.text();
-                    }
+                if (taghash == HASH_GUIDED) {
+                    guided = prop.text();
+                }
+                if (taghash == HASH_CONTENT) {
+                    content = prop.text();
                 }
             }
-            News news = getNewsLastFilter(title, link, description, date, new Tags(categoriesList));
-            handler.message(TaskMessage.NEWS_READ, news);
+            if (!title.isEmpty()) {
+                News news = new News(title, link.isEmpty() ? guided : link, description, date, new Tags(categoriesList));
+                news = applySpecialCase(news, content);
+
+                handler.message(TaskMessage.NEWS_READ, news);
+            }
         }
     }
 
-    protected News getNewsLastFilter(String title, String link, String description, String date, Tags categories) {
-        return new News(title, link, description, date, categories);
+    protected News applySpecialCase(News news, String content) {
+        return news;
     }
 
     protected Document getDocument(String pagelink) throws IOException {
@@ -112,6 +121,5 @@ public abstract class NewsReader {
     protected final void debug(String text) {
         android.util.Log.d("##" + this.getClass().getSimpleName() + "##", text);
     }
-
 
 }

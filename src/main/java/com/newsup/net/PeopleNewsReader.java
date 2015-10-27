@@ -3,7 +3,6 @@ package com.newsup.net;
 import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
-import com.newsup.kernel.list.Tags;
 
 public class PeopleNewsReader extends NewsReader {
 
@@ -17,9 +16,9 @@ public class PeopleNewsReader extends NewsReader {
     }
 
     @Override
-    protected News getNewsLastFilter(String title, String link, String description, String date, Tags categories) {
-        description = org.jsoup.Jsoup.parse(description).text();
-        return new News(title, link, description, date, categories);
+    protected News applySpecialCase(News news, String content) {
+        news.description = org.jsoup.Jsoup.parse(news.description).text();
+        return news;
     }
 
     @Override

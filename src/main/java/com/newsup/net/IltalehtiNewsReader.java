@@ -5,7 +5,6 @@ import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
 
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
@@ -44,7 +43,7 @@ public class IltalehtiNewsReader extends NewsReader {
 
     @Override
     protected Document getDocument(String rsslink) throws IOException {
-        return Jsoup.parse(new URL(rsslink).openStream(), "ISO-8859-1", rsslink);
+        return org.jsoup.Jsoup.parse(new URL(rsslink).openStream(), "ISO-8859-1", rsslink);
     }
 
     @Override

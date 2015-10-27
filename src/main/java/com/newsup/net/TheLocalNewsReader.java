@@ -3,7 +3,6 @@ package com.newsup.net;
 import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
-import com.newsup.kernel.list.Tags;
 
 public class TheLocalNewsReader extends NewsReader {
 
@@ -24,9 +23,9 @@ public class TheLocalNewsReader extends NewsReader {
     }
 
     @Override
-    protected News getNewsLastFilter(String title, String link, String description, String date, Tags categories) {
-        date = date.replace(' ', 'T') + "+02:00";
-        return new News(title, link, description, date, categories);
+    protected News applySpecialCase(News news, String content) {
+        news.date += (-2 * 3600000);
+        return news;
     }
 
     @Override

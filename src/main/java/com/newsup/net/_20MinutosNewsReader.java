@@ -3,7 +3,6 @@ package com.newsup.net;
 import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
-import com.newsup.kernel.list.Tags;
 
 public class _20MinutosNewsReader extends NewsReader {
 
@@ -109,10 +108,9 @@ public class _20MinutosNewsReader extends NewsReader {
 
     }
 
-    protected News getNewsLastFilter(String title, String link, String description, String date, Tags categories) {
-        News res = new News(title, link, "", date, categories);
-
-        org.jsoup.nodes.Element doc = org.jsoup.Jsoup.parse(description).select("body").get(0);
+    @Override
+    protected News applySpecialCase(News news, String content) {
+        org.jsoup.nodes.Element doc = org.jsoup.Jsoup.parse(news.description).select("body").get(0);
 
         org.jsoup.select.Elements eelasts = doc.select("[clear=all]");
         if (!eelasts.isEmpty()) {
@@ -123,12 +121,12 @@ public class _20MinutosNewsReader extends NewsReader {
             for (int i = 0; i < last; ++i) {
                 sb.append(elements.get(i).outerHtml());
             }
-            res.content = sb.toString();
+            news.content = sb.toString();
         } else {
-            res.content = doc.html();
+            news.content = doc.html();
         }
-
-        return res;
+        news.description = "";
+        return news;
     }
 
     @Override

@@ -3,7 +3,6 @@ package com.newsup.net;
 import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
-import com.newsup.kernel.list.Tags;
 
 public class AftonbladetNewsReader extends NewsReader {
 
@@ -31,10 +30,10 @@ public class AftonbladetNewsReader extends NewsReader {
 
     }
 
-
     @Override
-    protected News getNewsLastFilter(String title, String link, String description, String date, Tags categories) {
-        return new News(title, link, "", date, categories);
+    protected News applySpecialCase(News news, String content) {
+        news.description = "";
+        return news;
     }
 
     @Override

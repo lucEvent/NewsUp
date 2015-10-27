@@ -32,12 +32,12 @@
             <TextView
                 style="@style/settings_row_title"
 
-                android:text="Prefetch and save news" />
+                android:text="@string/prefechandsave" />
 
             <TextView
                 android:id="@+id/conf_label_save_time"
                 style="@style/settings_row_subtitle"
-                android:text="Never" />
+                android:text="@string/never" />
 
         </LinearLayout>
 
@@ -49,7 +49,7 @@
 
             <TextView
                 style="@style/settings_row_title"
-                android:text="Clean caché" />
+                android:text="@string/cleancache" />
 
             <TextView
                 android:id="@+id/conf_label_cleancache"

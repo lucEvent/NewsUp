@@ -3,7 +3,6 @@ package com.newsup.net;
 import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
-import com.newsup.kernel.list.Tags;
 
 public class TEDNewsReader extends NewsReader {
 
@@ -30,9 +29,9 @@ public class TEDNewsReader extends NewsReader {
     }
 
     @Override
-    protected News getNewsLastFilter(String title, String link, String description, String date, Tags categories) {
-        description = org.jsoup.Jsoup.clean(description, org.jsoup.safety.Whitelist.none());
-        return new News(title, link, description, date, categories);
+    protected News applySpecialCase(News news, String content) {
+        news.description = org.jsoup.Jsoup.clean(news.description, org.jsoup.safety.Whitelist.none());
+        return news;
     }
 
     @Override

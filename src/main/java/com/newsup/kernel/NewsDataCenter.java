@@ -47,6 +47,8 @@ public class NewsDataCenter implements TaskMessage {
         this.connectivityManager = connectivityManager;
         this.handler = handler;
 
+        new Date(context);
+
         dbmanager = new DBManager(context);
         sdmanager = new SDManager(context);
 
@@ -100,13 +102,14 @@ public class NewsDataCenter implements TaskMessage {
 
             getSiteHistorial(site);
 
+            int failCounter = 0;
             for (News N : site.news) {
                 // Mirar si esta en el historial
                 if (site.historial.add(N)) {
                     // Si no, leer el contenido
                     site.getReader().readNewsContent(N);
                     // Si se ha podido leer el contenido
-                    if (N.content != null) {
+                    if (N.content != null && !N.content.isEmpty()) {
                         // insertar en la BD
                         try {
                             dbmanager.insertNews(site.code, N);
@@ -116,6 +119,7 @@ public class NewsDataCenter implements TaskMessage {
                         // guardar el contenido en disco
                         sdmanager.saveNews(N);
                     } else {
+                        failCounter++;
                         site.historial.remove(N);
                     }
                 } else {
@@ -123,6 +127,7 @@ public class NewsDataCenter implements TaskMessage {
                     N.id = site.historial.ceiling(N).id;
                 }
             }
+            debug("[" + site.name + "] Noticias que ha sido imposible leer:: " + failCounter);
         }
 
         @Override

@@ -19,7 +19,7 @@
             android:gravity="center"
             android:onClick="onConfigureMyFeed"
             android:padding="20dip"
-            android:text="Configure My Feed" />
+            android:text="@string/mainpage" />
 
         <View
             android:id="@+id/divider"
@@ -40,7 +40,7 @@
             android:gravity="center"
             android:onClick="onConfigureSites"
             android:padding="20dip"
-            android:text="Configure Sites" />
+            android:text="@string/confsites" />
 
     </RelativeLayout>
 

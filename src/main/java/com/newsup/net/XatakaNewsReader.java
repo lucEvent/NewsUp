@@ -3,7 +3,6 @@ package com.newsup.net;
 import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
-import com.newsup.kernel.list.Tags;
 
 public class XatakaNewsReader extends NewsReader {
 
@@ -26,27 +25,26 @@ public class XatakaNewsReader extends NewsReader {
     }
 
     @Override
-    protected News getNewsLastFilter(String title, String link, String description, String date, Tags categories) {
-        News res = new News(title, link, "", date, categories);
-
-        org.jsoup.select.Elements ee = org.jsoup.Jsoup.parse(description).select("body").get(0).children();
-
-        StringBuilder content = new StringBuilder();
+    protected News applySpecialCase(News news, String content) {
+        org.jsoup.select.Elements ee = org.jsoup.Jsoup.parse(news.description).select("body").get(0).children();
 
         org.jsoup.select.Elements elasts = ee.select("h4,br[clear=\"all\"]");
         if (!elasts.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+
             org.jsoup.nodes.Element last = elasts.get(0);
             for (org.jsoup.nodes.Element elem : ee) {
                 if (elem == last) {
                     break;
                 }
-                content.append(elem.outerHtml());
+                sb.append(elem.outerHtml());
             }
-            res.content = content.toString();
+            news.content = content.toString();
         } else {
-            res.content = ee.html();
+            news.content = ee.html();
         }
-        return res;
+        news.description = "";
+        return news;
     }
 
     @Override

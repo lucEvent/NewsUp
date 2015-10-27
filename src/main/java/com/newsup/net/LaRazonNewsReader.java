@@ -3,7 +3,6 @@ package com.newsup.net;
 import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
-import com.newsup.kernel.list.Tags;
 
 public class LaRazonNewsReader extends NewsReader {
 
@@ -56,10 +55,10 @@ public class LaRazonNewsReader extends NewsReader {
     }
 
     @Override
-    protected News getNewsLastFilter(String title, String link, String description, String date, Tags categories) {
-        News res = new News(title, link, "", date, categories);
-        res.content = description;
-        return res;
+    protected News applySpecialCase(News news, String content) {
+        news.content = news.description;
+        news.description = "";
+        return news;
     }
 
     @Override

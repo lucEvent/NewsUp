@@ -68,7 +68,7 @@ public class NewsView {
         this.currentNews = news;
 
         if (news.content == null) {
-            Toast.makeText(context, "No hay contenido", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.contentnotavailableyet, Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -127,7 +127,7 @@ public class NewsView {
             sendIntent.setAction(Intent.ACTION_SEND);
             sendIntent.putExtra(Intent.EXTRA_TEXT, currentNews.title + " " + currentNews.link);
             sendIntent.setType("text/plain");
-            context.startActivity(Intent.createChooser(sendIntent, "Share to"));
+            context.startActivity(Intent.createChooser(sendIntent, context.getString(R.string.sharewith)));
         }
     };
 
