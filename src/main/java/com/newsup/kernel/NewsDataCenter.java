@@ -97,7 +97,23 @@ public class NewsDataCenter implements TaskMessage {
             if (finalSections == null) {
                 finalSections = getSettingsOf(site).sectionsOnMainIntegerArray();
             }
+//debug
+    /*        for (int s = 0; s < site.getSections().size(); ++s) {
+                Section section = site.getSections().get(s);
+                debug("Leyendo: " + section.name);
+                int[] isecs = new int[]{s};
+                site.getReader().readNews(isecs, this);
 
+                int nc = 0;
+                for (News N : site.news) {
+                    nc++;
+                    debug("   Reading news:" + nc);
+                    site.getReader().readNewsContent(N);
+                }
+                site.news.clear();
+            }
+            if (true) return;*/
+//end debug
             site.getReader().readNews(finalSections, this);
 
             getSiteHistorial(site);

@@ -18,7 +18,7 @@ public class MarcaNewsReader extends NewsReader {
         SECTIONS.add(new Section("Más fútbol", 1, "http://marca.feedsportal.com/rss/futbol_mas_futbol.xml"));
         SECTIONS.add(new Section("Fútbol internacional", 1, "http://marca.feedsportal.com/rss/futbol_futbol_internacional.xml"));
         SECTIONS.add(new Section("Liga de campeones", 1, "http://marca.feedsportal.com/rss/futbol_liga_campeones.xml"));
-        SECTIONS.add(new Section("Copa uefa", 1, "http://marca.feedsportal.com/rss/futbol_copa_uefa.xml"));
+        SECTIONS.add(new Section("Copa de la UEFA", 1, "http://marca.feedsportal.com/rss/futbol_copa_uefa.xml"));
         SECTIONS.add(new Section("Copa del Rey", 1, "http://marca.feedsportal.com/rss/futbol_copa_rey.xml"));
         SECTIONS.add(new Section("Selección", 1, "http://marca.feedsportal.com/rss/futbol_mundial.xml"));
         SECTIONS.add(new Section("Mundial 2014", 1, "http://marca.feedsportal.com/rss/futbol_mundial.xml"));
@@ -86,11 +86,29 @@ public class MarcaNewsReader extends NewsReader {
             org.jsoup.nodes.Document doc = getDocument(news.link);
             if (doc == null) return news;
 
-            doc.select("script").remove();
+            org.jsoup.select.Elements ee = doc.select("main");
+            ee.select("script").remove();
 
-            org.jsoup.select.Elements e = doc.select("li > h4,.socialDisplay,.cuerpo_articulo > p");
+            org.jsoup.select.Elements e = ee.select("img,.cuerpo-texto");
+            if (!e.isEmpty()) {
+                news.content = e.outerHtml();
+            } else {
+                e = doc.select(".cuerpo_articulo > p");
+                if (!e.isEmpty()) {
+                    e.select("script").remove();
+                    org.jsoup.select.Elements img = doc.select(".bloque-foto");
 
-            news.content = e.outerHtml();
+                    news.content = img.select("img").outerHtml() + e.outerHtml();
+                } else {
+                    e = doc.select(".texto-noticia > p");
+                    if (!e.isEmpty()) {
+                        e.select("script").remove();
+                        news.content = e.outerHtml();
+                    } else {
+                        debug("No se ha podido leer:" + news.title);
+                    }
+                }
+            }
         } catch (Exception e) {
             debug("[ERROR] link:" + news.link);
             e.printStackTrace();

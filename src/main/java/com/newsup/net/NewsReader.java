@@ -4,6 +4,7 @@ import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
 import com.newsup.kernel.list.Tags;
+import com.newsup.net.util.Enclosure;
 import com.newsup.task.Socket;
 import com.newsup.task.TaskMessage;
 
@@ -24,11 +25,17 @@ public abstract class NewsReader {
     protected static final int HASH_DESCRIPTION = "description".hashCode();
     protected static final int HASH_CATEGORY = "category".hashCode();
     protected static final int HASH_CONTENT = "content:encoded".hashCode();
+    protected static final int HASH_ENCLOSURE = "enclosure".hashCode();
 
-
+    private final boolean catchEnclosures;
     public SectionList SECTIONS;
 
     public NewsReader() {
+        this(false);
+    }
+
+    public NewsReader(boolean catchEnclosures) {
+        this.catchEnclosures = catchEnclosures;
     }
 
     public final void readNews(int[] sections, Socket handler) {
@@ -55,13 +62,17 @@ public abstract class NewsReader {
 
         for (org.jsoup.nodes.Element item : items) {
             String title = "", link = "", guided = "", description = "", date = "", content = "";
-            ArrayList<String> categoriesList = new ArrayList<String>();
+            ArrayList<String> categories = new ArrayList<String>();
+            ArrayList<Enclosure> enclosures = new ArrayList<Enclosure>();
             Elements props = item.getAllElements();
 
             //TODO Arraylist de opciones que se van quitando y lo hace mas eficiente
             for (org.jsoup.nodes.Element prop : props) {
                 int taghash = prop.tagName().hashCode();
 
+                if (taghash == HASH_ENCLOSURE && catchEnclosures) {
+                    enclosures.add(new Enclosure(prop.attr("url"), prop.attr("type")));
+                }
                 if (taghash == HASH_TITLE) {
                     title = prop.text();
                     continue;
@@ -79,7 +90,7 @@ public abstract class NewsReader {
                     continue;
                 }
                 if (taghash == HASH_CATEGORY) {
-                    categoriesList.add(prop.text());
+                    categories.add(prop.text());
                     continue;
                 }
                 if (taghash == HASH_GUIDED) {
@@ -90,15 +101,21 @@ public abstract class NewsReader {
                 }
             }
             if (!title.isEmpty()) {
-                News news = new News(title, link.isEmpty() ? guided : link, description, date, new Tags(categoriesList));
+                News news = new News(title, link.isEmpty() ? guided : link, description, date, new Tags(categories));
                 news = applySpecialCase(news, content);
-
+                if (catchEnclosures) {
+                    news = applyEnclosures(news, enclosures);
+                }
                 handler.message(TaskMessage.NEWS_READ, news);
             }
         }
     }
 
     protected News applySpecialCase(News news, String content) {
+        return news;
+    }
+
+    protected News applyEnclosures(News news, ArrayList<Enclosure> enclosures) {
         return news;
     }
 

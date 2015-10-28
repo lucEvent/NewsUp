@@ -3,11 +3,14 @@ package com.newsup.net;
 import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
+import com.newsup.net.util.Enclosure;
+
+import java.util.ArrayList;
 
 public class AsNewsReader extends NewsReader {
 
     public AsNewsReader() {
-        super();
+        super(true);
 
         SECTIONS = new SectionList();
         SECTIONS.add(new Section("TITULARES", 0, "http://as.com/rss/diarioas/portada.xml"));
@@ -83,6 +86,21 @@ public class AsNewsReader extends NewsReader {
     @Override
     protected News applySpecialCase(News news, String content) {
         if (!content.isEmpty()) news.content = content;
+        return news;
+    }
+
+    @Override
+    protected News applyEnclosures(News news, ArrayList<Enclosure> enclosures) {
+        String s = "";
+        boolean img = true;
+        for (Enclosure e : enclosures) {
+            if (e.isVideo()) s += e.html();
+            if (e.isImage() && img && e.size > 10000) {
+                img = false;
+                s += e.html();
+            }
+        }
+        news.content = s + news.content;
         return news;
     }
 

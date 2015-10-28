@@ -70,7 +70,6 @@ public class NewsView {
         this.currentNews = news;
 
         if (news.content == null) {
-
           //  Toast.makeText(context, R.string.contentnotavailableyet, Toast.LENGTH_SHORT).show();
             AlertDialog.Builder dialog = new AlertDialog.Builder(context);
             dialog.setTitle("Oops... This app is awesome but it still cannot read this news");
