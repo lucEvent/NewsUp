@@ -87,7 +87,7 @@ public class NewsLister extends ArrayAdapter<News> implements Comparator<News> {
 
     @Override
     public int compare(News n1, News n2) {
-        int comparison = -Date.compare(n1.date, n2.date);
-        return comparison != 0 ? comparison : (n1.id < n2.id ? -1 : (n1.id == n2.id ? 0 : 1));
+        int comparison = Date.compare(n1.date, n2.date);
+        return comparison != 0 ? -comparison : (n1.id < n2.id ? -1 : 1);
     }
 }

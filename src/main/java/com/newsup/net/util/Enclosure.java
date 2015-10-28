@@ -9,9 +9,13 @@ public class Enclosure {
 
     public Enclosure(String src, String type, String size) {
         this.src = src;
-        String[] s = type.split("/");
-        this.type = s[0];
-        this.encoded = s[1];
+        if (!type.isEmpty()) {
+            String[] s = type.split("/");
+            this.type = s[0];
+            this.encoded = s[1];
+        } else {
+            this.type = this.encoded = "";
+        }
         this.size = Integer.parseInt(size);
     }
 
@@ -27,7 +31,8 @@ public class Enclosure {
         if (isImage()) {
             return "<img src=\"" + src + "\">";
         } else if (isVideo()) {
-            return "<video controls=\"\"><source src=\"" + src + "\" type=\"video\\" + encoded + "\"></video>";
+
+            return "<iframe src=\"" + src + "\" ></IFRAME>";
         }
         return "";
     }

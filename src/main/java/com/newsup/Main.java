@@ -158,14 +158,6 @@ public class Main extends ListActivity implements TaskMessage {
             case R.id.action_bookmarks:
                 startActivity(new Intent(this, BookmarksActivity.class));
                 break;
-/*            case R.id.action_debug:
-                Intent i = new Intent(this, DebugActivity.class);
-                StringBuilder data = new StringBuilder();
-
-                i.putExtra("debug", data.toString());
-                startActivity(i);
-                break;
-  */
             default:
                 return super.onOptionsItemSelected(item);
         }

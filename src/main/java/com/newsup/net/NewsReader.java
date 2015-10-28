@@ -71,7 +71,7 @@ public abstract class NewsReader {
                 int taghash = prop.tagName().hashCode();
 
                 if (taghash == HASH_ENCLOSURE && catchEnclosures) {
-                    enclosures.add(new Enclosure(prop.attr("url"), prop.attr("type")));
+                    enclosures.add(new Enclosure(prop.attr("url"), prop.attr("type"), prop.attr("length")));
                 }
                 if (taghash == HASH_TITLE) {
                     title = prop.text();
@@ -102,10 +102,10 @@ public abstract class NewsReader {
             }
             if (!title.isEmpty()) {
                 News news = new News(title, link.isEmpty() ? guided : link, description, date, new Tags(categories));
-                news = applySpecialCase(news, content);
                 if (catchEnclosures) {
-                    news = applyEnclosures(news, enclosures);
+                    news.enclosures =  enclosures;
                 }
+                news = applySpecialCase(news, content);
                 handler.message(TaskMessage.NEWS_READ, news);
             }
         }
@@ -115,11 +115,7 @@ public abstract class NewsReader {
         return news;
     }
 
-    protected News applyEnclosures(News news, ArrayList<Enclosure> enclosures) {
-        return news;
-    }
-
-    protected Document getDocument(String pagelink) throws IOException {
+    protected Document getDocument(String pagelink) throws IOException {//TODO que deje de lanzar IOE y ya q tiene catch q lo coja en otro
         try {
             return Jsoup.connect(pagelink).get();
         } catch (Exception e) {

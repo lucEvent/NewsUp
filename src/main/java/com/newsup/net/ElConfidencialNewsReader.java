@@ -4,6 +4,7 @@ import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
 import com.newsup.kernel.list.Tags;
+import com.newsup.net.util.Enclosure;
 import com.newsup.task.Socket;
 import com.newsup.task.TaskMessage;
 
@@ -17,6 +18,7 @@ public class ElConfidencialNewsReader extends NewsReader {
     private static final int EC_HASH_DATE = "updated".hashCode();
     private static final int EC_HASH_DESCRIPTION = "summary".hashCode();
     private static final int EC_HASH_CONTENT = "content".hashCode();
+    private static final int EC_HASH_MEDIA = "media:content".hashCode();
 
     public ElConfidencialNewsReader() {
         super();
@@ -98,7 +100,8 @@ public class ElConfidencialNewsReader extends NewsReader {
         Elements items = doc.getElementsByTag("entry");
         for (org.jsoup.nodes.Element item : items) {
             String title = "", link = "", description = "", date = "", content = "";
-            ArrayList<String> categoriesList = new ArrayList<String>();
+            ArrayList<String> categories = new ArrayList<String>();
+            ArrayList<Enclosure> enclosures = new ArrayList<Enclosure>();
             Elements props = item.getAllElements();
 
             //TODO Arraylist de opciones que se van quitando y lo hace mas eficiente
@@ -121,7 +124,11 @@ public class ElConfidencialNewsReader extends NewsReader {
                     continue;
                 }
                 if (taghash == HASH_CATEGORY) {
-                    categoriesList.add(prop.text());
+                    categories.add(prop.text());
+                    continue;
+                }
+                if (taghash == EC_HASH_MEDIA) {
+                    enclosures.add(new Enclosure(prop.attr("url"), prop.attr("type"), "0"));
                     continue;
                 }
                 if (taghash == EC_HASH_CONTENT) {
@@ -131,8 +138,13 @@ public class ElConfidencialNewsReader extends NewsReader {
                     content = con.html();
                 }
             }
-            News news = new News(title, link, description, date, new Tags(categoriesList));
-            news.content = content;
+            News news = new News(title, link, description, date, new Tags(categories));
+            String imgs = "";
+            for (Enclosure e : enclosures) {
+                imgs += e.html();
+            }
+            news.content = imgs + content;
+
             handler.message(TaskMessage.NEWS_READ, news);
         }
     }

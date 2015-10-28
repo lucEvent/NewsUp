@@ -84,7 +84,7 @@ public class Date {
 
 
     public static int compare(long date1, long date2) {
-        return Long.compare(date1, date2);
+        return date1 < date2 ? -1 : (date1 == date2 ? 0 : 1);
     }
 
     private static final String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};

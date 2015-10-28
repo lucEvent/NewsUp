@@ -26,9 +26,9 @@ public class SiteList extends ArrayList<Site> {
             add(new Site(code++, "**El Pais", 0xffffffff, Site.THEME_SPAIN, assets.open("elpais.png"), new com.newsup.net.ElpaisNewsReader()));
             add(new Site(code++, "**20 Minutos", 0xff004594, Site.THEME_SPAIN, assets.open("20minutos.png"), new com.newsup.net._20MinutosNewsReader()));
             add(new Site(code++, "**El Mundo", 0xffffffff, Site.THEME_SPAIN, assets.open("elmundo.png"), new com.newsup.net.ElMundoNewsReader()));
-            add(new Site(code++, "As", 0xffba0202, Site.THEME_SPAIN, assets.open("as.png"), new com.newsup.net.AsNewsReader()));
+            add(new Site(code++, "**As", 0xffba0202, Site.THEME_SPAIN, assets.open("as.png"), new com.newsup.net.AsNewsReader()));
             add(new Site(code++, "**Marca", 0xff04394a, Site.THEME_SPAIN, assets.open("marca.png"), new com.newsup.net.MarcaNewsReader()));
-            add(new Site(code++, "El Confidencial", 0xff145f85, Site.THEME_SPAIN, assets.open("elconfidencial.png"), new com.newsup.net.ElConfidencialNewsReader()));
+            add(new Site(code++, "**El Confidencial", 0xff145f85, Site.THEME_SPAIN, assets.open("elconfidencial.png"), new com.newsup.net.ElConfidencialNewsReader()));
             add(new Site(code++, "El Diario", 0xff0061ab, Site.THEME_SPAIN, assets.open("eldiario.png"), new com.newsup.net.ElDiarioNewsReader()));
             add(new Site(code++, "La Razón", 0xffc7c7c7, Site.THEME_SPAIN, assets.open("larazon.png"), new com.newsup.net.LaRazonNewsReader()));
 

@@ -2,6 +2,9 @@ package com.newsup.kernel;
 
 import com.newsup.kernel.list.Tags;
 import com.newsup.kernel.util.Date;
+import com.newsup.net.util.Enclosure;
+
+import java.util.ArrayList;
 
 public class News {
 
@@ -12,6 +15,7 @@ public class News {
     public long date;
 
     public final Tags categories;
+    public ArrayList<Enclosure> enclosures;
 
     public String description, content;
 

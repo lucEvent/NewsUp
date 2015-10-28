@@ -5,8 +5,6 @@ import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
 import com.newsup.net.util.Enclosure;
 
-import java.util.ArrayList;
-
 public class AsNewsReader extends NewsReader {
 
     public AsNewsReader() {
@@ -85,23 +83,24 @@ public class AsNewsReader extends NewsReader {
 
     @Override
     protected News applySpecialCase(News news, String content) {
-        if (!content.isEmpty()) news.content = content;
+        if (!content.isEmpty()) {
+            news.content = getEnclosures(news) + content;
+        }
         return news;
     }
 
-    @Override
-    protected News applyEnclosures(News news, ArrayList<Enclosure> enclosures) {
-        String s = "";
-        boolean img = true;
-        for (Enclosure e : enclosures) {
-            if (e.isVideo()) s += e.html();
-            if (e.isImage() && img && e.size > 10000) {
-                img = false;
-                s += e.html();
+    private String getEnclosures(News news) {
+        String res = "";
+        boolean imgset = false;
+        for (Enclosure e : news.enclosures) {
+            if (e.isImage() && !imgset && e.size > 10000) {
+                res = e.html();
+            } else if (e.isVideo()) {
+                res = e.html();
+                break;
             }
         }
-        news.content = s + news.content;
-        return news;
+        return res;
     }
 
     @Override
@@ -110,11 +109,45 @@ public class AsNewsReader extends NewsReader {
             org.jsoup.nodes.Document doc = getDocument(news.link);
             if (doc == null) return news;
 
-            org.jsoup.nodes.Element element = doc.getElementsByAttributeValue("itemprop", "articleBody").get(0);
-            news.content = element.html();
+            org.jsoup.select.Elements e = doc.select("[itemprop=\"articleBody\"");
 
+            if (!e.isEmpty()) {
+                news.content = getEnclosures(news) + e.html();
+            } else {
+                boolean contains = news.link.contains("video");
+                boolean thereis = false;
+                String videohtml = "";
+                for (Enclosure enclosure : news.enclosures) {
+                    if (enclosure.isVideo()) {
+                        thereis = true;
+                        videohtml = enclosure.html();
+                        break;
+                    }
+                }
+                if (contains && thereis) {
+                    news.content = videohtml + news.description;
+                } else {
+                    e = doc.select("#contenido-interior > p,.entry-content > p,.floatFix > p,.floatFix > figure");
+                    if (!e.isEmpty()) {
+                        news.content = getEnclosures(news) + e.html();
+                    } else {
+                        e = doc.select("#columna2");
+                        if (!e.isEmpty()) {
+                            e.select(".redes,.menu_post,.archivado,script").remove();
+                            news.content = getEnclosures(news) + e.html();
+                        } else {
+                            e = doc.select(".marcador-generico,.cmt-live");
+                            if (!e.isEmpty()) {
+                                news.content = getEnclosures(news) + e.html();
+                            } else {
+                                debug("NO SE HA ENCONTRADO EN CONTENIDO " + news.link);
+                            }
+                        }
+                    }
+                }
+            }
         } catch (Exception e) {
-            debug("[ERROR La seleccion del articulo no se ha encontrado] " + news.link);
+            debug("[ERROR] " + news.title);
             e.printStackTrace();
         }
         return news;

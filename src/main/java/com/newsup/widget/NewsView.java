@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -48,9 +49,12 @@ public class NewsView {
 
         newsView = (WebView) view.findViewById(R.id.content);
         newsView.setOnTouchListener(onNewsViewTouchListener);
-        newsView.getSettings().setJavaScriptEnabled(true);
-        newsView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
         newsView.setPersistentDrawingCache(WebView.PERSISTENT_NO_CACHE);
+        WebSettings webSettings = newsView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
+        webSettings.setBuiltInZoomControls(true);
+        webSettings.setDisplayZoomControls(false);
 
         title = (TextView) view.findViewById(R.id.title);
 
@@ -64,7 +68,7 @@ public class NewsView {
 
     private News currentNews;
 
-    private final String css = "<style>img, iframe { width: 100%; height: auto; }</style>";
+    private final String css = "<style>img, iframe, video { width: 100%; height: auto; }</style>";
 
     public boolean displayNews(News news) {
         this.currentNews = news;
