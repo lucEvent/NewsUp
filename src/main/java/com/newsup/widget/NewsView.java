@@ -68,13 +68,13 @@ public class NewsView {
 
     private News currentNews;
 
-    private final String css = "<style>img, iframe, video { width: 100%; height: auto; }</style>";
+    private final String css = "<style>img, iframe, video {width: 100%; height: auto;} div > h2 > a > img {width: auto;}</style>";
 
     public boolean displayNews(News news) {
         this.currentNews = news;
 
         if (news.content == null) {
-          //  Toast.makeText(context, R.string.contentnotavailableyet, Toast.LENGTH_SHORT).show();
+            //  Toast.makeText(context, R.string.contentnotavailableyet, Toast.LENGTH_SHORT).show();
             AlertDialog.Builder dialog = new AlertDialog.Builder(context);
             dialog.setTitle("Oops... This app is awesome but it still cannot read this news");
             dialog.setMessage("What should we do?");

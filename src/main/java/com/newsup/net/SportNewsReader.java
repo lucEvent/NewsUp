@@ -78,10 +78,23 @@ public class SportNewsReader extends NewsReader {
             org.jsoup.nodes.Document doc = getDocument(news.link);
             if (doc == null) return news;
 
-            org.jsoup.nodes.Element content = doc.select(".cuerpo-noticia,.cuerpo-opinion").get(0);
+            org.jsoup.select.Elements img = doc.select(".sp-img,.sp-video").select("img");
 
-            content.select(".firma").remove();
-            news.content = content.html();
+            org.jsoup.select.Elements content = doc.select(".cuerpo-noticia");
+            content.select(".sp-autor").remove();
+
+            if (!content.isEmpty()) {
+                news.content = img.outerHtml() + content.html();
+            } else {
+                content = doc.select(".cuerpo-opinion");
+                content.select(".firma").remove();
+
+                if (!content.isEmpty()) {
+                    news.content = content.html();
+                } else {
+                    System.out.println("NO SE HA PODIDO LEER EL CONTENIDO: " + news.link);
+                }
+            }
         } catch (Exception e) {
             debug("[ERROR] title:" + news.title);
             e.printStackTrace();

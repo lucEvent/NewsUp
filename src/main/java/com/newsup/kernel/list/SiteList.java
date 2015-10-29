@@ -35,8 +35,8 @@ public class SiteList extends ArrayList<Site> {
             add(new Site(-1, context.getString(R.string.catalonia), 0, Site.THEME_CATALONIA, null, null));
             add(new Site(code++, "**El Periódico (Cat)", 0xff0088c7, Site.THEME_CATALONIA, assets.open("elperiodicocat.png"), new com.newsup.net.ElPeriodicoCaNewsReader()));
             add(new Site(code++, "**El Periódico (Esp)", 0xfff04d4d, Site.THEME_CATALONIA, assets.open("elperiodicoes.png"), new com.newsup.net.ElPeriodicoEsNewsReader()));
-            add(new Site(code++, "La Vanguardia", 0xff1a4970, Site.THEME_CATALONIA, assets.open("lavanguardia.png"), new com.newsup.net.LaVanguardiaNewsReader()));
-            add(new Site(code++, "Sport", 0xfffc6060, Site.THEME_CATALONIA, assets.open("sport.png"), new com.newsup.net.SportNewsReader()));
+            add(new Site(code++, "**La Vanguardia", 0xff1a4970, Site.THEME_CATALONIA, assets.open("lavanguardia.png"), new com.newsup.net.LaVanguardiaNewsReader()));
+            add(new Site(code++, "**Sport", 0xfffc6060, Site.THEME_CATALONIA, assets.open("sport.png"), new com.newsup.net.SportNewsReader()));
             add(new Site(code++, "Mundo Deportivo", 0xff242424, Site.THEME_CATALONIA, assets.open("mundodeportivo.png"), new com.newsup.net.MundoDeportivoNewsReader()));
 
             add(new Site(-1, context.getString(R.string.sweden), 0, Site.THEME_SWEDEN, null, null));

@@ -137,7 +137,20 @@ public class LaVanguardiaNewsReader extends NewsReader {
 
             doc.select("script").remove();
 
-            news.content = doc.select(".text").outerHtml();
+            org.jsoup.select.Elements e = doc.select(".text,.video,.foto,.story-text");
+
+            if (!e.isEmpty()) {
+                e.select(".colB").remove();
+                news.content = e.outerHtml();
+            } else {
+                e = doc.select(".entry-content");
+                if (!e.isEmpty()) {
+                    news.content = e.html();
+                } else {
+                    System.out.println("NO SE ENCUENTRA EL CONTENIDO: " + news.link);
+                    System.out.println(doc.html());
+                }
+            }
         } catch (Exception e) {
             debug("[ERROR] link:" + news.link);
             e.printStackTrace();
