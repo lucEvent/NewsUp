@@ -1,20 +1,20 @@
 package com.newsup.io;
 
-import android.content.Context;
-import android.os.Environment;
+        import android.content.Context;
+        import android.os.Environment;
 
-import com.newsup.kernel.News;
-import com.newsup.kernel.Site;
-import com.newsup.kernel.util.Compressor;
-import com.newsup.settings.AppSettings;
-import com.newsup.settings.SiteSettings;
+        import com.newsup.kernel.News;
+        import com.newsup.kernel.Site;
+        import com.newsup.kernel.util.Compressor;
+        import com.newsup.settings.AppSettings;
+        import com.newsup.settings.SiteSettings;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+        import java.io.File;
+        import java.io.FileInputStream;
+        import java.io.FileNotFoundException;
+        import java.io.FileOutputStream;
+        import java.io.ObjectInputStream;
+        import java.io.ObjectOutputStream;
 
 public class SDManager {
 
@@ -164,9 +164,8 @@ public class SDManager {
         return size + dbsize;
     }
 
-    public void cleanCache() {
+    public void wipeData() {
         File[] files = context.getFilesDir().listFiles();
         for (File f : files) f.delete();
-        context.deleteDatabase(Database.DATABASE_NAME);
     }
 }

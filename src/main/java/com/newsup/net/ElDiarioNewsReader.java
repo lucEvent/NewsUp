@@ -22,7 +22,6 @@ public class ElDiarioNewsReader extends NewsReader {
         SECTIONS.add(new Section("Canarias", 1, "http://www.eldiario.es/rss/canariasahora/"));
 
         SECTIONS.add(new Section("Desalambre (Derechos Humanos)", 0, "http://www.eldiario.es/rss/section/10593/"));
-        //      SECTIONS.add(new Section("Tecnologia", 0, "http://www.eldiario.es/rss/section/60648/"));
         SECTIONS.add(new Section("Juegoreviews", 0, "http://www.eldiario.es/rss/section/11709/"));
         SECTIONS.add(new Section("Política", 0, "http://www.eldiario.es/rss/section/1000/"));
         SECTIONS.add(new Section("Economía", 0, "http://www.eldiario.es/rss/section/3000/"));
@@ -41,7 +40,7 @@ public class ElDiarioNewsReader extends NewsReader {
 
         SECTIONS.add(new Section("Autores", 0, null));
         SECTIONS.add(new Section("Ignacio Escolar", 1, "http://www.eldiario.es/rss/section/20002/"));
-        SECTIONS.add(new Section("Íñigo Saez de Ugarte", 1, "http://www.eldiario.es/rss/section/20003/"));
+        SECTIONS.add(new Section("Ïñigo Saez de Ugarte", 1, "http://www.eldiario.es/rss/section/20003/"));
         SECTIONS.add(new Section("Juan Luis Sánchez", 1, "http://www.eldiario.es/rss/section/20001/"));
         SECTIONS.add(new Section("Belén Carreño", 1, "http://www.eldiario.es/rss/section/20032/"));
         SECTIONS.add(new Section("Ana Requena", 1, "http://www.eldiario.es/rss/section/20006/"));

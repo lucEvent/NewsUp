@@ -98,7 +98,7 @@ public class NewsDataCenter implements TaskMessage {
                 finalSections = getSettingsOf(site).sectionsOnMainIntegerArray();
             }
 //debug
-/*           for (int s = 0; s < site.getSections().size(); ++s) {
+    /*       for (int s = 0; s < site.getSections().size(); ++s) {
                 Section section = site.getSections().get(s);
                 debug("Leyendo: " + section.name);
                 int[] isecs = new int[]{s};
@@ -125,7 +125,9 @@ public class NewsDataCenter implements TaskMessage {
                 // Mirar si esta en el historial
                 if (site.historial.add(N)) {
                     // Si no, leer el contenido
-                    site.getReader().readNewsContent(N);
+                    if (N.content == null || N.content.isEmpty()) {
+                        site.getReader().readNewsContent(N);
+                    }
                     // Si se ha podido leer el contenido
                     if (N.content != null && !N.content.isEmpty()) {
                         // insertar en la BD
@@ -245,8 +247,12 @@ public class NewsDataCenter implements TaskMessage {
     }
 
     public void cleanCache() {
-        sdmanager.cleanCache();
-        dbmanager = new DBManager(context);
+        sdmanager.wipeData();
+        dbmanager.wipeData();
+        for (Site s : getSites()) {
+            s.historial = null;
+            s.news = null;
+        }
     }
 
     private boolean isInternetAvailable() {

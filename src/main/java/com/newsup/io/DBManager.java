@@ -95,4 +95,9 @@ public class DBManager {
         android.util.Log.d("##DBManager##", text);
     }
 
+    public void wipeData() {
+        SQLiteDatabase database = db.getWritableDatabase();
+        database.delete(DBNews.db, null, null);
+        database.close();
+    }
 }

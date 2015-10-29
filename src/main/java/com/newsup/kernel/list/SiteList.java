@@ -29,16 +29,15 @@ public class SiteList extends ArrayList<Site> {
             add(new Site(code++, "**As", 0xffba0202, Site.THEME_SPAIN, assets.open("as.png"), new com.newsup.net.AsNewsReader()));
             add(new Site(code++, "**Marca", 0xff04394a, Site.THEME_SPAIN, assets.open("marca.png"), new com.newsup.net.MarcaNewsReader()));
             add(new Site(code++, "**El Confidencial", 0xff145f85, Site.THEME_SPAIN, assets.open("elconfidencial.png"), new com.newsup.net.ElConfidencialNewsReader()));
-            add(new Site(code++, "El Diario", 0xff0061ab, Site.THEME_SPAIN, assets.open("eldiario.png"), new com.newsup.net.ElDiarioNewsReader()));
-            add(new Site(code++, "La Razón", 0xffc7c7c7, Site.THEME_SPAIN, assets.open("larazon.png"), new com.newsup.net.LaRazonNewsReader()));
+            add(new Site(code++, "**El Diario", 0xff0061ab, Site.THEME_SPAIN, assets.open("eldiario.png"), new com.newsup.net.ElDiarioNewsReader()));
+            add(new Site(code++, "**La Razón", 0xffc7c7c7, Site.THEME_SPAIN, assets.open("larazon.png"), new com.newsup.net.LaRazonNewsReader()));
 
             add(new Site(-1, context.getString(R.string.catalonia), 0, Site.THEME_CATALONIA, null, null));
-            //  add(new Site(code++, "Ara", 0xff, Site.THEME_CATALONIA, assets.open(".png"), new com.newsup.net.AraNewsReader()));
-            add(new Site(code++, "El Periódico (Cat)", 0xff0088c7, Site.THEME_CATALONIA, assets.open("elperiodicocat.png"), new com.newsup.net.ElPeriodicoCaNewsReader()));
-            add(new Site(code++, "El Periódico (Esp)", 0xfff04d4d, Site.THEME_CATALONIA, assets.open("elperiodicoes.png"), new com.newsup.net.ElPeriodicoEsNewsReader()));
+            add(new Site(code++, "**El Periódico (Cat)", 0xff0088c7, Site.THEME_CATALONIA, assets.open("elperiodicocat.png"), new com.newsup.net.ElPeriodicoCaNewsReader()));
+            add(new Site(code++, "**El Periódico (Esp)", 0xfff04d4d, Site.THEME_CATALONIA, assets.open("elperiodicoes.png"), new com.newsup.net.ElPeriodicoEsNewsReader()));
             add(new Site(code++, "La Vanguardia", 0xff1a4970, Site.THEME_CATALONIA, assets.open("lavanguardia.png"), new com.newsup.net.LaVanguardiaNewsReader()));
             add(new Site(code++, "Sport", 0xfffc6060, Site.THEME_CATALONIA, assets.open("sport.png"), new com.newsup.net.SportNewsReader()));
-             add(new Site(code++, "Mundo Deportivo", 0xff242424, Site.THEME_CATALONIA, assets.open("mundodeportivo.png"), new com.newsup.net.MundoDeportivoNewsReader()));
+            add(new Site(code++, "Mundo Deportivo", 0xff242424, Site.THEME_CATALONIA, assets.open("mundodeportivo.png"), new com.newsup.net.MundoDeportivoNewsReader()));
 
             add(new Site(-1, context.getString(R.string.sweden), 0, Site.THEME_SWEDEN, null, null));
             add(new Site(code++, "Aftonbladet", 0xffffffff, Site.THEME_SWEDEN, assets.open("aftonbladet.png"), new com.newsup.net.AftonbladetNewsReader()));

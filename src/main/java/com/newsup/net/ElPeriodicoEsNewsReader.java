@@ -4,8 +4,6 @@ import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
 
-import org.jsoup.nodes.Document;
-
 import java.io.IOException;
 import java.net.URL;
 
@@ -37,7 +35,6 @@ public class ElPeriodicoEsNewsReader extends NewsReader {
 
         SECTIONS.add(new Section("Canal Belleza", 0, "http://www.elperiodico.com/es/rss/belleza/rss.xml"));
         SECTIONS.add(new Section("Motor", 0, "http://www.elperiodico.com/es/rss/motor/rss.xml"));
-        SECTIONS.add(new Section("Neurocápsulas", 0, "http://www.elperiodico.com/es/rss/neurocapsulas/rss.xml"));
 
         SECTIONS.add(new Section("Blogs", 0, null));
         SECTIONS.add(new Section("Los restaurantes de Pau Arenós", 1, "http://rdp.elperiodico.com/feed/?_ga=1.183745446.1073564764.1445817152"));
@@ -58,12 +55,19 @@ public class ElPeriodicoEsNewsReader extends NewsReader {
     }
 
     @Override
-    protected Document getDocument(String rsslink) throws IOException {
-        return org.jsoup.Jsoup.parse(new URL(rsslink).openStream(), "ISO-8859-1", rsslink);
+    protected org.jsoup.nodes.Document getDocument(String rsslink) throws IOException {
+        if (rsslink == SECTIONS.get(0).link) {
+            System.out.println("Empleando la especial");
+            return org.jsoup.Jsoup.parse(new URL(rsslink).openStream(), "ISO-8859-1", rsslink);
+        }
+        return super.getDocument(rsslink);
     }
 
     @Override
     protected News applySpecialCase(News news, String content) {
+        if (!content.isEmpty()) {
+            news.content = content;
+        }
         news.description = org.jsoup.Jsoup.parse(news.description).text();
         return news;
     }
@@ -72,14 +76,25 @@ public class ElPeriodicoEsNewsReader extends NewsReader {
     public News readNewsContent(News news) {
         try {
             org.jsoup.nodes.Document doc = getDocument(news.link);
-            if (doc == null) {
-                return news;
+            if (doc == null) return news;
+
+            doc.select("script").remove();
+
+            org.jsoup.select.Elements intro = doc.select(".ep-video,.unit > .ep-img,.unit > .ep-galeria");
+            intro.select(".carousel").remove();
+            intro = intro.select("img");
+
+            org.jsoup.select.Elements content = doc.select(".cuerpo-noticia,.cuerpo-opinion");
+
+            content.select(".fecha,.carousel,.thumb-pie,.cred").remove();
+            content = content.select("p,a > img,h2,h3,h4,h5,h6");
+
+            news.content = intro.outerHtml() + content.outerHtml();
+
+            if (news.content.length() < 80) {
+                debug("NO SE HA PODIDO LEER " + news.link);
+                news.content = null;
             }
-
-            org.jsoup.select.Elements e = doc.select(".subtitulo,.ep-img,.ep-video,.cuerpo-noticia");
-            e.select("script").remove();
-
-            news.content = e.outerHtml();
         } catch (Exception e) {
             debug("[ERROR] link:" + news.link);
             e.printStackTrace();
