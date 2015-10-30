@@ -19,22 +19,16 @@ public class ElAndroideLibreNewsReader extends NewsReader {
 
     @Override
     protected News applySpecialCase(News news, String content) {
-        news.description = Jsoup.parse(news.description).getElementsByTag("p").get(0).text().replace("[...]", "");
+        news.description = Jsoup.parse(news.description).getElementsByTag("p").text().replace("[...]", "");
+
+        org.jsoup.select.Elements doc = org.jsoup.Jsoup.parseBodyFragment(content).getElementsByTag("body");
+        doc.select("[clear=\"all\"] ~ *,br").remove();
+        news.content = doc.html().replace("<br>", "");
         return news;
     }
 
     @Override
     public News readNewsContent(News news) {
-        try {
-            org.jsoup.nodes.Document doc = getDocument(news.link);
-            if (doc == null) return news;
-
-            news.content = doc.select("#singlePostContent").get(0).html();
-
-        } catch (Exception e) {
-            debug("[ERROR La seleccion del articulo no se ha encontrado] tit:" + news.title);
-            e.printStackTrace();
-        }
         return news;
     }
 

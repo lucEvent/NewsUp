@@ -71,22 +71,30 @@ public class MundoDeportivoNewsReader extends NewsReader {
             org.jsoup.nodes.Document doc = getDocument(news.link);
             if (doc == null) return news;
 
-            doc.select("script").remove();
+            String intro = doc.select("[itemprop=\"alternativeHeadline\"]").outerHtml();
+            org.jsoup.select.Elements imgs = doc.select("[itemprop=\"image\"] img,.gallery-leaf-figure img");
 
-            news.content = doc.select("p[itemprop=\"alternativeHeadline\"],div[itemprop=\"video\"] > iframe").outerHtml();
+            StringBuilder img = new StringBuilder();
+            if (!imgs.isEmpty()) {
+                for (org.jsoup.nodes.Element i : imgs) {
+                    String attr = i.attr("data-src-md");
+                    if (attr.isEmpty())
+                        attr = i.attr("src");
 
-            org.jsoup.select.Elements imgs = doc.select(".img-responsive");
-            for (org.jsoup.nodes.Element img : imgs) {
-                if (img.attr("target").isEmpty()) {
-                    String src = img.attr("data-src-sm");
-                    if (!src.isEmpty()) news.content += "<p><img src=\"" + src + "\"></p>";
-                    else news.content += img.outerHtml();
+                    img.append("<img src=\"" + attr + "\">");
                 }
             }
-            org.jsoup.select.Elements e = doc.select("div[itemprop=\"articleBody\"]");
-            e.select("time").remove();
+            org.jsoup.select.Elements metas = doc.select("[itemprop=\"video\"] [itemprop=\"image\"]");
+            if (!metas.isEmpty()) {
+                for (org.jsoup.nodes.Element i : metas) {
+                    img.append("<img src=\"" + i.attr("content") + "\">");
+                }
+            }
 
-            news.content += e.html();
+            org.jsoup.select.Elements content = doc.select("[itemprop=\"articleBody\"]");
+            content.select(".datetime-story-leaf,.gallery-story-leaf-figcaption").remove();
+
+            news.content = intro + img.toString() + content.html();
         } catch (Exception e) {
             debug("[ERROR] link:" + news.link);
             e.printStackTrace();

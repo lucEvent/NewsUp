@@ -37,7 +37,7 @@ public class SiteList extends ArrayList<Site> {
             add(new Site(code++, "**El Periódico (Esp)", 0xfff04d4d, Site.THEME_CATALONIA, assets.open("elperiodicoes.png"), new com.newsup.net.ElPeriodicoEsNewsReader()));
             add(new Site(code++, "**La Vanguardia", 0xff1a4970, Site.THEME_CATALONIA, assets.open("lavanguardia.png"), new com.newsup.net.LaVanguardiaNewsReader()));
             add(new Site(code++, "**Sport", 0xfffc6060, Site.THEME_CATALONIA, assets.open("sport.png"), new com.newsup.net.SportNewsReader()));
-            add(new Site(code++, "Mundo Deportivo", 0xff242424, Site.THEME_CATALONIA, assets.open("mundodeportivo.png"), new com.newsup.net.MundoDeportivoNewsReader()));
+            add(new Site(code++, "**Mundo Deportivo", 0xff242424, Site.THEME_CATALONIA, assets.open("mundodeportivo.png"), new com.newsup.net.MundoDeportivoNewsReader()));
 
             add(new Site(-1, context.getString(R.string.sweden), 0, Site.THEME_SWEDEN, null, null));
             add(new Site(code++, "Aftonbladet", 0xffffffff, Site.THEME_SWEDEN, assets.open("aftonbladet.png"), new com.newsup.net.AftonbladetNewsReader()));
@@ -60,7 +60,7 @@ public class SiteList extends ArrayList<Site> {
             add(new Site(code++, "BBC", 0xffa62e30, Site.THEME_INTERNATIONAL, assets.open("bbc.png"), new com.newsup.net.BCCNewsReader()));
 
             add(new Site(-1, context.getString(R.string.technology), 0, Site.THEME_TECHNOLOGY, null, null));
-            add(new Site(code++, "El Androide Libre", 0xffa3c23e, Site.THEME_TECHNOLOGY, assets.open("elandroidelibre.png"), new com.newsup.net.ElAndroideLibreNewsReader()));
+            add(new Site(code++, "**El Androide Libre", 0xffa3c23e, Site.THEME_TECHNOLOGY, assets.open("elandroidelibre.png"), new com.newsup.net.ElAndroideLibreNewsReader()));
             add(new Site(code++, "Digital Trends", 0xff0098d9, Site.THEME_TECHNOLOGY, assets.open("digitaltrends.png"), new com.newsup.net.DigitalTrendsNewsReader()));
             add(new Site(code++, "Lifehacker", 0xff94b330, Site.THEME_TECHNOLOGY, assets.open("lifehacker.png"), new com.newsup.net.LifeHackerNewsReader()));
             add(new Site(code++, "Xataka", 0xff558f22, Site.THEME_TECHNOLOGY, assets.open("xataka.png"), new com.newsup.net.XatakaNewsReader()));
