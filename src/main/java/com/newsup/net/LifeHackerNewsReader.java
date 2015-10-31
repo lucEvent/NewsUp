@@ -18,6 +18,8 @@ public class LifeHackerNewsReader extends NewsReader {
     protected News applySpecialCase(News news, String content) {
         org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parseBodyFragment(news.description);
         doc.select("img").last().remove();
+        doc.select("small,.core-inset").remove();
+
         news.content = doc.html();
         news.description = "";
         return news;

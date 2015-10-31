@@ -64,14 +64,15 @@ public abstract class NewsReader {
             String title = "", link = "", guided = "", description = "", date = "", content = "";
             ArrayList<String> categories = new ArrayList<String>();
             ArrayList<Enclosure> enclosures = new ArrayList<Enclosure>();
-            Elements props = item.getAllElements();
 
             //TODO Arraylist de opciones que se van quitando y lo hace mas eficiente
+            Elements props = item.getAllElements();
             for (org.jsoup.nodes.Element prop : props) {
                 int taghash = prop.tagName().hashCode();
 
                 if (taghash == HASH_ENCLOSURE && catchEnclosures) {
                     enclosures.add(new Enclosure(prop.attr("url"), prop.attr("type"), prop.attr("length")));
+                    continue;
                 }
                 if (taghash == HASH_TITLE) {
                     title = prop.text();
@@ -95,6 +96,7 @@ public abstract class NewsReader {
                 }
                 if (taghash == HASH_GUIDED) {
                     guided = prop.text();
+                    continue;
                 }
                 if (taghash == HASH_CONTENT) {
                     content = prop.text();
@@ -103,7 +105,7 @@ public abstract class NewsReader {
             if (!title.isEmpty()) {
                 News news = new News(title, link.isEmpty() ? guided : link, description, date, new Tags(categories));
                 if (catchEnclosures) {
-                    news.enclosures =  enclosures;
+                    news.enclosures = enclosures;
                 }
                 news = applySpecialCase(news, content);
                 handler.message(TaskMessage.NEWS_READ, news);

@@ -26,23 +26,10 @@ public class XatakaNewsReader extends NewsReader {
 
     @Override
     protected News applySpecialCase(News news, String content) {
-        org.jsoup.select.Elements ee = org.jsoup.Jsoup.parse(news.description).select("body").get(0).children();
+        org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parseBodyFragment(news.description);
 
-        org.jsoup.select.Elements elasts = ee.select("h4,br[clear=\"all\"]");
-        if (!elasts.isEmpty()) {
-            StringBuilder sb = new StringBuilder();
-
-            org.jsoup.nodes.Element last = elasts.get(0);
-            for (org.jsoup.nodes.Element elem : ee) {
-                if (elem == last) {
-                    break;
-                }
-                sb.append(elem.outerHtml());
-            }
-            news.content = content.toString();
-        } else {
-            news.content = ee.html();
-        }
+        doc.select("h4 ~ *,h4,[clear=\"all\"] ~ *").remove();
+        news.content = doc.html();
         news.description = "";
         return news;
     }

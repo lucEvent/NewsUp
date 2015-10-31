@@ -62,8 +62,8 @@ public class SiteList extends ArrayList<Site> {
             add(new Site(-1, context.getString(R.string.technology), 0, Site.THEME_TECHNOLOGY, null, null));
             add(new Site(code++, "**El Androide Libre", 0xffa3c23e, Site.THEME_TECHNOLOGY, assets.open("elandroidelibre.png"), new com.newsup.net.ElAndroideLibreNewsReader()));
             add(new Site(code++, "Digital Trends", 0xff0098d9, Site.THEME_TECHNOLOGY, assets.open("digitaltrends.png"), new com.newsup.net.DigitalTrendsNewsReader()));
-            add(new Site(code++, "Lifehacker", 0xff94b330, Site.THEME_TECHNOLOGY, assets.open("lifehacker.png"), new com.newsup.net.LifeHackerNewsReader()));
-            add(new Site(code++, "Xataka", 0xff558f22, Site.THEME_TECHNOLOGY, assets.open("xataka.png"), new com.newsup.net.XatakaNewsReader()));
+            add(new Site(code++, "**Lifehacker", 0xff94b330, Site.THEME_TECHNOLOGY, assets.open("lifehacker.png"), new com.newsup.net.LifeHackerNewsReader()));
+            add(new Site(code++, "**Xataka", 0xff558f22, Site.THEME_TECHNOLOGY, assets.open("xataka.png"), new com.newsup.net.XatakaNewsReader()));
             add(new Site(code++, "TED", 0xffffffff, Site.THEME_TECHNOLOGY, assets.open("ted.png"), new com.newsup.net.TEDNewsReader()));
             add(new Site(code++, "Gizmodo", 0xff9c9c9c, Site.THEME_TECHNOLOGY, assets.open("gizmodo.png"), new com.newsup.net.GizmodoNewsReader()));
 
@@ -76,7 +76,7 @@ public class SiteList extends ArrayList<Site> {
             add(new Site(code++, "Rolling Stone", 0xff1c202b, Site.THEME_MAGAZINES, assets.open("rollingstone.png"), new com.newsup.net.RollingStoneNewsReader()));
             add(new Site(code++, "People", 0xff20b3e8, Site.THEME_MAGAZINES, assets.open("people.png"), new com.newsup.net.PeopleNewsReader()));
             add(new Site(code++, "Time", 0xffe60000, Site.THEME_MAGAZINES, assets.open("time.png"), new com.newsup.net.TimeNewsReader()));
-            add(new Site(code++, "The Atlantic", 0xff030202, Site.THEME_MAGAZINES, assets.open("theatlantic.png"), new com.newsup.net.TheAtlanticNewsReader()));
+            add(new Site(code++, "**The Atlantic", 0xff030202, Site.THEME_MAGAZINES, assets.open("theatlantic.png"), new com.newsup.net.TheAtlanticNewsReader()));
 
         } catch (Exception e) {
             android.util.Log.d("##SiteList##", "No se ha encontrado un logo");
