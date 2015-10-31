@@ -44,6 +44,8 @@
     <string name="catalonia">Cataluña</string>
     <string name="sharewith">Compartir con</string>
     <string name="contentnotavailableyet">Contenido no disponible todavía</string>
+    <string name="uk">UK</string>
+    <string name="us">US</string>
 
 
 </resources>

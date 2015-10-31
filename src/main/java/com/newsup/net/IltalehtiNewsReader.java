@@ -42,8 +42,13 @@ public class IltalehtiNewsReader extends NewsReader {
     }
 
     @Override
-    protected Document getDocument(String rsslink) throws IOException {
-        return org.jsoup.Jsoup.parse(new URL(rsslink).openStream(), "ISO-8859-1", rsslink);
+    protected Document getDocument(String rsslink) {
+        try {
+            return org.jsoup.Jsoup.parse(new URL(rsslink).openStream(), "ISO-8859-1", rsslink);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return super.getDocument(rsslink);
     }
 
     @Override

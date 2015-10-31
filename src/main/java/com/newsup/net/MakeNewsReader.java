@@ -82,13 +82,13 @@ public class MakeNewsReader extends NewsReader {
         return news;
     }
 
-    protected Document getDocument(String pagelink) throws IOException {
+    protected Document getDocument(String pagelink) {
         try {
             return Jsoup.connect(pagelink).userAgent("Mozilla/5.0 (Linux; Android 4.4.2; GT-I9300 Build/KVT49L) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.94 Mobile Safari/537.36").get();
-        } catch (java.net.SocketTimeoutException e) {
-            debug("No se ha podido encontrar la pagina: " + pagelink);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return null;
+        return super.getDocument(pagelink);
     }
 
 }

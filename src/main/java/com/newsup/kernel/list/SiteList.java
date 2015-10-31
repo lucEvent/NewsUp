@@ -31,12 +31,13 @@ public class SiteList extends ArrayList<Site> {
             add(new Site(code++, "**El Confidencial", 0xff145f85, Site.THEME_SPAIN, assets.open("elconfidencial.png"), new com.newsup.net.ElConfidencialNewsReader()));
             add(new Site(code++, "**El Diario", 0xff0061ab, Site.THEME_SPAIN, assets.open("eldiario.png"), new com.newsup.net.ElDiarioNewsReader()));
             add(new Site(code++, "**La Razón", 0xffc7c7c7, Site.THEME_SPAIN, assets.open("larazon.png"), new com.newsup.net.LaRazonNewsReader()));
+            add(new Site(code++, "Huffington Post", 0xff2c705f, Site.THEME_SPAIN, assets.open("huffingtonpost.png"), new com.newsup.net.HuffingtonPostSpainNewsReader()));
 
             add(new Site(-1, context.getString(R.string.catalonia), 0, Site.THEME_CATALONIA, null, null));
             add(new Site(code++, "**El Periódico (Cat)", 0xff0088c7, Site.THEME_CATALONIA, assets.open("elperiodicocat.png"), new com.newsup.net.ElPeriodicoCaNewsReader()));
             add(new Site(code++, "**El Periódico (Esp)", 0xfff04d4d, Site.THEME_CATALONIA, assets.open("elperiodicoes.png"), new com.newsup.net.ElPeriodicoEsNewsReader()));
             add(new Site(code++, "**La Vanguardia", 0xff1a4970, Site.THEME_CATALONIA, assets.open("lavanguardia.png"), new com.newsup.net.LaVanguardiaNewsReader()));
-            add(new Site(code++, "**Sport", 0xfffc6060, Site.THEME_CATALONIA, assets.open("sport.png"), new com.newsup.net.SportNewsReader()));
+            add(new Site(code++, "**Sport", 0xffd61a1a, Site.THEME_CATALONIA, assets.open("sport.png"), new com.newsup.net.SportNewsReader()));
             add(new Site(code++, "**Mundo Deportivo", 0xff242424, Site.THEME_CATALONIA, assets.open("mundodeportivo.png"), new com.newsup.net.MundoDeportivoNewsReader()));
 
             add(new Site(-1, context.getString(R.string.sweden), 0, Site.THEME_SWEDEN, null, null));
@@ -53,11 +54,14 @@ public class SiteList extends ArrayList<Site> {
             add(new Site(code++, "Helsingin Sanomat", 0xff01133d, Site.THEME_FINLAND, assets.open("helsinginsanomat.png"), new HelsinkiSanomatNewsReader()));
             add(new Site(code++, "Iltalehti", 0xffff0000, Site.THEME_FINLAND, assets.open("iltalehti.png"), new com.newsup.net.IltalehtiNewsReader()));
 
+            add(new Site(-1, context.getString(R.string.uk), 0, Site.THEME_UK, null, null));
+            add(new Site(code++, "BBC", 0xffa62e30, Site.THEME_UK, assets.open("bbc.png"), new com.newsup.net.BCCNewsReader()));
+
+            add(new Site(-1, context.getString(R.string.us), 0, Site.THEME_USA, null, null));
+            add(new Site(code++, "CNN", 0xffc20000, Site.THEME_USA, assets.open("cnn.png"), new com.newsup.net.CNNNewsReader()));
+
             add(new Site(-1, context.getString(R.string.international), 0, Site.THEME_INTERNATIONAL, null, null));
-            add(new Site(code++, "Huffington Post", 0xff2c705f, Site.THEME_INTERNATIONAL, assets.open("huffingtonpost.png"), new com.newsup.net.HuffingtonPostNewsReader()));
             add(new Site(code++, "The Local", 0xfff76e05, Site.THEME_INTERNATIONAL, assets.open("thelocal.png"), new com.newsup.net.TheLocalNewsReader()));
-            add(new Site(code++, "CNN", 0xffc20000, Site.THEME_INTERNATIONAL, assets.open("cnn.png"), new com.newsup.net.CNNNewsReader()));
-            add(new Site(code++, "BBC", 0xffa62e30, Site.THEME_INTERNATIONAL, assets.open("bbc.png"), new com.newsup.net.BCCNewsReader()));
 
             add(new Site(-1, context.getString(R.string.technology), 0, Site.THEME_TECHNOLOGY, null, null));
             add(new Site(code++, "**El Androide Libre", 0xffa3c23e, Site.THEME_TECHNOLOGY, assets.open("elandroidelibre.png"), new com.newsup.net.ElAndroideLibreNewsReader()));

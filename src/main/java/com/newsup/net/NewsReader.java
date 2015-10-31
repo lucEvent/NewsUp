@@ -12,7 +12,6 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public abstract class NewsReader {
@@ -49,14 +48,8 @@ public abstract class NewsReader {
     }
 
     protected void readRssPage(Socket handler, String rsslink) {
-        org.jsoup.nodes.Document doc;
-        try {
-            doc = getDocument(rsslink);
-        } catch (Exception e) {
-            debug("[ERROR No se puede leer el link RSS] link:" + rsslink);
-            e.printStackTrace();
-            return;
-        }
+        org.jsoup.nodes.Document doc = getDocument(rsslink);
+        if (doc == null) return;
 
         Elements items = doc.select("item");
 
@@ -117,16 +110,18 @@ public abstract class NewsReader {
         return news;
     }
 
-    protected Document getDocument(String pagelink) throws IOException {//TODO que deje de lanzar IOE y ya q tiene catch q lo coja en otro
+    protected Document getDocument(String pagelink) {
         try {
             return Jsoup.connect(pagelink).get();
         } catch (Exception e) {
-            debug("Fallo de la conexión. Intentando nuevamente");
+            debug("[" + e.getClass().getSimpleName() + "] Intentando nuevamente");
         }
         try {
             return Jsoup.connect(pagelink).userAgent("Mozilla/5.0 (Linux; Android 4.4.2; GT-I9300 Build/KVT49L) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.94 Mobile Safari/537.36").get();
         } catch (java.net.SocketTimeoutException e) {
-            debug("No se ha podido encontrar la pagina: " + pagelink);
+            debug("SocketTimeoutException con: " + pagelink);
+        } catch (Exception e) {
+            debug("[" + e.getClass().getSimpleName() + "] No se ha podido leer: " + pagelink);
         }
         return null;
     }

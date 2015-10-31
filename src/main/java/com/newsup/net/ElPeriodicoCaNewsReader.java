@@ -55,10 +55,13 @@ public class ElPeriodicoCaNewsReader extends NewsReader {
     }
 
     @Override
-    protected org.jsoup.nodes.Document getDocument(String rsslink) throws IOException {
+    protected org.jsoup.nodes.Document getDocument(String rsslink) {
         if (rsslink == SECTIONS.get(0).link) {
-            System.out.println("Empleando la especial");
-            return org.jsoup.Jsoup.parse(new URL(rsslink).openStream(), "ISO-8859-1", rsslink);
+            try {
+                return org.jsoup.Jsoup.parse(new URL(rsslink).openStream(), "ISO-8859-1", rsslink);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return super.getDocument(rsslink);
     }

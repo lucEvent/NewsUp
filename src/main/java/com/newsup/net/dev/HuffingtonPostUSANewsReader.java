@@ -1,18 +1,17 @@
-package com.newsup.net;
-
+package com.newsup.net.dev;
 
 import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
+import com.newsup.net.NewsReader;
 
-public class HuffingtonPostNewsReader extends NewsReader {
+public class HuffingtonPostUSANewsReader extends NewsReader {
 
-    public HuffingtonPostNewsReader() {
+    public HuffingtonPostUSANewsReader() {
         super();
 
         SECTIONS = new SectionList();
         SECTIONS.add(new Section("Main", 0, "http://www.huffingtonpost.com/feeds/index.xml"));
-        SECTIONS.add(new Section("España", 0, "http://www.huffingtonpost.es/feeds/verticals/spain/index.xml"));
         SECTIONS.add(new Section("Arts & Culture", 0, "http://www.huffingtonpost.com/feeds/verticals/arts/index.xml"));
         SECTIONS.add(new Section("Black Voices", 0, "http://www.huffingtonpost.com/feeds/verticals/black-voices/index.xml"));
         SECTIONS.add(new Section("Books", 0, "http://www.huffingtonpost.com/feeds/verticals/books/index.xml"));
@@ -54,35 +53,7 @@ public class HuffingtonPostNewsReader extends NewsReader {
     }
 
     @Override
-    protected News applySpecialCase(News news, String content) {
-        org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(news.description);
-        org.jsoup.select.Elements ee = doc.select("body").get(0).children();
-        org.jsoup.select.Elements ads = doc.select("br[clear=\"all\"]");
-
-        if (!ads.isEmpty()) {
-            org.jsoup.nodes.Element e = ads.get(0);
-            int index;
-            while ((index = ee.indexOf(e)) == -1) {
-                e = e.parent();
-            }
-            for (; index < ee.size(); index++) {
-                ee.get(index).remove();
-            }
-        } else {
-            org.jsoup.nodes.Element e = doc.select("blockquote").last();
-            for (int index = ee.indexOf(e); index < ee.size() && index != -1; index++) {
-                ee.get(index).remove();
-            }
-
-        }
-        news.description = "";
-        news.content = doc.html();
-        return news;
-    }
-
-    @Override
     public News readNewsContent(News news) {
-        return news;
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
 }
