@@ -3,6 +3,9 @@ package com.newsup.net;
 import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
+import com.newsup.net.util.Enclosure;
+
+import java.util.ArrayList;
 
 public class AftonbladetNewsReader extends NewsReader {
 
@@ -18,21 +21,25 @@ public class AftonbladetNewsReader extends NewsReader {
         SECTIONS.add(new Section("Hockey", 1, "http://www.aftonbladet.se/sportbladet/hockey/rss.xml"));
         SECTIONS.add(new Section("Nöjesbladet", 0, "http://www.aftonbladet.se/nojesbladet/rss.xml"));
         SECTIONS.add(new Section("Klick!", 0, "http://www.aftonbladet.se/nojesbladet/klick/rss.xml"));
-        SECTIONS.add(new Section("Sofis Mode", 0, "http://www.aftonbladet.se/sofismode/rss.xml"));
         SECTIONS.add(new Section("Ledare", 0, "http://www.aftonbladet.se/ledare/rss.xml"));
         SECTIONS.add(new Section("Kultur", 0, "http://www.aftonbladet.se/kultur/rss.xml"));
-        SECTIONS.add(new Section("Hälsa", 0, "http://www.aftonbladet.se/halsa/rss.xml"));
         SECTIONS.add(new Section("Wellness", 0, "http://www.aftonbladet.se/wellness/rss.xml"));
         SECTIONS.add(new Section("Bil", 0, "http://www.aftonbladet.se/bil/rss.xml"));
-        SECTIONS.add(new Section("Min ekonomi", 0, "http://www.aftonbladet.se/minekonomi/rss.xml"));
-        SECTIONS.add(new Section("Kolumnister", 0, "http://www.aftonbladet.se/nyheter/kolumnister/robertaschberg/rss.xml"));
-        SECTIONS.add(new Section("Hjälp & Info", 0, "http://www.aftonbladet.se/hjalpinfo/rss.xml"));
+        SECTIONS.add(new Section("Kolumnister", 0, "http://www.aftonbladet.se/nyheter/kolumnister/rss.xml"));
 
     }
 
     @Override
     protected News applySpecialCase(News news, String content) {
-        news.description = "";
+        org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(news.description);
+        news.description = doc.text();
+
+        news.enclosures = new ArrayList<Enclosure>();
+        org.jsoup.select.Elements imgs = doc.select("img");
+        if (!imgs.isEmpty()) {
+            news.enclosures.add(new Enclosure(imgs.get(0).attr("src"), "image/jpg", "0"));
+        }
+
         return news;
     }
 
@@ -42,18 +49,23 @@ public class AftonbladetNewsReader extends NewsReader {
             org.jsoup.nodes.Document doc = getDocument(news.link);
             if (doc == null) return news;
 
-            org.jsoup.nodes.Element e = doc.select("article").get(0);
+            org.jsoup.select.Elements e = doc.select(".player__poster-image,.abLeadText,.abBodyText");
 
-            org.jsoup.select.Elements ads = e.select(".abShareMenu,.abArticleBlockMedium,.abItem,.abBtn,h1,script,.abArticleTopImageBackground");
-            ads.remove();
+            if (!e.isEmpty()) {
+                String img = "";
+                if (!news.enclosures.isEmpty()) img = news.enclosures.get(0).html();
 
-            news.content = e.html();
+                news.content = img + e.html();
+            } else {
+                debug("NO SE HA ENCONTRADO CONTENIDO PARA : " + news.link);
+                doc.select("script").remove();
+                System.out.println(doc.html());
+            }
 
         } catch (Exception e) {
             debug("[ERROR] title:" + news.title);
             e.printStackTrace();
         }
-
         return news;
     }
 

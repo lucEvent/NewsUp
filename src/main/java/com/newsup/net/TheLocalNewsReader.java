@@ -33,17 +33,17 @@ public class TheLocalNewsReader extends NewsReader {
         try {
             org.jsoup.nodes.Document doc = getDocument(news.link);
             if (doc == null) return news;
-            org.jsoup.nodes.Element element = doc.select("article").get(0);
 
-            StringBuilder content = new StringBuilder();
-            org.jsoup.nodes.Element elems = element.select(".articleTeaser").get(0);
-            do {
-                content.append(elems.outerHtml());
-                elems = elems.nextElementSibling();
-            } while (elems != null);
+            org.jsoup.select.Elements  content = doc.select("#main_picture_article > img,.articleTeaser,.articleContent");
 
-            news.content = content.toString();
+            org.jsoup.select.Elements imgs = content.select("img");
+            for(org.jsoup.nodes.Element img : imgs) {
+                String src = "http://www.thelocal.com" + img.attr("src");
+                img.attr("src", src);
+                img.attr("style", "");
+            }
 
+            news.content = content.outerHtml();
         } catch (Exception e) {
             debug("[ERROR] title:" + news.title);
             e.printStackTrace();
