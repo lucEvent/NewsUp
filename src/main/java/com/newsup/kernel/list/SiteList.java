@@ -42,7 +42,7 @@ public class SiteList extends ArrayList<Site> {
 
             add(new Site(-1, context.getString(R.string.sweden), 0, Site.THEME_SWEDEN, null, null));
             add(new Site(code++, "**Aftonbladet", 0xffffffff, Site.THEME_SWEDEN, assets.open("aftonbladet.png"), new com.newsup.net.AftonbladetNewsReader()));
-            add(new Site(code++, "Expressen", 0xffdb2727, Site.THEME_SWEDEN, assets.open("expressen.png"), new com.newsup.net.ExpressenNewsReader()));
+            add(new Site(code++, "**Expressen", 0xffdb2727, Site.THEME_SWEDEN, assets.open("expressen.png"), new com.newsup.net.ExpressenNewsReader()));
             add(new Site(code++, "Dagens Nyheter", 0xffeb1c2a, Site.THEME_SWEDEN, assets.open("dagensnyheter.png"), new com.newsup.net.DagensNyheterNewsReader()));
             add(new Site(code++, "Svenska Dagbladet", 0xfff5f5f5, Site.THEME_SWEDEN, assets.open("svenskadagbladet.png"), new com.newsup.net.SvDNewsReader()));
             add(new Site(code++, "Goteborgs Posten", 0xff005c9e, Site.THEME_SWEDEN, assets.open("goteborgsposten.png"), new com.newsup.net.GoteborgsPostenNewsReader()));
@@ -53,6 +53,7 @@ public class SiteList extends ArrayList<Site> {
             add(new Site(code++, "Helsinki times", 0xff32c8fa, Site.THEME_FINLAND, assets.open("helsinkitimes.png"), new com.newsup.net.HelsinkiTimesNewsReader()));
             add(new Site(code++, "Helsingin Sanomat", 0xff01133d, Site.THEME_FINLAND, assets.open("helsinginsanomat.png"), new HelsinkiSanomatNewsReader()));
             add(new Site(code++, "Iltalehti", 0xffff0000, Site.THEME_FINLAND, assets.open("iltalehti.png"), new com.newsup.net.IltalehtiNewsReader()));
+            add(new Site(code++, "Yle", 0xff00b4c4, Site.THEME_FINLAND, assets.open("yle.png"), new com.newsup.net.YleNewsReader()));
 
             add(new Site(-1, context.getString(R.string.uk), 0, Site.THEME_UK, null, null));
             add(new Site(code++, "BBC", 0xffa62e30, Site.THEME_UK, assets.open("bbc.png"), new com.newsup.net.BCCNewsReader()));

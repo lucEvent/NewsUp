@@ -16,7 +16,8 @@ public class Enclosure {
         } else {
             this.type = this.encoded = "";
         }
-        this.size = Integer.parseInt(size);
+        if (size.isEmpty()) this.size = 0;
+        else this.size = Integer.parseInt(size);
     }
 
     public boolean isVideo() {

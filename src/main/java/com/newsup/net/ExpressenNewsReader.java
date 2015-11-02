@@ -1,6 +1,5 @@
 package com.newsup.net;
 
-
 import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
@@ -23,7 +22,6 @@ public class ExpressenNewsReader extends NewsReader {
         SECTIONS.add(new Section("Debatt", 0, "http://expressen.se/rss/debatt"));
         SECTIONS.add(new Section("Ledare", 0, "http://expressen.se/rss/ledare"));
         SECTIONS.add(new Section("Kultur", 0, "http://expressen.se/rss/kultur"));
-        SECTIONS.add(new Section("Ekonomi", 0, "http://expressen.se/rss/ekonomi"));
         SECTIONS.add(new Section("Hälsa & Skönhet", 0, "http://expressen.se/rss/halsa"));
         SECTIONS.add(new Section("Leva & Bo", 0, "http://expressen.se/rss/leva-och-bo"));
         SECTIONS.add(new Section("Motor", 0, "http://expressen.se/rss/motor"));
@@ -41,18 +39,35 @@ public class ExpressenNewsReader extends NewsReader {
 
     @Override
     public News readNewsContent(News news) {
-        try {
-            org.jsoup.nodes.Document doc = getDocument(news.link);
-            if (doc == null) return news;
+        org.jsoup.nodes.Document doc = getDocument(news.link);
+        if (doc == null) return news;
 
-            org.jsoup.nodes.Element e = doc.select(".b-article__content").get(0);
-            e.select(".b-soc-panel").remove();
-            e.select(".b-ad__wrapper").remove();
-            news.content = e.html();
-
-        } catch (Exception e) {
-            debug("[ERROR] title:" + news.title);
+        String img = "";
+        org.jsoup.select.Elements media = doc.select(".b-article__media,.b-slideshow__slider").select("img");
+        for (org.jsoup.nodes.Element i : media) {
+            String src = i.attr("template-src");
+            img += "<img src=\"http:" + src + "\">";
         }
+        org.jsoup.select.Elements content = doc.select(".b-text_article-body");
+
+        if (content.isEmpty()) {
+            content = doc.select(".b-text_article");
+
+            if (content.isEmpty()) {
+                content = doc.select(".b-text");
+
+                if (content.isEmpty()) {
+                    content = doc.select(".text--article-preamble,.text--article-body");
+
+                    if (content.isEmpty()) {
+                        debug("NO SE HA ENCONTRADO EL CONTENIDO PARA: " + news.title);
+                        if (img.isEmpty())
+                            return news;
+                    }
+                }
+            }
+        }
+        news.content = img + content;
         return news;
     }
 

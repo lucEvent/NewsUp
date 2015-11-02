@@ -50,7 +50,6 @@ public class AftonbladetNewsReader extends NewsReader {
             if (doc == null) return news;
 
             org.jsoup.select.Elements e = doc.select(".player__poster-image,.abLeadText,.abBodyText");
-
             if (!e.isEmpty()) {
                 String img = "";
                 if (!news.enclosures.isEmpty()) img = news.enclosures.get(0).html();
@@ -58,8 +57,6 @@ public class AftonbladetNewsReader extends NewsReader {
                 news.content = img + e.html();
             } else {
                 debug("NO SE HA ENCONTRADO CONTENIDO PARA : " + news.link);
-                doc.select("script").remove();
-                System.out.println(doc.html());
             }
 
         } catch (Exception e) {
