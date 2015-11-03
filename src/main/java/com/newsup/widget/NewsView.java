@@ -68,7 +68,7 @@ public class NewsView {
 
     private News currentNews;
 
-    private final String css = "<style>img, iframe, video {width: 100%; height: auto;} div > h2 > a > img {width: auto;}</style>";
+    private final String css = "<style>img, iframe, video,figure {width: 100%; height: auto; margin: 0} div > h2 > a > img {width: auto;}</style>";
 
     public boolean displayNews(News news) {
         this.currentNews = news;

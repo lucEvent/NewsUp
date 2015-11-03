@@ -85,6 +85,7 @@ public class Main extends ListActivity implements TaskMessage {
                 drawerSiteList.setItemChecked(position, true);
                 mDrawerLayout.closeDrawer(drawerSiteList);
 
+                getListView().setBackgroundColor(sites.get(position).color.getColor());
                 SectionLister sectionlister = (SectionLister) drawerSectionList.getAdapter();
                 sectionlister.clear();
 
@@ -135,7 +136,11 @@ public class Main extends ListActivity implements TaskMessage {
 
     @Override
     public void onBackPressed() {
-        if (displayingNews) {
+        if (mDrawerLayout.isDrawerOpen(drawerSiteList)) {
+            mDrawerLayout.closeDrawer(drawerSiteList);
+        } else if (mDrawerLayout.isDrawerOpen(drawerSectionList)) {
+            mDrawerLayout.closeDrawer(drawerSectionList);
+        } else if (displayingNews) {
             closeNews();
         } else {
             finish();

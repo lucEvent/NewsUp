@@ -43,8 +43,8 @@ public class SiteList extends ArrayList<Site> {
             add(new Site(-1, context.getString(R.string.sweden), 0, Site.THEME_SWEDEN, null, null));
             add(new Site(code++, "**Aftonbladet", 0xffffffff, Site.THEME_SWEDEN, assets.open("aftonbladet.png"), new com.newsup.net.AftonbladetNewsReader()));
             add(new Site(code++, "**Expressen", 0xffdb2727, Site.THEME_SWEDEN, assets.open("expressen.png"), new com.newsup.net.ExpressenNewsReader()));
-            add(new Site(code++, "Dagens Nyheter", 0xffeb1c2a, Site.THEME_SWEDEN, assets.open("dagensnyheter.png"), new com.newsup.net.DagensNyheterNewsReader()));
-            add(new Site(code++, "Svenska Dagbladet", 0xfff5f5f5, Site.THEME_SWEDEN, assets.open("svenskadagbladet.png"), new com.newsup.net.SvDNewsReader()));
+            add(new Site(code++, "**Dagens Nyheter", 0xffeb1c2a, Site.THEME_SWEDEN, assets.open("dagensnyheter.png"), new com.newsup.net.DagensNyheterNewsReader()));
+            add(new Site(code++, "**Svenska Dagbladet", 0xfff5f5f5, Site.THEME_SWEDEN, assets.open("svenskadagbladet.png"), new com.newsup.net.SvenskaDagbladetNewsReader()));
             add(new Site(code++, "Goteborgs Posten", 0xff005c9e, Site.THEME_SWEDEN, assets.open("goteborgsposten.png"), new com.newsup.net.GoteborgsPostenNewsReader()));
             add(new Site(code++, "Fria Tider", 0xffffffff, Site.THEME_SWEDEN, assets.open("friatider.png"), new com.newsup.net.FriaTiderNewsReader()));
             add(new Site(code++, "Metro", 0xff007d3c, Site.THEME_SWEDEN, assets.open("metro.png"), new com.newsup.net.MetroNewsReader()));
@@ -53,7 +53,7 @@ public class SiteList extends ArrayList<Site> {
             add(new Site(code++, "Helsinki times", 0xff32c8fa, Site.THEME_FINLAND, assets.open("helsinkitimes.png"), new com.newsup.net.HelsinkiTimesNewsReader()));
             add(new Site(code++, "Helsingin Sanomat", 0xff01133d, Site.THEME_FINLAND, assets.open("helsinginsanomat.png"), new HelsinkiSanomatNewsReader()));
             add(new Site(code++, "Iltalehti", 0xffff0000, Site.THEME_FINLAND, assets.open("iltalehti.png"), new com.newsup.net.IltalehtiNewsReader()));
-            add(new Site(code++, "Yle", 0xff00b4c4, Site.THEME_FINLAND, assets.open("yle.png"), new com.newsup.net.YleNewsReader()));
+            add(new Site(code++, "**Yle", 0xff00b4c4, Site.THEME_FINLAND, assets.open("yle.png"), new com.newsup.net.YleNewsReader()));
 
             add(new Site(-1, context.getString(R.string.uk), 0, Site.THEME_UK, null, null));
             add(new Site(code++, "BBC", 0xffa62e30, Site.THEME_UK, assets.open("bbc.png"), new com.newsup.net.BCCNewsReader()));
@@ -71,6 +71,7 @@ public class SiteList extends ArrayList<Site> {
             add(new Site(code++, "**Xataka", 0xff558f22, Site.THEME_TECHNOLOGY, assets.open("xataka.png"), new com.newsup.net.XatakaNewsReader()));
             add(new Site(code++, "TED", 0xffffffff, Site.THEME_TECHNOLOGY, assets.open("ted.png"), new com.newsup.net.TEDNewsReader()));
             add(new Site(code++, "Gizmodo", 0xff9c9c9c, Site.THEME_TECHNOLOGY, assets.open("gizmodo.png"), new com.newsup.net.GizmodoNewsReader()));
+            add(new Site(code++, "**Android Authority", 0xff8cc234, Site.THEME_TECHNOLOGY, assets.open("androidauthority.png"), new com.newsup.net.AndroidAuthorityNewsReader()));
 
             add(new Site(-1, context.getString(R.string.blogs), 0, Site.THEME_BLOGS, null, null));
             add(new Site(code++, "Medium", 0xffffffff, Site.THEME_BLOGS, assets.open("medium.png"), new com.newsup.net.MediumNewsReader()));
@@ -82,6 +83,8 @@ public class SiteList extends ArrayList<Site> {
             add(new Site(code++, "People", 0xff20b3e8, Site.THEME_MAGAZINES, assets.open("people.png"), new com.newsup.net.PeopleNewsReader()));
             add(new Site(code++, "Time", 0xffe60000, Site.THEME_MAGAZINES, assets.open("time.png"), new com.newsup.net.TimeNewsReader()));
             add(new Site(code++, "**The Atlantic", 0xff030202, Site.THEME_MAGAZINES, assets.open("theatlantic.png"), new com.newsup.net.TheAtlanticNewsReader()));
+            add(new Site(code++, "**Sky and Telescope", 0xffd92326, Site.THEME_MAGAZINES, assets.open("skyntelescope.png"), new com.newsup.net.SkyAndTelescopeNewsReader()));
+            add(new Site(code++, "**Dogster", 0xff547a94, Site.THEME_MAGAZINES, assets.open("dogster.png"), new com.newsup.net.DogsterNewsReader()));
 
         } catch (Exception e) {
             android.util.Log.d("##SiteList##", "No se ha encontrado un logo");
