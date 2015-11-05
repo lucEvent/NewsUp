@@ -16,28 +16,26 @@ public class SectionLister extends ArrayAdapter<Section> {
     private LayoutInflater inflater;
 
     public SectionLister(Context context, SectionList values) {
-        super(context, R.layout.i_news, values);
-
+        super(context, -1, values);
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public View getView(int position, View view, ViewGroup parent) {
-         Section section = getItem(position);
+        Section section = getItem(position);
         if (section.level == 0) {
-            if (view == null || !view.hasOnClickListeners() || view.getId() != 0) {
+            if (view == null || !view.hasOnClickListeners() || view.getId() != R.layout.i_section_header) {
                 view = inflater.inflate(R.layout.i_section_header, parent, false);
-                view.setId(0);
             }
         } else {
-            if (view == null || !view.hasOnClickListeners() || view.getId() != 1) {
+            if (view == null || !view.hasOnClickListeners() || view.getId() != R.layout.i_section) {
                 view = inflater.inflate(R.layout.i_section, parent, false);
-                view.setId(1);
             }
         }
 
         ((TextView) view).setText(section.name);
         if (section.link == null) {
+            ((TextView) view).setTextColor(0xff999999);
             view.setOnClickListener(null);
         }
 

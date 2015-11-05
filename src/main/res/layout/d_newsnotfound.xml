@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/selector_i_news"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/tryagain"
+        style="@style/button_newsnotfound"
+        android:paddingBottom="20dip"
+        android:text="@string/tryagain" />
+
+    <Button
+        android:id="@+id/openinbrowser"
+        style="@style/button_newsnotfound"
+        android:text="@string/openinbrowser" />
+
+    <Button
+        android:id="@+id/close"
+        style="@style/button_newsnotfound"
+        android:text="@string/close" />
+</LinearLayout>

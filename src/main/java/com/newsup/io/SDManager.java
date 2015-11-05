@@ -1,20 +1,21 @@
 package com.newsup.io;
 
-        import android.content.Context;
-        import android.os.Environment;
+import android.content.Context;
+import android.os.Environment;
 
-        import com.newsup.kernel.News;
-        import com.newsup.kernel.Site;
-        import com.newsup.kernel.util.Compressor;
-        import com.newsup.settings.AppSettings;
-        import com.newsup.settings.SiteSettings;
+import com.newsup.kernel.News;
+import com.newsup.kernel.Site;
+import com.newsup.kernel.util.Compressor;
+import com.newsup.settings.AppSettings;
+import com.newsup.settings.SiteSettings;
 
-        import java.io.File;
-        import java.io.FileInputStream;
-        import java.io.FileNotFoundException;
-        import java.io.FileOutputStream;
-        import java.io.ObjectInputStream;
-        import java.io.ObjectOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
 public class SDManager {
 
@@ -112,13 +113,17 @@ public class SDManager {
         AppSettings result = new AppSettings();
 
         try {
-            ObjectInputStream oinputStream = new ObjectInputStream(context.openFileInput("sapp"));
+            ObjectInputStream in = new ObjectInputStream(context.openFileInput("sapp"));
 
-            int nitems = oinputStream.readInt();
+            int nitems = in.readInt();
             result.main_sites_i = new int[nitems];
-            for (int i = 0; i < nitems; ++i) result.main_sites_i[i] = oinputStream.readInt();
+            for (int i = 0; i < nitems; ++i) result.main_sites_i[i] = in.readInt();
 
-            oinputStream.close();
+            nitems = in.readInt();
+            result.favorite_list = new ArrayList<Integer>();
+            for (int i = 0; i < nitems; ++i) result.favorite_list.add(in.readInt());
+
+            in.close();
 
         } catch (Exception e) {
             // Nothing went wrong, it's just the setting up
@@ -128,12 +133,15 @@ public class SDManager {
 
     public void saveSettings(AppSettings settings) {
         try {
-            ObjectOutputStream ooutputStream = new ObjectOutputStream(context.openFileOutput("sapp", Context.MODE_PRIVATE));
+            ObjectOutputStream out = new ObjectOutputStream(context.openFileOutput("sapp", Context.MODE_PRIVATE));
 
-            ooutputStream.writeInt(settings.main_sites_i.length);
-            for (int value : settings.main_sites_i) ooutputStream.writeInt(value);
+            out.writeInt(settings.main_sites_i.length);
+            for (int value : settings.main_sites_i) out.writeInt(value);
 
-            ooutputStream.close();
+            out.writeInt(settings.favorite_list.size());
+            for (int value : settings.favorite_list) out.writeInt(value);
+
+            out.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -1,8 +1,8 @@
 package com.newsup.kernel;
 
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 
+import com.newsup.R;
 import com.newsup.ia.IASite;
 import com.newsup.kernel.list.NewsList;
 import com.newsup.kernel.list.NewsMap;
@@ -14,24 +14,14 @@ import java.io.InputStream;
 
 public class Site extends IASite {
 
-    public static final int THEME_APP = 0xFF86c700;
-    public static final int THEME_SPAIN = 0xFFEE3333;
-    public static final int THEME_CATALONIA = 0xFFfff800;
-    public static final int THEME_SWEDEN = 0xFF006ca6;
-    public static final int THEME_FINLAND = 0xFF003580;
-    public static final int THEME_UK = 0xFFcf152a;
-    public static final int THEME_USA = 0xFFd92326;
-    public static final int THEME_INTERNATIONAL = 0xFFDDDDDD;
-    public static final int THEME_TECHNOLOGY = 0xFF90c3d4;
-    public static final int THEME_BLOGS = 0xFF66AA55;
-    public static final int THEME_MAGAZINES = 0xFF444444;
+    public static final int MAIN_NAME = R.string.mycustomfeed;
+    public static final int MAIN_COLOR = 0xFF86c700;
 
     /**
      * Variables
      **/
     public final String name;
-    public final ColorDrawable color;
-    public final ColorDrawable theme;
+    public final int color;
     public final Drawable icon;
 
     public NewsList news;
@@ -41,11 +31,10 @@ public class Site extends IASite {
 
     private NewsReader reader;
 
-    public Site(int code, String name, int color, int theme, InputStream icon, NewsReader reader) {
+    public Site(int code, String name, int color, InputStream icon, NewsReader reader) {
         super(code);
         this.name = name;
-        this.color = new ColorDrawable(color);
-        this.theme = new ColorDrawable(theme);
+        this.color = color;
         this.icon = Drawable.createFromStream(icon, null);
         this.reader = reader;
         this.historial = new NewsMap();

@@ -6,7 +6,7 @@
     <string name="settings">Configuración</string>
     <string name="bookmarks">Favoritos</string>
 
-    <string name="mynews">Mis notícias</string>
+    <string name="mycustomfeed">Mis notícias</string>
     <string name="spain">España</string>
     <string name="sweden">Suecia</string>
     <string name="finland">Finlandia</string>
@@ -46,6 +46,13 @@
     <string name="contentnotavailableyet">Contenido no disponible todavía</string>
     <string name="uk">UK</string>
     <string name="us">US</string>
+    <string name="allsites">Todos los sitios</string>
+    <string name="favorite">Favorito</string>
+    <string name="tryagain">Intentar de nuevo</string>
+    <string name="openinbrowser">Abrir en el navegador</string>
+    <string name="close">Cerrar</string>
+    <string name="title_newsnotfound">Oops... La app es genial pero aun no puede leer esta notícia</string>
+    <string name="message_newsnotfound">Qué hacemos?</string>
 
 
 </resources>

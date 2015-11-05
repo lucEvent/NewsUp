@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,7 +36,7 @@ public final class SettingsActivity extends ListActivity implements Socket {
 
         data = new NewsDataCenter(this);
 
-        getActionBar().setIcon(data.getSites().get(0).icon);
+        getActionBar().setIcon(R.mipmap.ic_app);
 
         sites = filterSites();
 
@@ -176,9 +175,8 @@ public final class SettingsActivity extends ListActivity implements Socket {
 
     private SiteConfiguration siteConfigurationManager;
 
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        Site site = sites.get(position);
+    public void onSiteSelectedAction(View view) {
+        Site site = (Site) view.getTag();
         debug("Se ha seleccionado: " + site.name);
         if (siteConfigurationManager == null) {
             siteConfigurationManager = new SiteConfiguration(this, data);

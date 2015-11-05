@@ -2,10 +2,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@color/section_header"
-    android:paddingBottom="10dip"
-    android:paddingLeft="10dip"
-    android:paddingRight="10dip"
-    android:paddingTop="10dip"
+    android:padding="10dip"
     android:text="Section header"
-    android:textAppearance="?android:attr/textAppearanceMedium"
+    android:textAppearance="?android:attr/textAppearanceSmall"
     android:textStyle="bold" />

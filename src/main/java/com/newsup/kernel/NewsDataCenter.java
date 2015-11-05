@@ -222,6 +222,9 @@ public class NewsDataCenter implements TaskMessage {
         sdmanager.saveNews(news);
     }
 
+    /**
+     * ************************* Settings methods ***********************************
+     **/
     public SiteSettings getSettingsOf(Site site) {
         if (site.settings == null) {
             site.settings = sdmanager.readSettingsOf(site);
@@ -242,6 +245,31 @@ public class NewsDataCenter implements TaskMessage {
         return appSettings;
     }
 
+    public SiteList getFavoritesSites() {
+        SiteList list = new SiteList();
+        for (int i = 0; i < AppSettings.favorite_list.size(); ++i) {
+            list.add(sites.get(AppSettings.favorite_list.get(i)));
+        }
+        return list;
+    }
+
+    public boolean isFavorite(Site site) {
+        int position = sites.indexOf(site);
+        for (int i = 0; i < AppSettings.favorite_list.size(); ++i)
+            if (position == AppSettings.favorite_list.get(i)) return true;
+        return false;
+    }
+
+    public void toggleFavorite(Site site) {
+        int position = sites.indexOf(site);
+        if (isFavorite(site)) {
+            appSettings.setSetting(AppSettings.DEL_FAV_SITE, position);
+        } else {
+            appSettings.setSetting(AppSettings.ADD_FAV_SITE, position);
+        }
+        sdmanager.saveSettings(appSettings);
+    }
+
     public long getCacheSize() {
         return sdmanager.getCacheSize();
     }
@@ -250,11 +278,14 @@ public class NewsDataCenter implements TaskMessage {
         sdmanager.wipeData();
         dbmanager.wipeData();
         for (Site s : getSites()) {
-            s.historial = null;
-            s.news = null;
+            s.historial = new NewsMap();
+            s.news = new NewsList();
         }
     }
 
+    /**
+     * ************************************************************************
+     **/
     private boolean isInternetAvailable() {
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnected();

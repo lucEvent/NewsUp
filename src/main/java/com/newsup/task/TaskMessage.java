@@ -5,11 +5,8 @@ public interface TaskMessage {
     int NO_INTERNET = -2;
     int ERROR = -1;
     int NEWS_READ = 0;
-    int NEWS_READ_HISTORY = 2;
-
-//    int WORK_DONE = 4;
-    int NEWS_READ_BOOKMARKS = 5;
-    int ACTION_REFRESH_LIST = 6;
-
-
+    int NEWS_READ_HISTORY = 1;
+    int NEWS_READ_BOOKMARKS = 2;
+    int ACTION_REFRESH_LIST = 3;
+    int OPEN_NEWS = 4;
 }

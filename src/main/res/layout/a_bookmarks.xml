@@ -6,10 +6,12 @@
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:animateLayoutChanges="true"
         android:divider="@null" />
 
     <include
         layout="@layout/p_news"
+        android:animateLayoutChanges="true"
         android:visibility="gone" />
 
 </FrameLayout>

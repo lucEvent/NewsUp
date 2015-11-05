@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#FFFF">
+    android:layout_height="wrap_content">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -12,23 +11,12 @@
         android:layout_marginRight="5dip"
         android:layout_marginTop="2.5dip"
         android:background="@drawable/selector_i_news"
-
         android:padding="10dip">
-
-
-        <View
-            android:id="@+id/logo"
-            android:layout_width="20dip"
-            android:layout_height="20dip"
-            android:layout_marginBottom="5dip"
-            android:background="#F00" />
-
 
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/logo"
             android:text="Title"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textStyle="bold" />
@@ -42,15 +30,25 @@
             android:text="Description on the news, and then this text will be trimmed"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
-        <TextView
+        <View
+            android:id="@+id/logo"
+            android:layout_width="20dip"
+            android:layout_height="20dip"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/description"
+            android:layout_marginLeft="10dip"
+            android:layout_marginTop="5dip"
+            android:background="#F00" />
 
+        <TextView
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-
+            android:layout_alignBottom="@+id/logo"
+            android:layout_toLeftOf="@+id/logo"
             android:text="Hace 2 meses"
             android:textSize="11dp" />
+
     </RelativeLayout>
 </FrameLayout>
 

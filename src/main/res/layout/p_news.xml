@@ -21,7 +21,6 @@
                 android:layout_alignParentTop="true"
                 android:background="#FFDDDDDD"
                 android:padding="10dip"
-                android:text="Titulo"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textStyle="bold" />
 
@@ -42,25 +41,15 @@
 
         <ImageButton
             android:id="@+id/button_bookmark"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/button_floating"
             android:layout_alignParentLeft="true"
-            android:layout_margin="15dip"
-            android:background="@drawable/selector_floating_button"
-            android:padding="10dip"
             android:src="@drawable/ic_bookmark_border" />
 
         <ImageButton
             android:id="@+id/button_share"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/button_floating"
             android:layout_alignParentRight="true"
-            android:layout_margin="15dip"
-            android:background="@drawable/selector_floating_button"
-            android:padding="10dip"
             android:src="@drawable/ic_share" />
-
-        />
 
     </RelativeLayout>
 

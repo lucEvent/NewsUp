@@ -124,6 +124,7 @@ public class LaVanguardiaNewsReader extends NewsReader {
 
     @Override
     protected News applySpecialCase(News news, String content) {
+        news.description = org.jsoup.Jsoup.parseBodyFragment(news.description).text();
         int idash = news.description.indexOf("- ");
         if (idash != -1) news.description = news.description.substring(idash + 2);
         return news;

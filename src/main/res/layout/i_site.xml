@@ -1,34 +1,19 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    style="@style/item_layout_main_drawer"
+    android:onClick="onSiteSelectedAction"
+    android:paddingLeft="60dp">
 
-    <View
-        android:id="@+id/idcolor"
-        android:layout_width="10dip"
-        android:layout_height="@dimen/logo"
-        android:layout_alignParentLeft="true"
-        android:background="#FFFF0000" />
-
-    <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    <ImageView
         android:id="@+id/logo"
-        android:layout_width="@dimen/logo"
-        android:layout_height="@dimen/logo"
-        android:layout_gravity="center_horizontal"
-        android:layout_toRightOf="@+id/idcolor"
-        android:background="@drawable/ic_settings"
-        android:scaleType="matrix" />
+        style="@style/item_imageview_main_drawer"
+        android:layout_centerVertical="true"
+        android:background="@drawable/ic_settings" />
 
     <TextView
         android:id="@+id/name"
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
+        style="@style/item_textview_main_drawer"
         android:layout_toRightOf="@+id/logo"
-        android:paddingLeft="20dip"
-        android:text="Name"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:text="Favorite sites"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </RelativeLayout>

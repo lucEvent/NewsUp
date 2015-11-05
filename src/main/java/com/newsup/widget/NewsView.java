@@ -1,7 +1,6 @@
 package com.newsup.widget;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
@@ -9,9 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -74,25 +71,6 @@ public class NewsView {
         this.currentNews = news;
 
         if (news.content == null) {
-            //  Toast.makeText(context, R.string.contentnotavailableyet, Toast.LENGTH_SHORT).show();
-            AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-            dialog.setTitle("Oops... This app is awesome but it still cannot read this news");
-            dialog.setMessage("What should we do?");
-            LinearLayout v = new LinearLayout(context);
-            v.setOrientation(LinearLayout.VERTICAL);
-            Button b1 = new Button(context);
-            b1.setText("Try again");
-            Button b2 = new Button(context);
-            b2.setText("Open in your browser");
-            Button b3 = new Button(context);
-            b3.setText("Close");
-            v.addView(b1);
-            v.addView(b2);
-            v.addView(b3);
-
-            dialog.setView(v);
-
-            dialog.create().show();
             return false;
         }
 

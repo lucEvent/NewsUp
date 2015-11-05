@@ -8,11 +8,6 @@
 
     <style name="actionBarStyle" parent="@android:style/Widget.Holo.Light.ActionBar">
         <item name="android:background">@color/actionBar</item>
-        <item name="android:titleTextStyle">@style/actionBarTextStyle</item>
-    </style>
-
-    <style name="actionBarTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
-        <item name="android:textColor">@color/actionBarText</item>
     </style>
 
     <style name="settings_layout_row">
@@ -45,6 +40,55 @@
         <item name="android:layout_marginLeft">10dip</item>
         <item name="android:layout_marginRight">10dip</item>
         <item name="android:background">@color/divider</item>
+    </style>
+
+    <!-- **********************  Site Drawer ****************************** -->
+
+    <style name="item_layout_main_drawer">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/selector_settings</item>
+        <item name="android:paddingBottom">10dip</item>
+        <item name="android:paddingRight">10dip</item>
+        <item name="android:paddingLeft">40dip</item>
+        <item name="android:paddingTop">10dip</item>
+    </style>
+
+    <style name="item_imageview_main_drawer">
+        <item name="android:layout_width">30dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_centerVertical">true</item>
+    </style>
+
+    <style name="item_textview_main_drawer">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:paddingLeft">20dip</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
+    </style>
+
+    <!-- **********************  NewsNotFound Dialog ****************************** -->
+
+    <style name="button_newsnotfound">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@android:drawable/btn_default</item>
+        <item name="android:paddingTop">12dip</item>
+        <item name="android:paddingLeft">10dip</item>
+        <item name="android:paddingRight">10dip</item>
+        <item name="android:paddingBottom">17dip</item>
+        <item name="android:layout_margin">4dip</item>
+    </style>
+
+    <!-- *********************** Floating buttons ************************************ -->
+    <style name="button_floating">
+        <item name="android:layout_width">60dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:background">@drawable/selector_floating_button</item>
+        <item name="android:padding">15dip</item>
+        <item name="android:layout_margin">15dip</item>
+        <item name="android:scaleType">centerCrop</item>
     </style>
 
 </resources>

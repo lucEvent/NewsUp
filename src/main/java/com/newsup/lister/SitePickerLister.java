@@ -29,7 +29,7 @@ public class SitePickerLister extends ArrayAdapter<Site> implements View.OnClick
     public View getView(int position, View view, ViewGroup parent) {
         view = inflater.inflate(R.layout.i_picker, parent, false);
 
-        Site site = getItem(position + 1);
+        Site site = getItem(position);
 
         CheckBox checkbox = (CheckBox) view.findViewById(R.id.checkbox);
         if (site.code != -1) {
@@ -39,19 +39,14 @@ public class SitePickerLister extends ArrayAdapter<Site> implements View.OnClick
             checkbox.setCompoundDrawablesWithIntrinsicBounds(site.icon, null, null, null);
         } else {
             checkbox.setClickable(false);
-            view.setBackgroundColor(site.theme.getColor() - 0x55000000);
+            view.setBackgroundColor(0x5DDD);
             checkbox.setButtonDrawable(new ColorDrawable(0x0000));
             checkbox.setTypeface(null, Typeface.BOLD);
         }
-        checkbox.setTag(position + 1);
+        checkbox.setTag(position);
         checkbox.setText("   " + site.name);
-        checkbox.setChecked(marks[position + 1]);
+        checkbox.setChecked(marks[position]);
         return view;
-    }
-
-    @Override
-    public int getCount() {
-        return super.getCount() - 1;
     }
 
     @Override

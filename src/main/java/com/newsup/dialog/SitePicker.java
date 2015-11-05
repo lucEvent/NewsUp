@@ -44,7 +44,7 @@ public class SitePicker extends AlertDialog.Builder implements DialogState {
 
     private void saveSettings() {
         int[] main_sites = SiteSettings.toIntegerArray(marks);
-        dataManager.setSettingsWith(AppSettings.SET_MAIN_SITE, main_sites);
+        dataManager.setSettingsWith(AppSettings.SET_MAIN_SITES, main_sites);
         socket.message(MAIN_SITES_CHANGED, null);
     }
 

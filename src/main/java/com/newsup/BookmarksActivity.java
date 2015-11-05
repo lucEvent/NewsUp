@@ -39,7 +39,7 @@ public class BookmarksActivity extends ListActivity implements TaskMessage {
         NewsDataCenter dataCenter = new NewsDataCenter(this, null, null);
         newsView = new NewsView(this, dataCenter, handler);
 
-        getActionBar().setIcon(dataCenter.getSites().get(0).icon);
+        getActionBar().setIcon(R.mipmap.ic_app);
 
         manager = new BookmarksManager(dataCenter, handler);
         manager.getBookmarkedNews();
@@ -52,7 +52,6 @@ public class BookmarksActivity extends ListActivity implements TaskMessage {
 
         if (newsView.displayNews((News) getListAdapter().getItem(position))) {
             getActionBar().hide();
-
             displayingNews = true;
         }
 
@@ -102,7 +101,6 @@ public class BookmarksActivity extends ListActivity implements TaskMessage {
 
     public void closeNews() {
         getActionBar().show();
-
         displayingNews = false;
         newsView.close();
     }
