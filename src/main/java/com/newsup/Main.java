@@ -83,6 +83,7 @@ public class Main extends ListActivity implements TaskMessage {
 
         drawerSiteList = (ListView) findViewById(R.id.site_drawer);
         drawerSiteList.setAdapter(new SiteLister(this, datamanager, true));
+        drawerSiteList.setOnItemClickListener(null);
 
         drawerSectionList = (ListView) findViewById(R.id.section_drawer);
         drawerSectionList.setAdapter(new SectionLister(this, new SectionList()));

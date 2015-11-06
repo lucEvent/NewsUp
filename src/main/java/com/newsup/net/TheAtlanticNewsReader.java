@@ -63,7 +63,7 @@ public class TheAtlanticNewsReader extends NewsReader {
                 int taghash = prop.tagName().hashCode();
 
                 if (taghash == HASH_TITLE) {
-                    title = prop.text().replace("<em>","").replace("</em>","").replace("<i>","").replace("</i>","");
+                    title = prop.text().replace("<em>", "").replace("</em>", "").replace("<i>", "").replace("</i>", "");
                     continue;
                 }
                 if ((taghash == HASH_LINK || taghash == HASH_ORIGLINK) && link.isEmpty()) {
@@ -112,26 +112,21 @@ public class TheAtlanticNewsReader extends NewsReader {
 
     @Override
     public News readNewsContent(News news) {
-        try {
-            org.jsoup.nodes.Document doc = getDocument(news.link);
-            if (doc == null) return news;
+        org.jsoup.nodes.Document doc = getDocument(news.link);
+        if (doc == null) return news;
 
-            org.jsoup.select.Elements e = doc.select(".embed-code,[itemprop=\"description\"]");
+        org.jsoup.select.Elements e = doc.select(".embed-code,[itemprop=\"description\"]");
 
+        if (!e.isEmpty()) {
+            news.content = e.html().replace("&lt;", "<").replace("&quot;", "\"").replace("&gt;", ">");
+        } else {
+
+            e = doc.select("picture > img,.caption");
             if (!e.isEmpty()) {
-                news.content = e.html().replace("&lt;", "<").replace("&quot;", "\"").replace("&gt;", ">");
+                news.content = e.outerHtml().replace("data-src", "src");
             } else {
-
-                e = doc.select("picture > img,.caption");
-                if (!e.isEmpty()) {
-                    news.content = e.outerHtml().replace("data-src", "src");
-                } else {
-                    System.out.println("NO SE HA PODIDO LEER EL CONTENIDO:: " + news.link);
-                }
+                debug("NO SE HA PODIDO LEER EL CONTENIDO:: " + news.link);
             }
-        } catch (Exception e) {
-            debug("[ERROR] link:" + news.link);
-            e.printStackTrace();
         }
         return news;
     }

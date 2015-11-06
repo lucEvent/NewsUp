@@ -67,38 +67,33 @@ public class MundoDeportivoNewsReader extends NewsReader {
 
     @Override
     public News readNewsContent(News news) {
-        try {
-            org.jsoup.nodes.Document doc = getDocument(news.link);
-            if (doc == null) return news;
+        org.jsoup.nodes.Document doc = getDocument(news.link);
+        if (doc == null) return news;
 
-            String intro = doc.select("[itemprop=\"alternativeHeadline\"]").outerHtml();
-            org.jsoup.select.Elements imgs = doc.select("[itemprop=\"image\"] img,.gallery-leaf-figure img");
+        String intro = doc.select("[itemprop=\"alternativeHeadline\"]").outerHtml();
+        org.jsoup.select.Elements imgs = doc.select("[itemprop=\"image\"] img,.gallery-leaf-figure img");
 
-            StringBuilder img = new StringBuilder();
-            if (!imgs.isEmpty()) {
-                for (org.jsoup.nodes.Element i : imgs) {
-                    String attr = i.attr("data-src-md");
-                    if (attr.isEmpty())
-                        attr = i.attr("src");
+        StringBuilder img = new StringBuilder();
+        if (!imgs.isEmpty()) {
+            for (org.jsoup.nodes.Element i : imgs) {
+                String attr = i.attr("data-src-md");
+                if (attr.isEmpty())
+                    attr = i.attr("src");
 
-                    img.append("<img src=\"" + attr + "\">");
-                }
+                img.append("<img src=\"" + attr + "\">");
             }
-            org.jsoup.select.Elements metas = doc.select("[itemprop=\"video\"] [itemprop=\"image\"]");
-            if (!metas.isEmpty()) {
-                for (org.jsoup.nodes.Element i : metas) {
-                    img.append("<img src=\"" + i.attr("content") + "\">");
-                }
-            }
-
-            org.jsoup.select.Elements content = doc.select("[itemprop=\"articleBody\"]");
-            content.select(".datetime-story-leaf,.gallery-story-leaf-figcaption").remove();
-
-            news.content = intro + img.toString() + content.html();
-        } catch (Exception e) {
-            debug("[ERROR] link:" + news.link);
-            e.printStackTrace();
         }
+        org.jsoup.select.Elements metas = doc.select("[itemprop=\"video\"] [itemprop=\"image\"]");
+        if (!metas.isEmpty()) {
+            for (org.jsoup.nodes.Element i : metas) {
+                img.append("<img src=\"" + i.attr("content") + "\">");
+            }
+        }
+
+        org.jsoup.select.Elements content = doc.select("[itemprop=\"articleBody\"]");
+        content.select(".datetime-story-leaf,.gallery-story-leaf-figcaption").remove();
+
+        news.content = intro + img.toString() + content.html();
         return news;
     }
 

@@ -67,25 +67,19 @@ public class ElMundoNewsReader extends NewsReader {
 
     @Override
     public News readNewsContent(News news) {
-        try {
-            org.jsoup.nodes.Document doc = getDocument(news.link);
-            if (doc == null) return news;
+        org.jsoup.nodes.Document doc = getDocument(news.link);
+        if (doc == null) return news;
 
-            org.jsoup.select.Elements e = doc.select("div[itemprop=\"articleBody\"],#tamano");
+        org.jsoup.select.Elements e = doc.select("div[itemprop=\"articleBody\"],#tamano");
 
-            e.select("aside, footer, meta, time").remove();
+        e.select("aside, footer, meta, time").remove();
 
-            if (!e.isEmpty()) {
-                news.content = e.html();
-            } else {
-                debug("No se puede leer: " + news.title);
-            }
-        } catch (Exception e) {
-            debug("[ERROR] title:" + news.title);
-            e.printStackTrace();
+        if (!e.isEmpty()) {
+            news.content = e.html();
+        } else {
+            debug("No se puede leer: " + news.title);
         }
         return news;
-
     }
 
 }

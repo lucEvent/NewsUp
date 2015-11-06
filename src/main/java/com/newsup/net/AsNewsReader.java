@@ -105,50 +105,45 @@ public class AsNewsReader extends NewsReader {
 
     @Override
     public News readNewsContent(News news) {
-        try {
-            org.jsoup.nodes.Document doc = getDocument(news.link);
-            if (doc == null) return news;
+        org.jsoup.nodes.Document doc = getDocument(news.link);
+        if (doc == null) return news;
 
-            org.jsoup.select.Elements e = doc.select("[itemprop=\"articleBody\"");
+        org.jsoup.select.Elements e = doc.select("[itemprop=\"articleBody\"");
 
-            if (!e.isEmpty()) {
-                news.content = getEnclosures(news) + e.html();
-            } else {
-                boolean contains = news.link.contains("video");
-                boolean thereis = false;
-                String videohtml = "";
-                for (Enclosure enclosure : news.enclosures) {
-                    if (enclosure.isVideo()) {
-                        thereis = true;
-                        videohtml = enclosure.html();
-                        break;
-                    }
+        if (!e.isEmpty()) {
+            news.content = getEnclosures(news) + e.html();
+        } else {
+            boolean contains = news.link.contains("video");
+            boolean thereis = false;
+            String videohtml = "";
+            for (Enclosure enclosure : news.enclosures) {
+                if (enclosure.isVideo()) {
+                    thereis = true;
+                    videohtml = enclosure.html();
+                    break;
                 }
-                if (contains && thereis) {
-                    news.content = videohtml + news.description;
+            }
+            if (contains && thereis) {
+                news.content = videohtml + news.description;
+            } else {
+                e = doc.select("#contenido-interior > p,.entry-content > p,.floatFix > p,.floatFix > figure");
+                if (!e.isEmpty()) {
+                    news.content = getEnclosures(news) + e.html();
                 } else {
-                    e = doc.select("#contenido-interior > p,.entry-content > p,.floatFix > p,.floatFix > figure");
+                    e = doc.select("#columna2");
                     if (!e.isEmpty()) {
+                        e.select(".redes,.menu_post,.archivado,script").remove();
                         news.content = getEnclosures(news) + e.html();
                     } else {
-                        e = doc.select("#columna2");
+                        e = doc.select(".marcador-generico,.cmt-live");
                         if (!e.isEmpty()) {
-                            e.select(".redes,.menu_post,.archivado,script").remove();
                             news.content = getEnclosures(news) + e.html();
                         } else {
-                            e = doc.select(".marcador-generico,.cmt-live");
-                            if (!e.isEmpty()) {
-                                news.content = getEnclosures(news) + e.html();
-                            } else {
-                                debug("NO SE HA ENCONTRADO EN CONTENIDO " + news.link);
-                            }
+                            debug("NO SE HA ENCONTRADO EN CONTENIDO " + news.link);
                         }
                     }
                 }
             }
-        } catch (Exception e) {
-            debug("[ERROR] " + news.title);
-            e.printStackTrace();
         }
         return news;
     }

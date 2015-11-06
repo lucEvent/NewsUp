@@ -74,30 +74,25 @@ public class SportNewsReader extends NewsReader {
 
     @Override
     public News readNewsContent(News news) {
-        try {
-            org.jsoup.nodes.Document doc = getDocument(news.link);
-            if (doc == null) return news;
+        org.jsoup.nodes.Document doc = getDocument(news.link);
+        if (doc == null) return news;
 
-            org.jsoup.select.Elements img = doc.select(".sp-img,.sp-video").select("img");
+        org.jsoup.select.Elements img = doc.select(".sp-img,.sp-video").select("img");
 
-            org.jsoup.select.Elements content = doc.select(".cuerpo-noticia");
-            content.select(".sp-autor").remove();
+        org.jsoup.select.Elements content = doc.select(".cuerpo-noticia");
+        content.select(".sp-autor").remove();
+
+        if (!content.isEmpty()) {
+            news.content = img.outerHtml() + content.html();
+        } else {
+            content = doc.select(".cuerpo-opinion");
+            content.select(".firma").remove();
 
             if (!content.isEmpty()) {
-                news.content = img.outerHtml() + content.html();
+                news.content = content.html();
             } else {
-                content = doc.select(".cuerpo-opinion");
-                content.select(".firma").remove();
-
-                if (!content.isEmpty()) {
-                    news.content = content.html();
-                } else {
-                    System.out.println("NO SE HA PODIDO LEER EL CONTENIDO: " + news.link);
-                }
+                System.out.println("NO SE HA PODIDO LEER EL CONTENIDO: " + news.link);
             }
-        } catch (Exception e) {
-            debug("[ERROR] title:" + news.title);
-            e.printStackTrace();
         }
         return news;
     }

@@ -71,35 +71,30 @@ public class ElpaisNewsReader extends NewsReader {
 
     @Override
     public News readNewsContent(News news) {
-        try {
-            org.jsoup.nodes.Document doc = getDocument(news.link);
-            if (doc == null) return news;
+        org.jsoup.nodes.Document doc = getDocument(news.link);
+        if (doc == null) return news;
 
-            org.jsoup.select.Elements e = doc.select("#cuerpo_noticia");
-            org.jsoup.select.Elements img = doc.select(".contenedor_fotonoticia_compartir");
-            if (!e.isEmpty() || !img.isEmpty()) {
-                String simg = "";
-                if (!img.isEmpty()) simg = img.select("img").outerHtml();
+        org.jsoup.select.Elements e = doc.select("#cuerpo_noticia");
+        org.jsoup.select.Elements img = doc.select(".contenedor_fotonoticia_compartir");
+        if (!e.isEmpty() || !img.isEmpty()) {
+            String simg = "";
+            if (!img.isEmpty()) simg = img.select("img").outerHtml();
 
-                String mas = doc.select("div[id$=\"|despiece\"]").outerHtml();
-                String links = doc.select("div[id$=\"|apoyos\"]").outerHtml();
+            String mas = doc.select("div[id$=\"|despiece\"]").outerHtml();
+            String links = doc.select("div[id$=\"|apoyos\"]").outerHtml();
 
-                e.select("div[id$=\"|despiece\"],div[id$=\"|apoyos\"],div[id$=\"|html\"]").remove();
-                e.select("script").remove();
+            e.select("div[id$=\"|despiece\"],div[id$=\"|apoyos\"],div[id$=\"|html\"]").remove();
+            e.select("script").remove();
 
-                news.content = simg + e.outerHtml() + mas + links;
+            news.content = simg + e.outerHtml() + mas + links;
+        } else {
+            e = doc.select(".entry-content");
+            e.select("script").remove();
+            if (!e.text().isEmpty()) {
+                news.content = e.html();
             } else {
-                e = doc.select(".entry-content");
-                e.select("script").remove();
-                if (!e.text().isEmpty()) {
-                    news.content = e.html();
-                } else {
-                    debug("[NO SE HA ENCONTRADO LA NOTICIA] " + news.title);
-                }
+                debug("[NO SE HA ENCONTRADO LA NOTICIA] " + news.title);
             }
-        } catch (Exception e) {
-            debug("[ERROR] link:" + news.link);
-            e.printStackTrace();
         }
         return news;
     }

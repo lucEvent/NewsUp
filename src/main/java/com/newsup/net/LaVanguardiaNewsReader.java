@@ -132,29 +132,24 @@ public class LaVanguardiaNewsReader extends NewsReader {
 
     @Override
     public News readNewsContent(News news) {
-        try {
-            org.jsoup.nodes.Document doc = getDocument(news.link);
-            if (doc == null) return news;
+        org.jsoup.nodes.Document doc = getDocument(news.link);
+        if (doc == null) return news;
 
-            doc.select("script").remove();
+        doc.select("script").remove();
 
-            org.jsoup.select.Elements e = doc.select(".text,.video,.foto,.story-text");
+        org.jsoup.select.Elements e = doc.select(".text,.video,.foto,.story-text");
 
+        if (!e.isEmpty()) {
+            e.select(".colB").remove();
+            news.content = e.outerHtml();
+        } else {
+            e = doc.select(".entry-content");
             if (!e.isEmpty()) {
-                e.select(".colB").remove();
-                news.content = e.outerHtml();
+                news.content = e.html();
             } else {
-                e = doc.select(".entry-content");
-                if (!e.isEmpty()) {
-                    news.content = e.html();
-                } else {
-                    System.out.println("NO SE ENCUENTRA EL CONTENIDO: " + news.link);
-                    System.out.println(doc.html());
-                }
+                System.out.println("NO SE ENCUENTRA EL CONTENIDO: " + news.link);
+                System.out.println(doc.html());
             }
-        } catch (Exception e) {
-            debug("[ERROR] link:" + news.link);
-            e.printStackTrace();
         }
         return news;
     }

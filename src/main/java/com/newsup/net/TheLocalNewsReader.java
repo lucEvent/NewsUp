@@ -30,24 +30,19 @@ public class TheLocalNewsReader extends NewsReader {
 
     @Override
     public News readNewsContent(News news) {
-        try {
-            org.jsoup.nodes.Document doc = getDocument(news.link);
-            if (doc == null) return news;
+        org.jsoup.nodes.Document doc = getDocument(news.link);
+        if (doc == null) return news;
 
-            org.jsoup.select.Elements  content = doc.select("#main_picture_article > img,.articleTeaser,.articleContent");
+        org.jsoup.select.Elements content = doc.select("#main_picture_article > img,.articleTeaser,.articleContent");
 
-            org.jsoup.select.Elements imgs = content.select("img");
-            for(org.jsoup.nodes.Element img : imgs) {
-                String src = "http://www.thelocal.com" + img.attr("src");
-                img.attr("src", src);
-                img.attr("style", "");
-            }
-
-            news.content = content.outerHtml();
-        } catch (Exception e) {
-            debug("[ERROR] title:" + news.title);
-            e.printStackTrace();
+        org.jsoup.select.Elements imgs = content.select("img");
+        for (org.jsoup.nodes.Element img : imgs) {
+            String src = "http://www.thelocal.com" + img.attr("src");
+            img.attr("src", src);
+            img.attr("style", "");
         }
+
+        news.content = content.outerHtml();
         return news;
     }
 

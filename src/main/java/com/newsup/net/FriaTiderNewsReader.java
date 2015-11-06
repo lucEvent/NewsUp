@@ -12,19 +12,14 @@ public class FriaTiderNewsReader extends NewsReader {
 
         SECTIONS = new SectionList();
         SECTIONS.add(new Section("Nyheter", 0, "http://www.friatider.se/rss.xml"));
-        SECTIONS.add(new Section("Featured", 0, "http://www.friatider.se/taxonomy/term/15/feed"));
-
         SECTIONS.add(new Section("Politik", 0, "http://www.friatider.se/taxonomy/term/38/feed"));
         SECTIONS.add(new Section("Ekonomi", 0, "http://www.friatider.se/taxonomy/term/2/feed"));
         SECTIONS.add(new Section("Kultur", 0, "http://www.friatider.se/taxonomy/term/3/feed"));
         SECTIONS.add(new Section("Vetenskap", 0, "http://www.friatider.se/taxonomy/term/19/feed"));
         SECTIONS.add(new Section("Inrikes", 0, "http://www.friatider.se/taxonomy/term/20/feed"));
         SECTIONS.add(new Section("Utrikes", 0, "http://www.friatider.se/taxonomy/term/21/feed"));
-        SECTIONS.add(new Section("Insändare", 0, "http://www.friatider.se/taxonomy/term/30/feed"));
         SECTIONS.add(new Section("Ledare", 0, "http://www.friatider.se/taxonomy/term/31/feed"));
-        SECTIONS.add(new Section("Livsstil", 0, "http://www.friatider.se/taxonomy/term/1/feed"));
         SECTIONS.add(new Section("Special: Sidebar top", 0, "http://www.friatider.se/taxonomy/term/16/feed"));
-        SECTIONS.add(new Section("Debatt", 0, "http://www.friatider.se/taxonomy/term/39/feed"));
         SECTIONS.add(new Section("Media", 0, "http://www.friatider.se/taxonomy/term/36/feed"));
         SECTIONS.add(new Section("Du betalar", 0, "http://www.friatider.se/taxonomy/term/34/feed"));
 
@@ -33,7 +28,6 @@ public class FriaTiderNewsReader extends NewsReader {
 
         SECTIONS.add(new Section("Large", 0, "http://www.friatider.se/taxonomy/term/4/feed"));
         SECTIONS.add(new Section("Medium", 0, "http://www.friatider.se/taxonomy/term/5/feed"));
-        SECTIONS.add(new Section("Small", 0, "http://www.friatider.se/taxonomy/term/6/feed"));
         SECTIONS.add(new Section("Normal", 0, "http://www.friatider.se/taxonomy/term/7/feed"));
         SECTIONS.add(new Section("Wide", 0, "http://www.friatider.se/taxonomy/term/8/feed"));
 
@@ -41,16 +35,16 @@ public class FriaTiderNewsReader extends NewsReader {
 
     @Override
     public News readNewsContent(News news) {
-        try {
-            org.jsoup.nodes.Document doc = getDocument(news.link);
-            if (doc == null) return news;
+        org.jsoup.nodes.Document doc = getDocument(news.link);
+        if (doc == null) return news;
 
-            org.jsoup.nodes.Element e = doc.select(".node").get(0);
-            e.select("h1,.rightbox").remove();
+        org.jsoup.select.Elements e = doc.select(".field-items,.standfirst");
+        e.select(".image-credit").remove();
 
+        if (e.isEmpty()) {
+            System.out.println("NO SE HA PODIDO ENCONTRAR EL CONTENIDO: " + news.link);
+        } else {
             news.content = e.html();
-        } catch (Exception e) {
-            debug("[ERROR] title:" + news.title);
         }
         return news;
     }

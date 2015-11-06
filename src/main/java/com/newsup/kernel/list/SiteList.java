@@ -47,8 +47,8 @@ public class SiteList extends ArrayList<Site> {
             add(new Site(code++, "**Expressen", 0xffdb2727, assets.open("expressen.png"), new com.newsup.net.ExpressenNewsReader()));
             add(new Site(code++, "**Dagens Nyheter", 0xffeb1c2a, assets.open("dagensnyheter.png"), new com.newsup.net.DagensNyheterNewsReader()));
             add(new Site(code++, "**Svenska Dagbladet", 0xfff5f5f5, assets.open("svenskadagbladet.png"), new com.newsup.net.SvenskaDagbladetNewsReader()));
-            add(new Site(code++, "Goteborgs Posten", 0xff005c9e, assets.open("goteborgsposten.png"), new com.newsup.net.GoteborgsPostenNewsReader()));
-            add(new Site(code++, "Fria Tider", 0xffffffff, assets.open("friatider.png"), new com.newsup.net.FriaTiderNewsReader()));
+            add(new Site(code++, "**Goteborgs Posten", 0xff005c9e, assets.open("goteborgsposten.png"), new com.newsup.net.GoteborgsPostenNewsReader()));
+            add(new Site(code++, "**Fria Tider", 0xffffffff, assets.open("friatider.png"), new com.newsup.net.FriaTiderNewsReader()));
             add(new Site(code++, "Metro", 0xff007d3c, assets.open("metro.png"), new com.newsup.net.MetroNewsReader()));
 
             add(new Site(-1, context.getString(R.string.finland), 0, null, null));

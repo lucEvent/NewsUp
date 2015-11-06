@@ -55,7 +55,7 @@ public class ElPeriodicoEsNewsReader extends NewsReader {
     }
 
     @Override
-    protected org.jsoup.nodes.Document getDocument(String rsslink){
+    protected org.jsoup.nodes.Document getDocument(String rsslink) {
         if (rsslink == SECTIONS.get(0).link) {
             try {
                 return org.jsoup.Jsoup.parse(new URL(rsslink).openStream(), "ISO-8859-1", rsslink);
@@ -77,30 +77,25 @@ public class ElPeriodicoEsNewsReader extends NewsReader {
 
     @Override
     public News readNewsContent(News news) {
-        try {
-            org.jsoup.nodes.Document doc = getDocument(news.link);
-            if (doc == null) return news;
+        org.jsoup.nodes.Document doc = getDocument(news.link);
+        if (doc == null) return news;
 
-            doc.select("script").remove();
+        doc.select("script").remove();
 
-            org.jsoup.select.Elements intro = doc.select(".ep-video,.unit > .ep-img,.unit > .ep-galeria");
-            intro.select(".carousel").remove();
-            intro = intro.select("img");
+        org.jsoup.select.Elements intro = doc.select(".ep-video,.unit > .ep-img,.unit > .ep-galeria");
+        intro.select(".carousel").remove();
+        intro = intro.select("img");
 
-            org.jsoup.select.Elements content = doc.select(".cuerpo-noticia,.cuerpo-opinion");
+        org.jsoup.select.Elements content = doc.select(".cuerpo-noticia,.cuerpo-opinion");
 
-            content.select(".fecha,.carousel,.thumb-pie,.cred").remove();
-            content = content.select("p,a > img,h2,h3,h4,h5,h6");
+        content.select(".fecha,.carousel,.thumb-pie,.cred").remove();
+        content = content.select("p,a > img,h2,h3,h4,h5,h6");
 
-            news.content = intro.outerHtml() + content.outerHtml();
+        news.content = intro.outerHtml() + content.outerHtml();
 
-            if (news.content.length() < 80) {
-                debug("NO SE HA PODIDO LEER " + news.link);
-                news.content = null;
-            }
-        } catch (Exception e) {
-            debug("[ERROR] link:" + news.link);
-            e.printStackTrace();
+        if (news.content.length() < 80) {
+            debug("NO SE HA PODIDO LEER " + news.link);
+            news.content = null;
         }
         return news;
     }

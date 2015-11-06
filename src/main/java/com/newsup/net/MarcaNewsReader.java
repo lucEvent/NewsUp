@@ -82,36 +82,31 @@ public class MarcaNewsReader extends NewsReader {
 
     @Override
     public News readNewsContent(News news) {
-        try {
-            org.jsoup.nodes.Document doc = getDocument(news.link);
-            if (doc == null) return news;
+        org.jsoup.nodes.Document doc = getDocument(news.link);
+        if (doc == null) return news;
 
-            org.jsoup.select.Elements ee = doc.select("main");
-            ee.select("script").remove();
+        org.jsoup.select.Elements ee = doc.select("main");
+        ee.select("script").remove();
 
-            org.jsoup.select.Elements e = ee.select("img,.cuerpo-texto");
+        org.jsoup.select.Elements e = ee.select("img,.cuerpo-texto");
+        if (!e.isEmpty()) {
+            news.content = e.outerHtml();
+        } else {
+            e = doc.select(".cuerpo_articulo > p");
             if (!e.isEmpty()) {
-                news.content = e.outerHtml();
+                e.select("script").remove();
+                org.jsoup.select.Elements img = doc.select(".bloque-foto");
+
+                news.content = img.select("img").outerHtml() + e.outerHtml();
             } else {
-                e = doc.select(".cuerpo_articulo > p");
+                e = doc.select(".texto-noticia > p");
                 if (!e.isEmpty()) {
                     e.select("script").remove();
-                    org.jsoup.select.Elements img = doc.select(".bloque-foto");
-
-                    news.content = img.select("img").outerHtml() + e.outerHtml();
+                    news.content = e.outerHtml();
                 } else {
-                    e = doc.select(".texto-noticia > p");
-                    if (!e.isEmpty()) {
-                        e.select("script").remove();
-                        news.content = e.outerHtml();
-                    } else {
-                        debug("No se ha podido leer:" + news.title);
-                    }
+                    debug("No se ha podido leer:" + news.link);
                 }
             }
-        } catch (Exception e) {
-            debug("[ERROR] link:" + news.link);
-            e.printStackTrace();
         }
         return news;
     }
