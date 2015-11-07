@@ -31,17 +31,13 @@ public class DigitalTrendsNewsReader extends NewsReader {
         SECTIONS.add(new Section("Business", 0, "http://www.digitaltrends.com/business/feed/"));
         SECTIONS.add(new Section("Buying Guides", 0, "http://www.digitaltrends.com/buying-guides/feed/"));
         SECTIONS.add(new Section("CES", 0, "http://www.digitaltrends.com/ces/feed/"));
-        SECTIONS.add(new Section("CTIA", 0, "http://www.digitaltrends.com/ctia/feed/"));
         SECTIONS.add(new Section("DT Daily", 0, "http://www.digitaltrends.com/dt-daily/feed/"));
-        SECTIONS.add(new Section("E3", 0, "http://www.digitaltrends.com/e3/feed/"));
         SECTIONS.add(new Section("Features", 0, "http://www.digitaltrends.com/features/feed/"));
-        SECTIONS.add(new Section("GDC", 0, "http://www.digitaltrends.com/gdc-show/feed/"));
         SECTIONS.add(new Section("How-to", 0, "http://www.digitaltrends.com/how-to/feed/"));
         SECTIONS.add(new Section("IFA", 0, "http://www.digitaltrends.com/ifa/feed/"));
         SECTIONS.add(new Section("Movies & TV", 0, "http://www.digitaltrends.com/movies/feed/"));
         SECTIONS.add(new Section("Music", 0, "http://www.digitaltrends.com/music/feed/"));
         SECTIONS.add(new Section("Opinion", 0, "http://www.digitaltrends.com/opinion/feed/"));
-        SECTIONS.add(new Section("PAX", 0, "http://www.digitaltrends.com/pax/feed/"));
         SECTIONS.add(new Section("Photo Galleries", 0, "http://www.digitaltrends.com/photogalleries/feed/"));
         SECTIONS.add(new Section("Podcasts", 0, "http://www.digitaltrends.com/podcasts/feed/"));
         SECTIONS.add(new Section("The Manual", 0, "http://www.digitaltrends.com/the-manual/feed/"));
@@ -52,22 +48,21 @@ public class DigitalTrendsNewsReader extends NewsReader {
 
     @Override
     protected News applySpecialCase(News news, String content) {
-        news.description = Jsoup.parse(news.description).getElementsByTag("p").get(0).text();
+        news.description = Jsoup.parseBodyFragment(news.description).getElementsByTag("p").get(0).text();
         return news;
     }
 
     @Override
     public News readNewsContent(News news) {
-        try {
-            org.jsoup.nodes.Document doc = getDocument(news.link);
-            if (doc == null) return news;
+        org.jsoup.nodes.Document doc = getDocument(news.link);
+        if (doc == null) return news;
 
-            org.jsoup.nodes.Element element = doc.select("article").get(0);
-            news.content = element.html();
+        org.jsoup.select.Elements e = doc.select(".dt-video-container,.dt-iframe-header-media,.attachment-dt_header_media,.attachment-dt_header_media_full_width,article");
 
-        } catch (Exception e) {
-            debug("[ERROR] title:" + news.title);
-            e.printStackTrace();
+        if (e.isEmpty()) {
+            debug("NO SE ENCONTRO EL CONTENIDO: " + news.link);
+        } else {
+            news.content = e.outerHtml();
         }
         return news;
     }

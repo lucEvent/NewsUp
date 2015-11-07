@@ -68,7 +68,7 @@ public class SiteList extends ArrayList<Site> {
 
             add(new Site(-1, context.getString(R.string.technology), 0, null, null));
             add(new Site(code++, "**El Androide Libre", 0xffa3c23e, assets.open("elandroidelibre.png"), new com.newsup.net.ElAndroideLibreNewsReader()));
-            add(new Site(code++, "Digital Trends", 0xff0098d9, assets.open("digitaltrends.png"), new com.newsup.net.DigitalTrendsNewsReader()));
+            add(new Site(code++, "**Digital Trends", 0xff0098d9, assets.open("digitaltrends.png"), new com.newsup.net.DigitalTrendsNewsReader()));
             add(new Site(code++, "**Lifehacker", 0xff94b330, assets.open("lifehacker.png"), new com.newsup.net.LifeHackerNewsReader()));
             add(new Site(code++, "**Xataka", 0xff558f22, assets.open("xataka.png"), new com.newsup.net.XatakaNewsReader()));
             add(new Site(code++, "TED", 0xffffffff, assets.open("ted.png"), new com.newsup.net.TEDNewsReader()));
@@ -80,7 +80,7 @@ public class SiteList extends ArrayList<Site> {
 
             add(new Site(-1, context.getString(R.string.magazines), 0, null, null));
             add(new Site(code++, "Make", 0xff4ecbf5, assets.open("make.png"), new com.newsup.net.MakeNewsReader()));
-            add(new Site(code++, "Discover", 0xff171717, assets.open("discovermag.png"), new com.newsup.net.DiscoverNewsReader()));
+            add(new Site(code++, "**Discover", 0xff171717, assets.open("discovermag.png"), new com.newsup.net.DiscoverNewsReader()));
             add(new Site(code++, "Rolling Stone", 0xff1c202b, assets.open("rollingstone.png"), new com.newsup.net.RollingStoneNewsReader()));
             add(new Site(code++, "People", 0xff20b3e8, assets.open("people.png"), new com.newsup.net.PeopleNewsReader()));
             add(new Site(code++, "Time", 0xffe60000, assets.open("time.png"), new com.newsup.net.TimeNewsReader()));
