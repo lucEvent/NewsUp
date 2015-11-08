@@ -45,7 +45,6 @@ public class SDManager {
 
     public void saveNews(News news) {
         String filename = "n" + news.id;
-
         try {
             FileOutputStream outputStream = context.openFileOutput(filename, Context.MODE_PRIVATE);
 

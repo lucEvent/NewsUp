@@ -58,7 +58,7 @@ public class DiscoverNewsReader extends NewsReader {
             e = doc.select(".segment");
 
             if (e.isEmpty()) {
-                debug("No hay elementos");
+                debug("NO SE HA ENCONTRADO EL CONTENIDO:" + news.link);
                 return news;
             } else {
                 org.jsoup.select.Elements imgs = e.select("img");
@@ -74,7 +74,7 @@ public class DiscoverNewsReader extends NewsReader {
         }
         org.jsoup.select.Elements imgs = e.select("[style]");
         for (org.jsoup.nodes.Element img : imgs) {
-            img.attr("style","");
+            img.attr("style", "");
         }
         news.content = e.outerHtml();
 

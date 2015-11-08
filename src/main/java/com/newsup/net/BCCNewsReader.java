@@ -35,7 +35,6 @@ public class BCCNewsReader extends NewsReader {
         SECTIONS.add(new Section("Middle east", 1, "http://feeds.bbci.co.uk/news/world/middle_east/rss.xml"));
         SECTIONS.add(new Section("US & Canada", 1, "http://feeds.bbci.co.uk/news/world/us_and_canada/rss.xml"));
 
-
         SECTIONS.add(new Section("Video & Audio", 0, null));
         SECTIONS.add(new Section("Top stories", 1, "http://feeds.bbci.co.uk/news/video_and_audio/news_front_page/rss.xml?edition=uk"));
         SECTIONS.add(new Section("World", 1, "http://feeds.bbci.co.uk/news/video_and_audio/world/rss.xml"));
@@ -54,72 +53,65 @@ public class BCCNewsReader extends NewsReader {
         SECTIONS.add(new Section("In pictures", 1, "http://newsrss.bbc.co.uk/rss/newsonline_uk_edition/in_pictures/rss.xml"));
         SECTIONS.add(new Section("Special Reports", 1, "http://feeds.bbci.co.uk/news/special_reports/rss.xml"));
         SECTIONS.add(new Section("Have your say", 1, "http://feeds.bbci.co.uk/news/have_your_say/rss.xml"));
-        SECTIONS.add(new Section("Editors Blog", 1, "http://www.bbc.co.uk/blogs/theeditors/rss.xml"));
 
         SECTIONS.add(new Section("Sports", 0, "http://feeds.bbci.co.uk/sport/0/rss.xml?edition=uk"));
-        SECTIONS.add(new Section("Latest Stories", 1, "http://newsrss.bbc.co.uk/rss/sportonline_uk_edition/latest_published_stories/rss.xml"));
         SECTIONS.add(new Section("Football", 1, "http://newsrss.bbc.co.uk/rss/sportonline_uk_edition/football/rss.xml"));
         SECTIONS.add(new Section("Cricket", 1, "http://newsrss.bbc.co.uk/rss/sportonline_uk_edition/cricket/rss.xml"));
         SECTIONS.add(new Section("Rugby Union", 1, "http://newsrss.bbc.co.uk/rss/sportonline_uk_edition/rugby_union/rss.xml"));
         SECTIONS.add(new Section("Rugby League", 1, "http://newsrss.bbc.co.uk/rss/sportonline_uk_edition/rugby_league/rss.xml"));
         SECTIONS.add(new Section("Tennis", 1, "http://newsrss.bbc.co.uk/rss/sportonline_uk_edition/tennis/rss.xml"));
         SECTIONS.add(new Section("Golf", 1, "http://newsrss.bbc.co.uk/rss/sportonline_uk_edition/golf/rss.xml"));
-        SECTIONS.add(new Section("Motorsport", 1, "http://newsrss.bbc.co.uk/rss/sportonline_uk_edition/motorsport/rss.xml"));
-        SECTIONS.add(new Section("Boxing", 1, "http://newsrss.bbc.co.uk/rss/sportonline_uk_edition/boxing/rss.xml"));
-        SECTIONS.add(new Section("Athletics", 1, "http://newsrss.bbc.co.uk/rss/sportonline_uk_edition/athletics/rss.xml"));
         SECTIONS.add(new Section("Snooker", 1, "http://feeds.bbci.co.uk/sport/0/snooker/rss.xml?edition=uk"));
-        SECTIONS.add(new Section("Horse Racing", 1, "http://newsrss.bbc.co.uk/rss/sportonline_uk_edition/other_sports/horse_racing/rss.xml"));
-        SECTIONS.add(new Section("Cycling", 1, "http://newsrss.bbc.co.uk/rss/sportonline_uk_edition/other_sports/cycling/rss.xml"));
-        SECTIONS.add(new Section("Disability Sport", 1, "http://newsrss.bbc.co.uk/rss/sportonline_uk_edition/other_sports/disability_sport/rss.xml"));
-        SECTIONS.add(new Section("Other Sport", 1, "http://newsrss.bbc.co.uk/rss/sportonline_uk_edition/other_sports/rss.xml"));
 
         SECTIONS.add(new Section("Sports Video & Audio", 0, "http://feeds.bbci.co.uk/sport/0/rss.xml?edition=uk"));
-        SECTIONS.add(new Section("Football", 1, "http://newsrss.bbc.co.uk/rss/sportplayer_uk_edition/football/rss.xml"));
-        SECTIONS.add(new Section("Cricket", 1, "http://newsrss.bbc.co.uk/rss/sportplayer_uk_edition/cricket/rss.xml"));
-        SECTIONS.add(new Section("Rugby Union", 1, "http://newsrss.bbc.co.uk/rss/sportplayer_uk_edition/rugby_union/rss.xml"));
-        SECTIONS.add(new Section("Rugby League", 1, "http://newsrss.bbc.co.uk/rss/sportplayer_uk_edition/rugby_league/rss.xml"));
-        SECTIONS.add(new Section("Tennis", 1, "http://newsrss.bbc.co.uk/rss/sportplayer_uk_edition/tennis/rss.xml"));
-        SECTIONS.add(new Section("Golf", 1, "http://newsrss.bbc.co.uk/rss/sportplayer_uk_edition/golf/rss.xml"));
-        SECTIONS.add(new Section("Motorsport", 1, "http://newsrss.bbc.co.uk/rss/sportplayer_uk_edition/motorsport/rss.xml"));
-        SECTIONS.add(new Section("Boxing", 1, "http://newsrss.bbc.co.uk/rss/sportplayer_uk_edition/boxing/rss.xml"));
-        SECTIONS.add(new Section("Athletics", 1, "http://newsrss.bbc.co.uk/rss/sportplayer_uk_edition/athletics/rss.xml"));
-        SECTIONS.add(new Section("Snooker", 1, "http://newsrss.bbc.co.uk/rss/sportplayer_uk_edition/snooker/rss.xml"));
-        SECTIONS.add(new Section("Horse Racing", 1, "http://newsrss.bbc.co.uk/rss/sportplayer_uk_edition/horse_racing/rss.xml"));
-        SECTIONS.add(new Section("Cycling", 1, "http://newsrss.bbc.co.uk/rss/sportplayer_uk_edition/cycling/rss.xml"));
-        SECTIONS.add(new Section("Disability Sport", 1, "http://newsrss.bbc.co.uk/rss/sportplayer_uk_edition/disability_sport/rss.xml"));
-        SECTIONS.add(new Section("Other Sport", 1, "http://newsrss.bbc.co.uk/rss/sportplayer_uk_edition/other_sport/rss.xml"));
-
-        SECTIONS.add(new Section("Sport Selection", 0, null));
-        SECTIONS.add(new Section("Match of the day", 1, "http://newsrss.bbc.co.uk/rss/sportplayer_uk_edition/match_of_the_day/rss.xml"));
-        SECTIONS.add(new Section("Football Focus", 1, "http://newsrss.bbc.co.uk/rss/sportplayer_uk_edition/football_focus/rss.xml"));
-        SECTIONS.add(new Section("Score", 1, "http://newsrss.bbc.co.uk/rss/sportplayer_uk_edition/score_interactive/rss.xml"));
 
     }
 
     @Override
     public News readNewsContent(News news) {
-        org.jsoup.nodes.Document doc = null;
-        try {
-            doc = getDocument(news.link);
-            if (doc == null) return news;
+        org.jsoup.nodes.Document doc = getDocument(news.link);
+        if (doc == null) return news;
 
-            org.jsoup.nodes.Element e = doc.select(".story-body__inner").get(0);
-            org.jsoup.select.Elements ads = e.select("script");
-            for (org.jsoup.nodes.Element ad : ads) ad.remove();
-            news.content = e.html();
+        org.jsoup.select.Elements e = doc.select("[property=\"articleBody\"]");
 
-        } catch (Exception exception) {
-            try {
-                org.jsoup.nodes.Element e = doc.select(".article").get(0);
-                org.jsoup.select.Elements ads = e.select("#headline,script,.data-table-outer,#also-related-links,.share-tools-footer");
-                for (org.jsoup.nodes.Element ad : ads) ad.remove();
+        if (e.isEmpty()) {
+            e = doc.select(".story-body");
+            if (e.isEmpty()) {
+                e = doc.select("#emp-content > .emp-description");
+                if (e.isEmpty()) {
+                    e = doc.select(".main_content_wrapper");
+                    if (e.isEmpty()) {
+                        e = doc.select("#main-content .emp-decription");
+                        if (e.isEmpty()) {
+                            e = doc.select(".storybody");
 
-                news.content = e.html();
+                            if (e.isEmpty()) {
+                                debug("NO SE HA ENCONTRADO EL CONTENIDO:" + news.link);
+                                return news;
 
-            } catch (Exception e) {
-                debug("[ERROR] title:" + news.title);
+                            } else {
+                                e.select(".videoInStoryB,#socialBookMarks,.mvtb,script").remove();
+                            }
+                        }
+                    } else {
+                        e.select("h1,.titlebar,.livestats-tracking,.secondary_content_container,.related_topics").remove();
+                    }
+                }
+            } else {
+                e.select("h1,.date,.ad_wrapper,#article-sidebar,#headline,.introduction,#also-related-links,.share-tools-footer,.bbccom_advert_placeholder").remove();
             }
         }
+        org.jsoup.select.Elements styles = e.select("[style]");
+        for (org.jsoup.nodes.Element style : styles) {
+            style.attr("style", "");
+        }
+        org.jsoup.select.Elements imgs = e.select(".js-delayed-image-load");
+        for (org.jsoup.nodes.Element img : imgs) {
+            String src = img.attr("data-src");
+            img.html("<img src=\"" + src + "\" >");
+        }
+        news.content = e.html();
+
         return news;
     }
 

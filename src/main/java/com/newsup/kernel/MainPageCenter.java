@@ -21,39 +21,64 @@ public class MainPageCenter implements TaskMessage {
         this.handler = handler;
     }
 
-    private static Object historialsync = new Object();
-
     public void loadNews() {
         if (isInternetAvailable()) {
-            SiteList sites = datacenter.getSites();
-            int[] isites = datacenter.getSettings().main_sites_i;
-            for (int i = 0; i < isites.length; ++i) {
-                new NewsLoader(sites.get(isites[i]));
-            }
+
+            new NewsLoader().start();
+
         } else {
-            new NoInternetTask();
+            new NoInternetTask().start();
         }
     }
 
-    private class NewsLoader extends Thread implements com.newsup.task.Socket {
+    private class NewsLoader extends Thread {
 
-        private final Site site;
+        @Override
+        public void run() {
+            SiteList sites = datacenter.getSites();
+            int[] isites = datacenter.getSettings().main_sites_i;
+            NewsSiteLoader[] tasks = new NewsSiteLoader[isites.length];
 
-        NewsLoader(Site site) {
+            for (int i = 0; i < isites.length; ++i) {
+                tasks[i] = new NewsSiteLoader(sites.get(isites[i]));
+                tasks[i].start();
+            }
+
+            for (NewsSiteLoader task : tasks) {
+                try {
+                    task.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                NewsList newstosave = task.newsToSave;
+                for (News N : newstosave) {
+                    datacenter.createNews(task.site.code, N);
+                    datacenter.saveNews(N);
+                }
+            }
+            debug("Acabando en NewsLoader");
+        }
+    }
+
+    private class NewsSiteLoader extends Thread implements com.newsup.task.Socket {
+
+        final Site site;
+        NewsList newsToSave;
+
+        NewsSiteLoader(Site site) {
             this.site = site;
-            this.start();
         }
 
         @Override
         public void run() {
+            newsToSave = new NewsList();
+
             site.news = new NewsList();
+            datacenter.getSiteHistorial(site);
 
             int[] sections = datacenter.getSettingsOf(site).sectionsOnMainIntegerArray();
             site.getReader().readNews(sections, this);
-
-            synchronized (historialsync) {
-                datacenter.getSiteHistorial(site);
-            }
 
             for (News N : site.news) {
                 // Mirar si esta en el historial
@@ -61,15 +86,10 @@ public class MainPageCenter implements TaskMessage {
                     // Si no, leer el contenido
                     site.getReader().readNewsContent(N);
                     // Si se ha podido leer el contenido
-                    if (N.content != null) {
-                        // insertar en la BD
-                        try {
-                            datacenter.createNews(site.code, N);
-                        } catch (Exception e) {
-                            debug("[Error al insertar la noticia en la BD");
-                        }
-                        // guardar el contenido en disco
-                        datacenter.saveNews(N);
+                    if (N.content != null && !N.content.isEmpty()) {
+                        // Guardar para que el thread principal lo guarde en la BD
+                        newsToSave.add(N);
+
                     } else {
                         site.historial.remove(N);
                     }
@@ -79,7 +99,6 @@ public class MainPageCenter implements TaskMessage {
                 }
             }
         }
-
 
         @Override
         public void message(int message, Object dataAttached) {
@@ -100,10 +119,6 @@ public class MainPageCenter implements TaskMessage {
 
     private class NoInternetTask extends Thread {
 
-        private NoInternetTask() {
-            this.start();
-        }
-
         @Override
         public void run() {
             handler.obtainMessage(NO_INTERNET, null).sendToTarget();
@@ -116,9 +131,7 @@ public class MainPageCenter implements TaskMessage {
                 site = datacenter.getSiteHistorial(site);
 
                 handler.obtainMessage(NEWS_READ_HISTORY, site.historial).sendToTarget();
-
             }
-
         }
     }
 

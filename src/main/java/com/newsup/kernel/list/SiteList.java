@@ -52,13 +52,13 @@ public class SiteList extends ArrayList<Site> {
             add(new Site(code++, "Metro", 0xff007d3c, assets.open("metro.png"), new com.newsup.net.MetroNewsReader()));
 
             add(new Site(-1, context.getString(R.string.finland), 0, null, null));
-            add(new Site(code++, "Helsinki times", 0xff32c8fa, assets.open("helsinkitimes.png"), new com.newsup.net.HelsinkiTimesNewsReader()));
+            add(new Site(code++, "**Helsinki times", 0xff32c8fa, assets.open("helsinkitimes.png"), new com.newsup.net.HelsinkiTimesNewsReader()));
             add(new Site(code++, "Helsingin Sanomat", 0xff01133d, assets.open("helsinginsanomat.png"), new HelsinkiSanomatNewsReader()));
             add(new Site(code++, "Iltalehti", 0xffff0000, assets.open("iltalehti.png"), new com.newsup.net.IltalehtiNewsReader()));
             add(new Site(code++, "**Yle", 0xff00b4c4, assets.open("yle.png"), new com.newsup.net.YleNewsReader()));
 
             add(new Site(-1, context.getString(R.string.uk), 0, null, null));
-            add(new Site(code++, "BBC", 0xffa62e30, assets.open("bbc.png"), new com.newsup.net.BCCNewsReader()));
+            add(new Site(code++, "**BBC", 0xffa62e30, assets.open("bbc.png"), new com.newsup.net.BCCNewsReader()));
 
             add(new Site(-1, context.getString(R.string.us), 0, null, null));
             add(new Site(code++, "CNN", 0xffc20000, assets.open("cnn.png"), new com.newsup.net.CNNNewsReader()));

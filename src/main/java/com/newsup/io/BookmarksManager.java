@@ -1,7 +1,6 @@
 package com.newsup.io;
 
 import android.os.Handler;
-import android.util.Log;
 
 import com.newsup.kernel.News;
 import com.newsup.kernel.NewsDataCenter;
@@ -26,6 +25,7 @@ public class BookmarksManager implements TaskMessage {
 
     private static ArrayList<Integer> bookmarkedNewsIdsList;
     private static NewsList bookmarkedNewsList;
+
     private Handler handler;
     private NewsDataCenter dataCenter;
 
@@ -40,8 +40,9 @@ public class BookmarksManager implements TaskMessage {
         readBookmarkedNewsIds();
     }
 
-    public boolean isBookmarked(News currentNews) {
-        return readBookmarkedNewsIds().contains(currentNews.id);
+    public boolean isBookmarked(News news) {
+        int id = getNewsFileCode(news);
+        return readBookmarkedNewsIds().contains(id);
     }
 
     public ArrayList<Integer> readBookmarkedNewsIds() {
@@ -71,15 +72,16 @@ public class BookmarksManager implements TaskMessage {
 
         if (bookmarkedNewsIdsList == null) readBookmarkedNewsIds();
 
-        bookmarkedNewsIdsList.add(news.id);
+        int id = getNewsFileCode(news);
+
+        bookmarkedNewsIdsList.add(id);
         saveBookmarksIndex();
 
         File dir = new File(SDManager.getDirectory(), BOOKMARKS_DIR);
 
         try {
-            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File(dir, "b" + news.id)));
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File(dir, "b" + id)));
 
-            out.writeInt(news.id);
             out.writeObject(news.title);
             out.writeObject(news.link);
             out.writeObject(news.description);
@@ -97,14 +99,15 @@ public class BookmarksManager implements TaskMessage {
     public void unBookmarkNews(News news) {
         if (bookmarkedNewsIdsList == null) readBookmarkedNewsIds();
 
-        if (bookmarkedNewsIdsList.remove((Integer) news.id)) {
+        Integer id = getNewsFileCode(news);
+        if (bookmarkedNewsIdsList.remove(id)) {
             saveBookmarksIndex();
 
             if (bookmarkedNewsList != null) bookmarkedNewsList.remove(news);
 
             File dir = new File(SDManager.getDirectory(), BOOKMARKS_DIR);
 
-            File bookmark = new File(dir, "b" + news.id);
+            File bookmark = new File(dir, "b" + id);
             bookmark.delete();
         }
     }
@@ -138,19 +141,17 @@ public class BookmarksManager implements TaskMessage {
 
                     File dir = new File(SDManager.getDirectory(), BOOKMARKS_DIR);
 
-                    for (Integer newsId : bookmarkedNewsIdsList) {
+                    for (Integer id : bookmarkedNewsIdsList) {
                         try {
-                            ObjectInputStream in = new ObjectInputStream(new FileInputStream(new File(dir, "b" + newsId)));
+                            ObjectInputStream in = new ObjectInputStream(new FileInputStream(new File(dir, "b" + id)));
 
-                            int id = in.readInt();
                             String title = (String) in.readObject();
                             String link = (String) in.readObject();
                             String description = (String) in.readObject();
                             long date = in.readLong();
                             String categories = (String) in.readObject();
 
-
-                            News news = new News(id, title, link, description, date, new Tags(categories));
+                            News news = new News(-2, title, link, description, date, new Tags(categories));
                             news.content = (String) in.readObject();
 
                             int sitecode = in.readInt();
@@ -181,8 +182,11 @@ public class BookmarksManager implements TaskMessage {
         for (File f : files) f.delete();
     }
 
-    private void debug(String text) {
-        Log.d("##BookmarksManager##", text);
+    private int getNewsFileCode(News news) {
+        return (news.link + news.date).hashCode();
     }
 
+    private void debug(String text) {
+        android.util.Log.d("##BookmarksManager##", text);
+    }
 }
