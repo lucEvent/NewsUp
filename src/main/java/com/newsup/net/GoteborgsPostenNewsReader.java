@@ -48,8 +48,7 @@ public class GoteborgsPostenNewsReader extends NewsReader {
             }
             news.content = img + news.description;
             news.description = org.jsoup.Jsoup.parseBodyFragment(news.description).text().substring(0, 100);
-        }
-        else {
+        } else {
             news.description = org.jsoup.Jsoup.parseBodyFragment(news.description).text();
         }
 
@@ -57,31 +56,25 @@ public class GoteborgsPostenNewsReader extends NewsReader {
     }
 
     @Override
-    public News readNewsContent(News news) {
-        org.jsoup.nodes.Document doc = getDocument(news.link);
-        if (doc == null) return news;
-
-        org.jsoup.select.Elements imgs = doc.select(".imageWrapper,.photoAlbumContainer,.articlePictures").select("img");
-
-        String img = "";
-        for (org.jsoup.nodes.Element i : imgs) {
-            img += "<img src=\"http://www.gp.se/" + i.attr("src") + "\" />";
-        }
-
-        org.jsoup.select.Elements intro = doc.select(".factContainer,#articleContainer > iframe");
-        for (org.jsoup.nodes.Element i : intro) {
-            i.attr("style", "background-color: #f7f7f7");
-        }
-
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
         org.jsoup.select.Elements body = doc.select(".body");
 
-        news.content = img + intro.html() + body.html();
+        if (!body.isEmpty()) {
 
-        if (body.isEmpty()) {
-            debug("NO SE HA ENCONTRADO EL CONTENIDO: " + news.link);
-            news.content = null;
+            org.jsoup.select.Elements imgs = doc.select(".imageWrapper,.photoAlbumContainer,.articlePictures").select("img");
+
+            String img = "";
+            for (org.jsoup.nodes.Element i : imgs) {
+                img += "<img src=\"http://www.gp.se/" + i.attr("src") + "\" />";
+            }
+
+            org.jsoup.select.Elements intro = doc.select(".factContainer,#articleContainer > iframe");
+            for (org.jsoup.nodes.Element i : intro) {
+                i.attr("style", "background-color: #f7f7f7");
+            }
+
+            news.content = img + intro.html() + body.html();
         }
-        return news;
     }
 
 }

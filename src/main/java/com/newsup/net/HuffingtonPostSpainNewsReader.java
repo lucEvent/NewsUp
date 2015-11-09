@@ -47,7 +47,7 @@ public class HuffingtonPostSpainNewsReader extends NewsReader {
     protected static final int HASH_UPDATED = "updated".hashCode();
     protected static final int HASH_LINK_2 = "id".hashCode();
 
-
+    @Override
     protected void readRssPage(Socket handler, String rsslink) {
         org.jsoup.nodes.Document doc = getDocument(rsslink);
         if (doc == null) return;
@@ -127,9 +127,7 @@ public class HuffingtonPostSpainNewsReader extends NewsReader {
     }
 
     @Override
-    public News readNewsContent(News news) {
-        org.jsoup.nodes.Document doc = getDocument(news.link);
-        if (doc == null) return news;
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
         doc.select("script,.entry-text > a").remove();
 
         org.jsoup.select.Elements cnt = doc.select(".top-media,.entry-text");
@@ -153,7 +151,6 @@ public class HuffingtonPostSpainNewsReader extends NewsReader {
         cnt.select("img[src^=\"http://big.assets\"]");
 
         news.content = cnt.html();
-        return news;
     }
 
 }

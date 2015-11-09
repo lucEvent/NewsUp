@@ -73,10 +73,7 @@ public class SportNewsReader extends NewsReader {
     }
 
     @Override
-    public News readNewsContent(News news) {
-        org.jsoup.nodes.Document doc = getDocument(news.link);
-        if (doc == null) return news;
-
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
         org.jsoup.select.Elements img = doc.select(".sp-img,.sp-video").select("img");
 
         org.jsoup.select.Elements content = doc.select(".cuerpo-noticia");
@@ -90,11 +87,8 @@ public class SportNewsReader extends NewsReader {
 
             if (!content.isEmpty()) {
                 news.content = content.html();
-            } else {
-                System.out.println("NO SE HA PODIDO LEER EL CONTENIDO: " + news.link);
             }
         }
-        return news;
     }
 
 }

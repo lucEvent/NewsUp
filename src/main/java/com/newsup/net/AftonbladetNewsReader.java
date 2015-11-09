@@ -44,20 +44,14 @@ public class AftonbladetNewsReader extends NewsReader {
     }
 
     @Override
-    public News readNewsContent(News news) {
-        org.jsoup.nodes.Document doc = getDocument(news.link);
-        if (doc == null) return news;
-
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
         org.jsoup.select.Elements e = doc.select(".player__poster-image,.abLeadText,.abBodyText");
         if (!e.isEmpty()) {
             String img = "";
             if (!news.enclosures.isEmpty()) img = news.enclosures.get(0).html();
 
             news.content = img + e.html();
-        } else {
-            debug("NO SE HA ENCONTRADO CONTENIDO PARA : " + news.link);
         }
-        return news;
     }
 
 }

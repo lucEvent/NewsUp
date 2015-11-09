@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/app_icon"
             android:layout_alignParentRight="true"
-            android:text="Version 0.10.0"
+            android:text="@string/app_version"
             android:textAppearance="?android:attr/textAppearanceSmall" />
     </RelativeLayout>
 

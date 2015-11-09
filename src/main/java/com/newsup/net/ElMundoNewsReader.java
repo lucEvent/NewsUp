@@ -56,7 +56,6 @@ public class ElMundoNewsReader extends NewsReader {
 
     }
 
-
     @Override
     protected News applySpecialCase(News news, String content) {
         org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(news.description);
@@ -66,20 +65,13 @@ public class ElMundoNewsReader extends NewsReader {
     }
 
     @Override
-    public News readNewsContent(News news) {
-        org.jsoup.nodes.Document doc = getDocument(news.link);
-        if (doc == null) return news;
-
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
         org.jsoup.select.Elements e = doc.select("div[itemprop=\"articleBody\"],#tamano");
-
         e.select("aside, footer, meta, time").remove();
 
         if (!e.isEmpty()) {
             news.content = e.html();
-        } else {
-            debug("No se puede leer: " + news.title);
         }
-        return news;
     }
 
 }

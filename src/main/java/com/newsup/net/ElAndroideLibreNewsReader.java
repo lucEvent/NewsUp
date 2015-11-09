@@ -1,6 +1,5 @@
 package com.newsup.net;
 
-
 import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
@@ -24,11 +23,6 @@ public class ElAndroideLibreNewsReader extends NewsReader {
         org.jsoup.select.Elements doc = org.jsoup.Jsoup.parseBodyFragment(content).getElementsByTag("body");
         doc.select("[clear=\"all\"] ~ *,br").remove();
         news.content = doc.html().replace("<br>", "");
-        return news;
-    }
-
-    @Override
-    public News readNewsContent(News news) {
         return news;
     }
 

@@ -1,6 +1,5 @@
 package com.newsup.net.dev;
 
-import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.net.NewsReader;
 
@@ -22,8 +21,4 @@ public class HuffingtonPostArabicNewsReader extends NewsReader {
 
     }
 
-    @Override
-    public News readNewsContent(News news) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }

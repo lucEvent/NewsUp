@@ -52,25 +52,17 @@ public class IltalehtiNewsReader extends NewsReader {
     }
 
     @Override
-    public News readNewsContent(News news) {
-        try {
-            org.jsoup.nodes.Document doc = getDocument(news.link);
-            if (doc == null) return news;
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
+        org.jsoup.nodes.Element root = doc.getElementsByTag("isense").get(0);
+        Elements elements = root.children();
+        int last = elements.indexOf(root.getElementsByClass("author").get(0));
 
-            org.jsoup.nodes.Element root = doc.getElementsByTag("isense").get(0);
-            Elements elements = root.children();
-            int last = elements.indexOf(root.getElementsByClass("author").get(0));
-
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i <= last; ++i) {
-                sb.append(elements.get(i).outerHtml());
-            }
-            news.content = sb.toString();
-
-        } catch (Exception e) {
-            debug("[ERROR] title:" + news.title);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i <= last; ++i) {
+            sb.append(elements.get(i).outerHtml());
         }
-        return news;
+        news.content = sb.toString();
+
     }
 
 }

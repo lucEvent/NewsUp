@@ -25,23 +25,17 @@ public class HelsinkiTimesNewsReader extends NewsReader {
     }
 
     @Override
-    public News readNewsContent(News news) {
-        org.jsoup.nodes.Document doc = getDocument(news.link);
-        if (doc == null) return news;
-
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
         org.jsoup.select.Elements e = doc.select(".item-page > p,.item-page .thumbnail img");
 
-        if (e.isEmpty()) {
-            debug("NO SE HA PODIDO LEER EL CONTENIDO: " + news.link);
-            return news;
-        } else {
+        if (!e.isEmpty()) {
             org.jsoup.select.Elements imgs = e.select("img");
             for (org.jsoup.nodes.Element img : imgs) {
                 img.attr("src", "http://www.helsinkitimes.fi" + img.attr("src"));
             }
+
+            news.content = e.outerHtml();
         }
-        news.content = e.outerHtml();
-        return news;
     }
 
 }

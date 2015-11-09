@@ -126,7 +126,20 @@ public abstract class NewsReader {
         return null;
     }
 
-    public abstract News readNewsContent(News news);
+    public final News readNewsContent(News news) {
+        org.jsoup.nodes.Document doc = getDocument(news.link);
+        if (doc != null) {
+            readNewsContent(doc, news);
+            if (news.content == null || news.content.isEmpty()) {
+                debug("[NO SE HA ENCONTRADO EL CONTENIDO] " + news.link);
+            }
+        }
+        return news;
+    }
+
+    protected void readNewsContent(org.jsoup.nodes.Document document, News news) {
+        //To implement by Subclasses in case they need
+    }
 
     protected final void debug(String text) {
         android.util.Log.d("##" + this.getClass().getSimpleName() + "##", text);

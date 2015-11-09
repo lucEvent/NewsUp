@@ -29,9 +29,4 @@ public class DogsterNewsReader extends NewsReader {
         return news;
     }
 
-    @Override
-    public News readNewsContent(News news) {
-        return news;
-    }
-
 }

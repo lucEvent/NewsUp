@@ -49,7 +49,7 @@ public class SiteList extends ArrayList<Site> {
             add(new Site(code++, "**Svenska Dagbladet", 0xfff5f5f5, assets.open("svenskadagbladet.png"), new com.newsup.net.SvenskaDagbladetNewsReader()));
             add(new Site(code++, "**Goteborgs Posten", 0xff005c9e, assets.open("goteborgsposten.png"), new com.newsup.net.GoteborgsPostenNewsReader()));
             add(new Site(code++, "**Fria Tider", 0xffffffff, assets.open("friatider.png"), new com.newsup.net.FriaTiderNewsReader()));
-            add(new Site(code++, "Metro", 0xff007d3c, assets.open("metro.png"), new com.newsup.net.MetroNewsReader()));
+            add(new Site(code++, "**Metro", 0xff007d3c, assets.open("metro.png"), new com.newsup.net.MetroNewsReader()));
 
             add(new Site(-1, context.getString(R.string.finland), 0, null, null));
             add(new Site(code++, "**Helsinki times", 0xff32c8fa, assets.open("helsinkitimes.png"), new com.newsup.net.HelsinkiTimesNewsReader()));
@@ -83,7 +83,7 @@ public class SiteList extends ArrayList<Site> {
             add(new Site(code++, "**Discover", 0xff171717, assets.open("discovermag.png"), new com.newsup.net.DiscoverNewsReader()));
             add(new Site(code++, "Rolling Stone", 0xff1c202b, assets.open("rollingstone.png"), new com.newsup.net.RollingStoneNewsReader()));
             add(new Site(code++, "People", 0xff20b3e8, assets.open("people.png"), new com.newsup.net.PeopleNewsReader()));
-            add(new Site(code++, "Time", 0xffe60000, assets.open("time.png"), new com.newsup.net.TimeNewsReader()));
+            add(new Site(code++, "**Time", 0xffe60000, assets.open("time.png"), new com.newsup.net.TimeNewsReader()));
             add(new Site(code++, "**The Atlantic", 0xff030202, assets.open("theatlantic.png"), new com.newsup.net.TheAtlanticNewsReader()));
             add(new Site(code++, "**Sky and Telescope", 0xffd92326, assets.open("skyntelescope.png"), new com.newsup.net.SkyAndTelescopeNewsReader()));
             add(new Site(code++, "**Dogster", 0xff547a94, assets.open("dogster.png"), new com.newsup.net.DogsterNewsReader()));
@@ -98,7 +98,4 @@ public class SiteList extends ArrayList<Site> {
         super(list);
     }
 
-    public int getNumSites() {
-        return get(size() - 1).code + 1;
-    }
 }

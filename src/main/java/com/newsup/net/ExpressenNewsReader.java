@@ -38,10 +38,7 @@ public class ExpressenNewsReader extends NewsReader {
     }
 
     @Override
-    public News readNewsContent(News news) {
-        org.jsoup.nodes.Document doc = getDocument(news.link);
-        if (doc == null) return news;
-
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
         String img = "";
         org.jsoup.select.Elements media = doc.select(".b-article__media,.b-slideshow__slider").select("img");
         for (org.jsoup.nodes.Element i : media) {
@@ -59,16 +56,13 @@ public class ExpressenNewsReader extends NewsReader {
                 if (content.isEmpty()) {
                     content = doc.select(".text--article-preamble,.text--article-body");
 
-                    if (content.isEmpty()) {
-                        debug("NO SE HA ENCONTRADO EL CONTENIDO PARA: " + news.title);
-                        if (img.isEmpty())
-                            return news;
+                    if (content.isEmpty() && img.isEmpty()) {
+                        return;
                     }
                 }
             }
         }
         news.content = img + content;
-        return news;
     }
 
 }

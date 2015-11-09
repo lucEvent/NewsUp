@@ -30,29 +30,20 @@ public class RollingStoneNewsReader extends NewsReader {
     }
 
     @Override
-    public News readNewsContent(News news) {
-        try {
-            org.jsoup.nodes.Document doc = getDocument(news.link);
-            if (doc == null) return news;
-
-            org.jsoup.nodes.Element subt = doc.select(".article-sub-title").get(0);
-            org.jsoup.nodes.Element img = doc.select(".article-img-holder").get(0);
-            org.jsoup.nodes.Element art = doc.select(".article-content").get(0);
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
+        org.jsoup.nodes.Element subt = doc.select(".article-sub-title").get(0);
+        org.jsoup.nodes.Element img = doc.select(".article-img-holder").get(0);
+        org.jsoup.nodes.Element art = doc.select(".article-content").get(0);
 
 
-            org.jsoup.select.Elements ads = art.select("script,.related-article");
-            for (org.jsoup.nodes.Element ad : ads) ad.remove();
+        art.select("script,.related-article").remove();
 
-            org.jsoup.select.Elements ps = art.select("p");
+        org.jsoup.select.Elements ps = art.select("p");
 
-            StringBuilder sb = new StringBuilder(subt.outerHtml()).append(img.outerHtml());
-            for (org.jsoup.nodes.Element p : ps) sb.append(p.outerHtml());
+        StringBuilder sb = new StringBuilder(subt.outerHtml()).append(img.outerHtml());
+        for (org.jsoup.nodes.Element p : ps) sb.append(p.outerHtml());
 
-            news.content = sb.toString();
-        } catch (Exception exception) {
-            debug("[ERROR] title:" + news.title);
-        }
-        return news;
+        news.content = sb.toString();
     }
 
 }

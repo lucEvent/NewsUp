@@ -76,10 +76,7 @@ public class ElPeriodicoCaNewsReader extends NewsReader {
     }
 
     @Override
-    public News readNewsContent(News news) {
-        org.jsoup.nodes.Document doc = getDocument(news.link);
-        if (doc == null) return news;
-
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
         doc.select("script").remove();
 
         org.jsoup.select.Elements intro = doc.select(".ep-video,.unit > .ep-img,.unit > .ep-galeria");
@@ -92,12 +89,9 @@ public class ElPeriodicoCaNewsReader extends NewsReader {
         content = content.select("p,a > img,h2,h3,h4,h5,h6");
 
         news.content = intro.outerHtml() + content.outerHtml();
-
         if (news.content.length() < 80) {
-            debug("NO SE HA PODIDO LEER " + news.link);
             news.content = null;
         }
-        return news;
     }
 
 }

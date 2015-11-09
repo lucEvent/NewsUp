@@ -68,10 +68,7 @@ public class BCCNewsReader extends NewsReader {
     }
 
     @Override
-    public News readNewsContent(News news) {
-        org.jsoup.nodes.Document doc = getDocument(news.link);
-        if (doc == null) return news;
-
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
         org.jsoup.select.Elements e = doc.select("[property=\"articleBody\"]");
 
         if (e.isEmpty()) {
@@ -86,9 +83,7 @@ public class BCCNewsReader extends NewsReader {
                             e = doc.select(".storybody");
 
                             if (e.isEmpty()) {
-                                debug("NO SE HA ENCONTRADO EL CONTENIDO:" + news.link);
-                                return news;
-
+                                return;
                             } else {
                                 e.select(".videoInStoryB,#socialBookMarks,.mvtb,script").remove();
                             }
@@ -111,8 +106,6 @@ public class BCCNewsReader extends NewsReader {
             img.html("<img src=\"" + src + "\" >");
         }
         news.content = e.html();
-
-        return news;
     }
 
 }

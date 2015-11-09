@@ -36,20 +36,10 @@ public class HelsinkiSanomatNewsReader extends NewsReader {
     }
 
     @Override
-    public News readNewsContent(News news) {
-        try {
-            org.jsoup.nodes.Document doc = getDocument(news.link);
-            if (doc == null) return news;
-
-            org.jsoup.nodes.Element element = doc.select(".article-body,.post,.body").get(0);
-            element.select("script").remove();
-            news.content = element.html();
-
-        } catch (Exception e) {
-            debug("[ERROR] title:" + news.title);
-            e.printStackTrace();
-        }
-        return news;
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
+        org.jsoup.nodes.Element element = doc.select(".article-body,.post,.body").get(0);
+        element.select("script").remove();
+        news.content = element.html();
     }
 
 }

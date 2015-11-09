@@ -70,10 +70,7 @@ public class ElpaisNewsReader extends NewsReader {
     }
 
     @Override
-    public News readNewsContent(News news) {
-        org.jsoup.nodes.Document doc = getDocument(news.link);
-        if (doc == null) return news;
-
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
         org.jsoup.select.Elements e = doc.select("#cuerpo_noticia");
         org.jsoup.select.Elements img = doc.select(".contenedor_fotonoticia_compartir");
         if (!e.isEmpty() || !img.isEmpty()) {
@@ -92,10 +89,7 @@ public class ElpaisNewsReader extends NewsReader {
             e.select("script").remove();
             if (!e.text().isEmpty()) {
                 news.content = e.html();
-            } else {
-                debug("[NO SE HA ENCONTRADO LA NOTICIA] " + news.title);
             }
         }
-        return news;
     }
 }

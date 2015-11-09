@@ -65,23 +65,14 @@ public class MakeNewsReader extends NewsReader {
     }
 
     @Override
-    public News readNewsContent(News news) {
-        try {
-            org.jsoup.nodes.Document doc = getDocument(news.link);
-            if (doc == null) return news;
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
+        org.jsoup.select.Elements e = doc.select("article");
+        e.select(".related-topics,.row-fluid,.ctx-clearfix").remove();
 
-            org.jsoup.select.Elements ee = doc.select("article");
-            org.jsoup.select.Elements ads = ee.select(".related-topics,.row-fluid,.ctx-clearfix");
-            for (org.jsoup.nodes.Element ad : ads) ad.remove();
-
-            news.content = ee.html();
-
-        } catch (Exception exception) {
-            debug("[ERROR] title:" + news.title);
-        }
-        return news;
+        news.content = e.html();
     }
 
+    @Override
     protected Document getDocument(String pagelink) {
         try {
             return Jsoup.connect(pagelink).userAgent("Mozilla/5.0 (Linux; Android 4.4.2; GT-I9300 Build/KVT49L) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.94 Mobile Safari/537.36").get();

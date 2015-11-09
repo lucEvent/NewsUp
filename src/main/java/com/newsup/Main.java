@@ -222,7 +222,7 @@ public class Main extends ListActivity implements TaskMessage {
                     debug("Error recibido por el Handler");
                     break;
                 default:
-                    debug("[][#] OPCION NO CONTEMPLADA");
+                    debug("[][#] OPCION NO CONTEMPLADA: " + msg.what);
             }
         }
 

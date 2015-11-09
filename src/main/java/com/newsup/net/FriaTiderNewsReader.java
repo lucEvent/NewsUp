@@ -34,19 +34,13 @@ public class FriaTiderNewsReader extends NewsReader {
     }
 
     @Override
-    public News readNewsContent(News news) {
-        org.jsoup.nodes.Document doc = getDocument(news.link);
-        if (doc == null) return news;
-
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
         org.jsoup.select.Elements e = doc.select(".field-items,.standfirst");
         e.select(".image-credit").remove();
 
-        if (e.isEmpty()) {
-            System.out.println("NO SE HA PODIDO ENCONTRAR EL CONTENIDO: " + news.link);
-        } else {
+        if (!e.isEmpty()) {
             news.content = e.html();
         }
-        return news;
     }
 
 }

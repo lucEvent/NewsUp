@@ -53,10 +53,7 @@ public class DagensNyheterNewsReader extends NewsReader {
     }
 
     @Override
-    public News readNewsContent(News news) {
-        org.jsoup.nodes.Document doc = getDocument(news.link);
-        if (doc == null) return news;
-
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
         org.jsoup.select.Elements e = doc.select(".article_preamble,.article_text");
 
         if (e.isEmpty()) {
@@ -65,10 +62,8 @@ public class DagensNyheterNewsReader extends NewsReader {
             if (e.isEmpty()) {
                 e = doc.select(".content > .excerpt,.content > p");
 
-                if (e.isEmpty()) {
-                    debug("Noticia sin contenido??: " + news.link);
-                    return news;
-                }
+                if (e.isEmpty()) return;
+
             } else {
                 org.jsoup.select.Elements imgs = doc.select("img");
                 for (org.jsoup.nodes.Element img : imgs) {
@@ -78,8 +73,6 @@ public class DagensNyheterNewsReader extends NewsReader {
             }
         }
         news.content = e.outerHtml();
-
-        return news;
     }
 
 }

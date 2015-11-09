@@ -99,9 +99,4 @@ public class ElDiarioNewsReader extends NewsReader {
         return news;
     }
 
-    @Override
-    public News readNewsContent(News news) {
-        return news;
-    }
-
 }

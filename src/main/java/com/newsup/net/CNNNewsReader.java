@@ -52,17 +52,10 @@ public class CNNNewsReader extends NewsReader {
     }
 
     @Override
-    public News readNewsContent(News news) {
-        try {
-            org.jsoup.nodes.Document doc = getDocument(news.link);
-            if (doc == null) return news;
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
 
-            news.content = doc.select(".zn,.zn-body-text,.zn-body").get(0).html();
+        news.content = doc.select(".zn,.zn-body-text,.zn-body").get(0).html();
 
-        } catch (Exception e) {
-            debug("[ERROR] title:" + news.title);
-        }
-        return news;
     }
 
 }

@@ -66,10 +66,7 @@ public class MundoDeportivoNewsReader extends NewsReader {
     }
 
     @Override
-    public News readNewsContent(News news) {
-        org.jsoup.nodes.Document doc = getDocument(news.link);
-        if (doc == null) return news;
-
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
         String intro = doc.select("[itemprop=\"alternativeHeadline\"]").outerHtml();
         org.jsoup.select.Elements imgs = doc.select("[itemprop=\"image\"] img,.gallery-leaf-figure img");
 
@@ -94,7 +91,6 @@ public class MundoDeportivoNewsReader extends NewsReader {
         content.select(".datetime-story-leaf,.gallery-story-leaf-figcaption").remove();
 
         news.content = intro + img.toString() + content.html();
-        return news;
     }
 
 }

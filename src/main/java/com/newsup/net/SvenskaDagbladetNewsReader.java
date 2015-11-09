@@ -15,7 +15,6 @@ public class SvenskaDagbladetNewsReader extends NewsReader {
 
     }
 
-
     @Override
     protected News applySpecialCase(News news, String content) {
         news.description = org.jsoup.Jsoup.parseBodyFragment(news.description).text();
@@ -23,16 +22,12 @@ public class SvenskaDagbladetNewsReader extends NewsReader {
     }
 
     @Override
-    public News readNewsContent(News news) {
-        org.jsoup.nodes.Document doc = getDocument(news.link);
-        if (doc == null) return news;
-
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
         org.jsoup.select.Elements e = doc.select(".Deck,.Body");
 
         e.select(".Body-ad,.AdPositionData,.Body-pull,figcaption,.Quote,.ExternalLink").remove();
 
         news.content = e.html();
-        return news;
     }
 
 }

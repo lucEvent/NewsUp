@@ -29,10 +29,7 @@ public class TheLocalNewsReader extends NewsReader {
     }
 
     @Override
-    public News readNewsContent(News news) {
-        org.jsoup.nodes.Document doc = getDocument(news.link);
-        if (doc == null) return news;
-
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
         org.jsoup.select.Elements content = doc.select("#main_picture_article > img,.articleTeaser,.articleContent");
 
         org.jsoup.select.Elements imgs = content.select("img");
@@ -43,7 +40,6 @@ public class TheLocalNewsReader extends NewsReader {
         }
 
         news.content = content.outerHtml();
-        return news;
     }
 
 }

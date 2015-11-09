@@ -36,30 +36,24 @@ public class MetroNewsReader extends NewsReader {
     }
 
     @Override
-    public News readNewsContent(News news) {
-        try {
-            org.jsoup.nodes.Document doc = getDocument(news.link);
-            if (doc == null) return news;
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
+        doc.select("script").remove();
 
-            doc.select("script").remove();
-
-            org.jsoup.select.Elements imgs = doc.select(".image-component > img");
-            if (!imgs.isEmpty()) {
-                org.jsoup.nodes.Element img = imgs.get(0);
-                String src = img.attr("src");
-                if (src != null && !src.isEmpty()) {
-                    img.attr("src", "http://www.metro.se/" + src);
-                }
-                news.content = img.outerHtml();
+        org.jsoup.select.Elements imgs = doc.select(".image-component > img");
+        if (!imgs.isEmpty()) {
+            org.jsoup.nodes.Element img = imgs.get(0);
+            String src = img.attr("src");
+            if (src != null && !src.isEmpty()) {
+                img.attr("src", "http://www.metro.se/" + src);
             }
-            org.jsoup.select.Elements e = doc.select(".article-body");
-
-            news.content += e.html();
-        } catch (Exception e) {
-            debug("[ERROR] link:" + news.link);
-            e.printStackTrace();
+            news.content = img.outerHtml();
         }
-        return news;
+        org.jsoup.select.Elements e = doc.select(".article-body");
+        for (org.jsoup.nodes.Element img : e.select("img")) {
+            img.attr("src", "http://www.metro.se" + img.attr("src"));
+        }
+
+        news.content += e.html();
     }
 
 }

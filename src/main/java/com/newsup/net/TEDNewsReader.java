@@ -25,7 +25,6 @@ public class TEDNewsReader extends NewsReader {
         SECTIONS.add(new Section("", 1, "http://www.ted.com/themes/rss/id/10"));
         SECTIONS.add(new Section("", 1, "http://www.ted.com/themes/rss/id/"));
 */
-
     }
 
     @Override
@@ -35,19 +34,11 @@ public class TEDNewsReader extends NewsReader {
     }
 
     @Override
-    public News readNewsContent(News news) {
-        try {
-            org.jsoup.nodes.Document doc = getDocument(news.link);
-            if (doc == null) return news;
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
+        org.jsoup.select.Elements ee = doc.select(".entry-content");
+        ee.select(".meta").remove();
 
-            org.jsoup.select.Elements ee = doc.select(".entry-content");
-            ee.select(".meta").remove();
-
-            news.content = ee.outerHtml();
-        } catch (Exception e) {
-            debug("[ERROR La seleccion del articulo no se ha encontrado] tit:" + news.title);
-        }
-        return news;
+        news.content = ee.outerHtml();
     }
 
 }

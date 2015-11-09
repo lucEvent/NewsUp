@@ -53,18 +53,12 @@ public class DigitalTrendsNewsReader extends NewsReader {
     }
 
     @Override
-    public News readNewsContent(News news) {
-        org.jsoup.nodes.Document doc = getDocument(news.link);
-        if (doc == null) return news;
-
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
         org.jsoup.select.Elements e = doc.select(".dt-video-container,.dt-iframe-header-media,.attachment-dt_header_media,.attachment-dt_header_media_full_width,article");
 
-        if (e.isEmpty()) {
-            debug("NO SE ENCONTRO EL CONTENIDO: " + news.link);
-        } else {
+        if (!e.isEmpty()) {
             news.content = e.outerHtml();
         }
-        return news;
     }
 
 }

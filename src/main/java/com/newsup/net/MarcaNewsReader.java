@@ -81,10 +81,7 @@ public class MarcaNewsReader extends NewsReader {
     }
 
     @Override
-    public News readNewsContent(News news) {
-        org.jsoup.nodes.Document doc = getDocument(news.link);
-        if (doc == null) return news;
-
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
         org.jsoup.select.Elements ee = doc.select("main");
         ee.select("script").remove();
 
@@ -103,12 +100,9 @@ public class MarcaNewsReader extends NewsReader {
                 if (!e.isEmpty()) {
                     e.select("script").remove();
                     news.content = e.outerHtml();
-                } else {
-                    debug("No se ha podido leer:" + news.link);
                 }
             }
         }
-        return news;
     }
 
 }

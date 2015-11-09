@@ -24,25 +24,16 @@ public class GizmodoNewsReader extends NewsReader {
     }
 
     @Override
-    public News readNewsContent(News news) {
-        try {
-            org.jsoup.nodes.Document doc = getDocument(news.link);
-            if (doc == null) return news;
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
+        org.jsoup.nodes.Element e = doc.select(".post-content,.single-article__content,#content_post").get(0);
 
-            org.jsoup.nodes.Element e = doc.select(".post-content,.single-article__content,#content_post").get(0);
-
-            e.select("p[data-textannotation-id=\"6eee416cdd18ed05dcc366f5a5757226\"]").remove();
-            for (org.jsoup.nodes.Element elem : e.children()) {
-                for (org.jsoup.nodes.Attribute at : elem.attributes()) {
-                    elem.removeAttr(at.getKey());
-                }
+        e.select("p[data-textannotation-id=\"6eee416cdd18ed05dcc366f5a5757226\"]").remove();
+        for (org.jsoup.nodes.Element elem : e.children()) {
+            for (org.jsoup.nodes.Attribute at : elem.attributes()) {
+                elem.removeAttr(at.getKey());
             }
-            news.content = e.outerHtml();
-        } catch (Exception e) {
-            debug("[ERROR] link:" + news.link);
-            e.printStackTrace();
         }
-        return news;
+        news.content = e.outerHtml();
     }
 
 }

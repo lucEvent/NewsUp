@@ -6,7 +6,6 @@ import com.newsup.kernel.list.SectionList;
 
 public class DiscoverNewsReader extends NewsReader {
 
-
     public DiscoverNewsReader() {
         super();
 
@@ -49,17 +48,13 @@ public class DiscoverNewsReader extends NewsReader {
     }
 
     @Override
-    public News readNewsContent(News news) {
-        org.jsoup.nodes.Document doc = getDocument(news.link);
-        if (doc == null) return news;
-
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
         org.jsoup.select.Elements e = doc.select(".entry");
         if (e.isEmpty()) {
             e = doc.select(".segment");
 
             if (e.isEmpty()) {
-                debug("NO SE HA ENCONTRADO EL CONTENIDO:" + news.link);
-                return news;
+                return;
             } else {
                 org.jsoup.select.Elements imgs = e.select("img");
 
@@ -77,8 +72,6 @@ public class DiscoverNewsReader extends NewsReader {
             img.attr("style", "");
         }
         news.content = e.outerHtml();
-
-        return news;
     }
 
 }

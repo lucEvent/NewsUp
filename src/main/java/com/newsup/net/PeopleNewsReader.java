@@ -22,25 +22,16 @@ public class PeopleNewsReader extends NewsReader {
     }
 
     @Override
-    public News readNewsContent(News news) {
-        try {
-            org.jsoup.nodes.Document doc = getDocument(news.link);
-            if (doc == null) return news;
-
-            org.jsoup.select.Elements e = doc.select(".post-body");
-            if (e.isEmpty()) {
-                e = doc.select(".content");
-                e.select("script,header,.social_article,#partner-content,.emote-wrap,#article-comments").remove();
-            } else {
-                e.select("script,div").remove();
-            }
-
-            news.content = e.html();
-        } catch (Exception e) {
-            debug("[ERROR] link:" + news.link);
-            e.printStackTrace();
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
+        org.jsoup.select.Elements e = doc.select(".post-body");
+        if (e.isEmpty()) {
+            e = doc.select(".content");
+            e.select("script,header,.social_article,#partner-content,.emote-wrap,#article-comments").remove();
+        } else {
+            e.select("script,div").remove();
         }
-        return news;
+
+        news.content = e.html();
     }
 
 }

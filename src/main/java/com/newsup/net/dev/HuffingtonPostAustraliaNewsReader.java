@@ -1,7 +1,5 @@
 package com.newsup.net.dev;
 
-
-import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
 import com.newsup.net.NewsReader;
@@ -34,11 +32,6 @@ public class HuffingtonPostAustraliaNewsReader extends NewsReader {
         SECTIONS.add(new Section("Win the right way", 1, "http://www.huffingtonpost.com.au/news/au-win-the-right-way/feed/"));
         SECTIONS.add(new Section("Blogs", 1, "http://www.huffingtonpost.com.au/feeds/verticals/australia/blog.xml"));
 
-    }
-
-    @Override
-    public News readNewsContent(News news) {
-        return news;
     }
 
 }

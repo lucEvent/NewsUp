@@ -149,9 +149,4 @@ public class ElConfidencialNewsReader extends NewsReader {
         }
     }
 
-    @Override
-    public News readNewsContent(News news) {
-        return news;
-    }
-
 }
