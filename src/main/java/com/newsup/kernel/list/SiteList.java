@@ -7,6 +7,8 @@ import com.newsup.R;
 import com.newsup.kernel.Site;
 import com.newsup.net.HelsinkiSanomatNewsReader;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
@@ -53,8 +55,8 @@ public class SiteList extends ArrayList<Site> {
 
             add(new Site(-1, context.getString(R.string.finland), 0, null, null));
             add(new Site(code++, "**Helsinki times", 0xff32c8fa, assets.open("helsinkitimes.png"), new com.newsup.net.HelsinkiTimesNewsReader()));
-            add(new Site(code++, "Helsingin Sanomat", 0xff01133d, assets.open("helsinginsanomat.png"), new HelsinkiSanomatNewsReader()));
-            add(new Site(code++, "Iltalehti", 0xffff0000, assets.open("iltalehti.png"), new com.newsup.net.IltalehtiNewsReader()));
+            add(new Site(code++, "**Helsingin Sanomat", 0xff01133d, assets.open("helsinginsanomat.png"), new HelsinkiSanomatNewsReader()));
+            add(new Site(code++, "**Iltalehti", 0xffff0000, assets.open("iltalehti.png"), new com.newsup.net.IltalehtiNewsReader()));
             add(new Site(code++, "**Yle", 0xff00b4c4, assets.open("yle.png"), new com.newsup.net.YleNewsReader()));
 
             add(new Site(-1, context.getString(R.string.uk), 0, null, null));

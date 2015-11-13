@@ -1,12 +1,8 @@
 package com.newsup.net;
 
-
 import com.newsup.kernel.News;
 import com.newsup.kernel.Section;
 import com.newsup.kernel.list.SectionList;
-
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.net.URL;
@@ -42,7 +38,7 @@ public class IltalehtiNewsReader extends NewsReader {
     }
 
     @Override
-    protected Document getDocument(String rsslink) {
+    protected org.jsoup.nodes.Document getDocument(String rsslink) {
         try {
             return org.jsoup.Jsoup.parse(new URL(rsslink).openStream(), "ISO-8859-1", rsslink);
         } catch (IOException e) {
@@ -53,16 +49,17 @@ public class IltalehtiNewsReader extends NewsReader {
 
     @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
-        org.jsoup.nodes.Element root = doc.getElementsByTag("isense").get(0);
-        Elements elements = root.children();
-        int last = elements.indexOf(root.getElementsByClass("author").get(0));
+        org.jsoup.select.Elements e = doc.select("isense");
 
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i <= last; ++i) {
-            sb.append(elements.get(i).outerHtml());
+        if (!e.isEmpty()) {
+            e.select(".author,.important-articles-t,.kp-share-area").remove();
+
+            for (org.jsoup.nodes.Element style : e.select("[style]")) {
+                style.attr("style", "");
+            }
+
+            news.content = e.html();
         }
-        news.content = sb.toString();
-
     }
 
 }
