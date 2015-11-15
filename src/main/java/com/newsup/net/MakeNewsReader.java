@@ -54,20 +54,36 @@ public class MakeNewsReader extends NewsReader {
         SECTIONS.add(new Section("Woodworking", 1, "http://makezine.com/category/workshop/woodworking/feed/"));
 
         SECTIONS.add(new Section("Maker Faire", 0, "http://makezine.com/tag/makerfaire/feed/"));
-        SECTIONS.add(new Section("Maker Shed", 0, "http://makezine.com/tag/makershed/feed/"));
 
     }
 
     @Override
     protected News applySpecialCase(News news, String content) {
-        news.description = org.jsoup.Jsoup.parse(news.description).select("p").get(0).text();
+        news.description = org.jsoup.Jsoup.parseBodyFragment(news.description).select("p:nth-of-type(1)").text();
         return news;
     }
 
     @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
         org.jsoup.select.Elements e = doc.select("article");
-        e.select(".related-topics,.row-fluid,.ctx-clearfix").remove();
+
+        if (e.isEmpty()) {
+            e = doc.select(".hentry > .row > .span8");
+
+            if (e.isEmpty()) {
+                return;
+            }
+
+        } else {
+            e.select(".related-topics,.row-fluid,.ctx-clearfix,.ctx-sidebar-container,hr,#ctx-sl-subscribe,#ctx-module,#pubexchange_below_content").remove();
+        }
+
+        for (org.jsoup.nodes.Element ns : e.select("noscript")) {
+            ns.tagName("p");
+        }
+        for (org.jsoup.nodes.Element style : e.select("[style~=width]")) {
+            style.attr("style", "");
+        }
 
         news.content = e.html();
     }
