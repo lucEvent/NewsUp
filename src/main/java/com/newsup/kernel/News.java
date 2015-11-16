@@ -10,14 +10,12 @@ public class News {
 
     public int id;
 
-    public final String title, link;
+    public String title, link, description, content;
 
     public long date;
 
     public final Tags categories;
     public ArrayList<Enclosure> enclosures;
-
-    public String description, content;
 
     public Site site;
 

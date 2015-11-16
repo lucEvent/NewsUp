@@ -84,7 +84,7 @@ public class SiteList extends ArrayList<Site> {
             add(new Site(code++, "**Make", 0xff4ecbf5, assets.open("make.png"), new com.newsup.net.MakeNewsReader()));
             add(new Site(code++, "**Discover", 0xff171717, assets.open("discovermag.png"), new com.newsup.net.DiscoverNewsReader()));
             add(new Site(code++, "**Rolling Stone", 0xff1c202b, assets.open("rollingstone.png"), new com.newsup.net.RollingStoneNewsReader()));
-            add(new Site(code++, "People", 0xff20b3e8, assets.open("people.png"), new com.newsup.net.PeopleNewsReader()));
+            add(new Site(code++, "**People", 0xff20b3e8, assets.open("people.png"), new com.newsup.net.PeopleNewsReader()));
             add(new Site(code++, "**Time", 0xffe60000, assets.open("time.png"), new com.newsup.net.TimeNewsReader()));
             add(new Site(code++, "**The Atlantic", 0xff030202, assets.open("theatlantic.png"), new com.newsup.net.TheAtlanticNewsReader()));
             add(new Site(code++, "**Sky and Telescope", 0xffd92326, assets.open("skyntelescope.png"), new com.newsup.net.SkyAndTelescopeNewsReader()));

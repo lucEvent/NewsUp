@@ -29,7 +29,7 @@ public class XatakaNewsReader extends NewsReader {
         org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parseBodyFragment(news.description);
 
         doc.select("h4 ~ *,h4,[clear=\"all\"] ~ *").remove();
-        news.content = doc.html();
+        news.content = doc.body().html();
         news.description = "";
         return news;
     }
