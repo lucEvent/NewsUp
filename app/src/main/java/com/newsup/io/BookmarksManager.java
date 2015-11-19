@@ -5,7 +5,7 @@ import android.os.Handler;
 import com.newsup.kernel.News;
 import com.newsup.kernel.NewsDataCenter;
 import com.newsup.kernel.Site;
-import com.newsup.kernel.list.NewsList;
+import com.newsup.kernel.list.NewsMap;
 import com.newsup.kernel.list.SiteList;
 import com.newsup.kernel.list.Tags;
 import com.newsup.task.TaskMessage;
@@ -24,7 +24,7 @@ public class BookmarksManager implements TaskMessage {
     private static final String BOOKMARKS_IND = "index.nu";
 
     private static ArrayList<Integer> bookmarkedNewsIdsList;
-    private static NewsList bookmarkedNewsList;
+    private static NewsMap bookmarkedNewsList;
 
     private Handler handler;
     private NewsDataCenter dataCenter;
@@ -137,7 +137,7 @@ public class BookmarksManager implements TaskMessage {
                 if (bookmarkedNewsList == null) {
                     if (bookmarkedNewsIdsList == null) readBookmarkedNewsIds();
 
-                    bookmarkedNewsList = new NewsList(bookmarkedNewsIdsList.size());
+                    bookmarkedNewsList = new NewsMap();
 
                     File dir = new File(SDManager.getDirectory(), BOOKMARKS_DIR);
 

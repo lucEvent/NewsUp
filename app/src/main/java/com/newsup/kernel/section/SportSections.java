@@ -34,7 +34,7 @@ public class SportSections extends ArrayList<Section> {
         add(new Section("NBA", 1));
         add(new Section("Mundial baloncesto", 1));
 
-        add(new Section("Internacional", 0));
+        add(new Section("Internacional", -1));
         add(new Section("Inglaterra", 1));
         add(new Section("Francia", 1));
         add(new Section("Italia", 1));

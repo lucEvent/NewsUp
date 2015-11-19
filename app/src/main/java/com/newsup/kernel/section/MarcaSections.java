@@ -11,7 +11,7 @@ public class MarcaSections extends ArrayList<Section> {
 
         add(new Section("Notícias principales", 0));
 
-        add(new Section("Fútbol", 0));
+        add(new Section("Fútbol", -1));
         add(new Section("1ª División", 1));
         add(new Section("2ª División", 1));
         add(new Section("Más fútbol", 1));
@@ -23,7 +23,7 @@ public class MarcaSections extends ArrayList<Section> {
         add(new Section("Mundial 2014", 1));
         add(new Section("Fútbol sala", 1));
 
-        add(new Section("Equipos", 0));
+        add(new Section("Equipos", -1));
         add(new Section("Athletic", 1));
         add(new Section("Atlético", 1));
         add(new Section("Barcelona", 1));

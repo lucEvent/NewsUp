@@ -68,7 +68,7 @@ public class AsSections extends ArrayList<Section> {
         add(new Section("Valladolid", 1));
         add(new Section("Villarreal", 1));
 
-        add(new Section("Autores", 0));
+        add(new Section("Autores", -1));
         add(new Section("Alfredo Relaño", 1));
         add(new Section("Juan Mora", 1));
         add(new Section("Alejandro Elortegui", 1));

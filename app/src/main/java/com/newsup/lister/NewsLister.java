@@ -9,23 +9,27 @@ import android.widget.TextView;
 
 import com.newsup.R;
 import com.newsup.kernel.News;
-import com.newsup.kernel.list.NewsList;
 import com.newsup.kernel.list.NewsMap;
 import com.newsup.kernel.util.Date;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 
 public class NewsLister extends ArrayAdapter<News> implements Comparator<News> {
 
     private NewsMap newsmap;
-    private NewsList newslist;
+    private ArrayList<News> newslist;
+
+    private boolean update;
+
     private LayoutInflater inflater;
 
     public NewsLister(Context context) {
-        super(context, R.layout.i_news, new NewsList());
+        super(context, R.layout.i_news, new ArrayList<News>());
         newsmap = new NewsMap(this);
-        newslist = new NewsList(newsmap);
+        newslist = new ArrayList<News>(newsmap);
+        update = false;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -34,7 +38,7 @@ public class NewsLister extends ArrayAdapter<News> implements Comparator<News> {
         if (view == null) {
             view = inflater.inflate(R.layout.i_news, parent, false);
         }
-        News news = newslist.get(position);
+        News news = getItem(position);
 
         ((TextView) view.findViewById(R.id.title)).setText(news.title);
         ((TextView) view.findViewById(R.id.date)).setText(Date.getAge(news.date));
@@ -58,32 +62,36 @@ public class NewsLister extends ArrayAdapter<News> implements Comparator<News> {
 
     @Override
     public int getCount() {
-        return newslist.size();
+        return newsmap.size();
     }
 
     @Override
     public News getItem(int position) {
+        if (update) {
+            newslist.clear();
+            newslist.addAll(newsmap);
+            update = false;
+        }
         return newslist.get(position);
     }
 
     @Override
     public void add(News news) {
         newsmap.add(news);
-        newslist = new NewsList(newsmap);
+        update = true;
         notifyDataSetChanged();
     }
 
     @Override
     public void addAll(Collection<? extends News> list) {
         newsmap.addAll(list);
-        newslist = new NewsList(newsmap);
+        update = true;
         notifyDataSetChanged();
     }
 
     private void debug(String text) {
         android.util.Log.d(this.getClass().getSimpleName(), text);
     }
-
 
     @Override
     public int compare(News n1, News n2) {

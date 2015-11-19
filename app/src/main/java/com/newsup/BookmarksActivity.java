@@ -14,7 +14,7 @@ import android.widget.ListView;
 import com.newsup.io.BookmarksManager;
 import com.newsup.kernel.News;
 import com.newsup.kernel.NewsDataCenter;
-import com.newsup.kernel.list.NewsList;
+import com.newsup.kernel.list.NewsMap;
 import com.newsup.lister.NewsLister;
 import com.newsup.task.TaskMessage;
 import com.newsup.widget.NewsView;
@@ -111,7 +111,7 @@ public class BookmarksActivity extends ListActivity implements TaskMessage {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case NEWS_READ_BOOKMARKS:
-                    newslister.addAll((NewsList) msg.obj);
+                    newslister.addAll((NewsMap) msg.obj);
                     break;
                 case ACTION_REFRESH_LIST:
                     newslister.clear();

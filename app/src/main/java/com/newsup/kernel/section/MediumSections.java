@@ -46,7 +46,7 @@ public class MediumSections extends ArrayList<Section> {
         add(new Section("What's The Future of Work?", 0));
         add(new Section("Working Parents", 0));
 
-        add(new Section("Authors", 0));
+        add(new Section("Authors", -1));
         add(new Section("Aaron Bleyaert", 1));
         add(new Section("Akinori Machino", 1));
         add(new Section("Alana Massey", 1));

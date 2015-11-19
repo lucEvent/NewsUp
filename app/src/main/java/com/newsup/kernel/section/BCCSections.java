@@ -26,7 +26,7 @@ public class BCCSections extends ArrayList<Section> {
         add(new Section("Scotland", 1));
         add(new Section("Wales", 1));
 
-        add(new Section("World News ", 0));
+        add(new Section("World News ", -1));
         add(new Section("Africa", 1));
         add(new Section("Asia", 1));
         add(new Section("Europe", 1));
@@ -34,7 +34,7 @@ public class BCCSections extends ArrayList<Section> {
         add(new Section("Middle east", 1));
         add(new Section("US & Canada", 1));
 
-        add(new Section("Video & Audio", 0));
+        add(new Section("Video & Audio", -1));
         add(new Section("Top stories", 1));
         add(new Section("World", 1));
         add(new Section("UK", 1));
@@ -45,7 +45,7 @@ public class BCCSections extends ArrayList<Section> {
         add(new Section("Technology", 1));
         add(new Section("Entertainment & Arts", 1));
 
-        add(new Section("Other News", 0));
+        add(new Section("Other News", -1));
         add(new Section("Latest published stories", 1));
         add(new Section("Magazine", 1));
         add(new Section("Also in the news", 1));

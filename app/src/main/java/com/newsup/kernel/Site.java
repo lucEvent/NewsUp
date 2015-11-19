@@ -4,10 +4,7 @@ import android.graphics.drawable.Drawable;
 
 import com.newsup.R;
 import com.newsup.ia.IASite;
-import com.newsup.kernel.list.NewsList;
 import com.newsup.kernel.list.NewsMap;
-import com.newsup.kernel.list.SectionList;
-import com.newsup.net.NewsReader;
 import com.newsup.settings.SiteSettings;
 
 import java.io.InputStream;
@@ -29,8 +26,7 @@ public class Site extends IASite {
 
     public SiteSettings settings;
 
-    public NewsList news;
-    public NewsMap historial;
+    public NewsMap history;
 
     public Site(int code, String name, int color, InputStream icon, ArrayList<Section> sections) {
         super(code);
@@ -38,7 +34,7 @@ public class Site extends IASite {
         this.color = color;
         this.icon = Drawable.createFromStream(icon, null);
         this.sections = sections;
-        this.historial = new NewsMap();
+        this.history = new NewsMap();
     }
 
     public ArrayList<Section> getSections() {

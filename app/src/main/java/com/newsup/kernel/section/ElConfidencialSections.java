@@ -20,7 +20,7 @@ public class ElConfidencialSections extends ArrayList<Section> {
         add(new Section("C. Sánchez", 1));
         add(new Section("El confidente", 1));
 
-        add(new Section("Cotizalia", 0));
+        add(new Section("Cotizalia", -1));
         add(new Section("Mercados", 1));
         add(new Section("Economía", 1));
         add(new Section("Empresas", 1));
@@ -62,7 +62,7 @@ public class ElConfidencialSections extends ArrayList<Section> {
         add(new Section("Cine", 1));
         add(new Section("Música", 1));
 
-        add(new Section("Vanitatis", 0));
+        add(new Section("Vanitatis", -1));
         add(new Section("Actualidad", 1));
         add(new Section("Tendencias", 1));
         add(new Section("Televisión", 1));

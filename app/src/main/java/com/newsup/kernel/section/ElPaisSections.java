@@ -22,14 +22,14 @@ public class ElPaisSections extends ArrayList<Section> {
         add(new Section("Cultura", 0));
         add(new Section("Deportes", 0));
 
-        add(new Section("Internacional", 0));
+        add(new Section("Internacional", -1));
         add(new Section("America latina", 1));
         add(new Section("Europa", 1));
         add(new Section("EEUU", 1));
         add(new Section("Oriente próximo", 1));
         add(new Section("México", 1));
 
-        add(new Section("España", 0));
+        add(new Section("España", -1));
         add(new Section("Andalucía", 1));
         add(new Section("Catalunya", 1));
         add(new Section("C. Valenciana", 1));
@@ -37,7 +37,7 @@ public class ElPaisSections extends ArrayList<Section> {
         add(new Section("Pais vasco", 1));
         add(new Section("Galicia", 1));
 
-        add(new Section("Deportes", 0));
+        add(new Section("Deportes", -1));
         add(new Section("Fútbol", 1));
         add(new Section("Motor", 1));
         add(new Section("Baloncesto", 1));

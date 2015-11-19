@@ -17,7 +17,7 @@ public class ElMundoSections extends ArrayList<Section> {
         add(new Section("Cultura", 0));
         add(new Section("Ciencia", 0));
 
-        add(new Section("Ciudades", 0));
+        add(new Section("Ciudades", -1));
         add(new Section("Alicante", 1));
         add(new Section("Barcelona", 1));
         add(new Section("Castellón", 1));
@@ -27,7 +27,7 @@ public class ElMundoSections extends ArrayList<Section> {
         add(new Section("Valencia", 1));
         add(new Section("Valladolid", 1));
 
-        add(new Section("Regiones", 0));
+        add(new Section("Regiones", -1));
         add(new Section("Andalucía", 1));
         add(new Section("Baleares", 1));
         add(new Section("Castilla y león", 1));

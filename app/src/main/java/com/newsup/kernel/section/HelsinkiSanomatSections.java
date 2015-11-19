@@ -11,7 +11,7 @@ public class HelsinkiSanomatSections extends ArrayList<Section> {
 
         add(new Section("Uutiset", 0));
 
-        add(new Section("Uutiset osastoittain", 0));
+        add(new Section("Uutiset osastoittain", -1));
         add(new Section("Kotimaa", 1));
         add(new Section("Politiikka", 1));
         add(new Section("Kaupunki", 1));
@@ -20,7 +20,7 @@ public class HelsinkiSanomatSections extends ArrayList<Section> {
         add(new Section("Urheilu", 1));
         add(new Section("Kulttuuri", 1));
 
-        add(new Section("Teemat", 0));
+        add(new Section("Teemat", -1));
         add(new Section("Ruoka", 1));
         add(new Section("Elämä & Terveys", 1));
         add(new Section("Tiede", 1));

@@ -4,9 +4,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
 
-import com.newsup.kernel.list.NewsList;
+import com.newsup.kernel.list.NewsMap;
 import com.newsup.kernel.list.SiteList;
-import com.newsup.net.NewsReader;
+import com.newsup.settings.AppSettings;
 import com.newsup.task.TaskMessage;
 
 public class MainPageCenter implements TaskMessage {
@@ -37,7 +37,7 @@ public class MainPageCenter implements TaskMessage {
         @Override
         public void run() {
             SiteList sites = datacenter.getSites();
-            int[] isites = datacenter.getSettings().main_sites_i;
+            int[] isites = AppSettings.main_sites_i;
             NewsSiteLoader[] tasks = new NewsSiteLoader[isites.length];
 
             for (int i = 0; i < isites.length; ++i) {
@@ -52,7 +52,7 @@ public class MainPageCenter implements TaskMessage {
                     e.printStackTrace();
                 }
 
-                NewsList newstosave = task.newsToSave;
+                NewsMap newstosave = task.newsToSave;
                 for (News N : newstosave) {
                     datacenter.createNews(task.site.code, N);
                     datacenter.saveNews(N);
@@ -65,7 +65,9 @@ public class MainPageCenter implements TaskMessage {
     private class NewsSiteLoader extends Thread implements com.newsup.task.Socket {
 
         final Site site;
-        NewsList newsToSave;
+
+        NewsMap newsTempList;
+        NewsMap newsToSave;
 
         NewsSiteLoader(Site site) {
             this.site = site;
@@ -73,30 +75,35 @@ public class MainPageCenter implements TaskMessage {
 
         @Override
         public void run() {
-            newsToSave = new NewsList();
+            newsTempList = new NewsMap();
+            newsToSave = new NewsMap();
 
-            site.news = new NewsList();
-            datacenter.getSiteHistorial(site);
+            datacenter.getSiteHistory(site);
 
             int[] sections = datacenter.getSettingsOf(site).sectionsOnMainIntegerArray();
-            datacenter.getNewsreader().readNews(site, sections, this);
+            datacenter.getNewsreader().readNewsHeader(site, sections, this);
 
-            for (News N : site.news) {
-                // Mirar si esta en el historial
-                if (site.historial.add(N)) {
-                    // Si no, leer el contenido
-                    datacenter.getNewsreader().readNewsContent(site, N);
-                    // Si se ha podido leer el contenido
-                    if (N.content != null && !N.content.isEmpty()) {
-                        // Guardar para que el thread principal lo guarde en la BD
-                        newsToSave.add(N);
+            for (News N : newsTempList) {
+
+                if (site.history.add(N)) {  // if added, it means it was not in yet, so:
+
+                    if (N.content == null || N.content.isEmpty()) {  // We read the content (if needed)
+                        datacenter.getNewsreader().readNewsContent(site, N);
+                    }
+
+                    if (N.content != null && !N.content.isEmpty()) { // If there is content, we save it...
+
+                        newsToSave.add(N); // ... in the buffer. The master thread will save it in DB and disc
 
                     } else {
-                        site.historial.remove(N);
+
+                        site.history.remove(N); // ... if there isn't content, we remove it from the history
+
                     }
                 } else {
-                    // Si esta, asignar id para que al clickar se lea
-                    N.id = site.historial.ceiling(N).id;
+
+                    N.id = site.history.ceiling(N).id; // If not added, it means it already is in, so we
+
                 }
             }
         }
@@ -109,7 +116,7 @@ public class MainPageCenter implements TaskMessage {
 
                     News news = (News) dataAttached;
                     news.site = site;
-                    site.news.add(news);
+                    newsTempList.add(news);
                     break;
                 case ERROR:
                     debug("Error recibido por el Handler");
@@ -125,13 +132,13 @@ public class MainPageCenter implements TaskMessage {
             handler.obtainMessage(NO_INTERNET, null).sendToTarget();
 
             SiteList sites = datacenter.getSites();
-            int[] isites = datacenter.getSettings().main_sites_i;
-            for (int i = 0; i < isites.length; ++i) {
-                Site site = sites.get(isites[i]);
+            int[] isites = AppSettings.main_sites_i;
+            for (int isite : isites) {
+                Site site = sites.get(isite);
 
-                site = datacenter.getSiteHistorial(site);
+                site = datacenter.getSiteHistory(site);
 
-                handler.obtainMessage(NEWS_READ_HISTORY, site.historial).sendToTarget();
+                handler.obtainMessage(NEWS_READ_HISTORY, site.history).sendToTarget();
             }
         }
     }

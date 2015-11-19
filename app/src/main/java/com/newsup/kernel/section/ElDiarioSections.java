@@ -29,7 +29,7 @@ public class ElDiarioSections extends ArrayList<Section> {
         add(new Section("Cultura", 0));
         add(new Section("Agenda publica", 0));
 
-        add(new Section("Regiones", 0));
+        add(new Section("Regiones", -1));
         add(new Section("Andalucía", 1));
         add(new Section("Euskadi", 1));
         add(new Section("Catalunya", 1));
@@ -37,7 +37,7 @@ public class ElDiarioSections extends ArrayList<Section> {
         add(new Section("Galicia", 1));
         add(new Section("Canarias", 1));
 
-        add(new Section("Autores", 0));
+        add(new Section("Autores", -1));
         add(new Section("Ignacio Escolar", 1));
         add(new Section("Íñigo Saez de Ugarte", 1));
         add(new Section("Juan Luis Sánchez", 1));
@@ -60,7 +60,7 @@ public class ElDiarioSections extends ArrayList<Section> {
         add(new Section("Maruja Torres", 1));
         add(new Section("Carlos Elordi", 1));
 
-        add(new Section("Blogs", 0));
+        add(new Section("Blogs", -1));
         add(new Section("Escolar.net", 1));
         add(new Section("+Pikara", 1));
         add(new Section("Carta con pregunta", 1));

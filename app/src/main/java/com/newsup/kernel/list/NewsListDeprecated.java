@@ -4,19 +4,19 @@ import com.newsup.kernel.News;
 
 import java.util.ArrayList;
 
-public class NewsList extends ArrayList<News> {
+public class NewsListDeprecated extends ArrayList<News> {
 
     private static final long serialVersionUID = -4295930172654754706L;
 
-    public NewsList() {
+    public NewsListDeprecated() {
         super();
     }
 
-    public NewsList(NewsMap newsmap) {
+    public NewsListDeprecated(NewsMap newsmap) {
         super(newsmap);
     }
 
-    public NewsList(int size) {
+    public NewsListDeprecated(int size) {
         super(size);
     }
 }

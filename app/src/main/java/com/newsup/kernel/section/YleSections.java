@@ -32,7 +32,7 @@ public class YleSections extends ArrayList<Section> {
         add(new Section("Plus", 0));
         add(new Section("Ilmasto", 0));
 
-        add(new Section("Alueet", 0));
+        add(new Section("Alueet", -1));
         add(new Section("Etelä-Karjala", 1));
         add(new Section("Etelä-Savo", 1));
         add(new Section("Helsinki", 1));
@@ -52,7 +52,7 @@ public class YleSections extends ArrayList<Section> {
         add(new Section("Tampere", 1));
         add(new Section("Turku", 1));
 
-        add(new Section("Urheilu", 0));
+        add(new Section("Urheilu", -1));
         add(new Section("Pääuutiset", 1));
         add(new Section("Tuoreimmat uutiset", 1));
         add(new Section("Luetuimmat uutiset", 1));

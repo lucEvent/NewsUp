@@ -49,7 +49,7 @@ public class LaVanguardiaSections extends ArrayList<Section> {
 
         add(new Section("Participación", 0));
 
-        add(new Section("Corresponsales", 0));
+        add(new Section("Corresponsales", -1));
         add(new Section("Beirut: Tomás Alcoverro", 1));
         add(new Section("Pekín: Isidre Ambrós", 1));
         add(new Section("Moscú: Gonzalo Aragonés", 1));
@@ -67,7 +67,7 @@ public class LaVanguardiaSections extends ArrayList<Section> {
         add(new Section("Roma: Eusebio Val", 1));
         add(new Section("Jerusalén: Henrique Cymerman", 1));
 
-        add(new Section("Blogs Actualidad", 0));
+        add(new Section("Blogs Actualidad", -1));
         add(new Section("No digas que se te mueren las plantas", 1));
         add(new Section("Perspectiva europea", 1));
         add(new Section("Patologías urbanas", 1));
@@ -90,18 +90,18 @@ public class LaVanguardiaSections extends ArrayList<Section> {
         add(new Section("Valor añadido", 1));
         add(new Section("Guerreros del teclado", 1));
 
-        add(new Section("Blogs Gente", 0));
+        add(new Section("Blogs Gente", -1));
         add(new Section("Ailof", 1));
         add(new Section("Retwitteando", 1));
         add(new Section("Qué Llevas", 1));
 
-        add(new Section("Blogs Tecnología", 0));
+        add(new Section("Blogs Tecnología", -1));
         add(new Section("La Cafetera Rusa", 1));
         add(new Section("El Cuarto Bit", 1));
         add(new Section("The Fourth Bit", 1));
         add(new Section("Teclado Móvil", 1));
 
-        add(new Section("Blogs Cultura", 0));
+        add(new Section("Blogs Cultura", -1));
         add(new Section("Punto de lectura", 1));
         add(new Section("El arquero", 1));
         add(new Section("Jam Session", 1));
@@ -111,12 +111,12 @@ public class LaVanguardiaSections extends ArrayList<Section> {
         add(new Section("Cum Laude", 1));
         add(new Section("Barcelona gratis", 1));
 
-        add(new Section("Blogs Deportes", 0));
+        add(new Section("Blogs Deportes", -1));
         add(new Section("Planeta Mar", 1));
         add(new Section("Pase en profundidad", 1));
         add(new Section("ÑBA", 1));
 
-        add(new Section("Blogs Ficción y Humor", 0));
+        add(new Section("Blogs Ficción y Humor", -1));
         add(new Section("El último mono", 1));
 
     }

@@ -20,7 +20,7 @@ public class ElPeriodicoCaSections extends ArrayList<Section> {
         add(new Section("Oci i cultura", 0));
         add(new Section("Gent i TV", 0));
 
-        add(new Section("Ciutats", 0));
+        add(new Section("Ciutats", -1));
         add(new Section("Barcelona", 1));
         add(new Section("L'Hospitalet", 1));
         add(new Section("Cornellà", 1));
@@ -32,7 +32,7 @@ public class ElPeriodicoCaSections extends ArrayList<Section> {
         add(new Section("Canal Bellesa", 0));
         add(new Section("Motor", 0));
 
-        add(new Section("Blogs", 0));
+        add(new Section("Blogs", -1));
         add(new Section("Los restaurantes de Pau Arenós", 1));
         add(new Section("Your disco needs you", 1));
         add(new Section("I can hear music", 1));

@@ -60,6 +60,12 @@ public class BE_HelsinkiSanomatNewsReader extends BE_NewsReader {
         } else {
             content.select(".related-article,.embedded-ad,.credit,script").remove();
         }
+        for (org.jsoup.nodes.Element style : intro.select("[style]")) {
+            style.attr("style", "");
+        }
+        for (org.jsoup.nodes.Element style : content.select("[style]")) {
+            style.attr("style", "");
+        }
 
         news.content = intro.outerHtml() + content.html();
     }

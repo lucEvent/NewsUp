@@ -132,8 +132,14 @@ public class BE_LaVanguardiaNewsReader extends BE_NewsReader {
 
     @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, BE_News news) {
-        doc.select("script").remove();
+        //doc.select("script").remove();
+        //System.out.println(doc.html());
 
+        org.jsoup.select.Elements e = doc.select("[itemprop=\"articleBody\"]");
+
+        news.content = /*"<a href=\"" + news.link + "\">LINK</a>" +*/ e.html();
+
+        /*
         org.jsoup.select.Elements e = doc.select(".text,.video,.foto,.story-text");
 
         if (!e.isEmpty()) {
@@ -145,6 +151,15 @@ public class BE_LaVanguardiaNewsReader extends BE_NewsReader {
                 news.content = e.html();
             }
         }
+        */
+    }
+
+    protected org.jsoup.nodes.Document getDocument(String pagelink) {
+        try {
+            return org.jsoup.Jsoup.connect(pagelink).userAgent(USER_AGENT).get();
+        } catch (Exception e) {
+        }
+        return super.getDocument(pagelink);
     }
 
 }

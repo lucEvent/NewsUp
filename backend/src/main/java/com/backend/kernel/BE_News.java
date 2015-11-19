@@ -29,9 +29,9 @@ public class BE_News implements Comparable<BE_News> {
     public StringBuilder toEntry() {
         StringBuilder res = new StringBuilder("<item><title>");
         res.append(title);
-        res.append("</title><link><![CDATA[");
+        res.append("</title><link>");
         res.append(link);
-        res.append("]]></link><date>");
+        res.append("</link><date>");
         res.append(date);
         res.append("</date><description>");
         res.append(description);

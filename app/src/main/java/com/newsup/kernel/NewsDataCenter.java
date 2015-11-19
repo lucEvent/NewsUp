@@ -7,7 +7,6 @@ import android.os.Handler;
 
 import com.newsup.io.DBManager;
 import com.newsup.io.SDManager;
-import com.newsup.kernel.list.NewsList;
 import com.newsup.kernel.list.NewsMap;
 import com.newsup.kernel.list.SiteList;
 import com.newsup.kernel.util.Date;
@@ -16,6 +15,7 @@ import com.newsup.settings.AppSettings;
 import com.newsup.settings.SiteSettings;
 import com.newsup.task.TaskMessage;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 
 public class NewsDataCenter implements TaskMessage {
@@ -86,6 +86,8 @@ public class NewsDataCenter implements TaskMessage {
 
     private class NewsLoader extends Thread implements com.newsup.task.Socket {
 
+        private NewsMap tempNewslist;
+
         private final Site site;
         private final int[] sections;
 
@@ -98,42 +100,44 @@ public class NewsDataCenter implements TaskMessage {
         @Override
         public void run() {
             debug("Leyendo de site: " + site.name);
-            site.news = new NewsList();
+            tempNewslist = new NewsMap();
 
             int[] finalSections = sections;
             if (finalSections == null) {
                 finalSections = getSettingsOf(site).sectionsOnMainIntegerArray();
             }
 
-            newsreader.readNews(site, finalSections, this);
+            newsreader.readNewsHeader(site, finalSections, this);
 
-            getSiteHistorial(site);
+            getSiteHistory(site);
 
             int failCounter = 0;
-            for (News N : site.news) {
-                // Mirar si esta en el historial
-                if (site.historial.add(N)) {
-                    // Si no, leer el contenido
-                    if (N.content == null || N.content.isEmpty()) {
+            for (News N : tempNewslist) {
+
+                if (site.history.add(N)) {  // if added, it means it was not in yet, so:
+
+                    if (N.content == null || N.content.isEmpty()) {  // We read the content (if needed)
                         newsreader.readNewsContent(site, N);
                     }
-                    // Si se ha podido leer el contenido
-                    if (N.content != null && !N.content.isEmpty()) {
-                        // insertar en la BD
-                        try {
+
+                    if (N.content != null && !N.content.isEmpty()) { // If there is content, we save it...
+
+                        try {   // We insert it in the database
                             dbmanager.insertNews(site.code, N);
                         } catch (Exception e) {
                             debug("[Error al insertar la noticia en la BD");
                         }
-                        // guardar el contenido en disco
-                        sdmanager.saveNews(N);
+                        sdmanager.saveNews(N); // and we save it in the disc
+
                     } else {
+
                         failCounter++;
-                        site.historial.remove(N);
+                        site.history.remove(N); // ... if there isn't content, we remove it from the history
+
                     }
                 } else {
-                    // Si esta, asignar id para que al clickar se lea
-                    N.id = site.historial.ceiling(N).id;
+
+                    N.id = site.history.ceiling(N).id; // If not added, it means it already is in, so we
                 }
             }
             debug("[" + site.name + "] Noticias que ha sido imposible leer:: " + failCounter);
@@ -145,7 +149,7 @@ public class NewsDataCenter implements TaskMessage {
                 case NEWS_READ:
                     News news = (News) dataAttached;
                     news.site = site;
-                    site.news.add(news);
+                    tempNewslist.add(news);
                     handler.obtainMessage(taskMessage, dataAttached).sendToTarget();
                     break;
                 case ERROR:
@@ -162,13 +166,13 @@ public class NewsDataCenter implements TaskMessage {
         return news;
     }
 
-    public Site getSiteHistorial(Site site) {
-        if (site.historial == null || site.historial.isEmpty()) {
+    public Site getSiteHistory(Site site) {
+        if (site.history == null || site.history.isEmpty()) {
             try {
-                site.historial = dbmanager.readNews(site);
+                site.history = dbmanager.readNews(site);
             } catch (Exception e) {
                 dbmanager = new DBManager(context);
-                return getSiteHistorial(site);
+                return getSiteHistory(site);
             }
         }
         return site;
@@ -187,7 +191,7 @@ public class NewsDataCenter implements TaskMessage {
         public void run() {
             handler.obtainMessage(NO_INTERNET, null).sendToTarget();
 
-            getSiteHistorial(site);
+            getSiteHistory(site);
 
             NewsMap reorder = new NewsMap(new Comparator<News>() {
 
@@ -197,7 +201,7 @@ public class NewsDataCenter implements TaskMessage {
                     return comparison != 0 ? comparison : (o1.id < o2.id ? -1 : (o1.id == o2.id ? 0 : 1));
                 }
             });
-            reorder.addAll(site.historial);
+            reorder.addAll(site.history);
 
             handler.obtainMessage(NEWS_READ_HISTORY, reorder).sendToTarget();
         }
@@ -267,8 +271,7 @@ public class NewsDataCenter implements TaskMessage {
         sdmanager.wipeData();
         dbmanager.wipeData();
         for (Site s : getSites()) {
-            s.historial = new NewsMap();
-            s.news = new NewsList();
+            s.history = new NewsMap();
         }
     }
 

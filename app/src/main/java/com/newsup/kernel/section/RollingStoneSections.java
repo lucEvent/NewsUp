@@ -22,7 +22,7 @@ public class RollingStoneSections extends ArrayList<Section> {
         add(new Section("Sports", 0));
         add(new Section("All videos", 0));
 
-        add(new Section("Authors", 0));
+        add(new Section("Authors", -1));
         add(new Section("Rob Sheffield", 1));
         add(new Section("David Fricke", 1));
         add(new Section("Tim Dickinson", 1));

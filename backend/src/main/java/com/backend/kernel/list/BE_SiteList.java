@@ -77,9 +77,9 @@ public class BE_SiteList extends ArrayList<BE_Site> {
 
     }
 
-    public BE_Site getSiteByName(String site_name) {
+    public BE_Site getSiteByCode(int code) {
         for (BE_Site site : this) {
-            if (site.name.equals(site_name)) {
+            if (site.code == code) {
                 return site;
             }
         }

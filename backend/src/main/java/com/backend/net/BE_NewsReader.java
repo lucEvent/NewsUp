@@ -7,11 +7,12 @@ import com.backend.kernel.list.BE_Sections;
 
 import java.util.ArrayList;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 public abstract class BE_NewsReader {
+
+    public static final String USER_AGENT = "Mozilla/5.0 (Linux; Android 4.4.2; GT-I9300 Build/KVT49L) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.94 Mobile Safari/537.36";
+    //   public static final String USER_AGENT2 = " Mozilla/5.0 (Linux; U; Android 4.0.3; ko-kr; LG-L160L Build/IML74K) AppleWebkit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30";
 
     protected static final int HASH_TITLE = "title".hashCode();
     protected static final int HASH_LINK = "link".hashCode();
@@ -53,8 +54,8 @@ public abstract class BE_NewsReader {
         Elements items = doc.select("item");
         for (org.jsoup.nodes.Element item : items) {
             String title = "", link = "", guided = "", description = "", date = "", content = "";
-            ArrayList<String> categories = new ArrayList<String>();
-            ArrayList<BE_Enclosure> enclosures = new ArrayList<BE_Enclosure>();
+            ArrayList<String> categories = new ArrayList<>();
+            ArrayList<BE_Enclosure> enclosures = new ArrayList<>();
 
             //TODO Arraylist de opciones que se van quitando y lo hace mas eficiente
             Elements props = item.getAllElements();
@@ -77,7 +78,7 @@ public abstract class BE_NewsReader {
                     }
                     index = link.indexOf('?');
                     if (index != -1) {
-                        link = link.split("?")[0];
+                        link = link.split("\\?")[0];
                     }
                     continue;
                 }
@@ -101,7 +102,7 @@ public abstract class BE_NewsReader {
                     }
                     index = guided.indexOf('?');
                     if (index != -1) {
-                        guided = guided.split("?")[0];
+                        guided = guided.split("\\?")[0];
                     }
                     continue;
                 }
@@ -125,16 +126,14 @@ public abstract class BE_NewsReader {
         return news;
     }
 
-    protected Document getDocument(String pagelink) {
+    protected org.jsoup.nodes.Document getDocument(String pagelink) {
         try {
-            return Jsoup.connect(pagelink).get();
+            return org.jsoup.Jsoup.connect(pagelink).userAgent(USER_AGENT).get();
         } catch (Exception e) {
             debug("[" + e.getClass().getSimpleName() + "] Intentando nuevamente");
         }
         try {
-            return Jsoup.connect(pagelink).userAgent("Mozilla/5.0 (Linux; Android 4.4.2; GT-I9300 Build/KVT49L) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.94 Mobile Safari/537.36").get();
-        } catch (java.net.SocketTimeoutException e) {
-            debug("SocketTimeoutException con: " + pagelink);
+            return org.jsoup.Jsoup.connect(pagelink).get();
         } catch (Exception e) {
             debug("[" + e.getClass().getSimpleName() + "] No se ha podido leer: " + pagelink);
         }
@@ -145,9 +144,9 @@ public abstract class BE_NewsReader {
         org.jsoup.nodes.Document doc = getDocument(news.link);
         if (doc != null) {
             readNewsContent(doc, news);
-            if (news.content == null || news.content.isEmpty()) {
-                //  debug("[NO SE HA ENCONTRADO EL CONTENIDO] " + news.link);
-            }
+           /* if (news.content == null || news.content.isEmpty()) {
+                  debug("[NO SE HA ENCONTRADO EL CONTENIDO] " + news.link);
+            }*/
         }
         return news;
     }
