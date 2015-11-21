@@ -115,12 +115,12 @@ public class SDManager {
             ObjectInputStream in = new ObjectInputStream(context.openFileInput("sapp"));
 
             int nitems = in.readInt();
-            result.main_sites_i = new int[nitems];
-            for (int i = 0; i < nitems; ++i) result.main_sites_i[i] = in.readInt();
+            result.MAIN_CODES = new int[nitems];
+            for (int i = 0; i < nitems; ++i) result.MAIN_CODES[i] = in.readInt();
 
             nitems = in.readInt();
-            result.favorite_list = new ArrayList<Integer>();
-            for (int i = 0; i < nitems; ++i) result.favorite_list.add(in.readInt());
+            result.FAV_CODES = new ArrayList<Integer>();
+            for (int i = 0; i < nitems; ++i) result.FAV_CODES.add(in.readInt());
 
             in.close();
 
@@ -134,11 +134,11 @@ public class SDManager {
         try {
             ObjectOutputStream out = new ObjectOutputStream(context.openFileOutput("sapp", Context.MODE_PRIVATE));
 
-            out.writeInt(settings.main_sites_i.length);
-            for (int value : settings.main_sites_i) out.writeInt(value);
+            out.writeInt(settings.MAIN_CODES.length);
+            for (int value : settings.MAIN_CODES) out.writeInt(value);
 
-            out.writeInt(settings.favorite_list.size());
-            for (int value : settings.favorite_list) out.writeInt(value);
+            out.writeInt(settings.FAV_CODES.size());
+            for (int value : settings.FAV_CODES) out.writeInt(value);
 
             out.close();
         } catch (Exception e) {

@@ -20,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.newsup.dialog.SiteConfiguration;
-import com.newsup.kernel.MainPageCenter;
 import com.newsup.kernel.News;
 import com.newsup.kernel.NewsDataCenter;
 import com.newsup.kernel.Site;
@@ -46,7 +45,6 @@ public class Main extends ListActivity implements TaskMessage {
      * Kernel layer
      **/
     private static NewsDataCenter datamanager;
-    private static MainPageCenter mainpagecenter;
     private static SiteList sites;
     private static Site currentSite;
     private static boolean displayingNews;
@@ -70,8 +68,6 @@ public class Main extends ListActivity implements TaskMessage {
 
         datamanager = new NewsDataCenter(this, cm, handler);
         sites = datamanager.getSites();
-        mainpagecenter = new MainPageCenter(this.datamanager, cm, handler);
-
 
         newsView = new NewsView(this, datamanager, handler);
         actionBar = new ActionBarManager();
@@ -111,12 +107,12 @@ public class Main extends ListActivity implements TaskMessage {
         newslister.clear();
 
         if (site == null) {
-            mainpagecenter.loadNews();
+            datamanager.load_Mainpage_News();
             setTitle(Site.MAIN_NAME);
 
             getListView().setBackgroundColor(Site.MAIN_COLOR);
         } else {
-            datamanager.getNews(site, sections);
+            datamanager.load_News_from(site, sections);
             setTitle(site.name);
             getListView().setBackgroundColor(site.color);
         }

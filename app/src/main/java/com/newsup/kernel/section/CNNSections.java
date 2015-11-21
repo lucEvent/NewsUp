@@ -21,7 +21,6 @@ public class CNNSections extends ArrayList<Section> {
 
         add(new Section("Money", 0));
         add(new Section("Technology", 0));
-        add(new Section("Science & Space", 0));
         add(new Section("Entertainment", 0));
         add(new Section("Politics", 0));
         add(new Section("Health", 0));
@@ -39,7 +38,6 @@ public class CNNSections extends ArrayList<Section> {
 
         add(new Section("Student News", 0));
         add(new Section("iReports on CNN", 0));
-        add(new Section("The Buzz", 0));
         add(new Section("Small Business", 0));
 
     }

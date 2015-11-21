@@ -1,15 +1,12 @@
 package com.newsup.net.dev;
 
-import com.newsup.kernel.Section;
-import com.newsup.kernel.list.SectionList;
-import com.newsup.net.NewsReader;
+import com.newsup.net.NewsReaderDeprecated;
 
-public class SwedroidNewsReader extends NewsReader {
+public class SwedroidNewsReader extends NewsReaderDeprecated {
 
     public SwedroidNewsReader() {
         super();
 
-        SECTIONS = new SectionList();
         SECTIONS.add(new SectionDeprecated("Start", 0, "http://www.swedroid.se/feed/"));
 
         SECTIONS.add(new SectionDeprecated("Artiklar", 0, null));

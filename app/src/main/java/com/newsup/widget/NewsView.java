@@ -29,7 +29,7 @@ public class NewsView {
 
     private WebView newsView;
     private TextView title;
-    private ImageButton bshare, bbookmark;
+    private ImageButton bbookmark;
 
     public NewsView(Activity context, NewsDataCenter dataCenter, Handler handler) {
         this.context = context;
@@ -55,8 +55,7 @@ public class NewsView {
 
         title = (TextView) view.findViewById(R.id.title);
 
-        bshare = (ImageButton) view.findViewById(R.id.button_share);
-        bshare.setOnClickListener(onShareListener);
+        view.findViewById(R.id.button_share).setOnClickListener(onShareListener);
 
         bbookmark = (ImageButton) view.findViewById(R.id.button_bookmark);
         bbookmark.setOnClickListener(onBookmarkListener);
@@ -66,16 +65,18 @@ public class NewsView {
     private News currentNews;
 
     private final String css = "<style>img, iframe, video,figure {width: 100%; height: auto; margin: 0} div > h2 > a > img {width: auto;}</style>";
+    private final String fontcss = "<style>" +
+            "@font-face { font-family: customfont; src: url(\"fonts/customfont.woff\"); }" +
+            "body { font-family: customfont; font-weight: 300; font-size: 16px; line-height: 1.67; }" +
+            "</style>";
 
     public boolean displayNews(News news) {
         this.currentNews = news;
 
-        if (news.content == null) {
-            return false;
-        }
+        if (news.content == null) return false;
 
         title.setText(news.title);
-        newsView.loadData(css + news.content, "text/html; charset=UTF-8", null);
+        newsView.loadDataWithBaseURL("file:///android_asset/", css + fontcss + news.content, "text/html", "utf-8", null);
 
         setBookmarkButtonImage();
 
@@ -99,10 +100,6 @@ public class NewsView {
         newsView.clearCache(true);
 
         title.setText("");
-    }
-
-    public boolean isShown() {
-        return view.isShown();
     }
 
     private View.OnClickListener onBookmarkListener = new View.OnClickListener() {
@@ -135,6 +132,7 @@ public class NewsView {
 
     private static final int DEFAULT_WAITING_TIME = 3000;
     private int mstime = 0;
+    //TODO To Improve
     private View.OnTouchListener onNewsViewTouchListener = new View.OnTouchListener() {
 
         @Override

@@ -1,15 +1,12 @@
 package com.newsup.net.dev;
 
-import com.newsup.kernel.Section;
-import com.newsup.kernel.list.SectionList;
-import com.newsup.net.NewsReader;
+import com.newsup.net.NewsReaderDeprecated;
 
-public class SpaceNewsNewsReader extends NewsReader {
+public class SpaceNewsNewsReader extends NewsReaderDeprecated {
 
     public SpaceNewsNewsReader() {
         super();
 
-        SECTIONS = new SectionList();
         SECTIONS.add(new SectionDeprecated("Space news", 0, "http://spacenews.com/feed/"));
         SECTIONS.add(new SectionDeprecated("News", 0, "http://spacenews.com/segment/news/feed/"));
         SECTIONS.add(new SectionDeprecated("Opinion", 0, "http://spacenews.com/segment/opinion/feed/"));

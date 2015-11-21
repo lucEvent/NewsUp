@@ -36,6 +36,7 @@ public abstract class NewsReaderDeprecated {
 
     public NewsReaderDeprecated(boolean catchEnclosures) {
         this.catchEnclosures = catchEnclosures;
+        SECTIONS = new SectionList();
     }
 
     public final void readNews(int[] sections, Socket handler) {
@@ -43,7 +44,7 @@ public abstract class NewsReaderDeprecated {
         for (int isection : sections) {
             debug("Leyendo: " + this.getClass().getSimpleName() + ". Section: " + SECTIONS.get(isection).name);
             Section section = SECTIONS.get(isection);
-        //    readRssPage(handler, section.link);
+            //    readRssPage(handler, section.link);
         }
 
     }

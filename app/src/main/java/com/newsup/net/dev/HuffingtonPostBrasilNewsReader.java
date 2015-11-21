@@ -1,16 +1,12 @@
 package com.newsup.net.dev;
 
-import com.newsup.kernel.Section;
-import com.newsup.kernel.list.SectionList;
-import com.newsup.net.NewsReader;
+import com.newsup.net.NewsReaderDeprecated;
 
-
-public class HuffingtonPostBrasilNewsReader extends NewsReader {
+public class HuffingtonPostBrasilNewsReader extends NewsReaderDeprecated {
 
     public HuffingtonPostBrasilNewsReader() {
         super();
 
-        SECTIONS = new SectionList();
         SECTIONS.add(new SectionDeprecated("Brasil", 0, "http://www.brasilpost.com.br/feeds/verticals/brazil/news.xml"));
         SECTIONS.add(new SectionDeprecated("País", 1, "http://www.brasilpost.com.br/news/pais/feed/"));
         SECTIONS.add(new SectionDeprecated("Mundo", 1, "http://www.brasilpost.com.br/news/brasil-mundo/feed/"));

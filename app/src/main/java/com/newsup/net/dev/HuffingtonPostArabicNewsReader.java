@@ -1,9 +1,8 @@
 package com.newsup.net.dev;
 
-import com.newsup.kernel.Section;
-import com.newsup.net.NewsReader;
+import com.newsup.net.NewsReaderDeprecated;
 
-public class HuffingtonPostArabicNewsReader extends NewsReader {
+public class HuffingtonPostArabicNewsReader extends NewsReaderDeprecated {
 
     public HuffingtonPostArabicNewsReader() {
         super();

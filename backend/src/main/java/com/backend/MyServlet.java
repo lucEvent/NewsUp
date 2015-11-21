@@ -26,6 +26,9 @@ public class MyServlet extends HttpServlet {
     private void processPetition(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         initializeData();
 
+        resp.setContentType("text/plain");
+        resp.setCharacterEncoding("utf-8");
+
         if (req.getParameter("index") != null) {
 
             String site_request = req.getParameter("site");
@@ -47,7 +50,6 @@ public class MyServlet extends HttpServlet {
             }
             sb.append("</channel>");
 
-            resp.setContentType("text/plain");
 //        PrintWriter out = response.getWriter();
             resp.getWriter().println(sb.toString());
 
@@ -64,27 +66,24 @@ public class MyServlet extends HttpServlet {
             BE_News prey = site.news.ceiling(bait);
 
             if (prey != null && prey.compareTo(bait) == 0) {
-                System.out.println("Buscando contenido");
                 if (prey.content == null) {
-                    System.out.println("Era null asi que se busca");
                     site.getReader().readNewsContent(prey);
                 }
-                resp.setContentType("text/plain");
+
                 if (prey.content == null) {
                     resp.getWriter().println("");
                 } else {
-                    System.out.println("No es null asi que se envia");
                     resp.getWriter().println(prey.content);
                 }
             }
         } else if (req.getParameter("debug") != null) {
 
-            BE_Site site = sites.getSiteByCode(11);
-            ///debug
+            BE_Site site = sites.getSiteByCode(600);
+
             BE_News news = new ArrayList<BE_News>(site.news).get(Integer.parseInt(req.getParameter("i")));
             site.getReader().readNewsContent(news);
-            resp.getWriter().println(news.content);
 
+            resp.getWriter().println(news.content);
             //end debug
         }
     }
@@ -105,7 +104,6 @@ public class MyServlet extends HttpServlet {
 /*        //Posible support for more than 1 site request per request
         String[] news_requests = req.getParameterValues("site");
 
-        resp.setContentType("text/plain");
 
         for (String site_request : news_requests) {
             int l = site_request.indexOf("(");

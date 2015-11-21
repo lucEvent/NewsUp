@@ -1,14 +1,12 @@
 package com.newsup.net.dev;
 
-import com.newsup.kernel.list.SectionList;
-import com.newsup.net.NewsReader;
+import com.newsup.net.NewsReaderDeprecated;
 
-public class DiarioCordobaNewsReader extends NewsReader {
+public class DiarioCordobaNewsReader extends NewsReaderDeprecated {
 
     public DiarioCordobaNewsReader() {
         super();
 
-        SECTIONS = new SectionList();
         SECTIONS.add(new SectionDeprecated("Portada", 0, "http://zetaestaticos.com/cordoba/rss/portada_es.xml"));
         SECTIONS.add(new SectionDeprecated("Última hora", 0, "http://zetaestaticos.com/cordoba/rss/ultimahora_es.xml"));
         SECTIONS.add(new SectionDeprecated("Alto Guadalquivir", 0, "http://zetaestaticos.com/cordoba/rss/233_es.xml"));

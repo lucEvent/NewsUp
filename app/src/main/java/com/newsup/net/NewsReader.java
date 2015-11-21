@@ -7,7 +7,7 @@ import com.newsup.kernel.list.Tags;
 import com.newsup.task.Socket;
 import com.newsup.task.TaskMessage;
 
-public class NewsReader {
+public final class NewsReader {
 
     private static final String query_index = "http://newsup-2406.appspot.com/request?index&site=";
     private static final String query_content = "http://newsup-2406.appspot.com/request?content&site=";
@@ -96,7 +96,7 @@ public class NewsReader {
     public final News readNewsContent(Site site, News news) {
 
         String query = query_content + site.code + "&date=" + news.date + "&link=" + news.link;
-
+  debug(query);
         org.jsoup.nodes.Document doc = getDocument(query);
         if (doc != null) {
             String content = doc.html();

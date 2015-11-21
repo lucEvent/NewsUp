@@ -1,15 +1,12 @@
 package com.newsup.net.dev;
 
-import com.newsup.kernel.Section;
-import com.newsup.kernel.list.SectionList;
-import com.newsup.net.NewsReader;
+import com.newsup.net.NewsReaderDeprecated;
 
-public class ElJuevesNewsReader extends NewsReader {
+public class ElJuevesNewsReader extends NewsReaderDeprecated {
 
     public ElJuevesNewsReader() {
         super();
 
-        SECTIONS = new SectionList();
         SECTIONS.add(new SectionDeprecated("Principal", 0, "http://www.eljueves.es/feeds/rss.html"));
 
     }

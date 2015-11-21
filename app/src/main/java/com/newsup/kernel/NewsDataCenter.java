@@ -15,8 +15,7 @@ import com.newsup.settings.AppSettings;
 import com.newsup.settings.SiteSettings;
 import com.newsup.task.TaskMessage;
 
-import java.util.ArrayList;
-import java.util.Comparator;
+import java.sql.SQLOutput;
 
 public class NewsDataCenter implements TaskMessage {
 
@@ -70,23 +69,23 @@ public class NewsDataCenter implements TaskMessage {
         return sites;
     }
 
-    public NewsReader getNewsreader() {
-        return newsreader;
-    }
+    public void load_News_from(Site site, int[] sections) {
 
-    public void getNews(Site site, int[] sections) {
+        if (isInternetAvailable()) new NewsLoader(site, sections);
 
-        if (isInternetAvailable()) {
-            new NewsLoader(site, sections);
-        } else {
-            new NoInternetTask(site);
-        }
+        else new NoInternetTask(site);
 
     }
 
-    private class NewsLoader extends Thread implements com.newsup.task.Socket {
+    public void load_Mainpage_News() {
 
-        private NewsMap tempNewslist;
+        if (isInternetAvailable()) new NewsLoader();
+
+        else new NoInternetTask(null);
+
+    }
+
+    private class NewsLoader {
 
         private final Site site;
         private final int[] sections;
@@ -94,25 +93,142 @@ public class NewsDataCenter implements TaskMessage {
         NewsLoader(Site site, int[] sections) {
             this.site = site;
             this.sections = sections;
-            this.start();
+            new Thread(task_load_news_from).start();
+        }
+
+        private Runnable task_load_news_from = new Runnable() {
+
+            private NewsMap tempNewslist;
+
+            @Override
+            public void run() {
+                debug("Leyendo de site: " + site.name);
+                tempNewslist = new NewsMap();
+
+                int[] finalSections = sections;
+                if (finalSections == null) {
+                    finalSections = getSettingsOf(site).sectionsOnMainIntegerArray();
+                }
+/*
+No estaba date:1447977600000 [Huippu­kapellimestari]
+11-20 01:29:10.200 24417-24875/com.newsup D/##NewsReader##: http://newsup-2406.appspot.com/request?content&site=405&date=1447977600000&link=http://www.hs.fi/kulttuuri/a1447903914248
+11-20 01:29:10.540 24417-24875/com.newsup D/##NewsDataCenter##: No estaba date:1447977600000 [Venäjän]
+ */
+                newsreader.readNewsHeader(site, finalSections, socket);
+
+                getSiteHistory(site);
+                handler.obtainMessage(NEWS_READ_HISTORY, site.history).sendToTarget();
+
+                int failCounter = 0;
+                for (News N : tempNewslist) {
+
+                    if (site.history.add(N)) {  // if added, it means it was not in yet, so:
+
+                        if (N.content == null || N.content.isEmpty()) {  // We read the content (if needed)
+                            newsreader.readNewsContent(site, N);
+                        }
+
+                        if (N.content != null && !N.content.isEmpty()) { // If there is content, we save it...
+
+                            try {   // We insert it in the database
+                                dbmanager.insertNews(site.code, N);
+                            } catch (Exception e) {
+                                debug("[Error al insertar la noticia en la BD");
+                            }
+                            sdmanager.saveNews(N); // and we save it in the disc
+
+                        } else {
+
+                            failCounter++;
+                            site.history.remove(N); // ... if there isn't content, we remove it from the history
+
+                        }
+                    } else {
+
+                        N.id = site.history.ceiling(N).id; // If not added, it means it already is in, so we
+                    }
+                }
+                debug("[" + site.name + "] Noticias que ha sido imposible leer:: " + failCounter);
+            }
+
+            com.newsup.task.Socket socket = new com.newsup.task.Socket() {
+
+                @Override
+                public void message(int taskMessage, Object dataAttached) {
+                    switch (taskMessage) {
+                        case NEWS_READ:
+                            News news = (News) dataAttached;
+                            news.site = site;
+                            tempNewslist.add(news);
+                            handler.obtainMessage(taskMessage, dataAttached).sendToTarget();
+                            break;
+                        case ERROR:
+                            debug("Error recibido por el Handler");
+                            break;
+                    }
+                }
+            };
+        };
+
+        NewsLoader() {
+            site = null;
+            sections = null;
+            new Thread(task_load_mainpage_news).start();
+        }
+
+        private Runnable task_load_mainpage_news = new Runnable() {
+
+            @Override
+            public void run() {
+                SiteList sites = getSites();
+
+                NewsSiteLoader[] tasks = new NewsSiteLoader[AppSettings.MAIN_CODES.length];
+
+                for (int i = 0; i < AppSettings.MAIN_CODES.length; ++i) {
+                    tasks[i] = new NewsSiteLoader(sites.getSiteByCode(AppSettings.MAIN_CODES[i]));
+                    tasks[i].start();
+                }
+
+                for (NewsSiteLoader task : tasks) {
+                    try {
+                        task.join();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    NewsMap newstosave = task.newsToSave;
+                    for (News N : newstosave) {
+                        createNews(task.site.code, N);
+                        saveNews(N);
+                    }
+                }
+                debug("Acabando en NewsLoader");
+            }
+        };
+    }
+
+    private class NewsSiteLoader extends Thread implements com.newsup.task.Socket {
+
+        final Site site;
+
+        NewsMap newsTempList;
+        NewsMap newsToSave;
+
+        NewsSiteLoader(Site site) {
+            this.site = site;
         }
 
         @Override
         public void run() {
-            debug("Leyendo de site: " + site.name);
-            tempNewslist = new NewsMap();
-
-            int[] finalSections = sections;
-            if (finalSections == null) {
-                finalSections = getSettingsOf(site).sectionsOnMainIntegerArray();
-            }
-
-            newsreader.readNewsHeader(site, finalSections, this);
+            newsTempList = new NewsMap();
+            newsToSave = new NewsMap();
 
             getSiteHistory(site);
 
-            int failCounter = 0;
-            for (News N : tempNewslist) {
+            int[] sections = getSettingsOf(site).sectionsOnMainIntegerArray();
+            newsreader.readNewsHeader(site, sections, this);
+
+            for (News N : newsTempList) {
 
                 if (site.history.add(N)) {  // if added, it means it was not in yet, so:
 
@@ -122,35 +238,30 @@ public class NewsDataCenter implements TaskMessage {
 
                     if (N.content != null && !N.content.isEmpty()) { // If there is content, we save it...
 
-                        try {   // We insert it in the database
-                            dbmanager.insertNews(site.code, N);
-                        } catch (Exception e) {
-                            debug("[Error al insertar la noticia en la BD");
-                        }
-                        sdmanager.saveNews(N); // and we save it in the disc
+                        newsToSave.add(N); // ... in the buffer. The master thread will save it in DB and disc
 
                     } else {
 
-                        failCounter++;
                         site.history.remove(N); // ... if there isn't content, we remove it from the history
 
                     }
                 } else {
 
                     N.id = site.history.ceiling(N).id; // If not added, it means it already is in, so we
+
                 }
             }
-            debug("[" + site.name + "] Noticias que ha sido imposible leer:: " + failCounter);
         }
 
         @Override
-        public void message(int taskMessage, Object dataAttached) {
-            switch (taskMessage) {
+        public void message(int message, Object dataAttached) {
+            switch (message) {
                 case NEWS_READ:
+                    handler.obtainMessage(message, dataAttached).sendToTarget();
+
                     News news = (News) dataAttached;
                     news.site = site;
-                    tempNewslist.add(news);
-                    handler.obtainMessage(taskMessage, dataAttached).sendToTarget();
+                    newsTempList.add(news);
                     break;
                 case ERROR:
                     debug("Error recibido por el Handler");
@@ -191,19 +302,25 @@ public class NewsDataCenter implements TaskMessage {
         public void run() {
             handler.obtainMessage(NO_INTERNET, null).sendToTarget();
 
-            getSiteHistory(site);
+            if (site != null) {
 
-            NewsMap reorder = new NewsMap(new Comparator<News>() {
+                getSiteHistory(site);
+                handler.obtainMessage(NEWS_READ_HISTORY, site.history).sendToTarget();
 
-                @Override
-                public int compare(News o1, News o2) {
-                    int comparison = -Date.compare(o1.date, o2.date);
-                    return comparison != 0 ? comparison : (o1.id < o2.id ? -1 : (o1.id == o2.id ? 0 : 1));
+            } else {
+
+                SiteList sites = getSites();
+
+                for (int isite : AppSettings.MAIN_CODES) {
+                    Site site = sites.getSiteByCode(isite);
+
+                    site = getSiteHistory(site);
+
+                    handler.obtainMessage(NEWS_READ_HISTORY, site.history).sendToTarget();
                 }
-            });
-            reorder.addAll(site.history);
 
-            handler.obtainMessage(NEWS_READ_HISTORY, reorder).sendToTarget();
+            }
+
         }
     }
 
@@ -240,25 +357,23 @@ public class NewsDataCenter implements TaskMessage {
 
     public SiteList getFavoritesSites() {
         SiteList list = new SiteList();
-        for (int i = 0; i < AppSettings.favorite_list.size(); ++i) {
-            list.add(sites.get(AppSettings.favorite_list.get(i)));
+        for (int i = 0; i < AppSettings.FAV_CODES.size(); ++i) {
+            list.add(sites.getSiteByCode(AppSettings.FAV_CODES.get(i)));
         }
         return list;
     }
 
     public boolean isFavorite(Site site) {
-        int position = sites.indexOf(site);
-        for (int i = 0; i < AppSettings.favorite_list.size(); ++i)
-            if (position == AppSettings.favorite_list.get(i)) return true;
+        for (int i = 0; i < AppSettings.FAV_CODES.size(); ++i)
+            if (site.code == AppSettings.FAV_CODES.get(i)) return true;
         return false;
     }
 
     public void toggleFavorite(Site site) {
-        int position = sites.indexOf(site);
         if (isFavorite(site)) {
-            appSettings.setSetting(AppSettings.DEL_FAV_SITE, position);
+            appSettings.setSetting(AppSettings.DEL_FAV_CODE, site.code);
         } else {
-            appSettings.setSetting(AppSettings.ADD_FAV_SITE, position);
+            appSettings.setSetting(AppSettings.ADD_FAV_CODE, site.code);
         }
         sdmanager.saveSettings(appSettings);
     }

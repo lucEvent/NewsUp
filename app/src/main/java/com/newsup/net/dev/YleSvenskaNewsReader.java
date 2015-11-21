@@ -1,15 +1,12 @@
 package com.newsup.net.dev;
 
-import com.newsup.kernel.Section;
-import com.newsup.kernel.list.SectionList;
-import com.newsup.net.NewsReader;
+import com.newsup.net.NewsReaderDeprecated;
 
-public class YleSvenskaNewsReader extends NewsReader {
+public class YleSvenskaNewsReader extends NewsReaderDeprecated {
 
     public YleSvenskaNewsReader() {
         super();
 
-        SECTIONS = new SectionList();
         SECTIONS.add(new SectionDeprecated("Paradsida", 0, "http://svenska.yle.fi/nyheter/rss_parad.rss"));
         SECTIONS.add(new SectionDeprecated("Inrikes", 0, "http://svenska.yle.fi/rss/inrikes"));
         SECTIONS.add(new SectionDeprecated("Utrikes", 0, "http://svenska.yle.fi/rss/utrikes"));

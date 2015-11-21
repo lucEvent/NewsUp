@@ -53,6 +53,7 @@
     <string name="close">Cerrar</string>
     <string name="title_newsnotfound">Oops... La app es genial pero aun no puede leer esta notícia</string>
     <string name="message_newsnotfound">Qué hacemos?</string>
+    <string name="msg_no_site_picked">Ohh! No has seleccionado nada</string>
 
 
 </resources>

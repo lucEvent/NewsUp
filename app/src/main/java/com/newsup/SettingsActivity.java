@@ -132,14 +132,13 @@ public final class SettingsActivity extends ListActivity implements Socket {
         }
 
         void setUpMainSites() {
-            AppSettings settings = data.getSettings();
-            lab_sitesTitle.setText(getString(R.string.mainsites) + settings.main_sites_i.length);
+            lab_sitesTitle.setText(getString(R.string.mainsites) + AppSettings.MAIN_CODES.length);
 
             SiteList sites = data.getSites();
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < settings.main_sites_i.length; ++i) {
+            for (int i = 0; i < AppSettings.MAIN_CODES.length; ++i) {
                 if (i != 0) sb.append(", ");
-                sb.append(sites.get(settings.main_sites_i[i]).name);
+                sb.append(sites.getSiteByCode(AppSettings.MAIN_CODES[i]).name);
             }
             lab_sitesSubtitle.setText(sb.toString());
         }

@@ -1,15 +1,12 @@
 package com.newsup.net.dev;
 
-import com.newsup.kernel.Section;
-import com.newsup.kernel.list.SectionList;
-import com.newsup.net.NewsReader;
+import com.newsup.net.NewsReaderDeprecated;
 
-public class HuffingtonPostUSANewsReader extends NewsReader {
+public class HuffingtonPostUSANewsReader extends NewsReaderDeprecated {
 
     public HuffingtonPostUSANewsReader() {
         super();
 
-        SECTIONS = new SectionList();
         SECTIONS.add(new SectionDeprecated("Main", 0, "http://www.huffingtonpost.com/feeds/index.xml"));
         SECTIONS.add(new SectionDeprecated("Arts & Culture", 0, "http://www.huffingtonpost.com/feeds/verticals/arts/index.xml"));
         SECTIONS.add(new SectionDeprecated("Black Voices", 0, "http://www.huffingtonpost.com/feeds/verticals/black-voices/index.xml"));

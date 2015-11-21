@@ -1,6 +1,5 @@
 package com.backend.net;
 
-
 import com.backend.kernel.BE_News;
 import com.backend.kernel.BE_Section;
 import com.backend.kernel.list.BE_Sections;
@@ -23,7 +22,6 @@ public class BE_CNNNewsReader extends BE_NewsReader {
 
         SECTIONS.add(new BE_Section("Money", "http://rss.cnn.com/rss/money_news_international.rss"));
         SECTIONS.add(new BE_Section("Technology", "http://rss.cnn.com/rss/edition_technology.rss"));
-        SECTIONS.add(new BE_Section("Science & Space", "http://rss.cnn.com/rss/edition_space.rss"));
         SECTIONS.add(new BE_Section("Entertainment", "http://rss.cnn.com/rss/edition_entertainment.rss"));
         SECTIONS.add(new BE_Section("Politics", "http://rss.cnn.com/rss/cnn_allpolitics.rss"));
         SECTIONS.add(new BE_Section("Health", "http://rss.cnn.com/rss/cnn_health.rss"));
@@ -41,7 +39,6 @@ public class BE_CNNNewsReader extends BE_NewsReader {
 
         SECTIONS.add(new BE_Section("Student News", "http://rss.cnn.com/services/podcasting/studentnews/rss.xml"));
         SECTIONS.add(new BE_Section("iReports on CNN", "http://rss.ireport.com/feeds/oncnn.rss"));
-        SECTIONS.add(new BE_Section("The Buzz", "http://rss.cnn.com/cnnmoneymorningbuzz"));
         SECTIONS.add(new BE_Section("Small Business", "http://rss.cnn.com/rss/money_smbusiness.rss"));
 
     }
@@ -55,7 +52,36 @@ public class BE_CNNNewsReader extends BE_NewsReader {
     @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, BE_News news) {
 
-        news.content = doc.select(".zn,.zn-body-text,.zn-body").get(0).html();
+        org.jsoup.select.Elements e = doc.select("#body-text");
+
+        if (e.isEmpty()) {
+            org.jsoup.select.Elements temp = doc.select(".el-carousel__wrapper noscript");
+
+            if (temp.isEmpty()) {
+
+                //          System.out.println("Paren las maquinas");
+                //        System.out.println(" ----- " + news.link);
+                return;
+            }
+        } else {
+            e.select(".zn-body__read-more,.cn-zoneAdContainer,script,.el-editorial-source,.el__leafmedia--raw-html,.zn-body__read-more-outbrain,.el__leafmedia--storyhighlights,.ad--epic").remove();
+            e.select(".js-media__caption,.el__gallery-showhide,.owl-filmstrip,.el__storyelement__title,.media__video--thumbnail-wrapper").remove();
+
+            for (org.jsoup.nodes.Element i : e.select("noscript")) {
+                i.parent().html(i.html());
+            }
+            for (org.jsoup.nodes.Element i : e.select(".el-embed-youtube__content")) {
+                String src = i.attr("src");
+                if (!src.startsWith("http")) {
+                    i.attr("src", "http:" + src);
+                    i.attr("frameborder", "0");
+                }
+            }
+        }
+        org.jsoup.select.Elements img = doc.select("img[itemprop=\"image\"]");
+        org.jsoup.select.Elements carrousel = doc.select(".el-carousel__wrapper noscript");
+
+        news.content = img.outerHtml() + e.html() + carrousel.html();
 
     }
 

@@ -4,6 +4,9 @@ import com.backend.kernel.BE_News;
 import com.backend.kernel.BE_Section;
 import com.backend.kernel.list.BE_Sections;
 
+import java.io.IOException;
+import java.net.URL;
+
 public class BE_HelsinkiSanomatNewsReader extends BE_NewsReader {
 
     public BE_HelsinkiSanomatNewsReader() {

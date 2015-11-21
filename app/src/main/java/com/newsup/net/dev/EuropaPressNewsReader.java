@@ -1,15 +1,12 @@
 package com.newsup.net.dev;
 
-import com.newsup.kernel.Section;
-import com.newsup.kernel.list.SectionList;
-import com.newsup.net.NewsReader;
+import com.newsup.net.NewsReaderDeprecated;
 
-public class EuropaPressNewsReader extends NewsReader {
+public class EuropaPressNewsReader extends NewsReaderDeprecated {
 
     public EuropaPressNewsReader() {
         super();
 
-        SECTIONS = new SectionList();
         SECTIONS.add(new SectionDeprecated("Portada", 0, "http://www.europapress.es/rss/rss.aspx"));
         SECTIONS.add(new SectionDeprecated("Nacional", 0, "http://www.europapress.es/rss/rss.aspx?ch=66"));
         SECTIONS.add(new SectionDeprecated("Internacional", 0, "http://www.europapress.es/rss/rss.aspx?ch=69"));

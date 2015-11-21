@@ -1,15 +1,12 @@
 package com.newsup.net.dev;
 
-import com.newsup.kernel.Section;
-import com.newsup.kernel.list.SectionList;
-import com.newsup.net.NewsReader;
+import com.newsup.net.NewsReaderDeprecated;
 
-public class IltaSanomatNewsReader extends NewsReader {
+public class IltaSanomatNewsReader extends NewsReaderDeprecated {
 
     public IltaSanomatNewsReader() {
         super();
 
-        SECTIONS = new SectionList();
         SECTIONS.add(new SectionDeprecated("Tuoreimmat uutisotsikot", 0, "http://www.iltasanomat.fi/rss/tuoreimmat.xml"));
         SECTIONS.add(new SectionDeprecated("Kotimaa", 0, "http://www.iltasanomat.fi/rss/kotimaa.xml"));
         SECTIONS.add(new SectionDeprecated("Ulkomaat", 0, "http://www.iltasanomat.fi/rss/ulkomaat.xml"));

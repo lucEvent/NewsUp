@@ -67,7 +67,7 @@ public abstract class BE_NewsReader {
                     continue;
                 }
                 if (taghash == HASH_TITLE) {
-                    title = prop.text();
+                    title = prop.html();
                     continue;
                 }
                 if (taghash == HASH_LINK) {

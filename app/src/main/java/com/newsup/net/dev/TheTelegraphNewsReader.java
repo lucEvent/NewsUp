@@ -1,15 +1,12 @@
 package com.newsup.net.dev;
 
-import com.newsup.kernel.Section;
-import com.newsup.kernel.list.SectionList;
-import com.newsup.net.NewsReader;
+import com.newsup.net.NewsReaderDeprecated;
 
-public class TheTelegraphNewsReader extends NewsReader {
+public class TheTelegraphNewsReader extends NewsReaderDeprecated {
 
     public TheTelegraphNewsReader() {
         super();
 
-        SECTIONS = new SectionList();
         SECTIONS.add(new SectionDeprecated("UK News", 0, "http://www.telegraph.co.uk/news/uknews/rss"));
         SECTIONS.add(new SectionDeprecated("World News", 0, "http://www.telegraph.co.uk/news/worldnews/rss"));
         SECTIONS.add(new SectionDeprecated("Politics", 0, "http://www.telegraph.co.uk/news/politics/rss"));

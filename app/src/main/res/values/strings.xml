@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name" translatable="false">News Up</string>
-    <string name="app_version" translatable="false">Version 0.12.0</string>
+    <string name="app_version" translatable="false">Version 0.12.1</string>
 
     <string name="settings">Settings</string>
     <string name="bookmarks">Bookmarks</string>
@@ -52,7 +52,8 @@
     <string name="tryagain">Try again</string>
     <string name="openinbrowser">Open in browser</string>
     <string name="close">Close</string>
-    <string name="title_newsnotfound">Oops... This app is awesome but it still cannot read this news</string>
+    <string name="title_newsnotfound">Oops&#8230; This app is awesome but it still cannot read this news</string>
     <string name="message_newsnotfound">What should we do?</string>
+    <string name="msg_no_site_picked">Ohh! You have selected no site</string>
 
 </resources>

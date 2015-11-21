@@ -4,37 +4,30 @@ import java.util.ArrayList;
 
 public class AppSettings {
 
-    public static final int SET_MAIN_SITES = 0;
-    public static final int ADD_FAV_SITE = 1;
-    public static final int DEL_FAV_SITE = 2;
+    public static final int SET_MAIN_CODES = 0;
+    public static final int ADD_FAV_CODE = 1;
+    public static final int DEL_FAV_CODE = 2;
 
-    public static int[] main_sites_i;
-    public static ArrayList<Integer> favorite_list;
+    public static int[] MAIN_CODES;
+    public static ArrayList<Integer> FAV_CODES;
 
     public AppSettings() {
-        main_sites_i = new int[]{2};
-        favorite_list = new ArrayList<Integer>();
+        MAIN_CODES = new int[]{105};
+        FAV_CODES = new ArrayList<Integer>();
     }
 
     public void setSetting(int settingcode, Object setting) {
         switch (settingcode) {
-            case SET_MAIN_SITES:
-                main_sites_i = (int[]) setting;
+            case SET_MAIN_CODES:
+                MAIN_CODES = (int[]) setting;
                 break;
-            case ADD_FAV_SITE:
-                favorite_list.add((Integer) setting);
+            case ADD_FAV_CODE:
+                FAV_CODES.add((Integer) setting);
                 break;
-            case DEL_FAV_SITE:
-                favorite_list.remove(setting);
+            case DEL_FAV_CODE:
+                FAV_CODES.remove((Integer) setting);
                 break;
         }
-    }
-
-    public boolean[] sitesOnLoadBooleanArray(int size) {
-        boolean[] res = new boolean[size];
-        for (int i = 0; i < size; ++i) res[i] = false;
-        for (int i = 0; i < main_sites_i.length; ++i) res[main_sites_i[i]] = true;
-        return res;
     }
 
 }

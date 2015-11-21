@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 
-public class NewsLister extends ArrayAdapter<News> implements Comparator<News> {
+public class NewsLister extends ArrayAdapter<News> {
 
     private NewsMap newsmap;
     private ArrayList<News> newslist;
@@ -27,7 +27,7 @@ public class NewsLister extends ArrayAdapter<News> implements Comparator<News> {
 
     public NewsLister(Context context) {
         super(context, R.layout.i_news, new ArrayList<News>());
-        newsmap = new NewsMap(this);
+        newsmap = new NewsMap();
         newslist = new ArrayList<News>(newsmap);
         update = false;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -93,9 +93,4 @@ public class NewsLister extends ArrayAdapter<News> implements Comparator<News> {
         android.util.Log.d(this.getClass().getSimpleName(), text);
     }
 
-    @Override
-    public int compare(News n1, News n2) {
-        int comparison = Date.compare(n1.date, n2.date);
-        return comparison != 0 ? -comparison : (n1.id < n2.id ? -1 : 1);
-    }
 }

@@ -6,7 +6,7 @@ import com.newsup.net.util.Enclosure;
 
 import java.util.ArrayList;
 
-public class News {
+public class News implements Comparable<News> {
 
     public int id;
 
@@ -38,6 +38,12 @@ public class News {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    @Override
+    public int compareTo(News another) {
+        int comparison = Date.compare(this.date, another.date);
+        return comparison != 0 ? -comparison : this.link.compareTo(another.link);
     }
 
 }
