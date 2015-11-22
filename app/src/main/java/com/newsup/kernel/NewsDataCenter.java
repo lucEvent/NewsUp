@@ -109,15 +109,11 @@ public class NewsDataCenter implements TaskMessage {
                 if (finalSections == null) {
                     finalSections = getSettingsOf(site).sectionsOnMainIntegerArray();
                 }
-/*
-No estaba date:1447977600000 [Huippu­kapellimestari]
-11-20 01:29:10.200 24417-24875/com.newsup D/##NewsReader##: http://newsup-2406.appspot.com/request?content&site=405&date=1447977600000&link=http://www.hs.fi/kulttuuri/a1447903914248
-11-20 01:29:10.540 24417-24875/com.newsup D/##NewsDataCenter##: No estaba date:1447977600000 [Venäjän]
- */
+
                 newsreader.readNewsHeader(site, finalSections, socket);
 
                 getSiteHistory(site);
-                handler.obtainMessage(NEWS_READ_HISTORY, site.history).sendToTarget();
+            //    handler.obtainMessage(NEWS_READ_HISTORY, site.history).sendToTarget(); //TODO solo historial de la section
 
                 int failCounter = 0;
                 for (News N : tempNewslist) {

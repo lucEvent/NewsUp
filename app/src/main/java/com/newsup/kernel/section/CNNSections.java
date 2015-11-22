@@ -19,14 +19,12 @@ public class CNNSections extends ArrayList<Section> {
         add(new Section("Middle East", 1));
         add(new Section("U.S.", 1));
 
-        add(new Section("Money", 0));
         add(new Section("Technology", 0));
         add(new Section("Entertainment", 0));
         add(new Section("Politics", 0));
         add(new Section("Health", 0));
         add(new Section("Travel", 0));
         add(new Section("Living", 0));
-        add(new Section("Markets", 0));
 
         add(new Section("World Sport", 0));
         add(new Section("Football", 1));
@@ -34,11 +32,7 @@ public class CNNSections extends ArrayList<Section> {
         add(new Section("Motorsport", 1));
         add(new Section("Tennis", 1));
 
-        add(new Section("Video", 0));
-
         add(new Section("Student News", 0));
-        add(new Section("iReports on CNN", 0));
-        add(new Section("Small Business", 0));
 
     }
 

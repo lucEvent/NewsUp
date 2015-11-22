@@ -67,7 +67,7 @@ public class BE_SiteList extends ArrayList<BE_Site> {
         add(new BE_Site(805, "**Digital Trends", new com.backend.net.BE_DigitalTrendsNewsReader()));
         add(new BE_Site(810, "**Lifehacker", new com.backend.net.BE_LifeHackerNewsReader()));
         add(new BE_Site(815, "**Xataka", new com.backend.net.BE_XatakaNewsReader()));
-        add(new BE_Site(820, "TED", new com.backend.net.BE_TEDNewsReader()));
+        add(new BE_Site(820, "**TED", new com.backend.net.BE_TEDNewsReader()));
         add(new BE_Site(825, "Gizmodo", new com.backend.net.BE_GizmodoNewsReader()));
         add(new BE_Site(830, "**Android Authority", new com.backend.net.BE_AndroidAuthorityNewsReader()));
 //          add(new Site(835, "Computer Hoy", new com.backend.net.BE_ComputerHoySections()));

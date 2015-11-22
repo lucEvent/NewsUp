@@ -4,6 +4,8 @@ import com.backend.kernel.BE_News;
 import com.backend.kernel.BE_Section;
 import com.backend.kernel.list.BE_Sections;
 
+import org.jsoup.Connection;
+
 public class BE_CNNNewsReader extends BE_NewsReader {
 
     public BE_CNNNewsReader() {
@@ -20,14 +22,12 @@ public class BE_CNNNewsReader extends BE_NewsReader {
         SECTIONS.add(new BE_Section("Middle East", "http://rss.cnn.com/rss/edition_meast.rss"));
         SECTIONS.add(new BE_Section("U.S.", "http://rss.cnn.com/rss/edition_us.rss"));
 
-        SECTIONS.add(new BE_Section("Money", "http://rss.cnn.com/rss/money_news_international.rss"));
         SECTIONS.add(new BE_Section("Technology", "http://rss.cnn.com/rss/edition_technology.rss"));
         SECTIONS.add(new BE_Section("Entertainment", "http://rss.cnn.com/rss/edition_entertainment.rss"));
         SECTIONS.add(new BE_Section("Politics", "http://rss.cnn.com/rss/cnn_allpolitics.rss"));
         SECTIONS.add(new BE_Section("Health", "http://rss.cnn.com/rss/cnn_health.rss"));
         SECTIONS.add(new BE_Section("Travel", "http://rss.cnn.com/rss/edition_travel.rss"));
         SECTIONS.add(new BE_Section("Living", "http://rss.cnn.com/rss/cnn_living.rss"));
-        SECTIONS.add(new BE_Section("Markets", "http://rss.cnn.com/rss/money_markets.rss"));
 
         SECTIONS.add(new BE_Section("World Sport", "http://rss.cnn.com/rss/edition_sport.rss"));
         SECTIONS.add(new BE_Section("Football", "http://rss.cnn.com/rss/edition_football.rss"));
@@ -35,11 +35,7 @@ public class BE_CNNNewsReader extends BE_NewsReader {
         SECTIONS.add(new BE_Section("Motorsport", "http://rss.cnn.com/rss/edition_motorsport.rss"));
         SECTIONS.add(new BE_Section("Tennis", "http://rss.cnn.com/rss/edition_tennis.rss"));
 
-        SECTIONS.add(new BE_Section("Video", "http://rss.cnn.com/rss/cnn_freevideo.rss"));
-
         SECTIONS.add(new BE_Section("Student News", "http://rss.cnn.com/services/podcasting/studentnews/rss.xml"));
-        SECTIONS.add(new BE_Section("iReports on CNN", "http://rss.ireport.com/feeds/oncnn.rss"));
-        SECTIONS.add(new BE_Section("Small Business", "http://rss.cnn.com/rss/money_smbusiness.rss"));
 
     }
 
@@ -50,17 +46,28 @@ public class BE_CNNNewsReader extends BE_NewsReader {
     }
 
     @Override
-    protected void readNewsContent(org.jsoup.nodes.Document doc, BE_News news) {
+    public BE_News readNewsContent(BE_News news) {
+        if (news.link.contains("podcasts")) {
 
+            String urltemp = news.link.substring(news.link.indexOf("podcasts"), news.link.indexOf("/story"));
+
+            String result = "http://" + urltemp.replace("0B", ".").replace("0C", "/").replace("0E", "-").replace("0I", "_").replace("A", "");
+
+            news.content = "<video controls autoplay><source src=\"" + result + "\" type=\"video/mp4\"></video>";
+        } else {
+            return super.readNewsContent(news);
+        }
+        return news;
+    }
+
+    @Override
+    protected void readNewsContent(org.jsoup.nodes.Document doc, BE_News news) {
         org.jsoup.select.Elements e = doc.select("#body-text");
 
         if (e.isEmpty()) {
             org.jsoup.select.Elements temp = doc.select(".el-carousel__wrapper noscript");
 
             if (temp.isEmpty()) {
-
-                //          System.out.println("Paren las maquinas");
-                //        System.out.println(" ----- " + news.link);
                 return;
             }
         } else {
@@ -82,7 +89,6 @@ public class BE_CNNNewsReader extends BE_NewsReader {
         org.jsoup.select.Elements carrousel = doc.select(".el-carousel__wrapper noscript");
 
         news.content = img.outerHtml() + e.html() + carrousel.html();
-
     }
 
 }

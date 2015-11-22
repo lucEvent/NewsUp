@@ -5,6 +5,7 @@ import com.backend.kernel.BE_News;
 import com.backend.kernel.list.BE_NewsList;
 import com.backend.kernel.list.BE_Sections;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.jsoup.select.Elements;
@@ -12,7 +13,6 @@ import org.jsoup.select.Elements;
 public abstract class BE_NewsReader {
 
     public static final String USER_AGENT = "Mozilla/5.0 (Linux; Android 4.4.2; GT-I9300 Build/KVT49L) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.94 Mobile Safari/537.36";
-    //   public static final String USER_AGENT2 = " Mozilla/5.0 (Linux; U; Android 4.0.3; ko-kr; LG-L160L Build/IML74K) AppleWebkit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30";
 
     protected static final int HASH_TITLE = "title".hashCode();
     protected static final int HASH_LINK = "link".hashCode();
@@ -129,18 +129,18 @@ public abstract class BE_NewsReader {
     protected org.jsoup.nodes.Document getDocument(String pagelink) {
         try {
             return org.jsoup.Jsoup.connect(pagelink).userAgent(USER_AGENT).get();
-        } catch (Exception e) {
+        } catch (IOException e) {
             debug("[" + e.getClass().getSimpleName() + "] Intentando nuevamente");
         }
         try {
             return org.jsoup.Jsoup.connect(pagelink).get();
-        } catch (Exception e) {
+        } catch (IOException e) {
             debug("[" + e.getClass().getSimpleName() + "] No se ha podido leer: " + pagelink);
         }
         return null;
     }
 
-    public final BE_News readNewsContent(BE_News news) {
+    public BE_News readNewsContent(BE_News news) {
         org.jsoup.nodes.Document doc = getDocument(news.link);
         if (doc != null) {
             readNewsContent(doc, news);

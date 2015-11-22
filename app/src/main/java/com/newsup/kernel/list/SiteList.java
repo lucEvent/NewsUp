@@ -66,7 +66,7 @@ public class SiteList extends ArrayList<Site> {
 //          add(new Site(510, "The Huffington Post", 0xff, assets.open("huffingtonpost.png"), new com.newsup.kernel.section.HuffingtonPostUKSections()));
 
             add(new Site(-1, context.getString(R.string.us), 0, null, null));
-            add(new Site(600, "CNN", 0xffc20000, assets.open("cnn.png"), new com.newsup.kernel.section.CNNSections()));
+            add(new Site(600, "**CNN", 0xffc20000, assets.open("cnn.png"), new com.newsup.kernel.section.CNNSections()));
 //          add(new Site(605, "The Huffington Post", 0xff, assets.open("huffingtonpost.png"), new com.newsup.kernel.section.HuffingtonPostUSASections()));
 
             add(new Site(-1, context.getString(R.string.international), 0, null, null));
