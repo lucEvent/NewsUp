@@ -2,6 +2,7 @@ package com.backend.kernel;
 
 import com.backend.kernel.util.BE_Date;
 
+import java.text.Collator;
 import java.util.ArrayList;
 
 public class BE_News implements Comparable<BE_News> {

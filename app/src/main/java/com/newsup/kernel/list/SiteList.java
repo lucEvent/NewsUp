@@ -39,7 +39,7 @@ public class SiteList extends ArrayList<Site> {
             add(new Site(-1, context.getString(R.string.catalonia), 0, null, null));
             add(new Site(200, "**El Periódico (Cat)", 0xff0088c7, assets.open("elperiodicocat.png"), new com.newsup.kernel.section.ElPeriodicoCaSections()));
             add(new Site(205, "**El Periódico (Esp)", 0xfff04d4d, assets.open("elperiodicoes.png"), new com.newsup.kernel.section.ElPeriodicoEsSections()));
-            add(new Site(210, "**La Vanguardia", 0xff1a4970, assets.open("lavanguardia.png"), new com.newsup.kernel.section.LaVanguardiaSections()));
+            add(new Site(210, "La Vanguardia", 0xff1a4970, assets.open("lavanguardia.png"), new com.newsup.kernel.section.LaVanguardiaSections()));
             add(new Site(215, "**Sport", 0xffd61a1a, assets.open("sport.png"), new com.newsup.kernel.section.SportSections()));
             add(new Site(220, "**Mundo Deportivo", 0xff242424, assets.open("mundodeportivo.png"), new com.newsup.kernel.section.MundoDeportivoSections()));
 
@@ -81,14 +81,14 @@ public class SiteList extends ArrayList<Site> {
             add(new Site(805, "**Digital Trends", 0xff0098d9, assets.open("digitaltrends.png"), new com.newsup.kernel.section.DigitalTrendsSections()));
             add(new Site(810, "**Lifehacker", 0xff94b330, assets.open("lifehacker.png"), new com.newsup.kernel.section.LifeHackerSections()));
             add(new Site(815, "**Xataka", 0xff558f22, assets.open("xataka.png"), new com.newsup.kernel.section.XatakaSections()));
-            add(new Site(820, "TED", 0xffffffff, assets.open("ted.png"), new com.newsup.kernel.section.TEDSections()));
+            add(new Site(820, "**TED", 0xffffffff, assets.open("ted.png"), new com.newsup.kernel.section.TEDSections()));
             add(new Site(825, "Gizmodo", 0xff9c9c9c, assets.open("gizmodo.png"), new com.newsup.kernel.section.GizmodoSections()));
             add(new Site(830, "**Android Authority", 0xff8cc234, assets.open("androidauthority.png"), new com.newsup.kernel.section.AndroidAuthoritySections()));
 //          add(new Site(835, "Computer Hoy", 0xff, assets.open("computerhoy.png"), new com.newsup.kernel.section.ComputerHoySections()));
 //          add(new Site(840, "Swedroid", 0xff, assets.open("swedroid.png"), new com.newsup.kernel.section.SwedroidSections()));
 
             add(new Site(-1, context.getString(R.string.blogs), 0, null, null));
-            add(new Site(900, "Medium", 0xffffffff, assets.open("medium.png"), new com.newsup.kernel.section.MediumSections()));
+            add(new Site(900, "**Medium", 0xffffffff, assets.open("medium.png"), new com.newsup.kernel.section.MediumSections()));
 
             add(new Site(-1, context.getString(R.string.magazines), 0, null, null));
             add(new Site(1000, "**Make", 0xff4ecbf5, assets.open("make.png"), new com.newsup.kernel.section.MakeSections()));

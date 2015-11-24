@@ -39,9 +39,9 @@ public class BE_HuffingtonPostSpainNewsReader extends BE_NewsReader {
 
     }
 
-    protected static final int HASH_DESCRIPTION_2 = "content".hashCode();
-    protected static final int HASH_UPDATED = "updated".hashCode();
-    protected static final int HASH_LINK_2 = "id".hashCode();
+    protected static int HASH_DESCRIPTION_2 = "content".hashCode();
+    protected static int HASH_UPDATED = "updated".hashCode();
+    protected static int HASH_LINK_2 = "id".hashCode();
 
     @Override
     protected BE_NewsList readRssPage(String rsslink) {
@@ -118,9 +118,7 @@ public class BE_HuffingtonPostSpainNewsReader extends BE_NewsReader {
             }
 
             news.content = content;
-            if (news.title.contains("Fotos: Pol")) {
-                System.out.println(news.content);
-            }
+
         }
         return news;
     }

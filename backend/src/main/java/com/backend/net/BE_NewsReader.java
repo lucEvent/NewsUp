@@ -14,15 +14,15 @@ public abstract class BE_NewsReader {
 
     public static final String USER_AGENT = "Mozilla/5.0 (Linux; Android 4.4.2; GT-I9300 Build/KVT49L) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.94 Mobile Safari/537.36";
 
-    protected static final int HASH_TITLE = "title".hashCode();
-    protected static final int HASH_LINK = "link".hashCode();
-    protected static final int HASH_GUIDED = "guid".hashCode();
-    protected static final int HASH_DATE_1 = "pubdate".hashCode();
-    protected static final int HASH_DATE_2 = "dc:date".hashCode();
-    protected static final int HASH_DESCRIPTION = "description".hashCode();
-    protected static final int HASH_CATEGORY = "category".hashCode();
-    protected static final int HASH_CONTENT = "content:encoded".hashCode();
-    protected static final int HASH_ENCLOSURE = "enclosure".hashCode();
+    protected static int HASH_TITLE = "title".hashCode();
+    protected static int HASH_LINK = "link".hashCode();
+    protected static int HASH_GUIDED = "guid".hashCode();
+    protected static int HASH_DATE_1 = "pubdate".hashCode();
+    protected static int HASH_DATE_2 = "dc:date".hashCode();
+    protected static int HASH_DESCRIPTION = "description".hashCode();
+    protected static int HASH_CATEGORY = "category".hashCode();
+    protected static int HASH_CONTENT = "content:encoded".hashCode();
+    protected static int HASH_ENCLOSURE = "enclosure".hashCode();
 
     private final boolean catchEnclosures;
     public BE_Sections SECTIONS;

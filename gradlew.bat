@@ -5,6 +5,8 @@
 @rem
 @rem ##########################################################################
 
+set DEFAULT_ENCODING=UTF-8
+
 @rem Set local scope for the variables with windows NT shell
 if "%OS%"=="Windows_NT" setlocal
 

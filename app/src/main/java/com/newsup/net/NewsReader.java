@@ -96,7 +96,7 @@ public final class NewsReader {
     public final News readNewsContent(Site site, News news) {
 
         String query = query_content + site.code + "&date=" + news.date + "&link=" + news.link;
-  debug(query);
+
         org.jsoup.nodes.Document doc = getDocument(query);
         if (doc != null) {
             String content = doc.html();

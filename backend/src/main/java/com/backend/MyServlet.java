@@ -1,14 +1,18 @@
 package com.backend;
 
 import com.backend.kernel.BE_News;
+import com.backend.kernel.BE_Section;
 import com.backend.kernel.BE_Site;
 import com.backend.kernel.list.BE_NewsList;
 import com.backend.kernel.list.BE_SiteList;
 import com.backend.servlet.AsyncProcessManager;
 
 import java.io.IOException;
+import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Locale;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.*;
 
 public class MyServlet extends HttpServlet {
@@ -24,7 +28,6 @@ public class MyServlet extends HttpServlet {
     }
 
     private void processPetition(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        initializeData();
 
         resp.setContentType("text/plain");
         resp.setCharacterEncoding("utf-8");
@@ -91,14 +94,37 @@ public class MyServlet extends HttpServlet {
     private AsyncProcessManager processManager;
     private BE_SiteList sites;
 
-    private void initializeData() {
+    @Override
+    public void init() throws ServletException {
+        super.init();
+
+
         if (sites == null) {
             sites = new BE_SiteList();
         }
         if (processManager == null) {
             processManager = new AsyncProcessManager();
         }
+        //debug
+   /*
+        System.out.println("Preparando");
+        boolean debug = false;
+        if (debug) {
+            System.out.println("Iniciando el debugado");
+            for (BE_Site s : sites) {
+                System.out.println("### [" + s.name + "] ###");
+                for (int isec = 0; isec < s.getReader().SECTIONS.size(); ++isec) {
+                    BE_Section d = s.getReader().SECTIONS.get(isec);
+           //         System.out.println("@@# [" + d.name.toUpperCase() + "] #@@");
+                    if (d.link != null) s.getReader().readNews(new int[]{ isec});
+//                    else System.out.println("Es que el l");
+                }
+            }
+        }
+        //end debug
+    */
     }
+
 
 }
 /*        //Posible support for more than 1 site request per request
