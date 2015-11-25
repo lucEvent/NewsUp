@@ -25,15 +25,35 @@ public class BE_GizmodoNewsReader extends BE_NewsReader {
 
     @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, BE_News news) {
-        org.jsoup.nodes.Element e = doc.select(".post-content,.single-article__content,#content_post").get(0);
 
-        e.select("p[data-textannotation-id=\"6eee416cdd18ed05dcc366f5a5757226\"]").remove();
-        for (org.jsoup.nodes.Element elem : e.children()) {
-            for (org.jsoup.nodes.Attribute at : elem.attributes()) {
-                elem.removeAttr(at.getKey());
+        org.jsoup.select.Elements e = doc.select(".entry-content");
+        if (e.isEmpty()) {
+            e = doc.select(".single-article__content");
+
+            if (e.isEmpty()) {
+                e = doc.select("#content_post");
+
+                if (e.isEmpty()) {
+                    return;
+                }
+            }
+        } else {
+            e.select(".recommended,.ad-mobile,.referenced-wide,[x-inset=\"hidden\"]").remove();
+
+            for (org.jsoup.nodes.Element iframe : e.select(".core-inset")) {
+                String id = iframe.attr("id");
+                if (id.startsWith("youtube")) {
+                    String src = iframe.attr("data-recommend-id").replace("youtube://", "https://www.youtube.com/embed/");
+                    iframe.attr("src", src);
+                } else if (id.startsWith("vimeo")) {
+                    String src = iframe.attr("data-recommend-id").replace("vimeo://", "https://player.vimeo.com/video/");
+                    iframe.attr("src", src);
+                } else {
+                    iframe.remove();
+                }
             }
         }
-        news.content = e.outerHtml();
+        news.content = e.html();
     }
 
 }

@@ -1,19 +1,18 @@
 package com.backend;
 
 import com.backend.kernel.BE_News;
-import com.backend.kernel.BE_Section;
 import com.backend.kernel.BE_Site;
 import com.backend.kernel.list.BE_NewsList;
 import com.backend.kernel.list.BE_SiteList;
 import com.backend.servlet.AsyncProcessManager;
 
 import java.io.IOException;
-import java.text.Collator;
 import java.util.ArrayList;
-import java.util.Locale;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class MyServlet extends HttpServlet {
 
@@ -80,14 +79,14 @@ public class MyServlet extends HttpServlet {
                 }
             }
         } else if (req.getParameter("debug") != null) {
-
+/*
             BE_Site site = sites.getSiteByCode(600);
 
             BE_News news = new ArrayList<BE_News>(site.news).get(Integer.parseInt(req.getParameter("i")));
             site.getReader().readNewsContent(news);
 
             resp.getWriter().println(news.content);
-            //end debug
+*/
         }
     }
 
@@ -107,10 +106,10 @@ public class MyServlet extends HttpServlet {
         }
         //debug
    /*
-        System.out.println("Preparando");
+
         boolean debug = false;
         if (debug) {
-            System.out.println("Iniciando el debugado");
+
             for (BE_Site s : sites) {
                 System.out.println("### [" + s.name + "] ###");
                 for (int isec = 0; isec < s.getReader().SECTIONS.size(); ++isec) {
