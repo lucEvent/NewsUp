@@ -7,7 +7,6 @@ import com.backend.kernel.list.BE_SiteList;
 import com.backend.servlet.AsyncProcessManager;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -79,14 +78,22 @@ public class MyServlet extends HttpServlet {
                 }
             }
         } else if (req.getParameter("debug") != null) {
-/*
-            BE_Site site = sites.getSiteByCode(600);
 
-            BE_News news = new ArrayList<BE_News>(site.news).get(Integer.parseInt(req.getParameter("i")));
-            site.getReader().readNewsContent(news);
+            BE_Site site = sites.getSiteByCode(Integer.parseInt(req.getParameter("site")));
+            String link = req.getParameter("link");
 
-            resp.getWriter().println(news.content);
-*/
+            BE_News N = new BE_News("", link, "", 0, null);
+
+            site.getReader().readNewsContent(N);
+
+            resp.getWriter().println(N.content);
+
+        } else if (req.getParameter("clear") != null) {
+
+            for (BE_Site site : sites) {
+                site.news.clear();
+            }
+
         }
     }
 

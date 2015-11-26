@@ -4,20 +4,21 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
-import android.view.LayoutInflater;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.newsup.dialog.SiteConfiguration;
 import com.newsup.kernel.News;
@@ -25,7 +26,6 @@ import com.newsup.kernel.NewsDataCenter;
 import com.newsup.kernel.Site;
 import com.newsup.kernel.list.NewsMap;
 import com.newsup.kernel.list.SectionList;
-import com.newsup.kernel.list.SiteList;
 import com.newsup.lister.NewsLister;
 import com.newsup.lister.SectionLister;
 import com.newsup.lister.SiteLister;
@@ -45,7 +45,6 @@ public class Main extends ListActivity implements TaskMessage {
      * Kernel layer
      **/
     private static NewsDataCenter datamanager;
-    private static SiteList sites;
     private static Site currentSite;
     private static boolean displayingNews;
 
@@ -54,6 +53,7 @@ public class Main extends ListActivity implements TaskMessage {
     private static ListView drawerSiteList;
     private static ListView drawerSectionList;
     private static ActionBarManager actionBar;
+    private static Menu appmenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +67,6 @@ public class Main extends ListActivity implements TaskMessage {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
         datamanager = new NewsDataCenter(this, cm, handler);
-        sites = datamanager.getSites();
 
         newsView = new NewsView(this, datamanager, handler);
         actionBar = new ActionBarManager();
@@ -99,6 +98,29 @@ public class Main extends ListActivity implements TaskMessage {
             }
 
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        appmenu = menu;
+        actionBar.update();
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_favorite:
+                datamanager.toggleFavorite(currentSite);
+                actionBar.update();
+                ((SiteLister) drawerSiteList.getAdapter()).resetMain();
+                return true;
+            case R.id.action_settings:
+                new SiteConfiguration(Main.this, datamanager).set(currentSite);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void displaySiteNews(Site site, int[] sections) {
@@ -231,69 +253,59 @@ public class Main extends ListActivity implements TaskMessage {
     }
 
     private static void debug(String text) {
-        Log.d("##MAIN##", "[Main] " + text);
+        android.util.Log.d("##MAIN##", "[Main] " + text);
     }
 
-    class ActionBarManager implements View.OnClickListener, View.OnLongClickListener {
+    class ActionBarManager {
 
         private android.app.ActionBar actionBar;
 
-        private View bar;
-        private TextView title;
-        private ImageButton fav, set;
-
         ActionBarManager() {
+
             actionBar = getActionBar();
-            actionBar.setDisplayShowCustomEnabled(true);
+/*            actionBar.setDisplayShowCustomEnabled(true);
             actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setDisplayShowHomeEnabled(false);
-
-            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View view = inflater.inflate(R.layout.f_main_actionbar, null);
-
-            bar = view.findViewById(R.id.action_bar);
-            title = (TextView) view.findViewById(R.id.title);
-            fav = (ImageButton) view.findViewById(R.id.action_fav);
-            set = (ImageButton) view.findViewById(R.id.action_settings);
-
-            fav.setOnClickListener(this);
-            fav.setOnLongClickListener(this);
-
-            set.setOnClickListener(this);
-            set.setOnLongClickListener(this);
-
-            actionBar.setCustomView(view);
+*/
         }
 
         void update() {
+            if (appmenu == null) return;
+
             Site site = currentSite;
             if (site == null) {
-                title.setText(R.string.mycustomfeed);
-                fav.setVisibility(ImageView.INVISIBLE);
-                set.setVisibility(ImageView.INVISIBLE);
+                actionBar.setBackgroundDrawable(new ColorDrawable(Site.MAIN_COLOR));
+                actionBar.setIcon(R.mipmap.ic_app);
+                appmenu.getItem(0).setVisible(false);
+                appmenu.getItem(1).setVisible(false);
+                setBarTitle(getString(R.string.mycustomfeed), Color.BLACK);
 
-                bar.setBackgroundColor(Site.MAIN_COLOR);
             } else {
-                title.setText(site.name);
-                fav.setVisibility(ImageView.VISIBLE);
-                set.setVisibility(ImageView.VISIBLE);
-
-                bar.setBackgroundColor(site.color);
+                actionBar.setBackgroundDrawable(new ColorDrawable(site.color));
+                MenuItem fav = appmenu.getItem(0).setVisible(true);
+                MenuItem set = appmenu.getItem(1).setVisible(true);
 
                 boolean isfav = datamanager.isFavorite(site);
                 boolean isDark = (Color.red(site.color) < 0x7F) && (Color.green(site.color) < 0x7F) && (Color.blue(site.color) < 0x7F);
 
                 if (isDark) {
-                    set.setImageResource(R.drawable.ic_settings_white);
-                    fav.setImageResource(isfav ? R.drawable.ic_star_white : R.drawable.ic_star_border_white);
-                    title.setTextColor(Color.WHITE);
+                    set.setIcon(R.drawable.ic_settings_white);
+                    fav.setIcon(isfav ? R.drawable.ic_star_white : R.drawable.ic_star_border_white);
+                    setBarTitle(site.name, Color.WHITE);
                 } else {
-                    set.setImageResource(R.drawable.ic_settings);
-                    fav.setImageResource(isfav ? R.drawable.ic_star : R.drawable.ic_star_border);
-                    title.setTextColor(Color.BLACK);
+                    set.setIcon(R.drawable.ic_settings);
+                    fav.setIcon(isfav ? R.drawable.ic_star : R.drawable.ic_star_border);
+                    setBarTitle(site.name, Color.BLACK);
                 }
-//                actionBar.setIcon(site.icon);
+                actionBar.setIcon(site.icon);
             }
+        }
+
+        private void setBarTitle(String title, int color) {
+            Spannable sp_title = new SpannableString(title);
+            sp_title.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), 0, title.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            sp_title.setSpan(new ForegroundColorSpan(color), 0, title.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            actionBar.setTitle(sp_title);
         }
 
         public void show() {
@@ -304,26 +316,6 @@ public class Main extends ListActivity implements TaskMessage {
             actionBar.hide();
         }
 
-        @Override
-        public void onClick(View v) {
-            if (v.getId() == R.id.action_fav) {
-                datamanager.toggleFavorite(currentSite);
-                update();
-                ((SiteLister) drawerSiteList.getAdapter()).resetMain();
-            } else if (v.getId() == R.id.action_settings) {
-                new SiteConfiguration(Main.this, datamanager).set(currentSite);
-            }
-        }
-
-        @Override
-        public boolean onLongClick(View v) {
-            int message = 0;
-            if (v.getId() == R.id.action_fav) message = R.string.favorite;
-            else if (v.getId() == R.id.action_settings) message = R.string.settings;
-
-            Toast.makeText(Main.this, message, Toast.LENGTH_SHORT).show();
-            return true;
-        }
     }
 
 }

@@ -67,7 +67,7 @@ public abstract class BE_NewsReader {
                     continue;
                 }
                 if (taghash == HASH_TITLE) {
-                    title = prop.html();
+                    title = prop.text();
                     continue;
                 }
                 if (taghash == HASH_LINK) {
@@ -144,9 +144,6 @@ public abstract class BE_NewsReader {
         org.jsoup.nodes.Document doc = getDocument(news.link);
         if (doc != null) {
             readNewsContent(doc, news);
-           /* if (news.content == null || news.content.isEmpty()) {
-                  debug("[NO SE HA ENCONTRADO EL CONTENIDO] " + news.link);
-            }*/
         }
         return news;
     }

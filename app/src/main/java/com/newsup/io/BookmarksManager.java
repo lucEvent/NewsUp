@@ -4,9 +4,7 @@ import android.os.Handler;
 
 import com.newsup.kernel.News;
 import com.newsup.kernel.NewsDataCenter;
-import com.newsup.kernel.Site;
 import com.newsup.kernel.list.NewsMap;
-import com.newsup.kernel.list.SiteList;
 import com.newsup.kernel.list.Tags;
 import com.newsup.task.TaskMessage;
 
@@ -155,13 +153,7 @@ public class BookmarksManager implements TaskMessage {
                             news.content = (String) in.readObject();
 
                             int sitecode = in.readInt();
-                            SiteList sites = dataCenter.getSites();
-                            for (int i = sitecode; i < sites.size(); ++i) {
-                                Site site = sites.get(i);
-                                if (site.code == sitecode) {
-                                    news.site = site;
-                                }
-                            }
+                            news.site = dataCenter.getSites().getSiteByCode(sitecode);
 
                             bookmarkedNewsList.add(news);
                             in.close();

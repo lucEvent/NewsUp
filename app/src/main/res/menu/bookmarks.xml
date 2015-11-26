@@ -3,7 +3,7 @@
     tools:context="com.newsup.BookmarksActivity">
 
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_clear_all"
         android:icon="@drawable/ic_clear_all"
         android:orderInCategory="100"
         android:showAsAction="always"

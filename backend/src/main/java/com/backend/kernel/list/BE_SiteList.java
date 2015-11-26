@@ -19,8 +19,8 @@ public class BE_SiteList extends ArrayList<BE_Site> {
         add(new BE_Site(130, "El Diario", new com.backend.net.BE_ElDiarioNewsReader()));
         add(new BE_Site(135, "La Razón", new com.backend.net.BE_LaRazonNewsReader()));
         add(new BE_Site(140, "Huffington Post", new com.backend.net.BE_HuffingtonPostSpainNewsReader()));
-//          add(new Site(145, "Europa press",  new com.backend.net.BE_EuropaPressSections()));
-//          add(new Site(150, "Diario Córdoba",  new com.backend.net.BE_DiarioCordobaSections()));
+        add(new BE_Site(145, "Europa press", new com.backend.net.BE_EuropaPressNewsReader()));
+        add(new BE_Site(150, "Diario Córdoba", new com.backend.net.BE_DiarioCordobaNewsReader()));
 
         // Catalan sites
         add(new BE_Site(200, "El Periódico (Cat)", new com.backend.net.BE_ElPeriodicoCaNewsReader()));
@@ -43,24 +43,24 @@ public class BE_SiteList extends ArrayList<BE_Site> {
         add(new BE_Site(405, "Helsingin Sanomat", new com.backend.net.BE_HelsinkiSanomatNewsReader()));
         add(new BE_Site(410, "Iltalehti", new com.backend.net.BE_IltalehtiNewsReader()));
         add(new BE_Site(415, "Yle", new com.backend.net.BE_YleNewsReader()));
-//          add(new Site(420, "Yle Svenska", new com.backend.net.BE_YleSvenskaSections()));
-//          add(new Site(425, "Ilta Sanomat", new com.backend.net.BE_IltaSanomatSections()));
+//          add(new BE_Site(420, "Yle Svenska", new com.backend.net.BE_YleSvenskaNewsReader()));
+//          add(new BE_Site(425, "Ilta Sanomat", new com.backend.net.BE_IltaSanomatNewsReader()));
 
         // British sites
         add(new BE_Site(500, "BBC", new com.backend.net.BE_BCCNewsReader()));
-//          add(new Site(505, "The Telegraph", new com.backend.net.BE_TheTelegraphSections()));
-//          add(new Site(510, "The Huffington Post", new com.backend.net.BE_HuffingtonPostUKSections()));
+//          add(new BE_Site(505, "The Telegraph", new com.backend.net.BE_TheTelegraphNewsReader()));
+//          add(new BE_Site(510, "The Huffington Post", new com.backend.net.BE_HuffingtonPostUKNewsReader()));
 
         // American sites
         add(new BE_Site(600, "CNN", new com.backend.net.BE_CNNNewsReader()));
-//          add(new Site(605, "The Huffington Post", new com.backend.net.BE_HuffingtonPostUSASections()));
+//          add(new BE_Site(605, "The Huffington Post", new com.backend.net.BE_HuffingtonPostUSANewsReader()));
 
         // International sites
         add(new BE_Site(700, "The Local", new com.backend.net.BE_TheLocalNewsReader()));
-//          add(new Site(705, "The Huffington Post (Arabic)", new com.backend.net.BE_HuffingtonPostArabicSections()));
-//          add(new Site(710, "The Huffington Post (Australia)", new com.backend.net.BE_HuffingtonPostAustraliaSections()));
-//          add(new Site(715, "The Huffington Post (Brasil)", new com.backend.net.BE_HuffingtonPostBrasilSections()));
-//          add(new Site(720, "The Huffington Post (Canada)", new com.backend.net.BE_HuffingtonPostCanadaSections()));
+//          add(new BE_Site(705, "The Huffington Post (Arabic)", new com.backend.net.BE_HuffingtonPostArabicNewsReader()));
+//          add(new BE_Site(710, "The Huffington Post (Australia)", new com.backend.net.BE_HuffingtonPostAustraliaNewsReader()));
+//          add(new BE_Site(715, "The Huffington Post (Brasil)", new com.backend.net.BE_HuffingtonPostBrasilNewsReader()));
+//          add(new BE_Site(720, "The Huffington Post (Canada)", new com.backend.net.BE_HuffingtonPostCanadaNewsReader()));
 
         // Tecnology sites
         add(new BE_Site(800, "El Androide Libre", new com.backend.net.BE_ElAndroideLibreNewsReader()));
@@ -70,8 +70,8 @@ public class BE_SiteList extends ArrayList<BE_Site> {
         add(new BE_Site(820, "TED", new com.backend.net.BE_TEDNewsReader()));
         add(new BE_Site(825, "Gizmodo", new com.backend.net.BE_GizmodoNewsReader()));
         add(new BE_Site(830, "Android Authority", new com.backend.net.BE_AndroidAuthorityNewsReader()));
-//          add(new Site(835, "Computer Hoy", new com.backend.net.BE_ComputerHoySections()));
-//          add(new Site(840, "Swedroid", new com.backend.net.BE_SwedroidSections()));
+//          add(new BE_Site(835, "Computer Hoy", new com.backend.net.BE_ComputerHoyNewsReader()));
+//          add(new BE_Site(840, "Swedroid", new com.backend.net.BE_SwedroidNewsReader()));
 
         // Blog sites
         add(new BE_Site(900, "Medium", new com.backend.net.BE_MediumNewsReader()));
@@ -85,11 +85,11 @@ public class BE_SiteList extends ArrayList<BE_Site> {
         add(new BE_Site(1025, "**The Atlantic", new com.backend.net.BE_TheAtlanticNewsReader()));
         add(new BE_Site(1030, "**Sky and Telescope", new com.backend.net.BE_SkyAndTelescopeNewsReader()));
         add(new BE_Site(1035, "**Dogster", new com.backend.net.BE_DogsterNewsReader()));
-//          add(new Site(1040, "El Jueves", new com.backend.net.BE_ElJuevesSections()));
-//          add(new Site(1045, "National Geographic", new com.backend.net.BE_NationalGeographicSections()));
-//          add(new Site(1050, "Space News", new com.backend.net.BE_SpaceNewsSections()));
-//          add(new Site(1055, "Space", new com.backend.net.BE_SpaceSections()));
-//          add(new Site(1060, "The Bark", new com.backend.net.BE_TheBarkSections()));
+//          add(new BE_Site(1040, "El Jueves", new com.backend.net.BE_ElJuevesNewsReader()));
+//          add(new BE_Site(1045, "National Geographic", new com.backend.net.BE_NationalGeographicNewsReader()));
+//          add(new BE_Site(1050, "Space News", new com.backend.net.BE_SpaceNewsNewsReader()));
+//          add(new BE_Site(1055, "Space", new com.backend.net.BE_SpaceNewsReader()));
+//          add(new BE_Site(1060, "The Bark", new com.backend.net.BE_TheBarkNewsReader()));
 
     }
 

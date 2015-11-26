@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name" translatable="false">News Up</string>
-    <string name="app_version" translatable="false">Version 0.12.5</string>
+    <string name="app_version" translatable="false">Version 0.13.0</string>
 
     <string name="settings">Settings</string>
     <string name="bookmarks">Bookmarks</string>

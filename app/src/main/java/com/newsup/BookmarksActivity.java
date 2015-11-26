@@ -67,7 +67,7 @@ public class BookmarksActivity extends ListActivity implements TaskMessage {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_clear_all) {
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             dialog.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                 @Override

@@ -33,8 +33,8 @@ public class SiteList extends ArrayList<Site> {
             add(new Site(130, "El Diario", 0xff0061ab, assets.open("eldiario.png"), new com.newsup.kernel.section.ElDiarioSections()));
             add(new Site(135, "La Razón", 0xffc7c7c7, assets.open("larazon.png"), new com.newsup.kernel.section.LaRazonSections()));
             add(new Site(140, "Huffington Post", 0xff2c705f, assets.open("huffingtonpost.png"), new com.newsup.kernel.section.HuffingtonPostSpainSections()));
-//          add(new Site(145, "Europa press", 0xff, assets.open("europapress.png"), new com.newsup.kernel.section.EuropaPressSections()));
-//          add(new Site(150, "Diario Córdoba", 0xff, assets.open("diariocordoba.png"), new com.newsup.kernel.section.DiarioCordobaSections()));
+            add(new Site(145, "Europa press", 0xffffffff, assets.open("europapress.png"), new com.newsup.kernel.section.EuropaPressSections()));
+            add(new Site(150, "Diario Córdoba", 0xffde2632, assets.open("diariocordoba.png"), new com.newsup.kernel.section.DiarioCordobaSections()));
 
             add(new Site(-1, context.getString(R.string.catalonia), 0, null, null));
             add(new Site(200, "El Periódico (Cat)", 0xff0088c7, assets.open("elperiodicocat.png"), new com.newsup.kernel.section.ElPeriodicoCaSections()));
