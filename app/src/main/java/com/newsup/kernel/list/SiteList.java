@@ -116,13 +116,11 @@ public class SiteList extends ArrayList<Site> {
     }
 
     public Site getSiteByCode(int code) {
-        System.out.println("Looking for :" + code);
         for (Site site : this) {
             if (site.code == code) {
                 return site;
             }
         }
-        System.out.println("Not found");
         return null;
     }
 }

@@ -3,34 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    android:animationCache="true"
-    android:background="#FFFFFFFF">
+    android:background="#fff">
 
-    <ScrollView
+    <WebView
+        android:id="@+id/content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:background="#FFDDDDDD"
-                android:padding="10dip"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textStyle="bold" />
-
-            <WebView
-                android:id="@+id/content"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/title" />
-        </RelativeLayout>
-    </ScrollView>
+        android:layout_height="match_parent"
+        android:layout_below="@+id/title" />
 
     <RelativeLayout
         android:id="@+id/buttons"

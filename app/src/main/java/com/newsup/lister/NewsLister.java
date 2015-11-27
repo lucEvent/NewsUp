@@ -14,7 +14,6 @@ import com.newsup.kernel.util.Date;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 
 public class NewsLister extends ArrayAdapter<News> {
 
@@ -22,6 +21,7 @@ public class NewsLister extends ArrayAdapter<News> {
     private ArrayList<News> newslist;
 
     private boolean update;
+    private boolean showSiteLogo;
 
     private LayoutInflater inflater;
 
@@ -30,6 +30,7 @@ public class NewsLister extends ArrayAdapter<News> {
         newsmap = new NewsMap();
         newslist = new ArrayList<News>(newsmap);
         update = false;
+        showSiteLogo = true;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -42,7 +43,14 @@ public class NewsLister extends ArrayAdapter<News> {
 
         ((TextView) view.findViewById(R.id.title)).setText(news.title);
         ((TextView) view.findViewById(R.id.date)).setText(Date.getAge(news.date));
-        view.findViewById(R.id.logo).setBackgroundDrawable(news.site.icon);
+
+        View logo = view.findViewById(R.id.logo);
+        if (showSiteLogo) {
+            logo.setVisibility(View.VISIBLE);
+            logo.setBackground(news.site.icon);
+        } else {
+            logo.setVisibility(View.GONE);
+        }
 
         String description = news.description;
         if (description.length() > 100) {
@@ -51,6 +59,10 @@ public class NewsLister extends ArrayAdapter<News> {
         }
         ((TextView) view.findViewById(R.id.description)).setText(description);
         return view;
+    }
+
+    public void showSiteLogo(boolean showSiteLogo) {
+        this.showSiteLogo = showSiteLogo;
     }
 
     @Override

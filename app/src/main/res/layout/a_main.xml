@@ -1,7 +1,6 @@
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-
     android:layout_height="match_parent">
 
     <FrameLayout
@@ -9,12 +8,28 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ListView
-            android:id="@android:id/list"
+        <RelativeLayout
+            android:id="@+id/list_content"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:animateLayoutChanges="true"
-            android:divider="@null" />
+            android:layout_height="match_parent">
+
+            <ListView
+                android:id="@android:id/list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
+                android:divider="@null" />
+
+            <ImageButton
+                android:id="@+id/button_sections"
+                style="@style/button_floating"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/selector_floating_button_forfilter"
+                android:onClick="showSections"
+                android:src="@drawable/ic_more_black" />
+
+        </RelativeLayout>
 
         <include
             layout="@layout/p_news"
@@ -31,16 +46,6 @@
         android:background="@color/drawers"
         android:choiceMode="singleChoice"
         android:divider="@null"
-        android:dividerHeight="0dp" />
-
-    <ListView
-        android:id="@+id/section_drawer"
-        android:layout_width="200dip"
-        android:layout_height="match_parent"
-        android:layout_gravity="right"
-        android:background="@color/drawers"
-        android:choiceMode="singleChoice"
-        android:divider="@android:drawable/divider_horizontal_bright"
         android:dividerHeight="0dp" />
 
 </android.support.v4.widget.DrawerLayout>

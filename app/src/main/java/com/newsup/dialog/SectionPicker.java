@@ -6,8 +6,7 @@ import android.content.DialogInterface;
 
 import com.newsup.R;
 import com.newsup.kernel.Section;
-import com.newsup.kernel.list.SectionList;
-import com.newsup.lister.SectionPickerLister;
+import com.newsup.lister.SectionMultiPickerLister;
 import com.newsup.task.Socket;
 
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ public class SectionPicker extends AlertDialog.Builder {
         this.handler = handler;
         this.marks = marks;
 
-        setAdapter(new SectionPickerLister(context, sections, marks), null);
+        setAdapter(new SectionMultiPickerLister(context, sections, marks), null);
         setNegativeButton(android.R.string.cancel, null);
         setPositiveButton(R.string.apply, new DialogInterface.OnClickListener() {
             @Override

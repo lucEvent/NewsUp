@@ -1,7 +1,8 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="AppBaseTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+    <style name="AppBaseTheme" parent="android:Theme.Holo.Light">
         <item name="android:actionBarStyle">@style/actionBarStyle</item>
+        <item name="android:typeface">serif</item>
     </style>
 
     <style name="AppTheme" parent="AppBaseTheme"></style>

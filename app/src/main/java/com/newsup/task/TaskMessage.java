@@ -9,4 +9,6 @@ public interface TaskMessage {
     int NEWS_READ_BOOKMARKS = 2;
     int ACTION_REFRESH_LIST = 3;
     int OPEN_NEWS = 4;
+
+    int SECTION_SELECTED = 5;
 }

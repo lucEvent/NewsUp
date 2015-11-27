@@ -10,7 +10,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.newsup.R;
 import com.newsup.io.BookmarksManager;
@@ -28,7 +27,6 @@ public class NewsView {
     private RelativeLayout buttons;
 
     private WebView newsView;
-    private TextView title;
     private ImageButton bbookmark;
 
     public NewsView(Activity context, NewsDataCenter dataCenter, Handler handler) {
@@ -53,8 +51,6 @@ public class NewsView {
         webSettings.setBuiltInZoomControls(true);
         webSettings.setDisplayZoomControls(false);
 
-        title = (TextView) view.findViewById(R.id.title);
-
         view.findViewById(R.id.button_share).setOnClickListener(onShareListener);
 
         bbookmark = (ImageButton) view.findViewById(R.id.button_bookmark);
@@ -64,19 +60,21 @@ public class NewsView {
 
     private News currentNews;
 
-    private final String css = "<style>img, iframe, video,figure {width: 100%; height: auto; margin: 0} div > h2 > a > img {width: auto;}</style>";
+    private final String css = "<style>img, iframe, video,figure {width: 100%; height: auto; margin: 0; padding: 0} div > h2 > a > img {width: auto;}</style>";
     private final String fontcss = "<style>" +
             "@font-face { font-family: customfont; src: url(\"fonts/customfont.woff\"); }" +
             "body { font-family: customfont; font-weight: 300; font-size: 16px; line-height: 1.67; }" +
             "</style>";
+
 
     public boolean displayNews(News news) {
         this.currentNews = news;
 
         if (news.content == null) return false;
 
-        title.setText(news.title);
-        newsView.loadDataWithBaseURL("file:///android_asset/", css + fontcss + news.content, "text/html", "utf-8", null);
+        String title = "<h2>" + news.title + "</h2>";
+
+        newsView.loadDataWithBaseURL("file:///android_asset/", css + fontcss + title + news.content, "text/html", "utf-8", null);
 
         setBookmarkButtonImage();
 
@@ -98,8 +96,6 @@ public class NewsView {
         newsView.loadUrl("about:blank");
         newsView.clearHistory();
         newsView.clearCache(true);
-
-        title.setText("");
     }
 
     private View.OnClickListener onBookmarkListener = new View.OnClickListener() {

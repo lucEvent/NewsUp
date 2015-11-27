@@ -1,55 +1,50 @@
 package com.newsup.lister;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
+import android.widget.TextView;
 
 import com.newsup.R;
 import com.newsup.kernel.Section;
-import com.newsup.kernel.list.SectionList;
 
 import java.util.ArrayList;
 
-public class SectionPickerLister extends ArrayAdapter<Section> implements View.OnClickListener {
+public class SectionPickerLister extends ArrayAdapter<Section> {
 
-    private boolean[] marks;
     private LayoutInflater inflater;
 
-    public SectionPickerLister(Context context, ArrayList<Section> values, boolean[] marks) {
-        super(context, R.layout.i_picker, values);
-        this.marks = marks;
+    public SectionPickerLister(Context context, ArrayList<Section> values) {
+        super(context, -1, values);
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public View getView(int position, View view, ViewGroup parent) {
-        if (view == null) {
-            view = inflater.inflate(R.layout.i_picker, parent, false);
-        }
         Section section = getItem(position);
-
-        CheckBox checkbox = (CheckBox) view.findViewById(R.id.checkbox);
-        checkbox.setOnClickListener(this);
-        if (section.level == 0) {
-            checkbox.setTypeface(null, android.graphics.Typeface.BOLD);
-            checkbox.setPadding((int) (15 * Resources.getSystem().getDisplayMetrics().density), 0, 0, 0);
-        } else if (section.level == 1) {
-            checkbox.setTypeface(null, android.graphics.Typeface.NORMAL);
-            checkbox.setPadding((int) (25 * Resources.getSystem().getDisplayMetrics().density), 0, 0, 0);
+        if (section.level <= 0) {
+            if (view == null || !view.hasOnClickListeners() || view.getId() != R.layout.i_section_header) {
+                view = inflater.inflate(R.layout.i_section_header, parent, false);
+            }
+            if (section.level == -1) {
+                ((TextView) view).setTextColor(0xff999999);
+                view.setOnClickListener(null);
+            }
+        } else {
+            if (view == null || !view.hasOnClickListeners() || view.getId() != R.layout.i_section) {
+                view = inflater.inflate(R.layout.i_section, parent, false);
+            }
         }
-        checkbox.setText(getItem(position).name);
-        checkbox.setChecked(marks[position]);
-        checkbox.setTag(position);
+
+        ((TextView) view).setText(section.name);
+
         return view;
     }
 
-    @Override
-    public void onClick(View v) {
-        int position = (Integer) v.getTag();
-        marks[position] = !marks[position];
+    private void debug(String text) {
+        android.util.Log.d("##SectionLister##", text);
     }
+
 }
