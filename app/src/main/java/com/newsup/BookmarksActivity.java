@@ -12,9 +12,8 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.newsup.io.BookmarksManager;
-import com.newsup.kernel.News;
-import com.newsup.kernel.NewsDataCenter;
-import com.newsup.kernel.list.NewsMap;
+import com.newsup.kernel.basic.News;
+import com.newsup.kernel.set.NewsMap;
 import com.newsup.lister.NewsLister;
 import com.newsup.task.TaskMessage;
 import com.newsup.widget.NewsView;
@@ -36,12 +35,11 @@ public class BookmarksActivity extends ListActivity implements TaskMessage {
         newslister.setNotifyOnChange(true);
         setListAdapter(newslister);
 
-        NewsDataCenter dataCenter = new NewsDataCenter(this, null, null);
-        newsView = new NewsView(this, dataCenter, handler);
+        newsView = new NewsView(this, handler);
 
         getActionBar().setIcon(R.mipmap.ic_app);
 
-        manager = new BookmarksManager(dataCenter, handler);
+        manager = new BookmarksManager(handler);
         manager.getBookmarkedNews();
 
     }

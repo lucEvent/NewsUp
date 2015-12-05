@@ -51,8 +51,11 @@
     <string name="tryagain">Intentar de nuevo</string>
     <string name="openinbrowser">Abrir en el navegador</string>
     <string name="close">Cerrar</string>
-    <string name="title_newsnotfound">Oops... La app es genial pero aun no puede leer esta notícia</string>
+    <string name="title_newsnotfound">Oops&#8230; La app es genial pero aun no puede leer esta notícia</string>
     <string name="message_newsnotfound">Qué hacemos?</string>
     <string name="msg_no_site_picked">Ohh! No has seleccionado nada</string>
+    <string name="savedforlater">Notícias guardadas</string>
+    <string name="history">Notícias leídas</string>
+    <string name="msg_confirm_clear_hist">Confirma para eliminar el historial</string>
 
 </resources>

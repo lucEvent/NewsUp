@@ -34,6 +34,33 @@ public class Database extends SQLiteOpenHelper {
                         ");";
     }
 
+    static final class DBHistoryNews {
+        static String db = "histnews";
+
+        static String id = "_id";
+        static String news_id = "news_id";
+        static String site_code = "site_id";
+        static String title = "title";
+        static String link = "link";
+        static String date = "date";
+        static String description = "descr";
+        static String tags = "tags";
+
+        static String[] cols = {id, news_id, site_code, title, link, date, description, tags};
+
+        static String creator =
+                "CREATE TABLE " + db + " (" +
+                        id + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        news_id + " INTEGER," +
+                        site_code + " INTEGER," +
+                        title + " TEXT NOT NULL," +
+                        link + " TEXT NOT NULL," +
+                        date + " INTEGER," +
+                        description + " TEXT NOT NULL," +
+                        tags + " TEXT NOT NULL" +
+                        ");";
+    }
+
     Database(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -43,6 +70,7 @@ public class Database extends SQLiteOpenHelper {
         debug("En onCreate");
 
         db.execSQL(DBNews.creator);
+        db.execSQL(DBHistoryNews.creator);
     }
 
     @Override
@@ -50,9 +78,9 @@ public class Database extends SQLiteOpenHelper {
         debug("Upgrading DB from VERS: " + oldVersion + " to " + newVersion);
 
         // Delete all needed tables
-        // db.execSQL("DROP TABLE "+ "db_tiempo_verbal");
+        // db.execSQL("DROP TABLE "+ "db_xxxxxxxxxxxx");
         // Create all needed tables
-        // db.execSQL(CREATE_THEME);
+        // db.execSQL(CREATE_yyyyyyyyy);
     }
 
     private void debug(String text) {

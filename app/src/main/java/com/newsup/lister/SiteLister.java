@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 import com.newsup.R;
 import com.newsup.kernel.NewsDataCenter;
-import com.newsup.kernel.Site;
-import com.newsup.kernel.list.SiteList;
+import com.newsup.kernel.basic.Site;
+import com.newsup.kernel.set.SiteList;
 
 public class SiteLister extends ArrayAdapter<Site> {
     private View[] views;

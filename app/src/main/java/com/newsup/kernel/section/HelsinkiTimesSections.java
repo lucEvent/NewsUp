@@ -1,6 +1,6 @@
 package com.newsup.kernel.section;
 
-import com.newsup.kernel.Section;
+import com.newsup.kernel.basic.Section;
 
 import java.util.ArrayList;
 

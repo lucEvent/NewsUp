@@ -1,6 +1,5 @@
 package com.newsup.dialog;
 
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -9,7 +8,7 @@ import android.view.View;
 
 import com.newsup.R;
 import com.newsup.kernel.NewsDataCenter;
-import com.newsup.kernel.Site;
+import com.newsup.kernel.basic.Site;
 import com.newsup.settings.SiteSettings;
 import com.newsup.task.Socket;
 

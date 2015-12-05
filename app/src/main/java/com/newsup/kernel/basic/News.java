@@ -1,10 +1,7 @@
-package com.newsup.kernel;
+package com.newsup.kernel.basic;
 
-import com.newsup.kernel.list.Tags;
+import com.newsup.kernel.set.Tags;
 import com.newsup.kernel.util.Date;
-import com.newsup.net.util.Enclosure;
-
-import java.util.ArrayList;
 
 public class News implements Comparable<News> {
 
@@ -15,9 +12,8 @@ public class News implements Comparable<News> {
     public long date;
 
     public final Tags categories;
-    public ArrayList<Enclosure> enclosures;
 
-    public Site site;
+    public int site_code;
 
     public News(int id, String title, String link, String description, long date, Tags categories) {
         this.id = id;
@@ -33,7 +29,7 @@ public class News implements Comparable<News> {
     }
 
     public void setSite(Site site) {
-        this.site = site;
+        this.site_code = site.code;
     }
 
     public void setContent(String content) {

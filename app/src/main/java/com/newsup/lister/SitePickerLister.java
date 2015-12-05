@@ -11,8 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 
 import com.newsup.R;
-import com.newsup.kernel.Site;
-import com.newsup.kernel.list.SiteList;
+import com.newsup.kernel.basic.Site;
+import com.newsup.kernel.set.SiteList;
 
 public class SitePickerLister extends ArrayAdapter<Site> implements View.OnClickListener {
 

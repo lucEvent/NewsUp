@@ -74,7 +74,23 @@
             <TextView
                 style="@style/item_textview_main_drawer"
                 android:layout_toRightOf="@+id/sfl_icon"
-                android:text="Saved for later" />
+                android:text="@string/savedforlater" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            style="@style/item_layout_main_drawer"
+            android:onClick="onHistoryAction">
+
+            <ImageView
+                android:id="@+id/h_icon"
+                style="@style/item_imageview_main_drawer"
+                android:src="@drawable/ic_history" />
+
+            <TextView
+                style="@style/item_textview_main_drawer"
+                android:layout_toRightOf="@+id/h_icon"
+                android:text="@string/history" />
 
         </RelativeLayout>
 

@@ -7,15 +7,15 @@ import android.os.Handler;
 
 import com.newsup.io.DBManager;
 import com.newsup.io.SDManager;
-import com.newsup.kernel.list.NewsMap;
-import com.newsup.kernel.list.SiteList;
+import com.newsup.kernel.basic.News;
+import com.newsup.kernel.basic.Site;
+import com.newsup.kernel.set.NewsMap;
+import com.newsup.kernel.set.SiteList;
 import com.newsup.kernel.util.Date;
 import com.newsup.net.NewsReader;
 import com.newsup.settings.AppSettings;
 import com.newsup.settings.SiteSettings;
 import com.newsup.task.TaskMessage;
-
-import java.sql.SQLOutput;
 
 public class NewsDataCenter implements TaskMessage {
 
@@ -85,6 +85,10 @@ public class NewsDataCenter implements TaskMessage {
 
     }
 
+    public void addToHistory(News news) {
+        dbmanager.insertHistoryNews(news);
+    }
+
     private class NewsLoader {
 
         private final Site site;
@@ -113,7 +117,7 @@ public class NewsDataCenter implements TaskMessage {
                 newsreader.readNewsHeader(site, finalSections, socket);
 
                 getSiteHistory(site);
-            //    handler.obtainMessage(NEWS_READ_HISTORY, site.history).sendToTarget(); //TODO solo historial de la section
+                //    handler.obtainMessage(NEWS_READ_HISTORY, site.history).sendToTarget(); //TODO solo historial de la section
 
                 int failCounter = 0;
                 for (News N : tempNewslist) {
@@ -127,7 +131,7 @@ public class NewsDataCenter implements TaskMessage {
                         if (N.content != null && !N.content.isEmpty()) { // If there is content, we save it...
 
                             try {   // We insert it in the database
-                                dbmanager.insertNews(site.code, N);
+                                dbmanager.insertNews(N);
                             } catch (Exception e) {
                                 debug("[Error al insertar la noticia en la BD");
                             }
@@ -154,7 +158,7 @@ public class NewsDataCenter implements TaskMessage {
                     switch (taskMessage) {
                         case NEWS_READ:
                             News news = (News) dataAttached;
-                            news.site = site;
+                            news.site_code = site.code;
                             tempNewslist.add(news);
                             handler.obtainMessage(taskMessage, dataAttached).sendToTarget();
                             break;
@@ -194,7 +198,7 @@ public class NewsDataCenter implements TaskMessage {
 
                     NewsMap newstosave = task.newsToSave;
                     for (News N : newstosave) {
-                        createNews(task.site.code, N);
+                        dbmanager.insertNews(N);
                         saveNews(N);
                     }
                 }
@@ -256,7 +260,7 @@ public class NewsDataCenter implements TaskMessage {
                     handler.obtainMessage(message, dataAttached).sendToTarget();
 
                     News news = (News) dataAttached;
-                    news.site = site;
+                    news.site_code = site.code;
                     newsTempList.add(news);
                     break;
                 case ERROR:
@@ -318,10 +322,6 @@ public class NewsDataCenter implements TaskMessage {
             }
 
         }
-    }
-
-    public void createNews(int code, News news) {
-        dbmanager.insertNews(code, news);
     }
 
     public void saveNews(News news) {
@@ -392,6 +392,10 @@ public class NewsDataCenter implements TaskMessage {
     private boolean isInternetAvailable() {
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnected();
+    }
+
+    public static Site getSiteByCode(int code) {
+        return sites.getSiteByCode(code);
     }
 
     private void debug(String text) {

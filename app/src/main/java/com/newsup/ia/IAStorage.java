@@ -1,8 +1,8 @@
 package com.newsup.ia;
 
 import com.newsup.io.SDManager;
-import com.newsup.kernel.Site;
-import com.newsup.kernel.list.SiteList;
+import com.newsup.kernel.basic.Site;
+import com.newsup.kernel.set.SiteList;
 
 import java.io.File;
 import java.io.FileInputStream;

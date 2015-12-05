@@ -1,6 +1,5 @@
 package com.newsup.ia;
 
-
 import java.util.ArrayList;
 
 public class IASite {
@@ -21,4 +20,5 @@ public class IASite {
         last_access = System.currentTimeMillis();
         accesses.add(last_access);
     }
+
 }

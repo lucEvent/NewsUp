@@ -26,10 +26,10 @@ import android.widget.ListView;
 
 import com.newsup.control.SectionPickerManager;
 import com.newsup.dialog.SiteConfiguration;
-import com.newsup.kernel.News;
 import com.newsup.kernel.NewsDataCenter;
-import com.newsup.kernel.Site;
-import com.newsup.kernel.list.NewsMap;
+import com.newsup.kernel.basic.News;
+import com.newsup.kernel.basic.Site;
+import com.newsup.kernel.set.NewsMap;
 import com.newsup.kernel.util.Typefaces;
 import com.newsup.lister.NewsLister;
 import com.newsup.lister.SiteLister;
@@ -83,7 +83,7 @@ public class Main extends ListActivity implements Socket {
 
         datamanager = new NewsDataCenter(this, cm, handler);
 
-        newsView = new NewsView(this, datamanager, handler);
+        newsView = new NewsView(this, handler);
         newsListView = findViewById(R.id.list_content);
         actionBar = new ActionBarManager();
 
@@ -198,6 +198,11 @@ public class Main extends ListActivity implements Socket {
         mDrawerLayout.closeDrawer(drawerSiteList);
     }
 
+    public void onHistoryAction(View view) {
+        startActivity(new Intent(this, HistoryActivity.class));
+        mDrawerLayout.closeDrawer(drawerSiteList);
+    }
+
     public void onConfigurationAction(View view) {
         startActivityForResult(new Intent(this, SettingsActivity.class), 0);
         mDrawerLayout.closeDrawer(drawerSiteList);
@@ -230,6 +235,7 @@ public class Main extends ListActivity implements Socket {
 
     private void displayNews(News news) {
         if (newsView.displayNews(news)) {
+            datamanager.addToHistory(news);
             actionBar.hide();
             displayingNews = true;
         } else {

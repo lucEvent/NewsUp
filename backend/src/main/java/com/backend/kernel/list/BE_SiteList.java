@@ -70,7 +70,7 @@ public class BE_SiteList extends ArrayList<BE_Site> {
         add(new BE_Site(820, "TED", new com.backend.net.BE_TEDNewsReader()));
         add(new BE_Site(825, "Gizmodo", new com.backend.net.BE_GizmodoNewsReader()));
         add(new BE_Site(830, "Android Authority", new com.backend.net.BE_AndroidAuthorityNewsReader()));
-//          add(new BE_Site(835, "Computer Hoy", new com.backend.net.BE_ComputerHoyNewsReader()));
+        add(new BE_Site(835, "Computer Hoy", new com.backend.net.BE_ComputerHoyNewsReader()));
 //          add(new BE_Site(840, "Swedroid", new com.backend.net.BE_SwedroidNewsReader()));
 
         // Blog sites
@@ -85,7 +85,7 @@ public class BE_SiteList extends ArrayList<BE_Site> {
         add(new BE_Site(1025, "**The Atlantic", new com.backend.net.BE_TheAtlanticNewsReader()));
         add(new BE_Site(1030, "**Sky and Telescope", new com.backend.net.BE_SkyAndTelescopeNewsReader()));
         add(new BE_Site(1035, "**Dogster", new com.backend.net.BE_DogsterNewsReader()));
-//          add(new BE_Site(1040, "El Jueves", new com.backend.net.BE_ElJuevesNewsReader()));
+        add(new BE_Site(1040, "El Jueves", new com.backend.net.BE_ElJuevesNewsReader()));
 //          add(new BE_Site(1045, "National Geographic", new com.backend.net.BE_NationalGeographicNewsReader()));
 //          add(new BE_Site(1050, "Space News", new com.backend.net.BE_SpaceNewsNewsReader()));
 //          add(new BE_Site(1055, "Space", new com.backend.net.BE_SpaceNewsReader()));

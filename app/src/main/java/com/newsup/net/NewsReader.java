@@ -1,9 +1,9 @@
 package com.newsup.net;
 
-import com.newsup.kernel.News;
-import com.newsup.kernel.Site;
-import com.newsup.kernel.list.SectionList;
-import com.newsup.kernel.list.Tags;
+import com.newsup.kernel.basic.News;
+import com.newsup.kernel.basic.Site;
+import com.newsup.kernel.set.SectionList;
+import com.newsup.kernel.set.Tags;
 import com.newsup.task.Socket;
 import com.newsup.task.TaskMessage;
 

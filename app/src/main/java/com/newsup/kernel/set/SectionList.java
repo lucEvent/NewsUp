@@ -1,8 +1,8 @@
-package com.newsup.kernel.list;
+package com.newsup.kernel.set;
+
+import com.newsup.kernel.basic.Section;
 
 import java.util.ArrayList;
-
-import com.newsup.kernel.Section;
 
 public class SectionList extends ArrayList<Section> {
 

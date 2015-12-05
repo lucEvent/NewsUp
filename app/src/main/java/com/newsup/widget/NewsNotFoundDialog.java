@@ -12,7 +12,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.newsup.R;
-import com.newsup.kernel.News;
+import com.newsup.kernel.basic.News;
 import com.newsup.task.TaskMessage;
 
 public class NewsNotFoundDialog implements View.OnClickListener {

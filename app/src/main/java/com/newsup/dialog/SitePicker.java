@@ -7,14 +7,11 @@ import android.widget.Toast;
 
 import com.newsup.R;
 import com.newsup.kernel.NewsDataCenter;
-import com.newsup.kernel.Site;
-import com.newsup.kernel.list.SiteList;
+import com.newsup.kernel.basic.Site;
+import com.newsup.kernel.set.SiteList;
 import com.newsup.lister.SitePickerLister;
 import com.newsup.settings.AppSettings;
-import com.newsup.settings.SiteSettings;
 import com.newsup.task.Socket;
-
-import java.util.ArrayList;
 
 public class SitePicker extends AlertDialog.Builder implements DialogState {
 

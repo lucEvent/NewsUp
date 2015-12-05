@@ -1,6 +1,6 @@
 package com.newsup.net.dev;
 
-import com.newsup.kernel.Section;
+import com.newsup.kernel.basic.Section;
 
 public class SectionDeprecated extends Section {
 

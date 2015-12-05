@@ -1,9 +1,9 @@
 package com.newsup.net;
 
-import com.newsup.kernel.News;
-import com.newsup.kernel.Section;
-import com.newsup.kernel.list.SectionList;
-import com.newsup.kernel.list.Tags;
+import com.newsup.kernel.basic.News;
+import com.newsup.kernel.basic.Section;
+import com.newsup.kernel.set.SectionList;
+import com.newsup.kernel.set.Tags;
 import com.newsup.kernel.util.Date;
 import com.newsup.net.util.Enclosure;
 import com.newsup.task.Socket;
@@ -102,7 +102,7 @@ public abstract class NewsReaderDeprecated {
             if (!title.isEmpty()) {
                 News news = new News(title, link.isEmpty() ? guided : link, description, Date.toDate(date), new Tags(categories));
                 if (catchEnclosures) {
-                    news.enclosures = enclosures;
+                   // news.enclosures = enclosures;
                 }
                 news = applySpecialCase(news, content);
                 handler.message(TaskMessage.NEWS_READ, news);

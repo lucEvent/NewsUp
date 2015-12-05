@@ -1,11 +1,10 @@
-package com.newsup.kernel.list;
+package com.newsup.kernel.set;
 
 import android.content.Context;
 import android.content.res.AssetManager;
 
 import com.newsup.R;
-import com.newsup.kernel.Site;
-import com.newsup.kernel.section.HelsinkiSanomatSections;
+import com.newsup.kernel.basic.Site;
 
 import java.util.ArrayList;
 import java.util.TreeSet;
@@ -52,14 +51,14 @@ public class SiteList extends ArrayList<Site> {
             add(new Site(325, "Fria Tider", 0xffffffff, assets.open("friatider.png"), new com.newsup.kernel.section.FriaTiderSections()));
             add(new Site(330, "Metro", 0xff007d3c, assets.open("metro.png"), new com.newsup.kernel.section.MetroSections()));
 
-            add(new Site(-1, context.getString(R.string.finland), 0, null, null));
+/*            add(new Site(-1, context.getString(R.string.finland), 0, null, null));
             add(new Site(400, "Helsinki times", 0xff32c8fa, assets.open("helsinkitimes.png"), new com.newsup.kernel.section.HelsinkiTimesSections()));
             add(new Site(405, "Helsingin Sanomat", 0xff01133d, assets.open("helsinginsanomat.png"), new HelsinkiSanomatSections()));
             add(new Site(410, "Iltalehti", 0xffff0000, assets.open("iltalehti.png"), new com.newsup.kernel.section.IltalehtiSections()));
             add(new Site(415, "Yle", 0xff00b4c4, assets.open("yle.png"), new com.newsup.kernel.section.YleSections()));
 //          add(new Site(420, "Yle Svenska", 0xff, assets.open("ylesvenska.png"), new com.newsup.kernel.section.YleSvenskaSections()));
 //          add(new Site(425, "Ilta Sanomat", 0xff, assets.open("iltasanomat.png"), new com.newsup.kernel.section.IltaSanomatSections()));
-
+*/
             add(new Site(-1, context.getString(R.string.uk), 0, null, null));
             add(new Site(500, "BBC", 0xffa62e30, assets.open("bbc.png"), new com.newsup.kernel.section.BCCSections()));
 //          add(new Site(505, "The Telegraph", 0xff, assets.open("thetelegraph.png"), new com.newsup.kernel.section.TheTelegraphSections()));
@@ -84,7 +83,7 @@ public class SiteList extends ArrayList<Site> {
             add(new Site(820, "TED", 0xffffffff, assets.open("ted.png"), new com.newsup.kernel.section.TEDSections()));
             add(new Site(825, "Gizmodo", 0xff9c9c9c, assets.open("gizmodo.png"), new com.newsup.kernel.section.GizmodoSections()));
             add(new Site(830, "Android Authority", 0xff8cc234, assets.open("androidauthority.png"), new com.newsup.kernel.section.AndroidAuthoritySections()));
-//          add(new Site(835, "Computer Hoy", 0xff, assets.open("computerhoy.png"), new com.newsup.kernel.section.ComputerHoySections()));
+            add(new Site(835, "Computer Hoy", 0xff1a1a1a, assets.open("computerhoy.png"), new com.newsup.kernel.section.ComputerHoySections()));
 //          add(new Site(840, "Swedroid", 0xff, assets.open("swedroid.png"), new com.newsup.kernel.section.SwedroidSections()));
 
             add(new Site(-1, context.getString(R.string.blogs), 0, null, null));
@@ -99,7 +98,7 @@ public class SiteList extends ArrayList<Site> {
             add(new Site(1025, "The Atlantic", 0xff030202, assets.open("theatlantic.png"), new com.newsup.kernel.section.TheAtlanticSections()));
             add(new Site(1030, "Sky and Telescope", 0xffd92326, assets.open("skyntelescope.png"), new com.newsup.kernel.section.SkyAndTelescopeSections()));
             add(new Site(1035, "Dogster", 0xff547a94, assets.open("dogster.png"), new com.newsup.kernel.section.DogsterSections()));
-//          add(new Site(1040, "El Jueves", 0xff, assets.open("eljueves.png"), new com.newsup.kernel.section.ElJuevesSections()));
+            add(new Site(1040, "El Jueves", 0xffcb1f1f, assets.open("eljueves.png"), new com.newsup.kernel.section.ElJuevesSections()));
 //          add(new Site(1045, "National Geographic", 0xff, assets.open("nationalgeographic.png"), new com.newsup.kernel.section.NationalGeographicSections()));
 //          add(new Site(1050, "Space News", 0xff, assets.open("spacenews.png"), new com.newsup.kernel.section.SpaceNewsSections()));
 //          add(new Site(1055, "Space", 0xff, assets.open("space.png"), new com.newsup.kernel.section.SpaceSections()));

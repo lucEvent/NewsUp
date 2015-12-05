@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 
 import com.newsup.R;
-import com.newsup.kernel.Section;
+import com.newsup.kernel.basic.Section;
 import com.newsup.lister.SectionMultiPickerLister;
 import com.newsup.task.Socket;
 

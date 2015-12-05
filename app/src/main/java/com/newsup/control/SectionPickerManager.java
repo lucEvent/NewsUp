@@ -5,8 +5,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 
-import com.newsup.kernel.Section;
-import com.newsup.kernel.list.SectionList;
+import com.newsup.kernel.basic.Section;
+import com.newsup.kernel.set.SectionList;
 import com.newsup.lister.SectionPickerLister;
 import com.newsup.task.Socket;
 import com.newsup.task.TaskMessage;
@@ -43,4 +43,5 @@ public class SectionPickerManager {
     public void show() {
         dialog.show();
     }
+
 }

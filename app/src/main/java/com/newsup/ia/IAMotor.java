@@ -1,8 +1,8 @@
 package com.newsup.ia;
 
-import com.newsup.kernel.News;
 import com.newsup.kernel.NewsDataCenter;
-import com.newsup.kernel.Site;
+import com.newsup.kernel.basic.News;
+import com.newsup.kernel.basic.Site;
 
 import java.util.Comparator;
 import java.util.TreeSet;

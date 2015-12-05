@@ -1,10 +1,10 @@
-package com.newsup.kernel;
+package com.newsup.kernel.basic;
 
 import android.graphics.drawable.Drawable;
 
 import com.newsup.R;
 import com.newsup.ia.IASite;
-import com.newsup.kernel.list.NewsMap;
+import com.newsup.kernel.set.NewsMap;
 import com.newsup.settings.SiteSettings;
 
 import java.io.InputStream;

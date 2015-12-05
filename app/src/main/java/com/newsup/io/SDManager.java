@@ -3,8 +3,8 @@ package com.newsup.io;
 import android.content.Context;
 import android.os.Environment;
 
-import com.newsup.kernel.News;
-import com.newsup.kernel.Site;
+import com.newsup.kernel.basic.News;
+import com.newsup.kernel.basic.Site;
 import com.newsup.kernel.util.Compressor;
 import com.newsup.settings.AppSettings;
 import com.newsup.settings.SiteSettings;

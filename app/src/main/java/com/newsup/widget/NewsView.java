@@ -13,8 +13,7 @@ import android.widget.RelativeLayout;
 
 import com.newsup.R;
 import com.newsup.io.BookmarksManager;
-import com.newsup.kernel.News;
-import com.newsup.kernel.NewsDataCenter;
+import com.newsup.kernel.basic.News;
 import com.newsup.task.TaskMessage;
 
 public class NewsView {
@@ -29,10 +28,10 @@ public class NewsView {
     private WebView newsView;
     private ImageButton bbookmark;
 
-    public NewsView(Activity context, NewsDataCenter dataCenter, Handler handler) {
+    public NewsView(Activity context, Handler handler) {
         this.context = context;
         this.handler = handler;
-        this.bmManager = new BookmarksManager(dataCenter, null);
+        this.bmManager = new BookmarksManager(null);
 
         view = context.findViewById(R.id.layoutcontent);
         view.setOnClickListener(new View.OnClickListener() {

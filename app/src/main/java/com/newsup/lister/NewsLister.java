@@ -8,8 +8,9 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.newsup.R;
-import com.newsup.kernel.News;
-import com.newsup.kernel.list.NewsMap;
+import com.newsup.kernel.NewsDataCenter;
+import com.newsup.kernel.basic.News;
+import com.newsup.kernel.set.NewsMap;
 import com.newsup.kernel.util.Date;
 
 import java.util.ArrayList;
@@ -17,13 +18,13 @@ import java.util.Collection;
 
 public class NewsLister extends ArrayAdapter<News> {
 
-    private NewsMap newsmap;
-    private ArrayList<News> newslist;
+    protected NewsMap newsmap;
+    protected ArrayList<News> newslist;
 
-    private boolean update;
-    private boolean showSiteLogo;
+    protected boolean update;
+    protected boolean showSiteLogo;
 
-    private LayoutInflater inflater;
+    protected LayoutInflater inflater;
 
     public NewsLister(Context context) {
         super(context, R.layout.i_news, new ArrayList<News>());
@@ -47,7 +48,7 @@ public class NewsLister extends ArrayAdapter<News> {
         View logo = view.findViewById(R.id.logo);
         if (showSiteLogo) {
             logo.setVisibility(View.VISIBLE);
-            logo.setBackground(news.site.icon);
+            logo.setBackground(NewsDataCenter.getSiteByCode(news.site_code).icon);
         } else {
             logo.setVisibility(View.GONE);
         }

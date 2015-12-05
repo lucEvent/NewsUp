@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 
 import com.newsup.R;
-import com.newsup.kernel.Section;
+import com.newsup.kernel.basic.Section;
 
 import java.util.ArrayList;
 

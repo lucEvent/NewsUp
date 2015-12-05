@@ -1,4 +1,4 @@
-package com.newsup.kernel;
+package com.newsup.kernel.basic;
 
 public class Section {
 

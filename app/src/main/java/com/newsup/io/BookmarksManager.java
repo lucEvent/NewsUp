@@ -2,10 +2,9 @@ package com.newsup.io;
 
 import android.os.Handler;
 
-import com.newsup.kernel.News;
-import com.newsup.kernel.NewsDataCenter;
-import com.newsup.kernel.list.NewsMap;
-import com.newsup.kernel.list.Tags;
+import com.newsup.kernel.basic.News;
+import com.newsup.kernel.set.NewsMap;
+import com.newsup.kernel.set.Tags;
 import com.newsup.task.TaskMessage;
 
 import java.io.File;
@@ -25,10 +24,8 @@ public class BookmarksManager implements TaskMessage {
     private static NewsMap bookmarkedNewsList;
 
     private Handler handler;
-    private NewsDataCenter dataCenter;
 
-    public BookmarksManager(NewsDataCenter dataCenter, Handler handler) {
-        this.dataCenter = dataCenter;
+    public BookmarksManager(Handler handler) {
         this.handler = handler;
 
         File dir = new File(SDManager.getDirectory(), BOOKMARKS_DIR);
@@ -86,7 +83,7 @@ public class BookmarksManager implements TaskMessage {
             out.writeLong(news.date);
             out.writeObject(news.categories.toString());
             out.writeObject(news.content);
-            out.writeInt(news.site.code);
+            out.writeInt(news.site_code);
 
             out.close();
         } catch (IOException e) {
@@ -151,9 +148,7 @@ public class BookmarksManager implements TaskMessage {
 
                             News news = new News(-2, title, link, description, date, new Tags(categories));
                             news.content = (String) in.readObject();
-
-                            int sitecode = in.readInt();
-                            news.site = dataCenter.getSites().getSiteByCode(sitecode);
+                            news.site_code = in.readInt();
 
                             bookmarkedNewsList.add(news);
                             in.close();
