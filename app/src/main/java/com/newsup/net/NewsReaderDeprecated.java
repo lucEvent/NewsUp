@@ -7,7 +7,7 @@ import com.newsup.kernel.set.Tags;
 import com.newsup.kernel.util.Date;
 import com.newsup.net.util.Enclosure;
 import com.newsup.task.Socket;
-import com.newsup.task.TaskMessage;
+import com.newsup.task.SocketMessage;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -102,10 +102,10 @@ public abstract class NewsReaderDeprecated {
             if (!title.isEmpty()) {
                 News news = new News(title, link.isEmpty() ? guided : link, description, Date.toDate(date), new Tags(categories));
                 if (catchEnclosures) {
-                   // news.enclosures = enclosures;
+                    // news.enclosures = enclosures;
                 }
                 news = applySpecialCase(news, content);
-                handler.message(TaskMessage.NEWS_READ, news);
+                handler.message(SocketMessage.NEWS_READ, news);
             }
         }
     }

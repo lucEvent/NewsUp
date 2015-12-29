@@ -43,8 +43,6 @@ public class BE_SiteList extends ArrayList<BE_Site> {
         add(new BE_Site(405, "Helsingin Sanomat", new com.backend.net.BE_HelsinkiSanomatNewsReader()));
         add(new BE_Site(410, "Iltalehti", new com.backend.net.BE_IltalehtiNewsReader()));
         add(new BE_Site(415, "Yle", new com.backend.net.BE_YleNewsReader()));
-//          add(new BE_Site(420, "Yle Svenska", new com.backend.net.BE_YleSvenskaNewsReader()));
-//          add(new BE_Site(425, "Ilta Sanomat", new com.backend.net.BE_IltaSanomatNewsReader()));
 
         // British sites
         add(new BE_Site(500, "BBC", new com.backend.net.BE_BCCNewsReader()));
@@ -71,23 +69,23 @@ public class BE_SiteList extends ArrayList<BE_Site> {
         add(new BE_Site(825, "Gizmodo", new com.backend.net.BE_GizmodoNewsReader()));
         add(new BE_Site(830, "Android Authority", new com.backend.net.BE_AndroidAuthorityNewsReader()));
         add(new BE_Site(835, "Computer Hoy", new com.backend.net.BE_ComputerHoyNewsReader()));
-//          add(new BE_Site(840, "Swedroid", new com.backend.net.BE_SwedroidNewsReader()));
+        add(new BE_Site(840, "Swedroid", new com.backend.net.BE_SwedroidNewsReader()));
 
         // Blog sites
         add(new BE_Site(900, "Medium", new com.backend.net.BE_MediumNewsReader()));
 
         // Magazines sites
-        add(new BE_Site(1000, "**Make", new com.backend.net.BE_MakeNewsReader()));
-        add(new BE_Site(1005, "**Discover", new com.backend.net.BE_DiscoverNewsReader()));
-        add(new BE_Site(1010, "**Rolling Stone", new com.backend.net.BE_RollingStoneNewsReader()));
-        add(new BE_Site(1015, "**People", new com.backend.net.BE_PeopleNewsReader()));
-        add(new BE_Site(1020, "**Time", new com.backend.net.BE_TimeNewsReader()));
-        add(new BE_Site(1025, "**The Atlantic", new com.backend.net.BE_TheAtlanticNewsReader()));
-        add(new BE_Site(1030, "**Sky and Telescope", new com.backend.net.BE_SkyAndTelescopeNewsReader()));
-        add(new BE_Site(1035, "**Dogster", new com.backend.net.BE_DogsterNewsReader()));
+        add(new BE_Site(1000, "Make", new com.backend.net.BE_MakeNewsReader()));
+        add(new BE_Site(1005, "Discover", new com.backend.net.BE_DiscoverNewsReader()));
+        add(new BE_Site(1010, "Rolling Stone", new com.backend.net.BE_RollingStoneNewsReader()));
+        add(new BE_Site(1015, "People", new com.backend.net.BE_PeopleNewsReader()));
+        add(new BE_Site(1020, "Time", new com.backend.net.BE_TimeNewsReader()));
+        add(new BE_Site(1025, "The Atlantic", new com.backend.net.BE_TheAtlanticNewsReader()));
+        add(new BE_Site(1030, "Sky and Telescope", new com.backend.net.BE_SkyAndTelescopeNewsReader()));
+        add(new BE_Site(1035, "Dogster", new com.backend.net.BE_DogsterNewsReader()));
         add(new BE_Site(1040, "El Jueves", new com.backend.net.BE_ElJuevesNewsReader()));
 //          add(new BE_Site(1045, "National Geographic", new com.backend.net.BE_NationalGeographicNewsReader()));
-//          add(new BE_Site(1050, "Space News", new com.backend.net.BE_SpaceNewsNewsReader()));
+        add(new BE_Site(1050, "Space News", new com.backend.net.BE_SpaceNewsNewsReader()));
 //          add(new BE_Site(1055, "Space", new com.backend.net.BE_SpaceNewsReader()));
 //          add(new BE_Site(1060, "The Bark", new com.backend.net.BE_TheBarkNewsReader()));
 

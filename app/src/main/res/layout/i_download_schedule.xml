@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:text="08:00"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="48sp" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <ImageView
+                android:id="@+id/repeat_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/repeat"
+                android:layout_alignTop="@+id/repeat"
+                android:paddingBottom="5dip"
+                android:paddingTop="5dip"
+                android:src="@drawable/ic_refresh" />
+
+            <TextView
+                android:id="@+id/repeat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/repeat_icon"
+                android:drawablePadding="3dp"
+                android:paddingBottom="5dip"
+                android:paddingTop="5dip"
+                android:text="@string/repeat"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <ImageView
+                android:id="@+id/notification_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/notify"
+                android:layout_below="@+id/repeat_icon"
+                android:paddingBottom="5dip"
+                android:paddingTop="5dip"
+                android:src="@drawable/ic_notification" />
+
+            <TextView
+                android:id="@+id/notify"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/repeat_icon"
+                android:layout_toRightOf="@+id/notification_icon"
+                android:paddingBottom="5dip"
+                android:paddingTop="5dip"
+                android:text="@string/notification"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/days"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="10dip"
+            android:text="Mon, Tue, Wed, Sat"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <ImageButton
+            android:id="@+id/action_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:background="#0fff"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:paddingRight="10dip"
+            android:src="@drawable/ic_delete" />
+
+
+    </LinearLayout>
+</LinearLayout>

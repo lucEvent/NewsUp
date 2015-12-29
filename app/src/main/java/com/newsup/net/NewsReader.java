@@ -5,7 +5,7 @@ import com.newsup.kernel.basic.Site;
 import com.newsup.kernel.set.SectionList;
 import com.newsup.kernel.set.Tags;
 import com.newsup.task.Socket;
-import com.newsup.task.TaskMessage;
+import com.newsup.task.SocketMessage;
 
 public final class NewsReader {
 
@@ -78,7 +78,7 @@ public final class NewsReader {
 
                     news.content = content;
                 }
-                handler.message(TaskMessage.NEWS_READ, news);
+                handler.message(SocketMessage.NEWS_READ, news);
             }
         }
     }

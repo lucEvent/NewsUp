@@ -5,7 +5,7 @@
     android:versionName="@string/app_version">
 
     <uses-sdk
-        android:minSdkVersion="15"
+        android:minSdkVersion="16"
         android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -14,6 +14,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -33,13 +35,56 @@
         </activity>
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/settings" />
+            android:icon="@mipmap/ic_app"
+            android:label="@string/settings"
+            android:parentActivityName=".Main">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Main" />
+        </activity>
         <activity
             android:name=".BookmarksActivity"
-            android:label="@string/bookmarks" />
+            android:icon="@mipmap/ic_app"
+            android:label="@string/savedforlater"
+            android:parentActivityName=".Main">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Main" />
+        </activity>
         <activity
             android:name=".HistoryActivity"
-            android:label="@string/title_activity_history"></activity>
+            android:icon="@mipmap/ic_app"
+            android:label="@string/title_activity_history"
+            android:parentActivityName=".Main">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Main" />
+        </activity>
+
+        <receiver android:name=".services.schedule.ScheduledDownloadReceiver" />
+
+        <service android:name=".services.schedule.ScheduledDownloadService" />
+
+        <activity
+            android:name=".ScheduleDownloadActivity"
+            android:icon="@mipmap/ic_app"
+            android:label="@string/scheduledonwloads"
+            android:parentActivityName=".SettingsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".SettingsActivity" />
+        </activity>
+
+        <receiver
+            android:name=".services.onConcerningEventReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.DATE_CHANGED" />
+                <action android:name="android.intent.action.LOCALE_CHANGED" />
+                <action android:name="android.intent.action.TIME_SET" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

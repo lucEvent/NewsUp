@@ -6,8 +6,7 @@ public class SiteSettings {
 
     public int sitecode;
 
-    public boolean[] sectionsOnMain;
-    public boolean[] sectionsToSave;
+    public boolean[] sectionsOnMain, sectionsOffline;
 
     public SiteSettings(int sitecode) {
         this.sitecode = sitecode;
@@ -15,6 +14,10 @@ public class SiteSettings {
 
     public int[] sectionsOnMainIntegerArray() {
         return toIntegerArray(sectionsOnMain);
+    }
+
+    public int[] sectionsOfflineIntegerArray() {
+        return toIntegerArray(sectionsOffline);
     }
 
     public static int[] toIntegerArray(boolean[] array) {

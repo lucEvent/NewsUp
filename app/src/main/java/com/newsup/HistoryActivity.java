@@ -15,7 +15,7 @@ import com.newsup.kernel.HistoryDataCenter;
 import com.newsup.kernel.basic.News;
 import com.newsup.kernel.set.NewsMap;
 import com.newsup.lister.HistoryNewsLister;
-import com.newsup.task.TaskMessage;
+import com.newsup.task.SocketMessage;
 import com.newsup.widget.NewsView;
 
 public class HistoryActivity extends ListActivity {
@@ -39,8 +39,6 @@ public class HistoryActivity extends ListActivity {
         datamanager.load_Historial();
 
         newsView = new NewsView(this, handler);
-
-        getActionBar().setIcon(R.mipmap.ic_app);
     }
 
     @Override
@@ -106,10 +104,10 @@ public class HistoryActivity extends ListActivity {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case TaskMessage.NEWS_READ_HISTORY:
+                case SocketMessage.HISTORY_READ:
                     newslister.addAll((NewsMap) msg.obj);
                     break;
-                case TaskMessage.ERROR:
+                case SocketMessage.ERROR:
                     debug("Error recibido por el Handler");
                     break;
                 default:

@@ -3,8 +3,6 @@ package com.backend;
 import com.backend.kernel.BE_News;
 import com.backend.kernel.BE_Site;
 import com.backend.kernel.list.BE_NewsList;
-import com.backend.kernel.list.BE_SiteList;
-import com.backend.servlet.AsyncProcessManager;
 
 import java.io.IOException;
 
@@ -36,39 +34,54 @@ public class MyServlet extends HttpServlet {
 
             String[] parts = site_request.split(",");
 
-            BE_Site site = sites.getSiteByCode(Integer.parseInt(parts[0]));
-
-            int[] site_sections = new int[parts.length - 1];
-            for (int i = 0; i < site_sections.length; i++) {
-                site_sections[i] = Integer.parseInt(parts[i + 1]);
-            }
-
-            BE_NewsList site_news = site.getReader().readNews(site_sections);
+            BE_Site site = Data.sites.getSiteByCode(Integer.parseInt(parts[0]));
 
             StringBuilder sb = new StringBuilder("<channel>");
-            for (BE_News news : site_news) {
-                sb.append(news.toEntry());
+            for (int i = 0; i < parts.length - 1; i++) {
+                int section = Integer.parseInt(parts[i + 1]);
+
+                long lastupdate = site.getSectionUpdateTime(section);
+                if (lastupdate == -1 || lastupdate < System.currentTimeMillis() - 3600000) {
+                    BE_NewsList news = site.readNews(new int[]{section});
+
+                    boolean allcontent = true;
+                    for (BE_News N : news) {
+                        if (N.content == null || N.content.isEmpty()) {
+                            allcontent = false;
+                        }
+                    }
+
+                    if (allcontent) {
+                        site.addContent(section, news);
+                        sb.append(site.getSectionContent(section));
+                    } else {
+                        site.addNews(news);
+                        for (BE_News N : news) {
+                            sb.append(N.toEntry());
+                        }
+                    }
+                } else {
+                    sb.append(site.getSectionContent(section));
+                }
+
             }
             sb.append("</channel>");
 
 //        PrintWriter out = response.getWriter();
             resp.getWriter().println(sb.toString());
 
-            site.addNews(site_news);
-            //      processManager.addReadContentTask(site);
-
         } else if (req.getParameter("content") != null) {
 
-            BE_Site site = sites.getSiteByCode(Integer.parseInt(req.getParameter("site")));
+            BE_Site site = Data.sites.getSiteByCode(Integer.parseInt(req.getParameter("site")));
             String link = req.getParameter("link");
             long date = Long.parseLong(req.getParameter("date"));
 
             BE_News bait = new BE_News("", link, "", date, null);
-            BE_News prey = site.news.ceiling(bait);
+            BE_News prey = site.historial.ceiling(bait);
 
             if (prey != null && prey.compareTo(bait) == 0) {
                 if (prey.content == null) {
-                    site.getReader().readNewsContent(prey);
+                    site.readNewsContent(prey);
                 }
 
                 if (prey.content == null) {
@@ -79,63 +92,36 @@ public class MyServlet extends HttpServlet {
             }
         } else if (req.getParameter("debug") != null) {
 
-            BE_Site site = sites.getSiteByCode(Integer.parseInt(req.getParameter("site")));
+            BE_Site site = Data.sites.getSiteByCode(Integer.parseInt(req.getParameter("site")));
             String link = req.getParameter("link");
 
             BE_News N = new BE_News("", link, "", 0, null);
 
-            site.getReader().readNewsContent(N);
+            site.readNewsContent(N);
 
             resp.getWriter().println(N.content);
 
         } else if (req.getParameter("clear") != null) {
 
-            for (BE_Site site : sites) {
-                site.news.clear();
+            for (BE_Site site : Data.sites) {
+                site.historial.clear();
             }
 
         }
     }
-
-    private AsyncProcessManager processManager;
-    private BE_SiteList sites;
 
     @Override
     public void init() throws ServletException {
         super.init();
 
+        new Data();
 
-        if (sites == null) {
-            sites = new BE_SiteList();
-        }
-        if (processManager == null) {
-            processManager = new AsyncProcessManager();
-        }
-        //debug
-   /*
-
-        boolean debug = false;
-        if (debug) {
-
-            for (BE_Site s : sites) {
-                System.out.println("### [" + s.name + "] ###");
-                for (int isec = 0; isec < s.getReader().SECTIONS.size(); ++isec) {
-                    BE_Section d = s.getReader().SECTIONS.get(isec);
-           //         System.out.println("@@# [" + d.name.toUpperCase() + "] #@@");
-                    if (d.link != null) s.getReader().readNews(new int[]{ isec});
-//                    else System.out.println("Es que el l");
-                }
-            }
-        }
-        //end debug
-    */
     }
 
-
 }
-/*        //Posible support for more than 1 site request per request
-        String[] news_requests = req.getParameterValues("site");
+/*        Posible support for more than 1 site request per request
 
+        String[] news_requests = req.getParameterValues("site");
 
         for (String site_request : news_requests) {
             int l = site_request.indexOf("(");

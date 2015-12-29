@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.newsup.R;
 import com.newsup.kernel.basic.News;
-import com.newsup.task.TaskMessage;
+import com.newsup.task.SocketMessage;
 
 public class NewsNotFoundDialog implements View.OnClickListener {
 
@@ -53,7 +53,7 @@ public class NewsNotFoundDialog implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tryagain:
-                handler.obtainMessage(TaskMessage.OPEN_NEWS, news).sendToTarget();
+                handler.obtainMessage(SocketMessage.ACTION_OPEN_NEWS, news).sendToTarget();
                 break;
             case R.id.openinbrowser:
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(news.link));

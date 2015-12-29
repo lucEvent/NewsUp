@@ -13,18 +13,21 @@ import com.newsup.kernel.set.NewsMap;
 import com.newsup.kernel.set.SiteList;
 import com.newsup.kernel.util.Date;
 import com.newsup.net.NewsReader;
+import com.newsup.services.schedule.ScheduledDownloadReceiver;
 import com.newsup.settings.AppSettings;
 import com.newsup.settings.SiteSettings;
-import com.newsup.task.TaskMessage;
+import com.newsup.task.SocketMessage;
 
-public class NewsDataCenter implements TaskMessage {
+import java.util.Comparator;
+import java.util.TreeSet;
+
+public class NewsDataCenter {
 
     /**
-     * Static constants
+     *
      **/
-    private final Context context;
-    private final ConnectivityManager connectivityManager;
-    private final Handler handler;
+    private Context context;
+    private Handler handler;
 
     /**
      * Controllers
@@ -34,18 +37,18 @@ public class NewsDataCenter implements TaskMessage {
     private SDManager sdmanager;
 
     /**
-     * Variables
+     * Static variables
      **/
+    private static ConnectivityManager connectivityManager;
     private static AppSettings appSettings;
     private static SiteList sites;
 
     public NewsDataCenter(Context context) {
-        this(context, null, null);
+        this(context, null);
     }
 
-    public NewsDataCenter(Context context, ConnectivityManager connectivityManager, Handler handler) {
+    public NewsDataCenter(Context context, Handler handler) {
         this.context = context;
-        this.connectivityManager = connectivityManager;
         this.handler = handler;
 
         new Date(context);
@@ -54,6 +57,9 @@ public class NewsDataCenter implements TaskMessage {
         sdmanager = new SDManager(context);
         newsreader = new NewsReader();
 
+        if (connectivityManager == null) {
+            connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        }
         if (sites == null) {
             sites = new SiteList(context);
         }
@@ -84,6 +90,32 @@ public class NewsDataCenter implements TaskMessage {
         else new NoInternetTask(null);
 
     }
+
+    public boolean download_News_for_service(int[] dl_sites_codes) {
+
+        if (isInternetAvailable()) {
+            for (int dl_sites_code : dl_sites_codes) {
+                try {
+                    NewsSiteLoader thread = new NewsSiteLoader(sites.getSiteByCode(dl_sites_code), NewsSiteLoader.OFFLINE_SECTIONS);
+                    thread.start();
+                    thread.join();
+
+                    NewsMap newstosave = thread.newsToSave;
+                    for (News N : newstosave) {
+                        dbmanager.insertNews(N);
+                        saveNews(N);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    debug("HA HABIDO UN ERROR FATAL");
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
 
     public void addToHistory(News news) {
         dbmanager.insertHistoryNews(news);
@@ -185,7 +217,7 @@ public class NewsDataCenter implements TaskMessage {
                 NewsSiteLoader[] tasks = new NewsSiteLoader[AppSettings.MAIN_CODES.length];
 
                 for (int i = 0; i < AppSettings.MAIN_CODES.length; ++i) {
-                    tasks[i] = new NewsSiteLoader(sites.getSiteByCode(AppSettings.MAIN_CODES[i]));
+                    tasks[i] = new NewsSiteLoader(sites.getSiteByCode(AppSettings.MAIN_CODES[i]), NewsSiteLoader.MAIN_SECTIONS);
                     tasks[i].start();
                 }
 
@@ -209,13 +241,19 @@ public class NewsDataCenter implements TaskMessage {
 
     private class NewsSiteLoader extends Thread implements com.newsup.task.Socket {
 
+        public static final int MAIN_SECTIONS = 0;
+        public static final int OFFLINE_SECTIONS = 0;
+
+
         final Site site;
+        final int type_sections;
 
         NewsMap newsTempList;
         NewsMap newsToSave;
 
-        NewsSiteLoader(Site site) {
+        NewsSiteLoader(Site site, int type_sections) {
             this.site = site;
+            this.type_sections = type_sections;
         }
 
         @Override
@@ -225,7 +263,12 @@ public class NewsDataCenter implements TaskMessage {
 
             getSiteHistory(site);
 
-            int[] sections = getSettingsOf(site).sectionsOnMainIntegerArray();
+            int[] sections;
+            if (type_sections == MAIN_SECTIONS) {
+                sections = getSettingsOf(site).sectionsOnMainIntegerArray();
+            } else {
+                sections = getSettingsOf(site).sectionsOfflineIntegerArray();
+            }
             newsreader.readNewsHeader(site, sections, this);
 
             for (News N : newsTempList) {
@@ -257,8 +300,9 @@ public class NewsDataCenter implements TaskMessage {
         public void message(int message, Object dataAttached) {
             switch (message) {
                 case NEWS_READ:
-                    handler.obtainMessage(message, dataAttached).sendToTarget();
-
+                    if (handler != null) {
+                        handler.obtainMessage(message, dataAttached).sendToTarget();
+                    }
                     News news = (News) dataAttached;
                     news.site_code = site.code;
                     newsTempList.add(news);
@@ -300,12 +344,12 @@ public class NewsDataCenter implements TaskMessage {
 
         @Override
         public void run() {
-            handler.obtainMessage(NO_INTERNET, null).sendToTarget();
+            handler.obtainMessage(SocketMessage.NO_INTERNET, null).sendToTarget();
 
             if (site != null) {
 
                 getSiteHistory(site);
-                handler.obtainMessage(NEWS_READ_HISTORY, site.history).sendToTarget();
+                handler.obtainMessage(SocketMessage.HISTORY_READ, site.history).sendToTarget();
 
             } else {
 
@@ -316,11 +360,9 @@ public class NewsDataCenter implements TaskMessage {
 
                     site = getSiteHistory(site);
 
-                    handler.obtainMessage(NEWS_READ_HISTORY, site.history).sendToTarget();
+                    handler.obtainMessage(SocketMessage.HISTORY_READ, site.history).sendToTarget();
                 }
-
             }
-
         }
     }
 
@@ -342,9 +384,22 @@ public class NewsDataCenter implements TaskMessage {
         sdmanager.saveSettings(site.settings);
     }
 
-    public void setSettingsWith(int settingcode, Object setting) {
+    public void setSetting(int settingcode, Object setting) {
         appSettings.setSetting(settingcode, setting);
-        sdmanager.saveSettings(appSettings);
+        sdmanager.saveAppSettings();
+
+        if (settingcode == AppSettings.ADD_DL_SCHEDULE || settingcode == AppSettings.DEL_DL_SCHEDULE) {
+            ScheduledDownloadReceiver.scheduleDownload(context, AppSettings.DL_SCHEDULES);
+        }
+    }
+
+    public void updateSetting(int settingcode, int position, Object setting) {
+        appSettings.updateSetting(settingcode, position, setting);
+        sdmanager.saveAppSettings();
+
+        if (settingcode == AppSettings.MOD_DL_SCHEDULE) {
+            ScheduledDownloadReceiver.scheduleDownload(context, AppSettings.DL_SCHEDULES);
+        }
     }
 
     public AppSettings getSettings() {
@@ -371,7 +426,7 @@ public class NewsDataCenter implements TaskMessage {
         } else {
             appSettings.setSetting(AppSettings.ADD_FAV_CODE, site.code);
         }
-        sdmanager.saveSettings(appSettings);
+        sdmanager.saveAppSettings();
     }
 
     public long getCacheSize() {
@@ -392,6 +447,21 @@ public class NewsDataCenter implements TaskMessage {
     private boolean isInternetAvailable() {
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnected();
+    }
+
+    public static SiteList getAppSites() {
+        TreeSet<Site> orderedList = new TreeSet<Site>(new Comparator<Site>() {
+            @Override
+            public int compare(Site s1, Site s2) {
+                return s1.name.compareTo(s2.name);
+            }
+        });
+        for (Site site : sites) {
+            if (site.code >= 0) {
+                orderedList.add(site);
+            }
+        }
+        return new SiteList(orderedList);
     }
 
     public static Site getSiteByCode(int code) {

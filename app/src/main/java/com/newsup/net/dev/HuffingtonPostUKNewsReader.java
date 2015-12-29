@@ -8,14 +8,14 @@ public class HuffingtonPostUKNewsReader extends NewsReaderDeprecated {
         super();
 
         SECTIONS.add(new SectionDeprecated("UK", 1, "http://www.huffingtonpost.co.uk/feeds/verticals/uk/news.xml"));
-        SECTIONS.add(new SectionDeprecated("", 1, "http://www.huffingtonpost.co.uk/feeds/verticals/uk-politics/news.xml"));
-        SECTIONS.add(new SectionDeprecated("", 1, "http://www.huffingtonpost.co.uk/feeds/verticals/uk-entertainment/news.xml"));
-        SECTIONS.add(new SectionDeprecated("", 1, "http://www.huffingtonpost.co.uk/feeds/verticals/uk-style/news.xml"));
-        SECTIONS.add(new SectionDeprecated("", 1, "http://www.huffingtonpost.co.uk/feeds/verticals/uk-universities-education/news.xml"));
-        SECTIONS.add(new SectionDeprecated("", 1, "http://www.huffingtonpost.co.uk/feeds/verticals/uk-lifestyle/news.xml"));
-        SECTIONS.add(new SectionDeprecated("", 1, "http://www.huffingtonpost.co.uk/feeds/verticals/uk-comedy/news.xml"));
-        SECTIONS.add(new SectionDeprecated("", 1, "http://www.huffingtonpost.co.uk/news/celebrity/feed/"));
-        SECTIONS.add(new SectionDeprecated("", 1, "http://www.huffingtonpost.co.uk/feeds/verticals/uk-tech/news.xml"));
+        SECTIONS.add(new SectionDeprecated("Politics", 1, "http://www.huffingtonpost.co.uk/feeds/verticals/uk-politics/news.xml"));
+        SECTIONS.add(new SectionDeprecated("entertainment", 1, "http://www.huffingtonpost.co.uk/feeds/verticals/uk-entertainment/news.xml"));
+        SECTIONS.add(new SectionDeprecated("style", 1, "http://www.huffingtonpost.co.uk/feeds/verticals/uk-style/news.xml"));
+        SECTIONS.add(new SectionDeprecated("universities-education", 1, "http://www.huffingtonpost.co.uk/feeds/verticals/uk-universities-education/news.xml"));
+        SECTIONS.add(new SectionDeprecated("lifestyle", 1, "http://www.huffingtonpost.co.uk/feeds/verticals/uk-lifestyle/news.xml"));
+        SECTIONS.add(new SectionDeprecated("comedy", 1, "http://www.huffingtonpost.co.uk/feeds/verticals/uk-comedy/news.xml"));
+        SECTIONS.add(new SectionDeprecated("celebrity", 1, "http://www.huffingtonpost.co.uk/news/celebrity/feed/"));
+        SECTIONS.add(new SectionDeprecated("tech", 1, "http://www.huffingtonpost.co.uk/feeds/verticals/uk-tech/news.xml"));
         SECTIONS.add(new SectionDeprecated("", 1, "http://www.huffingtonpost.co.uk/feeds/verticals/uk-sport/news.xml"));
         SECTIONS.add(new SectionDeprecated("", 1, "http://www.huffingtonpost.co.uk/feeds/verticals/uk-parents/news.xml"));
         SECTIONS.add(new SectionDeprecated("", 1, "http://www.huffingtonpost.co.uk/feeds/verticals/uk-universities-education/index.xml"));

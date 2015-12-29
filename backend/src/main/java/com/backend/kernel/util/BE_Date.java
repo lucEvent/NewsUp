@@ -13,7 +13,7 @@ public class BE_Date {
     private static final long YEAR_TIME = 365 * DAY_TIME;
 
     public static long toDate(String date) {
-        if (date == null) return -1;
+        if (date == null || date.length() == 0) return -1;
         String temp;
         long timemillis = 0;
         long zoneOffset = 0;

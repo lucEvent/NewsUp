@@ -1,14 +1,13 @@
 package com.newsup;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.newsup.dialog.DialogState;
 import com.newsup.dialog.SiteConfiguration;
 import com.newsup.dialog.SitePicker;
 import com.newsup.kernel.NewsDataCenter;
@@ -16,16 +15,15 @@ import com.newsup.kernel.basic.Site;
 import com.newsup.kernel.set.SiteList;
 import com.newsup.lister.SiteLister;
 import com.newsup.settings.AppSettings;
+import com.newsup.settings.DownloadScheduleSetting;
 import com.newsup.task.Socket;
+import com.newsup.task.SocketMessage;
 
 import java.text.DecimalFormat;
-import java.util.Comparator;
-import java.util.TreeSet;
 
 public final class SettingsActivity extends ListActivity implements Socket {
 
     private NewsDataCenter data;
-    private SiteList sites;
 
     private SettingsTabManager tabManager;
 
@@ -35,29 +33,19 @@ public final class SettingsActivity extends ListActivity implements Socket {
         setContentView(R.layout.a_settings);
 
         data = new NewsDataCenter(this);
-
-        getActionBar().setIcon(R.mipmap.ic_app);
-
-        sites = filterSites();
-
         tabManager = new SettingsTabManager();
+
+        DownloadScheduleSetting.s_days = new String[]{getString(R.string.mon),
+                getString(R.string.tue), getString(R.string.wed), getString(R.string.thu),
+                getString(R.string.fri), getString(R.string.sat), getString(R.string.sun)};
 
         onConfigureMyFeed(null);
     }
 
-    private SiteList filterSites() {
-        TreeSet<Site> orderedList = new TreeSet<Site>(new Comparator<Site>() {
-            @Override
-            public int compare(Site s1, Site s2) {
-                return s1.name.compareTo(s2.name);
-            }
-        });
-        for (Site site : data.getSites()) {
-            if (site.code >= 0) {
-                orderedList.add(site);
-            }
-        }
-        return new SiteList(orderedList);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        tabManager.setUp();
     }
 
     public void onConfigureMyFeed(View view) {
@@ -81,6 +69,10 @@ public final class SettingsActivity extends ListActivity implements Socket {
             sitesManager = new SettingsSitesManager();
         }
 
+        public void setUp() {
+            myFeedManager.setUp();
+//           sitesManager.setUp();
+        }
 
         public void onSelectConfigureMyFeed() {
             myfeed.setSelected(true);
@@ -97,15 +89,15 @@ public final class SettingsActivity extends ListActivity implements Socket {
             myFeedManager.setVisibility(View.GONE);
             sitesManager.setVisibility(View.VISIBLE);
         }
+
     }
 
     public void onConfigureSitesToShow(View view) {
-        new SitePicker(SettingsActivity.this, data, this);
+        new SitePicker(SettingsActivity.this, AppSettings.MAIN_CODES, this);
     }
 
     public void onConfigureSaveTime(View view) {
-        //TODO new TimePicker(SettingsActivity.this, XXXtimeXXX, handler).show();
-        Toast.makeText(this, R.string.notimplementedyet, Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, ScheduleDownloadActivity.class));
     }
 
     public void onConfigureCleanCache(View v) {
@@ -114,7 +106,6 @@ public final class SettingsActivity extends ListActivity implements Socket {
     }
 
     private class SettingsMyFeedManager {
-
 
         private View content;
         private TextView lab_sitesTitle, lab_sitesSubtitle, lab_saveTime, lab_cleancache;
@@ -125,7 +116,9 @@ public final class SettingsActivity extends ListActivity implements Socket {
             lab_sitesSubtitle = (TextView) content.findViewById(R.id.conf_label_sites_subtitle);//El Pais, As,...
             lab_saveTime = (TextView) content.findViewById(R.id.conf_label_save_time);//Never
             lab_cleancache = (TextView) content.findViewById(R.id.conf_label_cleancache);//10 MB
+        }
 
+        void setUp() {
             setUpMainSites();
             setUpSaveTime();
             setUpCacheSize();
@@ -144,6 +137,16 @@ public final class SettingsActivity extends ListActivity implements Socket {
         }
 
         void setUpSaveTime() {
+            if (AppSettings.DL_SCHEDULES.isEmpty()) {
+                lab_saveTime.setText(R.string.never);
+            } else {
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < AppSettings.DL_SCHEDULES.size(); ++i) {
+                    if (i != 0) sb.append("\n");
+                    sb.append(AppSettings.DL_SCHEDULES.get(i).toShortString());
+                }
+                lab_saveTime.setText(sb.toString());
+            }
         }
 
         void setUpCacheSize() {
@@ -163,7 +166,7 @@ public final class SettingsActivity extends ListActivity implements Socket {
 
         SettingsSitesManager() {
             content = getListView();
-            setListAdapter(new SiteLister(SettingsActivity.this, sites));
+            setListAdapter(new SiteLister(SettingsActivity.this, NewsDataCenter.getAppSites()));
         }
 
         void setVisibility(int visibility) {
@@ -175,17 +178,16 @@ public final class SettingsActivity extends ListActivity implements Socket {
     private SiteConfiguration siteConfigurationManager;
 
     public void onSiteSelectedAction(View view) {
-        Site site = (Site) view.getTag();
-        debug("Se ha seleccionado: " + site.name);
         if (siteConfigurationManager == null) {
             siteConfigurationManager = new SiteConfiguration(this, data);
         }
-        siteConfigurationManager.set(site);
+        siteConfigurationManager.set((Site) view.getTag());
     }
 
     @Override
     public void message(int message, Object dataAttached) {
-        if (message == DialogState.MAIN_SITES_CHANGED) {
+        if (message == SocketMessage.SELECTED_SITE_CODES) {
+            data.setSetting(AppSettings.SET_MAIN_CODES, dataAttached);
             tabManager.myFeedManager.setUpMainSites();
         }
     }

@@ -106,7 +106,7 @@
             <TextView
                 style="@style/item_textview_main_drawer"
                 android:layout_toRightOf="@+id/conf_icon"
-                android:text="Configuration" />
+                android:text="@string/settings" />
 
         </RelativeLayout>
 
@@ -133,7 +133,7 @@
                 <TextView
                     style="@style/item_textview_main_drawer"
                     android:layout_toRightOf="@+id/fav_icon"
-                    android:text="Favorite sites" />
+                    android:text="@string/favorites" />
 
             </RelativeLayout>
 
@@ -156,7 +156,7 @@
             <TextView
                 style="@style/item_textview_main_drawer"
                 android:layout_toRightOf="@+id/sites_icon"
-                android:text="All sites" />
+                android:text="@string/allsites" />
 
         </RelativeLayout>
 

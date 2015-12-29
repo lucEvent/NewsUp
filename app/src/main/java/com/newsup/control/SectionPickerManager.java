@@ -9,7 +9,7 @@ import com.newsup.kernel.basic.Section;
 import com.newsup.kernel.set.SectionList;
 import com.newsup.lister.SectionPickerLister;
 import com.newsup.task.Socket;
-import com.newsup.task.TaskMessage;
+import com.newsup.task.SocketMessage;
 
 import java.util.ArrayList;
 
@@ -29,10 +29,14 @@ public class SectionPickerManager {
                 .setAdapter(lister, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        SectionPickerManager.this.handler.message(TaskMessage.SECTION_SELECTED, which);
+                        onSectionSelected(which);
                     }
                 });
         dialog = builder.create();
+    }
+
+    private void onSectionSelected(int position) {
+        handler.message(SocketMessage.SELECTED_SECTION, position);
     }
 
     public void setSections(ArrayList<Section> sections) {

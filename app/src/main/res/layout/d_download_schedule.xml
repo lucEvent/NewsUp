@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TimePicker
+        android:id="@+id/timepicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
+
+        <ToggleButton
+            android:id="@+id/monday"
+            style="@style/dl_toggle_button"
+            android:textOff="@string/mon"
+            android:textOn="@string/mon" />
+
+        <ToggleButton
+            android:id="@+id/tuesday"
+            style="@style/dl_toggle_button"
+            android:textOff="@string/tue"
+            android:textOn="@string/tue" />
+
+        <ToggleButton
+            android:id="@+id/wednesday"
+            style="@style/dl_toggle_button"
+            android:textOff="@string/wed"
+            android:textOn="@string/wed" />
+
+        <ToggleButton
+            android:id="@+id/thursday"
+            style="@style/dl_toggle_button"
+            android:textOff="@string/thu"
+            android:textOn="@string/thu" />
+
+        <ToggleButton
+            android:id="@+id/friday"
+            style="@style/dl_toggle_button"
+            android:textOff="@string/fri"
+            android:textOn="@string/fri" />
+
+        <ToggleButton
+            android:id="@+id/saturday"
+            style="@style/dl_toggle_button"
+            android:textOff="@string/sat"
+            android:textOn="@string/sat" />
+
+        <ToggleButton
+            android:id="@+id/sunday"
+            style="@style/dl_toggle_button"
+            android:textOff="@string/sun"
+            android:textOn="@string/sun" />
+
+    </LinearLayout>
+
+    <CheckBox
+        android:id="@+id/repeat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:checked="true"
+        android:padding="5dip"
+        android:text="@string/repeat" />
+
+    <CheckBox
+        android:id="@+id/notify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:checked="true"
+        android:padding="5dip"
+        android:text="@string/notificate" />
+
+    <Button
+        android:id="@+id/show_sites"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@android:drawable/btn_default"
+        android:padding="15dp"
+        android:text="@string/selectsitestodownload" />
+
+</LinearLayout>

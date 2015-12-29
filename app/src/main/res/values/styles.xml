@@ -2,7 +2,7 @@
 
     <style name="AppBaseTheme" parent="android:Theme.Holo.Light">
         <item name="android:actionBarStyle">@style/actionBarStyle</item>
-        <item name="android:typeface">serif</item>
+        <!--     <item name="android:typeface">serif</item>-->
     </style>
 
     <style name="AppTheme" parent="AppBaseTheme"></style>
@@ -42,6 +42,7 @@
         <item name="android:layout_marginRight">10dip</item>
         <item name="android:background">@color/divider</item>
     </style>
+
 
     <!-- **********************  Site Drawer ****************************** -->
 
@@ -90,6 +91,27 @@
         <item name="android:padding">15dip</item>
         <item name="android:layout_margin">15dip</item>
         <item name="android:scaleType">centerCrop</item>
+    </style>
+
+    <!-- *********************** Site Configuration Dialog ************************************ -->
+    <style name="elem_site_configuration">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/selector_settings</item>
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:paddingBottom">25dip</item>
+        <item name="android:paddingLeft">20dip</item>
+        <item name="android:paddingTop">25dip</item>
+        <item name="android:paddingRight">20dip</item>
+    </style>
+
+    <!-- *********************** Download Schedule Dialog ************************************ -->
+    <style name="dl_toggle_button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:padding">0dip</item>
+        <item name="android:layout_margin">0dip</item>
     </style>
 
 </resources>

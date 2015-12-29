@@ -15,10 +15,10 @@ import com.newsup.io.BookmarksManager;
 import com.newsup.kernel.basic.News;
 import com.newsup.kernel.set.NewsMap;
 import com.newsup.lister.NewsLister;
-import com.newsup.task.TaskMessage;
+import com.newsup.task.SocketMessage;
 import com.newsup.widget.NewsView;
 
-public class BookmarksActivity extends ListActivity implements TaskMessage {
+public class BookmarksActivity extends ListActivity {
 
     private NewsLister newslister;
     private NewsView newsView;
@@ -36,8 +36,6 @@ public class BookmarksActivity extends ListActivity implements TaskMessage {
         setListAdapter(newslister);
 
         newsView = new NewsView(this, handler);
-
-        getActionBar().setIcon(R.mipmap.ic_app);
 
         manager = new BookmarksManager(handler);
         manager.getBookmarkedNews();
@@ -75,7 +73,7 @@ public class BookmarksActivity extends ListActivity implements TaskMessage {
 
             });
             dialog.setNegativeButton(android.R.string.cancel, null);
-            dialog.setTitle(R.string.msg_remove_all_bm);
+            dialog.setTitle(R.string.removeall);
             dialog.create().show();
             return true;
         }
@@ -108,14 +106,14 @@ public class BookmarksActivity extends ListActivity implements TaskMessage {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case NEWS_READ_BOOKMARKS:
+                case SocketMessage.BOOKMARKS_READ:
                     newslister.addAll((NewsMap) msg.obj);
                     break;
-                case ACTION_REFRESH_LIST:
+                case SocketMessage.ACTION_REFRESH_LIST:
                     newslister.clear();
                     manager.getBookmarkedNews();
                     break;
-                case ERROR:
+                case SocketMessage.ERROR:
                     debug("Error recibido por el Handler");
                     break;
                 default:

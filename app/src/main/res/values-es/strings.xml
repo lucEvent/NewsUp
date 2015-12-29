@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">News Up</string>
-
     <string name="settings">Configuración</string>
-    <string name="bookmarks">Favoritos</string>
 
     <string name="mycustomfeed">Mis notícias</string>
     <string name="spain">España</string>
@@ -18,12 +15,9 @@
     <string name="confirm">Confirmar</string>
     <string name="removeall">Elimina todo</string>
 
-    <string name="msg_remove_all_bm">Elimina todos los favoritos</string>
-
     <!--  Settings -->
     <string name="mainpage">Página principal</string>
     <string name="confsites">Publicaciones</string>
-    <string name="prefechandsave">Descarga y guarda</string>
     <string name="cleancache">Limpia datos</string>
     <string name="never">Nunca</string>
     <string name="done">Hecho</string>
@@ -46,7 +40,7 @@
     <string name="contentnotavailableyet">Contenido no disponible todavía</string>
     <string name="uk">UK</string>
     <string name="us">US</string>
-    <string name="allsites">Todos los sitios</string>
+    <string name="allsites">Todas las publicaciones</string>
     <string name="favorite">Favorito</string>
     <string name="tryagain">Intentar de nuevo</string>
     <string name="openinbrowser">Abrir en el navegador</string>
@@ -57,5 +51,22 @@
     <string name="savedforlater">Notícias guardadas</string>
     <string name="history">Notícias leídas</string>
     <string name="msg_confirm_clear_hist">Confirma para eliminar el historial</string>
+    <string name="favorites">Favoritos</string>
+    <string name="title_activity_history">Historial</string>
+    <string name="schedulenewone">Programa nueva descarga</string>
+    <string name="create">Crear</string>
+    <string name="fri">Vie</string>
+    <string name="mon">Lun</string>
+    <string name="notificate">Recibir notificación</string>
+    <string name="notification">Notificación</string>
+    <string name="repeat">Repetir</string>
+    <string name="sat">Sab</string>
+    <string name="selectsitestodownload">Selecciona las publicaciones\n(Por defecto Todas)</string>
+    <string name="sun">Dom</string>
+    <string name="thu">Jue</string>
+    <string name="scheduledonwloads">Descargas programadas</string>
+    <string name="tue">Mar</string>
+    <string name="wed">Mie</string>
+    <string name="applychanges">Aplica cambios</string>
 
 </resources>

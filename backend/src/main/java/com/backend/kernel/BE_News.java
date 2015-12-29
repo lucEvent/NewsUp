@@ -2,7 +2,6 @@ package com.backend.kernel;
 
 import com.backend.kernel.util.BE_Date;
 
-import java.text.Collator;
 import java.util.ArrayList;
 
 public class BE_News implements Comparable<BE_News> {
@@ -11,7 +10,9 @@ public class BE_News implements Comparable<BE_News> {
 
     public long date;
 
-    public final ArrayList<String> categories;
+    public int site_code;
+
+    public ArrayList<String> categories;
 
     public ArrayList<BE_Enclosure> enclosures;
 
@@ -41,6 +42,19 @@ public class BE_News implements Comparable<BE_News> {
         res.append("</content><categories>");
         res.append(categories.toString());
         res.append("</categories></item>");
+        return res;
+    }
+
+    public StringBuilder toHtml() {
+        StringBuilder res = new StringBuilder("<div class=\"nu_news\" data-featherlight=\"/web?content&site=");
+        res.append(site_code + "&date=" + date + "&link=" + link);
+        res.append("\"><h2>");
+        res.append(title);
+        res.append("</h2><p>");
+        res.append(description);
+        res.append("</p><br><small><em>");
+        res.append(categories.toString());
+        res.append("</small></em></div>");
         return res;
     }
 

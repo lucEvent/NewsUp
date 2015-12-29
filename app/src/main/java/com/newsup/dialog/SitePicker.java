@@ -10,27 +10,28 @@ import com.newsup.kernel.NewsDataCenter;
 import com.newsup.kernel.basic.Site;
 import com.newsup.kernel.set.SiteList;
 import com.newsup.lister.SitePickerLister;
-import com.newsup.settings.AppSettings;
 import com.newsup.task.Socket;
+import com.newsup.task.SocketMessage;
 
-public class SitePicker extends AlertDialog.Builder implements DialogState {
+public class SitePicker extends AlertDialog.Builder {
 
-    private NewsDataCenter dataManager;
     private Socket socket;
     private boolean[] marks;
 
-    public SitePicker(Context context, NewsDataCenter dataManager, Socket socket) {
+    public SitePicker(Context context, int[] site_codes, Socket socket) {
         super(context);
-        this.dataManager = dataManager;
         this.socket = socket;
 
-        SiteList sites = dataManager.getSites();
+        SiteList sites = NewsDataCenter.getAppSites();
 
         marks = new boolean[sites.size()];
         for (int i = 0; i < marks.length; ++i) marks[i] = false;
-        for (int site_code : AppSettings.MAIN_CODES) {
-            Site site = sites.getSiteByCode(site_code);
-            marks[sites.indexOf(site)] = true;
+
+        if (site_codes != null) {
+            for (int site_code : site_codes) {
+                Site site = sites.getSiteByCode(site_code);
+                marks[sites.indexOf(site)] = true;
+            }
         }
 
         setAdapter(new SitePickerLister(context, sites, marks), null);
@@ -38,7 +39,7 @@ public class SitePicker extends AlertDialog.Builder implements DialogState {
         setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                saveSettings();
+                done();
             }
         });
 
@@ -47,29 +48,26 @@ public class SitePicker extends AlertDialog.Builder implements DialogState {
         dialog.show();
     }
 
-    private void saveSettings() {
+    private void done() {
         int counter = 0;
         for (boolean b : marks) if (b) counter++;
 
         if (counter > 0) {
-            SiteList sites = dataManager.getSites();
+            SiteList sites = NewsDataCenter.getAppSites();
 
-            int[] main_codes = new int[counter];
+            int[] site_codes = new int[counter];
             int index = 0;
             for (int i = 0; i < marks.length; ++i) {
                 if (marks[i]) {
-                    main_codes[index] = sites.get(i).code;
+                    site_codes[index] = sites.get(i).code;
                     index++;
                 }
             }
-
-            dataManager.setSettingsWith(AppSettings.SET_MAIN_CODES, main_codes);
-            socket.message(MAIN_SITES_CHANGED, null);
+            socket.message(SocketMessage.SELECTED_SITE_CODES, site_codes);
 
         } else {
             Toast.makeText(getContext(), R.string.msg_no_site_picked, Toast.LENGTH_SHORT).show();
         }
     }
-
 
 }

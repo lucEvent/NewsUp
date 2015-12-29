@@ -13,25 +13,20 @@ public class BE_ElMundoNewsReader extends BE_NewsReader {
         SECTIONS.add(new BE_Section("Portada", "http://estaticos.elmundo.es/elmundo/rss/portada.xml"));
         SECTIONS.add(new BE_Section("España", "http://estaticos.elmundo.es/elmundo/rss/espana.xml"));
         SECTIONS.add(new BE_Section("Internacional", "http://estaticos.elmundo.es/elmundo/rss/internacional.xml"));
-        SECTIONS.add(new BE_Section("Unión europea", "http://estaticos.elmundo.es/elmundo/rss/union_europea.xml"));
         SECTIONS.add(new BE_Section("Economía", "http://estaticos.elmundo.es/elmundo/rss/economia.xml"));
         SECTIONS.add(new BE_Section("Cultura", "http://estaticos.elmundo.es/elmundo/rss/cultura.xml"));
         SECTIONS.add(new BE_Section("Ciencia", "http://estaticos.elmundo.es/elmundo/rss/ciencia.xml"));
 
         SECTIONS.add(new BE_Section("Ciudades", null));
         SECTIONS.add(new BE_Section("Alicante", "http://estaticos.elmundo.es/elmundo/rss/alicante.xml"));
-        SECTIONS.add(new BE_Section("Barcelona", "http://estaticos.elmundo.es/elmundo/rss/barcelona.xml"));
         SECTIONS.add(new BE_Section("Castellón", "http://estaticos.elmundo.es/elmundo/rss/castellon.xml"));
         SECTIONS.add(new BE_Section("Madrid", "http://estaticos.elmundo.es/elmundo/rss/madrid.xml"));
         SECTIONS.add(new BE_Section("Málaga", "http://estaticos.elmundo.es/elmundo/rss/andalucia_malaga.xml"));
         SECTIONS.add(new BE_Section("Sevilla", "http://estaticos.elmundo.es/elmundo/rss/andalucia_sevilla.xml"));
         SECTIONS.add(new BE_Section("Valencia", "http://estaticos.elmundo.es/elmundo/rss/valencia.xml"));
-        SECTIONS.add(new BE_Section("Valladolid", "http://estaticos.elmundo.es/elmundo/rss/valladolid.xml"));
 
         SECTIONS.add(new BE_Section("Regiones", null));
         SECTIONS.add(new BE_Section("Andalucía", "http://estaticos.elmundo.es/elmundo/rss/andalucia.xml"));
-        SECTIONS.add(new BE_Section("Baleares", "http://estaticos.elmundo.es/elmundo/rss/baleares.xml"));
-        SECTIONS.add(new BE_Section("Castilla y león", "http://estaticos.elmundo.es/elmundo/rss/castillayleon.xml"));
         SECTIONS.add(new BE_Section("País vasco", "http://estaticos.elmundo.es/elmundo/rss/paisvasco.xml"));
 
         SECTIONS.add(new BE_Section("Solidaridad", "http://estaticos.elmundo.es/elmundo/rss/solidaridad.xml"));
@@ -44,15 +39,9 @@ public class BE_ElMundoNewsReader extends BE_NewsReader {
         SECTIONS.add(new BE_Section("Fútbol", "http://estaticos.elmundo.es/elmundodeporte/rss/futbol.xml"));
         SECTIONS.add(new BE_Section("Baloncesto", "http://estaticos.elmundo.es/elmundodeporte/rss/baloncesto.xml"));
         SECTIONS.add(new BE_Section("Ciclismo", "http://estaticos.elmundo.es/elmundodeporte/rss/ciclismo.xml"));
-        SECTIONS.add(new BE_Section("Golf", "http://estaticos.elmundo.es/elmundodeporte/rss/golf.xml"));
         SECTIONS.add(new BE_Section("Tenis", "http://estaticos.elmundo.es/elmundodeporte/rss/tenis.xml"));
-        SECTIONS.add(new BE_Section("Motor", "http://estaticos.elmundo.es/elmundodeporte/rss/motor.xml"));
-        SECTIONS.add(new BE_Section("Más deporte", "http://estaticos.elmundo.es/elmundodeporte/rss/masdeporte.xml"));
 
         SECTIONS.add(new BE_Section("Yo dona", "http://estaticos.elmundo.es/yodona/rss/portada.xml"));
-        SECTIONS.add(new BE_Section("El cuentahilos", "http://estaticos.elmundo.es/yodona/rss/blogs/cuentahilos.xml"));
-        SECTIONS.add(new BE_Section("Modamanía", "http://estaticos.elmundo.es/yodona/rss/blogs/modamania.xml"));
-        SECTIONS.add(new BE_Section("Grand class", "http://estaticos.elmundo.es/yodona/rss/blogs/grandclass.xml"));
 
     }
 

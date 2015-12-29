@@ -7,7 +7,7 @@ import com.newsup.io.DBManager;
 import com.newsup.io.SDManager;
 import com.newsup.kernel.basic.News;
 import com.newsup.kernel.set.NewsMap;
-import com.newsup.task.TaskMessage;
+import com.newsup.task.SocketMessage;
 
 public class HistoryDataCenter {
 
@@ -38,7 +38,7 @@ public class HistoryDataCenter {
             public void run() {
 
                 NewsMap news = dbmanager.readHistoryNews();
-                handler.obtainMessage(TaskMessage.NEWS_READ_HISTORY, news).sendToTarget();
+                handler.obtainMessage(SocketMessage.HISTORY_READ, news).sendToTarget();
 
             }
         }).start();

@@ -5,7 +5,7 @@ import android.os.Handler;
 import com.newsup.kernel.basic.News;
 import com.newsup.kernel.set.NewsMap;
 import com.newsup.kernel.set.Tags;
-import com.newsup.task.TaskMessage;
+import com.newsup.task.SocketMessage;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,7 +15,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-public class BookmarksManager implements TaskMessage {
+public class BookmarksManager {
 
     private static final String BOOKMARKS_DIR = "bookmarks/";
     private static final String BOOKMARKS_IND = "index.nu";
@@ -157,7 +157,7 @@ public class BookmarksManager implements TaskMessage {
                         }
                     }
                 }
-                handler.obtainMessage(NEWS_READ_BOOKMARKS, bookmarkedNewsList).sendToTarget();
+                handler.obtainMessage(SocketMessage.BOOKMARKS_READ, bookmarkedNewsList).sendToTarget();
             }
         }).start();
     }

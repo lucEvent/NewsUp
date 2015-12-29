@@ -8,6 +8,7 @@ import com.newsup.R;
 import com.newsup.kernel.basic.Section;
 import com.newsup.lister.SectionMultiPickerLister;
 import com.newsup.task.Socket;
+import com.newsup.task.SocketMessage;
 
 import java.util.ArrayList;
 
@@ -34,7 +35,7 @@ public class SectionPicker extends AlertDialog.Builder {
     }
 
     private void sendResults() {
-        handler.message(DialogState.SECTIONS_CHANGED, marks);
+        handler.message(SocketMessage.SELECTED_SECTIONS, marks);
     }
 
 

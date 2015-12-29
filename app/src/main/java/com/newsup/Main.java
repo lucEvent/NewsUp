@@ -1,14 +1,11 @@
 package com.newsup;
 
 import android.app.ListActivity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -30,14 +27,11 @@ import com.newsup.kernel.NewsDataCenter;
 import com.newsup.kernel.basic.News;
 import com.newsup.kernel.basic.Site;
 import com.newsup.kernel.set.NewsMap;
-import com.newsup.kernel.util.Typefaces;
 import com.newsup.lister.NewsLister;
 import com.newsup.lister.SiteLister;
 import com.newsup.task.Socket;
 import com.newsup.widget.NewsNotFoundDialog;
 import com.newsup.widget.NewsView;
-
-import java.lang.reflect.Field;
 
 public class Main extends ListActivity implements Socket {
 
@@ -53,7 +47,6 @@ public class Main extends ListActivity implements Socket {
      * kernel layer
      **/
     private static NewsDataCenter datamanager;
-
 
     /**
      * controllers
@@ -79,9 +72,7 @@ public class Main extends ListActivity implements Socket {
         newslister.setNotifyOnChange(true);
         setListAdapter(newslister);
 
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        datamanager = new NewsDataCenter(this, cm, handler);
+        datamanager = new NewsDataCenter(this, handler);
 
         newsView = new NewsView(this, handler);
         newsListView = findViewById(R.id.list_content);
@@ -107,7 +98,7 @@ public class Main extends ListActivity implements Socket {
         /**
          * Setting app font
          */
-        try {
+/*        try {
             Typeface customFontTypeface = Typefaces.get(this, "fonts/customfont.woff");
             Field defaultFontTypefaceField = Typeface.class.getDeclaredField("SERIF");
             defaultFontTypefaceField.setAccessible(true);
@@ -116,7 +107,7 @@ public class Main extends ListActivity implements Socket {
             debug("Can not set custom font");
             e.printStackTrace();
         }
-    }
+*/    }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -255,14 +246,14 @@ public class Main extends ListActivity implements Socket {
                 case NEWS_READ:
                     newslister.add((News) msg.obj);
                     break;
-                case NEWS_READ_HISTORY:
+                case HISTORY_READ:
                     newslister.addAll((NewsMap) msg.obj);
                     break;
                 case NO_INTERNET:
                     //TODO
                     debug("[NO INTERNET] Falta por hacer cosas");
                     break;
-                case OPEN_NEWS:
+                case ACTION_OPEN_NEWS:
                     News news = (News) msg.obj;
                     if (newsView.displayNews(news)) {
                         actionBar.hide();
@@ -285,7 +276,7 @@ public class Main extends ListActivity implements Socket {
     @Override
     public void message(int taskMessage, Object data) {
         switch (taskMessage) {
-            case SECTION_SELECTED:
+            case SELECTED_SECTION:
                 displaySiteNews(currentSite, new int[]{(Integer) data});
                 break;
         }

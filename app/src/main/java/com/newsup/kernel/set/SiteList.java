@@ -84,7 +84,7 @@ public class SiteList extends ArrayList<Site> {
             add(new Site(825, "Gizmodo", 0xff9c9c9c, assets.open("gizmodo.png"), new com.newsup.kernel.section.GizmodoSections()));
             add(new Site(830, "Android Authority", 0xff8cc234, assets.open("androidauthority.png"), new com.newsup.kernel.section.AndroidAuthoritySections()));
             add(new Site(835, "Computer Hoy", 0xff1a1a1a, assets.open("computerhoy.png"), new com.newsup.kernel.section.ComputerHoySections()));
-//          add(new Site(840, "Swedroid", 0xff, assets.open("swedroid.png"), new com.newsup.kernel.section.SwedroidSections()));
+            add(new Site(840, "Swedroid", 0xff485366, assets.open("swedroid.png"), new com.newsup.kernel.section.SwedroidSections()));
 
             add(new Site(-1, context.getString(R.string.blogs), 0, null, null));
             add(new Site(900, "Medium", 0xffffffff, assets.open("medium.png"), new com.newsup.kernel.section.MediumSections()));
@@ -100,7 +100,7 @@ public class SiteList extends ArrayList<Site> {
             add(new Site(1035, "Dogster", 0xff547a94, assets.open("dogster.png"), new com.newsup.kernel.section.DogsterSections()));
             add(new Site(1040, "El Jueves", 0xffcb1f1f, assets.open("eljueves.png"), new com.newsup.kernel.section.ElJuevesSections()));
 //          add(new Site(1045, "National Geographic", 0xff, assets.open("nationalgeographic.png"), new com.newsup.kernel.section.NationalGeographicSections()));
-//          add(new Site(1050, "Space News", 0xff, assets.open("spacenews.png"), new com.newsup.kernel.section.SpaceNewsSections()));
+            add(new Site(1050, "Space News", 0xffffffff, assets.open("spacenews.png"), new com.newsup.kernel.section.SpaceNewsSections()));
 //          add(new Site(1055, "Space", 0xff, assets.open("space.png"), new com.newsup.kernel.section.SpaceSections()));
 //          add(new Site(1060, "The Bark", 0xff, assets.open("thebark.png"), new com.newsup.kernel.section.TheBarkSections()));
 

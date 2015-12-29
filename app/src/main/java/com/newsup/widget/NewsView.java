@@ -14,7 +14,7 @@ import android.widget.RelativeLayout;
 import com.newsup.R;
 import com.newsup.io.BookmarksManager;
 import com.newsup.kernel.basic.News;
-import com.newsup.task.TaskMessage;
+import com.newsup.task.SocketMessage;
 
 public class NewsView {
 
@@ -59,7 +59,7 @@ public class NewsView {
 
     private News currentNews;
 
-    private final String css = "<style>img, iframe, video,figure {width: 100%; height: auto; margin: 0; padding: 0} div > h2 > a > img {width: auto;}</style>";
+    private final String css = "<style>img, iframe, video,figure {width: 100%; margin: 0; padding: 0} div > h2 > a > img {width: auto;}</style>";
     private final String fontcss = "<style>" +
             "@font-face { font-family: customfont; src: url(\"fonts/customfont.woff\"); }" +
             "body { font-family: customfont; font-weight: 300; font-size: 16px; line-height: 1.67; }" +
@@ -107,7 +107,7 @@ public class NewsView {
             } else {
                 bmManager.bookmarkNews(currentNews);
             }
-            handler.obtainMessage(TaskMessage.ACTION_REFRESH_LIST, null).sendToTarget();
+            handler.obtainMessage(SocketMessage.ACTION_REFRESH_LIST, null).sendToTarget();
             setBookmarkButtonImage();
         }
     };

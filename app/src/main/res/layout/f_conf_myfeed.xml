@@ -14,12 +14,11 @@
             <TextView
                 android:id="@+id/conf_label_sites_title"
                 style="@style/settings_row_title"
-                android:text="Sites to show: 1 Site" />
+                android:text="@string/mainsites" />
 
             <TextView
                 android:id="@+id/conf_label_sites_subtitle"
-                style="@style/settings_row_subtitle"
-                android:text="El Pais, El Confidencial,..." />
+                style="@style/settings_row_subtitle" />
 
         </LinearLayout>
 
@@ -31,8 +30,7 @@
 
             <TextView
                 style="@style/settings_row_title"
-
-                android:text="@string/prefechandsave" />
+                android:text="@string/scheduledonwloads" />
 
             <TextView
                 android:id="@+id/conf_label_save_time"

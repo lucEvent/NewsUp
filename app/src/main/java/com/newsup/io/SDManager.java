@@ -7,6 +7,7 @@ import com.newsup.kernel.basic.News;
 import com.newsup.kernel.basic.Site;
 import com.newsup.kernel.util.Compressor;
 import com.newsup.settings.AppSettings;
+import com.newsup.settings.DownloadScheduleSetting;
 import com.newsup.settings.SiteSettings;
 
 import java.io.File;
@@ -67,22 +68,22 @@ public class SDManager {
 
             int nitems = oinputStream.readInt();
             result.sectionsOnMain = new boolean[nitems];
-            result.sectionsToSave = new boolean[nitems];
+            result.sectionsOffline = new boolean[nitems];
             for (int i = 0; i < nitems; ++i) {
                 result.sectionsOnMain[i] = oinputStream.readBoolean();
-                result.sectionsToSave[i] = oinputStream.readBoolean();
+                result.sectionsOffline[i] = oinputStream.readBoolean();
             }
             oinputStream.close();
 
         } catch (Exception e) {
             int size = site.getSections().size();
             result.sectionsOnMain = new boolean[size];
-            result.sectionsToSave = new boolean[size];
+            result.sectionsOffline = new boolean[size];
             result.sectionsOnMain[0] = true;
-            result.sectionsToSave[0] = true;
+            result.sectionsOffline[0] = true;
             for (int i = 1; i < size; ++i) {
                 result.sectionsOnMain[i] = false;
-                result.sectionsToSave[i] = false;
+                result.sectionsOffline[i] = false;
             }
         }
 
@@ -98,7 +99,7 @@ public class SDManager {
             ooutputStream.writeInt(settings.sectionsOnMain.length);
             for (int i = 0; i < settings.sectionsOnMain.length; ++i) {
                 ooutputStream.writeBoolean(settings.sectionsOnMain[i]);
-                ooutputStream.writeBoolean(settings.sectionsToSave[i]);
+                ooutputStream.writeBoolean(settings.sectionsOffline[i]);
             }
             ooutputStream.close();
         } catch (Exception e) {
@@ -115,30 +116,40 @@ public class SDManager {
             ObjectInputStream in = new ObjectInputStream(context.openFileInput("sapp"));
 
             int nitems = in.readInt();
-            result.MAIN_CODES = new int[nitems];
-            for (int i = 0; i < nitems; ++i) result.MAIN_CODES[i] = in.readInt();
+            AppSettings.MAIN_CODES = new int[nitems];
+            for (int i = 0; i < nitems; ++i) AppSettings.MAIN_CODES[i] = in.readInt();
 
             nitems = in.readInt();
-            result.FAV_CODES = new ArrayList<Integer>();
-            for (int i = 0; i < nitems; ++i) result.FAV_CODES.add(in.readInt());
+            AppSettings.FAV_CODES = new ArrayList<Integer>();
+            for (int i = 0; i < nitems; ++i) AppSettings.FAV_CODES.add(in.readInt());
+
+            nitems = in.readInt();
+            AppSettings.DL_SCHEDULES = new ArrayList<DownloadScheduleSetting>();
+            for (int i = 0; i < nitems; ++i)
+                AppSettings.DL_SCHEDULES.add(new DownloadScheduleSetting((String) in.readObject()));
 
             in.close();
 
         } catch (Exception e) {
             // Nothing went wrong, it's just the setting up
+            e.printStackTrace();
         }
         return result;
     }
 
-    public void saveSettings(AppSettings settings) {
+    public void saveAppSettings() {
         try {
             ObjectOutputStream out = new ObjectOutputStream(context.openFileOutput("sapp", Context.MODE_PRIVATE));
 
-            out.writeInt(settings.MAIN_CODES.length);
-            for (int value : settings.MAIN_CODES) out.writeInt(value);
+            out.writeInt(AppSettings.MAIN_CODES.length);
+            for (int value : AppSettings.MAIN_CODES) out.writeInt(value);
 
-            out.writeInt(settings.FAV_CODES.size());
-            for (int value : settings.FAV_CODES) out.writeInt(value);
+            out.writeInt(AppSettings.FAV_CODES.size());
+            for (int value : AppSettings.FAV_CODES) out.writeInt(value);
+
+            out.writeInt(AppSettings.DL_SCHEDULES.size());
+            for (DownloadScheduleSetting value : AppSettings.DL_SCHEDULES)
+                out.writeObject(value.toString());
 
             out.close();
         } catch (Exception e) {

@@ -10,12 +10,12 @@ import java.util.TimeZone;
 
 public class Date {
 
-    private static final long SECOND_TIME = 1000;
-    private static final long MINUTE_TIME = 60 * SECOND_TIME;
-    private static final long HOUR_TIME = 60 * MINUTE_TIME;
-    private static final long DAY_TIME = 24 * HOUR_TIME;
-    private static final long MONTH_TIME = 30 * DAY_TIME;
-    private static final long YEAR_TIME = 365 * DAY_TIME;
+    public static final long SECOND_TIME = 1000;
+    public static final long MINUTE_TIME = 60 * SECOND_TIME;
+    public static final long HOUR_TIME = 60 * MINUTE_TIME;
+    public static final long DAY_TIME = 24 * HOUR_TIME;
+    public static final long MONTH_TIME = 30 * DAY_TIME;
+    public static final long YEAR_TIME = 365 * DAY_TIME;
 
     private static String textbefore;
     private static String textAfterSecond;
