@@ -4,6 +4,8 @@ import com.backend.kernel.BE_News;
 import com.backend.kernel.BE_Section;
 import com.backend.kernel.list.BE_Sections;
 
+import java.io.IOException;
+
 public class BE_MetroNewsReader extends BE_NewsReader {
 
     public BE_MetroNewsReader() {
@@ -27,6 +29,20 @@ public class BE_MetroNewsReader extends BE_NewsReader {
         SECTIONS.add(new BE_Section("Viralgranskaren", "http://www.metro.se/rss.xml?c=1394586029-0"));
         SECTIONS.add(new BE_Section("Kolumner", "http://www.metro.se/rss.xml?c=1292335191-14"));
 
+    }
+
+    protected org.jsoup.nodes.Document getDocument(String pagelink) {
+        try {
+            return org.jsoup.Jsoup.connect(pagelink).get();
+        } catch (IOException e) {
+            debug("[" + e.getClass().getSimpleName() + "] Reintentando");
+        }
+        try {
+            return org.jsoup.Jsoup.connect(pagelink).timeout(10000).get();
+        } catch (IOException e) {
+            debug("[" + e.getClass().getSimpleName() + "] No se ha podido leer: " + pagelink);
+        }
+        return null;
     }
 
     @Override

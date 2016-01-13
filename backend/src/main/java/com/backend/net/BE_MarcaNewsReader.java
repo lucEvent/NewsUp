@@ -18,11 +18,8 @@ public class BE_MarcaNewsReader extends BE_NewsReader {
         SECTIONS.add(new BE_Section("Más fútbol", "http://marca.feedsportal.com/rss/futbol_mas_futbol.xml"));
         SECTIONS.add(new BE_Section("Fútbol internacional", "http://marca.feedsportal.com/rss/futbol_futbol_internacional.xml"));
         SECTIONS.add(new BE_Section("Liga de campeones", "http://marca.feedsportal.com/rss/futbol_liga_campeones.xml"));
-        SECTIONS.add(new BE_Section("Copa de la UEFA", "http://marca.feedsportal.com/rss/futbol_copa_uefa.xml"));
         SECTIONS.add(new BE_Section("Copa del Rey", "http://marca.feedsportal.com/rss/futbol_copa_rey.xml"));
         SECTIONS.add(new BE_Section("Selección", "http://marca.feedsportal.com/rss/futbol_mundial.xml"));
-        SECTIONS.add(new BE_Section("Mundial 2014", "http://marca.feedsportal.com/rss/futbol_mundial.xml"));
-        SECTIONS.add(new BE_Section("Fútbol sala", "http://marca.feedsportal.com/rss/futbol_futbol_sala.xml"));
 
         SECTIONS.add(new BE_Section("Equipos", null));
         SECTIONS.add(new BE_Section("Athletic", "http://marca.feedsportal.com/rss/futbol_equipos_athletic.xml"));
@@ -63,12 +60,12 @@ public class BE_MarcaNewsReader extends BE_NewsReader {
         SECTIONS.add(new BE_Section("Trial", "http://marca.feedsportal.com/rss/motor_trial.xml"));
         SECTIONS.add(new BE_Section("Más motor", "http://marca.feedsportal.com/rss/motor_mas_motor.xml"));
 
+        SECTIONS.add(new BE_Section("Fútbol sala", "http://marca.feedsportal.com/rss/futbol_futbol_sala.xml"));
         SECTIONS.add(new BE_Section("Tenis", "http://marca.feedsportal.com/rss/tenis.xml"));
         SECTIONS.add(new BE_Section("Ciclismo", "http://marca.feedsportal.com/rss/ciclismo.xml"));
         SECTIONS.add(new BE_Section("Golf", "http://marca.feedsportal.com/rss/golf.xml"));
         SECTIONS.add(new BE_Section("Atletismo", "http://marca.feedsportal.com/rss/atletismo.xml"));
         SECTIONS.add(new BE_Section("Balonmano", "http://marca.feedsportal.com/rss/balonmano.xml"));
-        SECTIONS.add(new BE_Section("Más deporte", "http://marca.feedsportal.com/rss/mas_deportes.xml"));
         SECTIONS.add(new BE_Section("Vela", "http://marca.feedsportal.com/rss/mas_deportes_vela.xml"));
 
     }
@@ -76,33 +73,44 @@ public class BE_MarcaNewsReader extends BE_NewsReader {
     @Override
     protected BE_News applySpecialCase(BE_News news, String content) {
         news.description = org.jsoup.Jsoup.parse(news.description).text();
-        news.description = news.description.replace("�Leer", "");
+        news.description = news.description.replace("Leer", "");
         return news;
     }
 
     @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, BE_News news) {
-        org.jsoup.select.Elements ee = doc.select("main");
-        ee.select("script").remove();
+        doc.select("script").remove();
 
-        org.jsoup.select.Elements e = ee.select("img,.cuerpo-texto");
-        if (!e.isEmpty()) {
-            news.content = e.outerHtml();
-        } else {
-            e = doc.select(".cuerpo_articulo > p");
-            if (!e.isEmpty()) {
-                e.select("script").remove();
-                org.jsoup.select.Elements img = doc.select(".bloque-foto");
+        org.jsoup.select.Elements ee = doc.select(".news-item");
 
-                news.content = img.select("img").outerHtml() + e.outerHtml();
-            } else {
-                e = doc.select(".texto-noticia > p");
-                if (!e.isEmpty()) {
-                    e.select("script").remove();
-                    news.content = e.outerHtml();
+        if (ee.isEmpty()) {
+
+            ee = doc.select("#contenido-noticia");
+
+            if (!ee.isEmpty()) {
+
+                org.jsoup.select.Elements img = doc.select(".cubrereproductor noscript");
+                org.jsoup.select.Elements content = doc.select(".cuerpo_articulo > p");
+
+                if (content.isEmpty()) {
+                    news.content = ee.select(".bloque-foto img").outerHtml();
+                } else {
+                    news.content = img.html() + content.outerHtml();
                 }
             }
+        } else {
+
+            org.jsoup.select.Elements img = doc.select("figure");
+            org.jsoup.select.Elements content = doc.select("[itemprop=\"articleBody\"] > p");
+
+            if (!content.isEmpty()) {
+
+                String simage = img.html().replace("\"//", "\"http://").replace("noscript", "p");
+                news.content = simage + content.outerHtml();
+
+            }
         }
+        news.content = news.content.replace("style=\"", "none=\"");
     }
 
 }

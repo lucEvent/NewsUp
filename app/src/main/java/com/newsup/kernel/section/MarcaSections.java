@@ -17,11 +17,8 @@ public class MarcaSections extends ArrayList<Section> {
         add(new Section("Más fútbol", 1));
         add(new Section("Fútbol internacional", 1));
         add(new Section("Liga de campeones", 1));
-        add(new Section("Copa de la UEFA", 1));
         add(new Section("Copa del Rey", 1));
         add(new Section("Selección", 1));
-        add(new Section("Mundial 2014", 1));
-        add(new Section("Fútbol sala", 1));
 
         add(new Section("Equipos", -1));
         add(new Section("Athletic", 1));
@@ -62,13 +59,13 @@ public class MarcaSections extends ArrayList<Section> {
         add(new Section("Trial", 1));
         add(new Section("Más motor", 1));
 
+        add(new Section("Fútbol sala", 0));
         add(new Section("Tenis", 0));
         add(new Section("Ciclismo", 0));
         add(new Section("Golf", 0));
         add(new Section("Atletismo", 0));
         add(new Section("Balonmano", 0));
-        add(new Section("Más deporte", 0));
-        add(new Section("Vela", 1));
+        add(new Section("Vela", 0));
 
     }
 

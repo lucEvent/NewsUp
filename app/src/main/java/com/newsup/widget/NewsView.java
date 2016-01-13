@@ -59,12 +59,15 @@ public class NewsView {
 
     private News currentNews;
 
-    private final String css = "<style>img, iframe, video,figure {width: 100%; margin: 0; padding: 0} div > h2 > a > img {width: auto;}</style>";
+    private final String css = "<style>" +
+            "iframe, video {width: 100%; margin: 0; padding: 0}" +
+            "img, figure {width: 100%; height:auto; margin: 0; padding: 0}" +
+            "div > h2 > a > img {width: auto;}" +
+            "</style>";
     private final String fontcss = "<style>" +
             "@font-face { font-family: customfont; src: url(\"fonts/customfont.woff\"); }" +
             "body { font-family: customfont; font-weight: 300; font-size: 16px; line-height: 1.67; }" +
             "</style>";
-
 
     public boolean displayNews(News news) {
         this.currentNews = news;
