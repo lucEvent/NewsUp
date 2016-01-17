@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class MyServlet extends HttpServlet {
+public class MainServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -36,39 +36,17 @@ public class MyServlet extends HttpServlet {
 
             BE_Site site = Data.sites.getSiteByCode(Integer.parseInt(parts[0]));
 
-            StringBuilder sb = new StringBuilder("<channel>");
+            int[] sections = new int[parts.length - 1];
             for (int i = 0; i < parts.length - 1; i++) {
-                int section = Integer.parseInt(parts[i + 1]);
-
-                long lastupdate = site.getSectionUpdateTime(section);
-                if (lastupdate == -1 || lastupdate < System.currentTimeMillis() - 3600000) {
-                    BE_NewsList news = site.readNews(new int[]{section});
-
-                    boolean allcontent = true;
-                    for (BE_News N : news) {
-                        if (N.content == null || N.content.isEmpty()) {
-                            allcontent = false;
-                        }
-                    }
-
-                    if (allcontent) {
-                        site.addContent(section, news);
-                        sb.append(site.getSectionContent(section));
-                    } else {
-                        site.addNews(news);
-                        for (BE_News N : news) {
-                            sb.append(N.toEntry());
-                        }
-                    }
-                } else {
-                    sb.append(site.getSectionContent(section));
-                }
-
+                sections[i] = Integer.parseInt(parts[i + 1]);
             }
-            sb.append("</channel>");
+
+            BE_NewsList news = site.readNews(sections);
+            site.addNews(news);
+
 
 //        PrintWriter out = response.getWriter();
-            resp.getWriter().println(sb.toString());
+            resp.getWriter().println(news.toEntry().toString());
 
         } else if (req.getParameter("content") != null) {
 
@@ -90,7 +68,9 @@ public class MyServlet extends HttpServlet {
                     resp.getWriter().println(prey.content);
                 }
             }
-        } else if (req.getParameter("debug") != null) {
+        } else if (req.getParameter("debug") != null)
+
+        {
 
             BE_Site site = Data.sites.getSiteByCode(Integer.parseInt(req.getParameter("site")));
             String link = req.getParameter("link");
@@ -101,13 +81,16 @@ public class MyServlet extends HttpServlet {
 
             resp.getWriter().println(N.content);
 
-        } else if (req.getParameter("clear") != null) {
+        } else if (req.getParameter("clear") != null)
+
+        {
 
             for (BE_Site site : Data.sites) {
                 site.historial.clear();
             }
 
         }
+
     }
 
     @Override

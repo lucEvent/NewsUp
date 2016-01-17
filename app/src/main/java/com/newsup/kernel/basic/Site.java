@@ -26,6 +26,7 @@ public class Site extends IASite {
 
     public SiteSettings settings;
 
+    public News highlighted;
     public NewsMap history;
 
     public Site(int code, String name, int color, InputStream icon, ArrayList<Section> sections) {

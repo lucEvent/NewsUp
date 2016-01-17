@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:descendantFocusability="blocksDescendants"
     android:orientation="vertical">
 
     <LinearLayout
@@ -92,8 +93,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:background="#0fff"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
+
             android:paddingRight="10dip"
             android:src="@drawable/ic_delete" />
 

@@ -27,19 +27,21 @@ public class ScheduledDownloadReceiver extends BroadcastReceiver {
     }
 
     public static void scheduleDownload(Context context, ArrayList<DownloadScheduleSetting> schedules) {
-        System.out.println("Scheduling");
-        if (schedules.isEmpty()) {
-            Intent intent = new Intent(context, ScheduledDownloadReceiver.class);
-            PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+        System.out.println("[] Scheduling");
 
-            AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-            alarmMgr.cancel(alarmIntent);
+        AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        if (schedules.isEmpty()) {
+            Intent i_tocancel = new Intent(context, ScheduledDownloadReceiver.class);
+            PendingIntent pi_tocancel = PendingIntent.getBroadcast(context, 0, i_tocancel, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            alarmMgr.cancel(pi_tocancel);
             return;
         }
 
         TreeSet<Schedule> list = new TreeSet<Schedule>();
 
         for (DownloadScheduleSetting schedule : schedules) {
+            System.out.println("SDR: " + schedule.toString());
             Schedule item = new Schedule();
             item.object = schedule;
 
@@ -48,15 +50,12 @@ public class ScheduledDownloadReceiver extends BroadcastReceiver {
             int c_hour = calendar.get(Calendar.HOUR_OF_DAY);
             int c_minute = calendar.get(Calendar.MINUTE);
             boolean add_day = !(c_hour < schedule.hour || (c_hour == schedule.hour && c_minute < schedule.minute));
-            System.out.println(" boolean add_day = !(" + c_hour + " < " + schedule.hour + " || (" + c_hour + " == " + schedule.hour + " && " + c_minute + " < " + schedule.minute + "));");
-            int c_day = calendar.get(Calendar.DAY_OF_WEEK) - Calendar.MONDAY;
+            int c_day = calendar.get(Calendar.DAY_OF_WEEK) - Calendar.MONDAY + 7;
             if (add_day) c_day++;
 
             innerloop:
             for (int i = 0; i < schedule.days.length; ++i) {
-
                 if (schedule.days[c_day % 7]) {
-
                     calendar.setTimeInMillis(System.currentTimeMillis());
                     calendar.set(Calendar.HOUR_OF_DAY, schedule.hour);
                     calendar.set(Calendar.MINUTE, schedule.minute);
@@ -75,9 +74,8 @@ public class ScheduledDownloadReceiver extends BroadcastReceiver {
 
         Intent intent = new Intent(context, ScheduledDownloadReceiver.class);
         intent.putExtra(DownloadScheduleSetting.DOWNLOAD_SCHEDULE, next_schedule.toString());
-        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmMgr.set(AlarmManager.RTC_WAKEUP, list.first().time, alarmIntent);
 
         System.out.println("Time:" + list.first().time);

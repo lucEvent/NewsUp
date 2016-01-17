@@ -108,7 +108,7 @@ public class NewsDataCenter {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } catch (Exception e) {
-                    debug("HA HABIDO UN ERROR FATAL");
+                    debug("FATAL ERROR DURING SERVICE :(");
                 }
             }
             return true;
@@ -116,6 +116,9 @@ public class NewsDataCenter {
         return false;
     }
 
+    public News getNewsById(int id) {
+        return dbmanager.readNews(id);
+    }
 
     public void addToHistory(News news) {
         dbmanager.insertHistoryNews(news);
@@ -244,7 +247,6 @@ public class NewsDataCenter {
         public static final int MAIN_SECTIONS = 0;
         public static final int OFFLINE_SECTIONS = 0;
 
-
         final Site site;
         final int type_sections;
 
@@ -254,6 +256,7 @@ public class NewsDataCenter {
         NewsSiteLoader(Site site, int type_sections) {
             this.site = site;
             this.type_sections = type_sections;
+            this.site.highlighted = null;
         }
 
         @Override
@@ -306,9 +309,12 @@ public class NewsDataCenter {
                     News news = (News) dataAttached;
                     news.site_code = site.code;
                     newsTempList.add(news);
+                    if (this.site.highlighted == null) {
+                        this.site.highlighted = news;
+                    }
                     break;
                 case ERROR:
-                    debug("Error recibido por el Handler");
+                    debug("Error received by H  andler");
                     break;
             }
         }

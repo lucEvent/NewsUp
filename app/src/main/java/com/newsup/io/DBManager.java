@@ -33,14 +33,7 @@ public class DBManager {
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
 
-            int id = cursor.getInt(0);
-            String title = cursor.getString(2);
-            String link = cursor.getString(3);
-            long date = cursor.getLong(4);
-            String description = cursor.getString(5);
-            Tags categories = new Tags(cursor.getString(6));
-
-            News news = new News(id, title, link, description, date, categories);
+            News news = cursorToNews(cursor);
             news.site_code = site.code;
             result.add(news);
 
@@ -50,6 +43,24 @@ public class DBManager {
         database.close();
         debug("[#] NEWS IN " + site.name + " DATABASE: " + result.size());
         return result;
+    }
+
+    public News readNews(int id) {
+        SQLiteDatabase database = db.getReadableDatabase();
+        Cursor cursor = database.query(DBNews.db, DBNews.cols, DBNews.id + "=" + id, null, null, null, null);
+
+        News news = null;
+
+        cursor.moveToFirst();
+        if (!cursor.isAfterLast()) {
+
+            news = cursorToNews(cursor);
+            news.site_code = cursor.getInt(1);
+
+        }
+        cursor.close();
+        database.close();
+        return news;
     }
 
     public NewsMap readHistoryNews() {
@@ -151,8 +162,18 @@ public class DBManager {
         database.close();
     }
 
+    /**
+     * Cursor conversions
+     */
+    private News cursorToNews(Cursor c) {
+        return new News(c.getInt(0), c.getString(2), c.getString(3), c.getString(5),
+                c.getLong(4), new Tags(c.getString(6)));
+    }
+
+
     private void debug(String text) {
         android.util.Log.d("##DBManager##", text);
     }
+
 
 }

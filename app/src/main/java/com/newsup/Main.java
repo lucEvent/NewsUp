@@ -78,9 +78,18 @@ public class Main extends ListActivity implements Socket {
         newsListView = findViewById(R.id.list_content);
         actionBar = new ActionBarManager();
 
-        //TODO que se muestre la ultima que estaba viendo no?
-        displaySiteNews(null, null);
-
+        Bundle extras = getIntent().getExtras();
+        if (extras != null && extras.containsKey("notification_codes")) {
+            int[] notification_codes = extras.getIntArray("notification_codes");
+            for (int news_id : notification_codes) {
+                System.out.println("Im getting the ids :) " + news_id);
+                News news = datamanager.getNewsById(news_id);
+                newslister.add(news);
+            }
+        } else {
+            //TODO que se muestre la ultima que estaba viendo no?
+            displaySiteNews(null, null);
+        }
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         drawerSiteList = (ListView) findViewById(R.id.site_drawer);
@@ -107,7 +116,8 @@ public class Main extends ListActivity implements Socket {
             debug("Can not set custom font");
             e.printStackTrace();
         }
-*/    }
+*/
+    }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {

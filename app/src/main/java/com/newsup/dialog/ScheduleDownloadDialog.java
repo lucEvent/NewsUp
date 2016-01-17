@@ -66,7 +66,7 @@ public class ScheduleDownloadDialog extends AlertDialog.Builder implements View.
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
 
-        time.setCurrentHour(calendar.get(Calendar.HOUR));
+        time.setCurrentHour(calendar.get(Calendar.HOUR_OF_DAY));
         time.setCurrentMinute(calendar.get(Calendar.MINUTE));
         System.out.println(calendar.get(Calendar.MINUTE));
         for (ToggleButton day : days) day.setChecked(true);
