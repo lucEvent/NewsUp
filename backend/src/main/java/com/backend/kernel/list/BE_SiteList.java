@@ -46,8 +46,8 @@ public class BE_SiteList extends ArrayList<BE_Site> {
 
         // British sites
         add(new BE_Site(500, "BBC", new com.backend.net.BE_BCCNewsReader()));
-//          add(new BE_Site(505, "The Telegraph", new com.backend.net.BE_TheTelegraphNewsReader()));
-//          add(new BE_Site(510, "The Huffington Post", new com.backend.net.BE_HuffingtonPostUKNewsReader()));
+        add(new BE_Site(505, "The Telegraph", new com.backend.net.BE_TheTelegraphNewsReader()));
+        add(new BE_Site(510, "The Huffington Post", new com.backend.net.BE_HuffingtonPostUKNewsReader()));
 
         // American sites
         add(new BE_Site(600, "CNN", new com.backend.net.BE_CNNNewsReader()));

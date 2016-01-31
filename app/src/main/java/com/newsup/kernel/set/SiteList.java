@@ -61,8 +61,8 @@ public class SiteList extends ArrayList<Site> {
 */
             add(new Site(-1, context.getString(R.string.uk), 0, null, null));
             add(new Site(500, "BBC", 0xffa62e30, assets.open("bbc.png"), new com.newsup.kernel.section.BCCSections()));
-//          add(new Site(505, "The Telegraph", 0xff, assets.open("thetelegraph.png"), new com.newsup.kernel.section.TheTelegraphSections()));
-//          add(new Site(510, "The Huffington Post", 0xff, assets.open("huffingtonpost.png"), new com.newsup.kernel.section.HuffingtonPostUKSections()));
+          add(new Site(505, "The Telegraph", 0xffffffff, assets.open("thetelegraph.png"), new com.newsup.kernel.section.TheTelegraphSections()));
+          add(new Site(510, "The Huffington Post", 0xff2c705f, assets.open("huffingtonpost.png"), new com.newsup.kernel.section.HuffingtonPostUKSections()));
 
             add(new Site(-1, context.getString(R.string.us), 0, null, null));
             add(new Site(600, "CNN", 0xffc20000, assets.open("cnn.png"), new com.newsup.kernel.section.CNNSections()));
@@ -70,10 +70,10 @@ public class SiteList extends ArrayList<Site> {
 
             add(new Site(-1, context.getString(R.string.international), 0, null, null));
             add(new Site(700, "The Local", 0xfff76e05, assets.open("thelocal.png"), new com.newsup.kernel.section.TheLocalSections()));
-//          add(new Site(705, "The Huffington Post (Arabic)", 0xff, assets.open("huffingtonpost.png"), new com.newsup.kernel.section.HuffingtonPostArabicSections()));
-//          add(new Site(710, "The Huffington Post (Australia)", 0xff, assets.open("huffingtonpost.png"), new com.newsup.kernel.section.HuffingtonPostAustraliaSections()));
-//          add(new Site(715, "The Huffington Post (Brasil)", 0xff, assets.open("huffingtonpost.png"), new com.newsup.kernel.section.HuffingtonPostBrasilSections()));
-//          add(new Site(720, "The Huffington Post (Canada)", 0xff, assets.open("huffingtonpost.png"), new com.newsup.kernel.section.HuffingtonPostCanadaSections()));
+//          add(new Site(705, "The Huffington Post (Arabic)", 0xff2c705f, assets.open("huffingtonpost.png"), new com.newsup.kernel.section.HuffingtonPostArabicSections()));
+//          add(new Site(710, "The Huffington Post (Australia)", 0xff2c705f, assets.open("huffingtonpost.png"), new com.newsup.kernel.section.HuffingtonPostAustraliaSections()));
+//          add(new Site(715, "The Huffington Post (Brasil)", 0xff2c705f, assets.open("huffingtonpost.png"), new com.newsup.kernel.section.HuffingtonPostBrasilSections()));
+//          add(new Site(720, "The Huffington Post (Canada)", 0xff2c705f, assets.open("huffingtonpost.png"), new com.newsup.kernel.section.HuffingtonPostCanadaSections()));
 
             add(new Site(-1, context.getString(R.string.technology), 0, null, null));
             add(new Site(800, "El Androide Libre", 0xffa3c23e, assets.open("elandroidelibre.png"), new com.newsup.kernel.section.ElAndroideLibreSections()));
