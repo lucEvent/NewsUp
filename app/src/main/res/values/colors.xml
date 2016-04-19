@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="label_selected">#AA90C3D4</color>
-    <color name="divider">#AA999999</color>
-    <color name="divider_light">#AAEEEEEE</color>
-    <color name="drawers">#ffff</color>
-    <color name="section_header">#feee</color>
-    <color name="actionBar">#FF86c700</color>
-    <color name="actionBarLight">#9986c700</color>
+    <color name="colorPrimary">#8BC34A</color>
+    <color name="colorPrimaryDark">#558B2F</color>
+    <color name="colorAccent">#EF5350</color>
+
+    <color name="default_background">#feee</color>
+
+    <color name="black_overlay">#66000000</color>
+    <color name="disabled">#ffcccccc</color>
 
 </resources>

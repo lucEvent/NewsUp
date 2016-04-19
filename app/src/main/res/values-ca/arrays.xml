@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="date_messages">
+        <item>Fa %d segons</item>
+        <item>Fa %d minuts</item>
+        <item>Fa %d hores</item>
+        <item>Fa %d dies</item>
+        <item>Fa %d mesos</item>
+        <item>Fa %d anys</item>
+    </string-array>
+    <string-array name="sitelist_headers">
+        <item>Espanya</item>
+        <item>Catalunya</item>
+        <item>Suècia</item>
+        <item>Finlàndia</item>
+        <item>UK</item>
+        <item>US</item>
+        <item>Internacional</item>
+        <item>Tecnologia</item>
+        <item>Blogs</item>
+        <item>Revistes</item>
+    </string-array>
+
+</resources>

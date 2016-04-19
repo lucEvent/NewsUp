@@ -1,0 +1,36 @@
+<resources>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="listItemContainer">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/i_margin_top_bottom</item>
+        <item name="android:layout_marginLeft">@dimen/i_margin_left_right</item>
+        <item name="android:layout_marginRight">@dimen/i_margin_left_right</item>
+        <item name="android:layout_marginTop">@dimen/i_margin_top_bottom</item>
+        <item name="android:background">@drawable/ripple</item>
+        <item name="android:elevation">@dimen/i_elevation</item>
+        <item name="android:paddingBottom">10dip</item>
+        <item name="android:paddingLeft">15dip</item>
+        <item name="android:paddingRight">15dip</item>
+        <item name="android:paddingTop">15dip</item>
+    </style>
+
+    <style name="themeDialog" parent="Base.Theme.AppCompat.Dialog">
+        <item name="android:timePickerDialogTheme">@style/Dialog</item>
+    </style>
+
+    <style name="Dialog" parent="AppTheme">
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:colorPrimary">@color/colorPrimary</item>
+        <item name="android:colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:colorAccent">@color/colorAccent</item>
+    </style>
+
+</resources>

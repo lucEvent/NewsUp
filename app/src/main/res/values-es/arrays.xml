@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="date_messages">
+        <item>Hace %d segundos</item>
+        <item>Hace %d minutos</item>
+        <item>Hace %d horas</item>
+        <item>Hace %d días</item>
+        <item>Hace %d meses</item>
+        <item>Hace %d años</item>
+    </string-array>
+    <string-array name="sitelist_headers">
+        <item>España</item>
+        <item>Cataluña</item>
+        <item>Suecia</item>
+        <item>Finlandia</item>
+        <item>UK</item>
+        <item>US</item>
+        <item>Internacional</item>
+        <item>Tecnología</item>
+        <item>Blogs</item>
+        <item>Revistas</item>
+    </string-array>
+
+</resources>

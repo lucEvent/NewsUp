@@ -1,0 +1,47 @@
+package com.lucevent.newsup.data.reader;
+
+import com.lucevent.newsup.data.util.News;
+
+import java.io.IOException;
+import java.net.URL;
+
+public class ElJueves extends com.lucevent.newsup.data.util.NewsReader {
+
+    public ElJueves() {
+        super();
+    }
+
+    @Override
+    protected News applySpecialCase(News news, String content) {
+        news.description = org.jsoup.Jsoup.parse(news.description).text();
+        return news;
+    }
+
+    @Override
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
+        org.jsoup.select.Elements e = doc.select(".post > p:not(.extra-info)");
+
+        if (e.isEmpty()) {
+            return;
+        }
+        for (org.jsoup.nodes.Element img : e.select("img")) {
+            String src = img.attr("src");
+            if (!src.startsWith("http:")) {
+                img.attr("src", "http://www.eljueves.es" + src);
+            }
+        }
+
+        news.content = e.outerHtml();
+
+    }
+
+    protected org.jsoup.nodes.Document getDocument(String pagelink) {
+        try {
+            return org.jsoup.Jsoup.parse(new URL(pagelink).openStream(), "ISO-8859-1", pagelink);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return super.getDocument(pagelink);
+    }
+
+}

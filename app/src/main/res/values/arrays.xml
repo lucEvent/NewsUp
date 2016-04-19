@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="date_messages">
+        <item>%d seconds ago</item>
+        <item>%d minutes ago</item>
+        <item>%d hours ago</item>
+        <item>%d days ago</item>
+        <item>%d months ago</item>
+        <item>%d years ago</item>
+    </string-array>
+    <string-array name="sitelist_headers">
+        <item>Spain</item>
+        <item>Catalonia</item>
+        <item>Sweden</item>
+        <item>Finland</item>
+        <item>UK</item>
+        <item>US</item>
+        <item>International</item>
+        <item>Technology</item>
+        <item>Blogs</item>
+        <item>Magazines</item>
+    </string-array>
+
+</resources>

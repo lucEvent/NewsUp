@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/listItemContainer"
     android:descendantFocusability="blocksDescendants"
     android:orientation="vertical">
 
@@ -15,61 +15,38 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="10dp"
             android:text="08:00"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="48sp" />
+            android:textSize="36sp"/>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:orientation="vertical"
-            android:padding="10dp">
-
-            <ImageView
-                android:id="@+id/repeat_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/repeat"
-                android:layout_alignTop="@+id/repeat"
-                android:paddingBottom="5dip"
-                android:paddingTop="5dip"
-                android:src="@drawable/ic_refresh" />
+            android:layout_gravity="end"
+            android:gravity="end"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/repeat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/repeat_icon"
-                android:drawablePadding="3dp"
-                android:paddingBottom="5dip"
-                android:paddingTop="5dip"
+                android:drawableEnd="@drawable/ic_repeat"
+                android:drawablePadding="5dp"
+                android:gravity="center"
                 android:text="@string/repeat"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <ImageView
-                android:id="@+id/notification_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/notify"
-                android:layout_below="@+id/repeat_icon"
-                android:paddingBottom="5dip"
-                android:paddingTop="5dip"
-                android:src="@drawable/ic_notification" />
+                android:textAppearance="?android:attr/textAppearanceSmall"/>
 
             <TextView
                 android:id="@+id/notify"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/repeat_icon"
-                android:layout_toRightOf="@+id/notification_icon"
-                android:paddingBottom="5dip"
-                android:paddingTop="5dip"
+                android:drawableEnd="@drawable/ic_notification"
+                android:drawablePadding="5dp"
+                android:gravity="center"
                 android:text="@string/notification"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceSmall"/>
 
-        </RelativeLayout>
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -82,21 +59,21 @@
             android:id="@+id/days"
             android:layout_width="0dip"
             android:layout_height="wrap_content"
+            android:layout_gravity="start"
             android:layout_weight="1"
-            android:padding="10dip"
-            android:text="Mon, Tue, Wed, Sat"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:paddingBottom="10dip"
+            android:paddingTop="10dip"
+            android:text="Mon, Tue, Wed, Thu, Fri, Sat, Sun"
+            android:textAppearance="?android:attr/textAppearanceSmall"/>
 
         <ImageButton
             android:id="@+id/action_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:background="#0fff"
-
-            android:paddingRight="10dip"
-            android:src="@drawable/ic_delete" />
-
+            android:layout_gravity="end|bottom"
+            android:background="@drawable/ripple_round"
+            android:src="@drawable/ic_clear"/>
 
     </LinearLayout>
+
 </LinearLayout>

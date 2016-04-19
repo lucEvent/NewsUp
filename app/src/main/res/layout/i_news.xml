@@ -1,62 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/listItemContainer">
 
-    <RelativeLayout
+    <TextView
+        android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="2.5dip"
-        android:layout_marginLeft="5dip"
-        android:layout_marginRight="5dip"
-        android:layout_marginTop="2.5dip"
-        android:background="@drawable/selector_i_news"
-        android:paddingBottom="10dip"
-        android:paddingLeft="15dip"
-        android:paddingRight="15dip"
-        android:paddingTop="15dip">
+        android:text="Title"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
+        android:ellipsize="end"
+        android:maxLines="3"
+        android:paddingTop="5dip"
+        android:text="News description, and then this text will be trimmed"
+        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/description"
+        android:layout_marginTop="5dip">
 
         <TextView
-            android:id="@+id/title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Title"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/title"
-            android:paddingTop="5dip"
-            android:text="Description on the news, and then this text will be trimmed"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-        <LinearLayout
+            android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/description"
-            android:layout_marginTop="5dip">
+            android:layout_gravity="bottom"
+            android:text="Hace 2 meses"
+            android:textSize="11sp"/>
 
-            <TextView
-                android:id="@+id/date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:text="Hace 2 meses"
-                android:textSize="11sp" />
+        <View
+            android:id="@+id/logo"
+            android:layout_width="20dip"
+            android:layout_height="20dip"
+            android:layout_marginLeft="10dip"
+            android:background="#F00"/>
 
-            <View
-                android:id="@+id/logo"
-                android:layout_width="20dip"
-                android:layout_height="20dip"
-                android:layout_marginLeft="10dip"
-                android:background="#F00" />
+    </LinearLayout>
 
-        </LinearLayout>
-
-    </RelativeLayout>
-</FrameLayout>
-
+</RelativeLayout>

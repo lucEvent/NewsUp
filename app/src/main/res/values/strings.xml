@@ -1,77 +1,172 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name" translatable="false">News Up</string>
-    <string name="app_version" translatable="false">Version 0.16.3</string>
+    <string name="app_name" translatable="false">NewsUp</string>
+    <string name="app_version">version 1.0.0</string>
 
+
+    <!-- * ******************** Labels **************************** * -->
+    <string name="my_news">My news</string>
+    <string name="saved_for_later">Saved for later</string>
+    <string name="read_news">Read news</string>
     <string name="settings">Settings</string>
-
-    <string name="mycustomfeed">My custom feed</string>
-    <string name="spain">Spain</string>
-    <string name="sweden">Sweden</string>
-    <string name="finland">Finland</string>
-    <string name="international">International</string>
-    <string name="technology">Technology</string>
-    <string name="blogs">Blogs</string>
-    <string name="magazines">Magazines</string>
-
-    <string name="confirm">Confirm</string>
-    <string name="removeall">Remove all</string>
-
-    <!--  Settings -->
-    <string name="mainpage">Main page</string>
-    <string name="confsites">Newspapers</string>
-    <string name="cleancache">Clean caché</string>
-    <string name="never">Never</string>
-    <string name="done">Done</string>
-    <string name="notimplementedyet">Not implemented yet</string>
-    <string name="apply">Apply</string>
-    <string name="mainsections">Main sections</string>
-    <string name="offlinesections">Offline sections</string>
-    <string name="mainsites">Main sites:&#160;</string>
-
-    <!-- Dates -->
-    <string name="datetextbefore"></string>
-    <string name="datetextAfterSecond">&#160;seconds ago</string>
-    <string name="datetextAfterMinute">&#160;minutes ago</string>
-    <string name="datetextAfterHour">&#160;hours ago</string>
-    <string name="datetextAfterDay">&#160;days ago</string>
-    <string name="datetextAfterMonth">&#160;months ago</string>
-    <string name="datetextAfterYear">&#160;years ago</string>
-    <string name="catalonia">Catalonia</string>
-    <string name="sharewith">Share with</string>
-    <string name="contentnotavailableyet">Content not available yet</string>
-    <string name="uk">UK</string>
-    <string name="us">US</string>
-    <string name="allsites">All sites</string>
-    <string name="favorite">Favorite</string>
-    <string name="tryagain">Try again</string>
-    <string name="openinbrowser">Open in browser</string>
-    <string name="close">Close</string>
-    <string name="title_newsnotfound">Oops&#8230; This app is awesome but it still cannot read this news</string>
-    <string name="message_newsnotfound">What should we do?</string>
-    <string name="msg_no_site_picked">Ohh! You have selected no site</string>
-
-    <string name="title_activity_history">Historial</string>
-    <string name="savedforlater">Saved for later</string>
-    <string name="history">History</string>
-    <string name="msg_confirm_clear_hist">Confirm to clear history</string>
+    <string name="about">About</string>
     <string name="favorites">Favorites</string>
-    <string name="scheduledonwloads">Schedule Downloads</string>
-    <string name="schedulenewone">Schedule new download</string>
+    <string name="all_sites">All sites</string>
+    <string name="share_with">Share with</string>
+    <string name="notification">Notification</string>
     <string name="repeat">Repeat</string>
-    <string name="notificate">Receive notification</string>
+    <string name="select_time">Select Time</string>
+    <string name="notify">Notify</string>
+    <string name="select_sites_to_download">Select sites to download</string>
+
+
     <string name="mon">Mon</string>
     <string name="tue">Tue</string>
     <string name="wed">Wed</string>
-    <string name="fri">Fri</string>
     <string name="thu">Thu</string>
+    <string name="fri">Fri</string>
     <string name="sat">Sat</string>
     <string name="sun">Sun</string>
-    <string name="notification">Notification</string>
-    <string name="selectsitestodownload">Select sites to download\n(Default All)</string>
-    <string name="create">Create</string>
-    <string name="applychanges">Apply changes</string>
-    <string name="showonmycustomfeed">Show on my custom feed</string>
+
+
+    <!-- * ******************** Buttons **************************** * -->
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="confirm">Confirm</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="done">Done</string>
+    <string name="go_back">Go back</string>
+    <string name="continue_">Continue</string>
+    <string name="try_again">Try again</string>
+    <string name="open_in_browser">Open in browser</string>
+    <string name="close">Close</string>
+    <string name="schedule_download">Schedule download</string>
+
+
+    <!-- * ******************** Hints **************************** * -->
+
+
+    <!-- * ******************** Messages **************************** * -->
+    <string name="msg_confirm_to_remove_all_saved_news">Confirm to remove all saved news</string>
+    <string name="msg_confirm_clean_app_data">Confirm to clean all the data of the app</string>
+    <string name="msg_confirm_to_clear_history">Confirm to clear app history</string>
+    <string name="msg_must_select_at_least_one">Must select at least ONE</string>
+    <string name="msg_confirm_to_go_back">Confirm to go back</string>
+    <string name="msg_must_select_at_least_one_site">Must select at least ONE site</string>
+    <string name="msg_confirm_to_delete">Confirm to delete</string>
+    <string name="msg_must_select_at_least_one_day">Must select at least ONE DAY</string>
+    <string name="msg_cant_load_content">Can\'t load content</string>
+    <string name="msg_news_not_found">Oops… The app is awesome but yet it can\'t read this news.\nWhat do we do?</string>
+
+
+    <!-- * *************** Activities and fragment's titles ********************* * -->
+    <string name="title_frg_settings_of">Settings of %1$s</string>
+
+    <!-- ***************************** Menu strings ********************************** -->
+    <string name="menu_favorite">Favorite</string>
+    <string name="menu_settings">Site settings</string>
+    <string name="menu_delete_all">Delete all</string>
+
+
+    <!-- ***************************** Settings strings ********************************** -->
+    <string name="pref_title_general">General</string>
+    <string name="pref_title_data">Data</string>
+
+    <string name="pref_clean_cache">Clean cache</string>
+    <string name="pref_main_sites">Main sites</string>
+    <string name="pref_schedule_downloads">Schedule downloads</string>
+    <string name="pref_sites_settings">Sites settings</string>
+    <string name="pref_show_in_my_feed">Show in my feed</string>
+    <string name="pref_favorite">Favorite</string>
+    <string name="pref_main_sections">Main sections</string>
+    <string name="pref_download_sections">Download sections</string>
+
+    <string name="pref_main_sites_key" translatable="false">app_pref1</string>
+    <string name="pref_favorite_sites_key" translatable="false">app_pref2</string>
+    <string name="pref_sites_settings_key" translatable="false">app_pref3</string>
+    <string name="pref_schedule_downloads_key" translatable="false">app_pref4</string>
+    <string name="pref_clean_cache_key" translatable="false">app_pref5</string>
+
+    <string name="pref_show_in_my_feed_key" translatable="false">site_pref1</string>
+    <string name="pref_favorite_key" translatable="false">site_pref2</string>
+    <string name="pref_main_sections_key" translatable="false">site_pref3</string>
+    <string name="pref_download_sections_key" translatable="false">site_pref4</string>
+
+    <!-- ***************************** ***************** ********************************** -->
+    <string name="about_content" translatable="false"><![CDATA[
+        <h2>News Up version 1.0.0</h2>
+        <h2>Developed by Rafael J. Lucena</h2>
+        <h3>Contact: rafaa89(at)gmail.com</h3>
+        <p>
+            <p><b>Last features and Improvements:</b></p>
+            <p>Version 1.0 2016-04-XX:<br>Lollipop support!!.<br> Settings standardized.<br>Scheduled downloads now saved in DB<br>Minimum android version supported is now Kitkat (Api19)</p>
+        </p>
+        <br>
+        <p>
+            <p><b>What\'s coming soon?:</b></p>
+            <p>. . .</p>
+        </p>
+        <p>
+            <p><b>Possible support for news sites:</b></p>
+            <p> - Svenska Yle (Finland)</p>
+            <p> - Idg (Sweden)</p>
+            <p> - Sports illustrated (USA)</p>
+            <p> - Daily Mail (UK)</p>
+            <p> - The wall street journal (USA)</p>
+            <p> - Times of india</p>
+            <p> - NY times (USA)</p>
+            <p> - USA Today (USA)</p>
+            <p> - Metro (UK)</p>
+            <p> - Independent (UK)</p>
+            <p> - Siberian Times (Siberia, Russia)</p>
+        </p>
+        <p>
+            <p><b>Possible support for magazines:</b></p>
+            <p> - The bark</p>
+            <p> - Space.com</p>
+            <p> - National geographic</p>
+            <p> - Bestfriends.org</p>
+            <p> - Nova dog magazine</p>
+            <p> - Ny Teknik</p>
+            <p> - Sweclockers</p>
+            <p> - NASA</p>
+            <p> - Edx</p>
+            <p> - Digitalcamera.es</p>
+            <p> - Revista cuore</p>
+            <p> - La Patilla</p>
+            <p> - Science magazine</p>
+            <p> - Hipertextual</p>
+            <p> - The Verge</p>
+            <p> - Interviu</p>
+            <p> - Vagabond</p>
+            <p> - Life Science Sweden/</p>
+            <p> - Teknikensvarld</p>
+            <p> - Veckans Affärer</p>
+            <p> - FRIDA</p>
+            <p> - Catalonia today</p>
+            <p> - Tech Times</p>
+            <p> - IGN España</p>
+            <p> - Magazine Fashion & arts</p>
+        </p>
+        <p>
+            <p><b>Possible support for blogs:</b></p>
+            <p> - Verne (el pais, spain)</p>
+            <p> - Digital Inspiration Technology Blog</p>
+            <p> - Google Earth Blog</p>
+            <p> - Jumbo Joke: Humor the Way You Like It</p>
+            <p> - Mashable</p>
+            <p> - Ogle Earth</p>
+        </p>
+         <p>
+            <p><b>Possible other supports:</b></p>
+            <p> - Readanybook.com</p>
+        </p>
+    ]]></string>
+
+
+    <!-- ***************************** ***************** ********************************** -->
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+
 
 </resources>

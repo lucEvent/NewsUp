@@ -1,51 +1,47 @@
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start">
 
-    <FrameLayout
-        android:id="@+id/content_frame"
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
-            android:id="@+id/list_content"
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
 
-            <ListView
-                android:id="@android:id/list"
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:animateLayoutChanges="true"
-                android:divider="@null" />
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
-            <ImageButton
-                android:id="@+id/button_sections"
-                style="@style/button_floating"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:background="@drawable/selector_floating_button_forfilter"
-                android:onClick="showSections"
-                android:src="@drawable/ic_more_black" />
+        </android.support.design.widget.AppBarLayout>
 
-        </RelativeLayout>
+        <FrameLayout
+            android:id="@+id/main_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="?attr/actionBarSize"/>
 
-        <include
-            layout="@layout/p_news"
-            android:animateLayoutChanges="true"
-            android:visibility="gone" />
+    </android.support.design.widget.CoordinatorLayout>
 
-    </FrameLayout>
-
-    <ListView
-        android:id="@+id/site_drawer"
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="left"
-        android:background="@color/drawers"
-        android:choiceMode="singleChoice"
-        android:divider="@null"
-        android:dividerHeight="0dp" />
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/v_header_main"
+        app:menu="@menu/a_main_drawer"/>
 
 </android.support.v4.widget.DrawerLayout>

@@ -1,9 +1,12 @@
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/ripple"
+    android:clickable="true"
     android:paddingBottom="10dip"
-    android:paddingLeft="50dip"
-    android:paddingRight="20dip"
+    android:paddingStart="50dip"
     android:paddingTop="10dip"
     android:text="Section"
-    android:textAppearance="?android:attr/textAppearanceMedium" />
+    android:textAppearance="?android:attr/textAppearanceMedium"/>

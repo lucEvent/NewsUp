@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="@string/pref_show_in_my_feed_key"
+        android:title="@string/pref_show_in_my_feed"/>
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="@string/pref_favorite_key"
+        android:title="@string/pref_favorite"/>
+
+    <com.lucevent.newsup.view.preference.SectionsMultiSelectPreference
+        android:key="@string/pref_main_sections_key"
+        android:title="@string/pref_main_sections"/>
+
+    <com.lucevent.newsup.view.preference.SectionsMultiSelectPreference
+        android:key="@string/pref_download_sections_key"
+        android:title="@string/pref_download_sections"/>
+
+</PreferenceScreen>

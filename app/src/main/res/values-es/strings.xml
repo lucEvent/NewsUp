@@ -1,72 +1,83 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="app_version">versión 1.0</string>
+
+
+    <!-- * ******************** Labels **************************** * -->
+    <string name="my_news">Mis noticias</string>
+    <string name="saved_for_later">Noticias guardadas</string>
+    <string name="read_news">Noticias leídas</string>
     <string name="settings">Configuración</string>
-
-    <string name="mycustomfeed">Mis notícias</string>
-    <string name="spain">España</string>
-    <string name="sweden">Suecia</string>
-    <string name="finland">Finlandia</string>
-    <string name="international">Internacional</string>
-    <string name="technology">Tecnología</string>
-    <string name="blogs">Blogs</string>
-    <string name="magazines">Revistas</string>
-
-    <string name="confirm">Confirmar</string>
-    <string name="removeall">Elimina todo</string>
-
-    <!--  Settings -->
-    <string name="mainpage">Página principal</string>
-    <string name="confsites">Publicaciones</string>
-    <string name="cleancache">Limpia datos</string>
-    <string name="never">Nunca</string>
-    <string name="done">Hecho</string>
-    <string name="notimplementedyet">No implementado todavía</string>
-    <string name="apply">Aplicar</string>
-    <string name="mainsections">Secciones principales</string>
-    <string name="offlinesections">Secciones offline</string>
-    <string name="mainsites">Publicaciones principales:&#160;</string>
-
-    <!-- Dates -->
-    <string name="datetextbefore">Hace&#160;</string>
-    <string name="datetextAfterSecond">&#160;segundos</string>
-    <string name="datetextAfterMinute">&#160;minutos</string>
-    <string name="datetextAfterHour">&#160;horas</string>
-    <string name="datetextAfterDay">&#160;días</string>
-    <string name="datetextAfterMonth">&#160;meses</string>
-    <string name="datetextAfterYear">&#160;años</string>
-    <string name="catalonia">Cataluña</string>
-    <string name="sharewith">Compartir con</string>
-    <string name="contentnotavailableyet">Contenido no disponible todavía</string>
-    <string name="uk">UK</string>
-    <string name="us">US</string>
-    <string name="allsites">Todas las publicaciones</string>
-    <string name="favorite">Favorito</string>
-    <string name="tryagain">Intentar de nuevo</string>
-    <string name="openinbrowser">Abrir en el navegador</string>
-    <string name="close">Cerrar</string>
-    <string name="title_newsnotfound">Oops&#8230; La app es genial pero aun no puede leer esta notícia</string>
-    <string name="message_newsnotfound">Qué hacemos?</string>
-    <string name="msg_no_site_picked">Ohh! No has seleccionado nada</string>
-    <string name="savedforlater">Notícias guardadas</string>
-    <string name="history">Notícias leídas</string>
-    <string name="msg_confirm_clear_hist">Confirma para eliminar el historial</string>
+    <string name="about">Información</string>
     <string name="favorites">Favoritos</string>
-    <string name="title_activity_history">Historial</string>
-    <string name="schedulenewone">Programa nueva descarga</string>
-    <string name="create">Crear</string>
-    <string name="fri">Vie</string>
-    <string name="mon">Lun</string>
-    <string name="notificate">Recibir notificación</string>
+    <string name="all_sites">Todas las publicaciones</string>
+    <string name="share_with">Comparte con</string>
     <string name="notification">Notificación</string>
     <string name="repeat">Repetir</string>
-    <string name="sat">Sab</string>
-    <string name="selectsitestodownload">Selecciona las publicaciones\n(Por defecto Todas)</string>
-    <string name="sun">Dom</string>
-    <string name="thu">Jue</string>
-    <string name="scheduledonwloads">Descargas programadas</string>
+    <string name="select_time">Selecciona hora</string>
+    <string name="notify">Notificar</string>
+    <string name="select_sites_to_download">Selecciona publicaciones para descargar</string>
+
+    <string name="mon">Lun</string>
     <string name="tue">Mar</string>
     <string name="wed">Mie</string>
-    <string name="applychanges">Aplica cambios</string>
+    <string name="thu">Jue</string>
+    <string name="fri">Vie</string>
+    <string name="sat">Sab</string>
+    <string name="sun">Dom</string>
+
+
+    <!-- * ******************** Buttons **************************** * -->
+    <string name="cancel">Cancelar</string>
+    <string name="save">Guardar</string>
+    <string name="confirm">Confirmar</string>
+    <string name="dismiss">Descartar</string>
+    <string name="done">Hecho</string>
+    <string name="go_back">Atrás</string>
+    <string name="continue_">Continuar</string>
+    <string name="try_again">Intentar de nuevo</string>
+    <string name="open_in_browser">Abrir en navegador</string>
+    <string name="close">Cerrar</string>
+    <string name="schedule_download">Programa descarga</string>
+
+
+    <!-- * ******************** Hints **************************** * -->
+
+
+    <!-- * ******************** Messages **************************** * -->
+    <string name="msg_confirm_to_remove_all_saved_news">Confirma para eliminar todo</string>
+    <string name="msg_confirm_clean_app_data">Confirma para limpiar todos los datos</string>
+    <string name="msg_confirm_to_clear_history">Confirma para eliminar el historial</string>
+    <string name="msg_must_select_at_least_one">Debes seleccionar al menos UNA</string>
+    <string name="msg_confirm_to_go_back">Confirma para ir atrás</string>
+    <string name="msg_must_select_at_least_one_site">Debes seleccionar al menos UNA publicación</string>
+    <string name="msg_confirm_to_delete">Confirma para eliminar</string>
+    <string name="msg_must_select_at_least_one_day">Debes seleccionar al menos UN día</string>
+    <string name="msg_cant_load_content">No se puede cargar el contenido</string>
+    <string name="msg_news_not_found">Oohh… La aplicación es increíble pero todavía no puede leer esta noticia.\n¿Qué hacemos?</string>
+
+
+    <!-- * *************** Activities and fragment's titles ********************* * -->
+    <string name="title_frg_settings_of">Configuración de %1$s</string>
+
+    <!-- ***************************** Menu strings ********************************** -->
+    <string name="menu_favorite">Favorito</string>
+    <string name="menu_settings">Configuración de la publicación</string>
+    <string name="menu_delete_all">Elimina todo</string>
+
+
+    <!-- ***************************** Settings strings ********************************** -->
+    <string name="pref_title_general">General</string>
+    <string name="pref_title_data">Datos</string>
+
+    <string name="pref_clean_cache">Limpia la caché</string>
+    <string name="pref_main_sites">Publicaciones principales</string>
+    <string name="pref_schedule_downloads">Programa descargas</string>
+    <string name="pref_sites_settings">Configuración de las publicaciones</string>
+    <string name="pref_show_in_my_feed">Muestra en mis noticias</string>
+    <string name="pref_favorite">Favorito</string>
+    <string name="pref_main_sections">Secciones principales</string>
+    <string name="pref_download_sections">Secciones de descarga</string>
+
 
 </resources>

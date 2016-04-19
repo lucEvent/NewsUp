@@ -1,0 +1,33 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.lucevent.newsup.view.activity.NewsActivity">
+
+    <WebView
+        android:id="@+id/webview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:keepScreenOn="true"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/button_share"
+        style="@style/floatingButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_share"
+        app:backgroundTint="@color/colorPrimary"
+        app:rippleColor="@color/colorAccent"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/button_bookmark"
+        style="@style/floatingButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/ic_bookmark_border"
+        app:backgroundTint="@color/colorPrimary"
+        app:rippleColor="@color/colorAccent"/>
+
+</RelativeLayout>

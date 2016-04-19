@@ -1,0 +1,8 @@
+apply plugin: 'java'
+
+dependencies {
+    sourceCompatibility = "1.7"
+    targetCompatibility = "1.7"
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'org.jsoup:jsoup:1.8.3'
+}

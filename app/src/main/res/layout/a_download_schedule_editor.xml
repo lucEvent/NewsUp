@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".view.activity.DownloadScheduleEditorActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            android:gravity="center_vertical">
+
+            <ImageButton
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_alignParentStart="true"
+                android:background="@drawable/ripple_round"
+                android:contentDescription="@string/cancel"
+                android:onClick="actionCancel"
+                android:src="@drawable/ic_clear"/>
+
+            <Button
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:gravity="center"
+                android:onClick="actionSave"
+                android:text="@string/save"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="@color/colorPrimary"
+            android:gravity="bottom"
+            android:paddingBottom="10dp"
+            android:paddingStart="20dp"
+            android:text="@string/schedule_download"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textStyle="bold"/>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/text_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:onClick="onTimePickerAction"
+                    android:padding="20dp"
+                    android:text="00:00"
+                    android:textSize="48sp"/>
+
+                <LinearLayout
+                    style="?android:attr/buttonBarStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ToggleButton
+                        android:id="@+id/monday"
+                        style="@style/dayPicker"
+                        android:textOff="@string/mon"
+                        android:textOn="@string/mon"/>
+
+                    <ToggleButton
+                        android:id="@+id/tuesday"
+                        style="@style/dayPicker"
+                        android:textOff="@string/tue"
+                        android:textOn="@string/tue"/>
+
+                    <ToggleButton
+                        android:id="@+id/wednesday"
+                        style="@style/dayPicker"
+                        android:textOff="@string/wed"
+                        android:textOn="@string/wed"/>
+
+                    <ToggleButton
+                        android:id="@+id/thursday"
+                        style="@style/dayPicker"
+                        android:textOff="@string/thu"
+                        android:textOn="@string/thu"/>
+
+                    <ToggleButton
+                        android:id="@+id/friday"
+                        style="@style/dayPicker"
+                        android:textOff="@string/fri"
+                        android:textOn="@string/fri"/>
+
+                    <ToggleButton
+                        android:id="@+id/saturday"
+                        style="@style/dayPicker"
+                        android:textOff="@string/sat"
+                        android:textOn="@string/sat"/>
+
+                    <ToggleButton
+                        android:id="@+id/sunday"
+                        style="@style/dayPicker"
+                        android:textOff="@string/sun"
+                        android:textOn="@string/sun"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_repeat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple"
+                    android:clickable="true"
+                    android:onClick="onCheckboxStateChange"
+                    android:paddingBottom="5dp"
+                    android:paddingStart="10dp"
+                    android:paddingTop="5dp">
+
+                    <CheckBox
+                        android:id="@+id/checkbox_repeat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:background="@null"
+                        android:checked="true"
+                        android:clickable="false"
+                        android:padding="5dip"
+                        android:text="@string/repeat"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_notify"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ripple"
+                    android:clickable="true"
+                    android:onClick="onCheckboxStateChange"
+                    android:paddingBottom="5dp"
+                    android:paddingStart="10dp"
+                    android:paddingTop="5dp">
+
+                    <CheckBox
+                        android:id="@+id/checkbox_notify"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:background="@null"
+                        android:checked="true"
+                        android:clickable="false"
+                        android:padding="5dip"
+                        android:text="@string/notify"/>
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/select_sites"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="10dp"
+                    android:onClick="onSelectSitesAction"
+                    android:padding="15dp"
+                    android:text="@string/select_sites_to_download"/>
+
+            </LinearLayout>
+        </ScrollView>
+
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

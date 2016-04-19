@@ -1,72 +1,82 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="app_version">versión 1.0</string>
+
+
+    <!-- * ******************** Labels **************************** * -->
+    <string name="my_news">Les meves notícies</string>
+    <string name="saved_for_later">Notícies guardades</string>
+    <string name="read_news">Notícies llegides</string>
     <string name="settings">Configuració</string>
-
-    <string name="mycustomfeed">Les meves notícies</string>
-    <string name="spain">Espanya</string>
-    <string name="sweden">Suècia</string>
-    <string name="finland">Finlàndia</string>
-    <string name="international">Internacional</string>
-    <string name="technology">Tecnologia</string>
-    <string name="blogs">Blogs</string>
-    <string name="magazines">Revistes</string>
-
-    <string name="confirm">Confirmar</string>
-    <string name="removeall">Elimina tot</string>
-
-    <!--  Settings -->
-    <string name="mainpage">Pàgina principal</string>
-    <string name="confsites">Publicacions</string>
-    <string name="cleancache">Neteja dades</string>
-    <string name="never">Mai</string>
-    <string name="done">Fet</string>
-    <string name="notimplementedyet">Encara no desenvolupat (demana update)</string>
-    <string name="apply">Aplicar</string>
-    <string name="mainsections">Seccions a la pàgina principal</string>
-    <string name="offlinesections">Seccions offline</string>
-    <string name="mainsites">Publicacions a la pàgina principal:&#160;</string>
-
-    <!-- Dates -->
-    <string name="datetextbefore">Fa&#160;</string>
-    <string name="datetextAfterSecond">&#160;segons</string>
-    <string name="datetextAfterMinute">&#160;minuts</string>
-    <string name="datetextAfterHour">&#160;hores</string>
-    <string name="datetextAfterDay">&#160;dies</string>
-    <string name="datetextAfterMonth">&#160;mesos</string>
-    <string name="datetextAfterYear">&#160;anys</string>
-    <string name="catalonia">Catalunya</string>
-    <string name="sharewith">Compartir amb</string>
-    <string name="contentnotavailableyet">Contenit encara no disponible</string>
-    <string name="uk">UK</string>
-    <string name="us">US</string>
-    <string name="allsites">Totes les publicacions</string>
-    <string name="favorite">Favorit</string>
-    <string name="tryagain">Intentar un altre cop</string>
-    <string name="openinbrowser">Obrir al navegador</string>
-    <string name="close">Tancar</string>
-    <string name="title_newsnotfound">Oops&#8230; L\'app és genial però encara no pot llegir aquesta notícia</string>
-    <string name="message_newsnotfound">Què fem?</string>
-    <string name="msg_no_site_picked">Ohh! No has sel·leccionat res</string>
-    <string name="savedforlater">Notícies guardades</string>
-    <string name="history">Notícies llegides</string>
-    <string name="msg_confirm_clear_hist">Confirma per eliminar l\'historial</string>
+    <string name="about">Informació</string>
     <string name="favorites">Favorits</string>
-    <string name="title_activity_history">Historial</string>
-    <string name="schedulenewone">Programa nova descàrrega</string>
-    <string name="create">Crear</string>
-    <string name="fri">Dv</string>
-    <string name="mon">Dl</string>
-    <string name="notificate">Rebre notificació</string>
+    <string name="all_sites">Totes les publicacions</string>
+    <string name="share_with">Comparteix amb</string>
     <string name="notification">Notificació</string>
     <string name="repeat">Repetir</string>
-    <string name="sat">Ds</string>
-    <string name="selectsitestodownload">Sel·lecciona les publicacions\n(Per defecte Totes)</string>
-    <string name="sun">Dg</string>
-    <string name="thu">Dj</string>
-    <string name="scheduledonwloads">Descàrregues programades</string>
-    <string name="tue">Dt</string>
+    <string name="select_time">Sel·lecciona hora</string>
+    <string name="notify">Notificar</string>
+    <string name="select_sites_to_download">Sel·lecciona publicacions per descarregar</string>
+
+    <string name="mon">Dl</string>
+    <string name="tue">Dm</string>
     <string name="wed">Dc</string>
-    <string name="applychanges">Aplica canvis</string>
+    <string name="thu">Dj</string>
+    <string name="fri">Dv</string>
+    <string name="sat">Ds</string>
+    <string name="sun">Dg</string>
+
+
+    <!-- * ******************** Buttons **************************** * -->
+    <string name="cancel">Cancel·lar</string>
+    <string name="save">Guardar</string>
+    <string name="confirm">Confirmar</string>
+    <string name="dismiss">Descartar</string>
+    <string name="done">Fet</string>
+    <string name="go_back">Endarrere</string>
+    <string name="continue_">Continuar</string>
+    <string name="try_again">Provar de nou</string>
+    <string name="open_in_browser">Obrir al navegador</string>
+    <string name="close">Tancar</string>
+    <string name="schedule_download">Programa descàrrega</string>
+
+
+    <!-- * ******************** Hints **************************** * -->
+
+
+    <!-- * ******************** Messages **************************** * -->
+    <string name="msg_confirm_to_remove_all_saved_news">Confirma per eliminar tot</string>
+    <string name="msg_confirm_clean_app_data">Confirma per netejar totes les dades</string>
+    <string name="msg_confirm_to_clear_history">Confirma per eliminar l\'historial</string>
+    <string name="msg_must_select_at_least_one">Has de sel·leccionar al menys UNA</string>
+    <string name="msg_confirm_to_go_back">Confirma para anar endarrere</string>
+    <string name="msg_must_select_at_least_one_site">Has de sel·leccionar al menys UNA publicació</string>
+    <string name="msg_confirm_to_delete">Confirma per eliminar</string>
+    <string name="msg_must_select_at_least_one_day">Has de sel·leccionar al menys UN dia</string>
+    <string name="msg_cant_load_content">No es pot carregar el contingut</string>
+    <string name="msg_news_not_found">Oohh… La aplicació es increïble però encara no pot llegir aquesta noticia.\n¿Què fem?</string>
+
+
+    <!-- * *************** Activities and fragment's titles ********************* * -->
+    <string name="title_frg_settings_of">Configuració de %1$s</string>
+
+    <!-- ***************************** Menu strings ********************************** -->
+    <string name="menu_favorite">Favorit</string>
+    <string name="menu_settings">Configuració de la publicació</string>
+    <string name="menu_delete_all">Elimina tot</string>
+
+
+    <!-- ***************************** Settings strings ********************************** -->
+    <string name="pref_title_general">General</string>
+    <string name="pref_title_data">Dades</string>
+
+    <string name="pref_clean_cache">Neteja la caché</string>
+    <string name="pref_main_sites">Publicacions principals</string>
+    <string name="pref_schedule_downloads">Programa descàrregues</string>
+    <string name="pref_sites_settings">Configuració de les publicacions</string>
+    <string name="pref_show_in_my_feed">Mostra en les meves notícies</string>
+    <string name="pref_favorite">Favorit</string>
+    <string name="pref_main_sections">Seccions principals</string>
+    <string name="pref_download_sections">Seccions de descàrrega</string>
 
 </resources>

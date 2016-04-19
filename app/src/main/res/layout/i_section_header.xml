@@ -1,10 +1,13 @@
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/ripple"
+    android:clickable="true"
     android:paddingBottom="10dip"
-    android:paddingLeft="30dip"
-    android:paddingRight="20dip"
+    android:paddingStart="30dip"
     android:paddingTop="10dip"
     android:text="Section header"
     android:textAppearance="?android:attr/textAppearanceMedium"
-    android:textStyle="bold" />
+    android:textStyle="bold"/>
