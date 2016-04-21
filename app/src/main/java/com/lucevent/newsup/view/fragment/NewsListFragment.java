@@ -21,7 +21,6 @@ import android.widget.ImageButton;
 
 import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.R;
-import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.NewsMap;
 import com.lucevent.newsup.data.util.Section;
@@ -115,11 +114,11 @@ public class NewsListFragment extends android.app.Fragment {
         if (currentSite == null) {
             int code = getArguments().getInt(AppCode.SEND_SITE_CODE);
             if (code == -2) {
+                NewsArray newsArray = new NewsArray();
                 int[] news_ids = getArguments().getIntArray(AppCode.SEND_NEWS_IDS);
-                for (int news_id : news_ids) {
-                    News news = dataManager.getNewsById(news_id);
-                    adapter.add(news);
-                }
+                for (int news_id : news_ids)
+                    newsArray.add(dataManager.getNewsById(news_id));
+                adapter.setNewDataSet(newsArray);
             } else if (code == -1)
                 dataManager.getMainNews();
         } else

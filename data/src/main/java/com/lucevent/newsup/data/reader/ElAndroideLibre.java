@@ -13,8 +13,8 @@ public class ElAndroideLibre extends com.lucevent.newsup.data.util.NewsReader {
         news.description = org.jsoup.Jsoup.parse(news.description).getElementsByTag("p").text().replace("[...]", "");
 
         org.jsoup.select.Elements doc = org.jsoup.Jsoup.parseBodyFragment(content).getElementsByTag("body");
-        doc.select("[clear=\"all\"] ~ *,br").remove();
-        news.content = doc.html().replace("<br>", "");
+        doc.select("[clear=\"all\"] ~ *,br,.feedflare,[width=\"1\"]").remove();
+        news.content = doc.html();
         return news;
     }
 

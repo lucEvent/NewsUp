@@ -7,6 +7,13 @@ import com.lucevent.newsup.data.util.Tags;
 
 public final class NewsReader {
 
+    private static final int HASH_TITLE = "title".hashCode();
+    private static final int HASH_LINK = "link".hashCode();
+    private static final int HASH_DATE = "date".hashCode();
+    private static final int HASH_DESCRIPTION = "description".hashCode();
+    private static final int HASH_CATEGORIES = "categories".hashCode();
+    private static final int HASH_CONTENT = "content".hashCode();
+
     private static final String query_index = "http://newsup-2406.appspot.com/request?index&site=";
     private static final String query_content = "http://newsup-2406.appspot.com/request?content&site=";
 
@@ -28,17 +35,10 @@ public final class NewsReader {
         return res;
     }
 
-    private static final int HASH_TITLE = "title".hashCode();
-    private static final int HASH_LINK = "link".hashCode();
-    private static final int HASH_DATE = "date".hashCode();
-    private static final int HASH_DESCRIPTION = "description".hashCode();
-    private static final int HASH_CATEGORIES = "categories".hashCode();
-    private static final int HASH_CONTENT = "content".hashCode();
-
     protected NewsArray readRssPage(String rsslink)
     {
         org.jsoup.nodes.Document doc = getDocument(rsslink);
-        if (doc == null) new NewsArray();
+        if (doc == null) return new NewsArray();
 
         NewsArray res = new NewsArray();
 

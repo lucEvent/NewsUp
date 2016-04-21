@@ -11,27 +11,29 @@ import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.NewsMap;
 import com.lucevent.newsup.view.adapter.viewholder.NewsViewHolder;
 
+import java.util.Collection;
+
 public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> {
 
     public static final int CHUNK = 15;
 
-    private int datasetVisibleCount;
+    private int dataSetVisibleCount;
 
-    private final NewsArray dataset;
+    private final NewsMap dataMap;
+    private final NewsArray dataSet;
     private View.OnClickListener itemListener;
 
-    private NewsMap newsmap;
 
     private boolean showSiteLogo;
 
-    public NewsAdapter(NewsArray dataset, View.OnClickListener itemListener)
+    public NewsAdapter(NewsArray dataSet, View.OnClickListener itemListener)
     {
-        this.dataset = dataset;
+        this.dataSet = dataSet;
         this.itemListener = itemListener;
-        this.datasetVisibleCount = Math.min(CHUNK, dataset.size());
+        this.dataSetVisibleCount = Math.min(CHUNK, dataSet.size());
 
-        newsmap = new NewsMap();
-        showSiteLogo = true;
+        this.dataMap = new NewsMap();
+        this.showSiteLogo = true;
     }
 
     @Override
@@ -45,28 +47,28 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> {
     @Override
     public void onBindViewHolder(NewsViewHolder holder, int position)
     {
-        NewsViewHolder.populateViewHolder(holder, dataset.get(position), showSiteLogo);
+        NewsViewHolder.populateViewHolder(holder, dataSet.get(position), showSiteLogo);
     }
 
     @Override
     public int getItemCount()
     {
-        return datasetVisibleCount;
+        return dataSetVisibleCount;
     }
 
     public int getActualItemCount()
     {
-        return dataset.size();
+        return dataSet.size();
     }
 
     public void loadMoreData()
     {
-        int dataAdded = Math.min(this.datasetVisibleCount + CHUNK, dataset.size()) - datasetVisibleCount;
+        int dataAdded = Math.min(this.dataSetVisibleCount + CHUNK, dataSet.size()) - dataSetVisibleCount;
         try {
-            notifyItemRangeInserted(datasetVisibleCount, datasetVisibleCount + dataAdded - 1);
+            notifyItemRangeInserted(dataSetVisibleCount, dataAdded);
         } catch (Exception ignored) {
         }
-        this.datasetVisibleCount += dataAdded;
+        this.dataSetVisibleCount += dataAdded;
     }
 
     public void showSiteLogo(boolean showSiteLogo)
@@ -74,52 +76,50 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> {
         this.showSiteLogo = showSiteLogo;
     }
 
-    public void setNewDataSet(NewsMap dataset)
+    public void setNewDataSet(Collection<News> dataSet)
     {
-        this.dataset.clear();
-        this.dataset.addAll(dataset);
+        synchronized (this.dataSet) {
+            this.dataMap.clear();
+            this.dataMap.addAll(dataSet);
+            this.dataSet.clear();
+            this.dataSet.addAll(dataMap);
 
-        int newVisibleCount = Math.min(dataset.size(), CHUNK);
-        if (newVisibleCount > datasetVisibleCount) {
-            notifyItemRangeChanged(0, datasetVisibleCount - 1);
-            notifyItemRangeInserted(datasetVisibleCount, newVisibleCount - 1);
-        } else if (newVisibleCount < datasetVisibleCount) {
-            notifyItemRangeChanged(0, newVisibleCount - 1);
-            notifyItemRangeRemoved(newVisibleCount, datasetVisibleCount - 1);
-        } else
-            notifyDataSetChanged();
+            int newVisibleCount = Math.min(dataSet.size(), CHUNK);
+            if (newVisibleCount > dataSetVisibleCount) {
+                notifyItemRangeChanged(0, dataSetVisibleCount);
+                notifyItemRangeInserted(dataSetVisibleCount, newVisibleCount - dataSetVisibleCount);
+            } else if (newVisibleCount < dataSetVisibleCount) {
+                notifyItemRangeChanged(0, newVisibleCount);
+                notifyItemRangeRemoved(newVisibleCount, dataSetVisibleCount - newVisibleCount);
+            } else
+                notifyDataSetChanged();
 
-        this.datasetVisibleCount = newVisibleCount;
-    }
-
-    public void add(News news)
-    {
-        synchronized (dataset) {
-            dataset.add(news);
-            if (datasetVisibleCount < CHUNK) {
-                notifyItemInserted(datasetVisibleCount);
-                datasetVisibleCount++;
-            }
+            this.dataSetVisibleCount = newVisibleCount;
         }
     }
 
-    public void addAll(NewsMap news)
+    public void addAll(Collection<News> dataSet)
     {
-        synchronized (dataset) {
-            this.dataset.addAll(news);
+        synchronized (this.dataSet) {
+            int oldSize = dataSet.size();
 
-            if (datasetVisibleCount == dataset.size() - news.size() || datasetVisibleCount < CHUNK) {
-                datasetVisibleCount = Math.min(datasetVisibleCount + CHUNK, dataset.size());
-                notifyItemRangeInserted(dataset.size() - news.size() - 1, datasetVisibleCount - 1);
+            this.dataMap.addAll(dataSet);
+            this.dataSet.clear();
+            this.dataSet.addAll(dataMap);
+
+            if (dataSetVisibleCount == oldSize || dataSetVisibleCount < CHUNK) {
+                dataSetVisibleCount = Math.min(dataSetVisibleCount + CHUNK, this.dataSet.size());
+                notifyItemRangeInserted(oldSize, dataSet.size());
             }
         }
     }
 
     public void clear()
     {
-        notifyItemRangeRemoved(0, datasetVisibleCount);
-        datasetVisibleCount = 0;
-        dataset.clear();
+        notifyItemRangeRemoved(0, dataSetVisibleCount);
+        dataSetVisibleCount = 0;
+        dataSet.clear();
+        dataMap.clear();
         notifyDataSetChanged();
     }
 
