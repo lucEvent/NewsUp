@@ -62,6 +62,7 @@ public class NewsListFragment extends android.app.Fragment {
     private NewsManager dataManager;
     private SectionsDialog sectionsDialog;
     private NewsAdapter adapter;
+    private RecyclerView recyclerView;
 
     private Site currentSite;
 
@@ -95,7 +96,7 @@ public class NewsListFragment extends android.app.Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setAutoMeasureEnabled(true);
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        recyclerView = (RecyclerView) view.findViewById(R.id.list);
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(false);
         recyclerView.addOnScrollListener(new ContentLoader(layoutManager) {
@@ -172,6 +173,7 @@ public class NewsListFragment extends android.app.Fragment {
                 case AppCode.NEWS_MAP_READ:
                 case AppCode.NEWS_MAP_FRAGMENT_READ:
                     service.adapter.addAll((NewsMap) msg.obj);
+                    service.recyclerView.smoothScrollToPosition(0);
                     break;
                 case AppCode.NO_INTERNET:
                     //TODO

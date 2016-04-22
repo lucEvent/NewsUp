@@ -6,17 +6,19 @@ import com.lucevent.newsup.data.util.Tags;
 
 public class TheAtlantic extends com.lucevent.newsup.data.util.NewsReader {
 
-    protected static final int HASH_UPDATED = "updated".hashCode();
+    protected static final int HASH_PUBLISHED = "published".hashCode();
     protected static final int HASH_SUMMARY = "summary".hashCode();
     protected static final int HASH_CONTENT_2 = "content".hashCode();
     protected static final int HASH_ORIGLINK = "feedburner:origlink".hashCode();
 
-    public TheAtlantic() {
+    public TheAtlantic()
+    {
         super();
     }
 
     @Override
-    protected NewsArray readRssPage(String rsslink) {
+    protected NewsArray readRssPage(String rsslink)
+    {
         org.jsoup.nodes.Document doc = getDocument(rsslink);
         if (doc == null) return new NewsArray();
 
@@ -40,7 +42,7 @@ public class TheAtlantic extends com.lucevent.newsup.data.util.NewsReader {
                     link = prop.text();
                     continue;
                 }
-                if (taghash == HASH_DATE_1 || taghash == HASH_UPDATED) {
+                if (taghash == HASH_DATE_1 || taghash == HASH_PUBLISHED) {
                     date = prop.text();
                     continue;
                 }
@@ -70,7 +72,8 @@ public class TheAtlantic extends com.lucevent.newsup.data.util.NewsReader {
     }
 
     @Override
-    protected News applySpecialCase(News news, String content) {
+    protected News applySpecialCase(News news, String content)
+    {
         news.description = org.jsoup.Jsoup.parse(news.description).text();
 
         if (!content.isEmpty()) {
@@ -82,7 +85,8 @@ public class TheAtlantic extends com.lucevent.newsup.data.util.NewsReader {
     }
 
     @Override
-    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+    {
         org.jsoup.select.Elements e = doc.select(".embed-code,[itemprop=\"description\"]");
 
         if (!e.isEmpty()) {

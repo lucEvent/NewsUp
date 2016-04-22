@@ -83,7 +83,7 @@ public final class NewsReader {
     protected org.jsoup.nodes.Document getDocument(String pagelink)
     {
         try {
-            return org.jsoup.Jsoup.connect(pagelink).parser(org.jsoup.parser.Parser.xmlParser()).get();
+            return org.jsoup.Jsoup.connect(pagelink).parser(org.jsoup.parser.Parser.xmlParser()).timeout(10000).get();
         } catch (Exception e) {
             System.out.println("[NR] No se ha podido leer: " + pagelink);
             e.printStackTrace();

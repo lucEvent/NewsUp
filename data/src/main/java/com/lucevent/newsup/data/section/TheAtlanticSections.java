@@ -5,7 +5,8 @@ import com.lucevent.newsup.data.util.Sections;
 
 public class TheAtlanticSections extends Sections {
 
-    public TheAtlanticSections() {
+    public TheAtlanticSections()
+    {
         super();
 
         add(new Section("The Atlantic", "http://feeds.feedburner.com/TheAtlantic", 0));

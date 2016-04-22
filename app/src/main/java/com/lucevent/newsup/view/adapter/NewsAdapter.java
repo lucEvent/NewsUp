@@ -23,7 +23,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> {
     private final NewsArray dataSet;
     private View.OnClickListener itemListener;
 
-
     private boolean showSiteLogo;
 
     public NewsAdapter(NewsArray dataSet, View.OnClickListener itemListener)
@@ -101,26 +100,21 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> {
     public void addAll(Collection<News> dataSet)
     {
         synchronized (this.dataSet) {
-            int oldSize = dataSet.size();
-
             this.dataMap.addAll(dataSet);
             this.dataSet.clear();
             this.dataSet.addAll(dataMap);
 
-            if (dataSetVisibleCount == oldSize || dataSetVisibleCount < CHUNK) {
-                dataSetVisibleCount = Math.min(dataSetVisibleCount + CHUNK, this.dataSet.size());
-                notifyItemRangeInserted(oldSize, dataSet.size());
-            }
+            dataSetVisibleCount = Math.min(dataSetVisibleCount + CHUNK, this.dataSet.size());
+            notifyItemRangeChanged(0, dataSetVisibleCount);
         }
     }
 
     public void clear()
     {
-        notifyItemRangeRemoved(0, dataSetVisibleCount);
-        dataSetVisibleCount = 0;
         dataSet.clear();
         dataMap.clear();
-        notifyDataSetChanged();
+        notifyItemRangeRemoved(0, dataSetVisibleCount);
+        dataSetVisibleCount = 0;
     }
 
 }
