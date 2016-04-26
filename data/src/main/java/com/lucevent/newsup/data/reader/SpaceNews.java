@@ -1,20 +1,37 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
+import org.jsoup.nodes.Element;
 
-public class SpaceNews extends com.lucevent.newsup.data.util.NewsReader {
+public class SpaceNews extends com.lucevent.newsup.data.util.NewsReader_v2 {
 
-    public SpaceNews() {
-        super();
+    /**
+     * Tags
+     * [category, content:encoded, dc:creator, description,            guid, item, link, pubdate, title]
+     * [category, content:encoded, dc:creator, description, enclosure, guid, item, link, pubdate, title]
+     */
+
+    public SpaceNews()
+    {
+        super(TAG_ITEM_ITEMS,
+                new int[]{TAG_TITLE},
+                new int[]{TAG_LINK},
+                new int[]{TAG_DESCRIPTION},
+                new int[]{TAG_CONTENT_ENCODED},
+                new int[]{TAG_PUBDATE},
+                new int[]{TAG_CATEGORY},
+                new int[]{TAG_ENCLOSURE});
     }
 
     @Override
-    protected News applySpecialCase(News news, String content) {
-        news.description = org.jsoup.Jsoup.parse(news.description).text().replace("SpaceNews.com", "");
-        if (content.length() > 0) {
-            news.content = content.replace("style=", "none=");
-        }
-        return news;
+    protected String parseDescription(Element prop)
+    {
+        return org.jsoup.Jsoup.parse(prop.text()).text().replace("SpaceNews.com", "");
+    }
+
+    @Override
+    protected String parseContent(Element prop)
+    {
+        return prop.text().replace("style=", "none=");
     }
 
 }

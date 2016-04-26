@@ -5,7 +5,8 @@ import com.lucevent.newsup.data.util.Sections;
 
 public class SkyAndTelescopeSections extends Sections {
 
-    public SkyAndTelescopeSections() {
+    public SkyAndTelescopeSections()
+    {
         super();
 
         add(new Section("Astronomy News", "http://www.skyandtelescope.com/astronomy-news/feed/", 0));
@@ -14,7 +15,6 @@ public class SkyAndTelescopeSections extends Sections {
         add(new Section("Spacecraft and Space missions", "http://www.skyandtelescope.com/astronomy-news/spacecraft-and-space-missions/feed/", 1));
         add(new Section("Exoplanets", "http://www.skyandtelescope.com/astronomy-news/exoplanets/feed/", 1));
         add(new Section("Galaxies", "http://www.skyandtelescope.com/astronomy-news/galaxies/feed/", 1));
-        add(new Section("Astrobiology", "http://www.skyandtelescope.com/astronomy-news/astrobiology/feed/", 1));
         add(new Section("Black holes", "http://www.skyandtelescope.com/astronomy-news/black-holes/feed/", 1));
         add(new Section("People, Places and Events", "http://www.skyandtelescope.com/astronomy-news/people-places-and-events/feed/", 1));
 

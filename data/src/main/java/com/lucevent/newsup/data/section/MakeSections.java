@@ -32,7 +32,6 @@ public class MakeSections extends Sections {
         add(new Section("Cars", "http://makezine.com/category/drones-vehicles/cars/feed/", 1));
         add(new Section("Bikes", "http://makezine.com/category/drones-vehicles/bikes/feed/", 1));
         add(new Section("Drones", "http://makezine.com/category/drones-vehicles/drones/feed/", 1));
-        add(new Section("Planes", "http://makezine.com/category/drones-vehicles/planes/feed/", 1));
         add(new Section("Rockets", "http://makezine.com/category/drones-vehicles/rockets/feed/", 1));
 
         add(new Section("Science", "http://makezine.com/category/science/feed/", 0));

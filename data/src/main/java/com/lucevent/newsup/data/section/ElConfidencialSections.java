@@ -24,15 +24,11 @@ public class ElConfidencialSections extends Sections {
         add(new Section("Mercados", "http://rss.elconfidencial.com/mercados/", 1));
         add(new Section("Economía", "http://rss.elconfidencial.com/economia/", 1));
         add(new Section("Empresas", "http://rss.elconfidencial.com/empresas/", 1));
-        add(new Section("Finanzas personales", "http://rss.elconfidencial.com/mercados/finanzas-personales/", 1));
         add(new Section("Vivienda", "http://rss.elconfidencial.com/vivienda/", 1));
-        add(new Section("Fondos de inversión", "http://rss.elconfidencial.com/mercados/fondos-de-inversion/", 1));
 
         add(new Section("Teknautas", "http://rss.elconfidencial.com/tecnologia/", 0));
         add(new Section("Aplicaciones", "http://rss.elconfidencial.com/tags/temas/apps-9337/", 1));
         add(new Section("Emprendedores", "http://rss.elconfidencial.com/tags/economia/emprendedores-4800/", 1));
-        add(new Section("Gadgets", "http://rss.elconfidencial.com/tags/temas/gadgets-9340/", 1));
-        add(new Section("Hardware", "http://rss.elconfidencial.com/tags/temas/hardware-9341/", 1));
         add(new Section("Internet", "http://rss.elconfidencial.com/tags/temas/internet-9342/", 1));
         add(new Section("Móviles", "http://rss.elconfidencial.com/tags/otros/moviles-8601/", 1));
         add(new Section("Redes sociales", "http://rss.elconfidencial.com/tags/otros/redes-sociales-6338/", 1));

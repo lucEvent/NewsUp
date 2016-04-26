@@ -5,7 +5,8 @@ import com.lucevent.newsup.data.util.Sections;
 
 public class SvenskaDagbladetSections extends Sections {
 
-    public SvenskaDagbladetSections() {
+    public SvenskaDagbladetSections()
+    {
         super();
 
         add(new Section("Huvudnyheter", "http://www.svd.se/?service=rss", 0));

@@ -68,10 +68,9 @@ public class AsSections extends Sections {
         add(new Section("Valladolid", "http://masdeporte.as.com/tag/rss/real_valladolid/a", 1));
         add(new Section("Villarreal", "http://masdeporte.as.com/tag/rss/villarreal_cf/a", 1));
 
-        add(new Section("Autores", null, 1));
+        add(new Section("Autores", null, -1));
         add(new Section("Alfredo Relaño", "http://masdeporte.as.com/autor/rss/alfredo_relano/a", 1));
         add(new Section("Juan Mora", "http://masdeporte.as.com/autor/rss/juan_mora/a", 1));
-        add(new Section("Alejandro Elortegui", "http://masdeporte.as.com/autor/rss/alejandro_elortegui/a", 1));
         add(new Section("Juanma Trueba", "http://masdeporte.as.com/autor/rss/juanma_trueba/a", 1));
         add(new Section("Tomás Roncero", "http://masdeporte.as.com/autor/rss/tomas_roncero/a", 1));
         add(new Section("Manolete", "http://masdeporte.as.com/autor/rss/manolete/a", 1));

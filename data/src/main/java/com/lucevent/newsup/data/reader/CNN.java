@@ -2,20 +2,37 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
 
-public class CNN extends com.lucevent.newsup.data.util.NewsReader {
+import org.jsoup.nodes.Element;
 
-    public CNN() {
-        super();
+public class CNN extends com.lucevent.newsup.data.util.NewsReader_v2 {
+
+    /**
+     * Tags
+     * [description, guid, item, link, pubdate, title]
+     * [category, dc:creator, description, enclosure, guid, item, link, pubdate, source, title]
+     */
+
+    public CNN()
+    {
+        super(TAG_ITEM_ITEMS,
+                new int[]{TAG_TITLE},
+                new int[]{TAG_LINK},
+                new int[]{TAG_DESCRIPTION},
+                new int[]{},
+                new int[]{TAG_PUBDATE},
+                new int[]{TAG_CATEGORY},
+                new int[]{TAG_ENCLOSURE});
     }
 
     @Override
-    protected News applySpecialCase(News news, String content) {
-        news.description = org.jsoup.Jsoup.parse(news.description).text();
-        return news;
+    protected String parseDescription(Element prop)
+    {
+        return org.jsoup.Jsoup.parse(prop.text()).text();
     }
 
     @Override
-    public News readNewsContent(News news) {
+    public News readNewsContent(News news)
+    {
         if (news.link.contains("podcasts")) {
 
             String urltemp = news.link.substring(news.link.indexOf("podcasts"), news.link.indexOf("/story"));
@@ -30,7 +47,8 @@ public class CNN extends com.lucevent.newsup.data.util.NewsReader {
     }
 
     @Override
-    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+    {
         org.jsoup.select.Elements e = doc.select("#body-text");
 
         if (e.isEmpty()) {

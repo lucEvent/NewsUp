@@ -1,87 +1,73 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsArray;
-import com.lucevent.newsup.data.util.Tags;
 
-public class TheAtlantic extends com.lucevent.newsup.data.util.NewsReader {
+import org.jsoup.nodes.Element;
 
-    protected static final int HASH_PUBLISHED = "published".hashCode();
-    protected static final int HASH_SUMMARY = "summary".hashCode();
-    protected static final int HASH_CONTENT_2 = "content".hashCode();
-    protected static final int HASH_ORIGLINK = "feedburner:origlink".hashCode();
+public class TheAtlantic extends com.lucevent.newsup.data.util.NewsReader_v2 {
+
+    /**
+     * Tags
+     * [author, category, content, entry, id, link, media:content, name, published, summary, title]
+     * [content:encoded, description, feedburner:origlink, guid, item, link, pubdate, title]
+     * [category, description, feedburner:origlink, guid, item, link, pubdate, title]
+     */
 
     public TheAtlantic()
     {
-        super();
+        super(TAG_ITEM_ITEMS_ENTRY,
+                new int[]{TAG_TITLE},
+                new int[]{TAG_LINK},
+                new int[]{TAG_DESCRIPTION, TAG_SUMMARY},
+                new int[]{TAG_CONTENT_ENCODED, TAG_CONTENT},
+                new int[]{TAG_PUBDATE, TAG_PUBLISHED},
+                new int[]{TAG_CATEGORY},
+                new int[]{TAG_MEDIA_CONTENT});
     }
 
     @Override
-    protected NewsArray readRssPage(String rsslink)
+    protected String parseTitle(Element prop)
     {
-        org.jsoup.nodes.Document doc = getDocument(rsslink);
-        if (doc == null) return new NewsArray();
-
-        NewsArray result = new NewsArray();
-
-        org.jsoup.select.Elements items = doc.select("item,entry");
-        for (org.jsoup.nodes.Element item : items) {
-            String title = "", link = "", description = "", date = "", content = "";
-            Tags tags = new Tags();
-
-            //TODO Arraylist de opciones que se van quitando y lo hace mas eficiente
-            org.jsoup.select.Elements props = item.getAllElements();
-            for (org.jsoup.nodes.Element prop : props) {
-                int taghash = prop.tagName().hashCode();
-
-                if (taghash == HASH_TITLE) {
-                    title = prop.text().replace("<em>", "").replace("</em>", "").replace("<i>", "").replace("</i>", "");
-                    continue;
-                }
-                if ((taghash == HASH_LINK || taghash == HASH_ORIGLINK) && link.isEmpty()) {
-                    link = prop.text();
-                    continue;
-                }
-                if (taghash == HASH_DATE_1 || taghash == HASH_PUBLISHED) {
-                    date = prop.text();
-                    continue;
-                }
-                if (taghash == HASH_DESCRIPTION || taghash == HASH_SUMMARY) {
-                    description = prop.text();
-                    continue;
-                }
-                if (taghash == HASH_CATEGORY) {
-                    String cat = prop.text();
-                    if (cat.isEmpty()) {
-                        cat = prop.attr("term");
-                    }
-                    tags.add(cat);
-                    continue;
-                }
-                if (taghash == HASH_CONTENT || taghash == HASH_CONTENT_2) {
-                    content = prop.text();
-                }
-            }
-            if (!title.isEmpty()) {
-                News news = new News(title, link, description, date, tags);
-                news = applySpecialCase(news, content);
-                result.add(news);
-            }
-        }
-        return result;
+        return prop.text().replace("<em>", "").replace("</em>", "").replace("<i>", "").replace("</i>", "");
     }
 
     @Override
-    protected News applySpecialCase(News news, String content)
+    protected String parseLink(Element prop)
     {
-        news.description = org.jsoup.Jsoup.parse(news.description).text();
+        String link = prop.text();
+        if (link.isEmpty())
+            link = prop.attr("href");
+        return link;
+    }
 
-        if (!content.isEmpty()) {
-            org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
-            doc.select("[clear=\"all\"] ~ *,[clear=\"all\"],.callout,.partner-box,img[height=\"1\"]").remove();
-            news.content = doc.html();
-        }
-        return news;
+    @Override
+    protected String parseCategory(Element prop)
+    {
+        String category = prop.text();
+        if (category.isEmpty())
+            category = prop.attr("term");
+        return category;
+    }
+
+    @Override
+    protected Enclosure parseEnclosure(Element prop)
+    {
+        return new Enclosure(prop.attr("url"), prop.attr("medium"), prop.attr("width"));
+    }
+
+    @Override
+    protected String parseDescription(Element prop)
+    {
+        return org.jsoup.Jsoup.parse(prop.text()).text();
+    }
+
+    @Override
+    protected String parseContent(Element prop)
+    {
+        org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(prop.text());
+        doc.select("[clear=\"all\"] ~ *,[clear=\"all\"],.callout,.partner-box,img[height=\"1\"]").remove();
+        return doc.html();
     }
 
     @Override
@@ -89,14 +75,13 @@ public class TheAtlantic extends com.lucevent.newsup.data.util.NewsReader {
     {
         org.jsoup.select.Elements e = doc.select(".embed-code,[itemprop=\"description\"]");
 
-        if (!e.isEmpty()) {
+        if (!e.isEmpty())
             news.content = e.html().replace("&lt;", "<").replace("&quot;", "\"").replace("&gt;", ">");
-        } else {
 
+        else {
             e = doc.select("picture > img,.caption");
-            if (!e.isEmpty()) {
+            if (!e.isEmpty())
                 news.content = e.outerHtml().replace("data-src", "src");
-            }
         }
     }
 

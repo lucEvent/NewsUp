@@ -1,21 +1,33 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
+import org.jsoup.nodes.Element;
 
-public class Xataka extends com.lucevent.newsup.data.util.NewsReader {
+public class Xataka extends com.lucevent.newsup.data.util.NewsReader_v2 {
 
-    public Xataka() {
-        super();
+    /**
+     * Tags
+     * [dc:creator, description, feedburner:origlink, guid, item, link, pubdate, title]
+     * [dc:creator, description,                      guid, item, link, pubdate, title]
+     */
+
+    public Xataka()
+    {
+        super(TAG_ITEM_ITEMS,
+                new int[]{TAG_TITLE},
+                new int[]{TAG_GUID},
+                new int[]{},
+                new int[]{TAG_DESCRIPTION},
+                new int[]{TAG_PUBDATE},
+                new int[]{},
+                new int[]{});
     }
 
     @Override
-    protected News applySpecialCase(News news, String content) {
-        org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parseBodyFragment(news.description);
-
+    protected String parseContent(Element prop)
+    {
+        org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(prop.text());
         doc.select("h4 ~ *,h4,[clear=\"all\"] ~ *").remove();
-        news.content = doc.body().html();
-        news.description = "";
-        return news;
+        return doc.body().html();
     }
 
 }

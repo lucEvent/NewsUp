@@ -38,8 +38,6 @@ public class DagensNyheterSections extends Sections {
         add(new Section("Scen", "http://www.dn.se/kultur-noje/scen/rss", 1));
         add(new Section("Spel", "http://www.dn.se/spel/spel-hem/rss", 1));
 
-        add(new Section("Val", "http://www.dn.se/val/rss", 0));
-
         add(new Section("Frågesport", "http://www.dn.se/nyheter/fragesport/rss", 0));
         add(new Section("Åsikt", "http://asikt.dn.se/feed/", 0));
 

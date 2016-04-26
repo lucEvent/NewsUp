@@ -13,7 +13,6 @@ public class MundoDeportivoSections extends Sections {
         add(new Section("Fichajes", "http://www.mundodeportivo.com/feed/rss/futbol/fichajes", 0));
 
         add(new Section("Equipos", "http://www.mundodeportivo.com/feed/rss/futbol/la-liga-bbva", 0));
-        add(new Section("Almería", "http://www.mundodeportivo.com/feed/rss/futbol/almeria", 1));
         add(new Section("Athletic", "http://www.mundodeportivo.com/feed/rss/futbol/athletic-bilbao", 1));
         add(new Section("Atlético de Madrid", "http://www.mundodeportivo.com/feed/rss/futbol/atletico-madrid", 1));
         add(new Section("Celta", "http://www.mundodeportivo.com/feed/rss/futbol/celta-vigo", 1));

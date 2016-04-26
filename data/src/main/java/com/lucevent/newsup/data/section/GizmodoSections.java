@@ -5,7 +5,8 @@ import com.lucevent.newsup.data.util.Sections;
 
 public class GizmodoSections extends Sections {
 
-    public GizmodoSections() {
+    public GizmodoSections()
+    {
         super();
 
         add(new Section("Main site", "http://feeds.gawker.com/gizmodo/full", 0));

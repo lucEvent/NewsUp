@@ -5,7 +5,8 @@ import com.lucevent.newsup.data.util.Sections;
 
 public class RollingStoneSections extends Sections {
 
-    public RollingStoneSections() {
+    public RollingStoneSections()
+    {
         super();
 
         add(new Section("All news", "http://www.rollingstone.com/news.rss", 0));

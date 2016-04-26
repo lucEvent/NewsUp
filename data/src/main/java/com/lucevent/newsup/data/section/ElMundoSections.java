@@ -28,7 +28,6 @@ public class ElMundoSections extends Sections {
         add(new Section("Andalucía", "http://estaticos.elmundo.es/elmundo/rss/andalucia.xml", 1));
         add(new Section("País vasco", "http://estaticos.elmundo.es/elmundo/rss/paisvasco.xml", 1));
 
-        add(new Section("Solidaridad", "http://estaticos.elmundo.es/elmundo/rss/solidaridad.xml", 0));
         add(new Section("Comunicación", "http://estaticos.elmundo.es/elmundo/rss/comunicacion.xml", 0));
         add(new Section("Televisión", "http://estaticos.elmundo.es/elmundo/rss/television.xml", 0));
         add(new Section("Su vivienda", "http://estaticos.elmundo.es/elmundo/rss/suvivienda.xml", 0));

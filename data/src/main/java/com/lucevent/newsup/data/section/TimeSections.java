@@ -5,7 +5,8 @@ import com.lucevent.newsup.data.util.Sections;
 
 public class TimeSections extends Sections {
 
-    public TimeSections() {
+    public TimeSections()
+    {
         super();
 
         add(new Section("News", "http://time.com/newsfeed/feed/", 0));

@@ -5,7 +5,8 @@ import com.lucevent.newsup.data.util.Sections;
 
 public class CNNSections extends Sections {
 
-    public CNNSections() {
+    public CNNSections()
+    {
         super();
 
         add(new Section("Top Stories", "http://rss.cnn.com/rss/edition.rss", 0));

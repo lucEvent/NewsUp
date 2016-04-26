@@ -26,10 +26,10 @@ public class News implements Comparable<News>, Serializable {
         this.tags = tags;
     }
 
-    public News(String title, String link, String description, String date, Tags categories)
+  /*  public News(String title, String link, String description, String date, Tags categories)
     {
         this(-1, title, link, description, Date.toDate(date), categories);
-    }
+    }*/
 
     public News(String title, String link, String description, long date, Tags categories)
     {

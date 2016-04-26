@@ -46,7 +46,6 @@ public class LaRazonSections extends Sections {
         add(new Section("Cultura", "http://www.larazon.es/rss/cultura.xml", 0));
         add(new Section("Arte", "http://www.larazon.es/rss/cultura/arte.xml", 1));
         add(new Section("Cine", "http://www.larazon.es/rss/cultura/cine.xml", 1));
-        add(new Section("Gastronomía", "http://www.larazon.es/rss/cultura/gastronomia.xml", 1));
         add(new Section("Libros", "http://www.larazon.es/rss/cultura/libros.xml", 1));
         add(new Section("Música", "http://www.larazon.es/rss/cultura/musica.xml", 1));
         add(new Section("Teatro", "http://www.larazon.es/rss/cultura/teatro.xml", 1));

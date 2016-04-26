@@ -26,7 +26,6 @@ public class ExpressenSections extends Sections {
         add(new Section("Motor", "http://expressen.se/rss/motor", 0));
         add(new Section("Res", "http://expressen.se/rss/res", 0));
         add(new Section("Dokument", "http://expressen.se/rss/dokument", 0));
-        add(new Section("Extra", "http://expressen.se/rss/extra", 0));
 
     }
 

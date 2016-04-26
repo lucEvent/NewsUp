@@ -24,10 +24,10 @@ public class ElPaisSections extends Sections {
 
         add(new Section("Internacional", null, -1));
         add(new Section("America latina", "http://elpais.com/tag/rss/latinoamerica/a/", 1));
-        add(new Section("Europa", "http://elpais.com/tag/rss/mexico/a/", 1));
-        add(new Section("EEUU", "http://elpais.com/tag/rss/europa/a/", 1));
-        add(new Section("Oriente próximo", "http://elpais.com/tag/rss/estados_unidos/a/", 1));
-        add(new Section("México", "http://elpais.com/tag/rss/oriente_proximo/a/", 1));
+        add(new Section("Europa", "http://elpais.com/tag/rss/europa/a/", 1));
+        add(new Section("EEUU", "http://elpais.com/tag/rss/estados_unidos/a/", 1));
+        add(new Section("Oriente próximo", "http://elpais.com/tag/rss/oriente_proximo/a/", 1));
+        add(new Section("México", "http://elpais.com/tag/rss/mexico/a/", 1));
 
         add(new Section("España", null, -1));
         add(new Section("Andalucía", "http://ep00.epimg.net/rss/ccaa/andalucia.xml", 1));
@@ -53,7 +53,6 @@ public class ElPaisSections extends Sections {
         add(new Section("Arquitectura", "http://elpais.com/tag/rss/arquitectura/a/", 0));
         add(new Section("Estilo", "http://ep00.epimg.net/rss/elpais/estilo.xml", 0));
         add(new Section("Televisión", "http://ep00.epimg.net/rss/cultura/television.xml", 0));
-        add(new Section("Sociedad", "http://ep00.epimg.net/rss/sociedad/portada.xml", 0));
         add(new Section("Blogs", "http://ep01.epimg.net/rss/elpais/blogs.xml", 0));
         add(new Section("Opinión", "http://ep00.epimg.net/rss/elpais/opinion.xml", 0));
         add(new Section("Entrevistas", "http://ep00.epimg.net/rss/elpais/entrevistasdigitales.xml", 0));

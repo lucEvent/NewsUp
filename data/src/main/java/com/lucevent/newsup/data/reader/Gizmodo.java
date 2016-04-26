@@ -2,20 +2,39 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
 
-public class Gizmodo extends com.lucevent.newsup.data.util.NewsReader {
+import org.jsoup.nodes.Element;
 
-    public Gizmodo() {
-        super();
+public class Gizmodo extends com.lucevent.newsup.data.util.NewsReader_v2 {
+
+    /**
+     * Tags
+     * [category, dc:creator, description, feedburner:origlink, guid, item, link, pubdate, title]
+     * [category, comments, dc:creator, description, feedburner:origlink, guid, item, link, pubdate, slash:comments, title, wfw:commentrss]
+     * [category, dc:creator, description, guid, item, link, pubdate, title]
+     * [ dc:creator, description, feedburner:origlink, guid, item, link, media:thumbnail, pubdate, title]
+     */
+
+    public Gizmodo()
+    {
+        super(TAG_ITEM_ITEMS,
+                new int[]{TAG_TITLE},
+                new int[]{TAG_LINK},
+                new int[]{TAG_DESCRIPTION},
+                new int[]{},
+                new int[]{TAG_PUBDATE},
+                new int[]{TAG_CATEGORY},
+                new int[]{});
     }
 
     @Override
-    protected News applySpecialCase(News news, String content) {
-        news.description = org.jsoup.Jsoup.parse(news.description).text().replace(" Read more...", "");
-        return news;
+    protected String parseDescription(Element prop)
+    {
+        return org.jsoup.Jsoup.parse(prop.text()).text().replace(" Read more", "");
     }
 
     @Override
-    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+    {
 
         org.jsoup.select.Elements e = doc.select(".entry-content");
         if (e.isEmpty()) {

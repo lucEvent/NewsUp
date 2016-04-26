@@ -1,25 +1,46 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
+import org.jsoup.nodes.Element;
 
-public class Swedroid extends com.lucevent.newsup.data.util.NewsReader {
+public class Swedroid extends com.lucevent.newsup.data.util.NewsReader_v2 {
 
-    public Swedroid() {
-        super();
+    /**
+     * Tags
+     * [category, content:encoded, dc:creator, description, guid, item, link, pubdate, title]
+     * [category, content:encoded, dc:creator, description, guid, item, link, pubdate, title, enclosure]
+     */
+
+    public Swedroid()
+    {
+        super(TAG_ITEM_ITEMS,
+                new int[]{TAG_TITLE},
+                new int[]{TAG_LINK},
+                new int[]{TAG_DESCRIPTION},
+                new int[]{TAG_CONTENT_ENCODED},
+                new int[]{TAG_PUBDATE},
+                new int[]{TAG_CATEGORY},
+                new int[]{TAG_ENCLOSURE});
     }
 
     @Override
-    protected News applySpecialCase(News news, String content) {
-        news.description = org.jsoup.Jsoup.parse(news.description).text();
+    protected String parseDescription(Element prop)
+    {
+        String description = org.jsoup.Jsoup.parse(prop.text()).text();
 
-        int s = news.description.indexOf("[…]");
+        int s = description.indexOf("[…]");
         if (s != -1) {
-            news.description = news.description.substring(s);
+            description = description.substring(s);
         }
-        if (content.length() > 0) {
-            news.content = content.replace("style=", "none=");
-        }
-        return news;
+        return description;
+    }
+
+    @Override
+    protected String parseContent(Element prop)
+    {
+        String content = prop.text();
+        if (content.length() > 0)
+            content = content.replace("style=", "none=");
+        return content;
     }
 
 }

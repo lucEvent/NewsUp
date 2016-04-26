@@ -1,21 +1,35 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Date;
 import com.lucevent.newsup.data.util.News;
 
-public class TheLocal extends com.lucevent.newsup.data.util.NewsReader {
+import org.jsoup.nodes.Element;
 
-    public TheLocal() {
-        super();
+public class TheLocal extends com.lucevent.newsup.data.util.NewsReader_v2 {
+
+    // tags: [description, enclosure, guid, item, link, pubdate, title]
+
+    public TheLocal()
+    {
+        super(TAG_ITEM_ITEMS,
+                new int[]{TAG_TITLE},
+                new int[]{TAG_LINK},
+                new int[]{TAG_DESCRIPTION},
+                new int[]{},
+                new int[]{TAG_PUBDATE},
+                new int[]{},
+                new int[]{TAG_ENCLOSURE});
     }
 
     @Override
-    protected News applySpecialCase(News news, String content) {
-        news.date += (-2 * 3600000);
-        return news;
+    protected long parseDate(Element prop)
+    {
+        return Date.toDate(prop.text()) - 7200000; // -2hours
     }
 
     @Override
-    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+    {
         org.jsoup.select.Elements content = doc.select("#main_picture_article > img,.articleTeaser,.articleContent");
 
         org.jsoup.select.Elements imgs = content.select("img");

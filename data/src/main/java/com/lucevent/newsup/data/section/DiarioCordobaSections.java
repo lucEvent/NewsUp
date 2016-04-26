@@ -40,13 +40,11 @@ public class DiarioCordobaSections extends Sections {
         add(new Section("Gente", "http://zetaestaticos.com/cordoba/rss/204_es.xml", 0));
         add(new Section("Sociedad", "http://zetaestaticos.com/cordoba/rss/103_es.xml", 0));
         add(new Section("Televisión", "http://zetaestaticos.com/cordoba/rss/104_es.xml", 0));
-        add(new Section("Turismo", "http://zetaestaticos.com/cordoba/rss/251_es.xml", 0));
 
         add(new Section("Tema del día", "http://zetaestaticos.com/cordoba/rss/106_es.xml", 0));
         add(new Section("Opinión", "http://zetaestaticos.com/cordoba/rss/100_es.xml", 0));
         add(new Section("Tu Informas", "http://zetaestaticos.com/cordoba/rss/221_es.xml", 0));
 
-        add(new Section("La Brimz X en Córdoba", "http://zetaestaticos.com/cordoba/rss/256_es.xml", 0));
         add(new Section("UCOniversitas", "http://zetaestaticos.com/cordoba/rss/261_es.xml", 0));
 
     }

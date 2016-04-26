@@ -5,7 +5,8 @@ import com.lucevent.newsup.data.util.Sections;
 
 public class BBCSections extends Sections {
 
-    public BBCSections() {
+    public BBCSections()
+    {
         super();
 
         add(new Section("Top stories", "http://feeds.bbci.co.uk/news/rss.xml", 0));

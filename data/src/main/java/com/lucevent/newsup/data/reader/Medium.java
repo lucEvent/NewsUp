@@ -2,21 +2,33 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
 
-public class Medium extends com.lucevent.newsup.data.util.NewsReader {
+import org.jsoup.nodes.Element;
 
-    public Medium() {
-        super();
-        HASH_LINK = "guid".hashCode();
+public class Medium extends com.lucevent.newsup.data.util.NewsReader_v2 {
+
+    // Tags:      [dc:creator, description, guid, item, link, pubdate, title]
+
+    public Medium()
+    {
+        super(TAG_ITEM_ITEMS,
+                new int[]{TAG_TITLE},
+                new int[]{TAG_GUID},
+                new int[]{TAG_DESCRIPTION},
+                new int[]{},
+                new int[]{TAG_PUBDATE},
+                new int[]{},
+                new int[]{});
     }
 
     @Override
-    protected News applySpecialCase(News news, String content) {
-        news.description = org.jsoup.Jsoup.parse(news.description).select(".medium-feed-snippet").html();
-        return news;
+    protected String parseDescription(Element prop)
+    {
+        return org.jsoup.Jsoup.parse(prop.text()).select(".medium-feed-snippet").html();
     }
 
     @Override
-    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+    {
         org.jsoup.select.Elements e = doc.select("main section .section-content");
 
         for (org.jsoup.nodes.Element title : e.select("h3")) {

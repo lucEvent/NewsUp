@@ -2,21 +2,35 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
 
+public class DagensNyheter extends com.lucevent.newsup.data.util.NewsReader_v2 {
 
-public class DagensNyheter extends com.lucevent.newsup.data.util.NewsReader {
+    /**
+     * Tags
+     * [dc:date, description, guid, item, link, pubdate, title]
+     * [dc:creator, description, guid, item, link, pubdate, title, ]
+     */
 
-    public DagensNyheter() {
-        super();
+    public DagensNyheter()
+    {
+        super(TAG_ITEM_ITEMS,
+                new int[]{TAG_TITLE},
+                new int[]{TAG_LINK},
+                new int[]{TAG_DESCRIPTION},
+                new int[]{},
+                new int[]{TAG_PUBDATE},
+                new int[]{},
+                new int[]{});
     }
 
     @Override
-    protected News applySpecialCase(News news, String content) {
-        news.description = org.jsoup.Jsoup.parse(news.description).text();
-        return news;
+    protected String parseDescription(org.jsoup.nodes.Element prop)
+    {
+        return org.jsoup.Jsoup.parse(prop.text()).text();
     }
 
     @Override
-    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+    {
         org.jsoup.select.Elements e = doc.select(".article_preamble,.article_text");
 
         if (e.isEmpty()) {

@@ -1,18 +1,29 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.Enclosure;
 
-public class RacoCatala extends com.lucevent.newsup.data.util.NewsReader {
+import org.jsoup.nodes.Element;
 
-    public RacoCatala() {
-        super();
+public class RacoCatala extends com.lucevent.newsup.data.util.NewsReader_v2 {
+
+    // tags: category, description, guid, image, item, link, pubdate, title
+
+    public RacoCatala()
+    {
+        super(TAG_ITEM_ITEMS,
+                new int[]{TAG_TITLE},
+                new int[]{TAG_LINK},
+                new int[]{},
+                new int[]{TAG_DESCRIPTION},
+                new int[]{TAG_PUBDATE},
+                new int[]{TAG_CATEGORY},
+                new int[]{TAG_IMAGE});
     }
 
     @Override
-    protected News applySpecialCase(News news, String content) {
-        news.content = news.description;
-        news.description = "";
-        return news;
+    protected Enclosure parseEnclosure(Element prop)
+    {
+        return new Enclosure(prop.text(), "image", "");
     }
 
 }

@@ -34,7 +34,7 @@ public class Date {
 
     public static long toDate(String date)
     {
-        if (date == null) return -1;
+        if (date.isEmpty()) return -1;
         String temp;
         long timemillis = 0;
         long zoneOffset = 0;

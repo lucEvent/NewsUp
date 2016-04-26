@@ -60,12 +60,13 @@ public class MainServlet extends HttpServlet {
             News prey = site.news.ceiling(bait);
 
             if (prey != null && prey.compareTo(bait) == 0) {
-                if (prey.content == null) {
+
+                if (prey.content == null || prey.content.isEmpty()) {
                     site.readNewsContent(prey);
                 }
 
                 if (prey.content == null) {
-                    resp.getWriter().println("");
+                    resp.getWriter().println("ha sido null !!");
                 } else {
                     resp.getWriter().println(prey.content);
                 }

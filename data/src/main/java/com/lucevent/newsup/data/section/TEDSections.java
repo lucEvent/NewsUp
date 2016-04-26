@@ -5,7 +5,8 @@ import com.lucevent.newsup.data.util.Sections;
 
 public class TEDSections extends Sections {
 
-    public TEDSections() {
+    public TEDSections()
+    {
         super();
 
         add(new Section("Main talks", "http://blog.ted.com/feed/", 0));

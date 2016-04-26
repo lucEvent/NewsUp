@@ -5,7 +5,8 @@ import com.lucevent.newsup.data.util.Sections;
 
 public class SpaceNewsSections extends Sections {
 
-    public SpaceNewsSections() {
+    public SpaceNewsSections()
+    {
         super();
 
         add(new Section("Space news", "http://spacenews.com/feed/", 0));
@@ -18,7 +19,6 @@ public class SpaceNewsSections extends Sections {
         add(new Section("Policy & Politics", "http://spacenews.com/section/policy-politics/feed/", 0));
         add(new Section("People", "http://spacenews.com/section/people/feed/", 0));
         add(new Section("First-up", "http://spacenews.com/special-feature/first-up/feed/", 0));
-        add(new Section("Space geeks", "http://spacenews.com/special-feature/spacegeeks/feed/", 0));
 
     }
 

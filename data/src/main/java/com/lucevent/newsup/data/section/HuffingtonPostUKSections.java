@@ -5,7 +5,8 @@ import com.lucevent.newsup.data.util.Sections;
 
 public class HuffingtonPostUKSections extends Sections {
 
-    public HuffingtonPostUKSections() {
+    public HuffingtonPostUKSections()
+    {
         super();
 
         add(new Section("Main news", "http://www.huffingtonpost.co.uk/feeds/verticals/uk/news.xml", 0));

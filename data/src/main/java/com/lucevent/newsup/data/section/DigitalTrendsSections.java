@@ -5,7 +5,8 @@ import com.lucevent.newsup.data.util.Sections;
 
 public class DigitalTrendsSections extends Sections {
 
-    public DigitalTrendsSections() {
+    public DigitalTrendsSections()
+    {
         super();
 
         add(new Section("All Articles", "http://www.digitaltrends.com/feed/", 0));
@@ -23,7 +24,7 @@ public class DigitalTrendsSections extends Sections {
         add(new Section("Photography", "http://www.digitaltrends.com/photography/feed/", 0));
         add(new Section("Social Media", "http://www.digitaltrends.com/social-media/feed/", 0));
         add(new Section("Home", "http://www.digitaltrends.com/home/feed/", 0));
-        add(new Section("Sports", "http://www.digitaltrends.com/sports/feed/", 0));
+        add(new Section("Health & fitness", "http://www.digitaltrends.com/health-fitness/feed/", 0));
         add(new Section("Business", "http://www.digitaltrends.com/business/feed/", 0));
         add(new Section("Buying Guides", "http://www.digitaltrends.com/buying-guides/feed/", 0));
         add(new Section("CES", "http://www.digitaltrends.com/ces/feed/", 0));

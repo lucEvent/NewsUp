@@ -5,7 +5,8 @@ import com.lucevent.newsup.data.util.Sections;
 
 public class DiscoverSections extends Sections {
 
-    public DiscoverSections() {
+    public DiscoverSections()
+    {
         super();
 
         add(new Section("Top stories", "http://feeds.feedburner.com/DiscoverTopStories", 0));
@@ -14,8 +15,6 @@ public class DiscoverSections extends Sections {
         add(new Section("Blogs", null, -1));
         add(new Section("Latest blogs", "http://feeds.feedburner.com/DiscoverBlogs", 1));
         add(new Section("The Crux", "http://feeds.feedburner.com/discovercrux", 1));
-        add(new Section("Citizen Science Salon", "http://feeds.feedburner.com/citizen-science-salon", 1));
-        add(new Section("Drone 360", "http://feeds.feedburner.com/drone360", 1));
         add(new Section("The extremo files", "http://feeds.feedburner.com/the-extremo-files", 1));
         add(new Section("ImaGeo", "http://feeds.feedburner.com/imageo", 1));
         add(new Section("Lovesick Cyborg", "http://feeds.feedburner.com/lovesick-cyborg", 1));
@@ -35,8 +34,7 @@ public class DiscoverSections extends Sections {
         add(new Section("Mind Over Matter", "http://feeds.feedburner.com/mind-over-matter", 1));
         add(new Section("Notes From Earth", "http://feeds.feedburner.com/notes-from-earth", 1));
         add(new Section("Out There", "http://feeds.feedburner.com/discovermagazine-outthere", 1));
-        add(new Section("Vital Signs", "http://feeds.feedburner.com/discovermagazine/VitalSigns", 1));
-
+    
     }
 
 }

@@ -3,21 +3,37 @@ package com.lucevent.newsup.data.reader;
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
 
-public class As extends com.lucevent.newsup.data.util.NewsReader {
+public class As extends com.lucevent.newsup.data.util.NewsReader_v2 {
 
-    public As() {
-        super();
+    /**
+     * Tags:
+     * [category, comments, content:encoded, dc:creator, description, enclosure, guid, item, link, pubdate, title]
+     * [dc:creator, description, enclosure, guid, item, link, pubdate, title]
+     * [dc:creator, description, guid, item, link, pubdate, title]
+     */
+
+    public As()
+    {
+        super(TAG_ITEM_ITEMS,
+                new int[]{TAG_TITLE},
+                new int[]{TAG_LINK},
+                new int[]{TAG_DESCRIPTION},
+                new int[]{TAG_CONTENT_ENCODED},
+                new int[]{TAG_PUBDATE},
+                new int[]{TAG_CATEGORY},
+                new int[]{TAG_ENCLOSURE});
     }
 
     @Override
-    protected News applySpecialCase(News news, String content) {
-        if (!content.isEmpty()) {
+    protected News applySpecialCase(News news, String content)
+    {
+        if (!content.isEmpty())
             news.content = getEnclosures(news) + content;
-        }
         return news;
     }
 
-    private String getEnclosures(News news) {
+    private String getEnclosures(News news)
+    {
         String res = "";
         boolean imgset = false;
         for (Enclosure e : news.enclosures) {
@@ -32,7 +48,8 @@ public class As extends com.lucevent.newsup.data.util.NewsReader {
     }
 
     @Override
-    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+    {
         org.jsoup.select.Elements e = doc.select("[itemprop=\"articleBody\"");
 
         if (!e.isEmpty()) {

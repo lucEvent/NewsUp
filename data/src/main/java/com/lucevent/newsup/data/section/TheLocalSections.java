@@ -5,7 +5,8 @@ import com.lucevent.newsup.data.util.Sections;
 
 public class TheLocalSections extends Sections {
 
-    public TheLocalSections() {
+    public TheLocalSections()
+    {
         super();
 
         add(new Section("Austria", "http://www.thelocal.at/feeds/rss.php", 0));

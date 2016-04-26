@@ -61,7 +61,6 @@ public class _20MinutosSections extends Sections {
         add(new Section("Ciudad real", "http://www.20minutos.es/rss/ciudadreal", 1));
         add(new Section("Córdoba", "http://www.20minutos.es/rss/cordoba", 1));
         add(new Section("Cuenca", "http://www.20minutos.es/rss/cuenca", 1));
-        add(new Section("Elche", "http://www.20minutos.es/rss/elche", 1));
         add(new Section("Gijón", "http://www.20minutos.es/rss/gijon", 1));
         add(new Section("Girona", "http://www.20minutos.es/rss/girona", 1));
         add(new Section("Granada", "http://www.20minutos.es/rss/granada", 1));
@@ -69,7 +68,6 @@ public class _20MinutosSections extends Sections {
         add(new Section("Huelva", "http://www.20minutos.es/rss/huelva", 1));
         add(new Section("Huesca", "http://www.20minutos.es/rss/huesca", 1));
         add(new Section("Jaén", "http://www.20minutos.es/rss/jaen", 1));
-        add(new Section("Jerez de la frontera", "http://www.20minutos.es/rss/jerez", 1));
         add(new Section("Las palmas", "http://www.20minutos.es/rss/laspalmas", 1));
         add(new Section("León", "http://www.20minutos.es/rss/leon", 1));
         add(new Section("Lleida", "http://www.20minutos.es/rss/lleida", 1));
@@ -77,7 +75,6 @@ public class _20MinutosSections extends Sections {
         add(new Section("Lugo", "http://www.20minutos.es/rss/lugo", 1));
         add(new Section("Madrid", "http://www.20minutos.es/rss/madrid", 1));
         add(new Section("Málaga", "http://www.20minutos.es/rss/malaga", 1));
-        add(new Section("Marbella", "http://www.20minutos.es/rss/marbella", 1));
         add(new Section("Melilla", "http://www.20minutos.es/rss/melilla", 1));
         add(new Section("Murcia", "http://www.20minutos.es/rss/murcia", 1));
         add(new Section("Ourense", "http://www.20minutos.es/rss/ourense", 1));

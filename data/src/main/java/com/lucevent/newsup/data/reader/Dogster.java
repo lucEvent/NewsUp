@@ -1,24 +1,36 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
+import org.jsoup.nodes.Element;
 
-public class Dogster extends com.lucevent.newsup.data.util.NewsReader {
+public class Dogster extends com.lucevent.newsup.data.util.NewsReader_v2 {
 
-    public Dogster() {
-        super();
+    // Tags: [category, content:encoded, dc:creator, description, guid, item, link, pubdate, title]
+
+    public Dogster()
+    {
+        super(TAG_ITEM_ITEMS,
+                new int[]{TAG_TITLE},
+                new int[]{TAG_LINK},
+                new int[]{TAG_DESCRIPTION},
+                new int[]{TAG_CONTENT_ENCODED},
+                new int[]{TAG_PUBDATE},
+                new int[]{TAG_CATEGORY},
+                new int[]{});
     }
 
     @Override
-    protected News applySpecialCase(News news, String content) {
-        org.jsoup.nodes.Document description = org.jsoup.Jsoup.parse(news.description);
-        news.description = description.select("p").get(0).text();
+    protected String parseDescription(Element prop)
+    {
+        return org.jsoup.Jsoup.parse(prop.text()).select("p").get(0).text();
+    }
 
-        org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(content);
-        for (org.jsoup.nodes.Element e : doc.getElementsByAttribute("style")) {
+    @Override
+    protected String parseContent(Element prop)
+    {
+        org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(prop.text());
+        for (org.jsoup.nodes.Element e : doc.getElementsByAttribute("style"))
             e.attr("style", "");
-        }
-        news.content = doc.html();
-        return news;
+        return doc.html();
     }
 
 }

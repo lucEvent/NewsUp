@@ -25,7 +25,6 @@ public class EuropaPressSections extends Sections {
         add(new Section("Andalucía", "http://www.europapress.es/rss/rss.aspx?ch=279", 1));
         add(new Section("Aragón", "http://www.europapress.es/rss/rss.aspx?ch=280", 1));
         add(new Section("Asturias", "http://www.europapress.es/rss/rss.aspx?ch=294", 1));
-        add(new Section("C. Valenciana", "http://www.europapress.es/rss/rss.aspx?ch=192", 1));
         add(new Section("Cantabria", "http://www.europapress.es/rss/rss.aspx?ch=281", 1));
         add(new Section("Castilla-La Mancha", "http://www.europapress.es/rss/rss.aspx?ch=282", 1));
         add(new Section("Castilla y León", "http://www.europapress.es/rss/rss.aspx?ch=283", 1));
@@ -44,7 +43,7 @@ public class EuropaPressSections extends Sections {
         add(new Section("Lenguas", "http://www.europapress.es/rss/rss.aspx?ch=56", 0));
         add(new Section("Euskera", "http://www.europapress.es/rss/rss.aspx?ch=58", 1));
         add(new Section("Galego", "http://www.europapress.es/rss/rss.aspx?ch=57", 1));
-        add(new Section("Valencià ", "http://www.europapress.es/rss/rss.aspx?ch=60", 1));
+        add(new Section("Valencià", "http://www.europapress.es/rss/rss.aspx?ch=60", 1));
         add(new Section("Asturianu", "http://www.europapress.es/rss/rss.aspx?ch=395", 1));
 
     }

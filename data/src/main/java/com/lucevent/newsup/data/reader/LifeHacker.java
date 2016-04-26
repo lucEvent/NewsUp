@@ -1,22 +1,30 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
+import org.jsoup.nodes.Element;
 
-public class LifeHacker extends com.lucevent.newsup.data.util.NewsReader {
+public class LifeHacker extends com.lucevent.newsup.data.util.NewsReader_v2 {
 
-    public LifeHacker() {
-        super();
+    // tags: category, dc:creator, description, feedburner:origlink, guid, item, link, pubdate, title
+
+    public LifeHacker()
+    {
+        super(TAG_ITEM_ITEMS,
+                new int[]{TAG_TITLE},
+                new int[]{"feedburner:origlink".hashCode()},
+                new int[]{},
+                new int[]{TAG_DESCRIPTION},
+                new int[]{TAG_PUBDATE},
+                new int[]{TAG_CATEGORY},
+                new int[]{});
     }
 
     @Override
-    protected News applySpecialCase(News news, String content) {
-        org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parseBodyFragment(news.description);
+    protected String parseContent(Element prop)
+    {
+        org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(prop.text());
         doc.select("img").last().remove();
         doc.select("small,.core-inset").remove();
-
-        news.content = doc.html();
-        news.description = "";
-        return news;
+        return doc.html();
     }
 
 }

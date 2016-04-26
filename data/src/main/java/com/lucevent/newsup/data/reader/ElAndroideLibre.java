@@ -1,21 +1,35 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
+import org.jsoup.nodes.Element;
 
-public class ElAndroideLibre extends com.lucevent.newsup.data.util.NewsReader {
+public class ElAndroideLibre extends com.lucevent.newsup.data.util.NewsReader_v2 {
 
-    public ElAndroideLibre() {
-        super();
+    // tags: [category, content:encoded, dc:creator, description, feedburner:origlink, guid, item, link, pubdate, title
+
+    public ElAndroideLibre()
+    {
+        super(TAG_ITEM_ITEMS,
+                new int[]{TAG_TITLE},
+                new int[]{TAG_GUID},
+                new int[]{TAG_DESCRIPTION},
+                new int[]{TAG_CONTENT_ENCODED},
+                new int[]{TAG_PUBDATE},
+                new int[]{TAG_CATEGORY},
+                new int[]{});
     }
 
     @Override
-    protected News applySpecialCase(News news, String content) {
-        news.description = org.jsoup.Jsoup.parse(news.description).getElementsByTag("p").text().replace("[...]", "");
+    protected String parseDescription(Element prop)
+    {
+        return org.jsoup.Jsoup.parse(prop.text()).getElementsByTag("p").text().replace("[...]", "");
+    }
 
-        org.jsoup.select.Elements doc = org.jsoup.Jsoup.parseBodyFragment(content).getElementsByTag("body");
+    @Override
+    protected String parseContent(Element prop)
+    {
+        org.jsoup.select.Elements doc = org.jsoup.Jsoup.parseBodyFragment(prop.text()).getElementsByTag("body");
         doc.select("[clear=\"all\"] ~ *,br,.feedflare,[width=\"1\"]").remove();
-        news.content = doc.html();
-        return news;
+        return doc.html();
     }
 
 }

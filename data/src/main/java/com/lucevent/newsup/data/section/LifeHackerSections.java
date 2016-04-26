@@ -5,7 +5,8 @@ import com.lucevent.newsup.data.util.Sections;
 
 public class LifeHackerSections extends Sections {
 
-    public LifeHackerSections() {
+    public LifeHackerSections()
+    {
         super();
 
         add(new Section("Main", "http://feeds.gawker.com/lifehacker/vip", 0));
