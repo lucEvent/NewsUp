@@ -34,6 +34,7 @@ public class Sites extends ArrayList<Site> {
         add(new Site(115, "As", 0xffba0202, new com.lucevent.newsup.data.section.AsSections(), new com.lucevent.newsup.data.reader.As()));
         add(new Site(120, "Marca", 0xff04394a, new com.lucevent.newsup.data.section.MarcaSections(), new com.lucevent.newsup.data.reader.Marca()));
         add(new Site(125, "El Confidencial", 0xff145f85, new com.lucevent.newsup.data.section.ElConfidencialSections(), new com.lucevent.newsup.data.reader.ElConfidencial()));
+        add(new Site(130, "El Diario", 0xff0061ab, new com.lucevent.newsup.data.section.ElDiarioSections(), new com.lucevent.newsup.data.reader.ElDiario()));
         add(new Site(135, "La Razón", 0xffc7c7c7, new com.lucevent.newsup.data.section.LaRazonSections(), new com.lucevent.newsup.data.reader.LaRazon()));
         add(new Site(145, "Europa press", 0xffffffff, new com.lucevent.newsup.data.section.EuropaPressSections(), new com.lucevent.newsup.data.reader.EuropaPress()));
         add(new Site(150, "Diario Córdoba", 0xffde2632, new com.lucevent.newsup.data.section.DiarioCordobaSections(), new com.lucevent.newsup.data.reader.DiarioCordoba()));
@@ -54,13 +55,13 @@ public class Sites extends ArrayList<Site> {
         add(new Site(330, "Metro", 0xff007d3c, new com.lucevent.newsup.data.section.MetroSections(), new com.lucevent.newsup.data.reader.Metro()));
 
         // Finnish sites
-/*        if (titles != null) add(new Site(-1, titles[3], -1, null, null));
+        if (titles != null) add(new Site(-1, titles[3], -1, null, null));
         add(new Site(400, "Helsinki times", 0xff32c8fa, new com.lucevent.newsup.data.section.HelsinkiTimesSections(), new com.lucevent.newsup.data.reader.HelsinkiTimes()));
         add(new Site(405, "Helsingin Sanomat", 0xff01133d, new com.lucevent.newsup.data.section.HelsinkiSanomatSections(), new com.lucevent.newsup.data.reader.HelsinkiSanomat()));
         add(new Site(410, "Iltalehti", 0xffff0000, new com.lucevent.newsup.data.section.IltalehtiSections(), new com.lucevent.newsup.data.reader.Iltalehti()));
         add(new Site(415, "Yle", 0xff00b4c4, new com.lucevent.newsup.data.section.YleSections(), new com.lucevent.newsup.data.reader.Yle()));
 //        add(new Site(420, "Yle Svenska", 0xff, new com.lucevent.newsup.data.section.YleSvenskaSections(), new com.lucevent.newsup.data.reader.YleSvenska()));
-*/
+
         // British sites
         if (titles != null) add(new Site(-1, titles[4], -1, null, null));
         add(new Site(500, "BBC", 0xffa62e30, new com.lucevent.newsup.data.section.BBCSections(), new com.lucevent.newsup.data.reader.BBC()));
@@ -110,7 +111,6 @@ public class Sites extends ArrayList<Site> {
 
         //Not working
         if (titles != null) add(new Site(-1, titles[10], -1, null, null));
-        add(new Site(130, "El Diario", 0xff0061ab, new com.lucevent.newsup.data.section.ElDiarioSections(), new com.lucevent.newsup.data.reader.ElDiario()));
         add(new Site(140, "Huffington Post", 0xff2c705f, new com.lucevent.newsup.data.section.HuffingtonPostSpainSections(), new com.lucevent.newsup.data.reader.HuffingtonPostSpain()));
         add(new Site(210, "La Vanguardia", 0xff1a4970, new com.lucevent.newsup.data.section.LaVanguardiaSections(), new com.lucevent.newsup.data.reader.LaVanguardia()));
         add(new Site(305, "Expressen", 0xffdb2727, new com.lucevent.newsup.data.section.ExpressenSections(), new com.lucevent.newsup.data.reader.Expressen()));

@@ -1,20 +1,34 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
+import org.jsoup.nodes.Element;
 
-public class ElDiario extends com.lucevent.newsup.data.util.NewsReader {
+public class ElDiario extends com.lucevent.newsup.data.util.NewsReader_v2 {
 
-    public ElDiario() {
-        super();
+    /**
+     * Tags
+     * [author, description, enclosure, guid, item, link, media:content, media:keywords, media:thumbnail, media:title, pubdate, title]
+     * [author, description, guid, item, link, pubdate, title]
+     * [description, enclosure, guid, item, link, media:content, media:keywords, media:thumbnail, media:title, pubdate, title]
+     */
+
+    public ElDiario()
+    {
+        super(TAG_ITEM_ITEMS,
+                new int[]{TAG_TITLE},
+                new int[]{TAG_LINK},
+                new int[]{},
+                new int[]{TAG_DESCRIPTION},
+                new int[]{TAG_PUBDATE},
+                new int[]{"media:keywords".hashCode()},
+                new int[]{TAG_ENCLOSURE});
     }
 
     @Override
-    protected News applySpecialCase(News news, String content) {
-        org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(news.description);
+    protected String parseContent(Element prop)
+    {
+        org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(prop.text());
         doc.select("a,img[width=\"1\"],br").remove();
-        news.description = "";
-        news.content = doc.select("body").html();
-        return news;
+        return doc.select("body").html();
     }
 
 }

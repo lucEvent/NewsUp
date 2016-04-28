@@ -1,6 +1,6 @@
 package com.lucevent.newsup.backend;
 
-import com.lucevent.newsup.backend.kernel.BackendParser;
+import com.lucevent.newsup.backend.utils.BackendParser;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.Site;

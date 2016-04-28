@@ -1,7 +1,7 @@
 <resources>
 
     <string name="app_name" translatable="false">NewsUp</string>
-    <string name="app_version">version 1.0.3</string>
+    <string name="app_version">version 1.0.5</string>
 
 
     <!-- * ******************** Labels **************************** * -->
@@ -94,11 +94,12 @@
 
     <!-- ***************************** ***************** ********************************** -->
     <string name="about_content" translatable="false"><![CDATA[
-        <h2>News Up version 1.0.3</h2>
+        <h2>News Up version 1.0.5</h2>
         <h2>Developed by Rafael J. Lucena</h2>
         <h3>Contact: rafaa89(at)gmail.com</h3>
         <p>
             <p><b>Last features and Improvements:</b></p>
+            <p>Version 1.0.5 2016-04-28:<br>Updated sections of \'El Diario\' and \'La Vanguardia\'.</p>
             <p>Version 1.0.3 2016-04-26:<br>All sections has been revised and many (not working) removed. Server improvements/changes.</p>
             <p>Version 1.0.2 2016-04-22:<br>Bugs fixed when updating RecyclerviewAdapter and server timeout increased to 10s.</p>
             <p>Version 1.0.1 2016-04-21:<br>News in My news ordered by time even with multiply sites (like in pre-lollipop versions). Bugs fixed when updating RecyclerviewAdapter and when the server cannot answer one query.</p>

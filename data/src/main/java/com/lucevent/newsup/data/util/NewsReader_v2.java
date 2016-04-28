@@ -140,6 +140,7 @@ public abstract class NewsReader_v2 extends NewsReader {
     }
 
     @Override
+    @Deprecated
     protected News applySpecialCase(News news, String content)
     {
         return news;

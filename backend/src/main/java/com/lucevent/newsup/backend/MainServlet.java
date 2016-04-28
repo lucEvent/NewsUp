@@ -1,6 +1,6 @@
 package com.lucevent.newsup.backend;
 
-import com.lucevent.newsup.backend.kernel.BackendParser;
+import com.lucevent.newsup.backend.utils.BackendParser;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.Site;
@@ -38,6 +38,7 @@ public class MainServlet extends HttpServlet {
             String[] parts = site_request.split(",");
 
             Site site = Data.sites.getSiteByCode(Integer.parseInt(parts[0]));
+            Data.stats.count(Data.sites.indexOf(site));
 
             int[] sections = new int[parts.length - 1];
             for (int i = 0; i < parts.length - 1; i++) {
@@ -47,7 +48,6 @@ public class MainServlet extends HttpServlet {
             NewsArray news = site.readNewsHeaders(sections);
             site.news.addAll(news);
 
-//        PrintWriter out = response.getWriter();
             resp.getWriter().println(BackendParser.toEntry(news).toString());
 
         } else if (req.getParameter("content") != null) {
@@ -71,6 +71,10 @@ public class MainServlet extends HttpServlet {
                     resp.getWriter().println(prey.content);
                 }
             }
+        } else if (req.getParameter("stats") != null) {
+
+            resp.getWriter().println(BackendParser.toHtml(Data.sites, Data.stats));
+
         } else if (req.getParameter("debug") != null) {
 
             Site site = Data.sites.getSiteByCode(Integer.parseInt(req.getParameter("site")));

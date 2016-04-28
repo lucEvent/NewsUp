@@ -1,5 +1,6 @@
-package com.lucevent.newsup.backend.kernel;
+package com.lucevent.newsup.backend.utils;
 
+import com.lucevent.newsup.data.Sites;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
 
@@ -58,4 +59,17 @@ public class BackendParser {
         return sb;
     }
 
+    public static StringBuilder toHtml(Sites sites, Statistics stats)
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(stats.since).append("\n\n");
+
+        for (int i = 0; i < sites.size(); i++) {
+            int count = stats.getCount(i);
+            if (count != 0) {
+                sb.append(sites.get(i).name).append(": ").append(count).append(" requests\n");
+            }
+        }
+        return sb;
+    }
 }
