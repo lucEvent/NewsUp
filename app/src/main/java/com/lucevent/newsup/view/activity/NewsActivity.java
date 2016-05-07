@@ -17,6 +17,7 @@ import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.io.BookmarksManager;
 import com.lucevent.newsup.kernel.AppCode;
+import com.lucevent.newsup.kernel.AppData;
 
 public class NewsActivity extends AppCompatActivity {
 
@@ -127,7 +128,8 @@ public class NewsActivity extends AppCompatActivity {
         button_share = (FloatingActionButton) findViewById(R.id.button_share);
         button_share.setOnClickListener(onShareAction);
 
-        String webContent = css + fontcss + "<h2>" + currentNews.title + "</h2>" + currentNews.content;
+        String siteStyle = AppData.getSiteByCode(currentNews.site_code).getStyle();
+        String webContent = css + fontcss + siteStyle + "<h2>" + currentNews.title + "</h2>" + currentNews.content;
 
         newsView.loadDataWithBaseURL("file:///android_asset/", webContent, "text/html", "utf-8", null);
 

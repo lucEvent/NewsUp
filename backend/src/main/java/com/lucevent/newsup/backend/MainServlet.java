@@ -1,6 +1,9 @@
 package com.lucevent.newsup.backend;
 
+import com.googlecode.objectify.ObjectifyFactory;
+import com.googlecode.objectify.ObjectifyService;
 import com.lucevent.newsup.backend.utils.BackendParser;
+import com.lucevent.newsup.backend.utils.Statistics;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.Site;
@@ -96,9 +99,21 @@ public class MainServlet extends HttpServlet {
     }
 
     @Override
+    public void destroy()
+    {
+        super.destroy();
+        System.out.println("Destroying.... so saving statistics");
+        Data.stats.save();
+    }
+
+    @Override
     public void init() throws ServletException
     {
         super.init();
+
+        ObjectifyFactory oFactory = ObjectifyService.factory();
+        oFactory.register(Statistics.class);
+        oFactory.begin();
 
         new Data();
     }

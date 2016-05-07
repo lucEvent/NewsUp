@@ -25,6 +25,10 @@ dependencies {
     appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.28'
     compile 'javax.servlet:servlet-api:2.5'
     compile project(':data')
+    compile 'com.google.appengine:appengine-endpoints:1.9.28' //add this line to avoid upper comment
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.google.guava:guava:19.0'//add this
+    compile 'com.googlecode.objectify:objectify:5.1.12'  //works with ObjectifyFilter in web.xml
 }
 
 appengine {

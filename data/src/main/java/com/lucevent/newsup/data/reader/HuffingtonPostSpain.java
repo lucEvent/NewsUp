@@ -2,9 +2,13 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
 
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class HuffingtonPostSpain extends com.lucevent.newsup.data.util.NewsReader_v2 {
+
+    private String style = "<style>blockquote{margin:10px;padding:5px 10px 5px 10px;background-color:#f2f2f2}</style>";
 
     /**
      * Tags:
@@ -22,6 +26,7 @@ public class HuffingtonPostSpain extends com.lucevent.newsup.data.util.NewsReade
                 new int[]{TAG_PUBDATE, TAG_UPDATED},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_ENCLOSURE});
+        super.style = style;
     }
 
     @Override
@@ -37,13 +42,15 @@ public class HuffingtonPostSpain extends com.lucevent.newsup.data.util.NewsReade
     @Override
     protected String parseContent(Element prop)
     {
-        org.jsoup.nodes.Element body = org.jsoup.Jsoup.parse(prop.text()).getElementsByTag("body").get(0);
-        org.jsoup.select.Elements ee = body.children();
+        Element body = org.jsoup.Jsoup.parse(prop.text().replace("<br />", "<p></p>")).getElementsByTag("body").get(0);
+        Elements ee = body.children();
 
         int index = ee.indexOf(ee.select("blockquote").last()) - 1;
         if (index >= 0)
             for (; index < ee.size(); ++index)
                 ee.get(index).remove();
+
+        cleanBlockquotes(body.select("blockquote"));
 
         String content = body.outerHtml();
         index = content.indexOf("<hh--");
@@ -54,31 +61,37 @@ public class HuffingtonPostSpain extends com.lucevent.newsup.data.util.NewsReade
     }
 
     @Override
-    protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+    protected void readNewsContent(Document doc, News news)
     {
-        doc.select("script,.entry-text > a").remove();
+        doc.select("script").remove();
 
-        org.jsoup.select.Elements cnt = doc.select(".top-media,.entry-text");
-        cnt.select(".tag-cloud,[style^=\"display: n\"],.comment-button,.read-more,.corrections,.extra-content,.slideshow-thumb").remove();
+        org.jsoup.select.Elements e = doc.select(".top-media,.entry__body");
+        e.select("[style=\"display: none;\"],.slideshow-thumb,.tag-cloud,.comment-button,.corrections-links,.read-more,.extra-content").remove();
 
-        org.jsoup.nodes.Element e = cnt.select("blockquote").last();
-        if (e != null) {
-            String bq = e.html();
-            if (bq.contains("ADEMÁS") || bq.contains("TE PUEDE INTERESAR") ||
-                    bq.contains("AVÍSANOS") || bq.contains("MÁS SOBRE") ||
-                    bq.contains("MÁS PARA")) {
-                e.remove();
-            }
+        cleanBlockquotes(e.select("blockquote"));
+
+        for (Element ps : e.select(".entry__body > p"))
+            if (ps.text().isEmpty())
+                ps.remove();
+
+        Element ps = e.select("div").last();
+        if (ps != null)
+            if (ps.text().contains("Ve a nuestra portada"))
+                ps.remove();
+
+        news.content = e.html();
+    }
+
+    private void cleanBlockquotes(Elements select)
+    {
+        for (Element bq : select) {
+            String text = bq.text();
+
+            if (text.contains("ADEMÁS") || text.contains("TE PUEDE INTERESAR")
+                    || text.contains("AVÍSANOS") || text.contains("MÁS SOBRE")
+                    || text.contains("MÁS PARA"))
+                bq.remove();
         }
-        e = cnt.select("p").last();
-        if (e != null) {
-            if (e.html().contains("big.assets.huffingtonpost")) {
-                e.remove();
-            }
-        }
-        cnt.select("img[src^=\"http://big.assets\"]");
-
-        news.content = cnt.html();
     }
 
 }

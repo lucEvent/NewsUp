@@ -9,18 +9,17 @@ public class LaVanguardiaSections extends Sections {
         super();
 
         add(new Section("Principal", "http://www.lavanguardia.com/mvc/feed/rss/home", 0));
-        add(new Section("Internacional", "http://www.lavanguardia.com/mvc/feed/rss/Internacional", 0));
-        add(new Section("Política", "http://www.lavanguardia.com/mvc/feed/rss/Política", 0));
-        add(new Section("Vida", "http://www.lavanguardia.com/mvc/feed/rss/Vida", 0));
-        add(new Section("Deportes", "http://www.lavanguardia.com/mvc/feed/rss/Deportes", 0));
-        add(new Section("Economía", "http://www.lavanguardia.com/mvc/feed/rss/Economía", 0));
-        add(new Section("Opinión", "http://www.lavanguardia.com/mvc/feed/rss/Opinión", 0));
-        add(new Section("Cultura", "http://www.lavanguardia.com/mvc/feed/rss/Cultura", 0));
-        add(new Section("Gente", "http://www.lavanguardia.com/mvc/feed/rss/Gente", 0));
-        add(new Section("Sucesos", "http://www.lavanguardia.com/mvc/feed/rss/Sucesos", 0));
-        add(new Section("Participación", "http://www.lavanguardia.com/mvc/feed/rss/Participación", 0));
-        add(new Section("Vídeos", "http://www.lavanguardia.com/mvc/feed/rss/Vídeos", 0));
-        add(new Section("Temas", "http://www.lavanguardia.com/mvc/feed/rss/Temas", 0));
+        add(new Section("Internacional", "http://www.lavanguardia.com/mvc/feed/rss/internacional", 0));
+        add(new Section("Política", "http://www.lavanguardia.com/mvc/feed/rss/politica", 0));
+        add(new Section("Vida", "http://www.lavanguardia.com/mvc/feed/rss/vida", 0));
+        add(new Section("Deportes", "http://www.lavanguardia.com/mvc/feed/rss/deportes", 0));
+        add(new Section("Economía", "http://www.lavanguardia.com/mvc/feed/rss/economia", 0));
+        add(new Section("Opinión", "http://www.lavanguardia.com/mvc/feed/rss/opinion", 0));
+        add(new Section("Cultura", "http://www.lavanguardia.com/mvc/feed/rss/cultura", 0));
+        add(new Section("Gente", "http://www.lavanguardia.com/mvc/feed/rss/gente", 0));
+        add(new Section("Participación", "http://www.lavanguardia.com/mvc/feed/rss/participacion", 0));
+        add(new Section("Vídeos", "http://www.lavanguardia.com/mvc/feed/rss/videos", 0));
+        add(new Section("Temas", "http://www.lavanguardia.com/mvc/feed/rss/temas", 0));
 
         add(new Section("Canales", null, -1));
         add(new Section("VangData", "http://www.lavanguardia.com/mvc/feed/rss/vangdata", 1));

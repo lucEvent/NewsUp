@@ -54,5 +54,9 @@ public class Site {
     {
         return isDarkColor;
     }
-    
+
+    public String getStyle()
+    {
+        return reader.style;
+    }
 }

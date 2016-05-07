@@ -63,6 +63,7 @@ public class BackendParser {
     {
         StringBuilder sb = new StringBuilder();
         sb.append(stats.since).append("\n\n");
+        sb.append(stats.lastStart).append("\n\n");
 
         for (int i = 0; i < sites.size(); i++) {
             int count = stats.getCount(i);

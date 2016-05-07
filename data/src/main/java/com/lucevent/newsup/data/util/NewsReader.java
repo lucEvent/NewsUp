@@ -18,6 +18,8 @@ public abstract class NewsReader {
     private int HASH_CONTENT = "content:encoded".hashCode();
     private int HASH_ENCLOSURE = "enclosure".hashCode();
 
+    public String style = "";
+
     public NewsReader()
     {
     }
