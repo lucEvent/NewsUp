@@ -76,7 +76,31 @@ public class MainServlet extends HttpServlet {
             }
         } else if (req.getParameter("stats") != null) {
 
-            resp.getWriter().println(BackendParser.toHtml(Data.sites, Data.stats));
+            StringBuilder sb = new StringBuilder();
+            sb.append(Data.stats.since).append("\n\n");
+            sb.append(Data.stats.lastStart).append("\n\n");
+
+            String options = req.getParameter("options");
+            if (options != null) {
+
+                if (options.contains("r"))
+                    Data.stats.reset();
+
+                if (options.contains("s"))
+                    sb.append(BackendParser.toHtml(Data.sites, Data.stats, Statistics.Order.BySiteName));
+
+                if (options.contains("n"))
+                    sb.append(BackendParser.toHtml(Data.sites, Data.stats, Statistics.Order.ByNumber));
+
+                if (options.contains("t"))
+                    sb.append(BackendParser.toHtml(Data.sites, Data.stats, Statistics.Order.ByLastAccessTime));
+
+            } else {
+                sb.append(BackendParser.toHtml(Data.sites, Data.stats, Statistics.Order.ByDefault));
+            }
+
+            sb.append("\n\n").append("Options:\n\tr - Reset\n\ts - order by Site name\n\tn - order by Number of requests\n\tt - order by access Time");
+            resp.getWriter().println(sb);
 
         } else if (req.getParameter("debug") != null) {
 

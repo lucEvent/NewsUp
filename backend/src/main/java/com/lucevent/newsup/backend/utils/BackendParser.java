@@ -3,6 +3,11 @@ package com.lucevent.newsup.backend.utils;
 import com.lucevent.newsup.data.Sites;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
+import com.lucevent.newsup.data.util.Site;
+
+import java.util.Comparator;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class BackendParser {
 
@@ -59,17 +64,64 @@ public class BackendParser {
         return sb;
     }
 
-    public static StringBuilder toHtml(Sites sites, Statistics stats)
+    public static StringBuilder toHtml(Sites sites, Statistics stats, Statistics.Order order)
     {
         StringBuilder sb = new StringBuilder();
-        sb.append(stats.since).append("\n\n");
-        sb.append(stats.lastStart).append("\n\n");
 
-        for (int i = 0; i < sites.size(); i++) {
-            int count = stats.getCount(i);
-            if (count != 0) {
-                sb.append(sites.get(i).name).append(": ").append(count).append(" requests\n");
-            }
+        switch (order) {
+            case ByDefault:
+                for (int i = 0; i < sites.size(); i++) {
+                    int count = stats.getCount(i);
+                    if (count != 0) {
+                        sb.append("\t").append(sites.get(i).name).append(": ").append(count).append(" requests\n");
+                    }
+                }
+                break;
+            case BySiteName:
+                sb.append("\n ### Statistics ordered by site name ###\n\n");
+                TreeMap<Site, Integer> map_s = new TreeMap<>(new Comparator<Site>() {
+                    @Override
+                    public int compare(Site o1, Site o2)
+                    {
+                        return o1.name.compareTo(o2.name);
+                    }
+                });
+                for (int i = 0; i < sites.size(); ++i)
+                    map_s.put(sites.get(i), stats.getCount(i));
+
+                for (Map.Entry<Site, Integer> entry : map_s.entrySet()) {
+                    Integer count = entry.getValue();
+                    if (count > 0) {
+                        Site site = entry.getKey();
+                        sb.append("\t").append(site.name).append(": ").append(count).append(" requests\n");
+                    }
+                }
+                break;
+            case ByNumber:
+                sb.append("\n ### Statistics ordered by number of requests ###\n\n");
+                TreeMap<Integer, Site> map_n = new TreeMap<>(new Comparator<Integer>() {
+                    @Override
+                    public int compare(Integer o1, Integer o2)
+                    {
+                        return o1 < o2 ? 1 : -1;
+                    }
+                });
+                for (int i = 0; i < sites.size(); ++i)
+                    map_n.put(stats.getCount(i), sites.get(i));
+
+                for (Map.Entry<Integer, Site> entry : map_n.entrySet()) {
+                    Integer count = entry.getKey();
+                    if (count > 0) {
+                        Site site = entry.getValue();
+                        sb.append("\t").append(site.name).append(": ").append(count).append(" requests\n");
+                    }
+                }
+                break;
+            case ByLastAccessTime:
+                sb.append("\n ### Statistics ordered by last access time ###\n\n");
+                // TODO: 08/05/2016
+                sb.append("\t[NOT IMPLEMENTED YET]\n\n");
+                break;
         }
         return sb;
     }

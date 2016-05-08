@@ -13,6 +13,10 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
 @Entity
 public class Statistics {
 
+    public enum Order {
+        ByDefault, BySiteName, ByNumber, ByLastAccessTime
+    }
+
     @Id
     private Long id;
 
@@ -67,9 +71,13 @@ public class Statistics {
         ofy().save().entity(this).now();
     }
 
-    public void clearAll()
+    public void reset()
     {
-        ofy().delete().entity(this).now();
+        since = "[ Since " + new Date().toString() + " ]";
+        lastStart = "[ Last start " + new Date().toString() + " ]";
+        for (int i = 0; i < counters.length; i++)
+            counters[i] = 0;
+        ofy().save().entity(this).now();
     }
 
 }

@@ -29,7 +29,7 @@ public class ElAndroideLibre extends com.lucevent.newsup.data.util.NewsReader_v2
     {
         org.jsoup.select.Elements doc = org.jsoup.Jsoup.parseBodyFragment(prop.text()).getElementsByTag("body");
         doc.select("[clear=\"all\"] ~ *,br,.feedflare,[width=\"1\"]").remove();
-        return doc.html();
+        return doc.html().replace("src=\"//", "src=\"http://");
     }
 
 }
