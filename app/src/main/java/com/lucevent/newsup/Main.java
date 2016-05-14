@@ -31,6 +31,7 @@ import com.lucevent.newsup.view.fragment.AppSettingsFragment;
 import com.lucevent.newsup.view.fragment.BookmarksFragment;
 import com.lucevent.newsup.view.fragment.HistorialFragment;
 import com.lucevent.newsup.view.fragment.NewsListFragment;
+import com.lucevent.newsup.view.fragment.StatisticsFragment;
 
 import java.lang.ref.WeakReference;
 
@@ -157,6 +158,10 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 fragment = new AppSettingsFragment();
                 title = getString(R.string.settings);
                 break;
+            case R.id.nav_stats:
+                fragment = new StatisticsFragment();
+                title = "Statistics";
+                        break;
             case R.id.nav_about:
                 fragment = new AboutFragment();
                 title = getString(R.string.about);

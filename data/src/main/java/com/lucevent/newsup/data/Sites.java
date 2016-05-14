@@ -52,6 +52,7 @@ public class Sites extends ArrayList<Site> {
         // Swedish sites
         if (titles != null) add(new Site(-1, titles[2], -1, null, null));
         add(new Site(300, "Aftonbladet", 0xffffffff, new com.lucevent.newsup.data.section.AftonbladetSections(), new com.lucevent.newsup.data.reader.Aftonbladet()));
+        add(new Site(305, "Expressen", 0xffdb2727, new com.lucevent.newsup.data.section.ExpressenSections(), new com.lucevent.newsup.data.reader.Expressen()));
         add(new Site(315, "Svenska Dagbladet", 0xfff5f5f5, new com.lucevent.newsup.data.section.SvenskaDagbladetSections(), new com.lucevent.newsup.data.reader.SvenskaDagbladet()));
         add(new Site(325, "Fria Tider", 0xffffffff, new com.lucevent.newsup.data.section.FriaTiderSections(), new com.lucevent.newsup.data.reader.FriaTider()));
         add(new Site(330, "Metro", 0xff007d3c, new com.lucevent.newsup.data.section.MetroSections(), new com.lucevent.newsup.data.reader.Metro()));
@@ -67,6 +68,7 @@ public class Sites extends ArrayList<Site> {
         // British sites
         if (titles != null) add(new Site(-1, titles[4], -1, null, null));
         add(new Site(500, "BBC", 0xffa62e30, new com.lucevent.newsup.data.section.BBCSections(), new com.lucevent.newsup.data.reader.BBC()));
+        add(new Site(510, "The Huffington Post", 0xff2c705f, new com.lucevent.newsup.data.section.HuffingtonPostUKSections(), new com.lucevent.newsup.data.reader.HuffingtonPostUK()));
 
         // American sites
         if (titles != null) add(new Site(-1, titles[5], -1, null, null));
@@ -113,11 +115,9 @@ public class Sites extends ArrayList<Site> {
 
         //Not working
         if (titles != null) add(new Site(-1, titles[10], -1, null, null));
-        add(new Site(305, "Expressen", 0xffdb2727, new com.lucevent.newsup.data.section.ExpressenSections(), new com.lucevent.newsup.data.reader.Expressen()));
         add(new Site(310, "Dagens Nyheter", 0xffeb1c2a, new com.lucevent.newsup.data.section.DagensNyheterSections(), new com.lucevent.newsup.data.reader.DagensNyheter()));
         add(new Site(320, "Goteborgs Posten", 0xff005c9e, new com.lucevent.newsup.data.section.GoteborgsPostenSections(), new com.lucevent.newsup.data.reader.GoteborgsPosten()));
         add(new Site(505, "The Telegraph", 0xffffffff, new com.lucevent.newsup.data.section.TheTelegraphSections(), new com.lucevent.newsup.data.reader.TheTelegraph()));
-        add(new Site(510, "The Huffington Post", 0xff2c705f, new com.lucevent.newsup.data.section.HuffingtonPostUKSections(), new com.lucevent.newsup.data.reader.HuffingtonPostUK()));
         add(new Site(1005, "Discover", 0xff171717, new com.lucevent.newsup.data.section.DiscoverSections(), new com.lucevent.newsup.data.reader.Discover()));
     }
 

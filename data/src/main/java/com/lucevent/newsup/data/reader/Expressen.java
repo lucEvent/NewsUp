@@ -2,6 +2,9 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
 
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 public class Expressen extends com.lucevent.newsup.data.util.NewsReader_v2 {
 
     // tags:  author, description, guid, item, link, pubdate, title]
@@ -27,30 +30,59 @@ public class Expressen extends com.lucevent.newsup.data.util.NewsReader_v2 {
     @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
-        String img = "";
-        org.jsoup.select.Elements media = doc.select(".b-article__media,.b-slideshow__slider").select("img");
-        for (org.jsoup.nodes.Element i : media) {
-            String src = i.attr("template-src");
-            img += "<img src=\"http:" + src + "\">";
-        }
-        org.jsoup.select.Elements content = doc.select(".b-text_article-body");
+        doc.select("script").remove();
 
-        if (content.isEmpty()) {
-            content = doc.select(".b-text_article");
+        Elements firstElements, preamble, content;
 
-            if (content.isEmpty()) {
-                content = doc.select(".b-text");
+        content = doc.select(".text--article-body");
 
-                if (content.isEmpty()) {
-                    content = doc.select(".text--article-preamble,.text--article-body");
+        if (!content.isEmpty()) {
 
-                    if (content.isEmpty() && img.isEmpty()) {
-                        return;
-                    }
-                }
+            firstElements = doc.select(".slideshow").select("img,.text--image-caption");
+            for (Element p : firstElements.select("img")) {
+                String src = p.attr("data-src");
+                src = src.replace("_format_", "16x9").replace("_width_", "600").replace("_quality_", "90");
+                p.attr("src", src);
+            }
+
+            preamble = doc.select(".text--article-preamble");
+
+            content.select("h2").remove();
+        } else {
+
+            firstElements = doc.select(".b-article .b-article__top-widgets");
+            for (Element e : firstElements.select("noscript"))
+                e.tagName("p");
+            firstElements.select(".b-image__caption-toggle,.b-slideshow__fullscreen-btn,.b-slider__pagination__bullet").remove();
+            firstElements = firstElements.select("span");
+            for (Element e : firstElements)
+                e.removeAttr("class");
+
+            content = doc.select(".b-article .b-article__body__content");
+
+            if (!content.isEmpty()) {
+
+                preamble = doc.select("#article-preamble");
+
+            } else {
+
+                preamble = doc.select(".text--article-preamble");
+                content = doc.select(".article__content-body");
+
             }
         }
-        news.content = img + content;
+        for (Element e : content.select("a,strong")) {
+            String text = e.text();
+            if (text.startsWith("LÄS MER") || text.startsWith("Läs mer")
+                    || text.startsWith("LÄS OCKSÅ"))
+                e.parent().remove();
+        }
+
+        String s_preamble = "<p>" + preamble.html() + "</p>";
+        String s_firsts = "<p>" + firstElements.html() + "</p>";
+        String s_content = content.html().replace("<p>&nbsp;</p>", "");
+
+        news.content = s_preamble + s_firsts + "<hr>" + s_content;
     }
 
 }
