@@ -36,7 +36,7 @@ public class Sites extends ArrayList<Site> {
         add(new Site(125, "El Confidencial", 0xff145f85, new com.lucevent.newsup.data.section.ElConfidencialSections(), new com.lucevent.newsup.data.reader.ElConfidencial()));
         add(new Site(130, "El Diario", 0xff0061ab, new com.lucevent.newsup.data.section.ElDiarioSections(), new com.lucevent.newsup.data.reader.ElDiario()));
         add(new Site(135, "La Razón", 0xffc7c7c7, new com.lucevent.newsup.data.section.LaRazonSections(), new com.lucevent.newsup.data.reader.LaRazon()));
-        add(new Site(140, "Huffington Post", 0xff2c705f, new com.lucevent.newsup.data.section.HuffingtonPostSpainSections(), new com.lucevent.newsup.data.reader.HuffingtonPostSpain()));
+        add(new Site(140, "Huffington Post España", 0xff2c705f, new com.lucevent.newsup.data.section.HuffingtonPostSpainSections(), new com.lucevent.newsup.data.reader.HuffingtonPostSpain()));
         add(new Site(145, "Europa press", 0xffffffff, new com.lucevent.newsup.data.section.EuropaPressSections(), new com.lucevent.newsup.data.reader.EuropaPress()));
         add(new Site(150, "Diario Córdoba", 0xffde2632, new com.lucevent.newsup.data.section.DiarioCordobaSections(), new com.lucevent.newsup.data.reader.DiarioCordoba()));
 
@@ -58,29 +58,29 @@ public class Sites extends ArrayList<Site> {
         add(new Site(330, "Metro", 0xff007d3c, new com.lucevent.newsup.data.section.MetroSections(), new com.lucevent.newsup.data.reader.Metro()));
 
         // Finnish sites
-/*        if (titles != null) add(new Site(-1, titles[3], -1, null, null));
+        if (titles != null) add(new Site(-1, titles[3], -1, null, null));
         add(new Site(400, "Helsinki times", 0xff32c8fa, new com.lucevent.newsup.data.section.HelsinkiTimesSections(), new com.lucevent.newsup.data.reader.HelsinkiTimes()));
         add(new Site(405, "Helsingin Sanomat", 0xff01133d, new com.lucevent.newsup.data.section.HelsinkiSanomatSections(), new com.lucevent.newsup.data.reader.HelsinkiSanomat()));
         add(new Site(410, "Iltalehti", 0xffff0000, new com.lucevent.newsup.data.section.IltalehtiSections(), new com.lucevent.newsup.data.reader.Iltalehti()));
         add(new Site(415, "Yle", 0xff00b4c4, new com.lucevent.newsup.data.section.YleSections(), new com.lucevent.newsup.data.reader.Yle()));
 //        add(new Site(420, "Yle Svenska", 0xff, new com.lucevent.newsup.data.section.YleSvenskaSections(), new com.lucevent.newsup.data.reader.YleSvenska()));
-*/
+
         // British sites
         if (titles != null) add(new Site(-1, titles[4], -1, null, null));
         add(new Site(500, "BBC", 0xffa62e30, new com.lucevent.newsup.data.section.BBCSections(), new com.lucevent.newsup.data.reader.BBC()));
-        add(new Site(510, "The Huffington Post", 0xff2c705f, new com.lucevent.newsup.data.section.HuffingtonPostUKSections(), new com.lucevent.newsup.data.reader.HuffingtonPostUK()));
+        add(new Site(510, "The Huffington Post UK", 0xff2c705f, new com.lucevent.newsup.data.section.HuffingtonPostUKSections(), new com.lucevent.newsup.data.reader.HuffingtonPostUK()));
 
         // American sites
         if (titles != null) add(new Site(-1, titles[5], -1, null, null));
         add(new Site(600, "CNN", 0xffc20000, new com.lucevent.newsup.data.section.CNNSections(), new com.lucevent.newsup.data.reader.CNN()));
-//        add(new Site(605, "The Huffington Post", 0xff, new com.lucevent.newsup.data.section.HuffingtonPostUSASections(), new com.lucevent.newsup.data.reader.HuffingtonPostUSA()));
+        add(new Site(605, "The Huffington Post USA", 0xff2c705f, new com.lucevent.newsup.data.section.HuffingtonPostUSASections(), new com.lucevent.newsup.data.reader.HuffingtonPostInt()));
 
-        //International sites
+        //Other sites
         if (titles != null) add(new Site(-1, titles[6], -1, null, null));
         add(new Site(700, "The Local", 0xfff76e05, new com.lucevent.newsup.data.section.TheLocalSections(), new com.lucevent.newsup.data.reader.TheLocal()));
-//        add(new Site(710, "The Huffington Post (Australia)", 0xff2c705f, new com.lucevent.newsup.data.section.HuffingtonPostAustraliaSections(), new com.lucevent.newsup.data.reader.HuffingtonPostAustralia()));
-//        add(new Site(715, "The Huffington Post (Brasil)", 0xff2c705f, new com.lucevent.newsup.data.section.HuffingtonPostBrasilSections(), new com.lucevent.newsup.data.reader.HuffingtonPostBrasil()));
-//        add(new Site(720, "The Huffington Post (Canada)", 0xff2c705f, new com.lucevent.newsup.data.section.HuffingtonPostCanadaSections(), new com.lucevent.newsup.data.reader.HuffingtonPostCanada()));
+//        add(new Site(705, "The Huffington Post (Australia)", 0xff2c705f, new com.lucevent.newsup.data.section.HuffingtonPostAustraliaSections(), new com.lucevent.newsup.data.reader.HuffingtonPostAustralia()));
+//        add(new Site(710, "The Huffington Post (Brasil)", 0xff2c705f, new com.lucevent.newsup.data.section.HuffingtonPostBrasilSections(), new com.lucevent.newsup.data.reader.HuffingtonPostBrasil()));
+        add(new Site(715, "The Huffington Post Canada", 0xff2c705f, new com.lucevent.newsup.data.section.HuffingtonPostCanadaSections(), new com.lucevent.newsup.data.reader.HuffingtonPostInt()));
 
         // Technology sites
         if (titles != null) add(new Site(-1, titles[7], -1, null, null));
@@ -100,18 +100,25 @@ public class Sites extends ArrayList<Site> {
 
         // Magazines sites
         if (titles != null) add(new Site(-1, titles[9], -1, null, null));
-        add(new Site(1000, "Make", 0xff4ecbf5, new com.lucevent.newsup.data.section.MakeSections(), new com.lucevent.newsup.data.reader.Make()));
         add(new Site(1010, "Rolling Stone", 0xff1c202b, new com.lucevent.newsup.data.section.RollingStoneSections(), new com.lucevent.newsup.data.reader.RollingStone()));
         add(new Site(1015, "People", 0xff20b3e8, new com.lucevent.newsup.data.section.PeopleSections(), new com.lucevent.newsup.data.reader.People()));
         add(new Site(1020, "Time", 0xffe60000, new com.lucevent.newsup.data.section.TimeSections(), new com.lucevent.newsup.data.reader.Time()));
         add(new Site(1025, "The Atlantic", 0xff030202, new com.lucevent.newsup.data.section.TheAtlanticSections(), new com.lucevent.newsup.data.reader.TheAtlantic()));
+
+        add(new Site(1000, "Make", 0xff4ecbf5, new com.lucevent.newsup.data.section.MakeSections(), new com.lucevent.newsup.data.reader.Make()));
+        add(new Site(1045, "Digital Camera", 0xffffffff, new com.lucevent.newsup.data.section.DigitalCameraSections(), new com.lucevent.newsup.data.reader.DigitalCamera()));
+
         add(new Site(1030, "Sky and Telescope", 0xffd92326, new com.lucevent.newsup.data.section.SkyAndTelescopeSections(), new com.lucevent.newsup.data.reader.SkyAndTelescope()));
-        add(new Site(1035, "Dogster", 0xff547a94, new com.lucevent.newsup.data.section.DogsterSections(), new com.lucevent.newsup.data.reader.Dogster()));
-        add(new Site(1040, "El Jueves", 0xffcb1f1f, new com.lucevent.newsup.data.section.ElJuevesSections(), new com.lucevent.newsup.data.reader.ElJueves()));
-//        add(new Site(1045, "National Geographic", 0xff, new com.lucevent.newsup.data.section.NationalGeographicSections(), new com.lucevent.newsup.data.reader.NationalGeographic()));
         add(new Site(1050, "Space News", 0xffffffff, new com.lucevent.newsup.data.section.SpaceNewsSections(), new com.lucevent.newsup.data.reader.SpaceNews()));
-//        add(new Site(1055, "Space", 0xff, new com.lucevent.newsup.data.section.SpaceSections(), new com.lucevent.newsup.data.reader.Space()));
-//        add(new Site(1060, "The Bark", 0xff, new com.lucevent.newsup.data.section.TheBarkSections(), new com.lucevent.newsup.data.reader.TheBark()));
+
+        add(new Site(1035, "Dogster", 0xff547a94, new com.lucevent.newsup.data.section.DogsterSections(), new com.lucevent.newsup.data.reader.Dogster()));
+
+        add(new Site(1040, "El Jueves", 0xffcb1f1f, new com.lucevent.newsup.data.section.ElJuevesSections(), new com.lucevent.newsup.data.reader.ElJueves()));
+
+
+//        add(new Site(, "National Geographic", 0xff, new com.lucevent.newsup.data.section.NationalGeographicSections(), new com.lucevent.newsup.data.reader.NationalGeographic()));
+//        add(new Site(, "Space", 0xff, new com.lucevent.newsup.data.section.SpaceSections(), new com.lucevent.newsup.data.reader.Space()));
+//        add(new Site(, "The Bark", 0xff, new com.lucevent.newsup.data.section.TheBarkSections(), new com.lucevent.newsup.data.reader.TheBark()));
 
         //Not working
         if (titles != null) add(new Site(-1, titles[10], -1, null, null));

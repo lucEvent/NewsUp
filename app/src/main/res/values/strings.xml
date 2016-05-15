@@ -1,9 +1,8 @@
 <resources>
 
     <string name="app_name" translatable="false">NewsUp</string>
-    <string name="app_version" translatable="false">1.0.9</string>
+    <string name="app_version" translatable="false">1.2.0</string>
     <string name="version">version</string>
-
 
     <!-- * ******************** Labels **************************** * -->
     <string name="my_news">My news</string>
@@ -19,7 +18,6 @@
     <string name="select_time">Select Time</string>
     <string name="notify">Notify</string>
     <string name="select_sites_to_download">Select sites to download</string>
-
 
     <string name="mon">Mon</string>
     <string name="tue">Tue</string>
@@ -95,11 +93,13 @@
 
     <!-- ***************************** ***************** ********************************** -->
     <string name="about_content" translatable="false"><![CDATA[
-        <h2>News Up version 1.0.9</h2>
+        <h2>News Up version 1.2.0</h2>
         <h2>Developed by Rafael J. Lucena</h2>
         <h3>Contact: rafaa89(at)gmail.com</h3>
         <p>
             <p><b>Last features and Improvements:</b></p>
+            <p>Version 1.2.0 2016-05-15:<br>New sites: \'Digital Camera\'</p>
+            <p>Version 1.1.0 2016-05-14:<br>New sites: \'Huffington Post USA\' and \'Huffington Post Canada\'. Check them out!</p>
             <p>Version 1.0.9 2016-05-14:<br>New statistic option (temporal solution). Restored support for \'Expressen\' and \'HuffingtonPost UK\'. Sections updated  of the last one.</p>
             <p>Version 1.0.7 2016-05-07:<br>Updated content management of \'Huffington Post Spain\'. Added specific styles for each site (on Development). In server, statistics are saved in DataStore.</p>
             <p>Version 1.0.6 2016-04-30:<br>Adjustment of sections of \'La Vanguardia\'.</p>
@@ -140,7 +140,6 @@
             <p> - Sweclockers</p>
             <p> - NASA</p>
             <p> - Edx</p>
-            <p> - Digitalcamera.es</p>
             <p> - Revista cuore</p>
             <p> - La Patilla</p>
             <p> - Science magazine</p>

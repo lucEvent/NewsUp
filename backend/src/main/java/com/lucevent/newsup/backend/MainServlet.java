@@ -84,7 +84,7 @@ public class MainServlet extends HttpServlet {
             if (options != null) {
 
                 if (options.contains("r"))
-                    Data.stats.reset();
+                    Data.stats.reset(Data.sites.size());
 
                 if (options.contains("s"))
                     sb.append(BackendParser.toHtml(Data.sites, Data.stats, Statistics.Order.BySiteName));

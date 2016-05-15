@@ -8,8 +8,6 @@ import org.jsoup.select.Elements;
 
 public class HuffingtonPostSpain extends com.lucevent.newsup.data.util.NewsReader_v2 {
 
-    private String style = "<style>blockquote{margin:10px;padding:5px 10px 5px 10px;background-color:#f2f2f2}</style>";
-
     /**
      * Tags:
      * [author, description, enclosure, guid, item, link, pubdate, title]
@@ -26,7 +24,6 @@ public class HuffingtonPostSpain extends com.lucevent.newsup.data.util.NewsReade
                 new int[]{TAG_PUBDATE, TAG_UPDATED},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_ENCLOSURE});
-        super.style = style;
     }
 
     @Override

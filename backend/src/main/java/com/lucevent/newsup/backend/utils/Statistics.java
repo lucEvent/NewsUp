@@ -71,10 +71,11 @@ public class Statistics {
         ofy().save().entity(this).now();
     }
 
-    public void reset()
+    public void reset(int counterSize)
     {
         since = "[ Since " + new Date().toString() + " ]";
         lastStart = "[ Last start " + new Date().toString() + " ]";
+        counters = new int[counterSize];
         for (int i = 0; i < counters.length; i++)
             counters[i] = 0;
         ofy().save().entity(this).now();

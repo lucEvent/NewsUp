@@ -27,6 +27,7 @@ public class NewsActivity extends AppCompatActivity {
             "iframe, video {width: 100%; margin: 0; padding: 0}" +
             "img, figure {width: 100%; height:auto; margin: 0; padding: 0}" +
             "div > h2 > a > img {width: auto;}" +
+            "blockquote{margin:10px;padding:5px 10px 5px 10px;background-color:#f2f2f2}" +
             "</style>";
     private static final String fontcss = "<style>" +
             "@font-face { font-family: customfont; src: url(\"fonts/customfont.woff\"); }" +

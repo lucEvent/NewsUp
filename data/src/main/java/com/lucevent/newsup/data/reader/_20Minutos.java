@@ -26,4 +26,5 @@ public class _20Minutos extends com.lucevent.newsup.data.util.NewsReader_v2 {
 
         return doc.select("body").html();
     }
+
 }
