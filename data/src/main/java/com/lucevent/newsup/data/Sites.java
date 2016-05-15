@@ -93,10 +93,12 @@ public class Sites extends ArrayList<Site> {
         add(new Site(830, "Android Authority", 0xff8cc234, new com.lucevent.newsup.data.section.AndroidAuthoritySections(), new com.lucevent.newsup.data.reader.AndroidAuthority()));
         add(new Site(835, "Computer Hoy", 0xff1a1a1a, new com.lucevent.newsup.data.section.ComputerHoySections(), new com.lucevent.newsup.data.reader.ComputerHoy()));
         add(new Site(840, "Swedroid", 0xff485366, new com.lucevent.newsup.data.section.SwedroidSections(), new com.lucevent.newsup.data.reader.Swedroid()));
+        add(new Site(845, "Hipertextual", 0xff2799d7, new com.lucevent.newsup.data.section.HipertextualSections(), new com.lucevent.newsup.data.reader.Hipertextual()));
 
         // Blog sites
         if (titles != null) add(new Site(-1, titles[8], -1, null, null));
         add(new Site(900, "Medium", 0xffffffff, new com.lucevent.newsup.data.section.MediumSections(), new com.lucevent.newsup.data.reader.Medium()));
+        add(new Site(905, "Verne", 0xff02b283, new com.lucevent.newsup.data.section.VerneSections(), new com.lucevent.newsup.data.reader.Verne()));
 
         // Magazines sites
         if (titles != null) add(new Site(-1, titles[9], -1, null, null));
@@ -114,8 +116,6 @@ public class Sites extends ArrayList<Site> {
         add(new Site(1035, "Dogster", 0xff547a94, new com.lucevent.newsup.data.section.DogsterSections(), new com.lucevent.newsup.data.reader.Dogster()));
 
         add(new Site(1040, "El Jueves", 0xffcb1f1f, new com.lucevent.newsup.data.section.ElJuevesSections(), new com.lucevent.newsup.data.reader.ElJueves()));
-
-
 //        add(new Site(, "National Geographic", 0xff, new com.lucevent.newsup.data.section.NationalGeographicSections(), new com.lucevent.newsup.data.reader.NationalGeographic()));
 //        add(new Site(, "Space", 0xff, new com.lucevent.newsup.data.section.SpaceSections(), new com.lucevent.newsup.data.reader.Space()));
 //        add(new Site(, "The Bark", 0xff, new com.lucevent.newsup.data.section.TheBarkSections(), new com.lucevent.newsup.data.reader.TheBark()));
