@@ -32,9 +32,7 @@ public class DiscoverSections extends Sections {
         add(new Section("Departments", null, -1));
         add(new Section("20 Things You Didn't Know About...", "http://feeds.feedburner.com/20ThingsYouDidntKnowAbout", 1));
         add(new Section("Mind Over Matter", "http://feeds.feedburner.com/mind-over-matter", 1));
-        add(new Section("Notes From Earth", "http://feeds.feedburner.com/notes-from-earth", 1));
-        add(new Section("Out There", "http://feeds.feedburner.com/discovermagazine-outthere", 1));
-    
+
     }
 
 }

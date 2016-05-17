@@ -13,7 +13,7 @@ public class Discover extends com.lucevent.newsup.data.util.NewsReader_v2 {
     {
         super(TAG_ITEM_ITEMS,
                 new int[]{TAG_TITLE},
-                new int[]{TAG_GUID},
+                new int[]{TAG_LINK},
                 new int[]{TAG_DESCRIPTION},
                 new int[]{},
                 new int[]{TAG_PUBDATE},
@@ -36,29 +36,32 @@ public class Discover extends com.lucevent.newsup.data.util.NewsReader_v2 {
     @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
-        org.jsoup.select.Elements e = doc.select(".entry");
-        if (e.isEmpty()) {
-            e = doc.select(".segment");
+        doc.select("script").remove();
 
-            if (e.isEmpty()) {
-                return;
-            } else {
-                org.jsoup.select.Elements imgs = e.select("img");
+        org.jsoup.select.Elements content = doc.select(".entry > p,.entry img:not(.entry > p img),.entry > blockquote,.entry h4");
 
-                for (org.jsoup.nodes.Element img : imgs) {
-                    String src = img.attr("src");
-                    String start = "http://discovermagazine.com";
-                    if (!src.contains(start)) img.attr("src", start + src);
-                }
-            }
+        if (!content.isEmpty()) {
+
+            for (Element ad : content.select("strong"))
+                if (ad.text().startsWith("SEE ALSO"))
+                    ad.parent().text("");
+
+            for (Element ad : content.select(".Z3988"))
+                ad.parent().text("");
+
+            news.content = content.outerHtml();
+
         } else {
-            e.select(".navigation,h1,.meta,.shareIcons,blockquote,.categories,#disqus_thread,.fb-post").remove();
+
+            content = doc.select(".segment .mediaContainer,.segment .content");
+            for (Element img : content.select("img")) {
+                String src = img.attr("src");
+                if (!src.startsWith("http"))
+                    img.attr("src", "http://discovermagazine.com" + src);
+            }
+            content.select(".mobile,.credit").remove();
+            news.content = content.html();
         }
-        org.jsoup.select.Elements imgs = e.select("[style]");
-        for (org.jsoup.nodes.Element img : imgs) {
-            img.attr("style", "");
-        }
-        news.content = e.outerHtml();
     }
 
 }

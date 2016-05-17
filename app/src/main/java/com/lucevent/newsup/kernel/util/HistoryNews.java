@@ -7,10 +7,17 @@ public class HistoryNews extends News {
 
     public final int hid;
 
-    public HistoryNews(int id, int news_id, String title, String link, String description, long date, Tags tags, int site_code) {
+    public HistoryNews(int id, int news_id, String title, String link, String description, long date, Tags tags, int site_code)
+    {
         super(news_id, title, link, description, date, tags);
         this.hid = id;
         this.site_code = site_code;
+    }
+
+    @Override
+    public int compareTo(News o)
+    {
+        return Integer.compare(((HistoryNews) o).hid, this.hid);
     }
 
 }

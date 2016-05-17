@@ -53,6 +53,7 @@ public class Sites extends ArrayList<Site> {
         if (titles != null) add(new Site(-1, titles[2], -1, null, null));
         add(new Site(300, "Aftonbladet", 0xffffffff, new com.lucevent.newsup.data.section.AftonbladetSections(), new com.lucevent.newsup.data.reader.Aftonbladet()));
         add(new Site(305, "Expressen", 0xffdb2727, new com.lucevent.newsup.data.section.ExpressenSections(), new com.lucevent.newsup.data.reader.Expressen()));
+        add(new Site(310, "Dagens Nyheter", 0xffeb1c2a, new com.lucevent.newsup.data.section.DagensNyheterSections(), new com.lucevent.newsup.data.reader.DagensNyheter()));
         add(new Site(315, "Svenska Dagbladet", 0xfff5f5f5, new com.lucevent.newsup.data.section.SvenskaDagbladetSections(), new com.lucevent.newsup.data.reader.SvenskaDagbladet()));
         add(new Site(325, "Fria Tider", 0xffffffff, new com.lucevent.newsup.data.section.FriaTiderSections(), new com.lucevent.newsup.data.reader.FriaTider()));
         add(new Site(330, "Metro", 0xff007d3c, new com.lucevent.newsup.data.section.MetroSections(), new com.lucevent.newsup.data.reader.Metro()));
@@ -108,6 +109,7 @@ public class Sites extends ArrayList<Site> {
         add(new Site(1025, "The Atlantic", 0xff030202, new com.lucevent.newsup.data.section.TheAtlanticSections(), new com.lucevent.newsup.data.reader.TheAtlantic()));
 
         add(new Site(1000, "Make", 0xff4ecbf5, new com.lucevent.newsup.data.section.MakeSections(), new com.lucevent.newsup.data.reader.Make()));
+        add(new Site(1005, "Discover", 0xff171717, new com.lucevent.newsup.data.section.DiscoverSections(), new com.lucevent.newsup.data.reader.Discover()));
         add(new Site(1045, "Digital Camera", 0xffffffff, new com.lucevent.newsup.data.section.DigitalCameraSections(), new com.lucevent.newsup.data.reader.DigitalCamera()));
 
         add(new Site(1030, "Sky and Telescope", 0xffd92326, new com.lucevent.newsup.data.section.SkyAndTelescopeSections(), new com.lucevent.newsup.data.reader.SkyAndTelescope()));
@@ -122,10 +124,8 @@ public class Sites extends ArrayList<Site> {
 
         //Not working
         if (titles != null) add(new Site(-1, titles[10], -1, null, null));
-        add(new Site(310, "Dagens Nyheter", 0xffeb1c2a, new com.lucevent.newsup.data.section.DagensNyheterSections(), new com.lucevent.newsup.data.reader.DagensNyheter()));
         add(new Site(320, "Goteborgs Posten", 0xff005c9e, new com.lucevent.newsup.data.section.GoteborgsPostenSections(), new com.lucevent.newsup.data.reader.GoteborgsPosten()));
         add(new Site(505, "The Telegraph", 0xffffffff, new com.lucevent.newsup.data.section.TheTelegraphSections(), new com.lucevent.newsup.data.reader.TheTelegraph()));
-        add(new Site(1005, "Discover", 0xff171717, new com.lucevent.newsup.data.section.DiscoverSections(), new com.lucevent.newsup.data.reader.Discover()));
     }
 
     public Site getSiteByCode(int code)

@@ -160,8 +160,8 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 break;
             case R.id.nav_stats:
                 fragment = new StatisticsFragment();
-                title = "Statistics";
-                        break;
+                title = getString(R.string.statistics);
+                break;
             case R.id.nav_about:
                 fragment = new AboutFragment();
                 title = getString(R.string.about);

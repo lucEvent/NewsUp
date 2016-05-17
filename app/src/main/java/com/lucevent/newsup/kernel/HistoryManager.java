@@ -5,7 +5,6 @@ import android.os.Handler;
 
 import com.lucevent.newsup.data.util.NewsMap;
 import com.lucevent.newsup.io.DBManager;
-import com.lucevent.newsup.io.SDManager;
 
 public class HistoryManager {
 
@@ -18,15 +17,12 @@ public class HistoryManager {
      * Controllers
      **/
     private DBManager dbmanager;
-    private SDManager sdmanager;
 
     public HistoryManager(Context context, Handler handler)
     {
         this.handler = handler;
 
         dbmanager = new DBManager(context);
-        sdmanager = new SDManager(context);
-
     }
 
     public void getAppHistorial()

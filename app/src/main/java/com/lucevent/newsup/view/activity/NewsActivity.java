@@ -15,6 +15,7 @@ import android.webkit.WebView;
 
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.io.BookmarksManager;
 import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.AppData;
@@ -28,6 +29,7 @@ public class NewsActivity extends AppCompatActivity {
             "img, figure {width: 100%; height:auto; margin: 0; padding: 0}" +
             "div > h2 > a > img {width: auto;}" +
             "blockquote{margin:10px;padding:5px 10px 5px 10px;background-color:#f2f2f2}" +
+            "a{color: #%a_color;}" +
             "</style>";
     private static final String fontcss = "<style>" +
             "@font-face { font-family: customfont; src: url(\"fonts/customfont.woff\"); }" +
@@ -129,8 +131,11 @@ public class NewsActivity extends AppCompatActivity {
         button_share = (FloatingActionButton) findViewById(R.id.button_share);
         button_share.setOnClickListener(onShareAction);
 
-        String siteStyle = AppData.getSiteByCode(currentNews.site_code).getStyle();
-        String webContent = css + fontcss + siteStyle + "<h2>" + currentNews.title + "</h2>" + currentNews.content;
+        Site site = AppData.getSiteByCode(currentNews.site_code);
+        int a_color = (site.color == 0xffffffff ? 0xcccccc : site.color & 0xffffff);
+
+        String siteStyle = site.getStyle() + css.replace("%a_color", String.format("%06x", a_color));
+        String webContent = fontcss + siteStyle + "<h2>" + currentNews.title + "</h2>" + currentNews.content;
 
         newsView.loadDataWithBaseURL("file:///android_asset/", webContent, "text/html", "utf-8", null);
 

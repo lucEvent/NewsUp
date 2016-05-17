@@ -2,6 +2,8 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
 
+import org.jsoup.select.Elements;
+
 public class DagensNyheter extends com.lucevent.newsup.data.util.NewsReader_v2 {
 
     /**
@@ -31,25 +33,12 @@ public class DagensNyheter extends com.lucevent.newsup.data.util.NewsReader_v2 {
     @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
-        org.jsoup.select.Elements e = doc.select(".article_preamble,.article_text");
+        Elements imgs = doc.select(".article__header-img noscript");
+        Elements preamble = doc.select(".article__body .article__lead");
+        Elements content = doc.select(".article__body .article__body-content");
+        content.select(".ad-outer-container,script").remove();
 
-        if (e.isEmpty()) {
-            e = doc.select(".m-webtv-preview-container,.m-webtv-preamble");
-
-            if (e.isEmpty()) {
-                e = doc.select(".content > .excerpt,.content > p");
-
-                if (e.isEmpty()) return;
-
-            } else {
-                org.jsoup.select.Elements imgs = doc.select("img");
-                for (org.jsoup.nodes.Element img : imgs) {
-                    String src = "http://www.dn.se" + img.attr("src");
-                    img.attr("src", src);
-                }
-            }
-        }
-        news.content = e.outerHtml();
+        news.content = preamble.html() + imgs.html() + content.html();
     }
 
 }
