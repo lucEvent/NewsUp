@@ -16,6 +16,8 @@ public class AppSettings {
 
     public static final boolean DEBUG = true;
 
+    public static final int DEV_CODE = -31645597;
+
     /**
      * ************** Default values *********************
      **/
@@ -28,6 +30,7 @@ public class AppSettings {
     public static String PREF_FAVORITE_SITES_KEY;
     public static String PREF_SCHEDULE_DOWNLOADS_KEY;
     public static String PREF_CLEAN_CACHE_KEY;
+    public static String PREF_DEV_MODE_KEY;
 
     public static String PREF_SITE_MAIN_SECTIONS_KEY;
     public static String PREF_SITE_DOWNLOAD_SECTIONS_KEY;
@@ -42,6 +45,7 @@ public class AppSettings {
             PREF_FAVORITE_SITES_KEY = context.getString(R.string.pref_favorite_sites_key);
             PREF_SCHEDULE_DOWNLOADS_KEY = context.getString(R.string.pref_schedule_downloads_key);
             PREF_CLEAN_CACHE_KEY = context.getString(R.string.pref_clean_cache_key);
+            PREF_DEV_MODE_KEY = context.getString(R.string.pref_dev_mode_key);
 
             PREF_SITE_MAIN_SECTIONS_KEY = context.getString(R.string.pref_main_sections_key);
             PREF_SITE_DOWNLOAD_SECTIONS_KEY = context.getString(R.string.pref_download_sections_key);
@@ -189,6 +193,18 @@ public class AppSettings {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt(PREF_CLEAN_CACHE_KEY, cleaned + 1);
         editor.apply();
+    }
+
+    public static void devModeInvalidated() {
+        handler.obtainMessage(AppCode.ACTION_UPDATE_PRO).sendToTarget();
+    }
+
+    public static boolean isDevModeGranted()
+    {
+        int code = preferences.getString(PREF_DEV_MODE_KEY, "").hashCode();
+        code += Integer.bitCount(code) << ((code >> 16) & 32);
+        System.out.println("Code ::" + code);
+        return code == DEV_CODE;
     }
 
 }

@@ -16,6 +16,12 @@
             android:key="@string/pref_schedule_downloads_key"
             android:title="@string/pref_schedule_downloads"/>
 
+        <EditTextPreference
+            android:hint="@string/hint_pref_dev_mode"
+            android:defaultValue=""
+            android:key="@string/pref_dev_mode_key"
+            android:title="@string/pref_dev_mode"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_title_data">

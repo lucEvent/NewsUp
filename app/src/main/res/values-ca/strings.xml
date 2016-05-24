@@ -18,6 +18,9 @@
     <string name="select_time">Sel·lecciona hora</string>
     <string name="notify">Notificar</string>
     <string name="select_sites_to_download">Sel·lecciona publicacions per descarregar</string>
+    <string name="disabled">Desabilitat</string>
+    <string name="enabled">Habilitat</string>
+    <string name="reset">Reinicialitzar</string>
 
     <string name="mon">Dl</string>
     <string name="tue">Dm</string>
@@ -43,6 +46,7 @@
 
 
     <!-- * ******************** Hints **************************** * -->
+    <string name="hint_pref_dev_mode">Entra codi de desenvolupador</string>
 
 
     <!-- * ******************** Messages **************************** * -->
@@ -79,5 +83,6 @@
     <string name="pref_favorite">Favorit</string>
     <string name="pref_main_sections">Seccions principals</string>
     <string name="pref_download_sections">Seccions de descàrrega</string>
+    <string name="pref_dev_mode">Mode desenvolupador</string>
 
 </resources>

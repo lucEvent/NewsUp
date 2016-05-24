@@ -22,14 +22,12 @@ public class Date {
 
     public static void setTitles(String[] texts)
     {
-        if (texts != null) {
-            msg_seconds = texts[0];
-            msg_minute = texts[1];
-            msg_hour = texts[2];
-            msg_day = texts[3];
-            msg_month = texts[4];
-            msg_year = texts[5];
-        }
+        msg_seconds = texts[0];
+        msg_minute = texts[1];
+        msg_hour = texts[2];
+        msg_day = texts[3];
+        msg_month = texts[4];
+        msg_year = texts[5];
     }
 
     public static long toDate(String date)

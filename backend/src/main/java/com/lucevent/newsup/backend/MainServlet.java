@@ -4,6 +4,7 @@ import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
 import com.lucevent.newsup.backend.utils.BackendParser;
 import com.lucevent.newsup.backend.utils.Statistics;
+import com.lucevent.newsup.data.util.Date;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.Site;
@@ -41,10 +42,10 @@ public class MainServlet extends HttpServlet {
             String[] parts = site_request.split(",");
 
             Site site = Data.sites.getSiteByCode(Integer.parseInt(parts[0]));
-            Data.stats.count(Data.sites.indexOf(site));
+            Data.stats.count(Data.sites.indexOf(site), req.getRemoteAddr());
 
             int[] sections = new int[parts.length - 1];
-            for (int i = 0; i < parts.length - 1; i++) {
+            for (int i = 0; i < sections.length; i++) {
                 sections[i] = Integer.parseInt(parts[i + 1]);
             }
 
@@ -69,7 +70,7 @@ public class MainServlet extends HttpServlet {
                 }
 
                 if (prey.content == null) {
-                    resp.getWriter().println("ha sido null !!");
+                    resp.getWriter().println("");
                 } else {
                     resp.getWriter().println(prey.content);
                 }
@@ -77,8 +78,6 @@ public class MainServlet extends HttpServlet {
         } else if (req.getParameter("stats") != null) {
 
             StringBuilder sb = new StringBuilder();
-            sb.append(Data.stats.since).append("\n\n");
-            sb.append(Data.stats.lastStart).append("\n\n");
 
             String options = req.getParameter("options");
             if (options != null) {
@@ -98,12 +97,15 @@ public class MainServlet extends HttpServlet {
             } else {
                 sb.append(BackendParser.toHtml(Data.sites, Data.stats, Statistics.Order.ByDefault));
             }
+            sb.insert(0, "Last start " + Date.getAge(Data.stats.lastStart) + "\n\n");
+            sb.insert(0, "Since " + Date.getAge(Data.stats.since) + "\n\n");
 
-            sb.append("\n\n").append("Options:\n\tr - Reset\n\ts - order by Site name\n\tn - order by Number of requests\n\tt - order by access Time");
+            sb.append("\n\n").append("Options:\n\tr - Reset\n\ts - order by Site name\n\tn - order by Number of requests\n\tt - order by access Time\n");
+
             resp.getWriter().println(sb);
 
         } else if (req.getParameter("debug") != null) {
-
+/*
             Site site = Data.sites.getSiteByCode(Integer.parseInt(req.getParameter("site")));
             String link = req.getParameter("link");
 
@@ -112,7 +114,7 @@ public class MainServlet extends HttpServlet {
             site.readNewsContent(N);
 
             resp.getWriter().println(N.content);
-
+*/
         } else if (req.getParameter("clear") != null) {
 
             for (Site site : Data.sites)
@@ -126,7 +128,6 @@ public class MainServlet extends HttpServlet {
     public void destroy()
     {
         super.destroy();
-        System.out.println("Destroying.... so saving statistics");
         Data.stats.save();
     }
 
@@ -166,9 +167,6 @@ public class MainServlet extends HttpServlet {
             }
             sb.append("</channel>");
 
-
-           System.out.println("Site name: " + site.name);
-            System.out.println("Site sections: " + site_sections);
          resp.getWriter().println("Site name: " + site.name);
           resp.getWriter().println("Site sections: " + site_sections);
             resp.getWriter().println(sb.toString());

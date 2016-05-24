@@ -18,6 +18,9 @@
     <string name="select_time">Selecciona hora</string>
     <string name="notify">Notificar</string>
     <string name="select_sites_to_download">Selecciona publicaciones para descargar</string>
+    <string name="disabled">Desabilitado</string>
+    <string name="enabled">Habilitado</string>
+    <string name="reset">Reinicializar</string>
 
     <string name="mon">Lun</string>
     <string name="tue">Mar</string>
@@ -43,6 +46,7 @@
 
 
     <!-- * ******************** Hints **************************** * -->
+    <string name="hint_pref_dev_mode">Entra código de desarrollador</string>
 
 
     <!-- * ******************** Messages **************************** * -->
@@ -79,6 +83,6 @@
     <string name="pref_favorite">Favorito</string>
     <string name="pref_main_sections">Secciones principales</string>
     <string name="pref_download_sections">Secciones de descarga</string>
-
+    <string name="pref_dev_mode">Modo desarrollador</string>
 
 </resources>

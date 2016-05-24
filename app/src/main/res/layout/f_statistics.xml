@@ -9,6 +9,5 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:padding="5dp"
-        android:text="Medium Text"
         android:textAppearance="?android:attr/textAppearanceMedium"/>
 </ScrollView>

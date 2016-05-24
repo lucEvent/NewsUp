@@ -73,15 +73,13 @@ public abstract class NewsReader_v2 extends NewsReader {
         NewsArray result = new NewsArray();
         String title, link, description, content;
         long date;
-        Tags tags = new Tags();
-        Enclosures enclosures = new Enclosures();
 
         Elements items = doc.select(itemTag);
         for (org.jsoup.nodes.Element item : items) {
             title = link = description = content = "";
             date = 0;
-            tags.clear();
-            enclosures.clear();
+            Tags tags = new Tags();
+            Enclosures enclosures = new Enclosures();
 
             Elements props = item.getAllElements();
             for (org.jsoup.nodes.Element prop : props) {

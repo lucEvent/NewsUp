@@ -96,6 +96,13 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
             navigationView.setItemIconTintList(null);
 
+        MenuItem stats = navigationView.getMenu().findItem(R.id.nav_stats);
+        if (AppSettings.isDevModeGranted()) {
+            stats.setVisible(true);
+        } else {
+            stats.setVisible(false);
+        }
+
         if (updateFavorites) {
             SubMenu fab_menu = navigationView.getMenu().findItem(R.id.nav_header_favorites).getSubMenu();
             fab_menu.clear();
@@ -239,6 +246,9 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             switch (msg.what) {
                 case AppCode.ACTION_UPDATE_FAVORITES:
                     service.updateDrawer(true, false);
+                    break;
+                case AppCode.ACTION_UPDATE_PRO:
+                    service.updateDrawer(false, false);
                     break;
                 default:
                     System.out.println("[MAIN] OPTION UNKNOWN: " + msg.what);

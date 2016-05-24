@@ -6,8 +6,6 @@ import com.googlecode.objectify.annotation.Ignore;
 import com.googlecode.objectify.annotation.Unindex;
 import com.googlecode.objectify.cmd.LoadType;
 
-import java.util.Date;
-
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
 @Entity
@@ -21,13 +19,20 @@ public class Statistics {
     private Long id;
 
     @Unindex
-    public String since;
+    public Long since;
 
     @Ignore
-    public String lastStart;
+    public Long lastStart;
 
     @Unindex
     private int[] counters;
+
+    @Unindex
+    private long[] lastAccesses;
+
+    @Unindex
+    private String[] lastIps;
+
 
     public static Statistics initialize(int counterSize)
     {
@@ -37,16 +42,21 @@ public class Statistics {
         if (db.count() > 0) {
 
             statistics = db.first().now();
-            statistics.lastStart = "[ Last start " + new Date().toString() + " ]";
+            statistics.lastStart = System.currentTimeMillis();
 
         } else {
 
             statistics = new Statistics();
-            statistics.since = "[ Since " + new Date().toString() + " ]";
-            statistics.lastStart = "[ Last start " + new Date().toString() + " ]";
+            statistics.since = System.currentTimeMillis();
+            statistics.lastStart = System.currentTimeMillis();
             statistics.counters = new int[counterSize];
-            for (int i = 0; i < counterSize; i++)
+            statistics.lastAccesses = new long[counterSize];
+            statistics.lastIps = new String[counterSize];
+            for (int i = 0; i < counterSize; i++) {
                 statistics.counters[i] = 0;
+                statistics.lastAccesses[i] = 0;
+                statistics.lastIps[i] = "";
+            }
 
             ofy().save().entity(statistics).now();
 
@@ -54,9 +64,11 @@ public class Statistics {
         return statistics;
     }
 
-    public void count(int position)
+    public void count(int position, String ip)
     {
         counters[position]++;
+        lastAccesses[position] = System.currentTimeMillis();
+        lastIps[position] = ip;
         ofy().save().entity(this).now();//save()    //possible improvement? save only when the server instance is destroyed
     }
 
@@ -65,6 +77,15 @@ public class Statistics {
         return counters[position];
     }
 
+    public Long getLastAccess(int position)
+    {
+        return lastAccesses[position];
+    }
+
+    public String getLastIp(int position)
+    {
+        return lastIps[position];
+    }
 
     public void save()
     {
@@ -73,11 +94,14 @@ public class Statistics {
 
     public void reset(int counterSize)
     {
-        since = "[ Since " + new Date().toString() + " ]";
-        lastStart = "[ Last start " + new Date().toString() + " ]";
+        since = System.currentTimeMillis();
+        lastStart = System.currentTimeMillis();
         counters = new int[counterSize];
-        for (int i = 0; i < counters.length; i++)
+        for (int i = 0; i < counters.length; i++) {
             counters[i] = 0;
+            lastAccesses[i] = 0;
+            lastIps[i] = "";
+        }
         ofy().save().entity(this).now();
     }
 

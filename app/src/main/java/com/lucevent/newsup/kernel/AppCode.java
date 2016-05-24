@@ -11,7 +11,8 @@ public interface AppCode {
     int ACTION_OPEN_NEWS = 20;
     int ACTION_REFRESH_LIST = 21;
     int ACTION_UPDATE_FAVORITES = 22;
-    int ACTION_BOOKMARK_UNBOOKMARK = 23;
+    int ACTION_UPDATE_PRO = 23;
+    int ACTION_BOOKMARK_UNBOOKMARK = 24;
 
 
     int SELECTED_SECTION = 30;

@@ -4,6 +4,7 @@ import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.VoidWork;
 import com.lucevent.newsup.backend.utils.Statistics;
 import com.lucevent.newsup.data.Sites;
+import com.lucevent.newsup.data.util.Date;
 
 public class Data {
 
@@ -13,6 +14,7 @@ public class Data {
 
     public Data()
     {
+        Date.setTitles(new String[]{"%d seconds ago", "%d minutes ago", "%d hours ago", "%d days ago", "%d months ago", "%d years ago",});
         if (sites == null) {
             sites = new Sites((String[]) null);
 

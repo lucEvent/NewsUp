@@ -20,6 +20,7 @@ public class AppSettingsFragment extends PreferenceFragment
     private static final int PREF_MASK_MAIN_SITES = 0x01;
     private static final int PREF_MASK_SCHEDULE_DOWNLOADS = 0x02;
     private static final int PREF_MASK_CLEAN_CACHE = 0x04;
+    private static final int PREF_MASK_DEV_MODE = 0x08;
 
     @Override
     public void onCreate(final Bundle savedInstanceState)
@@ -54,10 +55,13 @@ public class AppSettingsFragment extends PreferenceFragment
             setUpPreferenceSummaries(PREF_MASK_MAIN_SITES);
 
         else if (key.equals(AppSettings.PREF_SCHEDULE_DOWNLOADS_KEY))
-            setUpPreferenceSummaries(PREF_MASK_SCHEDULE_DOWNLOADS); // TODO: 12/04/2016  Call the scheduler to set an alarm??
+            setUpPreferenceSummaries(PREF_MASK_SCHEDULE_DOWNLOADS);
 
         else if (key.equals(AppSettings.PREF_CLEAN_CACHE_KEY))
             setUpPreferenceSummaries(PREF_MASK_CLEAN_CACHE);
+
+        else if (key.equals(AppSettings.PREF_DEV_MODE_KEY))
+            setUpPreferenceSummaries(PREF_MASK_DEV_MODE);
     }
 
     private void setUpPreferenceSummaries(int preferencesMask)
@@ -85,7 +89,11 @@ public class AppSettingsFragment extends PreferenceFragment
 
             String dataSize = new DecimalFormat("#0.00").format(NewsManager.getCacheSize() / 1048576.0);
             findPreference(AppSettings.PREF_CLEAN_CACHE_KEY).setSummary(dataSize + " MB");
-
+        }
+        if ((preferencesMask & PREF_MASK_DEV_MODE) != 0) {
+            Preference p = findPreference(AppSettings.PREF_DEV_MODE_KEY);
+            p.setSummary(AppSettings.isDevModeGranted() ? R.string.enabled : R.string.disabled);
+            AppSettings.devModeInvalidated();
         }
     }
 

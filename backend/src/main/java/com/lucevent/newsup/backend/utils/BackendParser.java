@@ -1,8 +1,11 @@
 package com.lucevent.newsup.backend.utils;
 
 import com.lucevent.newsup.data.Sites;
+import com.lucevent.newsup.data.util.Date;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
+import com.lucevent.newsup.data.util.Section;
+import com.lucevent.newsup.data.util.Sections;
 import com.lucevent.newsup.data.util.Site;
 
 import java.util.Comparator;
@@ -37,9 +40,10 @@ public class BackendParser {
         res.append(news.title);
         res.append("</h2><p>");
         res.append(news.description);
-        res.append("</p><br><small><em>");
-        res.append(news.tags.toString());
-        res.append("</small></em></div>");
+        res.append("</p><br><p><small><em>");
+        for (String tag : news.tags)
+            res.append("<span class='tag'> ").append(tag).append(" </span>");
+        res.append("</em></small></p></div>");
         return res;
     }
 
@@ -86,16 +90,14 @@ public class BackendParser {
                         return o1.name.compareTo(o2.name);
                     }
                 });
-                for (int i = 0; i < sites.size(); ++i)
-                    map_s.put(sites.get(i), stats.getCount(i));
-
-                for (Map.Entry<Site, Integer> entry : map_s.entrySet()) {
-                    Integer count = entry.getValue();
-                    if (count > 0) {
-                        Site site = entry.getKey();
-                        sb.append("\t").append(site.name).append(": ").append(count).append(" requests\n");
-                    }
+                for (int i = 0; i < sites.size(); ++i) {
+                    int count = stats.getCount(i);
+                    if (count > 0)
+                        map_s.put(sites.get(i), count);
                 }
+                for (Map.Entry<Site, Integer> entry : map_s.entrySet())
+                    sb.append("\t").append(entry.getKey().name).append(": ")
+                            .append(entry.getValue()).append(" requests\n");
                 break;
             case ByNumber:
                 sb.append("\n ### Statistics ordered by number of requests ###\n\n");
@@ -106,23 +108,68 @@ public class BackendParser {
                         return o1 < o2 ? 1 : -1;
                     }
                 });
-                for (int i = 0; i < sites.size(); ++i)
-                    map_n.put(stats.getCount(i), sites.get(i));
-
-                for (Map.Entry<Integer, Site> entry : map_n.entrySet()) {
-                    Integer count = entry.getKey();
-                    if (count > 0) {
-                        Site site = entry.getValue();
-                        sb.append("\t").append(site.name).append(": ").append(count).append(" requests\n");
-                    }
+                for (int i = 0; i < sites.size(); ++i) {
+                    int count = stats.getCount(i);
+                    if (count > 0)
+                        map_n.put(count, sites.get(i));
                 }
+                for (Map.Entry<Integer, Site> entry : map_n.entrySet())
+                    sb.append("\t").append(entry.getValue().name).append(": ")
+                            .append(entry.getKey()).append(" requests\n");
                 break;
             case ByLastAccessTime:
                 sb.append("\n ### Statistics ordered by last access time ###\n\n");
-                // TODO: 08/05/2016
-                sb.append("\t[NOT IMPLEMENTED YET]\n\n");
+                TreeMap<Long, Integer> map_t = new TreeMap<>(new Comparator<Long>() {
+                    @Override
+                    public int compare(Long o1, Long o2)
+                    {
+                        return o1 < o2 ? 1 : -1;
+                    }
+                });
+                for (int i = 0; i < sites.size(); ++i)
+                    if (stats.getCount(i) > 0)
+                        map_t.put(stats.getLastAccess(i), i);
+
+                for (Map.Entry<Long, Integer> entry : map_t.entrySet()) {
+                    long time = entry.getKey();
+                    int position = entry.getValue();
+                    sb.append("\t").append(sites.get(position).name).append(": ")
+                            .append(Date.getAge(time)).append(" from ")
+                            .append(stats.getLastIp(position));
+                }
                 break;
         }
         return sb;
     }
+
+    public static StringBuilder toHtml(Sections sections)
+    {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < sections.size(); i++) {
+            Section s = sections.get(i);
+            String tag_class;
+            switch (s.level) {
+                case 0:
+                    tag_class = "section groupsection";
+                    break;
+                case 1:
+                    tag_class = "section subsection";
+                    break;
+                case -1:
+                    tag_class = "groupsection";
+                    break;
+                default:
+                    tag_class = "";
+            }
+            sb.append("<a class='")
+                    .append(tag_class)
+                    .append("' index='")
+                    .append(i)
+                    .append("'><p>")
+                    .append(s.name)
+                    .append("</p></a>");
+        }
+        return sb;
+    }
+
 }

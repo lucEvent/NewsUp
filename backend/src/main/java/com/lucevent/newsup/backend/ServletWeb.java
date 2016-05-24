@@ -38,21 +38,17 @@ public class ServletWeb extends HttpServlet {
             String[] parts = site_request.split(",");
 
             Site site = Data.sites.getSiteByCode(Integer.parseInt(parts[0]));
+            Data.stats.count(Data.sites.indexOf(site), req.getRemoteAddr());
 
-            int[] site_sections = new int[parts.length - 1];
-            for (int i = 0; i < site_sections.length; i++) {
-                site_sections[i] = Integer.parseInt(parts[i + 1]);
+            int[] sections = new int[parts.length - 1];
+            for (int i = 0; i < sections.length; i++) {
+                sections[i] = Integer.parseInt(parts[i + 1]);
             }
 
-            NewsArray site_news = site.readNewsHeaders(site_sections);
+            NewsArray news = site.readNewsHeaders(sections);
+            site.news.addAll(news);
 
-
-            StringBuilder sb = BackendParser.toHtml(site_news);
-
-//        PrintWriter out = response.getWriter();
-            resp.getWriter().println(sb.toString());
-
-            site.news.addAll(site_news);
+            resp.getWriter().println(BackendParser.toHtml(news).toString());
 
         } else if (req.getParameter("content") != null) {
 
@@ -64,7 +60,8 @@ public class ServletWeb extends HttpServlet {
             News prey = site.news.ceiling(bait);
 
             if (prey != null && prey.compareTo(bait) == 0) {
-                if (prey.content == null) {
+
+                if (prey.content == null || prey.content.isEmpty()) {
                     site.readNewsContent(prey);
                 }
 
@@ -74,23 +71,16 @@ public class ServletWeb extends HttpServlet {
                     resp.getWriter().println(prey.content);
                 }
             }
-        } else if (req.getParameter("debug") != null) {
+        } else if (req.getParameter("sections") != null) {
 
-            Site site = Data.sites.getSiteByCode(Integer.parseInt(req.getParameter("site")));
-            String link = req.getParameter("link");
+            String s_site = req.getParameter("site");
 
-            News N = new News("", link, "", 0, null);
+            Site site = Data.sites.getSiteByCode(Integer.parseInt(s_site));
 
-            site.readNewsContent(N);
-
-            resp.getWriter().println(N.content);
-
-        } else if (req.getParameter("clear") != null) {
-
-            for (Site site : Data.sites)
-                site.news.clear();
+            resp.getWriter().println(BackendParser.toHtml(site.sections).toString());
 
         }
+
     }
 
     @Override

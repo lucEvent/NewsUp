@@ -15,7 +15,7 @@ public class SportSections extends Sections {
         add(new Section("Barça", "http://www.sport.es/es/rss/barca/rss.xml", 1));
         add(new Section("Madrid", "http://www.sport.es/es/rss/real-madrid/rss.xml", 1));
         add(new Section("Espanyol", "http://www.sport.es/es/rss/espanyol/rss.xml", 1));
-        add(new Section("Liga Bbva", "http://www.sport.es/es/rss/liga-bbva/rss.xml", 1));
+        add(new Section("Liga BBVA", "http://www.sport.es/es/rss/liga-bbva/rss.xml", 1));
         add(new Section("Liga Adelante", "http://www.sport.es/es/rss/liga-adelante/rss.xml", 1));
         add(new Section("Champions league", "http://www.sport.es/es/rss/champions/rss.xml", 1));
         add(new Section("Europa league", "http://www.sport.es/es/rss/europa-league/rss.xml", 1));

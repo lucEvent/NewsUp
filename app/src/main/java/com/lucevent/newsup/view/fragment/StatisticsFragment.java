@@ -2,6 +2,9 @@ package com.lucevent.newsup.view.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -15,14 +18,15 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class StatisticsFragment extends android.app.Fragment implements Runnable {
+public class StatisticsFragment extends android.app.Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
-        new Thread(this).start();
+        new Thread(fetchStatistics).start();
     }
 
     private TextView vContent;
@@ -38,9 +42,44 @@ public class StatisticsFragment extends android.app.Fragment implements Runnable
     }
 
     @Override
-    public void run()
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
     {
-        String url = "http://newsup-2406.appspot.com/request?stats&options=n";
+        menu.add(R.string.reset)
+                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
+                .setIcon(R.drawable.ic_remove_all)
+                .setOnMenuItemClickListener(onResetAction);
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    private MenuItem.OnMenuItemClickListener onResetAction = new MenuItem.OnMenuItemClickListener() {
+        @Override
+        public boolean onMenuItemClick(MenuItem item)
+        {
+            new Thread(resetStatistics).start();
+            return true;
+        }
+    };
+
+
+    private Runnable fetchStatistics = new Runnable() {
+        @Override
+        public void run()
+        {
+            fetchURL("http://newsup-2406.appspot.com/request?stats&options=n");
+        }
+    };
+
+    private Runnable resetStatistics = new Runnable() {
+        @Override
+        public void run()
+        {
+            fetchURL("http://newsup-2406.appspot.com/request?stats&options=r");
+        }
+    };
+
+    private void fetchURL(String url)
+    {
         String content;
         try {
 
@@ -52,8 +91,9 @@ public class StatisticsFragment extends android.app.Fragment implements Runnable
 
             char[] buffer = new char[1024];
 
+            int read;
             StringBuilder html = new StringBuilder();
-            for (int read = 0; (read = reader.read(buffer, 0, 1024)) > 0; ) {
+            while ((read = reader.read(buffer, 0, 1024)) > 0) {
                 html.append(buffer, 0, read);
             }
             in.close();
@@ -74,4 +114,5 @@ public class StatisticsFragment extends android.app.Fragment implements Runnable
             }
         });
     }
+
 }
