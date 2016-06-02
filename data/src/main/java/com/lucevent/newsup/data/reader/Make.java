@@ -6,7 +6,7 @@ import org.jsoup.nodes.Element;
 
 import java.io.IOException;
 
-public class Make extends com.lucevent.newsup.data.util.NewsReader_v2 {
+public class Make extends com.lucevent.newsup.data.util.NewsReader {
 
     /**
      * Tags

@@ -46,8 +46,8 @@
 
 
     <!-- * ******************** Hints **************************** * -->
-    <string name="hint_pref_dev_mode">Entra código de desarrollador</string>
-
+    <string name="hint_pref_dev_mode">Inserta código de desarrollador</string>
+    <string name="hint_pref_pro_mode">Inserta código PRO</string>
 
     <!-- * ******************** Messages **************************** * -->
     <string name="msg_confirm_to_remove_all_saved_news">Confirma para eliminar todo</string>
@@ -60,6 +60,7 @@
     <string name="msg_must_select_at_least_one_day">Debes seleccionar al menos UN día</string>
     <string name="msg_cant_load_content">No se puede cargar el contenido</string>
     <string name="msg_news_not_found">Oohh… La aplicación es increíble pero todavía no puede leer esta noticia.\n¿Qué hacemos?</string>
+    <string name="msg_no_internet_connection">No hay conexión a internet</string>
 
 
     <!-- * *************** Activities and fragment's titles ********************* * -->
@@ -84,5 +85,7 @@
     <string name="pref_main_sections">Secciones principales</string>
     <string name="pref_download_sections">Secciones de descarga</string>
     <string name="pref_dev_mode">Modo desarrollador</string>
+    <string name="pref_pro_mode">Versión PRO</string>
+    <string name="pref_keep_news">Guardar noticias</string>
 
 </resources>

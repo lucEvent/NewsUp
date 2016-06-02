@@ -4,7 +4,7 @@ import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.Enclosures;
 import com.lucevent.newsup.data.util.News;
 
-public class Aftonbladet extends com.lucevent.newsup.data.util.NewsReader_v2 {
+public class Aftonbladet extends com.lucevent.newsup.data.util.NewsReader {
 
     // tags: category, description, guid, item, link, pubdate, title
 

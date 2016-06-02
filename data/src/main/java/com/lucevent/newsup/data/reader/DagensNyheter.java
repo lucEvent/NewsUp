@@ -4,7 +4,7 @@ import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.select.Elements;
 
-public class DagensNyheter extends com.lucevent.newsup.data.util.NewsReader_v2 {
+public class DagensNyheter extends com.lucevent.newsup.data.util.NewsReader {
 
     /**
      * Tags

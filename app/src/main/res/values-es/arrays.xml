@@ -22,5 +22,13 @@
         <item>Revistas</item>
         <item>No soportados temporalmente</item>
     </string-array>
+    <string-array name="keep_time_titles">
+        <item>No guardarlas (no recomendado)</item>
+        <item>1 semana</item>
+        <item>1 mes (recomendado)</item>
+        <item>3 meses</item>
+        <item>6 meses</item>
+        <item>Para siempre</item>
+    </string-array>
 
 </resources>

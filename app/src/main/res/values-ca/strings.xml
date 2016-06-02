@@ -47,6 +47,7 @@
 
     <!-- * ******************** Hints **************************** * -->
     <string name="hint_pref_dev_mode">Entra codi de desenvolupador</string>
+    <string name="hint_pref_pro_mode">Entra codi PRO</string>
 
 
     <!-- * ******************** Messages **************************** * -->
@@ -60,6 +61,7 @@
     <string name="msg_must_select_at_least_one_day">Has de sel·leccionar al menys UN dia</string>
     <string name="msg_cant_load_content">No es pot carregar el contingut</string>
     <string name="msg_news_not_found">Oohh… La aplicació es increïble però encara no pot llegir aquesta noticia.\n¿Què fem?</string>
+    <string name="msg_no_internet_connection">No hi ha connexió a internet</string>
 
 
     <!-- * *************** Activities and fragment's titles ********************* * -->
@@ -84,5 +86,7 @@
     <string name="pref_main_sections">Seccions principals</string>
     <string name="pref_download_sections">Seccions de descàrrega</string>
     <string name="pref_dev_mode">Mode desenvolupador</string>
+    <string name="pref_pro_mode">Versió PRO</string>
+    <string name="pref_keep_news">Guardar notícies</string>
 
 </resources>

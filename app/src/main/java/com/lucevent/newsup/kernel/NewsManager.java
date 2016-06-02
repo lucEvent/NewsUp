@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.lucevent.newsup.AppSettings;
@@ -12,6 +13,7 @@ import com.lucevent.newsup.data.Sites;
 import com.lucevent.newsup.data.SitesMap;
 import com.lucevent.newsup.data.util.Date;
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.NewsMap;
 import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.io.DBManager;
@@ -21,14 +23,11 @@ import com.lucevent.newsup.net.NewsReader;
 
 public class NewsManager {
 
-    /**
-     *
-     **/
     private Context context;
     private Handler handler;
 
     /**
-     * Controllers
+     * Managers
      **/
     private static NewsReader newsreader;
     protected static DBManager dbmanager;
@@ -58,7 +57,7 @@ public class NewsManager {
         if (sdmanager == null)
             sdmanager = new SDManager(context);
 
-        if (newsreader == null)
+        if (newsreader == null && AppSettings.isProModeActivated())
             newsreader = new NewsReader();
 
         if (connectivityManager == null)
@@ -107,7 +106,7 @@ public class NewsManager {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } catch (Exception e) {
-                    System.out.println("[NM] FATAL ERROR DURING SERVICE :(");
+                    AppSettings.printerror("[NM] FATAL ERROR DURING SERVICE :(");
                 }
             }
             return true;
@@ -130,7 +129,7 @@ public class NewsManager {
         private final Site site;
         private final int[] sections;
 
-        NewsLoader(Site site, int[] sections)
+        NewsLoader(@NonNull Site site, int[] sections)
         {
             this.site = site;
             this.sections = sections;
@@ -142,13 +141,17 @@ public class NewsManager {
             @Override
             public void run()
             {
-                System.out.println("[NM] Reading from: " + site.name);
+                AppSettings.printlog("[NM] Reading from: " + site.name);
 
                 int[] finalSections = sections;
                 if (finalSections == null)
                     finalSections = AppSettings.getMainSections(site);
 
-                NewsMap tempNewsMap = new NewsMap(newsreader.readNewsHeader(site, finalSections));
+                NewsMap tempNewsMap;
+                if (newsreader != null)
+                    tempNewsMap = new NewsMap(newsreader.readNewsHeader(site, finalSections));
+                else
+                    tempNewsMap = new NewsMap(site.readNewsHeaders(finalSections));
 
                 for (News N : tempNewsMap)
                     N.site_code = site.code;
@@ -164,14 +167,17 @@ public class NewsManager {
                     if (site.news.add(N)) {  // if added, it means it was not in yet, so:
 
                         if (N.content == null || N.content.isEmpty())   // We read the content (if needed)
-                            newsreader.readNewsContent(site, N);
+                            if (newsreader != null)
+                                newsreader.readNewsContent(site, N);
+                            else
+                                site.readNewsContent(N);
 
                         if (N.content != null && !N.content.isEmpty()) { // If there is content, we save it...
 
                             try {   // We insert it in the database
                                 dbmanager.insertNews(N);
                             } catch (Exception e) {
-                                System.out.println("[NM] Error when dbmanager.insertNews(N)");
+                                AppSettings.printerror("[NM] Error when dbmanager.insertNews(N)");
                             }
                             sdmanager.saveNews(N); // and we save it in the disc
 
@@ -186,7 +192,7 @@ public class NewsManager {
                         N.id = site.news.ceiling(N).id; // If not added, it means it already is in, so we
                     }
                 }
-                System.out.println("[NM] [" + site.name + "] News impossible to read: " + failCounter);
+                AppSettings.printlog("[NM] [" + site.name + "] News impossible to read: " + failCounter);
             }
 
         };
@@ -212,6 +218,7 @@ public class NewsManager {
                     tasks[i].start();
                 }
 
+                long timeBound = System.currentTimeMillis() - AppSettings.getKeepTime() * 1000;
                 for (NewsSiteLoader task : tasks) {
                     try {
                         task.join();
@@ -220,12 +227,19 @@ public class NewsManager {
                     }
 
                     NewsMap newstosave = task.newsToSave;
-                    for (News N : newstosave) {
-                        dbmanager.insertNews(N);
-                        saveNews(N);
-                    }
+                    for (News N : newstosave)
+                        if (N.date >= timeBound) {
+                            dbmanager.insertNews(N);
+                            saveNews(N);
+                        }
                 }
-                System.out.println("[NM] Acabando en NewsLoader");
+                AppSettings.printlog("Time bound: " + Date.getAge(timeBound));
+                NewsArray oldNews = dbmanager.deleteOldNews(timeBound);
+                for (News N : oldNews) {
+                    sdmanager.deleteNews(N);
+                }
+
+                AppSettings.printlog("[NM] NewsLoader has finished");
             }
         };
     }
@@ -259,7 +273,11 @@ public class NewsManager {
             else
                 sections = AppSettings.getDownloadSections(site);
 
-            NewsMap newsTempMap = new NewsMap(newsreader.readNewsHeader(site, sections));
+            NewsMap newsTempMap;
+            if (newsreader != null)
+                newsTempMap = new NewsMap(newsreader.readNewsHeader(site, sections));
+            else
+                newsTempMap = new NewsMap(site.readNewsHeaders(sections));
 
             for (News N : newsTempMap)
                 N.site_code = site.code;
@@ -277,7 +295,10 @@ public class NewsManager {
                 if (site.news.add(N)) {  // if added, it means it was not in yet, so:
 
                     if (N.content == null || N.content.isEmpty())   // We read the content (if needed)
-                        newsreader.readNewsContent(site, N);
+                        if (newsreader != null)
+                            newsreader.readNewsContent(site, N);
+                        else
+                            site.readNewsContent(N);
 
                     if (N.content != null && !N.content.isEmpty())  // If there is content, we save it...
                         newsToSave.add(N); // ... in the buffer. The master thread will save it in DB and disc
@@ -320,7 +341,6 @@ public class NewsManager {
 
         private NoInternetTask(Site site)
         {
-            System.out.println("En NoInternetTask creator");
             this.site = site;
             this.start();
         }
@@ -351,7 +371,6 @@ public class NewsManager {
     {
         sdmanager.saveNews(news);
     }
-
 
     public Sites getFavoritesSites()
     {

@@ -4,7 +4,7 @@ import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.nodes.Element;
 
-public class Medium extends com.lucevent.newsup.data.util.NewsReader_v2 {
+public class Medium extends com.lucevent.newsup.data.util.NewsReader {
 
     // Tags:      [dc:creator, description, guid, item, link, pubdate, title]
 

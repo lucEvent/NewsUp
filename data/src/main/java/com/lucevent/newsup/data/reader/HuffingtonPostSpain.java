@@ -6,7 +6,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class HuffingtonPostSpain extends com.lucevent.newsup.data.util.NewsReader_v2 {
+public class HuffingtonPostSpain extends com.lucevent.newsup.data.util.NewsReader {
 
     /**
      * Tags:

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.drawable.Drawable;
 
+import com.lucevent.newsup.AppSettings;
+
 import java.util.HashMap;
 
 public class LogoManager {
@@ -46,7 +48,7 @@ public class LogoManager {
                 res = Drawable.createFromStream(dataManager.open(site_code + ".png"), null);
                 map.put(site_code, res);
             } catch (Exception e) {
-                System.out.println("[LM] [EXCEPTION] Couldn't read asset " + site_code + ".png");
+                AppSettings.printerror("[LM] [EXCEPTION] Couldn't read asset " + site_code + ".png");
             }
         }
         return res;

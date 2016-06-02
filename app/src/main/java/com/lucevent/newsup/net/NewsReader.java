@@ -1,5 +1,6 @@
 package com.lucevent.newsup.net;
 
+import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.Site;
@@ -27,7 +28,7 @@ public final class NewsReader {
         for (int section : sections) sectArray.append(',').append(section);
 
         String query = query_index + site.code + sectArray;
-        System.out.println("La query es: " + query);
+        AppSettings.printlog("Query: " + query);
 
         NewsArray res = readRssPage(query);
         if (!res.isEmpty())
@@ -35,7 +36,7 @@ public final class NewsReader {
         return res;
     }
 
-    protected NewsArray readRssPage(String rsslink)
+    private NewsArray readRssPage(String rsslink)
     {
         org.jsoup.nodes.Document doc = getDocument(rsslink);
         if (doc == null) return new NewsArray();
@@ -80,12 +81,12 @@ public final class NewsReader {
         return res;
     }
 
-    protected org.jsoup.nodes.Document getDocument(String pagelink)
+    private org.jsoup.nodes.Document getDocument(String pagelink)
     {
         try {
             return org.jsoup.Jsoup.connect(pagelink).parser(org.jsoup.parser.Parser.xmlParser()).timeout(10000).get();
         } catch (Exception e) {
-            System.out.println("[NR] No se ha podido leer: " + pagelink);
+            AppSettings.printerror("[NR] Can't read url: " + pagelink);
             e.printStackTrace();
         }
         return null;
@@ -99,11 +100,10 @@ public final class NewsReader {
         if (doc != null) {
             String content = doc.html();
 
-            if (!content.isEmpty()) {
+            if (!content.isEmpty())
                 news.content = content;
-            } else {
-                System.out.println("[NR] NO SE HA ENCONTRADO EL CONTENIDO " + news.link);
-            }
+            else
+                AppSettings.printerror("[NR] CONTENT NOT FOUND OF " + news.link);
         }
         return news;
     }

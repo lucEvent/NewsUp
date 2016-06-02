@@ -5,7 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.NewsMap;
 import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.data.util.Tags;
@@ -27,9 +29,6 @@ public class DBManager {
         db = new Database(context);
     }
 
-    /**
-     * ******** READS *************
-     **/
     public NewsMap readNews(Site site)
     {
         SQLiteDatabase database = db.getReadableDatabase();
@@ -48,7 +47,7 @@ public class DBManager {
         }
         cursor.close();
         database.close();
-        System.out.println("[DB] NEWS IN " + site.name + " DATABASE: " + result.size());
+        AppSettings.printlog("[DB] NEWS IN " + site.name + " DATABASE: " + result.size());
         return result;
     }
 
@@ -95,7 +94,7 @@ public class DBManager {
         }
         cursor.close();
         database.close();
-        System.out.println("[DB] NEWS IN HISTORY DATABASE: " + result.size());
+        AppSettings.printlog("[DB] NEWS IN HISTORY DATABASE: " + result.size());
         return result;
     }
 
@@ -154,11 +153,28 @@ public class DBManager {
     /**
      * ******************** DELETES *********************
      **/
-    public void deleteNews(News news)
+    public NewsArray deleteOldNews(long timeBound)
     {
-        SQLiteDatabase database = db.getWritableDatabase();
-        database.delete(DBNews.db, DBNews.id + " = " + news.id, null);
+        SQLiteDatabase database = db.getReadableDatabase();
+        Cursor cursor = database.query(DBNews.db, DBNews.cols, DBNews.date + "<" + timeBound, null, null, null, null);
+
+        NewsArray result = new NewsArray();
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+
+            News news = cursorToNews(cursor);
+            result.add(news);
+
+            cursor.moveToNext();
+        }
+        cursor.close();
+        database.delete(DBHistoryNews.db, DBHistoryNews.date + "<" + timeBound, null);
+        database.delete(DBNews.db, DBNews.date + "<" + timeBound, null);
         database.close();
+
+        AppSettings.printlog("[DB] " + result.size() + " old news deleted from DB");
+        return result;
     }
 
     public void deleteHistory()
@@ -209,7 +225,7 @@ public class DBManager {
         }
         cursor.close();
         database.close();
-        System.out.println("[DB] DownloadSchedule in database: " + result.size());
+        AppSettings.printlog("[DB] DownloadSchedule in database: " + result.size());
         return result;
     }
 

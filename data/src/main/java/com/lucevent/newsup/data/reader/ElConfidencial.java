@@ -4,7 +4,7 @@ import com.lucevent.newsup.data.util.Enclosure;
 
 import org.jsoup.nodes.Element;
 
-public class ElConfidencial extends com.lucevent.newsup.data.util.NewsReader_v2 {
+public class ElConfidencial extends com.lucevent.newsup.data.util.NewsReader {
 
     //tags: author, content, id, link, media:content, media:credit, media:text, media:title, name, published, summary, title, updated, uri
 

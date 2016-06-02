@@ -1,6 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
-public class LaRazon extends com.lucevent.newsup.data.util.NewsReader_v2 {
+public class LaRazon extends com.lucevent.newsup.data.util.NewsReader {
 
     /**
      * Tags

@@ -95,7 +95,7 @@ public class BookmarksManager {
         }
     }
 
-    public void unBookmarkNews(News news)
+    public boolean unBookmarkNews(News news)
     {
         if (bookmarkedNewsIdsList == null) readBookmarkedNewsIds();
 
@@ -108,8 +108,9 @@ public class BookmarksManager {
 
             File dir = new File(SDManager.getDirectory(), BOOKMARKS_DIR);
 
-            new File(dir, "b" + id).delete();
+            return new File(dir, "b" + id).delete();
         }
+        return false;
     }
 
     private void saveBookmarksIndex()

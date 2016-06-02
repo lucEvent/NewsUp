@@ -4,7 +4,7 @@ import com.lucevent.newsup.data.util.Enclosure;
 
 import org.jsoup.nodes.Element;
 
-public class RacoCatala extends com.lucevent.newsup.data.util.NewsReader_v2 {
+public class RacoCatala extends com.lucevent.newsup.data.util.NewsReader {
 
     // tags: category, description, guid, image, item, link, pubdate, title
 

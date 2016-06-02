@@ -4,7 +4,7 @@ import com.lucevent.newsup.data.util.Enclosure;
 
 import org.jsoup.nodes.Element;
 
-public class Time extends com.lucevent.newsup.data.util.NewsReader_v2 {
+public class Time extends com.lucevent.newsup.data.util.NewsReader {
 
     // Tags: 	[category, content:encoded, dc:creator, description, guid, item, link, media:content, media:thumbnail, media:title, pubdate, title]
 

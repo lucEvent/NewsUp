@@ -2,7 +2,7 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
 
-public class RollingStone extends com.lucevent.newsup.data.util.NewsReader_v2 {
+public class RollingStone extends com.lucevent.newsup.data.util.NewsReader {
 
     // tags: [content:encoded, description, enclosure, guid, item, link, pubdate, title]
 

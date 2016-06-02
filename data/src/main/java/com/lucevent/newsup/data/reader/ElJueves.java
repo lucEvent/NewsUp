@@ -7,7 +7,7 @@ import org.jsoup.nodes.Element;
 import java.io.IOException;
 import java.net.URL;
 
-public class ElJueves extends com.lucevent.newsup.data.util.NewsReader_v2 {
+public class ElJueves extends com.lucevent.newsup.data.util.NewsReader {
 
     // tags: [description, enclosure, guid, item, link, pubdate, title]
 

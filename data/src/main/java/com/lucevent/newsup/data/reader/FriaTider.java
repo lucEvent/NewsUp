@@ -2,7 +2,7 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
 
-public class FriaTider extends com.lucevent.newsup.data.util.NewsReader_v2 {
+public class FriaTider extends com.lucevent.newsup.data.util.NewsReader {
 
     // tags: [comments, dc:creator, description, guid, item, link, pubdate, title]
 

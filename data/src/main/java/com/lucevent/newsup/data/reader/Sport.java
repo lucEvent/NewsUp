@@ -4,7 +4,7 @@ import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.nodes.Element;
 
-public class Sport extends com.lucevent.newsup.data.util.NewsReader_v2 {
+public class Sport extends com.lucevent.newsup.data.util.NewsReader {
 
     // tags:  description, guid, item, link, pubdate, title
 

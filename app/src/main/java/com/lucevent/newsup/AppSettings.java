@@ -14,7 +14,7 @@ import java.util.TreeSet;
 
 public class AppSettings {
 
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     public static final int DEV_CODE = -31645597;
 
@@ -25,12 +25,15 @@ public class AppSettings {
     private static Set<String> DEFAULT_FAVORITE_SITES;
     private static Set<String> DEFAULT_MAIN_SECTIONS;
     private static Set<String> DEFAULT_DOWNLOAD_SECTIONS;
+    private static final String DEFAULT_KEEP_TIME = "2592000";
 
     public static String PREF_MAIN_SITES_KEY;
     public static String PREF_FAVORITE_SITES_KEY;
     public static String PREF_SCHEDULE_DOWNLOADS_KEY;
     public static String PREF_CLEAN_CACHE_KEY;
     public static String PREF_DEV_MODE_KEY;
+    public static String PREF_PRO_MODE_KEY;
+    public static String PREF_KEEP_NEWS_KEY;
 
     public static String PREF_SITE_MAIN_SECTIONS_KEY;
     public static String PREF_SITE_DOWNLOAD_SECTIONS_KEY;
@@ -46,6 +49,8 @@ public class AppSettings {
             PREF_SCHEDULE_DOWNLOADS_KEY = context.getString(R.string.pref_schedule_downloads_key);
             PREF_CLEAN_CACHE_KEY = context.getString(R.string.pref_clean_cache_key);
             PREF_DEV_MODE_KEY = context.getString(R.string.pref_dev_mode_key);
+            PREF_PRO_MODE_KEY = context.getString(R.string.pref_pro_mode_key);
+            PREF_KEEP_NEWS_KEY = context.getString(R.string.pref_keep_news_key);
 
             PREF_SITE_MAIN_SECTIONS_KEY = context.getString(R.string.pref_main_sections_key);
             PREF_SITE_DOWNLOAD_SECTIONS_KEY = context.getString(R.string.pref_download_sections_key);
@@ -195,16 +200,38 @@ public class AppSettings {
         editor.apply();
     }
 
-    public static void devModeInvalidated() {
+    public static long getKeepTime()
+    {
+        return Long.parseLong(preferences.getString(PREF_KEEP_NEWS_KEY, DEFAULT_KEEP_TIME));
+    }
+
+    public static void devModeInvalidated()
+    {
         handler.obtainMessage(AppCode.ACTION_UPDATE_PRO).sendToTarget();
     }
 
-    public static boolean isDevModeGranted()
+    public static boolean isDevModeActivated()
     {
         int code = preferences.getString(PREF_DEV_MODE_KEY, "").hashCode();
         code += Integer.bitCount(code) << ((code >> 16) & 32);
-        System.out.println("Code ::" + code);
         return code == DEV_CODE;
+    }
+
+    public static boolean isProModeActivated()
+    {
+        return 2 == 1 + 1;
+    }
+
+    public static void printerror(String msg)
+    {
+        if (DEBUG)
+            System.err.println(msg);
+    }
+
+    public static void printlog(String msg)
+    {
+        if (DEBUG)
+            System.out.println(msg);
     }
 
 }

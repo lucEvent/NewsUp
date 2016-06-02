@@ -1,6 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
-public class DigitalCamera extends com.lucevent.newsup.data.util.NewsReader_v2 {
+public class DigitalCamera extends com.lucevent.newsup.data.util.NewsReader {
 
     //tags: item, title, link, comments, pubDate, dc:creator, category, guid, description, content:encoded
 

@@ -5,7 +5,7 @@ import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.nodes.Element;
 
-public class Discover extends com.lucevent.newsup.data.util.NewsReader_v2 {
+public class Discover extends com.lucevent.newsup.data.util.NewsReader {
 
     // Tags: [description, guid, item, link, media:content, media:thumbnail, pubdate, title]
 

@@ -1,6 +1,8 @@
 package com.lucevent.newsup.data.util;
 
-public class Enclosure {
+import java.io.Serializable;
+
+public class Enclosure implements Serializable {
 
     private final String type;
     private final String src;
@@ -10,7 +12,7 @@ public class Enclosure {
     {
         this.src = src;
         this.type = type;
-        
+
         if (size.isEmpty()) this.size = 0;
         else this.size = Integer.parseInt(size);
     }

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.lucevent.newsup.AppSettings;
+
 public class Database extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "newsup.db";
@@ -31,7 +33,7 @@ public class Database extends SQLiteOpenHelper {
                         date + " INTEGER," +
                         description + " TEXT NOT NULL," +
                         tags + " TEXT NOT NULL" +
-                ");";
+                        ");";
     }
 
     static final class DBHistoryNews {
@@ -58,7 +60,7 @@ public class Database extends SQLiteOpenHelper {
                         date + " INTEGER," +
                         description + " TEXT NOT NULL," +
                         tags + " TEXT NOT NULL" +
-                ");";
+                        ");";
     }
 
     static final class DBDownloadSchedule {
@@ -96,7 +98,7 @@ public class Database extends SQLiteOpenHelper {
                         day_saturday + " INTEGER," +
                         day_sunday + " INTEGER," +
                         sites_codes + " TEXT NOT NULL" +
-                ");";
+                        ");";
     }
 
 
@@ -108,7 +110,7 @@ public class Database extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db)
     {
-        System.out.println("[DB] En onCreate");
+        AppSettings.printlog("[DB] En onCreate");
 
         db.execSQL(DBNews.creator);
         db.execSQL(DBHistoryNews.creator);
@@ -118,7 +120,7 @@ public class Database extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
-        System.out.println("[DB] Upgrading DB from VERS: " + oldVersion + " to " + newVersion);
+        AppSettings.printlog("[DB] Upgrading DB from version " + oldVersion + " to " + newVersion);
 
         // Delete all needed tables
         // db.execSQL("DROP TABLE "+ "db_xxxxxxxxxxxx");

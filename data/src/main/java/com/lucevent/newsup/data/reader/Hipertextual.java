@@ -1,6 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
-public class Hipertextual extends com.lucevent.newsup.data.util.NewsReader_v2 {
+public class Hipertextual extends com.lucevent.newsup.data.util.NewsReader {
 
     //tags: item, title, link, description, dc:creator, pubDate, guid
 

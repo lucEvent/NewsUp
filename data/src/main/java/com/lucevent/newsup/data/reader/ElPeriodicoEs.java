@@ -8,7 +8,7 @@ import org.jsoup.parser.Parser;
 import java.io.IOException;
 import java.net.URL;
 
-public class ElPeriodicoEs extends com.lucevent.newsup.data.util.NewsReader_v2 {
+public class ElPeriodicoEs extends com.lucevent.newsup.data.util.NewsReader {
 
     /**
      * Tags

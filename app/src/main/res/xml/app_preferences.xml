@@ -17,14 +17,27 @@
             android:title="@string/pref_schedule_downloads"/>
 
         <EditTextPreference
-            android:hint="@string/hint_pref_dev_mode"
             android:defaultValue=""
+            android:hint="@string/hint_pref_dev_mode"
             android:key="@string/pref_dev_mode_key"
             android:title="@string/pref_dev_mode"/>
+
+        <EditTextPreference
+            android:defaultValue=""
+            android:hint="@string/hint_pref_pro_mode"
+            android:key="@string/pref_pro_mode_key"
+            android:title="@string/pref_pro_mode"/>
 
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_title_data">
+
+        <ListPreference
+            android:defaultValue="2592000"
+            android:entries="@array/keep_time_titles"
+            android:entryValues="@array/keep_time_values"
+            android:key="@string/pref_keep_news_key"
+            android:title="@string/pref_keep_news"/>
 
         <com.lucevent.newsup.view.preference.CleanCachePreference
             android:key="@string/pref_clean_cache_key"

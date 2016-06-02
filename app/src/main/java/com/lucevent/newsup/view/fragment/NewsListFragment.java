@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -117,6 +118,7 @@ public class NewsListFragment extends android.app.Fragment {
             if (code == -2) {
                 NewsArray newsArray = new NewsArray();
                 int[] news_ids = getArguments().getIntArray(AppCode.SEND_NEWS_IDS);
+                assert news_ids != null : "Arguments can't be recovered";
                 for (int news_id : news_ids)
                     newsArray.add(dataManager.getNewsById(news_id));
                 adapter.setNewDataSet(newsArray);
@@ -176,8 +178,7 @@ public class NewsListFragment extends android.app.Fragment {
                     service.recyclerView.smoothScrollToPosition(0);
                     break;
                 case AppCode.NO_INTERNET:
-                    //TODO
-                    System.out.println("[NLF] [NO_INTERNET] There're still things to do");
+                    Snackbar.make(service.recyclerView, R.string.msg_no_internet_connection, Snackbar.LENGTH_LONG).show();
                     break;
                 case AppCode.ERROR:
                     System.out.println("[NLF] Error received by the Handler");
@@ -259,7 +260,6 @@ public class NewsListFragment extends android.app.Fragment {
         @Override
         public boolean onMenuItemClick(MenuItem item)
         {
-            // TODO: 14/04/2016
             getActivity().getFragmentManager()
                     .beginTransaction()
                     .replace(R.id.main_content, SiteSettingsFragment.instanceFor(currentSite.code))

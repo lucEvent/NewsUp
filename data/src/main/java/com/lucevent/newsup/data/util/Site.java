@@ -37,7 +37,7 @@ public class Site {
         NewsArray res = new NewsArray();
 
         for (int isection : isections)
-            res.addAll(reader.readRssPage(sections.get(isection).url));
+            res.addAll(reader.readRssHeader(sections.get(isection).url));
 
         for (News N : res)
             N.site_code = code;

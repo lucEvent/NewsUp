@@ -2,21 +2,36 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
 
+import org.jsoup.nodes.Element;
+
 public class TheTelegraph extends com.lucevent.newsup.data.util.NewsReader {
 
-    public TheTelegraph() {
-        super();
+    /**
+     * Tags:[author, category,              enclosure, guid, item, link, pubdate, title]
+     * Tags:[author, category, description, enclosure, guid, item, link, pubdate, title]
+     */
+
+    public TheTelegraph()
+    {
+        super(TAG_ITEM_ITEMS,
+                new int[]{TAG_TITLE},
+                new int[]{TAG_LINK},
+                new int[]{TAG_DESCRIPTION},
+                new int[]{},
+                new int[]{TAG_PUBDATE},
+                new int[]{TAG_CATEGORY},
+                new int[]{TAG_ENCLOSURE});
     }
 
     @Override
-    protected News applySpecialCase(News news, String content) {
-        news.description = org.jsoup.Jsoup.parse(news.description).text();
-        return news;
+    protected String parseDescription(Element prop)
+    {
+        return org.jsoup.Jsoup.parse(prop.text()).text();
     }
 
     @Override
-    protected void readNewsContent(org.jsoup.nodes.Document doc, News news) {
-
+    protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+    {
         org.jsoup.select.Elements img = doc.select(".articleImage");
         org.jsoup.select.Elements content = doc.select("#mainBodyAreaMobile");
 
@@ -79,6 +94,6 @@ public class TheTelegraph extends com.lucevent.newsup.data.util.NewsReader {
             content.select("[class*=\"Advert\"],[class*=\"pullquote\"]").remove();
             news.content = img.outerHtml() + content.html();
         }
-
     }
+
 }

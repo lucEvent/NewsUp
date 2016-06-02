@@ -2,7 +2,7 @@ package com.lucevent.newsup.data.reader;
 
 import org.jsoup.nodes.Element;
 
-public class SpaceNews extends com.lucevent.newsup.data.util.NewsReader_v2 {
+public class SpaceNews extends com.lucevent.newsup.data.util.NewsReader {
 
     /**
      * Tags

@@ -4,7 +4,7 @@ import com.lucevent.newsup.data.util.News;
 
 import java.io.IOException;
 
-public class EuropaPress extends com.lucevent.newsup.data.util.NewsReader_v2 {
+public class EuropaPress extends com.lucevent.newsup.data.util.NewsReader {
 
     /**
      * Tags:

@@ -38,7 +38,7 @@ public class ScheduledDownloadService extends Service {
             doWork(getApplicationContext(), intent);
 
         } catch (Exception e) {
-            System.out.println("[SDS] Error executing service!!!!!!!!!!");
+            AppSettings.printerror("[SDS] Error executing service");
             e.printStackTrace();
         }
         stopSelf();
@@ -48,6 +48,7 @@ public class ScheduledDownloadService extends Service {
     private void doWork(Context context, Intent intent)
     {
         DownloadSchedule job = (DownloadSchedule) intent.getExtras().getSerializable(AppCode.SEND_DOWNLOAD_SCHEDULE);
+        assert job != null : "DownloadSchedule received is null";
 
         ScheduleManager dataManager = new ScheduleManager(context);
         if (!job.repeat) {
@@ -57,18 +58,15 @@ public class ScheduledDownloadService extends Service {
             job.days[day] = false;
 
             boolean maintain = false;
-            for (boolean b : job.days) {
+            for (boolean b : job.days)
                 if (b) {
-                    System.out.println("[SDS] Manteniendo");
                     maintain = true;
                     dataManager.updateDownloadSchedule(job);
                     break;
                 }
-            }
-            if (!maintain) {
-                System.out.println("[SDS] Eliminando");
+
+            if (!maintain)
                 dataManager.deleteDownloadSchedule(job);
-            }
 
         }
         AppSettings.initialize(context);
@@ -90,7 +88,7 @@ public class ScheduledDownloadService extends Service {
                     notiftext.append("\n");
                 }
                 notiftext.append(site.name.toUpperCase()).append(": ").append(site.prior_news.title);
-                System.out.println("[SDS] Im packing up the ids: " + site.prior_news.id);
+                AppSettings.printlog("[SDS] Im packing up the ids: " + site.prior_news.id);
             }
 
             // build notification

@@ -1,6 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
-public class Verne extends com.lucevent.newsup.data.util.NewsReader_v2 {
+public class Verne extends com.lucevent.newsup.data.util.NewsReader {
 
     //tags: item, title, link, guid, pubDate, dc:creator, description, category, content:encoded, enclosure, comments
 

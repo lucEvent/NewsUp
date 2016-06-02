@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.services.util.DownloadSchedule;
 import com.lucevent.newsup.services.util.Schedule;
@@ -29,7 +30,7 @@ public class ScheduledDownloadReceiver extends BroadcastReceiver {
 
     public static void scheduleDownloads(Context context, ArrayList<DownloadSchedule> schedules)
     {
-        System.out.println("[SDR] Scheduling");
+        AppSettings.printlog("[SDR] Scheduling");
 
         AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (schedules.isEmpty()) {
@@ -42,7 +43,7 @@ public class ScheduledDownloadReceiver extends BroadcastReceiver {
         Calendar calendar = Calendar.getInstance();
         TreeSet<Schedule> list = new TreeSet<>();
         for (DownloadSchedule schedule : schedules) {
-            System.out.println("[SDR] " + schedule.toShortString());
+            AppSettings.printlog("[SDR] candidate:" + schedule.toShortString());
 
             calendar.setTimeInMillis(System.currentTimeMillis());
             int c_hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -77,7 +78,7 @@ public class ScheduledDownloadReceiver extends BroadcastReceiver {
 
         alarmMgr.set(AlarmManager.RTC_WAKEUP, list.first().time, alarmIntent);
 
-        System.out.println("[SDR] Time:" + list.first().time);
+        AppSettings.printlog("[SDR] Next time scheduled:" + list.first().time);
     }
 
 }

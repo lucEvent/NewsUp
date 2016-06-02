@@ -135,7 +135,7 @@ public class BackendParser {
                     int position = entry.getValue();
                     sb.append("\t").append(sites.get(position).name).append(": ")
                             .append(Date.getAge(time)).append(" from ")
-                            .append(stats.getLastIp(position));
+                            .append(stats.getLastIp(position)).append("\n");
                 }
                 break;
         }

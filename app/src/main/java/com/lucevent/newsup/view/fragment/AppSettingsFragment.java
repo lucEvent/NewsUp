@@ -2,6 +2,7 @@ package com.lucevent.newsup.view.fragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
@@ -21,6 +22,8 @@ public class AppSettingsFragment extends PreferenceFragment
     private static final int PREF_MASK_SCHEDULE_DOWNLOADS = 0x02;
     private static final int PREF_MASK_CLEAN_CACHE = 0x04;
     private static final int PREF_MASK_DEV_MODE = 0x08;
+    private static final int PREF_MASK_PRO_MODE = 0x10;
+    private static final int PREF_MASK_KEEP_NEWS = 0x20;
 
     @Override
     public void onCreate(final Bundle savedInstanceState)
@@ -37,7 +40,7 @@ public class AppSettingsFragment extends PreferenceFragment
     {
         super.onResume();
         getActivity().setTitle(R.string.settings);
-        setUpPreferenceSummaries(0xff);
+        setUpPreferenceSummaries(0xfff);
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
 
@@ -53,15 +56,16 @@ public class AppSettingsFragment extends PreferenceFragment
     {
         if (key.equals(AppSettings.PREF_MAIN_SITES_KEY))
             setUpPreferenceSummaries(PREF_MASK_MAIN_SITES);
-
         else if (key.equals(AppSettings.PREF_SCHEDULE_DOWNLOADS_KEY))
             setUpPreferenceSummaries(PREF_MASK_SCHEDULE_DOWNLOADS);
-
         else if (key.equals(AppSettings.PREF_CLEAN_CACHE_KEY))
             setUpPreferenceSummaries(PREF_MASK_CLEAN_CACHE);
-
         else if (key.equals(AppSettings.PREF_DEV_MODE_KEY))
             setUpPreferenceSummaries(PREF_MASK_DEV_MODE);
+        else if (key.equals(AppSettings.PREF_PRO_MODE_KEY))
+            setUpPreferenceSummaries(PREF_MASK_PRO_MODE);
+        else if (key.equals(AppSettings.PREF_KEEP_NEWS_KEY))
+            setUpPreferenceSummaries(PREF_MASK_KEEP_NEWS);
     }
 
     private void setUpPreferenceSummaries(int preferencesMask)
@@ -92,8 +96,25 @@ public class AppSettingsFragment extends PreferenceFragment
         }
         if ((preferencesMask & PREF_MASK_DEV_MODE) != 0) {
             Preference p = findPreference(AppSettings.PREF_DEV_MODE_KEY);
-            p.setSummary(AppSettings.isDevModeGranted() ? R.string.enabled : R.string.disabled);
+            p.setSummary(AppSettings.isDevModeActivated() ? R.string.enabled : R.string.disabled);
             AppSettings.devModeInvalidated();
+        }
+        if ((preferencesMask & PREF_MASK_PRO_MODE) != 0) {
+            Preference p = findPreference(AppSettings.PREF_PRO_MODE_KEY);
+            p.setSummary(AppSettings.isProModeActivated() ? R.string.enabled : R.string.disabled);
+//            AppSettings.PROModeInvalidated();
+        }
+        if ((preferencesMask & PREF_MASK_KEEP_NEWS) != 0) {
+            ListPreference p = (ListPreference) findPreference(AppSettings.PREF_KEEP_NEWS_KEY);
+
+            CharSequence currentValue = p.getValue();
+            int currentPosition = 0;
+            for (CharSequence v : p.getEntryValues()) {
+                if (v.equals(currentValue))
+                    break;
+                currentPosition++;
+            }
+            p.setSummary(p.getEntries()[currentPosition]);
         }
     }
 

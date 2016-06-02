@@ -8,14 +8,8 @@ import com.lucevent.newsup.io.DBManager;
 
 public class HistoryManager {
 
-    /**
-     * Static constants
-     **/
     private final Handler handler;
 
-    /**
-     * Controllers
-     **/
     private DBManager dbmanager;
 
     public HistoryManager(Context context, Handler handler)

@@ -2,7 +2,7 @@ package com.lucevent.newsup.data.reader;
 
 import org.jsoup.nodes.Element;
 
-public class ElAndroideLibre extends com.lucevent.newsup.data.util.NewsReader_v2 {
+public class ElAndroideLibre extends com.lucevent.newsup.data.util.NewsReader {
 
     // tags: [category, content:encoded, dc:creator, description, feedburner:origlink, guid, item, link, pubdate, title
 

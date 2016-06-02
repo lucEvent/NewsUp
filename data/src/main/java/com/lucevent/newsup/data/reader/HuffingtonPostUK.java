@@ -2,7 +2,7 @@ package com.lucevent.newsup.data.reader;
 
 import org.jsoup.nodes.Element;
 
-public class HuffingtonPostUK extends com.lucevent.newsup.data.util.NewsReader_v2 {
+public class HuffingtonPostUK extends com.lucevent.newsup.data.util.NewsReader {
 
     // Tags: [author, description, enclosure, guid, item, link, pubdate, title]
 

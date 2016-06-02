@@ -59,13 +59,13 @@ public class Sites extends ArrayList<Site> {
         add(new Site(330, "Metro", 0xff007d3c, new com.lucevent.newsup.data.section.MetroSections(), new com.lucevent.newsup.data.reader.Metro()));
 
         // Finnish sites
-        if (titles != null) add(new Site(-1, titles[3], -1, null, null));
+/*        if (titles != null) add(new Site(-1, titles[3], -1, null, null));
         add(new Site(400, "Helsinki times", 0xff32c8fa, new com.lucevent.newsup.data.section.HelsinkiTimesSections(), new com.lucevent.newsup.data.reader.HelsinkiTimes()));
         add(new Site(405, "Helsingin Sanomat", 0xff01133d, new com.lucevent.newsup.data.section.HelsinkiSanomatSections(), new com.lucevent.newsup.data.reader.HelsinkiSanomat()));
         add(new Site(410, "Iltalehti", 0xffff0000, new com.lucevent.newsup.data.section.IltalehtiSections(), new com.lucevent.newsup.data.reader.Iltalehti()));
         add(new Site(415, "Yle", 0xff00b4c4, new com.lucevent.newsup.data.section.YleSections(), new com.lucevent.newsup.data.reader.Yle()));
 //        add(new Site(420, "Yle Svenska", 0xff, new com.lucevent.newsup.data.section.YleSvenskaSections(), new com.lucevent.newsup.data.reader.YleSvenska()));
-
+*/
         // British sites
         if (titles != null) add(new Site(-1, titles[4], -1, null, null));
         add(new Site(500, "BBC", 0xffa62e30, new com.lucevent.newsup.data.section.BBCSections(), new com.lucevent.newsup.data.reader.BBC()));

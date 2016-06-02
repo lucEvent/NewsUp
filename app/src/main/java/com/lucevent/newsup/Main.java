@@ -52,15 +52,16 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
         handler = new Handler(this);
         AppSettings.initialize(this, handler);
-        dataManager = new NewsManager(this, null);  // TODO: 17/04/2016  pasar handler null???
+        dataManager = new NewsManager(this);
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        assert navigationView != null : "Navigation view is null";
         navigationView.setNavigationItemSelectedListener(this);
 
         updateDrawer(true, true);
@@ -92,17 +93,17 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     private void updateDrawer(boolean updateFavorites, boolean updateSites)
     {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        assert navigationView != null : "Navigation view is null";
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
             navigationView.setItemIconTintList(null);
 
         MenuItem stats = navigationView.getMenu().findItem(R.id.nav_stats);
-        if (AppSettings.isDevModeGranted()) {
+        if (AppSettings.isDevModeActivated())
             stats.setVisible(true);
-        } else {
+        else
             stats.setVisible(false);
-        }
-
+        
         if (updateFavorites) {
             SubMenu fab_menu = navigationView.getMenu().findItem(R.id.nav_header_favorites).getSubMenu();
             fab_menu.clear();
@@ -133,6 +134,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             mi.setIcon(R.drawable.ic_label);
         } else {
             Drawable icon = LogoManager.getLogo(site.code, LogoManager.Size.DRAWER);
+            assert icon != null : "Icon not found for code " + site.code;
             icon.setColorFilter(0x000000, android.graphics.PorterDuff.Mode.ADD);
             mi.setIcon(icon);
             mi.setCheckable(true);
@@ -144,8 +146,8 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     @Override
     public boolean onNavigationItemSelected(MenuItem item)
     {
-        Fragment fragment = null;
-        String title = "";
+        Fragment fragment;
+        String title;
         int colorCode = -1;
 
         switch (item.getItemId()) {
@@ -251,7 +253,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                     service.updateDrawer(false, false);
                     break;
                 default:
-                    System.out.println("[MAIN] OPTION UNKNOWN: " + msg.what);
+                    AppSettings.printerror("[MAIN] OPTION UNKNOWN: " + msg.what);
             }
         }
 

@@ -2,7 +2,7 @@ package com.lucevent.newsup.data.reader;
 
 import org.jsoup.nodes.Element;
 
-public class _20Minutos extends com.lucevent.newsup.data.util.NewsReader_v2 {
+public class _20Minutos extends com.lucevent.newsup.data.util.NewsReader {
 
     //tags: dc:creator, dc:date, description, link, title
 

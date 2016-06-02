@@ -5,7 +5,7 @@ import com.lucevent.newsup.data.util.News;
 import org.jsoup.nodes.Element;
 
 
-public class ComputerHoy extends com.lucevent.newsup.data.util.NewsReader_v2 {
+public class ComputerHoy extends com.lucevent.newsup.data.util.NewsReader {
 
     // tags: [dc:creator, description, guid, item, link, pubdate, title]
 

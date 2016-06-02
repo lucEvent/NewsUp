@@ -2,7 +2,7 @@ package com.lucevent.newsup.data.reader;
 
 import org.jsoup.nodes.Element;
 
-public class SkyAndTelescope extends com.lucevent.newsup.data.util.NewsReader_v2 {
+public class SkyAndTelescope extends com.lucevent.newsup.data.util.NewsReader {
 
     /**
      * [category, content:encoded, dc:creator, description,            guid, item, link, pubdate, title]

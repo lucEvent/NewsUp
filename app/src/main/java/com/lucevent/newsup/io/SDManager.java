@@ -3,6 +3,7 @@ package com.lucevent.newsup.io;
 import android.content.Context;
 import android.os.Environment;
 
+import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.kernel.util.Compressor;
 
@@ -22,18 +23,16 @@ public class SDManager {
 
     public News readNews(News news)
     {
-        String filename = "n" + news.id;
-        System.out.println("reading News en SDMAngager: "+news.title);
         try {
-            FileInputStream inputStream = context.openFileInput(filename);
+            FileInputStream inputStream = context.openFileInput("n" + news.id);
 
             news.content = Compressor.decompress(inputStream);
 
             inputStream.close();
         } catch (FileNotFoundException e) {
-            System.out.println("[SDM] NO SE HA ENCONTRADO LA NOTICIA EN DISCO [news.id: " + news.id + "] ##");
+            AppSettings.printerror("[SDM] Couldn't find news in storage [news.id: " + news.id + "]");
         } catch (Exception e) {
-            System.out.println("[SDM] Error en SDManager.readNews [ news.id: " + news.id + "] ##");
+            AppSettings.printerror("[SDM] Error in SDManager.readNews [ news.id: " + news.id + "]");
             e.printStackTrace();
         }
         return news;
@@ -41,16 +40,25 @@ public class SDManager {
 
     public void saveNews(News news)
     {
-        String filename = "n" + news.id;
         try {
-            FileOutputStream outputStream = context.openFileOutput(filename, Context.MODE_PRIVATE);
+            FileOutputStream outputStream = context.openFileOutput("n" + news.id, Context.MODE_PRIVATE);
 
             Compressor.compress(news.content, outputStream);
 
             outputStream.flush();
             outputStream.close();
         } catch (Exception e) {
-            System.out.println("[SDM] Error en SAVENEWS [news.id = " + news.id + "] ## [title: " + news.title + "]");
+            AppSettings.printerror("[SDM] Error in saveNews [news.id = " + news.id + "] ## [title: " + news.title + "]");
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteNews(News news)
+    {
+        try {
+            context.deleteFile("n" + news.id);
+        } catch (Exception e) {
+            AppSettings.printerror("[SDM] Error in deleteNews [news.id = " + news.id + "] ## [title: " + news.title + "]");
             e.printStackTrace();
         }
     }
@@ -58,14 +66,14 @@ public class SDManager {
     public static File getDirectory()
     {
         File directory;
-        if (Environment.getExternalStorageState() == null) {
+        if (Environment.getExternalStorageState() == null)
             directory = new File(Environment.getDataDirectory() + "/NewsUp/");
-        } else {
+        else
             directory = new File(Environment.getExternalStorageDirectory() + "/NewsUp/");
-        }
-        if (!directory.exists()) {
+
+        if (!directory.exists())
             directory.mkdir();
-        }
+
         return directory;
     }
 
