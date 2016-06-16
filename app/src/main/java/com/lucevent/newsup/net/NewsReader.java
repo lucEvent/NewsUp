@@ -15,8 +15,8 @@ public final class NewsReader {
     private static final int HASH_CATEGORIES = "categories".hashCode();
     private static final int HASH_CONTENT = "content".hashCode();
 
-    private static final String query_index = "http://newsup-2406.appspot.com/request?index&site=";
-    private static final String query_content = "http://newsup-2406.appspot.com/request?content&site=";
+    private static final String query_index = "http://newsup-2406.appspot.com/app?news&site=";
+    private static final String query_content = "http://newsup-2406.appspot.com/app?content&site=";
 
     public NewsReader()
     {

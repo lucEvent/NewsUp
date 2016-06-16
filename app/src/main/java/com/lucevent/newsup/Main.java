@@ -1,6 +1,7 @@
 package com.lucevent.newsup;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -26,6 +27,8 @@ import com.lucevent.newsup.io.LogoManager;
 import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.AppData;
 import com.lucevent.newsup.kernel.NewsManager;
+import com.lucevent.newsup.kernel.ScheduleManager;
+import com.lucevent.newsup.services.ScheduledDownloadReceiver;
 import com.lucevent.newsup.view.fragment.AboutFragment;
 import com.lucevent.newsup.view.fragment.AppSettingsFragment;
 import com.lucevent.newsup.view.fragment.BookmarksFragment;
@@ -73,6 +76,11 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         } else
             currentFragment = NewsListFragment.instanceFor(-1);
 
+        if (extras != null && extras.containsKey(AppCode.RESTART)) {
+            ScheduledDownloadReceiver.scheduleDownloads(this,
+                    new ScheduleManager(this).getDownloadSchedules());
+        }
+
         getFragmentManager()
                 .beginTransaction()
                 .replace(R.id.main_content, currentFragment)
@@ -89,7 +97,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         else super.onBackPressed();
     }
 
-
     private void updateDrawer(boolean updateFavorites, boolean updateSites)
     {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -103,7 +110,13 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             stats.setVisible(true);
         else
             stats.setVisible(false);
-        
+
+        MenuItem sports = navigationView.getMenu().findItem(R.id.nav_sports);
+        if (ProSettings.areSportsEnabled())
+            sports.setVisible(true);
+        else
+            sports.setVisible(false);
+
         if (updateFavorites) {
             SubMenu fab_menu = navigationView.getMenu().findItem(R.id.nav_header_favorites).getSubMenu();
             fab_menu.clear();
@@ -175,6 +188,9 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 fragment = new AboutFragment();
                 title = getString(R.string.about);
                 break;
+            case R.id.nav_sports:
+                startActivity(new Intent(this, SportsMain.class));
+                return true;
             default:
                 colorCode = item.getItemId();
                 fragment = NewsListFragment.instanceFor(colorCode);

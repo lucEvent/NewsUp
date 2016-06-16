@@ -2,7 +2,6 @@
 
     <string name="version">versió</string>
 
-
     <!-- * ******************** Labels **************************** * -->
     <string name="my_news">Les meves notícies</string>
     <string name="saved_for_later">Notícies guardades</string>
@@ -30,6 +29,8 @@
     <string name="sat">Ds</string>
     <string name="sun">Dg</string>
 
+    <string name="extras">Extres</string>
+    <string name="sports">Esports</string>
 
     <!-- * ******************** Buttons **************************** * -->
     <string name="cancel">Cancel·lar</string>
@@ -43,6 +44,8 @@
     <string name="open_in_browser">Obrir al navegador</string>
     <string name="close">Tancar</string>
     <string name="schedule_download">Programa descàrrega</string>
+    <string name="ok">OK</string>
+    <string name="restart">Reiniciar</string>
 
 
     <!-- * ******************** Hints **************************** * -->
@@ -62,6 +65,10 @@
     <string name="msg_cant_load_content">No es pot carregar el contingut</string>
     <string name="msg_news_not_found">Oohh… La aplicació es increïble però encara no pot llegir aquesta noticia.\n¿Què fem?</string>
     <string name="msg_no_internet_connection">No hi ha connexió a internet</string>
+    <string name="msg_unlocked_finnish">Publicacions fineses desbloquejades</string>
+    <string name="msg_unlocked_sports">Esports desbloquejats</string>
+    <string name="msg_invalid_code">Codi invàlid</string>
+    <string name="msg_app_must_restart_to_apply_changes">Has de reinicialitzar la app per aplicar canvis</string>
 
 
     <!-- * *************** Activities and fragment's titles ********************* * -->
@@ -86,7 +93,19 @@
     <string name="pref_main_sections">Seccions principals</string>
     <string name="pref_download_sections">Seccions de descàrrega</string>
     <string name="pref_dev_mode">Mode desenvolupador</string>
-    <string name="pref_pro_mode">Versió PRO</string>
+    <string name="pref_pro_code">Codi PRO</string>
     <string name="pref_keep_news">Guardar notícies</string>
+
+
+    <!-- ***************************** * Sport strings * ********************************** -->
+    <string name="team">Equip</string>
+    <string name="points">Pts</string>
+    <string name="games">J</string>
+    <string name="won">G</string>
+    <string name="draw">E</string>
+    <string name="lost">P</string>
+    <string name="scored">GF</string>
+    <string name="received">GC</string>
+
 
 </resources>

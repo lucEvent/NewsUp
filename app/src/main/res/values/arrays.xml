@@ -38,5 +38,8 @@
         <item>15552000</item>
         <item>1464867864</item>
     </string-array>
+    <string-array name="sports">
+        <item>Football</item>
+    </string-array>
 
 </resources>

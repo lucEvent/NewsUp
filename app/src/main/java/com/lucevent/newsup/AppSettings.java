@@ -32,7 +32,7 @@ public class AppSettings {
     public static String PREF_SCHEDULE_DOWNLOADS_KEY;
     public static String PREF_CLEAN_CACHE_KEY;
     public static String PREF_DEV_MODE_KEY;
-    public static String PREF_PRO_MODE_KEY;
+    public static String PREF_PRO_CODE_KEY;
     public static String PREF_KEEP_NEWS_KEY;
 
     public static String PREF_SITE_MAIN_SECTIONS_KEY;
@@ -49,7 +49,7 @@ public class AppSettings {
             PREF_SCHEDULE_DOWNLOADS_KEY = context.getString(R.string.pref_schedule_downloads_key);
             PREF_CLEAN_CACHE_KEY = context.getString(R.string.pref_clean_cache_key);
             PREF_DEV_MODE_KEY = context.getString(R.string.pref_dev_mode_key);
-            PREF_PRO_MODE_KEY = context.getString(R.string.pref_pro_mode_key);
+            PREF_PRO_CODE_KEY = context.getString(R.string.pref_pro_code_key);
             PREF_KEEP_NEWS_KEY = context.getString(R.string.pref_keep_news_key);
 
             PREF_SITE_MAIN_SECTIONS_KEY = context.getString(R.string.pref_main_sections_key);
@@ -68,6 +68,7 @@ public class AppSettings {
             DEFAULT_DOWNLOAD_SECTIONS = new TreeSet<>();
             DEFAULT_DOWNLOAD_SECTIONS.add("0");
         }
+        ProSettings.initialize(preferences);
     }
 
     private static Handler handler;
@@ -215,11 +216,6 @@ public class AppSettings {
         int code = preferences.getString(PREF_DEV_MODE_KEY, "").hashCode();
         code += Integer.bitCount(code) << ((code >> 16) & 32);
         return code == DEV_CODE;
-    }
-
-    public static boolean isProModeActivated()
-    {
-        return 2 == 1 + 1;
     }
 
     public static void printerror(String msg)

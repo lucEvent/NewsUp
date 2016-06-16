@@ -1,24 +1,34 @@
 package com.lucevent.newsup.view.fragment;
 
 import android.os.Bundle;
+import android.os.Message;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
+import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.R;
+import com.lucevent.newsup.kernel.AppCode;
+import com.lucevent.newsup.kernel.stats.Statistics;
+import com.lucevent.newsup.net.StatisticsReader;
+import com.lucevent.newsup.view.adapter.StatisticsAdapter;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
+import java.lang.ref.WeakReference;
 
 public class StatisticsFragment extends android.app.Fragment {
+
+    private enum SortOrder {
+        SORT_BY_NAME, SORT_BY_NUM_REQUESTS, SORT_BY_TIME
+    }
+
+    private Handler handler;
+
+    private StatisticsAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -26,17 +36,37 @@ public class StatisticsFragment extends android.app.Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        new Thread(fetchStatistics).start();
+        handler = new Handler(this);
+        fetchStatistics(SortOrder.SORT_BY_NUM_REQUESTS);
     }
-
-    private TextView vContent;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.f_statistics, container, false);
 
-        vContent = (TextView) view.findViewById(R.id.content_box);
+        adapter = new StatisticsAdapter();
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setAutoMeasureEnabled(true);
+
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        recyclerView.setNestedScrollingEnabled(false);
+        recyclerView.setHasFixedSize(false);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+
+        View bbyname = view.findViewById(R.id.by_sitename);
+        View bbynrequest = view.findViewById(R.id.by_nrequests);
+        View bbytime = view.findViewById(R.id.by_time);
+
+        bbyname.setTag(SortOrder.SORT_BY_NAME);
+        bbynrequest.setTag(SortOrder.SORT_BY_NUM_REQUESTS);
+        bbytime.setTag(SortOrder.SORT_BY_TIME);
+
+        bbyname.setOnClickListener(onOrderChanged);
+        bbynrequest.setOnClickListener(onOrderChanged);
+        bbytime.setOnClickListener(onOrderChanged);
 
         return view;
     }
@@ -56,63 +86,57 @@ public class StatisticsFragment extends android.app.Fragment {
         @Override
         public boolean onMenuItemClick(MenuItem item)
         {
-            new Thread(resetStatistics).start();
+            StatisticsReader.fetchStatistics(handler, "http://newsup-2406.appspot.com/request?stats&reset");
             return true;
         }
     };
 
-
-    private Runnable fetchStatistics = new Runnable() {
+    private View.OnClickListener onOrderChanged = new View.OnClickListener() {
         @Override
-        public void run()
+        public void onClick(View v)
         {
-            fetchURL("http://newsup-2406.appspot.com/request?stats&options=n");
+            fetchStatistics((SortOrder) v.getTag());
         }
     };
 
-    private Runnable resetStatistics = new Runnable() {
-        @Override
-        public void run()
-        {
-            fetchURL("http://newsup-2406.appspot.com/request?stats&options=r");
-        }
-    };
-
-    private void fetchURL(String url)
+    private void fetchStatistics(SortOrder order)
     {
-        String content;
-        try {
+        String url = "";
+        switch (order) {
+            case SORT_BY_NAME:
+                url = "http://newsup-2406.appspot.com/request?stats&options=s";
+                break;
+            case SORT_BY_NUM_REQUESTS:
+                url = "http://newsup-2406.appspot.com/request?stats&options=n";
+                break;
+            case SORT_BY_TIME:
+                url = "http://newsup-2406.appspot.com/request?stats&options=t";
+        }
+        StatisticsReader.fetchStatistics(handler, url);
+    }
 
-            URLConnection connection = (new URL(url)).openConnection();
-            connection.connect();
+    static class Handler extends android.os.Handler {
 
-            InputStream in = connection.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        private final WeakReference<StatisticsFragment> context;
 
-            char[] buffer = new char[1024];
-
-            int read;
-            StringBuilder html = new StringBuilder();
-            while ((read = reader.read(buffer, 0, 1024)) > 0) {
-                html.append(buffer, 0, read);
-            }
-            in.close();
-
-            content = html.toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-            content = "Error" + e.toString();
+        Handler(StatisticsFragment context)
+        {
+            this.context = new WeakReference<>(context);
         }
 
-        final String finalContent = content;
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-                while (vContent == null) ;
-                vContent.setText(finalContent);
+        @Override
+        public void handleMessage(Message msg)
+        {
+            StatisticsFragment service = context.get();
+            switch (msg.what) {
+                case AppCode.STATISTICS:
+                    service.adapter.setNewDataSet((Statistics) msg.obj);
+                    break;
+                default:
+                    AppSettings.printerror("[SF] OPTION UNKNOWN: " + msg.what);
             }
-        });
+        }
+
     }
 
 }

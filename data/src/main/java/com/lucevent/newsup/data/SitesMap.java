@@ -7,11 +7,11 @@ import java.util.TreeSet;
 
 public class SitesMap extends TreeSet<Site> {
 
-    public SitesMap(Comparator<Site> comparator)
+    public SitesMap(Comparator<Site> comparator, boolean finnishSites)
     {
         super(comparator);
 
-        addAll(new Sites((String[]) null));
+        addAll(new Sites(null, finnishSites));
     }
 
     public static Comparator<Site> SITE_COMPARATOR_BY_NAME = new Comparator<Site>() {

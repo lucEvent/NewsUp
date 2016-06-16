@@ -11,12 +11,22 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>ServletWeb</servlet-name>
-        <servlet-class>com.lucevent.newsup.backend.ServletWeb</servlet-class>
+        <servlet-name>AppServlet</servlet-name>
+        <servlet-class>com.lucevent.newsup.backend.AppServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
-        <servlet-name>ServletWeb</servlet-name>
+        <servlet-name>AppServlet</servlet-name>
+        <url-pattern>/app</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>WebServlet</servlet-name>
+        <servlet-class>com.lucevent.newsup.backend.WebServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>WebServlet</servlet-name>
         <url-pattern>/web</url-pattern>
     </servlet-mapping>
 

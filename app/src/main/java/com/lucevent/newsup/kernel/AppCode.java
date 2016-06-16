@@ -22,11 +22,18 @@ public interface AppCode {
     int DOWNLOAD_SCHEDULE = 40;
     int REMOVE_SCHEDULE = 41;
 
+    int STATISTICS = 50;
+
+    int SPORT_LEAGUE_TABLE = 220;
+
     String SEND_SITE_CODE = "site_code";
     String SEND_NEWS = "news";
     String SEND_NEWS_IDS = "news_ids";
     String SEND_DOWNLOAD_SCHEDULE = "download_schedule";
 
+    String SEND_SPORT_CODE = "sport_code";
+
     String ACTION = "action";
+    String RESTART = "restart";
 
 }

@@ -2,31 +2,6 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/data/src/main/java/com/lucevent/newsup/data/Sites.java" charset="ISO-8859-1" />
-    <file url="file://$PROJECT_DIR$/data/src/main/java/com/lucevent/newsup/data/reader/HuffingtonPostSpain.java" charset="ISO-8859-1" />
-    <file url="file://$PROJECT_DIR$/data/src/main/java/com/lucevent/newsup/data/section/AftonbladetSections.java" charset="ISO-8859-1" />
-    <file url="file://$PROJECT_DIR$/data/src/main/java/com/lucevent/newsup/data/section/AsSections.java" charset="ISO-8859-1" />
-    <file url="file://$PROJECT_DIR$/data/src/main/java/com/lucevent/newsup/data/section/DagensNyheterSections.java" charset="ISO-8859-1" />
-    <file url="file://$PROJECT_DIR$/data/src/main/java/com/lucevent/newsup/data/section/DiarioCordobaSections.java" charset="ISO-8859-1" />
-    <file url="file://$PROJECT_DIR$/data/src/main/java/com/lucevent/newsup/data/section/ElConfidencialSections.java" charset="ISO-8859-1" />
-    <file url="file://$PROJECT_DIR$/data/src/main/java/com/lucevent/newsup/data/section/ElDiarioSections.java" charset="ISO-8859-1" />
-    <file url="file://$PROJECT_DIR$/data/src/main/java/com/lucevent/newsup/data/section/ElMundoSections.java" charset="ISO-8859-1" />
-    <file url="file://$PROJECT_DIR$/data/src/main/java/com/lucevent/newsup/data/section/ElPaisSections.java" charset="ISO-8859-1" />
-    <file url="file://$PROJECT_DIR$/data/src/main/java/com/lucevent/newsup/data/section/ElPeriodicoCaSections.java" charset="ISO-8859-1" />
-    <file url="file://$PROJECT_DIR$/data/src/main/java/com/lucevent/newsup/data/section/ElPeriodicoEsSections.java" charset="ISO-8859-1" />
-    <file url="file://$PROJECT_DIR$/data/src/main/java/com/lucevent/newsup/data/section/EuropaPressSections.java" charset="ISO-8859-1" />
-    <file url="file://$PROJECT_DIR$/data/src/main/java/com/lucevent/newsup/data/section/ExpressenSections.java" charset="ISO-8859-1" />
-    <file url="file://$PROJECT_DIR$/data/src/main/java/com/lucevent/newsup/data/section/HuffingtonPostSpainSections.java" charset="ISO-8859-1" />
-    <file url="file://$PROJECT_DIR$/data/src/main/java/com/lucevent/newsup/data/section/LaRazonSections.java" charset="ISO-8859-1" />
-    <file url="file://$PROJECT_DIR$/data/src/main/java/com/lucevent/newsup/data/section/LaVanguardiaSections.java" charset="ISO-8859-1" />
-    <file url="file://$PROJECT_DIR$/data/src/main/java/com/lucevent/newsup/data/section/MarcaSections.java" charset="ISO-8859-1" />
-    <file url="file://$PROJECT_DIR$/data/src/main/java/com/lucevent/newsup/data/section/MediumSections.java" charset="ISO-8859-1" />
-    <file url="file://$PROJECT_DIR$/data/src/main/java/com/lucevent/newsup/data/section/MetroSections.java" charset="ISO-8859-1" />
-    <file url="file://$PROJECT_DIR$/data/src/main/java/com/lucevent/newsup/data/section/MundoDeportivoSections.java" charset="ISO-8859-1" />
-    <file url="file://$PROJECT_DIR$/data/src/main/java/com/lucevent/newsup/data/section/RacoCatalaSections.java" charset="ISO-8859-1" />
-    <file url="file://$PROJECT_DIR$/data/src/main/java/com/lucevent/newsup/data/section/SportSections.java" charset="ISO-8859-1" />
-    <file url="file://$PROJECT_DIR$/data/src/main/java/com/lucevent/newsup/data/section/SwedroidSections.java" charset="ISO-8859-1" />
-    <file url="file://$PROJECT_DIR$/data/src/main/java/com/lucevent/newsup/data/section/XatakaSections.java" charset="ISO-8859-1" />
-    <file url="file://$PROJECT_DIR$/data/src/main/java/com/lucevent/newsup/data/section/_20MinutosSections.java" charset="ISO-8859-1" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

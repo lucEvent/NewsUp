@@ -1,16 +1,14 @@
 package com.lucevent.newsup.backend.utils;
 
-import com.lucevent.newsup.data.Sites;
+import com.lucevent.newsup.data.sports.util.LeagueTable;
+import com.lucevent.newsup.data.sports.util.LeagueTableRow;
 import com.lucevent.newsup.data.util.Date;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.Section;
 import com.lucevent.newsup.data.util.Sections;
-import com.lucevent.newsup.data.util.Site;
 
 import java.util.Comparator;
-import java.util.Map;
-import java.util.TreeMap;
 
 public class BackendParser {
 
@@ -35,7 +33,7 @@ public class BackendParser {
     public static StringBuilder toHtml(News news)
     {
         StringBuilder res = new StringBuilder("<div class=\"nu_news\" data-featherlight=\"/web?content&site=");
-        res.append(news.site_code + "&date=" + news.date + "&link=" + news.link);
+        res.append(news.site_code).append("&date=").append(news.date).append("&link=").append(news.link);
         res.append("\"><h2>");
         res.append(news.title);
         res.append("</h2><p>");
@@ -68,77 +66,116 @@ public class BackendParser {
         return sb;
     }
 
-    public static StringBuilder toHtml(Sites sites, Statistics stats, Statistics.Order order)
+    public static StringBuilder toHtml(Statistics stats, String options)
     {
         StringBuilder sb = new StringBuilder();
 
-        switch (order) {
-            case ByDefault:
-                for (int i = 0; i < sites.size(); i++) {
-                    int count = stats.getCount(i);
-                    if (count != 0) {
-                        sb.append("\t").append(sites.get(i).name).append(": ").append(count).append(" requests\n");
-                    }
-                }
-                break;
-            case BySiteName:
-                sb.append("\n ### Statistics ordered by site name ###\n\n");
-                TreeMap<Site, Integer> map_s = new TreeMap<>(new Comparator<Site>() {
-                    @Override
-                    public int compare(Site o1, Site o2)
-                    {
-                        return o1.name.compareTo(o2.name);
-                    }
-                });
-                for (int i = 0; i < sites.size(); ++i) {
-                    int count = stats.getCount(i);
-                    if (count > 0)
-                        map_s.put(sites.get(i), count);
-                }
-                for (Map.Entry<Site, Integer> entry : map_s.entrySet())
-                    sb.append("\t").append(entry.getKey().name).append(": ")
-                            .append(entry.getValue()).append(" requests\n");
-                break;
-            case ByNumber:
-                sb.append("\n ### Statistics ordered by number of requests ###\n\n");
-                TreeMap<Integer, Site> map_n = new TreeMap<>(new Comparator<Integer>() {
-                    @Override
-                    public int compare(Integer o1, Integer o2)
-                    {
-                        return o1 < o2 ? 1 : -1;
-                    }
-                });
-                for (int i = 0; i < sites.size(); ++i) {
-                    int count = stats.getCount(i);
-                    if (count > 0)
-                        map_n.put(count, sites.get(i));
-                }
-                for (Map.Entry<Integer, Site> entry : map_n.entrySet())
-                    sb.append("\t").append(entry.getValue().name).append(": ")
-                            .append(entry.getKey()).append(" requests\n");
-                break;
-            case ByLastAccessTime:
-                sb.append("\n ### Statistics ordered by last access time ###\n\n");
-                TreeMap<Long, Integer> map_t = new TreeMap<>(new Comparator<Long>() {
-                    @Override
-                    public int compare(Long o1, Long o2)
-                    {
-                        return o1 < o2 ? 1 : -1;
-                    }
-                });
-                for (int i = 0; i < sites.size(); ++i)
-                    if (stats.getCount(i) > 0)
-                        map_t.put(stats.getLastAccess(i), i);
+        StatisticsSet statisticsSet;
 
-                for (Map.Entry<Long, Integer> entry : map_t.entrySet()) {
-                    long time = entry.getKey();
-                    int position = entry.getValue();
-                    sb.append("\t").append(sites.get(position).name).append(": ")
-                            .append(Date.getAge(time)).append(" from ")
-                            .append(stats.getLastIp(position)).append("\n");
+        if (options.contains("s")) {
+            sb.append("\n # Statistics ordered by site name #\n\n");
+            statisticsSet = new StatisticsSet(stats.getSiteStats(), new Comparator<SiteStat>() {
+                @Override
+                public int compare(SiteStat o1, SiteStat o2)
+                {
+                    return o1.siteName.compareTo(o2.siteName);
                 }
-                break;
+            });
+            appendHtml(sb, statisticsSet);
         }
+
+        if (options.contains("n")) {
+            sb.append("\n # Statistics ordered by number of requests #\n\n");
+            statisticsSet = new StatisticsSet(stats.getSiteStats(), new Comparator<SiteStat>() {
+                @Override
+                public int compare(SiteStat o1, SiteStat o2)
+                {
+                    return o1.nAccesses < o2.nAccesses ? 1 : -1;
+                }
+            });
+            appendHtml(sb, statisticsSet);
+        }
+
+        if (options.contains("t")) {
+            sb.append("\n # Statistics ordered by last access time #\n\n");
+            statisticsSet = new StatisticsSet(stats.getSiteStats(), new Comparator<SiteStat>() {
+                @Override
+                public int compare(SiteStat o1, SiteStat o2)
+                {
+                    return o1.lastAccess < o2.lastAccess ? 1 : -1;
+                }
+            });
+            appendHtml(sb, statisticsSet);
+        }
+
+        if (options.isEmpty()) {
+            SiteStat[] siteStats = stats.getSiteStats();
+            for (SiteStat ss : siteStats)
+                if (ss.nAccesses != 0)
+                    sb.append("\t").append(ss.siteName).append(": ").append(ss.nAccesses).append(" requests\n");
+        }
+        return sb;
+    }
+
+    private static void appendHtml(StringBuilder sb, StatisticsSet statisticsSet)
+    {
+        for (SiteStat ss : statisticsSet)
+            if (ss.nAccesses > 0)
+                sb.append("\t").append(ss.siteName).append(ss.siteName.length() > 14 ? ":\t" : ":\t\t")
+                        .append(ss.nAccesses).append(" requests\t[last ")
+                        .append(Date.getAge(ss.lastAccess))
+                        .append("]\t[from ").append(ss.lastIp).append("]\n");
+    }
+
+    private static void appendEntries(StringBuilder sb, StatisticsSet statisticsSet)
+    {
+        for (SiteStat ss : statisticsSet)
+            if (ss.nAccesses > 0)
+                sb.append("<site code='").append(ss.siteCode)
+                        .append("' requests='").append(ss.nAccesses)
+                        .append("' last='").append(ss.lastAccess)
+                        .append("' ip='").append(ss.lastIp)
+                        .append("'/>");
+    }
+
+    public static StringBuilder toEntry(Statistics stats, String options)
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<statistics since='").append(stats.since)
+                .append("' laststart='").append(stats.lastStart).append("'>");
+
+        StatisticsSet statisticsSet = null;
+
+        if (options.contains("s")) {
+            statisticsSet = new StatisticsSet(stats.getSiteStats(), new Comparator<SiteStat>() {
+                @Override
+                public int compare(SiteStat o1, SiteStat o2)
+                {
+                    return o1.siteName.compareTo(o2.siteName);
+                }
+            });
+        } else if (options.contains("n")) {
+            statisticsSet = new StatisticsSet(stats.getSiteStats(), new Comparator<SiteStat>() {
+                @Override
+                public int compare(SiteStat o1, SiteStat o2)
+                {
+                    return o1.nAccesses < o2.nAccesses ? 1 : -1;
+                }
+            });
+        } else if (options.contains("t")) {
+            statisticsSet = new StatisticsSet(stats.getSiteStats(), new Comparator<SiteStat>() {
+                @Override
+                public int compare(SiteStat o1, SiteStat o2)
+                {
+                    return o1.lastAccess < o2.lastAccess ? 1 : -1;
+                }
+            });
+        }
+
+        if (statisticsSet != null)
+            appendEntries(sb, statisticsSet);
+
+        sb.append("</statistics>");
         return sb;
     }
 
@@ -172,4 +209,13 @@ public class BackendParser {
         return sb;
     }
 
+    public static StringBuilder toEntry(LeagueTable leagueTable)
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<leaguetable n='").append(leagueTable.size()).append("'>");
+        for (LeagueTableRow row : leagueTable)
+            sb.append("<row>").append(row.wrap()).append("</row>");
+        sb.append("</leaguetable>");
+        return sb;
+    }
 }

@@ -1,19 +1,30 @@
 package com.lucevent.newsup.view.fragment;
 
+import android.app.AlarmManager;
+import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
 import com.lucevent.newsup.AppSettings;
+import com.lucevent.newsup.Main;
+import com.lucevent.newsup.ProSettings;
 import com.lucevent.newsup.R;
+import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.AppData;
 import com.lucevent.newsup.kernel.NewsManager;
 import com.lucevent.newsup.kernel.ScheduleManager;
 import com.lucevent.newsup.services.util.DownloadSchedule;
 
 import java.text.DecimalFormat;
+import java.util.Random;
 
 public class AppSettingsFragment extends PreferenceFragment
         implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -22,8 +33,7 @@ public class AppSettingsFragment extends PreferenceFragment
     private static final int PREF_MASK_SCHEDULE_DOWNLOADS = 0x02;
     private static final int PREF_MASK_CLEAN_CACHE = 0x04;
     private static final int PREF_MASK_DEV_MODE = 0x08;
-    private static final int PREF_MASK_PRO_MODE = 0x10;
-    private static final int PREF_MASK_KEEP_NEWS = 0x20;
+    private static final int PREF_MASK_KEEP_NEWS = 0x10;
 
     @Override
     public void onCreate(final Bundle savedInstanceState)
@@ -62,9 +72,33 @@ public class AppSettingsFragment extends PreferenceFragment
             setUpPreferenceSummaries(PREF_MASK_CLEAN_CACHE);
         else if (key.equals(AppSettings.PREF_DEV_MODE_KEY))
             setUpPreferenceSummaries(PREF_MASK_DEV_MODE);
-        else if (key.equals(AppSettings.PREF_PRO_MODE_KEY))
-            setUpPreferenceSummaries(PREF_MASK_PRO_MODE);
-        else if (key.equals(AppSettings.PREF_KEEP_NEWS_KEY))
+        else if (key.equals(AppSettings.PREF_PRO_CODE_KEY)) {
+
+            String code = sharedPreferences.getString(AppSettings.PREF_PRO_CODE_KEY, "");
+            if (code.isEmpty()) return;
+
+            int resIdMsg = ProSettings.checkProCode(code);
+
+            AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+            if (resIdMsg == R.string.msg_invalid_code) {
+                dialog.setMessage(resIdMsg)
+                        .setPositiveButton(R.string.ok, null)
+                        .show();
+            } else {
+                dialog.setTitle(resIdMsg)
+                        .setMessage(R.string.msg_app_must_restart_to_apply_changes)
+                        .setPositiveButton(R.string.restart, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                restartApp();
+                            }
+                        })
+                        .show();
+            }
+            ((EditTextPreference) findPreference(AppSettings.PREF_PRO_CODE_KEY)).setText("");
+
+        } else if (key.equals(AppSettings.PREF_KEEP_NEWS_KEY))
             setUpPreferenceSummaries(PREF_MASK_KEEP_NEWS);
     }
 
@@ -98,11 +132,6 @@ public class AppSettingsFragment extends PreferenceFragment
             Preference p = findPreference(AppSettings.PREF_DEV_MODE_KEY);
             p.setSummary(AppSettings.isDevModeActivated() ? R.string.enabled : R.string.disabled);
             AppSettings.devModeInvalidated();
-        }
-        if ((preferencesMask & PREF_MASK_PRO_MODE) != 0) {
-            Preference p = findPreference(AppSettings.PREF_PRO_MODE_KEY);
-            p.setSummary(AppSettings.isProModeActivated() ? R.string.enabled : R.string.disabled);
-//            AppSettings.PROModeInvalidated();
         }
         if ((preferencesMask & PREF_MASK_KEEP_NEWS) != 0) {
             ListPreference p = (ListPreference) findPreference(AppSettings.PREF_KEEP_NEWS_KEY);
@@ -143,5 +172,16 @@ public class AppSettingsFragment extends PreferenceFragment
             return true;
         }
     };
+
+    private void restartApp()
+    {
+        Intent intent = new Intent(getActivity(), Main.class);
+        intent.putExtra(AppCode.RESTART, AppCode.RESTART);
+        int requestCode = new Random().nextInt();
+        PendingIntent mPendingIntent = PendingIntent.getActivity(getActivity(), requestCode, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager mgr = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+        System.exit(0);
+    }
 
 }

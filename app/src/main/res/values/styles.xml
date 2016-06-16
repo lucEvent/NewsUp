@@ -56,4 +56,14 @@
         <item name="android:alpha">0.6</item>
     </style>
 
+    <style name="tableLayout_text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="tableLayout_header" parent="tableLayout_text">
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>

@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.lucevent.newsup.AppSettings;
+import com.lucevent.newsup.ProSettings;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.Sites;
 import com.lucevent.newsup.data.SitesMap;
@@ -57,17 +58,17 @@ public class NewsManager {
         if (sdmanager == null)
             sdmanager = new SDManager(context);
 
-        if (newsreader == null && AppSettings.isProModeActivated())
+        if (newsreader == null && ProSettings.isProModeActivated())
             newsreader = new NewsReader();
 
         if (connectivityManager == null)
             connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         if (AppData.sites == null)
-            AppData.sites = new Sites(context.getResources().getStringArray(R.array.sitelist_headers));
+            AppData.sites = new Sites(context.getResources().getStringArray(R.array.sitelist_headers), ProSettings.areFinlandSitesEnabled());
 
         if (AppData.sitesOrderedByName == null)
-            AppData.sitesOrderedByName = new SitesMap(SitesMap.SITE_COMPARATOR_BY_NAME);
+            AppData.sitesOrderedByName = new SitesMap(SitesMap.SITE_COMPARATOR_BY_NAME, ProSettings.areFinlandSitesEnabled());
 
         if (logoManager == null)
             logoManager = LogoManager.getInstance(context, AppData.sites.size());

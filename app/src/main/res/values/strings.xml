@@ -1,7 +1,8 @@
 <resources>
 
     <string name="app_name" translatable="false">NewsUp</string>
-    <string name="app_version" translatable="false">1.2.3</string>
+    <string name="app_sports_name" translatable="false">NewsUp Sports</string>
+    <string name="app_version" translatable="false">1.3.0</string>
     <string name="version">version</string>
 
     <!-- * ******************** Labels **************************** * -->
@@ -31,6 +32,8 @@
     <string name="sat">Sat</string>
     <string name="sun">Sun</string>
 
+    <string name="extras">Extras</string>
+    <string name="sports">Sports</string>
 
     <!-- * ******************** Buttons **************************** * -->
     <string name="cancel">Cancel</string>
@@ -44,6 +47,8 @@
     <string name="open_in_browser">Open in browser</string>
     <string name="close">Close</string>
     <string name="schedule_download">Schedule download</string>
+    <string name="ok">OK</string>
+    <string name="restart">Restart</string>
 
 
     <!-- * ******************** Hints **************************** * -->
@@ -63,6 +68,10 @@
     <string name="msg_cant_load_content">Can\'t load content</string>
     <string name="msg_news_not_found">Oops… The app is awesome but yet it can\'t read this news.\nWhat do we do?</string>
     <string name="msg_no_internet_connection">No internet connection</string>
+    <string name="msg_unlocked_finnish">Finnish publications unlocked</string>
+    <string name="msg_unlocked_sports">Sports unlocked</string>
+    <string name="msg_invalid_code">Invalid code</string>
+    <string name="msg_app_must_restart_to_apply_changes">App must be restarted to apply changes</string>
 
 
     <!-- * *************** Activities and fragment's titles ********************* * -->
@@ -87,7 +96,7 @@
     <string name="pref_main_sections">Main sections</string>
     <string name="pref_download_sections">Download sections</string>
     <string name="pref_dev_mode">Developer mode</string>
-    <string name="pref_pro_mode">Pro version</string>
+    <string name="pref_pro_code">PRO code</string>
     <string name="pref_keep_news">Keep news</string>
 
     <string name="pref_main_sites_key" translatable="false">app_pref1</string>
@@ -96,7 +105,7 @@
     <string name="pref_schedule_downloads_key" translatable="false">app_pref4</string>
     <string name="pref_clean_cache_key" translatable="false">app_pref5</string>
     <string name="pref_dev_mode_key" translatable="false">app_pref6</string>
-    <string name="pref_pro_mode_key" translatable="false">app_pref7</string>
+    <string name="pref_pro_code_key" translatable="false">app_pref7</string>
     <string name="pref_keep_news_key" translatable="false">app_pref8</string>
 
     <string name="pref_show_in_my_feed_key" translatable="false">site_pref1</string>
@@ -104,90 +113,94 @@
     <string name="pref_main_sections_key" translatable="false">site_pref3</string>
     <string name="pref_download_sections_key" translatable="false">site_pref4</string>
 
-    <!-- ***************************** ***************** ********************************** -->
-    <string name="about_content" translatable="false"><![CDATA[
-        <h2>News Up version 1.2.3</h2>
-        <h2>Developed by Rafael J. Lucena</h2>
-        <h3>Contact: rafaa89(at)gmail.com</h3>
-        <p>
-            <p><b>Last features and Improvements:</b></p>
-            <p>Version 1.2.3 2016-06-02:<br>New: PRO version (atm enabled for everyone) will consume less data and battery, doing the hardest work in the server. Storage space consumed without limit?? Not anymore with the "Keep time" preference. Check it out at "Settings". Logs enabled/disabled easier for developing.</p>
-            <p>Version 1.2.2 2016-05-24:<br>Developer mode added with password for (only) developer features. Fixed error with categories.</p>
-            <p>Version 1.2.1 2016-05-17:<br>Restored support for \'Dagens Nyheter\' and \'Discover\'. \'Discover\' sections updated. Fixed error with the news order in Read News. News html styles updated.</p>
-            <p>Version 1.2.0 2016-05-15:<br>New sites: \'Digital Camera\', \'Verne\' and \'Hipertextual\'.</p>
-            <p>Version 1.1.0 2016-05-14:<br>New sites: \'Huffington Post USA\' and \'Huffington Post Canada\'. Check them out!</p>
-            <p>Version 1.0.9 2016-05-14:<br>New statistic option (temporal solution). Restored support for \'Expressen\' and \'HuffingtonPost UK\'. Sections updated  of the last one.</p>
-            <p>Version 1.0.7 2016-05-07:<br>Updated content management of \'Huffington Post Spain\'. Added specific styles for each site (on Development). In server, statistics are saved in DataStore.</p>
-            <p>Version 1.0.6 2016-04-30:<br>Adjustment of sections of \'La Vanguardia\'.</p>
-            <p>Version 1.0.5 2016-04-28:<br>Updated sections of \'El Diario\' and \'La Vanguardia\'.</p>
-            <p>Version 1.0.3 2016-04-26:<br>All sections has been revised and many (not working) removed. Server improvements/changes.</p>
-            <p>Version 1.0.2 2016-04-22:<br>Bugs fixed when updating RecyclerviewAdapter and server timeout increased to 10s.</p>
-            <p>Version 1.0.1 2016-04-21:<br>News in My news ordered by time even with multiply sites (like in pre-lollipop versions). Bugs fixed when updating RecyclerviewAdapter and when the server cannot answer one query.</p>
-            <p>Version 1.0.0 2016-04-19:<br>Lollipop support!!.<br> Settings standardized.<br>Scheduled downloads now saved in DB<br>Minimum android version supported is now Kitkat (Api19)</p>
-        </p>
-        <br>
-        <p>
-            <p><b>What\'s coming soon?:</b></p>
-            <p>Option to set a data storage limit, by size or by date</p>
-            <p>Preview on tap - like in Instagram</p>
-        </p>
-        <p>
-            <p><b>Possible support for news sites:</b></p>
-            <p> - Svenska Yle (Finland)</p>
-            <p> - Idg (Sweden)</p>
-            <p> - Sports illustrated (USA)</p>
-            <p> - Daily Mail (UK)</p>
-            <p> - The wall street journal (USA)</p>
-            <p> - Times of india</p>
-            <p> - NY times (USA)</p>
-            <p> - USA Today (USA)</p>
-            <p> - Metro (UK)</p>
-            <p> - Independent (UK)</p>
-            <p> - Siberian Times (Siberia, Russia)</p>
-        </p>
-        <p>
-            <p><b>Possible support for magazines:</b></p>
-            <p> - The bark</p>
-            <p> - Space.com</p>
-            <p> - National geographic</p>
-            <p> - Bestfriends.org</p>
-            <p> - Nova dog magazine</p>
-            <p> - Ny Teknik</p>
-            <p> - Sweclockers</p>
-            <p> - NASA</p>
-            <p> - Edx</p>
-            <p> - Revista cuore</p>
-            <p> - La Patilla</p>
-            <p> - Science magazine</p>
-            <p> - The Verge</p>
-            <p> - Interviu</p>
-            <p> - Vagabond</p>
-            <p> - Life Science Sweden/</p>
-            <p> - Teknikensvarld</p>
-            <p> - Veckans Affärer</p>
-            <p> - FRIDA</p>
-            <p> - Catalonia today</p>
-            <p> - Tech Times</p>
-            <p> - IGN España</p>
-            <p> - Magazine Fashion & arts</p>
-        </p>
-        <p>
-            <p><b>Possible support for blogs:</b></p>
-            <p> - Digital Inspiration Technology Blog</p>
-            <p> - Google Earth Blog</p>
-            <p> - Jumbo Joke: Humor the Way You Like It</p>
-            <p> - Mashable</p>
-            <p> - Ogle Earth</p>
-        </p>
-         <p>
-            <p><b>Possible other supports:</b></p>
-            <p> - Readanybook.com</p>
-        </p>
-    ]]></string>
 
+    <!-- ***************************** * Sport strings * ********************************** -->
+    <string name="team">Team</string>
+    <string name="points">Pts</string>
+    <string name="games">GP</string>
+    <string name="won">W</string>
+    <string name="draw">D</string>
+    <string name="lost">L</string>
+    <string name="scored">F</string>
+    <string name="received">A</string>
+
+
+    <!-- ***************************** ***************** ********************************** -->
+    <string name="about_content_header">News Up version 1.3.0</string>
+    <string name="about_content_contact">Developed by Rafael J. Lucena\nContact: rafaa89(at)gmail.com</string>
+    <string name="about_content_title_new_features">Last features and improvements:</string>
+    <string name="about_content_new_features">
+        Version 1.3.0 2016-06-16:\nStatistics improved.\nPro codes added.\nNew Pro feature: NewsUp Sports, follow your favorites sports (atm only football (soccer) supported)\nAbout screen improved for better performance\nDatabase bug fixed\n
+        \nVersion 1.2.3 2016-06-02:\nNew: PRO version (atm enabled for everyone) will consume less data and battery, doing the hardest work in the server. Storage space consumed without limit?? Not anymore with the "Keep time" preference. Check it out at "Settings". Logs enabled/disabled easier for developing.\n
+        \nVersion 1.2.2 2016-05-24:\nDeveloper mode added with password for (only) developer features. Fixed error with categories.\n
+        \nVersion 1.2.1 2016-05-17:\nRestored support for \'Dagens Nyheter\' and \'Discover\'. \'Discover\' sections updated. Fixed error with the news order in Read News. News html styles updated.\n
+        \nVersion 1.2.0 2016-05-15:\nNew sites: \'Digital Camera\', \'Verne\' and \'Hipertextual\'.\n
+        \nVersion 1.1.0 2016-05-14:\nNew sites: \'Huffington Post USA\' and \'Huffington Post Canada\'. Check them out!\n
+        \nVersion 1.0.9 2016-05-14:\nNew statistic option (temporal solution). Restored support for \'Expressen\' and \'HuffingtonPost UK\'. Sections updated  of the last one.\n
+        \nVersion 1.0.7 2016-05-07:\nUpdated content management of \'Huffington Post Spain\'. Added specific styles for each site (on Development). In server, statistics are saved in DataStore.\n
+        \nVersion 1.0.6 2016-04-30:\nAdjustment of sections of \'La Vanguardia\'.\n
+        \nVersion 1.0.5 2016-04-28:\nUpdated sections of \'El Diario\' and \'La Vanguardia\'.\n
+        \nVersion 1.0.3 2016-04-26:\nAll sections has been revised and many (not working) removed. Server improvements/changes.\n
+        \nVersion 1.0.2 2016-04-22:\nBugs fixed when updating RecyclerViewAdapter and server timeout increased to 10s.\n
+        \nVersion 1.0.1 2016-04-21:\nNews in My news ordered by time even with multiply sites (like in pre-lollipop versions). Bugs fixed when updating RecyclerviewAdapter and when the server cannot answer one query.\n
+        \nVersion 1.0.0 2016-04-19:\nLollipop support!!.\nSettings standardized.\nScheduled downloads now saved in DB\nMinimum android version supported is now Kitkat (Api19)\n
+    </string>
+    <string name="about_content_title_comming_soon">What\'s coming soon?:</string>
+    <string name="about_content_comming_soon">
+        Marshmallow support (permissions) in version 1.4.0
+        \nPreview on tap - like in Instagram in version 1.5.0
+    </string>
+    <string name="about_content_title_next_sites">Possible support for:</string>
+    <string name="about_content_next_sites">
+        NEWSPAPERS:\n
+        - Svenska Yle (Finland)\n
+        - Idg (Sweden)\n
+        - Sports illustrated (USA)\n
+        - Daily Mail (UK)\n
+        - The wall street journal (USA)\n
+        - Times of india\n
+        - NY times (USA)\n
+        - USA Today (USA)\n
+        - Metro (UK)\n
+        - Independent (UK)\n
+        - Siberian Times (Siberia, Russia)\n
+        \nMAGAZINES:\n
+        - The bark\n
+        - Space.com\n
+        - National geographic\n
+        - Bestfriends.org\n
+        - Nova dog magazine\n
+        - Ny Teknik\n
+        - Sweclockers\n
+        - NASA\n
+        - Edx\n
+        - Revista cuore\n
+        - La Patilla\n
+        - Science magazine\n
+        - The Verge\n
+        - Interviu\n
+        - Vagabond\n
+        - Life Science Sweden/\n
+        - Teknikensvarld\n
+        - Veckans Affärer\n
+        - FRIDA\n
+        - Catalonia today\n
+        - Tech Times\n
+        - IGN España\n
+        - Magazine Fashion &amp; arts\n
+        \nBLOGS:\n
+        - Digital Inspiration Technology Blog\n
+        - Google Earth Blog\n
+        - Jumbo Joke: Humor the Way You Like It\n
+        - Mashable\n
+        - Ogle Earth\n
+        \nOTHER:\n
+        - Readanybook.com\n\n
+    </string>
 
     <!-- ***************************** ***************** ********************************** -->
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+
 
 </resources>

@@ -7,11 +7,11 @@ import java.util.Collection;
 
 public class Sites extends ArrayList<Site> {
 
-    public Sites(String[] titles) //new String[]{R.string.spain, R.string.catalonia, ....};
+    public Sites(String[] titles, boolean finnishSites) //new String[]{R.string.spain, R.string.catalonia, ....};
     {
         super();
 
-        addDefault(titles);
+        addDefault(titles, finnishSites);
     }
 
     public Sites(Collection<Site> c)
@@ -24,7 +24,7 @@ public class Sites extends ArrayList<Site> {
         super(capacity);
     }
 
-    private void addDefault(String[] titles)
+    private void addDefault(String[] titles, boolean finnishSites)
     {
         // Spanish sites
         if (titles != null) add(new Site(-1, titles[0], -1, null, null));
@@ -47,7 +47,7 @@ public class Sites extends ArrayList<Site> {
         add(new Site(210, "La Vanguardia", 0xff1a4970, new com.lucevent.newsup.data.section.LaVanguardiaSections(), new com.lucevent.newsup.data.reader.LaVanguardia()));
         add(new Site(215, "Sport", 0xffd61a1a, new com.lucevent.newsup.data.section.SportSections(), new com.lucevent.newsup.data.reader.Sport()));
         add(new Site(220, "Mundo Deportivo", 0xff242424, new com.lucevent.newsup.data.section.MundoDeportivoSections(), new com.lucevent.newsup.data.reader.MundoDeportivo()));
-        add(new Site(225, "Racò Català", 0xffff6347, new com.lucevent.newsup.data.section.RacoCatalaSections(), new com.lucevent.newsup.data.reader.RacoCatala()));
+        add(new Site(225, "Racó Català", 0xffff6347, new com.lucevent.newsup.data.section.RacoCatalaSections(), new com.lucevent.newsup.data.reader.RacoCatala()));
 
         // Swedish sites
         if (titles != null) add(new Site(-1, titles[2], -1, null, null));
@@ -59,13 +59,15 @@ public class Sites extends ArrayList<Site> {
         add(new Site(330, "Metro", 0xff007d3c, new com.lucevent.newsup.data.section.MetroSections(), new com.lucevent.newsup.data.reader.Metro()));
 
         // Finnish sites
-/*        if (titles != null) add(new Site(-1, titles[3], -1, null, null));
-        add(new Site(400, "Helsinki times", 0xff32c8fa, new com.lucevent.newsup.data.section.HelsinkiTimesSections(), new com.lucevent.newsup.data.reader.HelsinkiTimes()));
-        add(new Site(405, "Helsingin Sanomat", 0xff01133d, new com.lucevent.newsup.data.section.HelsinkiSanomatSections(), new com.lucevent.newsup.data.reader.HelsinkiSanomat()));
-        add(new Site(410, "Iltalehti", 0xffff0000, new com.lucevent.newsup.data.section.IltalehtiSections(), new com.lucevent.newsup.data.reader.Iltalehti()));
-        add(new Site(415, "Yle", 0xff00b4c4, new com.lucevent.newsup.data.section.YleSections(), new com.lucevent.newsup.data.reader.Yle()));
+        if (finnishSites) {
+            if (titles != null) add(new Site(-1, titles[3], -1, null, null));
+            add(new Site(400, "Helsinki times", 0xff32c8fa, new com.lucevent.newsup.data.section.HelsinkiTimesSections(), new com.lucevent.newsup.data.reader.HelsinkiTimes()));
+            add(new Site(405, "Helsingin Sanomat", 0xff01133d, new com.lucevent.newsup.data.section.HelsinkiSanomatSections(), new com.lucevent.newsup.data.reader.HelsinkiSanomat()));
+            add(new Site(410, "Iltalehti", 0xffff0000, new com.lucevent.newsup.data.section.IltalehtiSections(), new com.lucevent.newsup.data.reader.Iltalehti()));
+            add(new Site(415, "Yle", 0xff00b4c4, new com.lucevent.newsup.data.section.YleSections(), new com.lucevent.newsup.data.reader.Yle()));
+        }
 //        add(new Site(420, "Yle Svenska", 0xff, new com.lucevent.newsup.data.section.YleSvenskaSections(), new com.lucevent.newsup.data.reader.YleSvenska()));
-*/
+
         // British sites
         if (titles != null) add(new Site(-1, titles[4], -1, null, null));
         add(new Site(500, "BBC", 0xffa62e30, new com.lucevent.newsup.data.section.BBCSections(), new com.lucevent.newsup.data.reader.BBC()));
@@ -111,16 +113,16 @@ public class Sites extends ArrayList<Site> {
         add(new Site(1000, "Make", 0xff4ecbf5, new com.lucevent.newsup.data.section.MakeSections(), new com.lucevent.newsup.data.reader.Make()));
         add(new Site(1005, "Discover", 0xff171717, new com.lucevent.newsup.data.section.DiscoverSections(), new com.lucevent.newsup.data.reader.Discover()));
         add(new Site(1045, "Digital Camera", 0xffffffff, new com.lucevent.newsup.data.section.DigitalCameraSections(), new com.lucevent.newsup.data.reader.DigitalCamera()));
+//        add(new Site(, "National Geographic", 0xff, new com.lucevent.newsup.data.section.NationalGeographicSections(), new com.lucevent.newsup.data.reader.NationalGeographic()));
 
         add(new Site(1030, "Sky and Telescope", 0xffd92326, new com.lucevent.newsup.data.section.SkyAndTelescopeSections(), new com.lucevent.newsup.data.reader.SkyAndTelescope()));
         add(new Site(1050, "Space News", 0xffffffff, new com.lucevent.newsup.data.section.SpaceNewsSections(), new com.lucevent.newsup.data.reader.SpaceNews()));
+//        add(new Site(, "Space", 0xff, new com.lucevent.newsup.data.section.SpaceSections(), new com.lucevent.newsup.data.reader.Space()));
 
         add(new Site(1035, "Dogster", 0xff547a94, new com.lucevent.newsup.data.section.DogsterSections(), new com.lucevent.newsup.data.reader.Dogster()));
+//        add(new Site(, "The Bark", 0xff, new com.lucevent.newsup.data.section.TheBarkSections(), new com.lucevent.newsup.data.reader.TheBark()));
 
         add(new Site(1040, "El Jueves", 0xffcb1f1f, new com.lucevent.newsup.data.section.ElJuevesSections(), new com.lucevent.newsup.data.reader.ElJueves()));
-//        add(new Site(, "National Geographic", 0xff, new com.lucevent.newsup.data.section.NationalGeographicSections(), new com.lucevent.newsup.data.reader.NationalGeographic()));
-//        add(new Site(, "Space", 0xff, new com.lucevent.newsup.data.section.SpaceSections(), new com.lucevent.newsup.data.reader.Space()));
-//        add(new Site(, "The Bark", 0xff, new com.lucevent.newsup.data.section.TheBarkSections(), new com.lucevent.newsup.data.reader.TheBark()));
 
         //Not working
         if (titles != null) add(new Site(-1, titles[10], -1, null, null));

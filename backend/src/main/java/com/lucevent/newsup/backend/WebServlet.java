@@ -1,6 +1,7 @@
 package com.lucevent.newsup.backend;
 
 import com.lucevent.newsup.backend.utils.BackendParser;
+import com.lucevent.newsup.data.util.Date;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.Site;
@@ -12,7 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class ServletWeb extends HttpServlet {
+public class WebServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
@@ -78,6 +79,20 @@ public class ServletWeb extends HttpServlet {
             Site site = Data.sites.getSiteByCode(Integer.parseInt(s_site));
 
             resp.getWriter().println(BackendParser.toHtml(site.sections).toString());
+
+        } else if (req.getParameter("stats") != null) {
+
+            if (req.getParameter("reset") != null)
+                Data.stats.reset(Data.sites);
+
+            StringBuilder sb = new StringBuilder();
+            sb.append("Since ").append(Date.getAge(Data.stats.since)).append("\n\n");
+            sb.append("Last start ").append(Date.getAge(Data.stats.lastStart)).append("\n\n");
+
+            String options = req.getParameter("options");
+            sb.append(BackendParser.toHtml(Data.stats, options != null ? options : ""));
+
+            resp.getWriter().println(sb);
 
         }
 

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#88cccccc"
+    android:paddingBottom="6dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingTop="6dp">
+
+    <TextView
+        android:id="@+id/position"
+        style="@style/tableLayout_header"
+        android:text="#"/>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
+
+    <TextView
+        android:id="@+id/teamName"
+        style="@style/tableLayout_header"
+        android:text="@string/team"/>
+
+    <TextView
+        android:id="@+id/points"
+        style="@style/tableLayout_header"
+        android:text="@string/points"/>
+
+    <TextView
+        android:id="@+id/games"
+        style="@style/tableLayout_header"
+        android:text="@string/games"/>
+
+    <TextView
+        android:id="@+id/won"
+        style="@style/tableLayout_header"
+        android:text="@string/won"/>
+
+    <TextView
+        android:id="@+id/draw"
+        style="@style/tableLayout_header"
+        android:text="@string/draw"/>
+
+    <TextView
+        android:id="@+id/lost"
+        style="@style/tableLayout_header"
+        android:text="@string/lost"/>
+
+    <TextView
+        android:id="@+id/scored"
+        style="@style/tableLayout_header"
+        android:text="@string/scored"/>
+
+    <TextView
+        android:id="@+id/received"
+        style="@style/tableLayout_header"
+        android:layout_weight="1"
+        android:text="@string/received"/>
+
+</TableRow>

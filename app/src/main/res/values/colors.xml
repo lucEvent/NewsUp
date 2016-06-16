@@ -5,6 +5,10 @@
     <color name="colorPrimaryDark">#558B2F</color>
     <color name="colorAccent">#EF5350</color>
 
+    <color name="sportsColorPrimary">#3949AB</color>
+    <color name="sportsColorPrimaryDark">#283593</color>
+    <color name="sportsColorAccent">#AFB42B</color>
+
     <color name="default_background">#feee</color>
 
     <color name="black_overlay">#66000000</color>

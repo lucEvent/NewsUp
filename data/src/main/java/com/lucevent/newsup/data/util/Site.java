@@ -59,4 +59,5 @@ public class Site {
     {
         return reader.style;
     }
+
 }

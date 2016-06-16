@@ -30,6 +30,13 @@
         </activity>
 
         <activity
+            android:name=".SportsMain"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/app_sports_name"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+
+        <activity
             android:name=".view.activity.NewsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:parentActivityName=".Main"

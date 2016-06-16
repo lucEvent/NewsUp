@@ -31,6 +31,21 @@
     </group>
 
     <item
+        android:id="@+id/nav_header_extras"
+        android:title="@string/extras">
+
+        <menu>
+
+            <item
+                android:id="@+id/nav_sports"
+                android:icon="@drawable/ic_sports"
+                android:title="@string/sports"/>
+
+        </menu>
+
+    </item>
+
+    <item
         android:id="@+id/nav_header_favorites"
         android:title="@string/favorites">
 

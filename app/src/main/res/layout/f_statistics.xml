@@ -1,13 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <TextView
-        android:id="@+id/content_box"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:padding="5dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"/>
-</ScrollView>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/by_sitename"
+        style="@style/floatingButton"
+        android:layout_above="@+id/by_nrequests"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_sort_by_name"
+        app:backgroundTint="@color/colorPrimary"
+        app:rippleColor="@color/colorAccent"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/by_nrequests"
+        style="@style/floatingButton"
+        android:layout_above="@+id/by_time"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_sort_by_number"
+        app:backgroundTint="@color/colorPrimary"
+        app:rippleColor="@color/colorAccent"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/by_time"
+        style="@style/floatingButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_access_time"
+        app:backgroundTint="@color/colorPrimary"
+        app:rippleColor="@color/colorAccent"/>
+
+</RelativeLayout>

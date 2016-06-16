@@ -5,15 +5,13 @@ import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Ignore;
 import com.googlecode.objectify.annotation.Unindex;
 import com.googlecode.objectify.cmd.LoadType;
+import com.lucevent.newsup.data.Sites;
+import com.lucevent.newsup.data.util.Site;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
 @Entity
 public class Statistics {
-
-    public enum Order {
-        ByDefault, BySiteName, ByNumber, ByLastAccessTime
-    }
 
     @Id
     private Long id;
@@ -25,16 +23,10 @@ public class Statistics {
     public Long lastStart;
 
     @Unindex
-    private int[] counters;
-
-    @Unindex
-    private long[] lastAccesses;
-
-    @Unindex
-    private String[] lastIps;
+    private SiteStat[] siteStats;
 
 
-    public static Statistics initialize(int counterSize)
+    public static Statistics initialize(Sites sites)
     {
         LoadType<Statistics> db = ofy().load().type(Statistics.class);
 
@@ -47,16 +39,7 @@ public class Statistics {
         } else {
 
             statistics = new Statistics();
-            statistics.since = System.currentTimeMillis();
-            statistics.lastStart = System.currentTimeMillis();
-            statistics.counters = new int[counterSize];
-            statistics.lastAccesses = new long[counterSize];
-            statistics.lastIps = new String[counterSize];
-            for (int i = 0; i < counterSize; i++) {
-                statistics.counters[i] = 0;
-                statistics.lastAccesses[i] = 0;
-                statistics.lastIps[i] = "";
-            }
+            initializeStats(statistics, sites);
 
             ofy().save().entity(statistics).now();
 
@@ -66,25 +49,15 @@ public class Statistics {
 
     public void count(int position, String ip)
     {
-        counters[position]++;
-        lastAccesses[position] = System.currentTimeMillis();
-        lastIps[position] = ip;
+        siteStats[position].nAccesses++;
+        siteStats[position].lastAccess = System.currentTimeMillis();
+        siteStats[position].lastIp = ip;
         ofy().save().entity(this).now();//save()    //possible improvement? save only when the server instance is destroyed
     }
 
-    public int getCount(int position)
+    public SiteStat[] getSiteStats()
     {
-        return counters[position];
-    }
-
-    public Long getLastAccess(int position)
-    {
-        return lastAccesses[position];
-    }
-
-    public String getLastIp(int position)
-    {
-        return lastIps[position];
+        return siteStats;
     }
 
     public void save()
@@ -92,17 +65,26 @@ public class Statistics {
         ofy().save().entity(this).now();
     }
 
-    public void reset(int counterSize)
+    public void reset(Sites sites)
     {
-        since = System.currentTimeMillis();
-        lastStart = System.currentTimeMillis();
-        counters = new int[counterSize];
-        for (int i = 0; i < counters.length; i++) {
-            counters[i] = 0;
-            lastAccesses[i] = 0;
-            lastIps[i] = "";
-        }
+        initializeStats(this, sites);
         ofy().save().entity(this).now();
+    }
+
+    private static void initializeStats(Statistics stats, Sites sites)
+    {
+        stats.since = System.currentTimeMillis();
+        stats.lastStart = System.currentTimeMillis();
+        stats.siteStats = new SiteStat[sites.size()];
+        for (int i = 0; i < sites.size(); i++) {
+            Site site = sites.get(i);
+            stats.siteStats[i] = new SiteStat();
+            stats.siteStats[i].siteName = site.name;
+            stats.siteStats[i].siteCode = site.code;
+            stats.siteStats[i].nAccesses = 0;
+            stats.siteStats[i].lastAccess = 0;
+            stats.siteStats[i].lastIp = "";
+        }
     }
 
 }

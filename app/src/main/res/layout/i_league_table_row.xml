@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="6dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingTop="6dp">
+
+    <TextView
+        android:id="@+id/position"
+        style="@style/tableLayout_text"
+        android:text="1"/>
+
+    <ImageView
+        android:id="@+id/badge"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_margin="1dp"
+        android:layout_weight="1"
+        android:scaleType="center"
+        android:src="@drawable/ic_history"/>
+
+    <TextView
+        android:id="@+id/teamName"
+        style="@style/tableLayout_text"
+        android:text="Barcelona"/>
+
+    <TextView
+        android:id="@+id/points"
+        style="@style/tableLayout_text"
+        android:text="92"/>
+
+    <TextView
+        android:id="@+id/games"
+        style="@style/tableLayout_text"
+        android:text="38"/>
+
+    <TextView
+        android:id="@+id/won"
+        style="@style/tableLayout_text"
+        android:text="31"/>
+
+    <TextView
+        android:id="@+id/draw"
+        style="@style/tableLayout_text"
+        android:text="5"/>
+
+    <TextView
+        android:id="@+id/lost"
+        style="@style/tableLayout_text"
+        android:text="2"/>
+
+    <TextView
+        android:id="@+id/scored"
+        style="@style/tableLayout_text"
+        android:text="112"/>
+
+    <TextView
+        android:id="@+id/received"
+        style="@style/tableLayout_text"
+        android:text="29"/>
+
+</TableRow>

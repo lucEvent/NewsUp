@@ -50,6 +50,7 @@ public class ScheduledDownloadService extends Service {
         DownloadSchedule job = (DownloadSchedule) intent.getExtras().getSerializable(AppCode.SEND_DOWNLOAD_SCHEDULE);
         assert job != null : "DownloadSchedule received is null";
 
+        AppSettings.initialize(context);
         ScheduleManager dataManager = new ScheduleManager(context);
         if (!job.repeat) {
             Calendar calendar = Calendar.getInstance();

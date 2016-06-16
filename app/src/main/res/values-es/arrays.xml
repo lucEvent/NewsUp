@@ -30,5 +30,8 @@
         <item>6 meses</item>
         <item>Para siempre</item>
     </string-array>
+    <string-array name="sports">
+        <item>Fútbol</item>
+    </string-array>
 
 </resources>
