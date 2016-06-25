@@ -44,7 +44,7 @@ public class BookmarksManager {
 
     private ArrayList<Integer> readBookmarkedNewsIds()
     {
-        if (bookmarkedNewsIdsList == null) {
+        if (bookmarkedNewsIdsList == null || bookmarkedNewsIdsList.isEmpty()) {
             try {
                 File dir = new File(SDManager.getDirectory(), BOOKMARKS_DIR);
 
@@ -58,8 +58,9 @@ public class BookmarksManager {
 
                 in.close();
             } catch (Exception e) {
-                // Exception only if file doesn't exits, which means there are no bookmarks
-                bookmarkedNewsIdsList = new ArrayList<>();
+
+                if (bookmarkedNewsIdsList == null)
+                    bookmarkedNewsIdsList = new ArrayList<>();
             }
         }
         return bookmarkedNewsIdsList;

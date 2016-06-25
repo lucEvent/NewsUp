@@ -2,7 +2,7 @@
 
     <string name="app_name" translatable="false">NewsUp</string>
     <string name="app_sports_name" translatable="false">NewsUp Sports</string>
-    <string name="app_version" translatable="false">1.3.0</string>
+    <string name="app_version" translatable="false">1.4.0</string>
     <string name="version">version</string>
 
     <!-- * ******************** Labels **************************** * -->
@@ -72,6 +72,8 @@
     <string name="msg_unlocked_sports">Sports unlocked</string>
     <string name="msg_invalid_code">Invalid code</string>
     <string name="msg_app_must_restart_to_apply_changes">App must be restarted to apply changes</string>
+    <string name="msg_disk_permission_denied">you CANNOT bookmark news until you grant permission</string>
+    <string name="msg_read_phone_state_permission_denied">Without this permission, we CANNOT re-schedule the downloads after a phone restart</string>
 
 
     <!-- * *************** Activities and fragment's titles ********************* * -->
@@ -126,11 +128,12 @@
 
 
     <!-- ***************************** ***************** ********************************** -->
-    <string name="about_content_header">News Up version 1.3.0</string>
+    <string name="about_content_header">News Up version 1.4.0</string>
     <string name="about_content_contact">Developed by Rafael J. Lucena\nContact: rafaa89(at)gmail.com</string>
     <string name="about_content_title_new_features">Last features and improvements:</string>
     <string name="about_content_new_features">
-        Version 1.3.0 2016-06-16:\nStatistics improved.\nPro codes added.\nNew Pro feature: NewsUp Sports, follow your favorites sports (atm only football (soccer) supported)\nAbout screen improved for better performance\nDatabase bug fixed\n
+        Version 1.4.0 2016-06-25:\nMarshmallow support!!\nIMPORTANT FIX: Huge leak when closing news view fixed.\nNews display style improved (margins). Zoom disabled.\n
+        \nVersion 1.3.0 2016-06-16:\nStatistics improved.\nPro codes added.\nNew Pro feature: NewsUp Sports, follow your favorites sports (atm only football (soccer) supported)\nAbout screen improved for better performance\nDatabase bug fixed\n
         \nVersion 1.2.3 2016-06-02:\nNew: PRO version (atm enabled for everyone) will consume less data and battery, doing the hardest work in the server. Storage space consumed without limit?? Not anymore with the "Keep time" preference. Check it out at "Settings". Logs enabled/disabled easier for developing.\n
         \nVersion 1.2.2 2016-05-24:\nDeveloper mode added with password for (only) developer features. Fixed error with categories.\n
         \nVersion 1.2.1 2016-05-17:\nRestored support for \'Dagens Nyheter\' and \'Discover\'. \'Discover\' sections updated. Fixed error with the news order in Read News. News html styles updated.\n
@@ -143,12 +146,15 @@
         \nVersion 1.0.3 2016-04-26:\nAll sections has been revised and many (not working) removed. Server improvements/changes.\n
         \nVersion 1.0.2 2016-04-22:\nBugs fixed when updating RecyclerViewAdapter and server timeout increased to 10s.\n
         \nVersion 1.0.1 2016-04-21:\nNews in My news ordered by time even with multiply sites (like in pre-lollipop versions). Bugs fixed when updating RecyclerviewAdapter and when the server cannot answer one query.\n
-        \nVersion 1.0.0 2016-04-19:\nLollipop support!!.\nSettings standardized.\nScheduled downloads now saved in DB\nMinimum android version supported is now Kitkat (Api19)\n
+        \nVersion 1.0.0 2016-04-19:\nLollipop support!!\nSettings standardized.\nScheduled downloads now saved in DB\nMinimum android version supported is now Kitkat (Api19)\n
     </string>
     <string name="about_content_title_comming_soon">What\'s coming soon?:</string>
     <string name="about_content_comming_soon">
-        Marshmallow support (permissions) in version 1.4.0
-        \nPreview on tap - like in Instagram in version 1.5.0
+        Preview on tap - like in Instagram
+        \nNew logo
+        \nNew look for list of news
+        \nImprove display of news
+        \nFix for overdisplay sometimes after accessing the settings tree.
     </string>
     <string name="about_content_title_next_sites">Possible support for:</string>
     <string name="about_content_next_sites">

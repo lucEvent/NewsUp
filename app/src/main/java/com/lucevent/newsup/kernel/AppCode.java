@@ -2,6 +2,9 @@ package com.lucevent.newsup.kernel;
 
 public interface AppCode {
 
+    int REQUEST_PERMISSION_WRITE_IN_STORAGE = 200;
+    int REQUEST_PERMISSION_READ_PHONE_STATE = 201;
+
     int NO_INTERNET = -12;
     int ERROR = -10;
 

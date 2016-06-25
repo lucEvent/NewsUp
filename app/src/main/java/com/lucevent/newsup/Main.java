@@ -1,13 +1,16 @@
 package com.lucevent.newsup;
 
+import android.Manifest;
 import android.app.Fragment;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -20,6 +23,7 @@ import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.lucevent.newsup.data.Sites;
 import com.lucevent.newsup.data.util.Site;
@@ -169,6 +173,12 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 title = getString(R.string.my_news);
                 break;
             case R.id.nav_saved_news:
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !diskPermissionGranted()) {
+                    requestPermissions(
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
+                            AppCode.REQUEST_PERMISSION_WRITE_IN_STORAGE);
+                    return true;
+                }
                 fragment = new BookmarksFragment();
                 title = getString(R.string.saved_for_later);
                 break;
@@ -273,6 +283,34 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             }
         }
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults)
+    {
+        switch (requestCode) {
+            case AppCode.REQUEST_PERMISSION_WRITE_IN_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the contacts-related task you need to do.
+                    onNavigationItemSelected(((NavigationView) findViewById(R.id.nav_view)).getMenu().findItem(R.id.nav_saved_news));
+
+                } else {
+
+                    // permission denied, boo!
+                    Toast.makeText(this, R.string.msg_disk_permission_denied, Toast.LENGTH_SHORT).show();
+
+                }
+                break;
+            }
+        }
+    }
+
+    private boolean diskPermissionGranted()
+    {
+        return ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 
 }

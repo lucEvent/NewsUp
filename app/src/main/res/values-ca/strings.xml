@@ -4,7 +4,7 @@
 
     <!-- * ******************** Labels **************************** * -->
     <string name="my_news">Les meves notícies</string>
-    <string name="saved_for_later">Notícies guardades</string>
+    <string name="saved_for_later">Notícies marcades</string>
     <string name="read_news">Notícies llegides</string>
     <string name="settings">Configuració</string>
     <string name="statistics">Estadístiques</string>
@@ -69,6 +69,8 @@
     <string name="msg_unlocked_sports">Esports desbloquejats</string>
     <string name="msg_invalid_code">Codi invàlid</string>
     <string name="msg_app_must_restart_to_apply_changes">Has de reinicialitzar la app per aplicar canvis</string>
+    <string name="msg_disk_permission_denied">NO podràs marcar notícies fins que no concedeixis aquest permís</string>
+    <string name="msg_read_phone_state_permission_denied">Sense aquest permís, les descàrregues no podràn reprogramar-se després d\'un reinici del dispositiu</string>
 
 
     <!-- * *************** Activities and fragment's titles ********************* * -->

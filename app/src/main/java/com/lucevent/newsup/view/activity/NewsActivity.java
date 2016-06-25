@@ -1,10 +1,15 @@
 package com.lucevent.newsup.view.activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,6 +17,7 @@ import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.Toast;
 
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.util.News;
@@ -22,9 +28,8 @@ import com.lucevent.newsup.kernel.AppData;
 
 public class NewsActivity extends AppCompatActivity {
 
-    private static final boolean AUTO_HIDE = true;
-
     private static final String css = "<style>" +
+            "body { margin: 20px }" +
             "iframe, video {width: 100%; margin: 0; padding: 0}" +
             "img, figure {width: 100%; height:auto; margin: 0; padding: 0}" +
             "div > h2 > a > img {width: auto;}" +
@@ -33,14 +38,8 @@ public class NewsActivity extends AppCompatActivity {
             "</style>";
     private static final String fontcss = "<style>" +
             "@font-face { font-family: customfont; src: url(\"fonts/customfont.woff\"); }" +
-            "body { font-family: customfont; font-weight: 300; font-size: 16px; line-height: 1.67; }" +
+            "body { font-family: customfont; font-weight: 300; font-size: 17px; line-height: 1.7; }" +
             "</style>";
-
-    /**
-     * If {@link #AUTO_HIDE} is set, the number of milliseconds to wait after
-     * user interaction before hiding the system UI.
-     */
-    private static final int AUTO_HIDE_DELAY_MILLIS = 3000;
 
     /**
      * Some older devices needs a small delay between UI widget updates
@@ -76,21 +75,6 @@ public class NewsActivity extends AppCompatActivity {
             hide();
         }
     };
-    /**
-     * Touch listener to use for in-layout UI controls to delay hiding the
-     * system UI. This is to prevent the jarring behavior of controls going away
-     * while interacting with activity UI.
-     */
-    private final View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent)
-        {
-            if (AUTO_HIDE) {
-                delayedHide(AUTO_HIDE_DELAY_MILLIS);
-            }
-            return false;
-        }
-    };
 
     private News currentNews;
     private BookmarksManager bookmarksManager;
@@ -123,7 +107,7 @@ public class NewsActivity extends AppCompatActivity {
         WebSettings webSettings = newsView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
-        webSettings.setBuiltInZoomControls(true);
+        webSettings.setBuiltInZoomControls(false);
         webSettings.setDisplayZoomControls(false);
 
         button_bookmark = (FloatingActionButton) findViewById(R.id.button_bookmark);
@@ -141,17 +125,60 @@ public class NewsActivity extends AppCompatActivity {
 
         setBookmarkButtonImage();
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !permissionGranted()) {
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.READ_EXTERNAL_STORAGE},
+                    AppCode.REQUEST_PERMISSION_WRITE_IN_STORAGE);
+        }
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        newsView.onResume();
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        newsView.onPause();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults)
+    {
+        switch (requestCode) {
+            case AppCode.REQUEST_PERMISSION_WRITE_IN_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the contacts-related task you need to do.
+                    bookmarksManager = new BookmarksManager(null);
+                    setBookmarkButtonImage();
+
+                } else {
+
+                    // permission denied, boo!
+                    Toast.makeText(this, R.string.msg_disk_permission_denied, Toast.LENGTH_LONG).show();
+
+                }
+                break;
+            }
+        }
     }
 
     private void setBookmarkButtonImage()
     {
-        if (bookmarksManager.isBookmarked(currentNews))
-            button_bookmark.setImageResource(R.drawable.ic_bookmark);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || permissionGranted()) {
+            if (bookmarksManager.isBookmarked(currentNews))
+                button_bookmark.setImageResource(R.drawable.ic_bookmark);
 
-        else
-            button_bookmark.setImageResource(R.drawable.ic_bookmark_border);
+            else
+                button_bookmark.setImageResource(R.drawable.ic_bookmark_border);
+        }
     }
-
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState)
@@ -195,12 +222,16 @@ public class NewsActivity extends AppCompatActivity {
         @Override
         public void onClick(View v)
         {
-            if (bookmarksManager.isBookmarked(currentNews))
-                bookmarksManager.unBookmarkNews(currentNews);
-            else
-                bookmarksManager.bookmarkNews(currentNews);
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || permissionGranted()) {
 
-            setBookmarkButtonImage();
+                if (bookmarksManager.isBookmarked(currentNews))
+                    bookmarksManager.unBookmarkNews(currentNews);
+                else
+                    bookmarksManager.bookmarkNews(currentNews);
+
+                setBookmarkButtonImage();
+            } else
+                Toast.makeText(NewsActivity.this, R.string.msg_disk_permission_denied, Toast.LENGTH_LONG).show();
         }
     };
 
@@ -348,6 +379,12 @@ public class NewsActivity extends AppCompatActivity {
 
         button_share.startAnimation(animation);
         button_bookmark.startAnimation(animation);
+    }
+
+    private boolean permissionGranted()
+    {
+        return ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 
 }
