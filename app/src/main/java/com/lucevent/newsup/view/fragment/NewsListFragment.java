@@ -181,10 +181,10 @@ public class NewsListFragment extends android.app.Fragment {
                     Snackbar.make(service.recyclerView, R.string.msg_no_internet_connection, Snackbar.LENGTH_LONG).show();
                     break;
                 case AppCode.ERROR:
-                    System.out.println("[NLF] Error received by the Handler");
+                    AppSettings.printerror("[NLF] Error received by the Handler");
                     break;
                 default:
-                    System.out.println("[NLF] OPTION UNKNOWN: " + msg.what);
+                    AppSettings.printerror("[NLF] OPTION UNKNOWN: " + msg.what);
             }
         }
     }

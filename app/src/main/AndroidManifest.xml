@@ -58,6 +58,15 @@
                 android:value="com.lucevent.newsup.Main"/>
         </activity>
 
+        <activity
+            android:name=".view.activity.SelectSitesActivity"
+            android:parentActivityName=".Main"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.lucevent.newsup.Main"/>
+        </activity>
+
         <receiver android:name=".services.ScheduledDownloadReceiver"/>
 
         <service android:name=".services.ScheduledDownloadService"/>

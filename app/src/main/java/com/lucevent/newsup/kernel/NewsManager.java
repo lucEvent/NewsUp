@@ -11,7 +11,6 @@ import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.ProSettings;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.Sites;
-import com.lucevent.newsup.data.SitesMap;
 import com.lucevent.newsup.data.util.Date;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
@@ -65,10 +64,7 @@ public class NewsManager {
             connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         if (AppData.sites == null)
-            AppData.sites = new Sites(context.getResources().getStringArray(R.array.sitelist_headers), ProSettings.areFinlandSitesEnabled());
-
-        if (AppData.sitesOrderedByName == null)
-            AppData.sitesOrderedByName = new SitesMap(SitesMap.SITE_COMPARATOR_BY_NAME, ProSettings.areFinlandSitesEnabled());
+            AppData.sites = Sites.getDefault(ProSettings.areFinlandSitesEnabled());
 
         if (logoManager == null)
             logoManager = LogoManager.getInstance(context, AppData.sites.size());

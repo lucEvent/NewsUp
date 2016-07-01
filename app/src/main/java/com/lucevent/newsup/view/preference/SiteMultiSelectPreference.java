@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.Sites;
+import com.lucevent.newsup.data.SitesMap;
 import com.lucevent.newsup.kernel.AppData;
 import com.lucevent.newsup.view.adapter.SiteMultiSelectAdapter;
 
@@ -24,7 +25,7 @@ public class SiteMultiSelectPreference extends android.preference.MultiSelectLis
     {
         super(context, attrs);
 
-        sites = new Sites(AppData.sitesOrderedByName);
+        sites = new Sites(new SitesMap(AppData.sites, SitesMap.SITE_COMPARATOR_BY_NAME));
     }
 
     public void setSelectedPreferences()

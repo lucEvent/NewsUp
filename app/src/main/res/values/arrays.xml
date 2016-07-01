@@ -9,19 +9,6 @@
         <item>%d months ago</item>
         <item>%d years ago</item>
     </string-array>
-    <string-array name="sitelist_headers">
-        <item>Spain</item>
-        <item>Catalonia</item>
-        <item>Sweden</item>
-        <item>Finland</item>
-        <item>UK</item>
-        <item>US</item>
-        <item>Other</item>
-        <item>Technology</item>
-        <item>Blogs</item>
-        <item>Magazines</item>
-        <item>Not supported temporarily</item>
-    </string-array>
     <string-array name="keep_time_titles">
         <item>Don\'t keep them (not recommended)</item>
         <item>1 week</item>
@@ -30,7 +17,7 @@
         <item>6 months</item>
         <item>Forever</item>
     </string-array>
-    <string-array name="keep_time_values">
+    <string-array name="keep_time_values" translatable="false">
         <item>0</item>
         <item>604800</item>
         <item>2592000</item>
@@ -40,6 +27,37 @@
     </string-array>
     <string-array name="sports">
         <item>Football</item>
+    </string-array>
+    <string-array name="site_sort_by">
+        <item>Sort by country</item>
+        <item>Sort by language</item>
+        <item>Sort by type</item>
+        <item>Sort by name</item>
+    </string-array>
+    <string-array name="site_languages">
+        <item>Spanish</item>
+        <item>Catalan</item>
+        <item>English</item>
+        <item>Finnish</item>
+        <item>Swedish</item>
+    </string-array>
+    <string-array name="site_countries">
+        <item>Spain</item>
+        <item>UK</item>
+        <item>US</item>
+        <item>Finland</item>
+        <item>Sweden</item>
+        <item>Canada</item>
+        <item>Europe</item>
+    </string-array>
+    <string-array name="site_categories">
+        <item>Newspapers</item>
+        <item>Sport Newspapers</item>
+        <item>Technology</item>
+        <item>Blogs</item>
+        <item>Magazines</item>
+        <item>Astronomy</item>
+        <item>Science</item>
     </string-array>
 
 </resources>

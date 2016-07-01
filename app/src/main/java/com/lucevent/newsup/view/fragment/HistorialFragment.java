@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.NewsMap;
@@ -100,10 +101,10 @@ public class HistorialFragment extends android.app.Fragment {
                     service.adapter.addAll((NewsMap) msg.obj);
                     break;
                 case AppCode.ERROR:
-                    System.out.println("[HF] Error received by the Handler");
+                    AppSettings.printerror("[HF] Error received by the Handler");
                     break;
                 default:
-                    System.out.println("[HF] OPTION UNKNOWN: " + msg.what);
+                    AppSettings.printerror("[HF] OPTION UNKNOWN: " + msg.what);
             }
         }
     }

@@ -17,6 +17,7 @@ import android.widget.ToggleButton;
 
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.Sites;
+import com.lucevent.newsup.data.SitesMap;
 import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.AppData;
 import com.lucevent.newsup.kernel.ScheduleManager;
@@ -123,7 +124,7 @@ public class DownloadScheduleEditorActivity extends AppCompatActivity {
     public void onSelectSitesAction(View v)
     {
         if (sites == null)
-            sites = new Sites(AppData.sitesOrderedByName);
+            sites = new Sites(new SitesMap(AppData.sites, SitesMap.SITE_COMPARATOR_BY_NAME));
 
         SiteMultiSelectAdapter adapter = new SiteMultiSelectAdapter(DownloadScheduleEditorActivity.this,
                 sites, selected_sites);

@@ -5,7 +5,10 @@ public class Site {
     public final int code;
 
     public final String name;
+
     public final int color;
+
+    public final int info;
 
     public Sections sections;
 
@@ -20,16 +23,32 @@ public class Site {
      */
     private final boolean isDarkColor;
 
-    public Site(int code, String name, int color, Sections sections, NewsReader reader)
+    public Site(int code, String name, int color, int info, Sections sections, NewsReader reader)
     {
         this.code = code;
         this.name = name;
+        this.info = 0x1000000 | info;
         this.color = color;
         this.sections = sections;
         this.news = new NewsMap();
         this.reader = reader;
 
         isDarkColor = (((color >> 16) & 0xFF) < 0x7F) || (((color >> 8) & 0xFF) < 0x7F) || ((color & 0xFF) < 0x7F);
+    }
+
+    public int getCountry()
+    {
+        return ((info >> SiteCountry.shift) & 0xFF);
+    }
+
+    public int getLanguage()
+    {
+        return ((info >> SiteLanguage.shift) & 0xFF);
+    }
+
+    public int getCategory()
+    {
+        return ((info >> SiteCategory.shift) & 0xFF);
     }
 
     public NewsArray readNewsHeaders(int[] isections)

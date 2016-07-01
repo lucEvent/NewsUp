@@ -117,11 +117,13 @@ public class BackendParser {
         return sb;
     }
 
+    private static String[] paddings = {"\t\t\t\t", "\t\t\t", "\t\t", "\t", ""};
+
     private static void appendHtml(StringBuilder sb, StatisticsSet statisticsSet)
     {
         for (SiteStat ss : statisticsSet)
             if (ss.nAccesses > 0)
-                sb.append("\t").append(ss.siteName).append(ss.siteName.length() > 14 ? ":\t" : ":\t\t")
+                sb.append("\t").append(ss.siteName).append(":").append(paddings[(ss.siteName.length() + 1) >> 3])
                         .append(ss.nAccesses).append(" requests\t[last ")
                         .append(Date.getAge(ss.lastAccess))
                         .append("]\t[from ").append(ss.lastIp).append("]\n");

@@ -9,19 +9,6 @@
         <item>Fa %d mesos</item>
         <item>Fa %d anys</item>
     </string-array>
-    <string-array name="sitelist_headers">
-        <item>Espanya</item>
-        <item>Catalunya</item>
-        <item>Suècia</item>
-        <item>Finlàndia</item>
-        <item>UK</item>
-        <item>US</item>
-        <item>Altres</item>
-        <item>Tecnologia</item>
-        <item>Blogs</item>
-        <item>Revistes</item>
-        <item>No suportades temporalment</item>
-    </string-array>
     <string-array name="keep_time_titles">
         <item>No guardar-les (no recomendat)</item>
         <item>1 setmana</item>
@@ -32,6 +19,37 @@
     </string-array>
     <string-array name="sports">
         <item>Futbol</item>
+    </string-array>
+    <string-array name="site_sort_by">
+        <item>Ordena per país</item>
+        <item>Ordena per idioma</item>
+        <item>Ordena per tipus</item>
+        <item>Ordena per nom</item>
+    </string-array>
+    <string-array name="site_languages">
+        <item>Espanyol</item>
+        <item>Català</item>
+        <item>Anglès</item>
+        <item>Finès</item>
+        <item>Suec</item>
+    </string-array>
+    <string-array name="site_countries">
+        <item>Espanya</item>
+        <item>Regne Unit</item>
+        <item>USA</item>
+        <item>Finlàndia</item>
+        <item>Suècia</item>
+        <item>Canadà</item>
+        <item>Europa</item>
+    </string-array>
+    <string-array name="site_categories">
+        <item>Diaris</item>
+        <item>Diaris Esportius</item>
+        <item>Tecnologia</item>
+        <item>Blogs</item>
+        <item>Revistes</item>
+        <item>Astronomia</item>
+        <item>Ciència</item>
     </string-array>
 
 </resources>

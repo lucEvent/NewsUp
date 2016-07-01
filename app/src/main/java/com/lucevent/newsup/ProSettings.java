@@ -10,9 +10,12 @@ public class ProSettings {
     private static final int SPORTS_CODE = -74477552; // "ILOVESWEAT"
     private static final String SPORTS_KEY = "sports";
 
-    private static final int PRO_CODES[] = new int[]{FINLAND_SITES_CODE, SPORTS_CODE};
-    private static final String PRO_KEYS[] = new String[]{FINLAND_SITES_KEY, SPORTS_KEY};
-    private static final int MESSAGES[] = new int[]{R.string.msg_unlocked_finnish, R.string.msg_unlocked_sports};
+    public static final int STATISTICS_CODE = -198082864;   // "IMCURIOUS"
+    private static final String STATISTICS_KEY = "statistics";
+
+    private static final int PRO_CODES[] = new int[]{FINLAND_SITES_CODE, SPORTS_CODE, STATISTICS_CODE};
+    private static final String PRO_KEYS[] = new String[]{FINLAND_SITES_KEY, SPORTS_KEY, STATISTICS_KEY};
+    private static final int MESSAGES[] = new int[]{R.string.msg_unlocked_finnish, R.string.msg_unlocked_sports, R.string.msg_unlocked_statistics};
 
     private static SharedPreferences preferences;
 
@@ -34,6 +37,11 @@ public class ProSettings {
     public static boolean areSportsEnabled()
     {
         return preferences.getBoolean(SPORTS_KEY, false);
+    }
+
+    public static boolean areStatisticsEnabled()
+    {
+        return preferences.getBoolean(STATISTICS_KEY, false);
     }
 
     public static int checkProCode(String code)

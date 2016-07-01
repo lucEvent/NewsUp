@@ -18,12 +18,6 @@
 
         <EditTextPreference
             android:defaultValue=""
-            android:hint="@string/hint_pref_dev_mode"
-            android:key="@string/pref_dev_mode_key"
-            android:title="@string/pref_dev_mode"/>
-
-        <EditTextPreference
-            android:defaultValue=""
             android:hint="@string/hint_pref_pro_mode"
             android:key="@string/pref_pro_code_key"
             android:title="@string/pref_pro_code"/>

@@ -11,12 +11,12 @@ import java.util.HashMap;
 public class LogoManager {
 
     public enum Size {
-        DRAWER, I_ITEM, ACTION_BAR
+        DRAWER, I_ITEM, ACTION_BAR, SELECT_SCREEN
     }
 
     private static AssetManager dataManager;
 
-    private static HashMap<Integer, Drawable> drawer_logos, i_item_logos, bar_logos;
+    private static HashMap<Integer, Drawable> drawer_logos, i_item_logos, bar_logos, select_screen_logos;
 
     public static LogoManager getInstance(Context context, int size)
     {
@@ -25,6 +25,7 @@ public class LogoManager {
         drawer_logos = new HashMap<>(size);
         i_item_logos = new HashMap<>(size);
         bar_logos = new HashMap<>(size);
+        select_screen_logos = new HashMap<>(size);
 
         return new LogoManager();
     }
@@ -33,14 +34,22 @@ public class LogoManager {
     {
         HashMap<Integer, Drawable> map;
 
-        if (size == Size.DRAWER)
-            map = drawer_logos;
-        else if (size == Size.I_ITEM)
-            map = i_item_logos;
-        else if (size == Size.ACTION_BAR)
-            map = bar_logos;
-        else
-            return null;
+        switch (size) {
+            case DRAWER:
+                map = drawer_logos;
+                break;
+            case I_ITEM:
+                map = i_item_logos;
+                break;
+            case ACTION_BAR:
+                map = bar_logos;
+                break;
+            case SELECT_SCREEN:
+                map = select_screen_logos;
+                break;
+            default:
+                return null;
+        }
 
         Drawable res = map.get(site_code);
         if (res == null) {

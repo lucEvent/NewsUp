@@ -16,8 +16,6 @@ public class AppSettings {
 
     public static final boolean DEBUG = false;
 
-    public static final int DEV_CODE = -31645597;
-
     /**
      * ************** Default values *********************
      **/
@@ -31,7 +29,6 @@ public class AppSettings {
     public static String PREF_FAVORITE_SITES_KEY;
     public static String PREF_SCHEDULE_DOWNLOADS_KEY;
     public static String PREF_CLEAN_CACHE_KEY;
-    public static String PREF_DEV_MODE_KEY;
     public static String PREF_PRO_CODE_KEY;
     public static String PREF_KEEP_NEWS_KEY;
 
@@ -48,7 +45,6 @@ public class AppSettings {
             PREF_FAVORITE_SITES_KEY = context.getString(R.string.pref_favorite_sites_key);
             PREF_SCHEDULE_DOWNLOADS_KEY = context.getString(R.string.pref_schedule_downloads_key);
             PREF_CLEAN_CACHE_KEY = context.getString(R.string.pref_clean_cache_key);
-            PREF_DEV_MODE_KEY = context.getString(R.string.pref_dev_mode_key);
             PREF_PRO_CODE_KEY = context.getString(R.string.pref_pro_code_key);
             PREF_KEEP_NEWS_KEY = context.getString(R.string.pref_keep_news_key);
 
@@ -77,6 +73,11 @@ public class AppSettings {
     {
         initialize(context);
         AppSettings.handler = handler;
+    }
+
+    public static boolean firstStart()
+    {
+        return preferences.getStringSet(PREF_MAIN_SITES_KEY, null) == null;
     }
 
     public static Set<String> getMainSitesCodesString()
@@ -137,6 +138,13 @@ public class AppSettings {
         return getMainSitesCodesString().contains(code);
     }
 
+    public static void setFavoriteSitesCodes(Set<String> codes)
+    {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putStringSet(PREF_FAVORITE_SITES_KEY, codes);
+        editor.apply();
+    }
+
     private static Set<String> getFavoriteSitesCodesString()
     {
         return preferences.getStringSet(PREF_FAVORITE_SITES_KEY, DEFAULT_FAVORITE_SITES);
@@ -162,9 +170,7 @@ public class AppSettings {
         if (!pref.remove(code))
             pref.add(code);
 
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putStringSet(PREF_FAVORITE_SITES_KEY, pref);
-        editor.apply();
+        setFavoriteSitesCodes(pref);
 
         handler.obtainMessage(AppCode.ACTION_UPDATE_FAVORITES).sendToTarget();
     }
@@ -204,18 +210,6 @@ public class AppSettings {
     public static long getKeepTime()
     {
         return Long.parseLong(preferences.getString(PREF_KEEP_NEWS_KEY, DEFAULT_KEEP_TIME));
-    }
-
-    public static void devModeInvalidated()
-    {
-        handler.obtainMessage(AppCode.ACTION_UPDATE_PRO).sendToTarget();
-    }
-
-    public static boolean isDevModeActivated()
-    {
-        int code = preferences.getString(PREF_DEV_MODE_KEY, "").hashCode();
-        code += Integer.bitCount(code) << ((code >> 16) & 32);
-        return code == DEV_CODE;
     }
 
     public static void printerror(String msg)

@@ -86,7 +86,7 @@ public class StatisticsFragment extends android.app.Fragment {
         @Override
         public boolean onMenuItemClick(MenuItem item)
         {
-            StatisticsReader.fetchStatistics(handler, "http://newsup-2406.appspot.com/request?stats&reset");
+            StatisticsReader.fetchStatistics(handler, "http://newsup-2406.appspot.com/app?stats&reset");
             return true;
         }
     };
@@ -104,13 +104,13 @@ public class StatisticsFragment extends android.app.Fragment {
         String url = "";
         switch (order) {
             case SORT_BY_NAME:
-                url = "http://newsup-2406.appspot.com/request?stats&options=s";
+                url = "http://newsup-2406.appspot.com/app?stats&options=s";
                 break;
             case SORT_BY_NUM_REQUESTS:
-                url = "http://newsup-2406.appspot.com/request?stats&options=n";
+                url = "http://newsup-2406.appspot.com/app?stats&options=n";
                 break;
             case SORT_BY_TIME:
-                url = "http://newsup-2406.appspot.com/request?stats&options=t";
+                url = "http://newsup-2406.appspot.com/app?stats&options=t";
         }
         StatisticsReader.fetchStatistics(handler, url);
     }

@@ -13,7 +13,7 @@ public class Iltalehti extends com.lucevent.newsup.data.util.NewsReader {
     {
         super(TAG_ITEM_ITEMS,
                 new int[]{TAG_TITLE},
-                new int[]{TAG_LINK},
+                new int[]{TAG_GUID},
                 new int[]{TAG_DESCRIPTION},
                 new int[]{},
                 new int[]{TAG_PUBDATE},

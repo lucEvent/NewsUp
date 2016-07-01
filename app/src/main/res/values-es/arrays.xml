@@ -9,19 +9,6 @@
         <item>Hace %d meses</item>
         <item>Hace %d años</item>
     </string-array>
-    <string-array name="sitelist_headers">
-        <item>España</item>
-        <item>Cataluña</item>
-        <item>Suecia</item>
-        <item>Finlandia</item>
-        <item>UK</item>
-        <item>US</item>
-        <item>Otros</item>
-        <item>Tecnología</item>
-        <item>Blogs</item>
-        <item>Revistas</item>
-        <item>No soportados temporalmente</item>
-    </string-array>
     <string-array name="keep_time_titles">
         <item>No guardarlas (no recomendado)</item>
         <item>1 semana</item>
@@ -32,6 +19,37 @@
     </string-array>
     <string-array name="sports">
         <item>Fútbol</item>
+    </string-array>
+    <string-array name="site_sort_by">
+        <item>Ordena por país</item>
+        <item>Ordena por idioma</item>
+        <item>Ordena por tipo</item>
+        <item>Ordena por nombre</item>
+    </string-array>
+    <string-array name="site_languages">
+        <item>Español</item>
+        <item>Catalán</item>
+        <item>Inglés</item>
+        <item>Finés</item>
+        <item>Sueco</item>
+    </string-array>
+    <string-array name="site_countries">
+        <item>España</item>
+        <item>Reino Unido</item>
+        <item>USA</item>
+        <item>Finlandia</item>
+        <item>Suecia</item>
+        <item>Canadá</item>
+        <item>Europa</item>
+    </string-array>
+    <string-array name="site_categories">
+        <item>Periódicos</item>
+        <item>Periódicos Deportivos</item>
+        <item>Tecnología</item>
+        <item>Blogs</item>
+        <item>Revistas</item>
+        <item>Astronomía</item>
+        <item>Ciencia</item>
     </string-array>
 
 </resources>

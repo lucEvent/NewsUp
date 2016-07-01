@@ -19,7 +19,9 @@
     <string name="select_sites_to_download">Sel·lecciona publicacions per descarregar</string>
     <string name="disabled">Desabilitat</string>
     <string name="enabled">Habilitat</string>
-    <string name="reset">Reinicialitzar</string>
+    <string name="reset">Restaurar</string>
+    <string name="add_content">Afegeix més</string>
+    <string name="select_fav_publications">Sel·lecciona les teves\npublicacions favorites</string>
 
     <string name="mon">Dl</string>
     <string name="tue">Dm</string>
@@ -46,11 +48,12 @@
     <string name="schedule_download">Programa descàrrega</string>
     <string name="ok">OK</string>
     <string name="restart">Reiniciar</string>
+    <string name="thats_it">Això és tot</string>
 
 
     <!-- * ******************** Hints **************************** * -->
-    <string name="hint_pref_dev_mode">Entra codi de desenvolupador</string>
     <string name="hint_pref_pro_mode">Entra codi PRO</string>
+    <string name="search">Busca</string>
 
 
     <!-- * ******************** Messages **************************** * -->
@@ -67,6 +70,7 @@
     <string name="msg_no_internet_connection">No hi ha connexió a internet</string>
     <string name="msg_unlocked_finnish">Publicacions fineses desbloquejades</string>
     <string name="msg_unlocked_sports">Esports desbloquejats</string>
+    <string name="msg_unlocked_statistics">Estadístiques desbloquejades</string>
     <string name="msg_invalid_code">Codi invàlid</string>
     <string name="msg_app_must_restart_to_apply_changes">Has de reinicialitzar la app per aplicar canvis</string>
     <string name="msg_disk_permission_denied">NO podràs marcar notícies fins que no concedeixis aquest permís</string>
@@ -94,7 +98,6 @@
     <string name="pref_favorite">Favorit</string>
     <string name="pref_main_sections">Seccions principals</string>
     <string name="pref_download_sections">Seccions de descàrrega</string>
-    <string name="pref_dev_mode">Mode desenvolupador</string>
     <string name="pref_pro_code">Codi PRO</string>
     <string name="pref_keep_news">Guardar notícies</string>
 

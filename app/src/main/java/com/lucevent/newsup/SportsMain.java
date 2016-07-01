@@ -84,7 +84,7 @@ public class SportsMain extends AppCompatActivity implements NavigationView.OnNa
             navigationView.setItemIconTintList(null);
 
         MenuItem stats = navigationView.getMenu().findItem(R.id.nav_stats);
-        if (AppSettings.isDevModeActivated())
+        if (ProSettings.areStatisticsEnabled())
             stats.setVisible(true);
         else
             stats.setVisible(false);

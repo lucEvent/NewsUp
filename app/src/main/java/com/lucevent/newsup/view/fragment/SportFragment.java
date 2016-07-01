@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TableRow;
 
+import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.sports.util.Sport;
 import com.lucevent.newsup.data.util.Section;
@@ -94,10 +95,10 @@ public class SportFragment extends android.app.Fragment {
                     Snackbar.make(service.leagueTableView, R.string.msg_no_internet_connection, Snackbar.LENGTH_LONG).show();
                     break;
                 case AppCode.ERROR:
-                    System.out.println("[SF] Error received by the Handler");
+                    AppSettings.printerror("[SF] Error received by the Handler");
                     break;
                 default:
-                    System.out.println("[SF] OPTION UNKNOWN: " + msg.what);
+                    AppSettings.printerror("[SF] OPTION UNKNOWN: " + msg.what);
             }
         }
     }

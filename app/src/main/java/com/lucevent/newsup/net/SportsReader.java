@@ -87,7 +87,7 @@ public class SportsReader {
             InputStream in = new java.net.URL(url).openStream();
             res = BitmapFactory.decodeStream(in);
         } catch (Exception e) {
-            System.out.println("Error finding " + url);
+            AppSettings.printerror("Error finding " + url);
             e.printStackTrace();
         }
         return res;

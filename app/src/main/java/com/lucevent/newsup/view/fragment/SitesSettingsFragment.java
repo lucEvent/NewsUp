@@ -5,6 +5,7 @@ import android.preference.Preference;
 import android.preference.PreferenceScreen;
 
 import com.lucevent.newsup.R;
+import com.lucevent.newsup.data.SitesMap;
 import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.io.LogoManager;
 import com.lucevent.newsup.kernel.AppData;
@@ -19,7 +20,8 @@ public class SitesSettingsFragment extends android.preference.PreferenceFragment
         addPreferencesFromResource(R.xml.sites_list_preferences);
 
         PreferenceScreen sitesPreferenceScreen = getPreferenceScreen();
-        for (Site site : AppData.sitesOrderedByName) {
+        SitesMap sites = new SitesMap(AppData.sites, SitesMap.SITE_COMPARATOR_BY_NAME);
+        for (Site site : sites) {
             Preference p = new Preference(getActivity());
             p.setIcon(LogoManager.getLogo(site.code, LogoManager.Size.ACTION_BAR));
             p.setTitle(site.name);

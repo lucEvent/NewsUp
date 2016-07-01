@@ -4,6 +4,7 @@
     <color name="colorPrimary">#8BC34A</color>
     <color name="colorPrimaryDark">#558B2F</color>
     <color name="colorAccent">#EF5350</color>
+    <color name="colorAccentDark">#D32F2F</color>
 
     <color name="sportsColorPrimary">#3949AB</color>
     <color name="sportsColorPrimaryDark">#283593</color>
@@ -13,5 +14,8 @@
 
     <color name="black_overlay">#66000000</color>
     <color name="disabled">#ffcccccc</color>
+    <color name="ripple_pressed">#22000000</color>
+    <color name="ripple_pressed_dark">#55999999</color>
+
 
 </resources>

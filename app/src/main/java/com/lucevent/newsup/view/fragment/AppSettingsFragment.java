@@ -32,7 +32,6 @@ public class AppSettingsFragment extends PreferenceFragment
     private static final int PREF_MASK_MAIN_SITES = 0x01;
     private static final int PREF_MASK_SCHEDULE_DOWNLOADS = 0x02;
     private static final int PREF_MASK_CLEAN_CACHE = 0x04;
-    private static final int PREF_MASK_DEV_MODE = 0x08;
     private static final int PREF_MASK_KEEP_NEWS = 0x10;
 
     @Override
@@ -70,8 +69,6 @@ public class AppSettingsFragment extends PreferenceFragment
             setUpPreferenceSummaries(PREF_MASK_SCHEDULE_DOWNLOADS);
         else if (key.equals(AppSettings.PREF_CLEAN_CACHE_KEY))
             setUpPreferenceSummaries(PREF_MASK_CLEAN_CACHE);
-        else if (key.equals(AppSettings.PREF_DEV_MODE_KEY))
-            setUpPreferenceSummaries(PREF_MASK_DEV_MODE);
         else if (key.equals(AppSettings.PREF_PRO_CODE_KEY)) {
 
             String code = sharedPreferences.getString(AppSettings.PREF_PRO_CODE_KEY, "");
@@ -127,11 +124,6 @@ public class AppSettingsFragment extends PreferenceFragment
 
             String dataSize = new DecimalFormat("#0.00").format(NewsManager.getCacheSize() / 1048576.0);
             findPreference(AppSettings.PREF_CLEAN_CACHE_KEY).setSummary(dataSize + " MB");
-        }
-        if ((preferencesMask & PREF_MASK_DEV_MODE) != 0) {
-            Preference p = findPreference(AppSettings.PREF_DEV_MODE_KEY);
-            p.setSummary(AppSettings.isDevModeActivated() ? R.string.enabled : R.string.disabled);
-            AppSettings.devModeInvalidated();
         }
         if ((preferencesMask & PREF_MASK_KEEP_NEWS) != 0) {
             ListPreference p = (ListPreference) findPreference(AppSettings.PREF_KEEP_NEWS_KEY);

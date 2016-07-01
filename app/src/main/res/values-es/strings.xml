@@ -19,7 +19,10 @@
     <string name="select_sites_to_download">Selecciona publicaciones para descargar</string>
     <string name="disabled">Desabilitado</string>
     <string name="enabled">Habilitado</string>
-    <string name="reset">Reinicializar</string>
+    <string name="reset">Restaurar</string>
+    <string name="add_content">Añade más</string>
+    <string name="select_fav_publications">Selecciona tus\npublicaciones favoritas</string>
+
 
     <string name="mon">Lun</string>
     <string name="tue">Mar</string>
@@ -46,11 +49,13 @@
     <string name="schedule_download">Programa descarga</string>
     <string name="ok">OK</string>
     <string name="restart">Reiniciar</string>
+    <string name="thats_it">Eso es todo</string>
 
 
     <!-- * ******************** Hints **************************** * -->
-    <string name="hint_pref_dev_mode">Inserta código de desarrollador</string>
     <string name="hint_pref_pro_mode">Inserta código PRO</string>
+    <string name="search">Busca</string>
+
 
     <!-- * ******************** Messages **************************** * -->
     <string name="msg_confirm_to_remove_all_saved_news">Confirma para eliminar todo</string>
@@ -66,6 +71,7 @@
     <string name="msg_no_internet_connection">No hay conexión a internet</string>
     <string name="msg_unlocked_finnish">Publicaciones finlandesas desbloqueadas</string>
     <string name="msg_unlocked_sports">Deportes desbloqueados</string>
+    <string name="msg_unlocked_statistics">Estadísticas desbloqueadas</string>
     <string name="msg_invalid_code">Código inválido</string>
     <string name="msg_app_must_restart_to_apply_changes">Debes reiniciar la app para aplicar cambios</string>
     <string name="msg_disk_permission_denied">NO podrás marcar noticias hasta que no concedas este permiso</string>
@@ -93,7 +99,6 @@
     <string name="pref_favorite">Favorito</string>
     <string name="pref_main_sections">Secciones principales</string>
     <string name="pref_download_sections">Secciones de descarga</string>
-    <string name="pref_dev_mode">Modo desarrollador</string>
     <string name="pref_pro_code">Código PRO</string>
     <string name="pref_keep_news">Guardar noticias</string>
 

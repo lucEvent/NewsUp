@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.NewsMap;
@@ -108,10 +109,10 @@ public class BookmarksFragment extends android.app.Fragment {
                     service.adapter.addAll(service.bookmarks);
                     break;
                 case AppCode.ERROR:
-                    System.out.println("[BMF] Error received by the Handler");
+                    AppSettings.printerror("[BMF] Error received by the Handler");
                     break;
                 default:
-                    System.out.println("[BMF] OPTION UNKNOWN: " + msg.what);
+                    AppSettings.printerror("[BMF] OPTION UNKNOWN: " + msg.what);
             }
         }
     }

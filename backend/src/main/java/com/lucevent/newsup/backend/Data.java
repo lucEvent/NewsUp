@@ -18,7 +18,7 @@ public class Data {
     {
         Date.setTitles(new String[]{"%d seconds ago", "%d minutes ago", "%d hours ago", "%d days ago", "%d months ago", "%d years ago",});
         if (sites == null) {
-            sites = new Sites(null, true);
+            sites = Sites.getDefault(true);
             sports = new Sports(new String[]{"", "", "", "", ""});
 
             ObjectifyService.run(new VoidWork() {

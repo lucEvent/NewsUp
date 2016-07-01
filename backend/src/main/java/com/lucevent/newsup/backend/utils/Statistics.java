@@ -49,10 +49,12 @@ public class Statistics {
 
     public void count(int position, String ip)
     {
-        siteStats[position].nAccesses++;
-        siteStats[position].lastAccess = System.currentTimeMillis();
-        siteStats[position].lastIp = ip;
-        ofy().save().entity(this).now();//save()    //possible improvement? save only when the server instance is destroyed
+        synchronized (this) {
+            siteStats[position].nAccesses++;
+            siteStats[position].lastAccess = System.currentTimeMillis();
+            siteStats[position].lastIp = ip;
+            ofy().save().entity(this).now();//save()    //possible improvement? save only when the server instance is destroyed
+        }
     }
 
     public SiteStat[] getSiteStats()

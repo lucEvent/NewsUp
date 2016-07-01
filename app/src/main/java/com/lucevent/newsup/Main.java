@@ -33,6 +33,7 @@ import com.lucevent.newsup.kernel.AppData;
 import com.lucevent.newsup.kernel.NewsManager;
 import com.lucevent.newsup.kernel.ScheduleManager;
 import com.lucevent.newsup.services.ScheduledDownloadReceiver;
+import com.lucevent.newsup.view.activity.SelectSitesActivity;
 import com.lucevent.newsup.view.fragment.AboutFragment;
 import com.lucevent.newsup.view.fragment.AppSettingsFragment;
 import com.lucevent.newsup.view.fragment.BookmarksFragment;
@@ -53,13 +54,23 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         handler = new Handler(this);
         AppSettings.initialize(this, handler);
         dataManager = new NewsManager(this);
+
+        if (AppSettings.firstStart()) {
+            Intent intent = new Intent(this, SelectSitesActivity.class);
+            intent.putExtra(AppCode.SEND_PURPOSE, SelectSitesActivity.FOR.APP_FIRST_START);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
+        setContentView(R.layout.a_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -71,7 +82,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         assert navigationView != null : "Navigation view is null";
         navigationView.setNavigationItemSelectedListener(this);
 
-        updateDrawer(true, true);
+        updateDrawer(true);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null && extras.containsKey(AppCode.SEND_NEWS_IDS)) {
@@ -101,7 +112,16 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         else super.onBackPressed();
     }
 
-    private void updateDrawer(boolean updateFavorites, boolean updateSites)
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == AppCode.REQUEST_ADD_CONTENT && resultCode > 0) {
+            navigateTo(resultCode);
+        }
+    }
+
+    private void updateDrawer(boolean updateFavorites)
     {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         assert navigationView != null : "Navigation view is null";
@@ -110,7 +130,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             navigationView.setItemIconTintList(null);
 
         MenuItem stats = navigationView.getMenu().findItem(R.id.nav_stats);
-        if (AppSettings.isDevModeActivated())
+        if (ProSettings.areStatisticsEnabled())
             stats.setVisible(true);
         else
             stats.setVisible(false);
@@ -131,31 +151,16 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 configureMenuItem(mi, site);
             }
         }
-
-        if (updateSites) {
-            SubMenu sites_menu = navigationView.getMenu().findItem(R.id.nav_header_sites).getSubMenu();
-            sites_menu.clear();
-
-            for (Site site : AppData.sites) {
-                MenuItem mi = sites_menu.add(3, site.code, Menu.NONE, site.name);
-                configureMenuItem(mi, site);
-            }
-        }
         navigationView.invalidate();
     }
 
     private void configureMenuItem(MenuItem mi, Site site)
     {
-        if (site.code == -1) {
-            mi.setEnabled(false);
-            mi.setIcon(R.drawable.ic_label);
-        } else {
-            Drawable icon = LogoManager.getLogo(site.code, LogoManager.Size.DRAWER);
-            assert icon != null : "Icon not found for code " + site.code;
-            icon.setColorFilter(0x000000, android.graphics.PorterDuff.Mode.ADD);
-            mi.setIcon(icon);
-            mi.setCheckable(true);
-        }
+        Drawable icon = LogoManager.getLogo(site.code, LogoManager.Size.DRAWER);
+        assert icon != null : "Icon not found for code " + site.code;
+        icon.setColorFilter(0x000000, android.graphics.PorterDuff.Mode.ADD);
+        mi.setIcon(icon);
+        mi.setCheckable(true);
     }
 
     private Fragment currentFragment, previousFragment;
@@ -163,11 +168,17 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     @Override
     public boolean onNavigationItemSelected(MenuItem item)
     {
+        navigateTo(item.getItemId());
+        return true;
+    }
+
+    private void navigateTo(int where)
+    {
         Fragment fragment;
         String title;
         int colorCode = -1;
 
-        switch (item.getItemId()) {
+        switch (where) {
             case R.id.nav_my_news:
                 fragment = NewsListFragment.instanceFor(-1);
                 title = getString(R.string.my_news);
@@ -177,7 +188,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                     requestPermissions(
                             new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
                             AppCode.REQUEST_PERMISSION_WRITE_IN_STORAGE);
-                    return true;
+                    return;
                 }
                 fragment = new BookmarksFragment();
                 title = getString(R.string.saved_for_later);
@@ -200,11 +211,16 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 break;
             case R.id.nav_sports:
                 startActivity(new Intent(this, SportsMain.class));
-                return true;
+                return;
+            case R.id.nav_add_content:
+                Intent intent = new Intent(this, SelectSitesActivity.class);
+                intent.putExtra(AppCode.SEND_PURPOSE, SelectSitesActivity.FOR.ADD_CONTENT);
+                startActivityForResult(intent, AppCode.REQUEST_ADD_CONTENT);
+                return;
             default:
-                colorCode = item.getItemId();
-                fragment = NewsListFragment.instanceFor(colorCode);
-                title = AppData.getSiteByCode(colorCode).name;
+                colorCode = where;
+                fragment = NewsListFragment.instanceFor(where);
+                title = AppData.getSiteByCode(where).name;
         }
         drawer.closeDrawer(GravityCompat.START);
 
@@ -218,7 +234,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
         setTitle(title);
         setUpColors(colorCode);
-        return true;
     }
 
     private void setUpColors(int colorCode)
@@ -273,10 +288,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             Main service = context.get();
             switch (msg.what) {
                 case AppCode.ACTION_UPDATE_FAVORITES:
-                    service.updateDrawer(true, false);
-                    break;
-                case AppCode.ACTION_UPDATE_PRO:
-                    service.updateDrawer(false, false);
+                    service.updateDrawer(true);
                     break;
                 default:
                     AppSettings.printerror("[MAIN] OPTION UNKNOWN: " + msg.what);
