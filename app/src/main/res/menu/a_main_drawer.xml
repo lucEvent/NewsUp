@@ -45,7 +45,9 @@
 
     </item>
 
-    <group android:id="@+id/group_3">
+    <group
+        android:id="@+id/group_3"
+        android:checkableBehavior="single">
 
         <item
             android:id="@+id/nav_add_content"
@@ -62,6 +64,5 @@
             android:title="@string/about"/>
 
     </group>
-
 
 </menu>

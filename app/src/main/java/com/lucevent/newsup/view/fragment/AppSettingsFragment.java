@@ -143,11 +143,8 @@ public class AppSettingsFragment extends PreferenceFragment
         @Override
         public boolean onPreferenceClick(Preference preference)
         {
-            getActivity().getFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.main_content, new SitesSettingsFragment())
-                    .addToBackStack(null)
-                    .commit();
+            ((Main) getActivity()).getMainFragmentManager()
+                    .replaceFragment(new SitesSettingsFragment(), R.id.nav_settings, true);
             return true;
         }
     };
@@ -156,11 +153,8 @@ public class AppSettingsFragment extends PreferenceFragment
         @Override
         public boolean onPreferenceClick(Preference preference)
         {
-            getActivity().getFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.main_content, new ScheduleDownloadSettingsFragment())
-                    .addToBackStack(null)
-                    .commit();
+            ((Main) getActivity()).getMainFragmentManager()
+                    .replaceFragment(new ScheduleDownloadSettingsFragment(), R.id.nav_settings, true);
             return true;
         }
     };

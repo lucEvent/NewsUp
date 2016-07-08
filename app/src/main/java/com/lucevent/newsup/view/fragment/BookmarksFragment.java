@@ -109,10 +109,10 @@ public class BookmarksFragment extends android.app.Fragment {
                     service.adapter.addAll(service.bookmarks);
                     break;
                 case AppCode.ERROR:
-                    AppSettings.printerror("[BMF] Error received by the Handler");
+                    AppSettings.printerror("[BMF] Error received by the Handler", null);
                     break;
                 default:
-                    AppSettings.printerror("[BMF] OPTION UNKNOWN: " + msg.what);
+                    AppSettings.printerror("[BMF] OPTION UNKNOWN: " + msg.what, null);
             }
         }
     }

@@ -61,7 +61,7 @@ public class SiteAdapter {
                 siteMap = new SitesMap(AppData.sites, SitesMap.SITE_COMPARATOR_BY_CATEGORY, filter);
                 break;
             default:
-                AppSettings.printerror("Wrong order");
+                AppSettings.printerror("Wrong order", null);
                 return null;
         }
 

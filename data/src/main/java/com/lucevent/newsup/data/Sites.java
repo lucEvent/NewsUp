@@ -65,6 +65,8 @@ public class Sites extends ArrayList<Site> {
                 new com.lucevent.newsup.data.section.MundoDeportivoSections(), new com.lucevent.newsup.data.reader.MundoDeportivo()));
         res.add(new Site(225, "Racó Català", 0xffff6347, SiteCountry.SPAIN | SiteLanguage.CATALAN | SiteCategory.NEWSPAPER,
                 new com.lucevent.newsup.data.section.RacoCatalaSections(), new com.lucevent.newsup.data.reader.RacoCatala()));
+        res.add(new Site(230, "VilaWeb", 0xfffd6300, SiteCountry.SPAIN | SiteLanguage.CATALAN | SiteCategory.NEWSPAPER,
+                new com.lucevent.newsup.data.section.VilaWebSections(), new com.lucevent.newsup.data.reader.VilaWeb()));
 
         // Swedish newspapers
         res.add(new Site(300, "Aftonbladet", 0xffffffff, SiteCountry.SWEDEN | SiteLanguage.SWEDISH | SiteCategory.NEWSPAPER,
@@ -134,6 +136,8 @@ public class Sites extends ArrayList<Site> {
                 new com.lucevent.newsup.data.section.SwedroidSections(), new com.lucevent.newsup.data.reader.Swedroid()));
         res.add(new Site(845, "Hipertextual", 0xff2799d7, SiteLanguage.SPANISH | SiteCategory.TECHNOLOGY,
                 new com.lucevent.newsup.data.section.HipertextualSections(), new com.lucevent.newsup.data.reader.Hipertextual()));
+        res.add(new Site(850, "Mashable", 0xff01aef0, SiteCountry.USA | SiteLanguage.ENGLISH | SiteCategory.TECHNOLOGY,
+                new com.lucevent.newsup.data.section.MashableSections(), new com.lucevent.newsup.data.reader.Mashable()));
 
         // Blog sites
         res.add(new Site(900, "Medium", 0xffffffff, SiteCountry.USA | SiteLanguage.ENGLISH | SiteCategory.BLOG,

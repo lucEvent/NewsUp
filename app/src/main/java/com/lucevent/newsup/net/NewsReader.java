@@ -86,8 +86,7 @@ public final class NewsReader {
         try {
             return org.jsoup.Jsoup.connect(pagelink).parser(org.jsoup.parser.Parser.xmlParser()).timeout(10000).get();
         } catch (Exception e) {
-            AppSettings.printerror("[NR] Can't read url: " + pagelink);
-            e.printStackTrace();
+            AppSettings.printerror("[NR] Can't read url: " + pagelink, e);
         }
         return null;
     }
@@ -103,7 +102,7 @@ public final class NewsReader {
             if (!content.isEmpty())
                 news.content = content;
             else
-                AppSettings.printerror("[NR] CONTENT NOT FOUND OF " + news.link);
+                AppSettings.printerror("[NR] CONTENT NOT FOUND OF " + news.link, null);
         }
         return news;
     }

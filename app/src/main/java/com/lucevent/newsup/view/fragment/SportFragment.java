@@ -95,10 +95,10 @@ public class SportFragment extends android.app.Fragment {
                     Snackbar.make(service.leagueTableView, R.string.msg_no_internet_connection, Snackbar.LENGTH_LONG).show();
                     break;
                 case AppCode.ERROR:
-                    AppSettings.printerror("[SF] Error received by the Handler");
+                    AppSettings.printerror("[SF] Error received by the Handler", null);
                     break;
                 default:
-                    AppSettings.printerror("[SF] OPTION UNKNOWN: " + msg.what);
+                    AppSettings.printerror("[SF] OPTION UNKNOWN: " + msg.what, null);
             }
         }
     }

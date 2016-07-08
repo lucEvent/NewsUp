@@ -101,10 +101,10 @@ public class HistorialFragment extends android.app.Fragment {
                     service.adapter.addAll((NewsMap) msg.obj);
                     break;
                 case AppCode.ERROR:
-                    AppSettings.printerror("[HF] Error received by the Handler");
+                    AppSettings.printerror("[HF] Error received by the Handler", null);
                     break;
                 default:
-                    AppSettings.printerror("[HF] OPTION UNKNOWN: " + msg.what);
+                    AppSettings.printerror("[HF] OPTION UNKNOWN: " + msg.what, null);
             }
         }
     }

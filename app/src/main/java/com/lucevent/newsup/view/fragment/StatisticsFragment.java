@@ -133,7 +133,7 @@ public class StatisticsFragment extends android.app.Fragment {
                     service.adapter.setNewDataSet((Statistics) msg.obj);
                     break;
                 default:
-                    AppSettings.printerror("[SF] OPTION UNKNOWN: " + msg.what);
+                    AppSettings.printerror("[SF] OPTION UNKNOWN: " + msg.what, null);
             }
         }
 

@@ -174,7 +174,7 @@ public class SportsMain extends AppCompatActivity implements NavigationView.OnNa
             SportsMain service = context.get();
             switch (msg.what) {
                 default:
-                    AppSettings.printerror("[SPORTSMAIN] OPTION UNKNOWN: " + msg.what);
+                    AppSettings.printerror("[SPORTSMAIN] OPTION UNKNOWN: " + msg.what, null);
             }
         }
 

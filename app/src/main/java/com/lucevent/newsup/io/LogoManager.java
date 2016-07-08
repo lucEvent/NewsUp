@@ -57,7 +57,7 @@ public class LogoManager {
                 res = Drawable.createFromStream(dataManager.open(site_code + ".png"), null);
                 map.put(site_code, res);
             } catch (Exception e) {
-                AppSettings.printerror("[LM] [EXCEPTION] Couldn't read asset " + site_code + ".png");
+                AppSettings.printerror("[LM] [EXCEPTION] Couldn't read asset " + site_code + ".png", e);
             }
         }
         return res;

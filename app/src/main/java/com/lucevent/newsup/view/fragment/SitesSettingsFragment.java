@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceScreen;
 
+import com.lucevent.newsup.Main;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.SitesMap;
 import com.lucevent.newsup.data.util.Site;
@@ -43,11 +44,8 @@ public class SitesSettingsFragment extends android.preference.PreferenceFragment
     public boolean onPreferenceClick(Preference preference)
     {
         int code = Integer.parseInt(preference.getKey());
-        getActivity().getFragmentManager()
-                .beginTransaction()
-                .replace(R.id.main_content, SiteSettingsFragment.instanceFor(code))
-                .addToBackStack(null)
-                .commit();
+        ((Main) getActivity()).getMainFragmentManager()
+                .replaceFragment(SiteSettingsFragment.instanceFor(code), R.id.nav_settings, true);
         return true;
     }
 

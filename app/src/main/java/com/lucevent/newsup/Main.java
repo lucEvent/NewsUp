@@ -37,6 +37,7 @@ import com.lucevent.newsup.view.activity.SelectSitesActivity;
 import com.lucevent.newsup.view.fragment.AboutFragment;
 import com.lucevent.newsup.view.fragment.AppSettingsFragment;
 import com.lucevent.newsup.view.fragment.BookmarksFragment;
+import com.lucevent.newsup.view.fragment.FragmentManager;
 import com.lucevent.newsup.view.fragment.HistorialFragment;
 import com.lucevent.newsup.view.fragment.NewsListFragment;
 import com.lucevent.newsup.view.fragment.StatisticsFragment;
@@ -45,6 +46,10 @@ import java.lang.ref.WeakReference;
 
 public class Main extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    private NewsListFragment newsFragment;
+    private Fragment previousFragment;
+
+    private FragmentManager fragmentManager;
     private NewsManager dataManager;
     public Handler handler;
 
@@ -82,24 +87,25 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         assert navigationView != null : "Navigation view is null";
         navigationView.setNavigationItemSelectedListener(this);
 
+        fragmentManager = new FragmentManager(this, navigationView, R.id.main_content);
+
         updateDrawer(true);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null && extras.containsKey(AppCode.SEND_NEWS_IDS)) {
             int[] news_codes = extras.getIntArray(AppCode.SEND_NEWS_IDS);
-            currentFragment = NewsListFragment.instanceForNotification(news_codes);
+            newsFragment = NewsListFragment.instanceForNotification(news_codes);
         } else
-            currentFragment = NewsListFragment.instanceFor(-1);
+            newsFragment = NewsListFragment.instanceFor(-1);
 
         if (extras != null && extras.containsKey(AppCode.RESTART)) {
             ScheduledDownloadReceiver.scheduleDownloads(this,
                     new ScheduleManager(this).getDownloadSchedules());
         }
 
-        getFragmentManager()
-                .beginTransaction()
-                .replace(R.id.main_content, currentFragment)
-                .commit();
+        newsFragment.setRetainInstance(true);
+        previousFragment = newsFragment;
+        fragmentManager.addFragment(newsFragment, R.id.nav_my_news);
     }
 
     @Override
@@ -107,9 +113,15 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     {
         if (drawer.isDrawerOpen(GravityCompat.START))
             drawer.closeDrawer(GravityCompat.START);
-        else if (getFragmentManager().getBackStackEntryCount() > 0)
-            getFragmentManager().popBackStack();
-        else super.onBackPressed();
+        else if (fragmentManager.getBackStackEntryCount() > 0) {
+            if (fragmentManager.getBackStackEntryCount() == 1)
+                previousFragment = newsFragment;
+
+            Fragment f = fragmentManager.popFragment();
+            if (f instanceof NewsListFragment)
+                setUpColors(((NewsListFragment) f).currentSiteCode);
+
+        } else super.onBackPressed();
     }
 
     @Override
@@ -119,6 +131,11 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         if (requestCode == AppCode.REQUEST_ADD_CONTENT && resultCode > 0) {
             navigateTo(resultCode);
         }
+    }
+
+    public FragmentManager getMainFragmentManager()
+    {
+        return fragmentManager;
     }
 
     private void updateDrawer(boolean updateFavorites)
@@ -163,8 +180,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         mi.setCheckable(true);
     }
 
-    private Fragment currentFragment, previousFragment;
-
     @Override
     public boolean onNavigationItemSelected(MenuItem item)
     {
@@ -174,14 +189,16 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
     private void navigateTo(int where)
     {
-        Fragment fragment;
+        Fragment fragment = null;
         String title;
         int colorCode = -1;
+        boolean isNewsFragment = false;
 
         switch (where) {
             case R.id.nav_my_news:
-                fragment = NewsListFragment.instanceFor(-1);
+                newsFragment.setSite(-1);
                 title = getString(R.string.my_news);
+                isNewsFragment = true;
                 break;
             case R.id.nav_saved_news:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !diskPermissionGranted()) {
@@ -219,19 +236,25 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 return;
             default:
                 colorCode = where;
-                fragment = NewsListFragment.instanceFor(where);
+                newsFragment.setSite(where);
                 title = AppData.getSiteByCode(where).name;
+                isNewsFragment = true;
         }
         drawer.closeDrawer(GravityCompat.START);
 
-        previousFragment = currentFragment;
-        currentFragment = fragment;
+        if (isNewsFragment) {
 
-        getFragmentManager()
-                .beginTransaction()
-                .replace(R.id.main_content, fragment)
-                .commit();
+            if (!(previousFragment instanceof NewsListFragment)) {
+                fragmentManager.popToFirst();
+                previousFragment = newsFragment;
+            } else newsFragment.setUp();
+            fragmentManager.setNavigationItemId(0, where);
 
+        } else {
+
+            fragmentManager.replaceFragment(fragment, where, previousFragment instanceof NewsListFragment);
+            previousFragment = fragment;
+        }
         setTitle(title);
         setUpColors(colorCode);
     }
@@ -242,7 +265,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         boolean navBlack = false;
 
         Toolbar ab = (Toolbar) findViewById(R.id.toolbar);
-        if (colorCode == -1) {
+        if (colorCode < 0) {
             barColor = ContextCompat.getColor(this, R.color.colorPrimary);
             textColor = Color.WHITE;
             statusBarColor = ContextCompat.getColor(this, R.color.colorPrimaryDark);
@@ -291,7 +314,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                     service.updateDrawer(true);
                     break;
                 default:
-                    AppSettings.printerror("[MAIN] OPTION UNKNOWN: " + msg.what);
+                    AppSettings.printerror("[MAIN] OPTION UNKNOWN: " + msg.what, null);
             }
         }
 

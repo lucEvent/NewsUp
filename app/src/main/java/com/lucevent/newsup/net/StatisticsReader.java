@@ -28,8 +28,7 @@ public class StatisticsReader {
                 try {
                     doc = Jsoup.connect(url).get();
                 } catch (IOException e) {
-                    AppSettings.printerror("[SR] Problem fetching Statistics:" + url);
-                    e.printStackTrace();
+                    AppSettings.printerror("[SR] Problem fetching Statistics:" + url, e);
                 }
                 if (doc == null) return;
 

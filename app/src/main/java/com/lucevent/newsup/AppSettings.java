@@ -19,8 +19,6 @@ public class AppSettings {
     /**
      * ************** Default values *********************
      **/
-    private static Set<String> DEFAULT_MAIN_SITES;
-    private static Set<String> DEFAULT_FAVORITE_SITES;
     private static Set<String> DEFAULT_MAIN_SECTIONS;
     private static Set<String> DEFAULT_DOWNLOAD_SECTIONS;
     private static final String DEFAULT_KEEP_TIME = "2592000";
@@ -51,13 +49,6 @@ public class AppSettings {
             PREF_SITE_MAIN_SECTIONS_KEY = context.getString(R.string.pref_main_sections_key);
             PREF_SITE_DOWNLOAD_SECTIONS_KEY = context.getString(R.string.pref_download_sections_key);
 
-            DEFAULT_MAIN_SITES = new TreeSet<>();
-            DEFAULT_MAIN_SITES.add("100");
-            DEFAULT_MAIN_SITES.add("800");
-            //  DEFAULT_MAIN_SITES.add("125");
-
-            DEFAULT_FAVORITE_SITES = new TreeSet<>();
-
             DEFAULT_MAIN_SECTIONS = new TreeSet<>();
             DEFAULT_MAIN_SECTIONS.add("0");
 
@@ -82,7 +73,7 @@ public class AppSettings {
 
     public static Set<String> getMainSitesCodesString()
     {
-        return preferences.getStringSet(PREF_MAIN_SITES_KEY, DEFAULT_MAIN_SITES);
+        return preferences.getStringSet(PREF_MAIN_SITES_KEY, new TreeSet<String>());
     }
 
     public static int[] getMainSitesCodes()
@@ -147,7 +138,7 @@ public class AppSettings {
 
     private static Set<String> getFavoriteSitesCodesString()
     {
-        return preferences.getStringSet(PREF_FAVORITE_SITES_KEY, DEFAULT_FAVORITE_SITES);
+        return preferences.getStringSet(PREF_FAVORITE_SITES_KEY, new TreeSet<String>());
     }
 
     public static int[] getFavoriteSitesCodes()
@@ -212,10 +203,14 @@ public class AppSettings {
         return Long.parseLong(preferences.getString(PREF_KEEP_NEWS_KEY, DEFAULT_KEEP_TIME));
     }
 
-    public static void printerror(String msg)
+    public static void printerror(String msg, Exception e)
     {
-        if (DEBUG)
+        if (DEBUG) {
             System.err.println(msg);
+
+            if (e != null)
+                e.printStackTrace();
+        }
     }
 
     public static void printlog(String msg)

@@ -100,10 +100,9 @@ public class NewsManager {
                         dbmanager.insertNews(N);
                         saveNews(N);
                     }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+
                 } catch (Exception e) {
-                    AppSettings.printerror("[NM] FATAL ERROR DURING SERVICE :(");
+                    AppSettings.printerror("[NM] FATAL ERROR DURING SERVICE :(", e);
                 }
             }
             return true;
@@ -174,7 +173,7 @@ public class NewsManager {
                             try {   // We insert it in the database
                                 dbmanager.insertNews(N);
                             } catch (Exception e) {
-                                AppSettings.printerror("[NM] Error when dbmanager.insertNews(N)");
+                                AppSettings.printerror("[NM] Error when dbmanager.insertNews(N)", e);
                             }
                             sdmanager.saveNews(N); // and we save it in the disc
 
@@ -220,7 +219,7 @@ public class NewsManager {
                     try {
                         task.join();
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        AppSettings.printerror("", e);
                     }
 
                     NewsMap newstosave = task.newsToSave;

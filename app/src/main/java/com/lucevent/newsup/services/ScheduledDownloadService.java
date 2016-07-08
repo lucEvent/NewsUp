@@ -38,8 +38,7 @@ public class ScheduledDownloadService extends Service {
             doWork(getApplicationContext(), intent);
 
         } catch (Exception e) {
-            AppSettings.printerror("[SDS] Error executing service");
-            e.printStackTrace();
+            AppSettings.printerror("[SDS] Error executing service", e);
         }
         stopSelf();
         return Service.START_NOT_STICKY;

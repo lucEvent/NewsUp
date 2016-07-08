@@ -31,8 +31,7 @@ public class SportsReader {
         try {
             doc = Jsoup.connect(query + sport_code + "," + isection).get();
         } catch (IOException e) {
-            AppSettings.printerror("[SR] Problem fetching:" + query + sport_code + "," + isection);
-            e.printStackTrace();
+            AppSettings.printerror("[SR] Problem fetching:" + query + sport_code + "," + isection, e);
         }
         if (doc == null) return null;
 
@@ -87,8 +86,7 @@ public class SportsReader {
             InputStream in = new java.net.URL(url).openStream();
             res = BitmapFactory.decodeStream(in);
         } catch (Exception e) {
-            AppSettings.printerror("Error finding " + url);
-            e.printStackTrace();
+            AppSettings.printerror("Error finding " + url, e);
         }
         return res;
     }

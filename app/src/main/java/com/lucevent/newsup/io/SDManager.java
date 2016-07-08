@@ -30,10 +30,9 @@ public class SDManager {
 
             inputStream.close();
         } catch (FileNotFoundException e) {
-            AppSettings.printerror("[SDM] Couldn't find news in storage [news.id: " + news.id + "]");
+            AppSettings.printerror("[SDM] Couldn't find news in storage [news.id: " + news.id + "]", e);
         } catch (Exception e) {
-            AppSettings.printerror("[SDM] Error in SDManager.readNews [ news.id: " + news.id + "]");
-            e.printStackTrace();
+            AppSettings.printerror("[SDM] Error in SDManager.readNews [ news.id: " + news.id + "]", e);
         }
         return news;
     }
@@ -48,8 +47,7 @@ public class SDManager {
             outputStream.flush();
             outputStream.close();
         } catch (Exception e) {
-            AppSettings.printerror("[SDM] Error in saveNews [news.id = " + news.id + "] ## [title: " + news.title + "]");
-            e.printStackTrace();
+            AppSettings.printerror("[SDM] Error in saveNews [news.id = " + news.id + "] ## [title: " + news.title + "]", e);
         }
     }
 
@@ -58,8 +56,7 @@ public class SDManager {
         try {
             context.deleteFile("n" + news.id);
         } catch (Exception e) {
-            AppSettings.printerror("[SDM] Error in deleteNews [news.id = " + news.id + "] ## [title: " + news.title + "]");
-            e.printStackTrace();
+            AppSettings.printerror("[SDM] Error in deleteNews [news.id = " + news.id + "] ## [title: " + news.title + "]", e);
         }
     }
 

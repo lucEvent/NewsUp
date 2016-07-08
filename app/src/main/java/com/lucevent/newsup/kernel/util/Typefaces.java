@@ -19,7 +19,7 @@ public class Typefaces {
                     Typeface t = Typeface.createFromAsset(c.getAssets(), assetPath);
                     cache.put(assetPath, t);
                 } catch (Exception e) {
-                    AppSettings.printerror("[Tf] Could not get typeface '" + assetPath + "' because " + e.getMessage());
+                    AppSettings.printerror("[Tf] Could not get typeface '" + assetPath + "' because " + e.getMessage(), e);
                     return null;
                 }
             }
