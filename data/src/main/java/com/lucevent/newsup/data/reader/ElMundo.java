@@ -32,11 +32,12 @@ public class ElMundo extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
-        org.jsoup.select.Elements e = doc.select("div[itemprop=\"articleBody\"],#tamano");
-        e.select("aside, footer, meta, time").remove();
+        org.jsoup.select.Elements e = doc.select("div[itemprop=\"articleBody\"]:not(#tamano div[itemprop=\"articleBody\"]),#tamano");
+        e.select("aside,footer,meta,time,script,.summary-lead").remove();
 
         if (!e.isEmpty())
-            news.content = e.html();
+            news.content = e.html().replace("noscript", "div").replace("style=\"", "n=\"").replace("\"//", "\"http://");
+
     }
 
 }
