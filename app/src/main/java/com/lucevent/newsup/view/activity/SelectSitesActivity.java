@@ -69,7 +69,7 @@ public class SelectSitesActivity extends AppCompatActivity implements
 
         saveButton = (Button) findViewById(R.id.save);
 
-        siteAdapter = new SiteAdapter();
+        siteAdapter = new SiteAdapter(this);
 
         purpose = (FOR) getIntent().getExtras().get(AppCode.SEND_PURPOSE);
 

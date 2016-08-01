@@ -1,7 +1,9 @@
 package com.lucevent.newsup.view.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -21,7 +23,7 @@ import com.lucevent.newsup.kernel.AppData;
 
 import java.util.HashMap;
 
-public class SiteAdapter {
+public class SiteAdapter implements View.OnTouchListener {
 
     public enum Order {
         BY_NAME, BY_COUNTRY, BY_LANGUAGE, BY_CATEGORY
@@ -29,8 +31,13 @@ public class SiteAdapter {
 
     private HashMap<Integer, View> viewMap;
 
-    public SiteAdapter()
+    private String[] titles_languages, titles_countries, titles_types;
+
+    public SiteAdapter(Context context)
     {
+        titles_languages = context.getResources().getStringArray(R.array.site_languages);
+        titles_countries = context.getResources().getStringArray(R.array.site_countries);
+        titles_types = context.getResources().getStringArray(R.array.site_categories);
     }
 
     public HashMap<Integer, View> createView(Context context, ViewGroup parent, int rowSize, Order order, String filter)
@@ -46,17 +53,17 @@ public class SiteAdapter {
                 siteMap = new SitesMap(AppData.sites, SitesMap.SITE_COMPARATOR_BY_NAME, filter);
                 break;
             case BY_LANGUAGE:
-                titles = context.getResources().getStringArray(R.array.site_languages);
+                titles = titles_languages;
                 shift = SiteLanguage.shift;
                 siteMap = new SitesMap(AppData.sites, SitesMap.SITE_COMPARATOR_BY_LANGUAGE, filter);
                 break;
             case BY_COUNTRY:
-                titles = context.getResources().getStringArray(R.array.site_countries);
+                titles = titles_countries;
                 shift = SiteCountry.shift;
                 siteMap = new SitesMap(AppData.sites, SitesMap.SITE_COMPARATOR_BY_COUNTRY, filter);
                 break;
             case BY_CATEGORY:
-                titles = context.getResources().getStringArray(R.array.site_categories);
+                titles = titles_types;
                 shift = SiteCategory.shift;
                 siteMap = new SitesMap(AppData.sites, SitesMap.SITE_COMPARATOR_BY_CATEGORY, filter);
                 break;
@@ -79,6 +86,7 @@ public class SiteAdapter {
                 }
 
                 View v = inflater.inflate(R.layout.i_site, row, false);
+                v.setOnTouchListener(this);
                 v.setTag(s.code);
                 ((TextView) v.findViewById(R.id.site_name)).setText(s.name);
                 ((ImageView) v.findViewById(R.id.site_icon)).setImageDrawable(LogoManager.getLogo(s.code, LogoManager.Size.SELECT_SCREEN));
@@ -132,6 +140,57 @@ public class SiteAdapter {
             number++;
         }
         return viewMap;
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event)
+    {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+
+                showSiteDataDialog(v.getContext(), (Integer) v.getTag());
+
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+
+                dismissDialog();
+
+                break;
+        }
+
+        return false;
+    }
+
+    private View dialogView;
+    private AlertDialog dialog;
+
+    private void showSiteDataDialog(Context context, int site_code)
+    {
+        if (dialogView == null)
+            dialogView = LayoutInflater.from(context).inflate(R.layout.d_site_info, null);
+        else ((ViewGroup) dialogView.getParent()).removeAllViews();
+
+        Site site = AppData.getSiteByCode(site_code);
+
+        int barColor = site.color == 0xffffffff ? 0xffcccccc : site.color;
+        dialogView.findViewById(R.id.color_top_bar).setBackgroundColor(barColor);
+        ((ImageView) dialogView.findViewById(R.id.site_logo)).setImageDrawable(LogoManager.getLogo(site_code, LogoManager.Size.SELECT_SCREEN));
+
+        int icountry = site.getCountry() - 1;
+        ((TextView) dialogView.findViewById(R.id.country)).setText(context.getString(R.string.x_country, icountry >= 0 ? titles_countries[icountry] : ""));
+        ((TextView) dialogView.findViewById(R.id.language)).setText(context.getString(R.string.x_language, titles_languages[site.getLanguage() - 1]));
+        ((TextView) dialogView.findViewById(R.id.type)).setText(context.getString(R.string.x_category, titles_types[site.getCategory() - 1]));
+
+        dialog = new AlertDialog.Builder(context)
+                .setView(dialogView)
+                .create();
+        dialog.show();
+    }
+
+    private void dismissDialog()
+    {
+        dialog.dismiss();
     }
 
 }

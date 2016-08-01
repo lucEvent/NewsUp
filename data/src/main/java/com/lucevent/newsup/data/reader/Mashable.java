@@ -35,31 +35,33 @@ public class Mashable extends com.lucevent.newsup.data.util.NewsReader {
     {
         document.select("script").remove();
 
-        Elements content = document.select("#story .viral-video-lead,#story .article-image,#story .post-text");
+        Elements story = document.select("#story");
+
+        Elements img = story.select(".article-image");
+        Elements content = story.select(".article-content");
 
         if (!content.isEmpty()) {
-
-            content.select(".see-also,.image-credit").remove();
-            news.content = content.outerHtml().replace("src=\"//", "src=\"http://");
-
+            content.select(".viral-next-up,.see-also,.review-card").remove();
+            news.content = img.outerHtml() + content.outerHtml().replace("src=\"//", "src=\"http://");
         } else {
 
             Elements video = document.select("#player [data-sourcefile]");
-            if (video.size() > 0) {
+            if (!video.isEmpty()) {
 
                 String src = video.get(0).attr("data-sourcefile");
                 news.content = "<video controls><source src=\"" + src + "\" type=\"video/mp4\"></video>";
-
             } else {
-
                 Elements longcards = document.select(".long-card");
+
                 if (!longcards.isEmpty()) {
 
                     longcards = longcards.select("[data-type=\"ImageBlock\"] img,[data-type=\"TextBlock\"] p");
                     news.content = longcards.outerHtml();
-
+                } else {
+                    System.out.println("NO CONTENT FOUND");
                 }
             }
+
         }
     }
 

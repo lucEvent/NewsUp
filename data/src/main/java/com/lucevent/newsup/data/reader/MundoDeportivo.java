@@ -3,6 +3,7 @@ package com.lucevent.newsup.data.reader;
 import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class MundoDeportivo extends com.lucevent.newsup.data.util.NewsReader {
 
@@ -37,28 +38,9 @@ public class MundoDeportivo extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
-        String intro = doc.select("[itemprop=\"alternativeHeadline\"]").outerHtml();
-        org.jsoup.select.Elements imgs = doc.select("[itemprop=\"image\"] img,.gallery-leaf-figure img");
+        Elements e = doc.select(".story-leaf-figure,.story-leaf-body-video,.story-leaf-body .story-leaf-txt-p,.live-scribble");
 
-        StringBuilder img = new StringBuilder();
-        if (!imgs.isEmpty())
-            for (org.jsoup.nodes.Element i : imgs) {
-                String attr = i.attr("data-src-md");
-                if (attr.isEmpty())
-                    attr = i.attr("src");
-
-                img.append("<img src=\"").append(attr).append("\">");
-            }
-
-        org.jsoup.select.Elements metas = doc.select("[itemprop=\"video\"] [itemprop=\"image\"]");
-        if (!metas.isEmpty())
-            for (org.jsoup.nodes.Element i : metas)
-                img.append("<img src=\"").append(i.attr("content")).append("\">");
-
-        org.jsoup.select.Elements content = doc.select("[itemprop=\"articleBody\"]");
-        content.select(".datetime-story-leaf,.gallery-story-leaf-figcaption").remove();
-
-        news.content = intro + img.toString() + content.html();
+        news.content = e.outerHtml().replace("src=\"/", "src=\"http:/");
     }
 
 }

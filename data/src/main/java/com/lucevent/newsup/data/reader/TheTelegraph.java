@@ -3,6 +3,7 @@ package com.lucevent.newsup.data.reader;
 import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class TheTelegraph extends com.lucevent.newsup.data.util.NewsReader {
 
@@ -30,69 +31,64 @@ public class TheTelegraph extends com.lucevent.newsup.data.util.NewsReader {
     }
 
     @Override
+    protected String parseCategory(Element prop)
+    {
+        String[] cats = prop.text().split(":");
+        return cats.length > 0 ? cats[cats.length - 1] : "";
+    }
+
+    private static final String garbage = "[itemprop=\"caption\"],[itemprop=\"copyrightHolder\"],.video-player__image-controls-wrapper";
+    int t = 1;
+
+    @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
-        org.jsoup.select.Elements img = doc.select(".articleImage");
-        org.jsoup.select.Elements content = doc.select("#mainBodyAreaMobile");
+        doc.select("script").remove();
 
-        if (content.isEmpty()) {
-            content = doc.select("#upperSet a");
+        String content = "";
+        Elements intro = doc.select(".article__content .hero-area-wrapper");
+        intro.select(garbage).remove();
+        cleanImages(intro.select("img"));
 
-            if (content.isEmpty()) {
+        Element article = doc.select("article[itemprop=\"articleBody\"]").first();
+        if (article == null) {
 
-                content = doc.select("[itemprop=\"articleBody\"] .component-content");
+            Elements articles = doc.select(".gallery__content img,.gallery__content p");
 
-                if (content.isEmpty()) {
+            if (articles.isEmpty()) {
 
-                    content = doc.select(".gallery__item");
+                articles = doc.select(".main-column");
 
-                    if (content.isEmpty()) {
-                        content = doc.select(".section-text");
+                if (articles.isEmpty()) {
+                    //todo
+                    System.out.println("No content");
 
-                        if (content.isEmpty()) {
-                            content = doc.select(".article-footer");
-
-                            if (!content.isEmpty()) {
-                                news.content = content.html().replace("src=\"/", "src=\"http://www.telegraph.co.uk/");
-                            }
-                        } else {
-                            news.content = content.html();
-                        }
-                    } else {
-
-                        for (org.jsoup.nodes.Element i : content.select("img")) {
-                            String data = i.attr("data-frz-src-array");
-
-                            int ind1 = data.indexOf(":");
-                            int ind2 = data.indexOf(",");
-                            if (ind1 != -1 && ind2 != -1) {
-                                i.attr("src", "http://www.telegraph.co.uk" + data.substring(ind1 + 2, ind2 - 1));
-                            }
-                            i.attr("data-frz-src-array", "");
-                        }
-                        news.content = content.html();
-                    }
                 } else {
-                    img = doc.select(".article__content header [itemprop=\"image\"]");
-                    img.attr("src", "http://www.telegraph.co.uk" + img.attr("src"));
-                    img.attr("data-frz-src-array", "");
 
-                    news.content = img.outerHtml() + content.html();
+                    articles.select("style,.html-block").remove();
+                    String rootUrl = news.link.replace("index.html", "");
+                    content = articles.outerHtml().replace("=\"/", "=\"http:/").replace("=\"./", "=\"" + rootUrl);
+
                 }
             } else {
-
-                StringBuilder sb = new StringBuilder();
-                for (org.jsoup.nodes.Element element : content) {
-                    String href = element.attr("href");
-                    String descr = element.attr("title");
-
-                    sb.append("<p>").append(descr).append("</p><img src=\"").append(href).append("\">");
-                }
-                news.content = sb.toString();
+                content = articles.outerHtml();
             }
+
         } else {
-            content.select("[class*=\"Advert\"],[class*=\"pullquote\"]").remove();
-            news.content = img.outerHtml() + content.html();
+            article.select(garbage).remove();
+            cleanImages(article.select("img"));
+
+            content = intro.outerHtml() + article.outerHtml();
+        }
+
+        news.content = content.replace("=\"/", "=\"http://www.telegraph.co.uk/");
+    }
+
+    private void cleanImages(Elements imgs)
+    {
+        for (Element img : imgs) {
+            img.after("<img src=\"" + img.attr("src") + "\"/>");
+            img.remove();
         }
     }
 
