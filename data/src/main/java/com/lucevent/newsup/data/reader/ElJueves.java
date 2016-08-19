@@ -55,7 +55,7 @@ public class ElJueves extends com.lucevent.newsup.data.util.NewsReader {
 
             article = main.select("article").get(0).select(".row .sub-title,.row .detailMedia,.row #detail");
             finalcontent = article.html();
-        } else if (news.link.contains("eljueves.es/temazo/")) {
+        } else if (news.link.contains("eljueves.es/temazo/") || news.link.contains("eljueves.es/sexo/")) {
 
             article = main.select("#slider-temazo .slide");
             article.select(".relacionats").remove();

@@ -1,5 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class SpaceNews extends com.lucevent.newsup.data.util.NewsReader {
@@ -31,7 +32,19 @@ public class SpaceNews extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected String parseContent(Element prop)
     {
-        return prop.text().replace("style=", "none=");
+        Document doc = org.jsoup.Jsoup.parse(prop.text());
+
+        for (Element img : doc.select("img")) {
+            img.removeAttr("width");
+            img.removeAttr("height");
+            img.removeAttr("srcset");
+            img.removeAttr("style");
+            img.removeAttr("class");
+            img.removeAttr("sizes");
+        }
+        doc.select(".ctx-clearfix,a[rel=\"nofollow\"]").remove();
+
+        return doc.html();
     }
 
 }
