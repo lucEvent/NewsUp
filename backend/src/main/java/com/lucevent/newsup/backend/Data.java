@@ -14,7 +14,7 @@ public class Data {
 
     public Data()
     {
-        Date.setTitles(new String[]{"%d s. ago", "%d m. ago", "%d h. ago", "%d D. ago", "%d M. ago", "%d Y. ago",});
+        Date.setTitles(new String[]{"%d seconds ago", "%d minutes ago", "%d hours ago", "%d days ago", "%d months ago", "%d years ago",});
         if (sites == null) {
             sites = Sites.getDefault(true);
 

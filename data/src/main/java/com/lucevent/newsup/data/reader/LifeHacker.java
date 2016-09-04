@@ -17,7 +17,7 @@ public class LifeHacker extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_CATEGORY},
                 new int[]{});
     }
-
+    
     @Override
     protected String parseContent(Element prop)
     {

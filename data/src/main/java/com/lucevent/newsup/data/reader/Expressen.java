@@ -78,9 +78,14 @@ public class Expressen extends com.lucevent.newsup.data.util.NewsReader {
                 e.parent().remove();
         }
 
+        for (Element img : firstElements.select("img"))
+            img.attr("srcset", "");
+        for (Element img : content.select("img"))
+            img.attr("srcset", "");
+
         String s_preamble = "<p>" + preamble.html() + "</p>";
-        String s_firsts = "<p>" + firstElements.html() + "</p>";
-        String s_content = content.html().replace("<p>&nbsp;</p>", "");
+        String s_firsts = "<p>" + firstElements.html().replace("style=", "n=") + "</p>";
+        String s_content = content.html().replace("<p>&nbsp;</p>", "").replace("style=", "n=");
 
         news.content = s_preamble + s_firsts + "<hr>" + s_content;
     }

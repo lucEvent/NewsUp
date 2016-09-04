@@ -105,8 +105,8 @@ public class BackendParser {
         for (SiteStat ss : statisticsSet)
             if (ss.nAccesses > 0)
                 sb.append("\t").append(ss.siteName).append(":").append(paddings[(ss.siteName.length() + 1) >> 3])
-                        .append(ss.nAccesses).append(" reqs,\t")
-                        .append(ss.nNewsRead).append(" reads\t[last ")
+                        .append(ss.nAccesses).append(" requests\t")
+                        .append(ss.nNewsRead).append(" reads |\t[last ")
                         .append(Date.getAge(ss.lastAccess))
                         .append("]\t[from ").append(ss.lastIp).append("]\n");
     }

@@ -31,6 +31,20 @@ public class SvenskaDagbladet extends com.lucevent.newsup.data.util.NewsReader {
 
         e.select(".Body-ad,.AdPositionData,.Body-pull,figcaption,.Quote,.ExternalLink").remove();
 
+        for (org.jsoup.nodes.Element img : e.select("img")) {
+            String src = img.attr("srcset");
+
+            if (!src.startsWith("http:"))
+                src = "http:" + src;
+
+            int i = src.indexOf(" ");
+            if (i != -1)
+                src = src.substring(0, i);
+
+            img.attr("src", src);
+            img.attr("srcset", "");
+        }
+
         news.content = e.html();
     }
 
