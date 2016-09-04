@@ -1,14 +1,13 @@
 package com.lucevent.newsup.services;
 
+import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.RingtoneManager;
-import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
@@ -23,25 +22,23 @@ import com.lucevent.newsup.services.util.DownloadSchedule;
 
 import java.util.Calendar;
 
-public class ScheduledDownloadService extends Service {
+public class ScheduledDownloadService extends IntentService {
 
-    @Override
-    public void onCreate()
+    public ScheduledDownloadService()
     {
-        super.onCreate();
+        super("ScheduledDownloadService");
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId)
+    protected void onHandleIntent(Intent intent)
     {
         try {
+
             doWork(getApplicationContext(), intent);
 
         } catch (Exception e) {
             AppSettings.printerror("[SDS] Error executing service", e);
         }
-        stopSelf();
-        return Service.START_NOT_STICKY;
     }
 
     private void doWork(Context context, Intent intent)
@@ -69,13 +66,11 @@ public class ScheduledDownloadService extends Service {
                 dataManager.deleteDownloadSchedule(job);
 
         }
-        AppSettings.initialize(context);
         ScheduledDownloadReceiver.scheduleDownloads(context, dataManager.getDownloadSchedules());
 
         boolean jobdone = dataManager.download_News_for_service(job.sites_codes);
 
         if (job.notify) {
-            //todo notification not working properly in Lollipop
             int[] intentextra = new int[job.sites_codes.length];
             StringBuilder notiftext = new StringBuilder();
 
@@ -84,9 +79,9 @@ public class ScheduledDownloadService extends Service {
 
                 intentextra[i] = site.prior_news.id;
 
-                if (i != 0) {
+                if (i != 0)
                     notiftext.append("\n");
-                }
+
                 notiftext.append(site.name.toUpperCase()).append(": ").append(site.prior_news.title);
                 AppSettings.printlog("[SDS] Im packing up the ids: " + site.prior_news.id);
             }
@@ -120,12 +115,6 @@ public class ScheduledDownloadService extends Service {
         if (!jobdone) {
             //todo
         }
-    }
-
-    @Override
-    public IBinder onBind(Intent intent)
-    {
-        return null;
     }
 
 }

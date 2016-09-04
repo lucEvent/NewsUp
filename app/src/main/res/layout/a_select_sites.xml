@@ -26,6 +26,7 @@
             app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed">
 
             <TextView
+                android:id="@+id/introduction"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"

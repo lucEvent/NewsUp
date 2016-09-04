@@ -6,6 +6,7 @@ import android.net.NetworkInfo;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Pair;
 
 import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.ProSettings;
@@ -20,6 +21,8 @@ import com.lucevent.newsup.io.DBManager;
 import com.lucevent.newsup.io.LogoManager;
 import com.lucevent.newsup.io.SDManager;
 import com.lucevent.newsup.net.NewsReader;
+
+import java.util.ArrayList;
 
 public class NewsManager {
 
@@ -91,12 +94,12 @@ public class NewsManager {
         if (isInternetAvailable()) {
             for (int site_code : sites_codes) {
                 try {
-                    NewsSiteLoader thread = new NewsSiteLoader(AppData.getSiteByCode(site_code), NewsSiteLoader.OFFLINE_SECTIONS);
-                    thread.start();
-                    thread.join();
 
-                    NewsMap newstosave = thread.newsToSave;
-                    for (News N : newstosave) {
+                    Site site = AppData.getSiteByCode(site_code);
+                    NewsSiteLoader loader = new NewsSiteLoader(site, AppSettings.getDownloadSections(site));
+                    loader.run();
+
+                    for (News N : loader.newsToSave) {
                         dbmanager.insertNews(N);
                         saveNews(N);
                     }
@@ -145,12 +148,11 @@ public class NewsManager {
 
                 NewsMap tempNewsMap;
                 if (newsreader != null)
-                    tempNewsMap = new NewsMap(newsreader.readNewsHeader(site, finalSections));
+                    tempNewsMap = new NewsMap(newsreader.readNewsHeaders(site, finalSections));
                 else
                     tempNewsMap = new NewsMap(site.readNewsHeaders(finalSections));
 
-                for (News N : tempNewsMap)
-                    N.site_code = site.code;
+                tempNewsMap.setCode(site.code);
 
                 handler.obtainMessage(AppCode.NEWS_MAP_READ, tempNewsMap).sendToTarget();
 
@@ -210,7 +212,8 @@ public class NewsManager {
                 NewsSiteLoader[] tasks = new NewsSiteLoader[main_codes.length];
 
                 for (int i = 0; i < main_codes.length; ++i) {
-                    tasks[i] = new NewsSiteLoader(AppData.getSiteByCode(main_codes[i]), NewsSiteLoader.MAIN_SECTIONS);
+                    Site site = AppData.getSiteByCode(main_codes[i]);
+                    tasks[i] = new NewsSiteLoader(site, AppSettings.getMainSections(site));
                     tasks[i].start();
                 }
 
@@ -242,18 +245,15 @@ public class NewsManager {
 
     private class NewsSiteLoader extends Thread {
 
-        public static final int MAIN_SECTIONS = 0;
-        public static final int OFFLINE_SECTIONS = 0;
-
         final Site site;
-        final int type_sections;
+        final int[] sections;
 
         NewsMap newsToSave;
 
-        NewsSiteLoader(Site site, int type_sections)
+        NewsSiteLoader(Site site, int[] sections)
         {
             this.site = site;
-            this.type_sections = type_sections;
+            this.sections = sections;
         }
 
         @Override
@@ -263,29 +263,17 @@ public class NewsManager {
 
             getSiteHistory(site);
 
-            int[] sections;
-            if (type_sections == MAIN_SECTIONS)
-                sections = AppSettings.getMainSections(site);
-            else
-                sections = AppSettings.getDownloadSections(site);
-
             NewsMap newsTempMap;
             if (newsreader != null)
-                newsTempMap = new NewsMap(newsreader.readNewsHeader(site, sections));
+                newsTempMap = new NewsMap(newsreader.readNewsHeaders(site, sections));
             else
                 newsTempMap = new NewsMap(site.readNewsHeaders(sections));
 
-            for (News N : newsTempMap)
-                N.site_code = site.code;
+            newsTempMap.setCode(site.code);
 
             if (handler != null)
                 handler.obtainMessage(AppCode.NEWS_MAP_READ, newsTempMap).sendToTarget();
 
-
-/*            if (site.highlighted == null) {
-                site.highlighted = news;
-            }
-*/
             for (News N : newsTempMap) {
 
                 if (site.news.add(N)) {  // if added, it means it was not in yet, so:
@@ -304,7 +292,7 @@ public class NewsManager {
 
                 } else {
 
-                    N.id = site.news.ceiling(N).id; // If not added, it means it already is in, so we
+                    N.id = site.news.ceiling(N).id; // If not added, it means it is in already
 
                 }
             }
@@ -395,6 +383,16 @@ public class NewsManager {
     {
         NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnected();
+    }
+
+    public ArrayList<Pair<Integer, Integer>> getReadingStats()
+    {
+        return dbmanager.readReadingStats();
+    }
+
+    public void clearReadingStats()
+    {
+        dbmanager.deleteReadingStats();
     }
 
 }

@@ -23,7 +23,6 @@
     <string name="add_content">Añade más</string>
     <string name="select_fav_publications">Selecciona tus\npublicaciones favoritas</string>
 
-
     <string name="mon">Lun</string>
     <string name="tue">Mar</string>
     <string name="wed">Mie</string>
@@ -32,8 +31,6 @@
     <string name="sat">Sab</string>
     <string name="sun">Dom</string>
 
-    <string name="extras">Extras</string>
-    <string name="sports">Deportes</string>
 
     <!-- * ******************** Buttons **************************** * -->
     <string name="cancel">Cancelar</string>
@@ -70,7 +67,6 @@
     <string name="msg_news_not_found">Oohh… La aplicación es increíble pero todavía no puede leer esta noticia.\n¿Qué hacemos?</string>
     <string name="msg_no_internet_connection">No hay conexión a internet</string>
     <string name="msg_unlocked_finnish">Publicaciones finlandesas desbloqueadas</string>
-    <string name="msg_unlocked_sports">Deportes desbloqueados</string>
     <string name="msg_unlocked_statistics">Estadísticas desbloqueadas</string>
     <string name="msg_invalid_code">Código inválido</string>
     <string name="msg_app_must_restart_to_apply_changes">Debes reiniciar la app para aplicar cambios</string>
@@ -101,17 +97,6 @@
     <string name="pref_download_sections">Secciones de descarga</string>
     <string name="pref_pro_code">Código PRO</string>
     <string name="pref_keep_news">Guardar noticias</string>
-
-
-    <!-- ***************************** * Sport strings * ********************************** -->
-    <string name="team">Equipo</string>
-    <string name="points">Pts</string>
-    <string name="games">J</string>
-    <string name="won">G</string>
-    <string name="draw">E</string>
-    <string name="lost">P</string>
-    <string name="scored">GF</string>
-    <string name="received">GC</string>
 
 
 </resources>

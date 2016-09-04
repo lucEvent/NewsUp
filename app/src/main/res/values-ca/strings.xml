@@ -31,8 +31,6 @@
     <string name="sat">Ds</string>
     <string name="sun">Dg</string>
 
-    <string name="extras">Extres</string>
-    <string name="sports">Esports</string>
 
     <!-- * ******************** Buttons **************************** * -->
     <string name="cancel">Cancel·lar</string>
@@ -69,7 +67,6 @@
     <string name="msg_news_not_found">Oohh… La aplicació es increïble però encara no pot llegir aquesta noticia.\n¿Què fem?</string>
     <string name="msg_no_internet_connection">No hi ha connexió a internet</string>
     <string name="msg_unlocked_finnish">Publicacions fineses desbloquejades</string>
-    <string name="msg_unlocked_sports">Esports desbloquejats</string>
     <string name="msg_unlocked_statistics">Estadístiques desbloquejades</string>
     <string name="msg_invalid_code">Codi invàlid</string>
     <string name="msg_app_must_restart_to_apply_changes">Has de reinicialitzar la app per aplicar canvis</string>
@@ -100,17 +97,6 @@
     <string name="pref_download_sections">Seccions de descàrrega</string>
     <string name="pref_pro_code">Codi PRO</string>
     <string name="pref_keep_news">Guardar notícies</string>
-
-
-    <!-- ***************************** * Sport strings * ********************************** -->
-    <string name="team">Equip</string>
-    <string name="points">Pts</string>
-    <string name="games">J</string>
-    <string name="won">G</string>
-    <string name="draw">E</string>
-    <string name="lost">P</string>
-    <string name="scored">GF</string>
-    <string name="received">GC</string>
 
 
 </resources>

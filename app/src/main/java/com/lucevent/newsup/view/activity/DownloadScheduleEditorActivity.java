@@ -38,6 +38,7 @@ public class DownloadScheduleEditorActivity extends AppCompatActivity {
     private TextView text_time;
     private ToggleButton[] btn_days;
     private CheckBox repeat, notify;
+    private int hour = 0, minute = 0;
 
     private Set<String> selected_sites = new HashSet<>();
 
@@ -65,6 +66,8 @@ public class DownloadScheduleEditorActivity extends AppCompatActivity {
         if (action == ACTION_MODIFY) {
             originalSchedule = (DownloadSchedule) getIntent().getExtras().get(AppCode.SEND_DOWNLOAD_SCHEDULE);
 
+            hour = originalSchedule.hour;
+            minute = originalSchedule.minute;
             text_time.setText(originalSchedule.timeString());
             for (int i = 0; i < btn_days.length; i++)
                 if (!originalSchedule.days[i]) {
@@ -95,10 +98,12 @@ public class DownloadScheduleEditorActivity extends AppCompatActivity {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hour, int minute)
                     {
+                        DownloadScheduleEditorActivity.this.hour = hour;
+                        DownloadScheduleEditorActivity.this.minute = minute;
                         String time = (hour < 10 ? "0" : "") + hour + ":" + (minute < 10 ? "0" : "") + minute;
                         text_time.setText(time);
                     }
-                }, 0, 0, true);
+                }, hour, minute, true);
         dialog.setTitle(R.string.select_time);
         dialog.show();
     }
@@ -162,10 +167,7 @@ public class DownloadScheduleEditorActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.msg_must_select_at_least_one_day, Toast.LENGTH_SHORT).show();
             return;
         }
-        String time = text_time.getText().toString();
 
-        int hour = Integer.parseInt(time.substring(0, 2));
-        int minute = Integer.parseInt(time.substring(3, 5));
         boolean notify = this.notify.isChecked();
         boolean repeat = this.repeat.isChecked();
 

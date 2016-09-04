@@ -15,28 +15,31 @@
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/by_sitename"
         style="@style/floatingButton"
-        android:layout_above="@+id/by_nrequests"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
         android:src="@drawable/ic_sort_by_name"
         app:backgroundTint="@color/colorPrimary"
+        app:fabSize="mini"
         app:rippleColor="@color/colorAccent"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/by_nrequests"
         style="@style/floatingButton"
-        android:layout_above="@+id/by_time"
         android:layout_alignParentEnd="true"
+        android:layout_below="@+id/by_sitename"
         android:src="@drawable/ic_sort_by_number"
         app:backgroundTint="@color/colorPrimary"
+        app:fabSize="mini"
         app:rippleColor="@color/colorAccent"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/by_time"
         style="@style/floatingButton"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:layout_below="@+id/by_nrequests"
         android:src="@drawable/ic_access_time"
         app:backgroundTint="@color/colorPrimary"
+        app:fabSize="mini"
         app:rippleColor="@color/colorAccent"/>
 
 </RelativeLayout>

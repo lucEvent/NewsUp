@@ -4,17 +4,17 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Pair;
 
 import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.NewsMap;
 import com.lucevent.newsup.data.util.Site;
-import com.lucevent.newsup.data.util.Tags;
 import com.lucevent.newsup.io.Database.DBDownloadSchedule;
 import com.lucevent.newsup.io.Database.DBHistoryNews;
 import com.lucevent.newsup.io.Database.DBNews;
-import com.lucevent.newsup.kernel.util.HistoryNews;
+import com.lucevent.newsup.io.Database.DBReadingStats;
 import com.lucevent.newsup.services.util.DownloadSchedule;
 
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ public class DBManager {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
 
-                News news = cursorToNews(cursor);
+                News news = DBNews.parse(cursor);
                 news.site_code = site.code;
                 result.add(news);
 
@@ -59,12 +59,11 @@ public class DBManager {
 
         synchronized (this) {
             SQLiteDatabase database = db.getReadableDatabase();
-            Cursor cursor = database.query(DBNews.db, DBNews.cols, DBNews.id + "=" + id, null, null, null, null);
+            Cursor cursor = database.query(DBNews.db, DBNews.cols, Database.id + "=" + id, null, null, null, null);
 
-            cursor.moveToFirst();
-            if (!cursor.isAfterLast()) {
+            if (cursor.moveToFirst()) {
 
-                news = cursorToNews(cursor);
+                news = DBNews.parse(cursor);
                 news.site_code = cursor.getInt(1);
 
             }
@@ -81,29 +80,42 @@ public class DBManager {
         synchronized (this) {
             SQLiteDatabase database = db.getReadableDatabase();
             Cursor cursor = database.query(DBHistoryNews.db, DBHistoryNews.cols, null, null, null, null, null);
-            cursor.moveToFirst();
-            while (!cursor.isAfterLast()) {
-                int id = cursor.getInt(0);
-                int news_id = cursor.getInt(1);
-                int site_code = cursor.getInt(2);
-                String title = cursor.getString(3);
-                String link = cursor.getString(4);
-                long date = cursor.getLong(5);
-                String description = cursor.getString(6);
-                Tags categories = new Tags(cursor.getString(7));
 
-                HistoryNews news = new HistoryNews(id, news_id, title, link, description, date, categories, site_code);
-                result.add(news);
+            if (cursor.moveToFirst())
+                do {
 
-                cursor.moveToNext();
-            }
+                    result.add(DBHistoryNews.parse(cursor));
+
+                } while (cursor.moveToNext());
+
             cursor.close();
             database.close();
         }
+
         AppSettings.printlog("[DB] NEWS IN HISTORY DATABASE: " + result.size());
         return result;
     }
 
+    public ArrayList<Pair<Integer, Integer>> readReadingStats()
+    {
+        ArrayList<Pair<Integer, Integer>> result = new ArrayList<>();
+
+        synchronized (this) {
+            SQLiteDatabase database = db.getReadableDatabase();
+            Cursor cursor = database.query(DBReadingStats.db, DBReadingStats.cols, null, null, null, null, null);
+
+            if (cursor.moveToFirst())
+                do {
+
+                    result.add(DBReadingStats.parse(cursor));
+
+                } while (cursor.moveToNext());
+
+            cursor.close();
+            database.close();
+        }
+        return result;
+    }
 
     /**
      * ******** UPDATES *************
@@ -119,7 +131,7 @@ public class DBManager {
 
         synchronized (this) {
             SQLiteDatabase database = db.getWritableDatabase();
-            database.update(DBNews.db, values, DBNews.id + " = " + news.id, null);
+            database.update(DBNews.db, values, Database.id + " = " + news.id, null);
             database.close();
         }
     }
@@ -158,6 +170,21 @@ public class DBManager {
         synchronized (this) {
             SQLiteDatabase database = db.getWritableDatabase();
             database.insert(DBHistoryNews.db, null, values);
+            values.clear();
+
+            Cursor cursor = database.query(DBReadingStats.db, DBReadingStats.cols,
+                    DBReadingStats.site_code + "=" + news.site_code, null, null, null, null);
+
+            if (cursor.moveToFirst()) {
+                Pair<Integer, Integer> readingStat = DBReadingStats.parse(cursor);
+                values.put(DBReadingStats.readings, readingStat.second + 1);
+                database.update(DBReadingStats.db, values, DBReadingStats.site_code + "=" + news.site_code, null);
+            } else {
+                values.put(DBReadingStats.site_code, news.site_code);
+                values.put(DBReadingStats.readings, 1);
+                database.insert(DBReadingStats.db, null, values);
+            }
+            cursor.close();
             database.close();
         }
     }
@@ -176,7 +203,7 @@ public class DBManager {
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
 
-                News news = cursorToNews(cursor);
+                News news = DBNews.parse(cursor);
                 result.add(news);
 
                 cursor.moveToNext();
@@ -195,6 +222,15 @@ public class DBManager {
         synchronized (this) {
             SQLiteDatabase database = db.getWritableDatabase();
             database.delete(DBHistoryNews.db, null, null);
+            database.close();
+        }
+    }
+
+    public void deleteReadingStats()
+    {
+        synchronized (this) {
+            SQLiteDatabase database = db.getWritableDatabase();
+            database.delete(DBReadingStats.db, null, null);
             database.close();
         }
     }
@@ -220,27 +256,13 @@ public class DBManager {
             SQLiteDatabase database = db.getReadableDatabase();
             Cursor cursor = database.query(DBDownloadSchedule.db, DBDownloadSchedule.cols, null, null, null, null, null);
 
-            cursor.moveToFirst();
-            while (!cursor.isAfterLast()) {
+            if (cursor.moveToFirst())
+                do {
 
-                DownloadSchedule schedule = new DownloadSchedule(cursor.getInt(0));
-                schedule.hour = cursor.getInt(1);
-                schedule.minute = cursor.getInt(2);
-                schedule.notify = cursor.getInt(3) == 1;
-                schedule.repeat = cursor.getInt(4) == 1;
-                schedule.days = new boolean[7];
-                for (int i = 0; i < schedule.days.length; ++i)
-                    schedule.days[i] = cursor.getInt(i + 5) == 1;
+                    result.add(DBDownloadSchedule.parse(cursor));
+                }
+                while (cursor.moveToNext());
 
-                String[] codes = cursor.getString(12).split(", ");
-                schedule.sites_codes = new int[codes.length];
-                for (int i = 0; i < schedule.sites_codes.length; i++)
-                    schedule.sites_codes[i] = Integer.parseInt(codes[i]);
-
-                result.add(schedule);
-
-                cursor.moveToNext();
-            }
             cursor.close();
             database.close();
         }
@@ -294,7 +316,7 @@ public class DBManager {
 
         synchronized (this) {
             SQLiteDatabase database = db.getWritableDatabase();
-            database.update(DBDownloadSchedule.db, values, DBDownloadSchedule.id + " = " + schedule.id, null);
+            database.update(DBDownloadSchedule.db, values, Database.id + " = " + schedule.id, null);
             database.close();
         }
     }
@@ -303,18 +325,9 @@ public class DBManager {
     {
         synchronized (this) {
             SQLiteDatabase database = db.getWritableDatabase();
-            database.delete(DBDownloadSchedule.db, DBDownloadSchedule.id + " = " + schedule.id, null);
+            database.delete(DBDownloadSchedule.db, Database.id + " = " + schedule.id, null);
             database.close();
         }
-    }
-
-    /**
-     * Cursor conversions
-     */
-    private News cursorToNews(Cursor c)
-    {
-        return new News(c.getInt(0), c.getString(2), c.getString(3), c.getString(5),
-                c.getLong(4), new Tags(c.getString(6)));
     }
 
 }

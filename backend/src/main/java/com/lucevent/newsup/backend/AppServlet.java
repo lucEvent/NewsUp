@@ -5,11 +5,8 @@ import com.googlecode.objectify.ObjectifyService;
 import com.lucevent.newsup.backend.utils.BackendParser;
 import com.lucevent.newsup.backend.utils.SiteStat;
 import com.lucevent.newsup.backend.utils.Statistics;
-import com.lucevent.newsup.data.sports.util.LeagueTable;
-import com.lucevent.newsup.data.sports.util.Sport;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
-import com.lucevent.newsup.data.util.Section;
 import com.lucevent.newsup.data.util.Site;
 
 import java.io.IOException;
@@ -89,16 +86,13 @@ public class AppServlet extends HttpServlet {
 
             resp.getWriter().println(sb);
 
-        } else if (req.getParameter("sports") != null) {
+        } else if (req.getParameter("notify") != null) {
 
-            String[] params = req.getParameter("code").split(",");
-
-            Sport sport = Data.sports.getSportByCode(Integer.parseInt(params[0]));
-            Section section = sport.sections.get(Integer.parseInt(params[1]));
-
-            LeagueTable content = sport.getLeagueTable(section);
-
-            resp.getWriter().println(BackendParser.toEntry(content));
+            String[] values = req.getParameter("values").split(",");
+            for (int i = 0; i < values.length; i += 2) {
+                int site_index = Data.sites.getIndexByCode(Integer.parseInt(values[i]));
+                Data.stats.read(site_index, Integer.parseInt(values[i + 1]));
+            }
 
         } else if (req.getParameter("clear") != null) {
 

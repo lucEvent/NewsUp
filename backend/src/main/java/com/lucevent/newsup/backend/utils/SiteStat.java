@@ -17,6 +17,9 @@ public class SiteStat {
     public int nAccesses;
 
     @Unindex
+    public int nNewsRead;
+
+    @Unindex
     public long lastAccess;
 
     @Unindex

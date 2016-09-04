@@ -1,5 +1,6 @@
 package com.lucevent.newsup.view.fragment;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -31,6 +32,7 @@ import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.AppData;
 import com.lucevent.newsup.kernel.NewsManager;
+import com.lucevent.newsup.services.StatisticsService;
 import com.lucevent.newsup.view.adapter.NewsAdapter;
 import com.lucevent.newsup.view.dialog.SectionsDialog;
 import com.lucevent.newsup.view.util.ContentLoader;
@@ -82,14 +84,17 @@ public class NewsListFragment extends android.app.Fragment {
         switch (currentSiteCode) {
             case -2:
 
-                NewsArray newsArray = new NewsArray();
                 int[] news_ids = getArguments().getIntArray(AppCode.SEND_NEWS_IDS);
                 assert news_ids != null : "Arguments can't be recovered";
-                for (int news_id : news_ids)
-                    newsArray.add(dataManager.getNewsById(news_id));
-                adapter.setNewDataSet(newsArray);
-                getActivity().setTitle(R.string.app_name);
 
+                NewsMap newsMap = new NewsMap();
+
+                for (int news_id : news_ids)
+                    if (news_id > 0)
+                        newsMap.add(dataManager.getNewsById(news_id));
+
+                handler.obtainMessage(AppCode.NEWS_MAP_READ, newsMap).sendToTarget();
+                getActivity().setTitle(R.string.app_name);
                 break;
 
             case -1:
@@ -108,6 +113,7 @@ public class NewsListFragment extends android.app.Fragment {
 
     private NewsManager dataManager;
     private NewsAdapter adapter;
+    private Handler handler;
 
     private View mainView;
     private RecyclerView recyclerView;
@@ -119,11 +125,15 @@ public class NewsListFragment extends android.app.Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        Handler handler = new Handler(this);
+        handler = new Handler(this);
         dataManager = new NewsManager(getActivity(), handler);
 
         setSite(getArguments().getInt(AppCode.SEND_SITE_CODE));
-
+        System.out.println("NLF onCreate. starting service for statistics");
+        getActivity().startService(
+                new Intent(getActivity(), StatisticsService.class)
+                        .putExtra(AppCode.SEND_REQUEST_CODE, StatisticsService.REQ_SEND)
+        );
     }
 
     @Override
@@ -153,7 +163,6 @@ public class NewsListFragment extends android.app.Fragment {
 
             btn_sections = (FloatingActionButton) mainView.findViewById(R.id.button_sections);
             btn_sections.setOnClickListener(onSectionsAction);
-
 
         }
         setUp();
@@ -207,7 +216,12 @@ public class NewsListFragment extends android.app.Fragment {
                     service.recyclerView.smoothScrollToPosition(0);
                     break;
                 case AppCode.NO_INTERNET:
-                    Snackbar.make(service.mainView, R.string.msg_no_internet_connection, Snackbar.LENGTH_LONG).show();
+                    Snackbar snackbar = Snackbar.make(service.mainView, R.string.msg_no_internet_connection, Snackbar.LENGTH_LONG);
+                    if (service.currentSite != null) {
+                        int color = service.currentSite.color == 0xffffffff ? 0xffcccccc : service.currentSite.color;
+                        snackbar.getView().setBackgroundColor(color);
+                    }
+                    snackbar.show();
                     break;
                 case AppCode.ERROR:
                     AppSettings.printerror("[NLF] Error received by the Handler", null);

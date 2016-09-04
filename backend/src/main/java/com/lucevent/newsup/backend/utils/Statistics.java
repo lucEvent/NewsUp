@@ -53,7 +53,15 @@ public class Statistics {
             siteStats[position].nAccesses++;
             siteStats[position].lastAccess = System.currentTimeMillis();
             siteStats[position].lastIp = ip;
-            ofy().save().entity(this).now();//save()    //possible improvement? save only when the server instance is destroyed
+            ofy().save().entity(this);//save()    //possible improvement? save only when the server instance is destroyed
+        }
+    }
+
+    public void read(int position, int n)
+    {
+        synchronized (this) {
+            siteStats[position].nNewsRead += n;
+            ofy().save().entity(this);//save()    //possible improvement? save only when the server instance is destroyed
         }
     }
 
@@ -84,6 +92,7 @@ public class Statistics {
             stats.siteStats[i].siteName = site.name;
             stats.siteStats[i].siteCode = site.code;
             stats.siteStats[i].nAccesses = 0;
+            stats.siteStats[i].nNewsRead = 0;
             stats.siteStats[i].lastAccess = 0;
             stats.siteStats[i].lastIp = "";
         }

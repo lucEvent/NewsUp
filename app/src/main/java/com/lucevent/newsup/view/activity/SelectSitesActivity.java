@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
@@ -17,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lucevent.newsup.AppSettings;
@@ -30,11 +32,11 @@ import java.util.TreeSet;
 public class SelectSitesActivity extends AppCompatActivity implements
         AdapterView.OnItemSelectedListener, TextWatcher, View.OnFocusChangeListener {
 
-    public enum FOR {
+    public enum For {
         APP_FIRST_START, FAVORITES, ADD_CONTENT
     }
 
-    private FOR purpose;
+    private For purpose;
     private SiteAdapter.Order currentOrder;
     private String currentSearch = "";
 
@@ -71,10 +73,15 @@ public class SelectSitesActivity extends AppCompatActivity implements
 
         siteAdapter = new SiteAdapter(this);
 
-        purpose = (FOR) getIntent().getExtras().get(AppCode.SEND_PURPOSE);
+        purpose = (For) getIntent().getExtras().get(AppCode.SEND_PURPOSE);
 
         switch (purpose) {
             case ADD_CONTENT:
+                TextView intro = (TextView) findViewById(R.id.introduction);
+                intro.setText("");
+                intro.setPadding(0, 0, 0, 0);
+                ((CollapsingToolbarLayout.LayoutParams) intro.getLayoutParams()).setMargins(0, 0, 0, 0);
+
                 findViewById(R.id.button_bar).setVisibility(View.GONE);
 
                 NestedScrollView scrollView = (NestedScrollView) findViewById(R.id.scrollView);
@@ -89,7 +96,7 @@ public class SelectSitesActivity extends AppCompatActivity implements
 
     public void actionToggle(View view)
     {
-        if (purpose == FOR.ADD_CONTENT) {
+        if (purpose == For.ADD_CONTENT) {
             setResult((Integer) view.getTag());
             finish();
         } else {

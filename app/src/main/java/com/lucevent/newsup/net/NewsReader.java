@@ -22,7 +22,7 @@ public final class NewsReader {
     {
     }
 
-    public final NewsArray readNewsHeader(Site site, int[] sections)
+    public final NewsArray readNewsHeaders(Site site, int[] sections)
     {
         StringBuilder sectArray = new StringBuilder(sections.length * 3);
         for (int section : sections) sectArray.append(',').append(section);

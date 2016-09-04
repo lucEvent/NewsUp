@@ -4,18 +4,18 @@ import android.content.SharedPreferences;
 
 public class ProSettings {
 
-    private static final int FINLAND_SITES_CODE = -108255470; // "HYVÄÄSUOMI"
+    private static final int FINLAND_SITES_CODE = -593347822;
     private static final String FINLAND_SITES_KEY = "finlandsites";
 
-    private static final int SPORTS_CODE = -74477552; // "ILOVESWEAT"
-    private static final String SPORTS_KEY = "sports";
-
-    public static final int STATISTICS_CODE = -198082864;   // "IMCURIOUS"
+    private static final int STATISTICS_CODE = 2113281681;
     private static final String STATISTICS_KEY = "statistics";
 
-    private static final int PRO_CODES[] = new int[]{FINLAND_SITES_CODE, SPORTS_CODE, STATISTICS_CODE};
-    private static final String PRO_KEYS[] = new String[]{FINLAND_SITES_KEY, SPORTS_KEY, STATISTICS_KEY};
-    private static final int MESSAGES[] = new int[]{R.string.msg_unlocked_finnish, R.string.msg_unlocked_sports, R.string.msg_unlocked_statistics};
+    private static final int NOTES_CODE = 1793461659;
+    private static final String NOTES_KEY = "notes";
+
+    private static final int PRO_CODES[] = new int[]{FINLAND_SITES_CODE, STATISTICS_CODE, NOTES_CODE};
+    private static final String PRO_KEYS[] = new String[]{FINLAND_SITES_KEY, STATISTICS_KEY, NOTES_KEY};
+    private static final int MESSAGES[] = new int[]{R.string.msg_unlocked_finnish, R.string.msg_unlocked_statistics, R.string.msg_unlocked_notes};
 
     private static SharedPreferences preferences;
 
@@ -32,11 +32,6 @@ public class ProSettings {
     public static boolean areFinlandSitesEnabled()
     {
         return preferences.getBoolean(FINLAND_SITES_KEY, false);
-    }
-
-    public static boolean areSportsEnabled()
-    {
-        return preferences.getBoolean(SPORTS_KEY, false);
     }
 
     public static boolean areStatisticsEnabled()
@@ -62,7 +57,7 @@ public class ProSettings {
 
     private static int convert(String c)
     {
-        int code = c.hashCode();
+        int code = c.toLowerCase().hashCode();
         return code + (Integer.bitCount(code) << ((code >> 16) & 32));
     }
 

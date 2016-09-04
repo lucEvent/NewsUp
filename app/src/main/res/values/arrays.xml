@@ -25,9 +25,6 @@
         <item>15552000</item>
         <item>1464867864</item>
     </string-array>
-    <string-array name="sports">
-        <item>Football</item>
-    </string-array>
     <string-array name="site_sort_by">
         <item>Sort by country</item>
         <item>Sort by language</item>

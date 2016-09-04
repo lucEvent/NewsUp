@@ -17,9 +17,6 @@
         <item>6 meses</item>
         <item>Para siempre</item>
     </string-array>
-    <string-array name="sports">
-        <item>Fútbol</item>
-    </string-array>
     <string-array name="site_sort_by">
         <item>Ordena por país</item>
         <item>Ordena por idioma</item>

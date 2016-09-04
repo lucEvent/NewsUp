@@ -21,4 +21,10 @@ public class NewsMap extends TreeSet<News> {
         super(comparator);
     }
 
+    public void setCode(int code)
+    {
+        for (News N : this)
+            N.site_code = code;
+    }
+
 }

@@ -43,19 +43,19 @@ public class Sites extends ArrayList<Site> {
                 new com.lucevent.newsup.data.section.ElConfidencialSections(), new com.lucevent.newsup.data.reader.ElConfidencial()));
         res.add(new Site(130, "El Diario", 0xff0061ab, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.NEWSPAPER,
                 new com.lucevent.newsup.data.section.ElDiarioSections(), new com.lucevent.newsup.data.reader.ElDiario()));
-        res.add(new Site(135, "La Razón", 0xffc7c7c7, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.NEWSPAPER,
+        res.add(new Site(135, "La Razï¿½n", 0xffc7c7c7, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.NEWSPAPER,
                 new com.lucevent.newsup.data.section.LaRazonSections(), new com.lucevent.newsup.data.reader.LaRazon()));
-        res.add(new Site(140, "Huffington Post España", 0xff2c705f, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.NEWSPAPER,
+        res.add(new Site(140, "Huffington Post Espaï¿½a", 0xff2c705f, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.NEWSPAPER,
                 new com.lucevent.newsup.data.section.HuffingtonPostSpainSections(), new com.lucevent.newsup.data.reader.HuffingtonPostSpain()));
         res.add(new Site(145, "Europa press", 0xffffffff, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.NEWSPAPER,
                 new com.lucevent.newsup.data.section.EuropaPressSections(), new com.lucevent.newsup.data.reader.EuropaPress()));
-        res.add(new Site(150, "Diario Córdoba", 0xffde2632, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.NEWSPAPER,
+        res.add(new Site(150, "Diario Cï¿½rdoba", 0xffde2632, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.NEWSPAPER,
                 new com.lucevent.newsup.data.section.DiarioCordobaSections(), new com.lucevent.newsup.data.reader.DiarioCordoba()));
 
         // Catalan newspapers
-        res.add(new Site(200, "El Periódico (Cat)", 0xff0088c7, SiteCountry.SPAIN | SiteLanguage.CATALAN | SiteCategory.NEWSPAPER,
+        res.add(new Site(200, "El Periï¿½dico (Cat)", 0xff0088c7, SiteCountry.SPAIN | SiteLanguage.CATALAN | SiteCategory.NEWSPAPER,
                 new com.lucevent.newsup.data.section.ElPeriodicoCaSections(), new com.lucevent.newsup.data.reader.ElPeriodicoCa()));
-        res.add(new Site(205, "El Periódico (Esp)", 0xfff04d4d, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.NEWSPAPER,
+        res.add(new Site(205, "El Periï¿½dico (Esp)", 0xfff04d4d, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.NEWSPAPER,
                 new com.lucevent.newsup.data.section.ElPeriodicoEsSections(), new com.lucevent.newsup.data.reader.ElPeriodicoEs()));
         res.add(new Site(210, "La Vanguardia", 0xff1a4970, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.NEWSPAPER,
                 new com.lucevent.newsup.data.section.LaVanguardiaSections(), new com.lucevent.newsup.data.reader.LaVanguardia()));
@@ -63,7 +63,7 @@ public class Sites extends ArrayList<Site> {
                 new com.lucevent.newsup.data.section.SportSections(), new com.lucevent.newsup.data.reader.Sport()));
         res.add(new Site(220, "Mundo Deportivo", 0xff242424, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.SPORT_NEWSPAPER,
                 new com.lucevent.newsup.data.section.MundoDeportivoSections(), new com.lucevent.newsup.data.reader.MundoDeportivo()));
-        res.add(new Site(225, "Racó Català", 0xffff6347, SiteCountry.SPAIN | SiteLanguage.CATALAN | SiteCategory.NEWSPAPER,
+        res.add(new Site(225, "Racï¿½ Catalï¿½", 0xffff6347, SiteCountry.SPAIN | SiteLanguage.CATALAN | SiteCategory.NEWSPAPER,
                 new com.lucevent.newsup.data.section.RacoCatalaSections(), new com.lucevent.newsup.data.reader.RacoCatala()));
         res.add(new Site(230, "VilaWeb", 0xfffd6300, SiteCountry.SPAIN | SiteLanguage.CATALAN | SiteCategory.NEWSPAPER,
                 new com.lucevent.newsup.data.section.VilaWebSections(), new com.lucevent.newsup.data.reader.VilaWeb()));
@@ -192,6 +192,16 @@ public class Sites extends ArrayList<Site> {
                 return site;
 
         return null;
+    }
+
+    public int getIndexByCode(int code)
+    {
+        for (int i = 0; i < size(); i++) {
+            Site site = get(i);
+            if (site.code == code)
+                return i;
+        }
+        return -1;
     }
 
 }

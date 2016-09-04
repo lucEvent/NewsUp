@@ -2,8 +2,11 @@ package com.lucevent.newsup.view.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,15 +31,25 @@ import com.lucevent.newsup.kernel.AppData;
 
 public class NewsActivity extends AppCompatActivity {
 
-    private static final String css = "<style>" +
+    private static final String NEWS_STYLE = "<style>" +
             "body { margin: 20px }" +
-            "iframe, video {width: 100%; margin: 0; padding: 0}" +
-            "img, figure {width: 100%; height:auto; margin: 0; padding: 0}" +
-            "div > h2 > a > img {width: auto;}" +
             "blockquote{margin:10px;padding:5px 10px 5px 10px;background-color:#f2f2f2}" +
             "a{color: #%a_color;}" +
             "</style>";
-    private static final String fontcss = "<style>" +
+
+    private static final String GRAPHYCS_STYLE = "<style>" +
+            "iframe, video {width: 100%; margin: 0; padding: 0}" +
+            "img, figure {width: 100%; height:auto; margin: 0; padding: 0}" +
+            "div > h2 > a > img {width: auto;}" +
+            "</style>";
+
+    private static final String GRAPHYCS_STYLE_NO_INTERNET = "<style>" +
+            "iframe, video {width: 0; height: 0; margin: 0; padding: 0}" +
+            "img, figure {width: 0; height:0; margin: 0; padding: 0}" +
+            "div > h2 > a > img {width: 0; height:0;margin: 0; padding: 0}" +
+            "</style>";
+
+    private static final String FONT_STYLE = "<style>" +
             "@font-face { font-family: customfont; src: url(\"fonts/customfont.woff\"); }" +
             "body { font-family: customfont; font-weight: 300; font-size: 17px; line-height: 1.7; }" +
             "</style>";
@@ -111,8 +124,12 @@ public class NewsActivity extends AppCompatActivity {
         Site site = AppData.getSiteByCode(currentNews.site_code);
         int a_color = (site.color == 0xffffffff ? 0xcccccc : site.color & 0xffffff);
 
-        String siteStyle = site.getStyle() + css.replace("%a_color", String.format("%06x", a_color));
-        String webContent = fontcss + siteStyle + "<h2>" + currentNews.title + "</h2>" + currentNews.content;
+        String style = site.getStyle() +
+                FONT_STYLE +
+                NEWS_STYLE.replace("%a_color", String.format("%06x", a_color)) +
+                (isInternetAvailable() ? GRAPHYCS_STYLE : GRAPHYCS_STYLE_NO_INTERNET);
+
+        String webContent = style + "<h2>" + currentNews.title + "</h2>" + currentNews.content;
 
         newsView.loadDataWithBaseURL("file:///android_asset/", webContent, "text/html", "utf-8", null);
 
@@ -144,22 +161,25 @@ public class NewsActivity extends AppCompatActivity {
     {
         switch (requestCode) {
             case AppCode.REQUEST_PERMISSION_WRITE_IN_STORAGE: {
-                // If request is cancelled, the result arrays are empty.
+
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                    // permission was granted, yay! Do the contacts-related task you need to do.
                     bookmarksManager = new BookmarksManager(null);
                     setBookmarkButtonImage();
 
-                } else {
-
-                    // permission denied, boo!
+                } else
                     Toast.makeText(this, R.string.msg_disk_permission_denied, Toast.LENGTH_LONG).show();
 
-                }
                 break;
             }
         }
+    }
+
+    private boolean isInternetAvailable()
+    {
+        NetworkInfo ni = ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE))
+                .getActiveNetworkInfo();
+        return ni != null && ni.isConnected() && ni.isAvailable();
     }
 
     private void setBookmarkButtonImage()

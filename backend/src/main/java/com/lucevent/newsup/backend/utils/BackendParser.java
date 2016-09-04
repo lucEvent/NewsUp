@@ -1,14 +1,10 @@
 package com.lucevent.newsup.backend.utils;
 
-import com.lucevent.newsup.data.sports.util.LeagueTable;
-import com.lucevent.newsup.data.sports.util.LeagueTableRow;
 import com.lucevent.newsup.data.util.Date;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.Section;
 import com.lucevent.newsup.data.util.Sections;
-
-import java.util.Comparator;
 
 public class BackendParser {
 
@@ -74,37 +70,22 @@ public class BackendParser {
 
         if (options.contains("s")) {
             sb.append("\n # Statistics ordered by site name #\n\n");
-            statisticsSet = new StatisticsSet(stats.getSiteStats(), new Comparator<SiteStat>() {
-                @Override
-                public int compare(SiteStat o1, SiteStat o2)
-                {
-                    return o1.siteName.compareTo(o2.siteName);
-                }
-            });
+            statisticsSet = new StatisticsSet(stats.getSiteStats(), StatisticsSet.CMP_SITE_NAME);
             appendHtml(sb, statisticsSet);
         }
-
         if (options.contains("n")) {
             sb.append("\n # Statistics ordered by number of requests #\n\n");
-            statisticsSet = new StatisticsSet(stats.getSiteStats(), new Comparator<SiteStat>() {
-                @Override
-                public int compare(SiteStat o1, SiteStat o2)
-                {
-                    return o1.nAccesses < o2.nAccesses ? 1 : -1;
-                }
-            });
+            statisticsSet = new StatisticsSet(stats.getSiteStats(), StatisticsSet.CMP_N_ACCESSES);
             appendHtml(sb, statisticsSet);
         }
-
         if (options.contains("t")) {
             sb.append("\n # Statistics ordered by last access time #\n\n");
-            statisticsSet = new StatisticsSet(stats.getSiteStats(), new Comparator<SiteStat>() {
-                @Override
-                public int compare(SiteStat o1, SiteStat o2)
-                {
-                    return o1.lastAccess < o2.lastAccess ? 1 : -1;
-                }
-            });
+            statisticsSet = new StatisticsSet(stats.getSiteStats(), StatisticsSet.CMP_LAST_ACCESS);
+            appendHtml(sb, statisticsSet);
+        }
+        if (options.contains("r")) {
+            sb.append("\n # Statistics ordered by readings #\n\n");
+            statisticsSet = new StatisticsSet(stats.getSiteStats(), StatisticsSet.CMP_READINGS);
             appendHtml(sb, statisticsSet);
         }
 
@@ -124,7 +105,8 @@ public class BackendParser {
         for (SiteStat ss : statisticsSet)
             if (ss.nAccesses > 0)
                 sb.append("\t").append(ss.siteName).append(":").append(paddings[(ss.siteName.length() + 1) >> 3])
-                        .append(ss.nAccesses).append(" requests\t[last ")
+                        .append(ss.nAccesses).append(" reqs,\t")
+                        .append(ss.nNewsRead).append(" reads\t[last ")
                         .append(Date.getAge(ss.lastAccess))
                         .append("]\t[from ").append(ss.lastIp).append("]\n");
     }
@@ -133,9 +115,10 @@ public class BackendParser {
     {
         for (SiteStat ss : statisticsSet)
             if (ss.nAccesses > 0)
-                sb.append("<site code='").append(ss.siteCode)
-                        .append("' requests='").append(ss.nAccesses)
-                        .append("' last='").append(ss.lastAccess)
+                sb.append("<site cd='").append(ss.siteCode)
+                        .append("' rq='").append(ss.nAccesses)
+                        .append("' rd='").append(ss.nNewsRead)
+                        .append("' lt='").append(ss.lastAccess)
                         .append("' ip='").append(ss.lastIp)
                         .append("'/>");
     }
@@ -147,32 +130,14 @@ public class BackendParser {
                 .append("' laststart='").append(stats.lastStart).append("'>");
 
         StatisticsSet statisticsSet = null;
-
-        if (options.contains("s")) {
-            statisticsSet = new StatisticsSet(stats.getSiteStats(), new Comparator<SiteStat>() {
-                @Override
-                public int compare(SiteStat o1, SiteStat o2)
-                {
-                    return o1.siteName.compareTo(o2.siteName);
-                }
-            });
-        } else if (options.contains("n")) {
-            statisticsSet = new StatisticsSet(stats.getSiteStats(), new Comparator<SiteStat>() {
-                @Override
-                public int compare(SiteStat o1, SiteStat o2)
-                {
-                    return o1.nAccesses < o2.nAccesses ? 1 : -1;
-                }
-            });
-        } else if (options.contains("t")) {
-            statisticsSet = new StatisticsSet(stats.getSiteStats(), new Comparator<SiteStat>() {
-                @Override
-                public int compare(SiteStat o1, SiteStat o2)
-                {
-                    return o1.lastAccess < o2.lastAccess ? 1 : -1;
-                }
-            });
-        }
+        if (options.contains("s"))
+            statisticsSet = new StatisticsSet(stats.getSiteStats(), StatisticsSet.CMP_SITE_NAME);
+        else if (options.contains("n"))
+            statisticsSet = new StatisticsSet(stats.getSiteStats(), StatisticsSet.CMP_N_ACCESSES);
+        else if (options.contains("t"))
+            statisticsSet = new StatisticsSet(stats.getSiteStats(), StatisticsSet.CMP_LAST_ACCESS);
+        else if (options.contains("r"))
+            statisticsSet = new StatisticsSet(stats.getSiteStats(), StatisticsSet.CMP_READINGS);
 
         if (statisticsSet != null)
             appendEntries(sb, statisticsSet);
@@ -211,13 +176,4 @@ public class BackendParser {
         return sb;
     }
 
-    public static StringBuilder toEntry(LeagueTable leagueTable)
-    {
-        StringBuilder sb = new StringBuilder();
-        sb.append("<leaguetable n='").append(leagueTable.size()).append("'>");
-        for (LeagueTableRow row : leagueTable)
-            sb.append("<row>").append(row.wrap()).append("</row>");
-        sb.append("</leaguetable>");
-        return sb;
-    }
 }

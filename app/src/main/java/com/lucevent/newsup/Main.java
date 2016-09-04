@@ -66,7 +66,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
         if (AppSettings.firstStart()) {
             Intent intent = new Intent(this, SelectSitesActivity.class);
-            intent.putExtra(AppCode.SEND_PURPOSE, SelectSitesActivity.FOR.APP_FIRST_START);
+            intent.putExtra(AppCode.SEND_PURPOSE, SelectSitesActivity.For.APP_FIRST_START);
             startActivity(intent);
             finish();
             return;
@@ -75,7 +75,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         setContentView(R.layout.a_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -152,12 +151,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         else
             stats.setVisible(false);
 
-        MenuItem sports = navigationView.getMenu().findItem(R.id.nav_sports);
-        if (ProSettings.areSportsEnabled())
-            sports.setVisible(true);
-        else
-            sports.setVisible(false);
-
         if (updateFavorites) {
             SubMenu fab_menu = navigationView.getMenu().findItem(R.id.nav_header_favorites).getSubMenu();
             fab_menu.clear();
@@ -226,12 +219,9 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 fragment = new AboutFragment();
                 title = getString(R.string.about);
                 break;
-            case R.id.nav_sports:
-                startActivity(new Intent(this, SportsMain.class));
-                return;
             case R.id.nav_add_content:
                 Intent intent = new Intent(this, SelectSitesActivity.class);
-                intent.putExtra(AppCode.SEND_PURPOSE, SelectSitesActivity.FOR.ADD_CONTENT);
+                intent.putExtra(AppCode.SEND_PURPOSE, SelectSitesActivity.For.ADD_CONTENT);
                 startActivityForResult(intent, AppCode.REQUEST_ADD_CONTENT);
                 return;
             default:
