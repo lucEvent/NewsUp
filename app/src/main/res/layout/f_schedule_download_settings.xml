@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list"
@@ -15,14 +16,8 @@
         android:id="@+id/button_sections"
         style="@style/floatingButton"
         android:layout_gravity="bottom|end"
-        android:src="@drawable/ic_more"
+        android:src="@drawable/ic_add"
         app:backgroundTint="@color/colorPrimary"
         app:rippleColor="@color/colorAccent"/>
-
-    <com.lucevent.newsup.view.util.NewsView
-        android:id="@+id/news_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"/>
 
 </android.support.design.widget.CoordinatorLayout>

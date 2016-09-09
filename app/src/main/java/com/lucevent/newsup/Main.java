@@ -9,7 +9,6 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
@@ -32,6 +31,7 @@ import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.AppData;
 import com.lucevent.newsup.kernel.NewsManager;
 import com.lucevent.newsup.kernel.ScheduleManager;
+import com.lucevent.newsup.net.MainChangeListener;
 import com.lucevent.newsup.services.ScheduledDownloadReceiver;
 import com.lucevent.newsup.view.activity.SelectSitesActivity;
 import com.lucevent.newsup.view.fragment.AboutFragment;
@@ -41,27 +41,25 @@ import com.lucevent.newsup.view.fragment.FragmentManager;
 import com.lucevent.newsup.view.fragment.HistorialFragment;
 import com.lucevent.newsup.view.fragment.NewsListFragment;
 import com.lucevent.newsup.view.fragment.StatisticsFragment;
+import com.lucevent.newsup.view.util.OnBackPressedListener;
 
-import java.lang.ref.WeakReference;
-
-public class Main extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class Main extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
+        MainChangeListener {
 
     private NewsListFragment newsFragment;
-    private Fragment previousFragment;
+    private Fragment currentFragment;
 
     private FragmentManager fragmentManager;
     private NewsManager dataManager;
-    public Handler handler;
 
-    private DrawerLayout drawer;
+    public DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
 
-        handler = new Handler(this);
-        AppSettings.initialize(this, handler);
+        AppSettings.initialize(this, this);
         dataManager = new NewsManager(this);
 
         if (AppSettings.firstStart()) {
@@ -103,7 +101,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         }
 
         newsFragment.setRetainInstance(true);
-        previousFragment = newsFragment;
+        currentFragment = newsFragment;
         fragmentManager.addFragment(newsFragment, R.id.nav_my_news);
     }
 
@@ -112,9 +110,11 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     {
         if (drawer.isDrawerOpen(GravityCompat.START))
             drawer.closeDrawer(GravityCompat.START);
-        else if (fragmentManager.getBackStackEntryCount() > 0) {
+        else if (currentFragment instanceof OnBackPressedListener && ((OnBackPressedListener) currentFragment).onBackPressed()) {
+            // do nothing
+        } else if (fragmentManager.getBackStackEntryCount() > 0) {
             if (fragmentManager.getBackStackEntryCount() == 1)
-                previousFragment = newsFragment;
+                currentFragment = newsFragment;
 
             Fragment f = fragmentManager.popFragment();
             if (f instanceof NewsListFragment)
@@ -234,16 +234,16 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
         if (isNewsFragment) {
 
-            if (!(previousFragment instanceof NewsListFragment)) {
+            if (!(currentFragment instanceof NewsListFragment)) {
                 fragmentManager.popToFirst();
-                previousFragment = newsFragment;
+                currentFragment = newsFragment;
             } else newsFragment.setUp();
             fragmentManager.setNavigationItemId(0, where);
 
         } else {
 
-            fragmentManager.replaceFragment(fragment, where, previousFragment instanceof NewsListFragment);
-            previousFragment = fragment;
+            fragmentManager.replaceFragment(fragment, where, currentFragment instanceof NewsListFragment);
+            currentFragment = fragment;
         }
         setTitle(title);
         setUpColors(colorCode);
@@ -286,28 +286,22 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         }
     }
 
-    static class Handler extends android.os.Handler {
+    @Override
+    public void onFavoritesChange()
+    {
+        updateDrawer(true);
+    }
 
-        private final WeakReference<Main> context;
+    @Override
+    public void onNewsDisplayed()
+    {
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+    }
 
-        Handler(Main context)
-        {
-            this.context = new WeakReference<>(context);
-        }
-
-        @Override
-        public void handleMessage(Message msg)
-        {
-            Main service = context.get();
-            switch (msg.what) {
-                case AppCode.ACTION_UPDATE_FAVORITES:
-                    service.updateDrawer(true);
-                    break;
-                default:
-                    AppSettings.printerror("[MAIN] OPTION UNKNOWN: " + msg.what, null);
-            }
-        }
-
+    @Override
+    public void onNewsUndisplayed()
+    {
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
     }
 
     @Override

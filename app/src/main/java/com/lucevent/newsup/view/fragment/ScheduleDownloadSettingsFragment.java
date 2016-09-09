@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -50,7 +49,7 @@ public class ScheduleDownloadSettingsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.f_news_list, container, false);
+        View view = inflater.inflate(R.layout.f_schedule_download_settings, container, false);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setAutoMeasureEnabled(true);
@@ -61,9 +60,7 @@ public class ScheduleDownloadSettingsFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
-        FloatingActionButton btn_add = (FloatingActionButton) view.findViewById(R.id.button_sections);
-        btn_add.setImageResource(R.drawable.ic_add);
-        btn_add.setOnClickListener(onAddAction);
+        view.findViewById(R.id.button_sections).setOnClickListener(onAddAction);
 
         return view;
     }

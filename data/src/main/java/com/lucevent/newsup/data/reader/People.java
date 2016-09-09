@@ -73,10 +73,8 @@ public class People extends com.lucevent.newsup.data.util.NewsReader {
 
         for (org.jsoup.nodes.Element video : e.select("iframe")) {
             String src = video.attr("src");
-            if (!src.contains("http:")) {
-                src = "http:" + src;
-                video.attr("src", src);
-            }
+            if (!src.startsWith("http"))
+                video.attr("src", "http:" + src);
         }
 
         for (org.jsoup.nodes.Element video : e.select(".youtube"))

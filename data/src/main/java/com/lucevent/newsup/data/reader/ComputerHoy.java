@@ -39,13 +39,12 @@ public class ComputerHoy extends com.lucevent.newsup.data.util.NewsReader {
             if (e.isEmpty())
                 return;
 
-        } else {
+        } else
             e.select(".adcuadrado,blockquote").remove();
-        }
 
         for (org.jsoup.nodes.Element iframe : e.select("iframe")) {
             String src = iframe.attr("src");
-            if (!src.startsWith("http:"))
+            if (!src.startsWith("http"))
                 iframe.attr("src", "http:" + src);
         }
         for (org.jsoup.nodes.Element style : e.select("[style]"))

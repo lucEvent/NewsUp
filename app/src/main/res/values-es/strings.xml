@@ -22,6 +22,9 @@
     <string name="reset">Restaurar</string>
     <string name="add_content">Añade más</string>
     <string name="select_fav_publications">Selecciona tus\npublicaciones favoritas</string>
+    <string name="x_country">País: <b>%1$s</b></string>
+    <string name="x_language">Idioma: <b>%1$s</b></string>
+    <string name="x_category">Categoría: <b>%1$s</b></string>
 
     <string name="mon">Lun</string>
     <string name="tue">Mar</string>
@@ -68,11 +71,12 @@
     <string name="msg_no_internet_connection">No hay conexión a internet</string>
     <string name="msg_unlocked_finnish">Publicaciones finlandesas desbloqueadas</string>
     <string name="msg_unlocked_statistics">Estadísticas desbloqueadas</string>
+    <string name="msg_unlocked_notes">Notas desbloqueadas</string>
     <string name="msg_invalid_code">Código inválido</string>
     <string name="msg_app_must_restart_to_apply_changes">Debes reiniciar la app para aplicar cambios</string>
     <string name="msg_disk_permission_denied">NO podrás marcar noticias hasta que no concedas este permiso</string>
     <string name="msg_read_phone_state_permission_denied">Sin este permiso, las descargas no podrán reprogramarse tras un reinicio del dispositivo</string>
-
+    <string name="msg_confirm_to_reset_statistics">Confirma para restaurar las estadísticas</string>
 
     <!-- * *************** Activities and fragment's titles ********************* * -->
     <string name="title_frg_settings_of">Configuración de %1$s</string>

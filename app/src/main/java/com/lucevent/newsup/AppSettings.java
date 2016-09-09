@@ -2,11 +2,10 @@ package com.lucevent.newsup;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 
 import com.lucevent.newsup.data.util.Site;
-import com.lucevent.newsup.kernel.AppCode;
+import com.lucevent.newsup.net.MainChangeListener;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -58,12 +57,12 @@ public class AppSettings {
         ProSettings.initialize(preferences);
     }
 
-    private static Handler handler;
+    private static MainChangeListener changeListener;
 
-    public static void initialize(Context context, Handler handler)
+    public static void initialize(Context context, MainChangeListener changeListener)
     {
         initialize(context);
-        AppSettings.handler = handler;
+        AppSettings.changeListener = changeListener;
     }
 
     public static boolean firstStart()
@@ -163,7 +162,7 @@ public class AppSettings {
 
         setFavoriteSitesCodes(pref);
 
-        handler.obtainMessage(AppCode.ACTION_UPDATE_FAVORITES).sendToTarget();
+        changeListener.onFavoritesChange();
     }
 
     public static void toggleShownInMain(Site site)

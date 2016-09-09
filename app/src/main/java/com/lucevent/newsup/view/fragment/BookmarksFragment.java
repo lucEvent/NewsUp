@@ -14,22 +14,29 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lucevent.newsup.AppSettings;
+import com.lucevent.newsup.Main;
 import com.lucevent.newsup.R;
+import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.NewsMap;
 import com.lucevent.newsup.io.BookmarksManager;
 import com.lucevent.newsup.kernel.AppCode;
+import com.lucevent.newsup.kernel.NewsManager;
 import com.lucevent.newsup.view.adapter.NewsAdapter;
 import com.lucevent.newsup.view.util.ContentLoader;
-import com.lucevent.newsup.view.util.OnNewsItemClickListener;
+import com.lucevent.newsup.view.util.NewsView;
+import com.lucevent.newsup.view.util.OnBackPressedListener;
 
 import java.lang.ref.WeakReference;
 
-public class BookmarksFragment extends android.app.Fragment {
+public class BookmarksFragment extends android.app.Fragment implements View.OnClickListener,
+        OnBackPressedListener {
 
     private BookmarksManager dataManager;
     private NewsAdapter adapter;
     private NewsMap bookmarks;
+
+    private NewsView newsView;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -39,7 +46,7 @@ public class BookmarksFragment extends android.app.Fragment {
 
         dataManager = new BookmarksManager(new Handler(this));
 
-        adapter = new NewsAdapter(new NewsArray(), new OnNewsItemClickListener(getActivity()));
+        adapter = new NewsAdapter(new NewsArray(), this);
         adapter.showSiteLogo(true);
     }
 
@@ -75,6 +82,9 @@ public class BookmarksFragment extends android.app.Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
+        newsView = (NewsView) view.findViewById(R.id.news_view);
+        newsView.setFragmentContext(this, ((Main) getActivity()).drawer);
+
         view.findViewById(R.id.button_sections).setVisibility(View.GONE);
 
         dataManager.getBookmarkedNews();
@@ -88,6 +98,30 @@ public class BookmarksFragment extends android.app.Fragment {
 
         if (bookmarks != null && bookmarks.size() != adapter.getActualItemCount())
             adapter.setNewDataSet(bookmarks);
+    }
+
+    private boolean displayingNews = false;
+
+    @Override
+    public boolean onBackPressed()
+    {
+        if (displayingNews) {
+            newsView.hideNews();
+            displayingNews = false;
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onClick(View v)
+    {
+        News news = (News) v.getTag();
+        NewsManager.getNewsContent(news);
+
+        displayingNews = true;
+        NewsManager.addToHistory(news);
+        newsView.displayNews(news);
     }
 
     static class Handler extends android.os.Handler {

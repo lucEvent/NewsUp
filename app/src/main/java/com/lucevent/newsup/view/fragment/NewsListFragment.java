@@ -1,12 +1,16 @@
 package com.lucevent.newsup.view.fragment;
 
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -24,6 +28,7 @@ import android.widget.ImageButton;
 import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.Main;
 import com.lucevent.newsup.R;
+import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.NewsMap;
 import com.lucevent.newsup.data.util.Section;
@@ -36,11 +41,13 @@ import com.lucevent.newsup.services.StatisticsService;
 import com.lucevent.newsup.view.adapter.NewsAdapter;
 import com.lucevent.newsup.view.dialog.SectionsDialog;
 import com.lucevent.newsup.view.util.ContentLoader;
-import com.lucevent.newsup.view.util.OnNewsItemClickListener;
+import com.lucevent.newsup.view.util.NewsView;
+import com.lucevent.newsup.view.util.OnBackPressedListener;
 
 import java.lang.ref.WeakReference;
 
-public class NewsListFragment extends android.app.Fragment {
+public class NewsListFragment extends android.app.Fragment implements View.OnClickListener,
+        OnBackPressedListener {
 
     public static NewsListFragment instanceFor(int site_code)
     {
@@ -116,6 +123,7 @@ public class NewsListFragment extends android.app.Fragment {
     private Handler handler;
 
     private View mainView;
+    private NewsView newsView;
     private RecyclerView recyclerView;
     private FloatingActionButton btn_sections;
 
@@ -142,7 +150,7 @@ public class NewsListFragment extends android.app.Fragment {
         if (adapter == null) {
             mainView = inflater.inflate(R.layout.f_news_list, container, false);
 
-            adapter = new NewsAdapter(new NewsArray(), new OnNewsItemClickListener(getActivity()));
+            adapter = new NewsAdapter(new NewsArray(), this);
             adapter.showSiteLogo(currentSite == null);
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -161,12 +169,30 @@ public class NewsListFragment extends android.app.Fragment {
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setAdapter(adapter);
 
+            newsView = (NewsView) mainView.findViewById(R.id.news_view);
+            newsView.setFragmentContext(this, ((Main) getActivity()).drawer);
+
             btn_sections = (FloatingActionButton) mainView.findViewById(R.id.button_sections);
             btn_sections.setOnClickListener(onSectionsAction);
-
         }
         setUp();
         return mainView;
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        if (displayingNews)
+            newsView.resume();
+    }
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+        if (displayingNews)
+            newsView.pause();
     }
 
     @Override
@@ -194,6 +220,72 @@ public class NewsListFragment extends android.app.Fragment {
         super.onCreateOptionsMenu(appmenu, inflater);
 
         setUpColors();
+    }
+
+    private boolean displayingNews = false;
+
+    @Override
+    public boolean onBackPressed()
+    {
+        if (displayingNews) {
+            btn_sections.setVisibility(View.VISIBLE);
+            newsView.hideNews();
+            displayingNews = false;
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onClick(View v)
+    {
+        final News news = (News) v.getTag();
+        final Context context = getActivity();
+
+        NewsManager.getNewsContent(news);
+
+        if (news.content != null) {
+            newsView.displayNews(news);
+            btn_sections.setVisibility(View.GONE);
+            displayingNews = true;
+            NewsManager.addToHistory(news);
+            return;
+        }
+
+        View view = LayoutInflater.from(context).inflate(R.layout.d_news_not_found, null);
+
+        final AlertDialog dialog = new AlertDialog.Builder(context)
+                .setTitle(R.string.msg_cant_load_content)
+                .setMessage(R.string.msg_news_not_found)
+                .setView(view)
+                .create();
+
+        view.findViewById(R.id.action_try_again).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                onClick(v);
+                dialog.dismiss();
+            }
+        });
+        view.findViewById(R.id.action_open_in_browser).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(news.link));
+                context.startActivity(browserIntent);
+                dialog.dismiss();
+            }
+        });
+        view.findViewById(R.id.action_close).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
     static class Handler extends android.os.Handler {
@@ -230,6 +322,7 @@ public class NewsListFragment extends android.app.Fragment {
                     AppSettings.printerror("[NLF] OPTION UNKNOWN: " + msg.what, null);
             }
         }
+
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -319,5 +412,11 @@ public class NewsListFragment extends android.app.Fragment {
             sectionsDialog.dismiss();
         }
     };
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults)
+    {
+        newsView.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
 
 }

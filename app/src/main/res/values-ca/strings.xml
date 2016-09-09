@@ -22,6 +22,9 @@
     <string name="reset">Restaurar</string>
     <string name="add_content">Afegeix més</string>
     <string name="select_fav_publications">Sel·lecciona les teves\npublicacions favorites</string>
+    <string name="x_country">Pais: <b>%1$s</b></string>
+    <string name="x_language">Idioma: <b>%1$s</b></string>
+    <string name="x_category">Categoria: <b>%1$s</b></string>
 
     <string name="mon">Dl</string>
     <string name="tue">Dm</string>
@@ -68,10 +71,12 @@
     <string name="msg_no_internet_connection">No hi ha connexió a internet</string>
     <string name="msg_unlocked_finnish">Publicacions fineses desbloquejades</string>
     <string name="msg_unlocked_statistics">Estadístiques desbloquejades</string>
+    <string name="msg_unlocked_notes">Notes desbloquejades</string>
     <string name="msg_invalid_code">Codi invàlid</string>
     <string name="msg_app_must_restart_to_apply_changes">Has de reinicialitzar la app per aplicar canvis</string>
     <string name="msg_disk_permission_denied">NO podràs marcar notícies fins que no concedeixis aquest permís</string>
     <string name="msg_read_phone_state_permission_denied">Sense aquest permís, les descàrregues no podràn reprogramar-se després d\'un reinici del dispositiu</string>
+    <string name="msg_confirm_to_reset_statistics">Confirma per restaurar les estadístiques</string>
 
 
     <!-- * *************** Activities and fragment's titles ********************* * -->

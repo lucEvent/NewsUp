@@ -14,21 +14,27 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lucevent.newsup.AppSettings;
+import com.lucevent.newsup.Main;
 import com.lucevent.newsup.R;
+import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.NewsMap;
 import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.HistoryManager;
+import com.lucevent.newsup.kernel.NewsManager;
 import com.lucevent.newsup.view.adapter.NewsAdapter;
 import com.lucevent.newsup.view.util.ContentLoader;
-import com.lucevent.newsup.view.util.OnNewsItemClickListener;
+import com.lucevent.newsup.view.util.NewsView;
+import com.lucevent.newsup.view.util.OnBackPressedListener;
 
 import java.lang.ref.WeakReference;
 
-public class HistorialFragment extends android.app.Fragment {
+public class HistorialFragment extends android.app.Fragment implements View.OnClickListener,
+        OnBackPressedListener {
 
     private HistoryManager dataManager;
     private NewsAdapter adapter;
+    private NewsView newsView;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -45,7 +51,7 @@ public class HistorialFragment extends android.app.Fragment {
     {
         View view = inflater.inflate(R.layout.f_news_list, container, false);
 
-        adapter = new NewsAdapter(new NewsArray(), new OnNewsItemClickListener(getActivity()));
+        adapter = new NewsAdapter(new NewsArray(), this);
         adapter.showSiteLogo(true);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -64,6 +70,9 @@ public class HistorialFragment extends android.app.Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
+        newsView = (NewsView) view.findViewById(R.id.news_view);
+        newsView.setFragmentContext(this, ((Main) getActivity()).drawer);
+
         view.findViewById(R.id.button_sections).setVisibility(View.GONE);
 
         dataManager.getAppHistorial();
@@ -80,6 +89,31 @@ public class HistorialFragment extends android.app.Fragment {
                 .setOnMenuItemClickListener(onDeleteAllAction);
 
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    private boolean displayingNews = false;
+
+    @Override
+    public boolean onBackPressed()
+    {
+        if (displayingNews) {
+            newsView.hideNews();
+            displayingNews = false;
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onClick(View v)
+    {
+        News news = (News) v.getTag();
+
+        NewsManager.getNewsContent(news);
+
+        displayingNews = true;
+        NewsManager.addToHistory(news);
+        newsView.displayNews(news);
     }
 
     static class Handler extends android.os.Handler {

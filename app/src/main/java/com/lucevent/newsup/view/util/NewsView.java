@@ -1,25 +1,30 @@
-package com.lucevent.newsup.view.activity;
+package com.lucevent.newsup.view.util;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
-import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.lucevent.newsup.R;
@@ -29,7 +34,49 @@ import com.lucevent.newsup.io.BookmarksManager;
 import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.AppData;
 
-public class NewsActivity extends AppCompatActivity {
+public class NewsView extends RelativeLayout {
+
+    private News currentNews;
+    private BookmarksManager bookmarksManager;
+
+    private Fragment fragmentContext;
+    private DrawerLayout drawer;
+    private ActionBar actionBar;
+
+    private WebView webView;
+    private FloatingActionButton button_bookmark, button_share;
+
+    public NewsView(Context context, AttributeSet attrs)
+    {
+        super(context, attrs);
+
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater.inflate(R.layout.v_news, this, true);
+
+        bookmarksManager = new BookmarksManager(null);
+
+        webView = (WebView) findViewById(R.id.webview);
+        webView.setOnTouchListener(onNewsContentTouch);
+        webView.setPersistentDrawingCache(WebView.PERSISTENT_NO_CACHE);
+
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
+        webSettings.setBuiltInZoomControls(false);
+        webSettings.setDisplayZoomControls(false);
+
+        button_bookmark = (FloatingActionButton) findViewById(R.id.button_bookmark);
+        button_bookmark.setOnClickListener(onBookmarkAction);
+        button_share = (FloatingActionButton) findViewById(R.id.button_share);
+        button_share.setOnClickListener(onShareAction);
+    }
+
+    public void setFragmentContext(Fragment context, DrawerLayout drawer)
+    {
+        this.fragmentContext = context;
+        this.actionBar = ((AppCompatActivity) context.getActivity()).getSupportActionBar();
+        this.drawer = drawer;
+    }
 
     private static final String NEWS_STYLE = "<style>" +
             "body { margin: 20px }" +
@@ -54,72 +101,26 @@ public class NewsActivity extends AppCompatActivity {
             "body { font-family: customfont; font-weight: 300; font-size: 17px; line-height: 1.7; }" +
             "</style>";
 
-    /**
-     * Some older devices needs a small delay between UI widget updates
-     * and a change of the status and navigation bar.
-     */
-    private static final int UI_ANIMATION_DELAY = 300;
-    private final Handler mHideHandler = new Handler();
+    private static final String TWITTER_STYLE = "<script type=\"text/javascript\" src=\"https://platform.twitter.com/widgets.js\"></script>";
 
-    private final Runnable mHidePart2Runnable = new Runnable() {
-        @SuppressLint("InlinedApi")
-        @Override
-        public void run()
-        {
-            newsView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
-                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        }
-    };
-
-    private boolean mVisible;
-    private final Runnable mHideRunnable = new Runnable() {
-        @Override
-        public void run()
-        {
-            hide();
-        }
-    };
-
-    private News currentNews;
-    private BookmarksManager bookmarksManager;
-
-    private WebView newsView;
-    private FloatingActionButton button_bookmark, button_share;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
+    public void displayNews(News news)
     {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.a_news);
+        currentNews = news;
 
-        mVisible = true;
+        //  hiding System UI
+        Window w = fragmentContext.getActivity().getWindow();
+        w.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        w.getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LOW_PROFILE
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
-        bookmarksManager = new BookmarksManager(null);
-        currentNews = (News) getIntent().getSerializableExtra(AppCode.SEND_NEWS);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        actionBar.hide();
 
-        newsView = (WebView) findViewById(R.id.webview);
-        newsView.setOnTouchListener(onNewsContentTouch);
-        newsView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view)
-            {
-                toggle();
-            }
-        });
-        newsView.setPersistentDrawingCache(WebView.PERSISTENT_NO_CACHE);
-
-        WebSettings webSettings = newsView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
-        webSettings.setBuiltInZoomControls(false);
-        webSettings.setDisplayZoomControls(false);
-
-        button_bookmark = (FloatingActionButton) findViewById(R.id.button_bookmark);
-        button_bookmark.setOnClickListener(onBookmarkAction);
-        button_share = (FloatingActionButton) findViewById(R.id.button_share);
-        button_share.setOnClickListener(onShareAction);
+        // displaying current news
+        setVisibility(View.VISIBLE);
 
         Site site = AppData.getSiteByCode(currentNews.site_code);
         int a_color = (site.color == 0xffffffff ? 0xcccccc : site.color & 0xffffff);
@@ -127,57 +128,44 @@ public class NewsActivity extends AppCompatActivity {
         String style = site.getStyle() +
                 FONT_STYLE +
                 NEWS_STYLE.replace("%a_color", String.format("%06x", a_color)) +
-                (isInternetAvailable() ? GRAPHYCS_STYLE : GRAPHYCS_STYLE_NO_INTERNET);
+                (isInternetAvailable() ? GRAPHYCS_STYLE : GRAPHYCS_STYLE_NO_INTERNET) +
+                TWITTER_STYLE;
 
         String webContent = style + "<h2>" + currentNews.title + "</h2>" + currentNews.content;
 
-        newsView.loadDataWithBaseURL("file:///android_asset/", webContent, "text/html", "utf-8", null);
+        webView.loadDataWithBaseURL("file:///android_asset/", webContent, "text/html", "utf-8", null);
 
         setBookmarkButtonImage();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !permissionGranted()) {
-            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                            Manifest.permission.READ_EXTERNAL_STORAGE},
-                    AppCode.REQUEST_PERMISSION_WRITE_IN_STORAGE);
-        }
     }
 
-    @Override
-    protected void onResume()
+    public void resume()
     {
-        super.onResume();
-        newsView.onResume();
+        webView.onResume();
     }
 
-    @Override
-    protected void onPause()
+    public void pause()
     {
-        super.onPause();
-        newsView.onPause();
+        webView.onPause();
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults)
+    public void hideNews()
     {
-        switch (requestCode) {
-            case AppCode.REQUEST_PERMISSION_WRITE_IN_STORAGE: {
+        // showing System UI
+        Window w = fragmentContext.getActivity().getWindow();
+        w.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        w.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
 
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
-                    bookmarksManager = new BookmarksManager(null);
-                    setBookmarkButtonImage();
-
-                } else
-                    Toast.makeText(this, R.string.msg_disk_permission_denied, Toast.LENGTH_LONG).show();
-
-                break;
-            }
-        }
+        // hiding news
+        actionBar.show();
+        setVisibility(View.GONE);
+        webView.loadUrl("about:blank");
     }
 
     private boolean isInternetAvailable()
     {
-        NetworkInfo ni = ((ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE))
+        NetworkInfo ni = ((ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE))
                 .getActiveNetworkInfo();
         return ni != null && ni.isConnected() && ni.isAvailable();
     }
@@ -193,58 +181,22 @@ public class NewsActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState)
-    {
-        super.onPostCreate(savedInstanceState);
-        delayedHide(0);
-    }
-
-    private void toggle()
-    {
-        if (mVisible)
-            hide();
-        else
-            show();
-    }
-
-    private void hide()
-    {
-        mVisible = false;
-        mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY);
-    }
-
-    @SuppressLint("InlinedApi")
-    private void show()
-    {
-        mVisible = true;
-        mHideHandler.removeCallbacks(mHidePart2Runnable);
-    }
-
-    /**
-     * Schedules a call to hide() in [delay] milliseconds, canceling any
-     * previously scheduled calls.
-     */
-    private void delayedHide(int delayMillis)
-    {
-        mHideHandler.removeCallbacks(mHideRunnable);
-        mHideHandler.postDelayed(mHideRunnable, delayMillis);
-    }
-
     private View.OnClickListener onBookmarkAction = new View.OnClickListener() {
         @Override
         public void onClick(View v)
         {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || permissionGranted()) {
-
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !permissionGranted()) {
+                fragmentContext.requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                Manifest.permission.READ_EXTERNAL_STORAGE},
+                        AppCode.REQUEST_PERMISSION_WRITE_IN_STORAGE);
+            } else {
                 if (bookmarksManager.isBookmarked(currentNews))
                     bookmarksManager.unBookmarkNews(currentNews);
                 else
                     bookmarksManager.bookmarkNews(currentNews);
 
                 setBookmarkButtonImage();
-            } else
-                Toast.makeText(NewsActivity.this, R.string.msg_disk_permission_denied, Toast.LENGTH_LONG).show();
+            }
         }
     };
 
@@ -256,7 +208,7 @@ public class NewsActivity extends AppCompatActivity {
             sendIntent.setAction(Intent.ACTION_SEND);
             sendIntent.putExtra(Intent.EXTRA_TEXT, currentNews.title + " " + currentNews.link);
             sendIntent.setType("text/plain");
-            startActivity(Intent.createChooser(sendIntent, getString(R.string.share_with)));
+            getContext().startActivity(Intent.createChooser(sendIntent, getContext().getString(R.string.share_with)));
         }
     };
 
@@ -300,12 +252,12 @@ public class NewsActivity extends AppCompatActivity {
             @Override
             public void run()
             {
+                //noinspection InfiniteLoopStatement
                 while (true)
                     try {
                         Thread.sleep(DEFAULT_WAITING_TIME);
                         synchronized (onNewsContentTouch) {
-
-                            runOnUiThread(new Runnable() {
+                            fragmentContext.getActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run()
                                 {
@@ -396,8 +348,30 @@ public class NewsActivity extends AppCompatActivity {
 
     private boolean permissionGranted()
     {
-        return ContextCompat.checkSelfPermission(this,
+        return ContextCompat.checkSelfPermission(getContext(),
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    /**
+     * @return true if the result was handled, false if the result wasn't about this permission
+     */
+    public boolean onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults)
+    {
+        switch (requestCode) {
+            case AppCode.REQUEST_PERMISSION_WRITE_IN_STORAGE: {
+
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    bookmarksManager = new BookmarksManager(null);
+                    setBookmarkButtonImage();
+
+                } else
+                    Toast.makeText(fragmentContext.getActivity(), R.string.msg_disk_permission_denied, Toast.LENGTH_LONG).show();
+
+                return true;
+            }
+        }
+        return false;
     }
 
 }

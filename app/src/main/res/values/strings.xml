@@ -24,6 +24,9 @@
     <string name="reset">Reset</string>
     <string name="add_content">Add content</string>
     <string name="select_fav_publications">Select your favorite\npublications</string>
+    <string name="x_country">Country: <b>%1$s</b></string>
+    <string name="x_language">Language: <b>%1$s</b></string>
+    <string name="x_category">Category: <b>%1$s</b></string>
 
     <string name="mon">Mon</string>
     <string name="tue">Tue</string>
@@ -73,6 +76,8 @@
     <string name="msg_app_must_restart_to_apply_changes">App must be restarted to apply changes</string>
     <string name="msg_disk_permission_denied">you CANNOT bookmark news until you grant permission</string>
     <string name="msg_read_phone_state_permission_denied">Without this permission, we CANNOT re-schedule the downloads after a phone restart</string>
+    <string name="msg_confirm_to_reset_statistics">Confirm to reset statistics</string>
+    <string name="msg_unlocked_notes">Notes unlocked</string>
 
 
     <!-- * *************** Activities and fragment's titles ********************* * -->
@@ -118,16 +123,14 @@
     <string name="about_content_contact" translatable="false">Developed by Rafael J. Lucena\nContact: rafaa89(at)gmail.com</string>
     <string name="about_content_title_new_features" translatable="false">Last features and improvements:</string>
     <string name="about_content_new_features" translatable="false">
-        [GIT: ]\n
-        Version 1.6.0 2016-09-XX:\nNewsView: images, videos and iframes are hidden when there is no internet connection.\nFixed severe bug when a schedule is executed while the user is interacting with the app.\nFixed severe bug opening news from notification.\nBug fixes and improvements.\n
+        [GIT:  ]\n
+        Version 1.6.0 2016-09-XX:\nNewsView: images, videos and iframes are hidden when there is no internet connection.\nFixed severe bug when a schedule is executed while the user is interacting with the app.\nFixed severe bug opening news from notification.\n Support for tweets.\nNews load faster.\nBug fixes and improvements.\n
         \nVersion 1.5.2 2016-07-10:\nFix news displaying for devices with navigation bar in screen.\n
         \nVersion 1.5.1 2016-07-08:\nNew publications: VilaWeb, Mashable.\nScreen overlapping on navigation back fixed, plus coherence with drawer row selected.\n
-        \nVersion 1.5.0 2016-07-01:\nDev mode integrated in Pro Codes.\nInit screen to select your favorite sites.\nDrawer list reconfigured.\n
+        \nVersion 1.5.0 2016-07-01:\nInit screen to select your favorite sites.\nDrawer list reconfigured.\n
         \nVersion 1.4.0 2016-06-25:\nMarshmallow support!!\nIMPORTANT FIX: Huge leak when closing news view fixed.\nNews display style improved (margins). Zoom disabled.\n
         \nVersion 1.3.0 2016-06-16:\nStatistics improved.\nPro codes added.\nAbout screen improved for better performance\nDatabase bug fixed\n
-        \nVersion 1.2.3 2016-06-02:\nNew: PRO version (atm enabled for everyone) will consume less data and battery, doing the hardest work in the server. Storage space consumed without limit?? Not anymore with the "Keep time" preference. Check it out at "Settings". Logs enabled/disabled easier for developing.\n
-        \nVersion 1.2.2 2016-05-24:\nDeveloper mode added with password for (only) developer features. Fixed error with categories.\n
-        \nVersion 1.2.1 2016-05-17:\nRestored support for \'Dagens Nyheter\' and \'Discover\'. \'Discover\' sections updated. Fixed error with the news order in Read News. News html styles updated.\n
+        \nVersion 1.2.3 2016-06-02:\nStorage space consumed without limit?? Not anymore with the "Keep time" preference. Check it out at "Settings". Logs enabled/disabled easier for developing.\n
         \nVersion 1.2.0 2016-05-15:\nNew sites: \'Digital Camera\', \'Verne\' and \'Hipertextual\'.\n
         \nVersion 1.1.0 2016-05-14:\nNew sites: \'Huffington Post USA\' and \'Huffington Post Canada\'. Check them out!\n
         \nVersion 1.0.7 2016-05-07:\nUpdated content management of \'Huffington Post Spain\'. Added specific styles for each site (on development).\n
@@ -193,13 +196,6 @@
     <!-- ***************************** ***************** ********************************** -->
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
-
-
-    <string name="x_country">Country: <b>%1$s</b></string>
-    <string name="x_language">Language: <b>%1$s</b></string>
-    <string name="x_category">Category: <b>%1$s</b></string>
-    <string name="msg_confirm_to_reset_statistics">Confirm to reset statistics</string>
-    <string name="msg_unlocked_notes">Notes unlocked</string>
 
 
 </resources>

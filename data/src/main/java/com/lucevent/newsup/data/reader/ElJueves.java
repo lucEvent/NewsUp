@@ -52,7 +52,8 @@ public class ElJueves extends com.lucevent.newsup.data.util.NewsReader {
 
         Elements article;
         String finalcontent;
-        if (news.link.contains(".es/news/") || news.link.contains(".es/jarticulos/")) {
+        if (news.link.contains(".es/news/") || news.link.contains(".es/jarticulos/")
+                || news.link.contains(".es/vloggers/")) {
             article = main.select(".row .sub-title,.row .detailMedia,.row #detail");
 
             if (article.isEmpty())

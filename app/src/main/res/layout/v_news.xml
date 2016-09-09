@@ -1,10 +1,8 @@
-<RelativeLayout
+<merge
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.lucevent.newsup.view.activity.NewsActivity">
+    android:layout_height="match_parent">
 
     <WebView
         android:id="@+id/webview"
@@ -30,4 +28,4 @@
         app:backgroundTint="@color/colorPrimary"
         app:rippleColor="@color/colorAccent"/>
 
-</RelativeLayout>
+</merge>

@@ -27,7 +27,10 @@ public class Xataka extends com.lucevent.newsup.data.util.NewsReader {
     {
         org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(prop.text());
         doc.select("h4 ~ *,h4,[clear=\"all\"] ~ *").remove();
-        return doc.body().html();
+
+        String content = doc.body().html();
+        content = content.replace("=\"//", "=\"http://");
+        return content;
     }
 
 }

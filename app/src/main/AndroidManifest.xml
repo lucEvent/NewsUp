@@ -33,16 +33,6 @@
         </activity>
 
         <activity
-            android:name=".view.activity.NewsActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:parentActivityName=".Main"
-            android:theme="@style/FullscreenTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.lucevent.newsup.Main"/>
-        </activity>
-
-        <activity
             android:name=".view.activity.DownloadScheduleEditorActivity"
             android:parentActivityName=".Main"
             android:theme="@style/AppTheme.NoActionBar">
