@@ -25,6 +25,7 @@
     <string name="x_country">Pais: <b>%1$s</b></string>
     <string name="x_language">Idioma: <b>%1$s</b></string>
     <string name="x_category">Categoria: <b>%1$s</b></string>
+    <string name="notes">Anotacions</string>
 
     <string name="mon">Dl</string>
     <string name="tue">Dm</string>
@@ -50,11 +51,14 @@
     <string name="ok">OK</string>
     <string name="restart">Reiniciar</string>
     <string name="thats_it">Això és tot</string>
+    <string name="add">Afegeix</string>
+    <string name="delete">Eliminar</string>
 
 
     <!-- * ******************** Hints **************************** * -->
     <string name="hint_pref_pro_mode">Entra codi PRO</string>
     <string name="search">Busca</string>
+    <string name="hint_create_note">Inserta anotació</string>
 
 
     <!-- * ******************** Messages **************************** * -->
@@ -77,6 +81,7 @@
     <string name="msg_disk_permission_denied">NO podràs marcar notícies fins que no concedeixis aquest permís</string>
     <string name="msg_read_phone_state_permission_denied">Sense aquest permís, les descàrregues no podràn reprogramar-se després d\'un reinici del dispositiu</string>
     <string name="msg_confirm_to_reset_statistics">Confirma per restaurar les estadístiques</string>
+    <string name="msg_empty_input">Anotació buida</string>
 
 
     <!-- * *************** Activities and fragment's titles ********************* * -->
@@ -103,5 +108,10 @@
     <string name="pref_pro_code">Codi PRO</string>
     <string name="pref_keep_news">Guardar notícies</string>
 
+    <!-- ***************************** ***************** ********************************** -->
+    <string name="about_content_contact">Desenvolupat per Rafael J. Lucena\nContacte: rafaa89@gmail.com</string>
+    <string name="about_content_title_new_features">Darreres característiques i millores:</string>
+    <string name="about_content_title_comming_soon">En properes actualitzacions:</string>
+    <string name="about_content_title_next_sites">Possible suport per:</string>
 
 </resources>

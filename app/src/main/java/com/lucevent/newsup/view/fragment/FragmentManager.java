@@ -17,6 +17,8 @@ public class FragmentManager {
     private int stackSize;
     private ArrayList<Pair<Integer, Fragment>> stack;
 
+    public Fragment currentFragment;
+
     public FragmentManager(Activity context, NavigationView navigationView, int containerId)
     {
         this.fManager = context.getFragmentManager();
@@ -29,6 +31,8 @@ public class FragmentManager {
 
     public void addFragment(Fragment f, int navigationViewIndex)
     {
+        currentFragment = f;
+
         stack.add(stackSize, new Pair<>(navigationViewIndex, f));
         fManager
                 .beginTransaction()
@@ -38,6 +42,8 @@ public class FragmentManager {
 
     public void replaceFragment(Fragment f, int navigationViewIndex, boolean addToStack)
     {
+        currentFragment = f;
+
         FragmentTransaction ft = fManager
                 .beginTransaction()
                 .remove(stack.get(stackSize).second)
@@ -65,10 +71,12 @@ public class FragmentManager {
         stackSize--;
 
         navigationView.setCheckedItem(stack.get(stackSize).first);
-        return stack.get(stackSize).second;
+
+        currentFragment = stack.get(stackSize).second;
+        return currentFragment;
     }
 
-    public void popToFirst()
+    public Fragment popToFirst()
     {
         fManager.popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
@@ -83,6 +91,9 @@ public class FragmentManager {
         stackSize = 0;
 
         navigationView.setCheckedItem(tmp.first);
+
+        currentFragment = tmp.second;
+        return currentFragment;
     }
 
     public int getBackStackEntryCount()

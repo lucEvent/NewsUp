@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bottom_bar"
+        android:layout_alignParentTop="true"
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+    <LinearLayout
+        android:id="@+id/bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#fff"
+        android:elevation="20dp">
+
+        <EditText
+            android:id="@+id/input"
+            style="@style/input"
+            android:ems="10"
+            android:hint="@string/hint_create_note"
+            android:imeActionLabel="@string/add">
+
+            <requestFocus/>
+        </EditText>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/swipe_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#ff00"
+        android:ellipsize="none"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp"
+        android:singleLine="true"
+        android:text="@string/delete"
+        android:textAllCaps="true"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textStyle="bold"
+        android:visibility="gone"/>
+
+</RelativeLayout>

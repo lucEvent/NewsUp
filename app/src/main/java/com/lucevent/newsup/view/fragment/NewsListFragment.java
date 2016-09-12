@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 
 import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.Main;
@@ -70,7 +71,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         return fragment;
     }
 
-    public int currentSiteCode;
+    public int currentSiteCode, lastLoadedSiteCode;
     private Site currentSite;
     private SectionsDialog sectionsDialog;
 
@@ -88,6 +89,11 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
 
     public void setUp()
     {
+        if (currentSiteCode == lastLoadedSiteCode)
+            return;
+
+        adapter.clear();
+        progressBar.setVisibility(ProgressBar.VISIBLE);
         switch (currentSiteCode) {
             case -2:
 
@@ -100,8 +106,9 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
                     if (news_id > 0)
                         newsMap.add(dataManager.getNewsById(news_id));
 
-                handler.obtainMessage(AppCode.NEWS_MAP_READ, newsMap).sendToTarget();
                 getActivity().setTitle(R.string.app_name);
+                handler.obtainMessage(AppCode.NEWS_MAP_READ, newsMap).sendToTarget();
+                handler.obtainMessage(AppCode.NEWS_LOADED).sendToTarget();
                 break;
 
             case -1:
@@ -112,9 +119,8 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
             default:
                 dataManager.getNewsOf(currentSite, null);
                 getActivity().setTitle(currentSite.name);
-
         }
-        adapter.clear();
+        lastLoadedSiteCode = currentSiteCode;
         setUpColors();
     }
 
@@ -126,6 +132,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
     private NewsView newsView;
     private RecyclerView recyclerView;
     private FloatingActionButton btn_sections;
+    private ProgressBar progressBar;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -136,8 +143,9 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         handler = new Handler(this);
         dataManager = new NewsManager(getActivity(), handler);
 
+        lastLoadedSiteCode = -9;
         setSite(getArguments().getInt(AppCode.SEND_SITE_CODE));
-        System.out.println("NLF onCreate. starting service for statistics");
+
         getActivity().startService(
                 new Intent(getActivity(), StatisticsService.class)
                         .putExtra(AppCode.SEND_REQUEST_CODE, StatisticsService.REQ_SEND)
@@ -174,6 +182,8 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
 
             btn_sections = (FloatingActionButton) mainView.findViewById(R.id.button_sections);
             btn_sections.setOnClickListener(onSectionsAction);
+
+            progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
         }
         setUp();
         return mainView;
@@ -228,7 +238,8 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
     public boolean onBackPressed()
     {
         if (displayingNews) {
-            btn_sections.setVisibility(View.VISIBLE);
+            if (currentSite != null)
+                btn_sections.setVisibility(View.VISIBLE);
             newsView.hideNews();
             displayingNews = false;
             return true;
@@ -306,6 +317,9 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
                 case AppCode.NEWS_MAP_FRAGMENT_READ:
                     service.adapter.addAll((NewsMap) msg.obj);
                     service.recyclerView.smoothScrollToPosition(0);
+                    break;
+                case AppCode.NEWS_LOADED:
+                    service.progressBar.setVisibility(ProgressBar.GONE);
                     break;
                 case AppCode.NO_INTERNET:
                     Snackbar snackbar = Snackbar.make(service.mainView, R.string.msg_no_internet_connection, Snackbar.LENGTH_LONG);
@@ -396,8 +410,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         @Override
         public boolean onMenuItemClick(MenuItem item)
         {
-            ((Main) getActivity()).getMainFragmentManager()
-                    .replaceFragment(SiteSettingsFragment.instanceFor(currentSite.code), currentSite.code, true);
+            ((Main) getActivity()).onReplaceFragment(SiteSettingsFragment.instanceFor(currentSite.code), R.id.nav_settings, true);
             return true;
         }
     };

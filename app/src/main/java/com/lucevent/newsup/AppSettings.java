@@ -13,7 +13,7 @@ import java.util.TreeSet;
 
 public class AppSettings {
 
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     /**
      * ************** Default values *********************
@@ -177,6 +177,8 @@ public class AppSettings {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putStringSet(PREF_MAIN_SITES_KEY, pref);
         editor.apply();
+
+        changeListener.onMainistsChange();
     }
 
     private static int[] getIntArray(Set<String> set)

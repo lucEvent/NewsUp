@@ -10,6 +10,7 @@ import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.Tags;
 import com.lucevent.newsup.kernel.util.HistoryNews;
+import com.lucevent.newsup.kernel.util.Note;
 import com.lucevent.newsup.services.util.DownloadSchedule;
 
 public class Database extends SQLiteOpenHelper {
@@ -158,6 +159,25 @@ public class Database extends SQLiteOpenHelper {
         }
     }
 
+    static final class DBNote {
+        static final String db = "dl_notes";
+
+        static final String note = "note";
+
+        static final String[] cols = {id, note};
+
+        static final String creator =
+                "CREATE TABLE " + db + " (" +
+                        id + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        note + " TEXT NOT NULL" +
+                        ");";
+
+        static Note parse(Cursor cursor)
+        {
+            return new Note(cursor.getInt(0), cursor.getString(1));
+        }
+    }
+
     public Database(Context context)
     {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -172,6 +192,7 @@ public class Database extends SQLiteOpenHelper {
         db.execSQL(DBHistoryNews.creator);
         db.execSQL(DBDownloadSchedule.creator);
         db.execSQL(DBReadingStats.creator);
+        db.execSQL(DBNote.creator);
     }
 
     @Override
@@ -182,6 +203,7 @@ public class Database extends SQLiteOpenHelper {
         switch (oldVersion) {
             case 1:
                 db.execSQL(DBReadingStats.creator);
+                db.execSQL(DBNote.creator);
             case 2:
                 // Delete all needed tables
                 // db.execSQL("DROP TABLE "+ "db_xxxxxxxxxxxx");

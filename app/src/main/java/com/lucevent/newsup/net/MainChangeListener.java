@@ -1,11 +1,13 @@
 package com.lucevent.newsup.net;
 
+import android.app.Fragment;
+
 public interface MainChangeListener {
+
+    void onMainistsChange();
 
     void onFavoritesChange();
 
-    void onNewsDisplayed();
-
-    void onNewsUndisplayed();
+    void onReplaceFragment(Fragment f, int navigationViewIndex, boolean addToStack);
 
 }

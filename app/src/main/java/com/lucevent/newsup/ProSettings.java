@@ -5,13 +5,13 @@ import android.content.SharedPreferences;
 public class ProSettings {
 
     private static final int FINLAND_SITES_CODE = -593347822;
-    private static final String FINLAND_SITES_KEY = "finlandsites";
+    public static final String FINLAND_SITES_KEY = "finlandsites";
 
     private static final int STATISTICS_CODE = 2113281681;
-    private static final String STATISTICS_KEY = "statistics";
+    public static final String STATISTICS_KEY = "statistics";
 
     private static final int NOTES_CODE = 1793461659;
-    private static final String NOTES_KEY = "notes";
+    public static final String NOTES_KEY = "notes";
 
     private static final int PRO_CODES[] = new int[]{FINLAND_SITES_CODE, STATISTICS_CODE, NOTES_CODE};
     private static final String PRO_KEYS[] = new String[]{FINLAND_SITES_KEY, STATISTICS_KEY, NOTES_KEY};
@@ -29,14 +29,9 @@ public class ProSettings {
         return 2 == 1 + 1;
     }
 
-    public static boolean areFinlandSitesEnabled()
+    public static boolean checkEnabled(String key)
     {
-        return preferences.getBoolean(FINLAND_SITES_KEY, false);
-    }
-
-    public static boolean areStatisticsEnabled()
-    {
-        return preferences.getBoolean(STATISTICS_KEY, false);
+        return preferences.getBoolean(key, false);
     }
 
     public static int checkProCode(String code)

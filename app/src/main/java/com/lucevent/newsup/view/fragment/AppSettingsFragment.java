@@ -63,9 +63,10 @@ public class AppSettingsFragment extends PreferenceFragment
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
     {
-        if (key.equals(AppSettings.PREF_MAIN_SITES_KEY))
+        if (key.equals(AppSettings.PREF_MAIN_SITES_KEY)) {
             setUpPreferenceSummaries(PREF_MASK_MAIN_SITES);
-        else if (key.equals(AppSettings.PREF_SCHEDULE_DOWNLOADS_KEY))
+            ((Main) getActivity()).onMainistsChange();
+        } else if (key.equals(AppSettings.PREF_SCHEDULE_DOWNLOADS_KEY))
             setUpPreferenceSummaries(PREF_MASK_SCHEDULE_DOWNLOADS);
         else if (key.equals(AppSettings.PREF_CLEAN_CACHE_KEY))
             setUpPreferenceSummaries(PREF_MASK_CLEAN_CACHE);
@@ -143,8 +144,7 @@ public class AppSettingsFragment extends PreferenceFragment
         @Override
         public boolean onPreferenceClick(Preference preference)
         {
-            ((Main) getActivity()).getMainFragmentManager()
-                    .replaceFragment(new SitesSettingsFragment(), R.id.nav_settings, true);
+            ((Main) getActivity()).onReplaceFragment(new SitesSettingsFragment(), R.id.nav_settings, true);
             return true;
         }
     };
@@ -153,8 +153,7 @@ public class AppSettingsFragment extends PreferenceFragment
         @Override
         public boolean onPreferenceClick(Preference preference)
         {
-            ((Main) getActivity()).getMainFragmentManager()
-                    .replaceFragment(new ScheduleDownloadSettingsFragment(), R.id.nav_settings, true);
+            ((Main) getActivity()).onReplaceFragment(new ScheduleDownloadSettingsFragment(), R.id.nav_settings, true);
             return true;
         }
     };

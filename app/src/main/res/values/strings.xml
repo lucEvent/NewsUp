@@ -27,6 +27,7 @@
     <string name="x_country">Country: <b>%1$s</b></string>
     <string name="x_language">Language: <b>%1$s</b></string>
     <string name="x_category">Category: <b>%1$s</b></string>
+    <string name="notes">Notes</string>
 
     <string name="mon">Mon</string>
     <string name="tue">Tue</string>
@@ -51,11 +52,14 @@
     <string name="ok">OK</string>
     <string name="restart">Restart</string>
     <string name="thats_it">That\'s it</string>
+    <string name="add">Add</string>
+    <string name="delete">Delete</string>
 
 
     <!-- * ******************** Hints **************************** * -->
     <string name="hint_pref_pro_mode">Enter PRO code</string>
     <string name="search">Search</string>
+    <string name="hint_create_note">Enter one annotation</string>
 
 
     <!-- * ******************** Messages **************************** * -->
@@ -73,11 +77,12 @@
     <string name="msg_unlocked_finnish">Finnish publications unlocked</string>
     <string name="msg_invalid_code">Invalid code</string>
     <string name="msg_unlocked_statistics">Statistics unlocked</string>
+    <string name="msg_unlocked_notes">Notes unlocked</string>
     <string name="msg_app_must_restart_to_apply_changes">App must be restarted to apply changes</string>
     <string name="msg_disk_permission_denied">you CANNOT bookmark news until you grant permission</string>
     <string name="msg_read_phone_state_permission_denied">Without this permission, we CANNOT re-schedule the downloads after a phone restart</string>
     <string name="msg_confirm_to_reset_statistics">Confirm to reset statistics</string>
-    <string name="msg_unlocked_notes">Notes unlocked</string>
+    <string name="msg_empty_input">Empty input</string>
 
 
     <!-- * *************** Activities and fragment's titles ********************* * -->
@@ -120,11 +125,10 @@
 
     <!-- ***************************** ***************** ********************************** -->
     <string name="about_content_header" translatable="false">News Up 1.6.0</string>
-    <string name="about_content_contact" translatable="false">Developed by Rafael J. Lucena\nContact: rafaa89(at)gmail.com</string>
-    <string name="about_content_title_new_features" translatable="false">Last features and improvements:</string>
+    <string name="about_content_contact">Developed by Rafael J. Lucena\nContact: rafaa89@gmail.com</string>
+    <string name="about_content_title_new_features">Last features and improvements:</string>
     <string name="about_content_new_features" translatable="false">
-        [GIT:  ]\n
-        Version 1.6.0 2016-09-XX:\nNewsView: images, videos and iframes are hidden when there is no internet connection.\nFixed severe bug when a schedule is executed while the user is interacting with the app.\nFixed severe bug opening news from notification.\n Support for tweets.\nNews load faster.\nBug fixes and improvements.\n
+        Version 1.6.0 2016-09-12:\nNewsView: images, videos and iframes are hidden when there is no internet connection.\nFixed severe bug when a schedule is executed while the user is interacting with the app.\nFixed severe bug opening news from notification.\nSupport for tweets.\nNews load faster.\nAdded animation to show that news are loading.\nIntroducing notes with Pro code.\nAvoid news reloading when unnecessary.\nBug fixes and improvements.\n
         \nVersion 1.5.2 2016-07-10:\nFix news displaying for devices with navigation bar in screen.\n
         \nVersion 1.5.1 2016-07-08:\nNew publications: VilaWeb, Mashable.\nScreen overlapping on navigation back fixed, plus coherence with drawer row selected.\n
         \nVersion 1.5.0 2016-07-01:\nInit screen to select your favorite sites.\nDrawer list reconfigured.\n
@@ -139,14 +143,14 @@
         \nVersion 1.0.1 2016-04-21:\nNews in My news ordered by time even with multiply sites. Bugs fixed when updating RecyclerViewAdapter and when the server cannot answer one query.\n
         \nVersion 1.0.0 2016-04-19:\nLollipop support!!\nSettings standardized.\nScheduled downloads now saved in DB\nMinimum android version supported is now Kitkat\n
     </string>
-    <string name="about_content_title_comming_soon" translatable="false">What\'s coming soon?:</string>
+    <string name="about_content_title_comming_soon">What\'s coming soon?:</string>
     <string name="about_content_comming_soon" translatable="false">
         Preview on tap - like in Instagram
         \nNew logo
         \nNew look for list of news
         \nImprove display of news
     </string>
-    <string name="about_content_title_next_sites" translatable="false">Possible support for:</string>
+    <string name="about_content_title_next_sites">Possible support for:</string>
     <string name="about_content_next_sites" translatable="false">
         NEWSPAPERS:\n
         - Svenska Yle (Finland)\n

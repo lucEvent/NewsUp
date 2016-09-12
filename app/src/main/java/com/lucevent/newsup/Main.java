@@ -40,6 +40,7 @@ import com.lucevent.newsup.view.fragment.BookmarksFragment;
 import com.lucevent.newsup.view.fragment.FragmentManager;
 import com.lucevent.newsup.view.fragment.HistorialFragment;
 import com.lucevent.newsup.view.fragment.NewsListFragment;
+import com.lucevent.newsup.view.fragment.NotesFragment;
 import com.lucevent.newsup.view.fragment.StatisticsFragment;
 import com.lucevent.newsup.view.util.OnBackPressedListener;
 
@@ -47,7 +48,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         MainChangeListener {
 
     private NewsListFragment newsFragment;
-    private Fragment currentFragment;
 
     private FragmentManager fragmentManager;
     private NewsManager dataManager;
@@ -101,7 +101,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         }
 
         newsFragment.setRetainInstance(true);
-        currentFragment = newsFragment;
+
         fragmentManager.addFragment(newsFragment, R.id.nav_my_news);
     }
 
@@ -110,11 +110,10 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     {
         if (drawer.isDrawerOpen(GravityCompat.START))
             drawer.closeDrawer(GravityCompat.START);
-        else if (currentFragment instanceof OnBackPressedListener && ((OnBackPressedListener) currentFragment).onBackPressed()) {
+        else if (fragmentManager.currentFragment instanceof OnBackPressedListener
+                && ((OnBackPressedListener) fragmentManager.currentFragment).onBackPressed()) {
             // do nothing
         } else if (fragmentManager.getBackStackEntryCount() > 0) {
-            if (fragmentManager.getBackStackEntryCount() == 1)
-                currentFragment = newsFragment;
 
             Fragment f = fragmentManager.popFragment();
             if (f instanceof NewsListFragment)
@@ -132,11 +131,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         }
     }
 
-    public FragmentManager getMainFragmentManager()
-    {
-        return fragmentManager;
-    }
-
     private void updateDrawer(boolean updateFavorites)
     {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -146,10 +140,16 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             navigationView.setItemIconTintList(null);
 
         MenuItem stats = navigationView.getMenu().findItem(R.id.nav_stats);
-        if (ProSettings.areStatisticsEnabled())
+        if (ProSettings.checkEnabled(ProSettings.STATISTICS_KEY))
             stats.setVisible(true);
         else
             stats.setVisible(false);
+
+        MenuItem notes = navigationView.getMenu().findItem(R.id.nav_notes);
+        if (ProSettings.checkEnabled(ProSettings.NOTES_KEY))
+            notes.setVisible(true);
+        else
+            notes.setVisible(false);
 
         if (updateFavorites) {
             SubMenu fab_menu = navigationView.getMenu().findItem(R.id.nav_header_favorites).getSubMenu();
@@ -224,6 +224,10 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 intent.putExtra(AppCode.SEND_PURPOSE, SelectSitesActivity.For.ADD_CONTENT);
                 startActivityForResult(intent, AppCode.REQUEST_ADD_CONTENT);
                 return;
+            case R.id.nav_notes:
+                fragment = new NotesFragment();
+                title = getString(R.string.notes);
+                break;
             default:
                 colorCode = where;
                 newsFragment.setSite(where);
@@ -234,17 +238,17 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
         if (isNewsFragment) {
 
-            if (!(currentFragment instanceof NewsListFragment)) {
+            if (!(fragmentManager.currentFragment instanceof NewsListFragment))
                 fragmentManager.popToFirst();
-                currentFragment = newsFragment;
-            } else newsFragment.setUp();
+
+            else newsFragment.setUp();
+
             fragmentManager.setNavigationItemId(0, where);
 
-        } else {
+        } else
+            fragmentManager.replaceFragment(fragment, where,
+                    fragmentManager.currentFragment instanceof NewsListFragment);
 
-            fragmentManager.replaceFragment(fragment, where, currentFragment instanceof NewsListFragment);
-            currentFragment = fragment;
-        }
         setTitle(title);
         setUpColors(colorCode);
     }
@@ -287,21 +291,22 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     }
 
     @Override
+    public void onMainistsChange()
+    {
+        if (newsFragment.lastLoadedSiteCode == -1)
+            newsFragment.lastLoadedSiteCode = -9;
+    }
+
+    @Override
     public void onFavoritesChange()
     {
         updateDrawer(true);
     }
 
     @Override
-    public void onNewsDisplayed()
+    public void onReplaceFragment(Fragment f, int navigationViewIndex, boolean addToStack)
     {
-        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-    }
-
-    @Override
-    public void onNewsUndisplayed()
-    {
-        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
+        fragmentManager.replaceFragment(f, navigationViewIndex, addToStack);
     }
 
     @Override

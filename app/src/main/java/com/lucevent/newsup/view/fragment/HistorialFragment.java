@@ -75,7 +75,7 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
 
         view.findViewById(R.id.button_sections).setVisibility(View.GONE);
 
-        dataManager.getAppHistorial();
+        dataManager.getReadNews();
 
         return view;
     }

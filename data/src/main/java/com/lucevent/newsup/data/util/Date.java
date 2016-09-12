@@ -71,7 +71,7 @@ public class Date {
         try {
             timemillis = sdf.parse(temp).getTime();
         } catch (Exception e) {
-            System.out.println("Error convirtiendo esta fecha: " + date);
+            System.out.println("Error converting date: " + date);
             e.printStackTrace();
         }
         timemillis += zoneOffset;
@@ -93,20 +93,20 @@ public class Date {
         return "";
     }
 
-    private static long estimateZoneOffset(String s)
+    private static long estimateZoneOffset(String zone)
     {
-        if (s.length() <= 3) {
-            if (s.equals("GMT") || s.equals("Z")) return 0;
-            if (s.equals("PDT")) return 7 * HOUR_TIME;
-            if (s.equals("PST")) return 8 * HOUR_TIME;
-            if (s.equals("CET")) return -HOUR_TIME;
-            if (s.equals("EDT")) return 4 * HOUR_TIME;
-            if (s.equals("EST")) return 5 * HOUR_TIME;
-            System.out.println("El zone offset no es el que se esperaba: " + s);
+        if (zone.length() <= 3) {
+            if (zone.equals("GMT") || zone.equals("Z")) return 0;
+            if (zone.equals("PDT")) return 7 * HOUR_TIME;
+            if (zone.equals("PST")) return 8 * HOUR_TIME;
+            if (zone.equals("CET")) return -HOUR_TIME;
+            if (zone.equals("EDT")) return 4 * HOUR_TIME;
+            if (zone.equals("EST")) return 5 * HOUR_TIME;
+            System.out.println("Date zone unexpected: " + zone);
             return 0;
         }
-        boolean plus = s.charAt(0) == '+';
-        long hourmillis = Long.parseLong(s.substring(1, 3)) * HOUR_TIME;
+        boolean plus = zone.charAt(0) == '+';
+        long hourmillis = Long.parseLong(zone.substring(1, 3)) * HOUR_TIME;
         return plus ? -hourmillis : hourmillis;
     }
 
@@ -115,7 +115,7 @@ public class Date {
         long age = System.currentTimeMillis() - date;
 
         if (age < 0) {
-            System.out.println("Edad negativa: millis:" + date);
+            System.out.println("Negative age:" + date);
             return "";
         }
         if (age < MINUTE_TIME)

@@ -44,8 +44,7 @@ public class SitesSettingsFragment extends android.preference.PreferenceFragment
     public boolean onPreferenceClick(Preference preference)
     {
         int code = Integer.parseInt(preference.getKey());
-        ((Main) getActivity()).getMainFragmentManager()
-                .replaceFragment(SiteSettingsFragment.instanceFor(code), R.id.nav_settings, true);
+        ((Main) getActivity()).onReplaceFragment(SiteSettingsFragment.instanceFor(code), R.id.nav_settings, true);
         return true;
     }
 

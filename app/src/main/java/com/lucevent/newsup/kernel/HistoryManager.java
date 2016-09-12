@@ -19,7 +19,7 @@ public class HistoryManager {
         dbmanager = new DBManager(context);
     }
 
-    public void getAppHistorial()
+    public void getReadNews()
     {
         new Thread(new Runnable() {
             @Override

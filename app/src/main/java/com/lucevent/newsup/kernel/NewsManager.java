@@ -20,6 +20,8 @@ import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.io.DBManager;
 import com.lucevent.newsup.io.LogoManager;
 import com.lucevent.newsup.io.SDManager;
+import com.lucevent.newsup.kernel.util.Note;
+import com.lucevent.newsup.kernel.util.Notes;
 import com.lucevent.newsup.net.NewsReader;
 
 import java.util.ArrayList;
@@ -36,6 +38,8 @@ public class NewsManager {
     protected static DBManager dbmanager;
     protected static SDManager sdmanager;
     private static LogoManager logoManager;
+
+    private Notes notes;
 
     /**
      * Static variables
@@ -67,7 +71,7 @@ public class NewsManager {
             connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         if (AppData.sites == null)
-            AppData.sites = Sites.getDefault(ProSettings.areFinlandSitesEnabled());
+            AppData.sites = Sites.getDefault(ProSettings.checkEnabled(ProSettings.FINLAND_SITES_KEY));
 
         if (logoManager == null)
             logoManager = LogoManager.getInstance(context, AppData.sites.size());
@@ -155,6 +159,7 @@ public class NewsManager {
                 tempNewsMap.setCode(site.code);
 
                 handler.obtainMessage(AppCode.NEWS_MAP_READ, tempNewsMap).sendToTarget();
+                handler.obtainMessage(AppCode.NEWS_LOADED).sendToTarget();
 
                 getSiteHistory(site);
                 //    handler.obtainMessage(NEWS_READ_HISTORY, site.history).sendToTarget(); //TODO solo historial de la section
@@ -232,6 +237,8 @@ public class NewsManager {
                             saveNews(N);
                         }
                 }
+                handler.obtainMessage(AppCode.NEWS_LOADED).sendToTarget();
+
                 AppSettings.printlog("Time bound: " + Date.getAge(timeBound));
                 NewsArray oldNews = dbmanager.deleteOldNews(timeBound);
                 for (News N : oldNews) {
@@ -348,6 +355,7 @@ public class NewsManager {
                     handler.obtainMessage(AppCode.NEWS_MAP_FRAGMENT_READ, site.news).sendToTarget();
                 }
             }
+            handler.obtainMessage(AppCode.NEWS_LOADED).sendToTarget();
         }
     }
 
@@ -393,6 +401,25 @@ public class NewsManager {
     public void clearReadingStats()
     {
         dbmanager.deleteReadingStats();
+    }
+
+    public void createNote(String note)
+    {
+        notes.add(dbmanager.insertNote(note));
+    }
+
+    public void deleteNote(int note_position)
+    {
+        Note note = notes.remove(note_position);
+        dbmanager.deleteNote(note.id);
+    }
+
+    public Notes getNotes()
+    {
+        if (notes == null)
+            notes = dbmanager.readNotes();
+
+        return notes;
     }
 
 }
