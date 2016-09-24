@@ -13,7 +13,7 @@ import java.util.TreeSet;
 
 public class AppSettings {
 
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
 
     /**
      * ************** Default values *********************

@@ -10,6 +10,8 @@ public class SiteCountry {
     public static final int FINLAND = 4 << shift;
     public static final int SWEDEN = 5 << shift;
     public static final int CANADA = 6 << shift;
-    public static final int EUROPE = 7 << shift;
+    public static final int RUSSIA = 7 << shift;
+    public static final int INDIA = 8 << shift;
+    public static final int EUROPE = 9 << shift;
 
 }

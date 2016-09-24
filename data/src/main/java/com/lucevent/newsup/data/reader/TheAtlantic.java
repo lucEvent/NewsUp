@@ -67,7 +67,7 @@ public class TheAtlantic extends com.lucevent.newsup.data.util.NewsReader {
     {
         org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(prop.text());
         doc.select("[clear=\"all\"] ~ *,[clear=\"all\"],.callout,.partner-box,img[height=\"1\"]").remove();
-        return doc.html();
+        return doc.html().replace("src=\"/", "src=\"http:/");
     }
 
     @Override

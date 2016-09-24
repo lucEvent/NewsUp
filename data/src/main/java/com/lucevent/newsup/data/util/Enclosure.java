@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 public class Enclosure implements Serializable {
 
-    private final String type;
-    private final String src;
+    public final String type;
+    public final String src;
     public final int size;
 
     public Enclosure(String src, String type, String size)
@@ -29,12 +29,11 @@ public class Enclosure implements Serializable {
 
     public String html()
     {
-        if (isImage()) {
+        if (isImage())
             return "<img src=\"" + src + "\">";
-        } else if (isVideo()) {
+        else if (isVideo())
+            return "<iframe frameborder='0' allowfullscreen src=\"" + src + "\"></iframe>";
 
-            return "<iframe src=\"" + src + "\" ></IFRAME>";
-        }
         return "";
     }
 

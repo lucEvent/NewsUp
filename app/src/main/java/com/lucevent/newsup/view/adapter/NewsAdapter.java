@@ -63,11 +63,13 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> {
     public void loadMoreData()
     {
         int dataAdded = Math.min(this.dataSetVisibleCount + CHUNK, dataSet.size()) - dataSetVisibleCount;
-        try {
-            notifyItemRangeInserted(dataSetVisibleCount, dataAdded);
-        } catch (Exception ignored) {
+        if (dataAdded > 0) {
+            try {
+                notifyItemRangeInserted(dataSetVisibleCount, dataAdded);
+            } catch (Exception ignored) {
+            }
+            this.dataSetVisibleCount += dataAdded;
         }
-        this.dataSetVisibleCount += dataAdded;
     }
 
     public void showSiteLogo(boolean showSiteLogo)
@@ -104,8 +106,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> {
             this.dataSet.clear();
             this.dataSet.addAll(dataMap);
 
+            int current = dataSetVisibleCount;
             dataSetVisibleCount = Math.min(dataSetVisibleCount + CHUNK, this.dataSet.size());
-            notifyItemRangeChanged(0, dataSetVisibleCount);
+            if (current == 0)
+                notifyItemRangeInserted(0, dataSetVisibleCount);
+            else
+                notifyItemRangeChanged(0, dataSetVisibleCount);
         }
     }
 

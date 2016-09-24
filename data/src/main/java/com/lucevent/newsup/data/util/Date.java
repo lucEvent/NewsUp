@@ -57,9 +57,9 @@ public class Date {
         } else {
             // Sat, 8 Aug 2015 19:48:06
             //Tue, 13 Oct 2015 18:04:07 +0300 //TODO
-            if (items.length >= 6) {
+            if (items.length >= 6)
                 zoneOffset = estimateZoneOffset(items[5]);
-            }
+
             String day = items[1].length() == 1 ? "0" + items[1] : items[1];
 
             temp = items[3] + "-" + monthToIntString(items[2]) + "-" + day + " " + items[4];
@@ -71,19 +71,28 @@ public class Date {
         try {
             timemillis = sdf.parse(temp).getTime();
         } catch (Exception e) {
-            System.out.println("Error converting date: " + date);
+            System.out.println("Error converting date: " + date + " [gotten:" + temp + "]");
             e.printStackTrace();
         }
         timemillis += zoneOffset;
         return timemillis;
     }
 
-    private static final String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+    private static final String[] eng_months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+    private static final String[] esp_months = {"Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"};
 
     private static String monthToIntString(String month)
     {
-        for (int i = 0; i < months.length; i++) {
-            if (month.equals(months[i])) {
+        for (int i = 0; i < eng_months.length; i++) {
+            if (month.equals(eng_months[i])) {
+                if (i + 1 < 10) {
+                    return "0" + (i + 1);
+                }
+                return "" + (i + 1);
+            }
+        }
+        for (int i = 0; i < esp_months.length; i++) {
+            if (month.equals(esp_months[i])) {
                 if (i + 1 < 10) {
                     return "0" + (i + 1);
                 }

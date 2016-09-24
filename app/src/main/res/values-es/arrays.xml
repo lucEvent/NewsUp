@@ -37,6 +37,8 @@
         <item>Finlandia</item>
         <item>Suecia</item>
         <item>Canadá</item>
+        <item>Rusia</item>
+        <item>India</item>
         <item>Europa</item>
     </string-array>
     <string-array name="site_categories">
@@ -47,6 +49,7 @@
         <item>Revistas</item>
         <item>Astronomía</item>
         <item>Ciencia</item>
+        <item>Videojuegos</item>
     </string-array>
 
 </resources>

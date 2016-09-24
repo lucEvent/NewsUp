@@ -6,11 +6,11 @@ import org.jsoup.nodes.Element;
 
 import java.io.IOException;
 
-public class Metro extends com.lucevent.newsup.data.util.NewsReader {
+public class MetroSV extends com.lucevent.newsup.data.util.NewsReader {
 
     // tags: [description, enclosure, guid, item, link, pubdate, title]
 
-    public Metro()
+    public MetroSV()
     {
         super(TAG_ITEM_ITEMS,
                 new int[]{TAG_TITLE},

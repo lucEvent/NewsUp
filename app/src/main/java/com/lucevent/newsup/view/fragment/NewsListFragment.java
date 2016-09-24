@@ -248,7 +248,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
     }
 
     @Override
-    public void onClick(View v)
+    public void onClick(final View v)
     {
         final News news = (News) v.getTag();
         final Context context = getActivity();
@@ -273,15 +273,15 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
 
         view.findViewById(R.id.action_try_again).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
+            public void onClick(View v2)
             {
-                onClick(v);
+                NewsListFragment.this.onClick(v);
                 dialog.dismiss();
             }
         });
         view.findViewById(R.id.action_open_in_browser).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
+            public void onClick(View v2)
             {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(news.link));
                 context.startActivity(browserIntent);
@@ -290,7 +290,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         });
         view.findViewById(R.id.action_close).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
+            public void onClick(View v2)
             {
                 dialog.dismiss();
             }
@@ -419,9 +419,9 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         @Override
         public void onClick(View v)
         {
+            adapter.clear();
             Section section = (Section) v.getTag();
             dataManager.getNewsOf(currentSite, new int[]{currentSite.sections.indexOf(section)});
-            adapter.clear();
             sectionsDialog.dismiss();
         }
     };
