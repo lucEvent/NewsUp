@@ -33,6 +33,7 @@ import com.lucevent.newsup.kernel.NewsManager;
 import com.lucevent.newsup.kernel.ScheduleManager;
 import com.lucevent.newsup.net.MainChangeListener;
 import com.lucevent.newsup.services.ScheduledDownloadReceiver;
+import com.lucevent.newsup.view.activity.ContactActivity;
 import com.lucevent.newsup.view.activity.SelectSitesActivity;
 import com.lucevent.newsup.view.fragment.AboutFragment;
 import com.lucevent.newsup.view.fragment.AppSettingsFragment;
@@ -207,17 +208,9 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 fragment = new HistorialFragment();
                 title = getString(R.string.read_news);
                 break;
-            case R.id.nav_settings:
-                fragment = new AppSettingsFragment();
-                title = getString(R.string.settings);
-                break;
             case R.id.nav_stats:
                 fragment = new StatisticsFragment();
                 title = getString(R.string.statistics);
-                break;
-            case R.id.nav_about:
-                fragment = new AboutFragment();
-                title = getString(R.string.about);
                 break;
             case R.id.nav_add_content:
                 Intent intent = new Intent(this, SelectSitesActivity.class);
@@ -227,6 +220,17 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             case R.id.nav_notes:
                 fragment = new NotesFragment();
                 title = getString(R.string.notes);
+                break;
+            case R.id.nav_settings:
+                fragment = new AppSettingsFragment();
+                title = getString(R.string.settings);
+                break;
+            case R.id.nav_contact:
+                startActivity(new Intent(this, ContactActivity.class));
+                return;
+            case R.id.nav_about:
+                fragment = new AboutFragment();
+                title = getString(R.string.about);
                 break;
             default:
                 colorCode = where;

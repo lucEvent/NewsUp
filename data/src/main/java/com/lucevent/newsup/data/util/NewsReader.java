@@ -29,7 +29,7 @@ public abstract class NewsReader {
     protected static final int TAG_IMAGE = "image".hashCode();
     protected static final int TAG_PUBLISHED = "published".hashCode();
 
-    public static final String USER_AGENT = "Mozilla/5.0 (Linux; Android 5.0.1; GT-I9300 Build/KVT49L) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.94 Mobile Safari/537.36";
+    protected static final String USER_AGENT = "Mozilla/5.0 (Linux; Android 5.0.1; GT-I9300 Build/KVT49L) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.94 Mobile Safari/537.36";
 
     private static final int TITLE = 0;
     private static final int LINK = 1;
@@ -114,7 +114,7 @@ public abstract class NewsReader {
                 News news = new News(title, link, description, date, tags);
                 news.content = content;
                 news.enclosures = enclosures;
-                news = applySpecialCase(news, content);
+                news = onNewsRead(news);
                 result.add(news);
             }
         }
@@ -136,8 +136,7 @@ public abstract class NewsReader {
         return null;
     }
 
-    @Deprecated
-    protected News applySpecialCase(News news, String content)
+    protected News onNewsRead(News news)
     {
         return news;
     }

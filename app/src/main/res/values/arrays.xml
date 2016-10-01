@@ -26,27 +26,96 @@
         <item>1464867864</item>
     </string-array>
     <string-array name="site_sort_by">
-        <item>Sort by country</item>
         <item>Sort by language</item>
+        <item>Sort by country</item>
         <item>Sort by type</item>
         <item>Sort by name</item>
     </string-array>
     <string-array name="site_languages">
-        <item>Spanish</item>
+        <item>German</item>
+        <item>Arabic</item>
+        <item>Bengali</item>
         <item>Catalan</item>
-        <item>English</item>
+        <item>Chinese</item>
+        <item>Korean</item>
+        <item>Spanish</item>
         <item>Finnish</item>
+        <item>French</item>
+        <item>Hindi</item>
+        <item>Indonesian</item>
+        <item>English</item>
+        <item>Italian</item>
+        <item>Japanese</item>
+        <item>Portuguese</item>
+        <item>Russian</item>
         <item>Swedish</item>
+        <item>Urdu</item>
     </string-array>
     <string-array name="site_countries">
-        <item>Spain</item>
-        <item>UK</item>
-        <item>US</item>
-        <item>Finland</item>
-        <item>Sweden</item>
+        <item>Germany</item>
+        <item>Argentina</item>
+        <item>Australia</item>
+        <item>Austria</item>
+        <item>Belgium</item>
+        <item>Bolivia</item>
+        <item>Brazil</item>
+        <item>Bulgaria</item>
+        <item>Cameroon</item>
         <item>Canada</item>
-        <item>Russia</item>
+        <item>Chile</item>
+        <item>China</item>
+        <item>Cyprus</item>
+        <item>Colombia</item>
+        <item>South Korea</item>
+        <item>Costa Rica</item>
+        <item>Croatia</item>
+        <item>Cuba</item>
+        <item>Denmark</item>
+        <item>Ecuador</item>
+        <item>Egypt</item>
+        <item>El Salvador</item>
+        <item>Spain</item>
+        <item>United States</item>
+        <item>Estonia</item>
+        <item>Ethiopia</item>
+        <item>Philippines</item>
+        <item>Finland</item>
+        <item>France</item>
+        <item>Greece</item>
+        <item>Guatemala</item>
+        <item>Honduras</item>
+        <item>Hungary</item>
         <item>India</item>
+        <item>Indonesia</item>
+        <item>Ireland</item>
+        <item>Iceland</item>
+        <item>Italy</item>
+        <item>Jamaica</item>
+        <item>Japan</item>
+        <item>Latvia</item>
+        <item>Lithuania</item>
+        <item>Malaysia</item>
+        <item>Morocco</item>
+        <item>Mexico</item>
+        <item>Nicaragua</item>
+        <item>Nigeria</item>
+        <item>Norway</item>
+        <item>New Zealand</item>
+        <item>Netherlands</item>
+        <item>Panama</item>
+        <item>Paraguay</item>
+        <item>Peru</item>
+        <item>Poland</item>
+        <item>Portugal</item>
+        <item>United Kingdom</item>
+        <item>Romania</item>
+        <item>Russia</item>
+        <item>Singapore</item>
+        <item>Sweden</item>
+        <item>Thailand</item>
+        <item>Ukraine</item>
+        <item>Uruguay</item>
+        <item>Venezuela</item>
         <item>Europe</item>
     </string-array>
     <string-array name="site_categories">
@@ -59,5 +128,161 @@
         <item>Science</item>
         <item>Videogames</item>
     </string-array>
+    <integer-array name="site_language_weights">
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>4</item>
+        <item>16</item>
+        <item>5</item>
+        <item>17</item>
+        <item>18</item>
+        <item>1</item>
+        <item>6</item>
+        <item>19</item>
+        <item>7</item>
+        <item>20</item>
+        <item>8</item>
+        <item>21</item>
+    </integer-array>
+    <integer-array name="site_country_weights">
+        <item>10</item>
+        <item>11</item>
+        <item>3</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>4</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+        <item>27</item>
+        <item>28</item>
+        <item>29</item>
+        <item>5</item>
+        <item>1</item>
+        <item>30</item>
+        <item>31</item>
+        <item>32</item>
+        <item>7</item>
+        <item>33</item>
+        <item>34</item>
+        <item>35</item>
+        <item>36</item>
+        <item>37</item>
+        <item>38</item>
+        <item>39</item>
+        <item>40</item>
+        <item>41</item>
+        <item>42</item>
+        <item>43</item>
+        <item>44</item>
+        <item>45</item>
+        <item>46</item>
+        <item>47</item>
+        <item>48</item>
+        <item>50</item>
+        <item>51</item>
+        <item>52</item>
+        <item>53</item>
+        <item>54</item>
+        <item>55</item>
+        <item>56</item>
+        <item>57</item>
+        <item>58</item>
+        <item>59</item>
+        <item>60</item>
+        <item>2</item>
+        <item>61</item>
+        <item>62</item>
+        <item>63</item>
+        <item>6</item>
+        <item>64</item>
+        <item>65</item>
+        <item>66</item>
+        <item>68</item>
+        <item>8</item>
+    </integer-array>
+    <!--
+    <integer-array name="site_country_weights">
+        <item>10</item>
+        <item>11</item>
+        <item>Australia</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>Canadá</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+        <item>27</item>
+        <item>28</item>
+        <item>29</item>
+        <item>España</item>
+        <item>Estados Unidos</item>
+        <item>30</item>
+        <item>31</item>
+        <item>32</item>
+        <item>Finlandia</item>
+        <item>33</item>
+        <item>34</item>
+        <item>35</item>
+        <item>36</item>
+        <item>37</item>
+        <item>38</item>
+        <item>39</item>
+        <item>40</item>
+        <item>41</item>
+        <item>42</item>
+        <item>43</item>
+        <item>44</item>
+        <item>45</item>
+        <item>46</item>
+        <item>47</item>
+        <item>48</item>
+        <item>50</item>
+        <item>51</item>
+        <item>52</item>
+        <item>53</item>
+        <item>54</item>
+        <item>55</item>
+        <item>56</item>
+        <item>57</item>
+        <item>58</item>
+        <item>59</item>
+        <item>60</item>
+        <item>Reino Unido</item>
+        <item>61</item>
+        <item>62</item>
+        <item>63</item>
+        <item>Suecia</item>
+        <item>64</item>
+        <item>65</item>
+        <item>66</item>
+        <item>67</item>
+        <item>Europa</item>
+    </integer-array>
+    -->
 
 </resources>

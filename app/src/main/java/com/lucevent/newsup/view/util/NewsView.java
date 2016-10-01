@@ -42,6 +42,7 @@ public class NewsView extends RelativeLayout {
     private Fragment fragmentContext;
     private DrawerLayout drawer;
     private ActionBar actionBar;
+    private OnBookmarkChangeListener bookmarkChangeListener;
 
     private WebView webView;
     private FloatingActionButton button_bookmark, button_share;
@@ -76,6 +77,11 @@ public class NewsView extends RelativeLayout {
         this.fragmentContext = context;
         this.actionBar = ((AppCompatActivity) context.getActivity()).getSupportActionBar();
         this.drawer = drawer;
+    }
+
+    public void setBookmarkChangeListener(OnBookmarkChangeListener bookmarkChangeListener)
+    {
+        this.bookmarkChangeListener = bookmarkChangeListener;
     }
 
     private static final String NEWS_STYLE = "<style>" +
@@ -196,6 +202,9 @@ public class NewsView extends RelativeLayout {
                     bookmarksManager.bookmarkNews(currentNews);
 
                 setBookmarkButtonImage();
+
+                if (bookmarkChangeListener != null)
+                    bookmarkChangeListener.onBookmarkChange();
             }
         }
     };

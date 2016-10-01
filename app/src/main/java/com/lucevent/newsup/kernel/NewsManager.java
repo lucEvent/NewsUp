@@ -25,6 +25,7 @@ import com.lucevent.newsup.kernel.util.Notes;
 import com.lucevent.newsup.net.NewsReader;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class NewsManager {
 
@@ -71,7 +72,8 @@ public class NewsManager {
             connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         if (AppData.sites == null)
-            AppData.sites = Sites.getDefault(ProSettings.checkEnabled(ProSettings.FINLAND_SITES_KEY));
+            AppData.sites = Sites.getDefault(ProSettings.checkEnabled(ProSettings.FINLAND_SITES_KEY)
+                    || Locale.getDefault().getLanguage().equals("fi"));
 
         if (logoManager == null)
             logoManager = LogoManager.getInstance(context, AppData.sites.size());
@@ -105,7 +107,7 @@ public class NewsManager {
 
                     for (News N : loader.newsToSave) {
                         dbmanager.insertNews(N);
-                        saveNews(N);
+                        sdmanager.saveNews(N);
                     }
 
                 } catch (Exception e) {
@@ -164,12 +166,20 @@ public class NewsManager {
                 getSiteHistory(site);
                 //    handler.obtainMessage(NEWS_READ_HISTORY, site.history).sendToTarget(); //TODO solo historial de la section
 
+                NewsArray tempNewsArray = new NewsArray();
+                tempNewsArray.addAll(tempNewsMap);
+                for (int i = 0; i < tempNewsArray.size(); ++i) {    // At first: set id of news that are already in the DB
+                    News N = tempNewsArray.get(i);
+                    if (site.news.contains(N))
+                        N.id = site.news.ceiling(N).id;
+                }
+
                 int failCounter = 0;
-                for (News N : tempNewsMap) {
+                for (News N : tempNewsMap) {    // Next: read news content and store news that were not in the DB
 
-                    if (site.news.add(N)) {  // if added, it means it was not in yet, so:
+                    if (N.id != -1) {   // id was not set in previous step, means it is not in the history
 
-                        if (N.content == null || N.content.isEmpty())   // We read the content (if needed)
+                        if (N.content == null || N.content.isEmpty())   // if there's need, read the content
                             if (newsreader != null)
                                 newsreader.readNewsContent(site, N);
                             else
@@ -182,17 +192,11 @@ public class NewsManager {
                             } catch (Exception e) {
                                 AppSettings.printerror("[NM] Error when dbmanager.insertNews(N)", e);
                             }
+                            site.news.add(N);
                             sdmanager.saveNews(N); // and we save it in the disc
 
-                        } else {
-
+                        } else
                             failCounter++;
-                            site.news.remove(N); // ... if there isn't content, we remove it from the history
-
-                        }
-                    } else {
-
-                        N.id = site.news.ceiling(N).id; // If not added, it means it already is in, so we
                     }
                 }
                 AppSettings.printlog("[NM] [" + site.name + "] News impossible to read: " + failCounter);
@@ -234,7 +238,7 @@ public class NewsManager {
                     for (News N : newstosave)
                         if (N.date >= timeBound) {
                             dbmanager.insertNews(N);
-                            saveNews(N);
+                            sdmanager.saveNews(N);
                         }
                 }
                 handler.obtainMessage(AppCode.NEWS_LOADED).sendToTarget();
@@ -270,50 +274,77 @@ public class NewsManager {
 
             getSiteHistory(site);
 
-            NewsMap newsTempMap;
+            NewsMap tempNewsMap;
             if (newsreader != null)
-                newsTempMap = new NewsMap(newsreader.readNewsHeaders(site, sections));
+                tempNewsMap = new NewsMap(newsreader.readNewsHeaders(site, sections));
             else
-                newsTempMap = new NewsMap(site.readNewsHeaders(sections));
+                tempNewsMap = new NewsMap(site.readNewsHeaders(sections));
 
-            newsTempMap.setCode(site.code);
+            tempNewsMap.setCode(site.code);
 
             if (handler != null)
-                handler.obtainMessage(AppCode.NEWS_MAP_READ, newsTempMap).sendToTarget();
+                handler.obtainMessage(AppCode.NEWS_MAP_READ, tempNewsMap).sendToTarget();
 
-            for (News N : newsTempMap) {
+            NewsArray tempNewsArray = new NewsArray();
+            tempNewsArray.addAll(tempNewsMap);
+            for (int i = 0; i < tempNewsArray.size(); ++i) {    // At first: set id of news that are already in the DB
+                News N = tempNewsArray.get(i);
+                if (site.news.contains(N))
+                    N.id = site.news.ceiling(N).id;
+            }
 
-                if (site.news.add(N)) {  // if added, it means it was not in yet, so:
+            for (News N : tempNewsMap) {    // Next: read news content and store news that were not in the DB
 
-                    if (N.content == null || N.content.isEmpty())   // We read the content (if needed)
+                if (N.id != -1) {   // id was not set in previous step, means it is not in the history
+
+                    if (N.content == null || N.content.isEmpty())   // if there's need, read the content
                         if (newsreader != null)
                             newsreader.readNewsContent(site, N);
                         else
                             site.readNewsContent(N);
 
-                    if (N.content != null && !N.content.isEmpty())  // If there is content, we save it...
+                    if (N.content != null && !N.content.isEmpty()) { // If there is content, we save it...
                         newsToSave.add(N); // ... in the buffer. The master thread will save it in DB and disc
-
-                    else
-                        site.news.remove(N); // ... if there isn't content, we remove it from the history
-
-                } else {
-
-                    N.id = site.news.ceiling(N).id; // If not added, it means it is in already
-
+                        site.news.add(N);
+                    }
                 }
             }
         }
     }
 
-    public static News getNewsContent(News news)
+    public static News readContentOf(News news)
     {
         if (news.content == null || news.content.isEmpty())
             sdmanager.readNews(news);
         return news;
     }
 
-    public Site getSiteHistory(Site site)
+    public static void fetchContentOf(final News news)
+    {
+        if (news.content == null || news.content.isEmpty()) {
+            new Thread(new Runnable() {
+                @Override
+                public void run()
+                {
+                    Site site = AppData.getSiteByCode(news.site_code);
+                    site.readNewsContent(news);
+
+                    if (news.content != null && !news.content.isEmpty()) {
+                        try {
+                            dbmanager.insertNews(news);
+                        } catch (Exception e) {
+                            AppSettings.printerror("[NM] Error when dbmanager.insertNews(news)", e);
+                        }
+                        sdmanager.saveNews(news);
+                        if (!site.news.contains(news))
+                            site.news.add(news);
+                    }
+                }
+            }).start();
+        }
+    }
+
+    private Site getSiteHistory(Site site)
     {
         if (site.news == null || site.news.isEmpty()) {
             try {
@@ -357,11 +388,6 @@ public class NewsManager {
             }
             handler.obtainMessage(AppCode.NEWS_LOADED).sendToTarget();
         }
-    }
-
-    public void saveNews(News news)
-    {
-        sdmanager.saveNews(news);
     }
 
     public Sites getFavoritesSites()

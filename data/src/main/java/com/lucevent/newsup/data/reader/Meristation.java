@@ -24,7 +24,7 @@ public class Meristation extends com.lucevent.newsup.data.util.NewsReader {
     }
 
     @Override
-    protected News applySpecialCase(News news, String content)
+    protected News onNewsRead(News news)
     {
         Document d = Jsoup.parse(news.description);
 

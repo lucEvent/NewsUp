@@ -109,7 +109,7 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
     {
         News news = (News) v.getTag();
 
-        NewsManager.getNewsContent(news);
+        NewsManager.readContentOf(news);
 
         displayingNews = true;
         NewsManager.addToHistory(news);

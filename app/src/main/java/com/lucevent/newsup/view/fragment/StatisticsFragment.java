@@ -110,7 +110,7 @@ public class StatisticsFragment extends android.app.Fragment {
                         })
                         .show();
             } else
-                Snackbar.make(mainView, R.string.msg_no_internet_connection, Snackbar.LENGTH_LONG).show();
+                notifyNoInternet();
             return true;
         }
     };
@@ -122,9 +122,14 @@ public class StatisticsFragment extends android.app.Fragment {
             if (service.isInternetAvailable())
                 service.getStatistics(handler, (SortOrder) v.getTag());
             else
-                Snackbar.make(mainView, R.string.msg_no_internet_connection, Snackbar.LENGTH_LONG).show();
+                notifyNoInternet();
         }
     };
+
+    private void notifyNoInternet()
+    {
+        Snackbar.make(mainView, R.string.msg_no_internet_connection, Snackbar.LENGTH_LONG).show();
+    }
 
     static class Handler extends android.os.Handler {
 
@@ -185,7 +190,10 @@ public class StatisticsFragment extends android.app.Fragment {
         {
             service = ((StatisticsService.Binder) ibinder).getService();
             serviceBound = true;
-            service.getStatistics(handler, DEFAULT_ORDER);
+            if (service.isInternetAvailable())
+                service.getStatistics(handler, DEFAULT_ORDER);
+            else
+                notifyNoInternet();
         }
 
         @Override

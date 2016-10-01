@@ -50,9 +50,9 @@ public class Abc extends com.lucevent.newsup.data.util.NewsReader {
     }
 
     @Override
-    protected News applySpecialCase(News news, String content)
+    protected News onNewsRead(News news)
     {
-        if (content.isEmpty()) {
+        if (news.content.isEmpty()) {
             Document d = Jsoup.parse(news.description);
             d.select(".remision-galeria").remove();
 

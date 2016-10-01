@@ -26,11 +26,12 @@ import com.lucevent.newsup.view.adapter.NewsAdapter;
 import com.lucevent.newsup.view.util.ContentLoader;
 import com.lucevent.newsup.view.util.NewsView;
 import com.lucevent.newsup.view.util.OnBackPressedListener;
+import com.lucevent.newsup.view.util.OnBookmarkChangeListener;
 
 import java.lang.ref.WeakReference;
 
 public class BookmarksFragment extends android.app.Fragment implements View.OnClickListener,
-        OnBackPressedListener {
+        OnBackPressedListener, OnBookmarkChangeListener {
 
     private BookmarksManager dataManager;
     private NewsAdapter adapter;
@@ -84,20 +85,12 @@ public class BookmarksFragment extends android.app.Fragment implements View.OnCl
 
         newsView = (NewsView) view.findViewById(R.id.news_view);
         newsView.setFragmentContext(this, ((Main) getActivity()).drawer);
+        newsView.setBookmarkChangeListener(this);
 
         view.findViewById(R.id.button_sections).setVisibility(View.GONE);
 
         dataManager.getBookmarkedNews();
         return view;
-    }
-
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-
-        if (bookmarks != null && bookmarks.size() != adapter.getActualItemCount())
-            adapter.setNewDataSet(bookmarks);
     }
 
     private boolean displayingNews = false;
@@ -117,11 +110,17 @@ public class BookmarksFragment extends android.app.Fragment implements View.OnCl
     public void onClick(View v)
     {
         News news = (News) v.getTag();
-        NewsManager.getNewsContent(news);
+        NewsManager.readContentOf(news);
 
         displayingNews = true;
         NewsManager.addToHistory(news);
         newsView.displayNews(news);
+    }
+
+    @Override
+    public void onBookmarkChange()
+    {
+        adapter.setNewDataSet(bookmarks);
     }
 
     static class Handler extends android.os.Handler {

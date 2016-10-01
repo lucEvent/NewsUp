@@ -9,7 +9,9 @@ public class ElAndroideLibreSections extends Sections {
     {
         super();
 
-        add(new Section("Principal", "http://feeds.feedburner.com/elandroidelibre", 1));
+        add(new Section("Principal", "http://www.elandroidelibre.com/feed", 0));
+        add(new Section("Aplicaciones", "http://www.elandroidelibre.com/category/aplicaciones/feed", 0));
+        add(new Section("Juegos", "http://www.elandroidelibre.com/category/juegos/feed", 0));
 
     }
 

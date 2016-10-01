@@ -46,7 +46,7 @@ public class TheVerge extends com.lucevent.newsup.data.util.NewsReader {
     }
 
     @Override
-    protected News applySpecialCase(News news, String content)
+    protected News onNewsRead(News news)
     {
         if (news.link.contains("theverge.com/video")) {
             Document d = Jsoup.parse(news.content);

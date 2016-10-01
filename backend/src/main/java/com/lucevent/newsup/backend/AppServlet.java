@@ -3,6 +3,7 @@ package com.lucevent.newsup.backend;
 import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
 import com.lucevent.newsup.backend.utils.BackendParser;
+import com.lucevent.newsup.backend.utils.Report;
 import com.lucevent.newsup.backend.utils.SiteStat;
 import com.lucevent.newsup.backend.utils.Statistics;
 import com.lucevent.newsup.data.util.News;
@@ -42,7 +43,8 @@ public class AppServlet extends HttpServlet {
             String[] parts = site_request.split(",");
 
             Site site = Data.sites.getSiteByCode(Integer.parseInt(parts[0]));
-            Data.stats.count(Data.sites.indexOf(site), req.getRemoteAddr());
+            if (req.getParameter("nc") == null)
+                Data.stats.count(Data.sites.indexOf(site), req.getRemoteAddr());
 
             int[] sections = new int[parts.length - 1];
             for (int i = 0; i < sections.length; i++) {
@@ -94,13 +96,16 @@ public class AppServlet extends HttpServlet {
                 Data.stats.read(site_index, Integer.parseInt(values[i + 1]));
             }
 
+        } else if (req.getParameter("report") != null) {
+
+            Data.reports.addReport(req.getRemoteAddr(), req.getParameter("email"), req.getParameter("message"));
+
         } else if (req.getParameter("clear") != null) {
 
             for (Site site : Data.sites)
                 site.news.clear();
 
         }
-
     }
 
     @Override
@@ -118,6 +123,7 @@ public class AppServlet extends HttpServlet {
         ObjectifyFactory oFactory = ObjectifyService.factory();
         oFactory.register(SiteStat.class);
         oFactory.register(Statistics.class);
+        oFactory.register(Report.class);
         oFactory.begin();
 
         new Data();

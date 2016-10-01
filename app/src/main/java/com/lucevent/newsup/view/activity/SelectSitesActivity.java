@@ -3,6 +3,8 @@ package com.lucevent.newsup.view.activity;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -52,8 +54,9 @@ public class SelectSitesActivity extends AppCompatActivity implements
 
         Spinner sortSelector = (Spinner) findViewById(R.id.sortSelector);
         ArrayAdapter<String> sortSelectorAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.site_sort_by)) {
+            @NonNull
             @Override
-            public View getView(int position, View convertView, ViewGroup parent)
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent)
             {
                 // this part is needed for hiding the original view
                 View view = super.getView(position, convertView, parent);
@@ -63,7 +66,7 @@ public class SelectSitesActivity extends AppCompatActivity implements
             }
         };
         sortSelector.setAdapter(sortSelectorAdapter);
-        sortSelector.setOnItemSelectedListener(SelectSitesActivity.this);
+        sortSelector.setOnItemSelectedListener(this);
 
         EditText input = (EditText) findViewById(R.id.input);
         input.addTextChangedListener(this);
@@ -119,11 +122,12 @@ public class SelectSitesActivity extends AppCompatActivity implements
 
         else
             switch (position) {
+                default:
                 case 0:
-                    currentOrder = SiteAdapter.Order.BY_COUNTRY;
+                    currentOrder = SiteAdapter.Order.BY_LANGUAGE;
                     break;
                 case 1:
-                    currentOrder = SiteAdapter.Order.BY_LANGUAGE;
+                    currentOrder = SiteAdapter.Order.BY_COUNTRY;
                     break;
                 case 2:
                     currentOrder = SiteAdapter.Order.BY_CATEGORY;
@@ -131,8 +135,6 @@ public class SelectSitesActivity extends AppCompatActivity implements
                 case 3:
                     currentOrder = SiteAdapter.Order.BY_NAME;
                     break;
-                default:
-                    currentOrder = SiteAdapter.Order.BY_LANGUAGE;
             }
 
         siteViewsMap = siteAdapter.createView(this, (ViewGroup) findViewById(R.id.container), 4, currentOrder, currentSearch);

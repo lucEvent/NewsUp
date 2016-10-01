@@ -32,7 +32,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
         <activity
             android:name=".view.activity.DownloadScheduleEditorActivity"
             android:parentActivityName=".Main"
@@ -41,7 +40,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.lucevent.newsup.Main"/>
         </activity>
-
         <activity
             android:name=".view.activity.SelectSitesActivity"
             android:parentActivityName=".Main"
@@ -55,6 +53,7 @@
 
         <service android:name=".services.ScheduledDownloadService"/>
         <service android:name=".services.StatisticsService"/>
+        <service android:name=".services.ContactService"/>
 
         <receiver
             android:name=".services.onConcerningEventReceiver"
@@ -67,6 +66,16 @@
             </intent-filter>
         </receiver>
 
+        <activity
+            android:name=".view.activity.ContactActivity"
+            android:label="@string/report_n_contact"
+            android:parentActivityName=".Main"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateAlwaysVisible|adjustResize">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.lucevent.newsup.Main"/>
+        </activity>
     </application>
 
 </manifest>

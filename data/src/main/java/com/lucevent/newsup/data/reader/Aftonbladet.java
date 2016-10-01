@@ -21,7 +21,7 @@ public class Aftonbladet extends com.lucevent.newsup.data.util.NewsReader {
     }
 
     @Override
-    protected News applySpecialCase(News news, String content)
+    protected News onNewsRead(News news)
     {
         org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(news.description);
         news.description = doc.text();

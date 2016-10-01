@@ -20,16 +20,16 @@ public class Yle extends com.lucevent.newsup.data.util.NewsReader {
     }
 
     @Override
-    protected News applySpecialCase(News news, String content)
+    protected News onNewsRead(News news)
     {
-        if (!content.isEmpty())
-            if (org.jsoup.Jsoup.parseBodyFragment(content).text().length() != 0) {
+        if (!news.content.isEmpty())
+            if (org.jsoup.Jsoup.parse(news.content).text().length() != 0) {
 
                 String img = "";
                 for (Enclosure e : news.enclosures)
                     img += e.html();
 
-                news.content = "<meta charset=\"UTF-8\">" + img + content;
+                news.content = "<meta charset=\"UTF-8\">" + img + news.content;
             }
         return news;
     }

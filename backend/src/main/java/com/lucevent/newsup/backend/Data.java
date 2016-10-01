@@ -2,17 +2,20 @@ package com.lucevent.newsup.backend;
 
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.VoidWork;
+import com.lucevent.newsup.backend.utils.Reports;
 import com.lucevent.newsup.backend.utils.Statistics;
 import com.lucevent.newsup.data.Sites;
 import com.lucevent.newsup.data.util.Date;
 
-public class Data {
+class Data {
 
-    public static Sites sites;
+    static Sites sites;
 
-    public static Statistics stats;
+    static Statistics stats;
 
-    public Data()
+    static Reports reports;
+
+    Data()
     {
         Date.setTitles(new String[]{"%d seconds ago", "%d minutes ago", "%d hours ago", "%d days ago", "%d months ago", "%d years ago",});
         if (sites == null) {
@@ -24,6 +27,8 @@ public class Data {
                     stats = Statistics.initialize(sites);
                 }
             });
+
+            reports = new Reports();
 
         }
     }

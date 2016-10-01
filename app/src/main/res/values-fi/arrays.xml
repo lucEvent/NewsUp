@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="date_messages">
+        <item>%d sekuntia sitten</item>
+        <item>%d minuuttia sitten</item>
+        <item>%d tuntia sitten</item>
+        <item>%d päivää sitten</item>
+        <item>%d kuukautta sitten</item>
+        <item>%d vuotta sitten</item>
+    </string-array>
+    <string-array name="keep_time_titles">
+        <item>Älä pidä niitä (ei suositella)</item>
+        <item>1 viikko</item>
+        <item>1 kuukausi (suositus)</item>
+        <item>3 kuukautta</item>
+        <item>6 kuukautta</item>
+        <item>Ikuisesti</item>
+    </string-array>
+    <string-array name="site_sort_by">
+        <item>Lajittelu kieli</item>
+        <item>Lajittele maan</item>
+        <item>Lajittele tyypin</item>
+        <item>Lajittele nimen</item>
+    </string-array>
+    <string-array name="site_languages">
+        <item>Saksa</item>
+        <item>Arabia</item>
+        <item>Bengali</item>
+        <item>Katalaani</item>
+        <item>Kiina</item>
+        <item>Korea</item>
+        <item>Espanja</item>
+        <item>Suomi</item>
+        <item>Ranska</item>
+        <item>Hindi</item>
+        <item>Indonesia</item>
+        <item>Englanti</item>
+        <item>Italia</item>
+        <item>Japani</item>
+        <item>Portugali</item>
+        <item>Venäjä</item>
+        <item>Ruotsi</item>
+        <item>Urdu</item>
+    </string-array>
+    <string-array name="site_countries">
+        <item>Saksa</item>
+        <item>Argentiina</item>
+        <item>Australia</item>
+        <item>Itävalta</item>
+        <item>Belgia</item>
+        <item>Bolivia</item>
+        <item>Brasilia</item>
+        <item>Bulgaria</item>
+        <item>Kamerun</item>
+        <item>Kanada</item>
+        <item>Chile</item>
+        <item>Kiina</item>
+        <item>Kypros</item>
+        <item>Kolumbia</item>
+        <item>Etelä-Korea</item>
+        <item>Costa Rica</item>
+        <item>Kroatia</item>
+        <item>Kuuba</item>
+        <item>Tanska</item>
+        <item>Ecuador</item>
+        <item>Egypti</item>
+        <item>El Salvador</item>
+        <item>Espanja</item>
+        <item>Yhdysvallat</item>
+        <item>Viro</item>
+        <item>Etiopia</item>
+        <item>Filippiinit</item>
+        <item>Suomi</item>
+        <item>Ranska</item>
+        <item>Kreikka</item>
+        <item>Guatemala</item>
+        <item>Honduras</item>
+        <item>Unkari</item>
+        <item>Intia</item>
+        <item>Indonesia</item>
+        <item>Irlanti</item>
+        <item>Islanti</item>
+        <item>Italia</item>
+        <item>Jamaika</item>
+        <item>Japani</item>
+        <item>Latvia</item>
+        <item>Liettua</item>
+        <item>Malesia</item>
+        <item>Marokko</item>
+        <item>Meksiko</item>
+        <item>Nicaragua</item>
+        <item>Nigeria</item>
+        <item>Norja</item>
+        <item>Uusi-Seelanti</item>
+        <item>Alankomaat</item>
+        <item>Panama</item>
+        <item>Paraguay</item>
+        <item>Peru</item>
+        <item>Puola</item>
+        <item>Portugali</item>
+        <item>Yhdistynyt kuningaskunta</item>
+        <item>Romania</item>
+        <item>Venäjä</item>
+        <item>Singapore</item>
+        <item>Ruotsi</item>
+        <item>Thaimaa</item>
+        <item>Ukraina</item>
+        <item>Uruguay</item>
+        <item>Venezuela</item>
+        <item>Eurooppa</item>
+    </string-array>
+    <string-array name="site_categories">
+        <item>Sanomalehdet</item>
+        <item>Sport Sanomalehdet</item>
+        <item>Teknologia</item>
+        <item>Blogit</item>
+        <item>Lehdet</item>
+        <item>Tähtitiede</item>
+        <item>Science</item>
+        <item>Videopelit</item>
+    </string-array>
+    <integer-array name="site_language_weights">
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>1</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>3</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>2</item>
+        <item>18</item>
+    </integer-array>
+    <integer-array name="site_country_weights">
+        <item>10</item>
+        <item>11</item>
+        <item>5</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>6</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+        <item>27</item>
+        <item>28</item>
+        <item>29</item>
+        <item>7</item>
+        <item>4</item>
+        <item>30</item>
+        <item>31</item>
+        <item>32</item>
+        <item>1</item>
+        <item>33</item>
+        <item>34</item>
+        <item>35</item>
+        <item>36</item>
+        <item>37</item>
+        <item>38</item>
+        <item>39</item>
+        <item>40</item>
+        <item>41</item>
+        <item>42</item>
+        <item>43</item>
+        <item>44</item>
+        <item>45</item>
+        <item>46</item>
+        <item>47</item>
+        <item>48</item>
+        <item>50</item>
+        <item>51</item>
+        <item>52</item>
+        <item>53</item>
+        <item>54</item>
+        <item>55</item>
+        <item>56</item>
+        <item>57</item>
+        <item>58</item>
+        <item>59</item>
+        <item>60</item>
+        <item>3</item>
+        <item>61</item>
+        <item>62</item>
+        <item>63</item>
+        <item>2</item>
+        <item>64</item>
+        <item>65</item>
+        <item>66</item>
+        <item>67</item>
+        <item>8</item>
+    </integer-array>
+
+</resources>

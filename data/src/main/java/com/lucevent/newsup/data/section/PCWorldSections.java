@@ -12,7 +12,7 @@ public class PCWorldSections extends Sections {
         add(new Section("All Stories", "http://www.pcworld.com/index.rss", 0));
         add(new Section("Reviews", "http://www.pcworld.com/reviews/index.rss", 0));
         add(new Section("How-Tos", "http://www.pcworld.com/howto/index.rss", 0));
-        //   add(new Section("Video", "http://www.pcworld.com/video/index.rss", 0));
+        add(new Section("Video", "http://www.pcworld.com/video/index.rss", 0));
 
         add(new Section("Columns", null, -1));
         add(new Section("Hassle-Free PC", "http://www.pcworld.com/column/hassle-free-pc/index.rss", 1));

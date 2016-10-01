@@ -10,7 +10,6 @@
     <string name="statistics">Estadísticas</string>
     <string name="about">Información</string>
     <string name="favorites">Favoritos</string>
-    <string name="all_sites">Todas las publicaciones</string>
     <string name="share_with">Comparte con</string>
     <string name="notification">Notificación</string>
     <string name="repeat">Repetir</string>
@@ -26,6 +25,8 @@
     <string name="x_language">Idioma: <b>%1$s</b></string>
     <string name="x_category">Categoría: <b>%1$s</b></string>
     <string name="notes">Anotaciones</string>
+    <string name="send">Enviar</string>
+    <string name="report_n_contact">Informa &amp; Contacta</string>
 
     <string name="mon">Lun</string>
     <string name="tue">Mar</string>
@@ -59,6 +60,8 @@
     <string name="hint_pref_pro_mode">Inserta código PRO</string>
     <string name="search">Busca</string>
     <string name="hint_create_note">Inserta anotación</string>
+    <string name="hint_email">Tu email (opcional)</string>
+    <string name="hint_message_suggestion_report">Tu mensaje, sugerencia o informe de error</string>
 
 
     <!-- * ******************** Messages **************************** * -->

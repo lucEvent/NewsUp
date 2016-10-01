@@ -1,5 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.Jsoup;
@@ -33,19 +34,17 @@ public class PCWorld extends com.lucevent.newsup.data.util.NewsReader {
         return dsc.substring(0, Math.min(300, dsc.length()));
     }
 
-    /* Only when video section is working
-        @Override
-        protected News applySpecialCase(News news, String content)
-        {
-            if (news.link.contains("pcworld.com/video"))
-                for (Enclosure e : news.enclosures)
-                    if (e.isVideo()) {
-                        news.content = e.html();
-                        break;
-                    }
-            return news;
-        }
-    */
+    @Override
+    protected News onNewsRead(News news)
+    {
+        if (news.link.contains("pcworld.com/video"))
+            for (Enclosure e : news.enclosures)
+                if (e.isVideo()) {
+                    news.content = e.html();
+                    break;
+                }
+        return news;
+    }
 
     @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)

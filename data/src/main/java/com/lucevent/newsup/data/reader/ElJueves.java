@@ -33,7 +33,7 @@ public class ElJueves extends com.lucevent.newsup.data.util.NewsReader {
     }
 
     @Override
-    protected News applySpecialCase(News news, String content)
+    protected News onNewsRead(News news)
     {
         if (news.link.contains(".es/vineta-del-dia/") || news.link.contains(".es/juevflix/")) {
             news.content = news.description;

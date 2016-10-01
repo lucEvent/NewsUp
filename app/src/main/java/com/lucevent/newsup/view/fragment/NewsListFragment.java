@@ -146,10 +146,11 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         lastLoadedSiteCode = -9;
         setSite(getArguments().getInt(AppCode.SEND_SITE_CODE));
 
-        getActivity().startService(
-                new Intent(getActivity(), StatisticsService.class)
-                        .putExtra(AppCode.SEND_REQUEST_CODE, StatisticsService.REQ_SEND)
-        );
+        if (!AppSettings.DEBUG)
+            getActivity().startService(
+                    new Intent(getActivity(), StatisticsService.class)
+                            .putExtra(AppCode.SEND_REQUEST_CODE, StatisticsService.REQ_SEND)
+            );
     }
 
     @Override
@@ -253,15 +254,16 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         final News news = (News) v.getTag();
         final Context context = getActivity();
 
-        NewsManager.getNewsContent(news);
+        NewsManager.readContentOf(news);
 
-        if (news.content != null) {
+        if (news.content != null && !news.content.isEmpty()) {
             newsView.displayNews(news);
             btn_sections.setVisibility(View.GONE);
             displayingNews = true;
             NewsManager.addToHistory(news);
             return;
         }
+        NewsManager.fetchContentOf(news);
 
         View view = LayoutInflater.from(context).inflate(R.layout.d_news_not_found, null);
 
@@ -315,7 +317,16 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
             switch (msg.what) {
                 case AppCode.NEWS_MAP_READ:
                 case AppCode.NEWS_MAP_FRAGMENT_READ:
-                    service.adapter.addAll((NewsMap) msg.obj);
+                    NewsMap news = (NewsMap) msg.obj;
+
+                    if (news.isEmpty())
+                        return;
+
+                    if (service.currentSiteCode > 0 &&
+                            news.first().site_code != service.currentSiteCode)
+                        return;
+
+                    service.adapter.addAll(news);
                     service.recyclerView.smoothScrollToPosition(0);
                     break;
                 case AppCode.NEWS_LOADED:
@@ -420,6 +431,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         public void onClick(View v)
         {
             adapter.clear();
+            progressBar.setVisibility(ProgressBar.VISIBLE);
             Section section = (Section) v.getTag();
             dataManager.getNewsOf(currentSite, new int[]{currentSite.sections.indexOf(section)});
             sectionsDialog.dismiss();

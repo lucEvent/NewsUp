@@ -54,6 +54,9 @@ public class NotesFragment extends Fragment implements TextView.OnEditorActionLi
         input = (EditText) view.findViewById(R.id.input);
         input.setOnEditorActionListener(this);
 
+        ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE))
+                .toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+
         return view;
     }
 

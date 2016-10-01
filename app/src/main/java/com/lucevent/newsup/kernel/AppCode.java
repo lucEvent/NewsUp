@@ -11,6 +11,7 @@ public interface AppCode {
     int NEWS_MAP_FRAGMENT_READ = 11;
     int NEWS_LOADED = 12;
     int NO_INTERNET = 13;
+    int REPORT_SEND_OK = 14;
 
     int REQUEST_ADD_CONTENT = 30;
 

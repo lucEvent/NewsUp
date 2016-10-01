@@ -41,9 +41,9 @@ public class TED extends com.lucevent.newsup.data.util.NewsReader {
     }
 
     @Override
-    protected News applySpecialCase(News news, String content)
+    protected News onNewsRead(News news)
     {
-        if (content.isEmpty() && !news.enclosures.isEmpty())
+        if (news.content.isEmpty() && !news.enclosures.isEmpty())
             news.content = news.enclosures.get(0).html() + "<p>" + news.description + "</p>";
 
         return news;

@@ -25,10 +25,10 @@ public class As extends com.lucevent.newsup.data.util.NewsReader {
     }
 
     @Override
-    protected News applySpecialCase(News news, String content)
+    protected News onNewsRead(News news)
     {
-        if (!content.isEmpty())
-            news.content = getEnclosures(news) + content;
+        if (!news.content.isEmpty())
+            news.content = getEnclosures(news) + news.content;
         return news;
     }
 

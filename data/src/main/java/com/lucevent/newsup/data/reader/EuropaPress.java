@@ -31,15 +31,11 @@ public class EuropaPress extends com.lucevent.newsup.data.util.NewsReader {
         org.jsoup.select.Elements img = doc.select(".schema_foto img:not([itemprop=\"articleBody\"] .schema_foto img)");
         org.jsoup.select.Elements e = doc.select("[itemprop=\"articleBody\"]");
 
-        if (e.isEmpty()) {
-
+        if (e.isEmpty())
             return;
 
-        } else {
+        e.select(".FechaPublicacionNoticia,.captionv2,script,.related-content-no-image,.related-content").remove();
 
-            e.select(".FechaPublicacionNoticia,.captionv2,script").remove();
-
-        }
         news.content = img.outerHtml() + e.outerHtml();
         news.content = news.content.replace("Cargando el vídeo....", "");
     }
