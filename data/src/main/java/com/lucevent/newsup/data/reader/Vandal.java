@@ -43,7 +43,6 @@ public class Vandal extends com.lucevent.newsup.data.util.NewsReader {
 
                 v.previousElementSibling()
                         .append(
-//                                "<iframe allowfullscreen src='http://videos.vandalimg.com/mp4/" + video_id + ".mp4'></iframe>"
                                 "<video controls><source src=\"http://videosold.vandalimg.com/mp4/" + video_id + ".mp4\" type=\"video/mp4\"></video>"
                         );
                 v.remove();

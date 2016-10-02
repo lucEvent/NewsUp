@@ -1,7 +1,7 @@
 <resources>
 
     <string name="app_name" translatable="false">NewsUp</string>
-    <string name="app_version" translatable="false">1.7.1</string>
+    <string name="app_version" translatable="false">1.7.2</string>
     <string name="version">version</string>
 
     <!-- * ******************** Labels **************************** * -->
@@ -127,11 +127,11 @@
 
 
     <!-- ***************************** ***************** ********************************** -->
-    <string name="about_content_header" translatable="false">News Up 1.7.1</string>
+    <string name="about_content_header" translatable="false">News Up 1.7.2</string>
     <string name="about_content_contact">Developed by Rafael J. Lucena\nContact: rafaa89@gmail.com</string>
     <string name="about_content_title_new_features">Last features and improvements:</string>
     <string name="about_content_new_features" translatable="false">
-        Version 1.7.1 2016-10-01:\nNew: Report/Suggestion option.\nBookmarked news list updating fixed.\nSite selection screen now orders by device locale, and each section by site name.\nFull-translated to swedish.\nPartially translated to Finnish.\nLoading animation comes up when loading a section too now.\nMore errors fixed and improvements.\n
+        Version 1.7.2 2016-10-02:\nNew: Report/Suggestion option.\nBookmarked news list updating fixed.\nSite selection screen now orders by device locale, and each section by site name.\nFull-translated to swedish.\nPartially translated to Finnish.\nLoading animation comes up when loading a section too now.\nMore errors fixed and improvements.\n
         \nVersion 1.7.0 2016-09-24:\nAdded support for newspapers \'Abc\', \'Metro UK\', \'Siberian Times\' and \'USA Today\', and online magazines and blogs \'Digital Inspiration\', \'Meristation\', \'PC World\', \'The Verge\' and \'Vandal\'.\nBugs fixed.\n
         \nVersion 1.6.0 2016-09-12:\nNewsView: images, videos and iframes are hidden when there is no internet connection.\nFixed severe bug when a schedule is executed while the user is interacting with the app.\nFixed severe bug opening news from notification.\nSupport for tweets.\nNews load faster.\nAdded animation to show that news are loading.\nIntroducing notes with Pro code.\nAvoid news reloading when unnecessary.\nBug fixes and improvements.\n
         \nVersion 1.5.1 2016-07-08:\nNew sites: VilaWeb, Mashable.\nScreen overlapping on navigation back fixed, plus coherence with drawer row selected.\n

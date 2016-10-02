@@ -170,14 +170,16 @@ public class NewsManager {
                 tempNewsArray.addAll(tempNewsMap);
                 for (int i = 0; i < tempNewsArray.size(); ++i) {    // At first: set id of news that are already in the DB
                     News N = tempNewsArray.get(i);
-                    if (site.news.contains(N))
+                    if (site.news.contains(N)) {
                         N.id = site.news.ceiling(N).id;
+                        System.out.println("Setting id for: "+N.id);
+                    }
                 }
 
                 int failCounter = 0;
                 for (News N : tempNewsMap) {    // Next: read news content and store news that were not in the DB
-
-                    if (N.id != -1) {   // id was not set in previous step, means it is not in the history
+                    System.out.println("N.id="+N.id);
+                    if (N.id == -1) {   // id was not set in previous step, means it is not in the history
 
                         if (N.content == null || N.content.isEmpty())   // if there's need, read the content
                             if (newsreader != null)
@@ -295,7 +297,7 @@ public class NewsManager {
 
             for (News N : tempNewsMap) {    // Next: read news content and store news that were not in the DB
 
-                if (N.id != -1) {   // id was not set in previous step, means it is not in the history
+                if (N.id == -1) {   // id was not set in previous step, means it is not in the history
 
                     if (N.content == null || N.content.isEmpty())   // if there's need, read the content
                         if (newsreader != null)
