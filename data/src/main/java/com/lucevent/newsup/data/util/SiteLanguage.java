@@ -22,5 +22,6 @@ public class SiteLanguage {
     public static final int RUSSIAN = 16 << shift;
     public static final int SWEDISH = 17 << shift;
     public static final int URDU = 18 << shift;
+    public static final int MANY = 19 << shift; //// TODO: 09/10/2016
 
 }

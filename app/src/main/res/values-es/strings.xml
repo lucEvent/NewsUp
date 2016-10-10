@@ -112,7 +112,7 @@
     <string name="pref_keep_news">Guardar noticias</string>
 
     <!-- ***************************** ***************** ********************************** -->
-    <string name="about_content_contact">Desarrollado por Rafael J. Lucena\nContacto: rafaa89@gmail.com</string>
+    <string name="about_content_contact">Desarrollado por Rafael J. Lucena\nContacto: rafaa89(arroba)gmail.com</string>
     <string name="about_content_title_new_features">Últimas características y mejoras:</string>
     <string name="about_content_title_comming_soon">En próximas actualizaciones:</string>
     <string name="about_content_title_next_sites">Posible soporte para:</string>

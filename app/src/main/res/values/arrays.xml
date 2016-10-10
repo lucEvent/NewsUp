@@ -50,6 +50,7 @@
         <item>Russian</item>
         <item>Swedish</item>
         <item>Urdu</item>
+        <item>Many</item>
     </string-array>
     <string-array name="site_countries">
         <item>Germany</item>
@@ -117,6 +118,7 @@
         <item>Uruguay</item>
         <item>Venezuela</item>
         <item>Europe</item>
+        <item>World</item>
     </string-array>
     <string-array name="site_categories">
         <item>Newspapers</item>
@@ -127,6 +129,7 @@
         <item>Astronomy</item>
         <item>Science</item>
         <item>Videogames</item>
+        <item>Lifestyle</item>
     </string-array>
     <integer-array name="site_language_weights">
         <item>10</item>
@@ -147,6 +150,7 @@
         <item>20</item>
         <item>8</item>
         <item>21</item>
+        <item>22</item>
     </integer-array>
     <integer-array name="site_country_weights">
         <item>10</item>
@@ -214,6 +218,7 @@
         <item>66</item>
         <item>68</item>
         <item>8</item>
+        <item>69</item>
     </integer-array>
     <!--
     <integer-array name="site_country_weights">
@@ -282,6 +287,7 @@
         <item>66</item>
         <item>67</item>
         <item>Europa</item>
+        <item>World</item>
     </integer-array>
     -->
 

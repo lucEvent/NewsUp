@@ -1,7 +1,7 @@
 <resources>
 
     <string name="app_name" translatable="false">NewsUp</string>
-    <string name="app_version" translatable="false">1.7.2</string>
+    <string name="app_version" translatable="false">1.8.0</string>
     <string name="version">version</string>
 
     <!-- * ******************** Labels **************************** * -->
@@ -127,11 +127,12 @@
 
 
     <!-- ***************************** ***************** ********************************** -->
-    <string name="about_content_header" translatable="false">News Up 1.7.2</string>
-    <string name="about_content_contact">Developed by Rafael J. Lucena\nContact: rafaa89@gmail.com</string>
+    <string name="about_content_header" translatable="false">News Up 1.8.0</string>
+    <string name="about_content_contact">Developed by Rafael J. Lucena\nContact: rafaa89(at)gmail.com</string>
     <string name="about_content_title_new_features">Last features and improvements:</string>
     <string name="about_content_new_features" translatable="false">
-        Version 1.7.2 2016-10-02:\nNew: Report/Suggestion option.\nBookmarked news list updating fixed.\nSite selection screen now orders by device locale, and each section by site name.\nFull-translated to swedish.\nPartially translated to Finnish.\nLoading animation comes up when loading a section too now.\nMore errors fixed and improvements.\n
+        Version 1.8.0 2016-10-10:\nAdded support for newspapers \'The Herald Scotland\', \'The Guardian\', \'The New York Times\' and \'The Times of India\', and online magazines and blogs \'Clipset\', \'Elle Spain\', \'Google Earth Blog\', \'TechCrunch\', \'The Intercept\' and \'Vice\'.\n
+        \nVersion 1.7.2 2016-10-02:\nNew: Report/Suggestion option.\nBookmarked news list updating fixed.\nSite selection screen now orders by device locale, and each section by site name.\nFull-translated to swedish.\nPartially translated to Finnish.\nLoading animation comes up when loading a section too now.\nMore errors fixed and improvements.\n
         \nVersion 1.7.0 2016-09-24:\nAdded support for newspapers \'Abc\', \'Metro UK\', \'Siberian Times\' and \'USA Today\', and online magazines and blogs \'Digital Inspiration\', \'Meristation\', \'PC World\', \'The Verge\' and \'Vandal\'.\nBugs fixed.\n
         \nVersion 1.6.0 2016-09-12:\nNewsView: images, videos and iframes are hidden when there is no internet connection.\nFixed severe bug when a schedule is executed while the user is interacting with the app.\nFixed severe bug opening news from notification.\nSupport for tweets.\nNews load faster.\nAdded animation to show that news are loading.\nIntroducing notes with Pro code.\nAvoid news reloading when unnecessary.\nBug fixes and improvements.\n
         \nVersion 1.5.1 2016-07-08:\nNew sites: VilaWeb, Mashable.\nScreen overlapping on navigation back fixed, plus coherence with drawer row selected.\n
@@ -145,59 +146,55 @@
     </string>
     <string name="about_content_title_comming_soon">What\'s coming soon?:</string>
     <string name="about_content_comming_soon" translatable="false">
-        Preview on tap - like in Instagram
-        \nNew logo
-        \nNew look for list of news
-        \nImprove display of news
+        ** In next version (2.0.0) **\n
+        - Preview on tap - like in Instagram\n
+        - New look for list of news\n
+        - Many other new features and improvements\n
+        \n** In version (2.1.0) **\n
+        - Support for:\n
+        \t- La Patilla\n
+        \t- National geographic\n
+        \t- Revista cuore (Spain)\n
+        \t- Interviu\n
+        \t- Life Science Sweden\n
+        \t- Teknikensvarld\n
+        \t- TLife.guru\n
+        \t- Edx\n
+        \t- Motherboard\n
+        \t- Vice News\n
+        \t- IGN España\n
+        \t- Vogue España\n
+        \t- GoteborgsPosten\n
+        \n** Soon **\n
+        - New logo\n
+        - Improve display of news\n
     </string>
     <string name="about_content_title_next_sites">Possible support for:</string>
     <string name="about_content_next_sites" translatable="false">
         NEWSPAPERS:\n
-        - Times of india\n
-        - The Guardian\n
-        - The New York Times\n
-        - Herald Scotland\n
-        *********************\n
         - Svenska Yle (Finland)\n
-        - Daily Mail (UK)\n
-        - Independent (UK)\n
         - Sports illustrated (USA)\n
-        - The wall street journal (USA)\n
-        - NY times (USA)\n
+        - Daily Mail (UK)\n
+        - The Wall Street Journal (USA)\n
+        - Independent (UK)\n
         \nMAGAZINES:\n
         - Space.com\n
         - NASA\n
-        - The Intercept\n
-        - Vice\n
-        - Clipset\n
-        - TechCrunch\n
-        - Elle\n
-        *********************\n
-        - Idg (Sweden)\n
+        - Vagabond\n
+        - Science magazine\n
         - The bark\n
-        - National geographic\n
-        - Bestfriends.org\n
         - Nova dog magazine\n
         - Ny Teknik\n
         - Sweclockers\n
-        - Edx\n
-        - Revista cuore\n
-        - La Patilla\n
-        - Science magazine\n
-        - Interviu\n
-        - Vagabond\n
-        - Life Science Sweden\n
-        - Teknikensvarld\n
+        - Idg (Sweden)\n
         - Veckans Affärer\n
-        - FRIDA\n
         - Catalonia today\n
         - Tech Times\n
-        - IGN España\n
         - Magazine Fashion &amp; arts\n
-        \nBLOGS:\n
-        - Google Earth Blog\n
-        \nOTHER:\n
-        - Readanybook.com\n\n
+        - Astrophysical journal\n
+        - FIFA\n
+        - BuzzFeed News\n
+        - BackChannel\n\n
     </string>
 
     <!-- ***************************** ***************** ********************************** -->

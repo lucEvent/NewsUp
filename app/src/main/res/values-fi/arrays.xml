@@ -42,6 +42,7 @@
         <item>Venäjä</item>
         <item>Ruotsi</item>
         <item>Urdu</item>
+        <item>Monet</item>
     </string-array>
     <string-array name="site_countries">
         <item>Saksa</item>
@@ -109,6 +110,7 @@
         <item>Uruguay</item>
         <item>Venezuela</item>
         <item>Eurooppa</item>
+        <item>Maailman</item>
     </string-array>
     <string-array name="site_categories">
         <item>Sanomalehdet</item>
@@ -119,6 +121,7 @@
         <item>Tähtitiede</item>
         <item>Science</item>
         <item>Videopelit</item>
+        <item>Elämäntapa</item>
     </string-array>
     <integer-array name="site_language_weights">
         <item>4</item>
@@ -139,6 +142,7 @@
         <item>17</item>
         <item>2</item>
         <item>18</item>
+        <item>25</item>
     </integer-array>
     <integer-array name="site_country_weights">
         <item>10</item>
@@ -206,6 +210,7 @@
         <item>66</item>
         <item>67</item>
         <item>8</item>
+        <item>69</item>
     </integer-array>
 
 </resources>

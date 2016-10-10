@@ -32,16 +32,13 @@ public class MetroSV extends com.lucevent.newsup.data.util.NewsReader {
     {
         try {
             return org.jsoup.Jsoup.connect(pagelink).get();
-        } catch (IOException e) {
-
-            try {
-                return org.jsoup.Jsoup.connect(pagelink).timeout(10000).get();
-            } catch (IOException e2) {
-                System.out.println("[" + e2.getClass().getSimpleName() + "] No se ha podido leer: " + pagelink);
-            }
-
+        } catch (IOException ignored) {
         }
-        return null;
+        try {
+            return org.jsoup.Jsoup.connect(pagelink).timeout(10000).get();
+        } catch (IOException ignored) {
+        }
+        return super.getDocument(pagelink);
     }
 
     @Override

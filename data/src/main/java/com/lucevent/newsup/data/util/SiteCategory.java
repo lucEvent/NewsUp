@@ -12,5 +12,6 @@ public class SiteCategory {
     public static final int ASTRONOMY = 6 << shift;
     public static final int SCIENCE = 7 << shift;
     public static final int VIDEOGAMES = 8 << shift;
+    public static final int LIFESTYLE = 9 << shift;
 
 }

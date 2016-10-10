@@ -44,8 +44,7 @@ public class Meristation extends com.lucevent.newsup.data.util.NewsReader {
             return org.jsoup.Jsoup.connect(pagelink)
                     .timeout(10000)
                     .get();
-        } catch (IOException e) {
-            System.out.println("[" + e.getClass().getSimpleName() + "] Trying again");
+        } catch (IOException ignored) {
         }
         return super.getDocument(pagelink);
     }

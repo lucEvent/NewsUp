@@ -60,6 +60,9 @@ public class Date {
             if (items.length >= 6)
                 zoneOffset = estimateZoneOffset(items[5]);
 
+            if (items[4].length()==5)
+                items[4] = items[4]+":00";
+
             String day = items[1].length() == 1 ? "0" + items[1] : items[1];
 
             temp = items[3] + "-" + monthToIntString(items[2]) + "-" + day + " " + items[4];
