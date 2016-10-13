@@ -4,7 +4,11 @@ import java.io.Serializable;
 
 public class News implements Comparable<News>, Serializable {
 
+    public static final Object NEWS_STATIC_SYNCHRONIZER = new Object();
+    public static Integer SERVER_ID_ASSIGNER = 1;
+
     public int id;
+    public long server_id;
 
     public String title, link, description, content;
 

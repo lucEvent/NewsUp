@@ -28,13 +28,19 @@ public class BackendParser {
 
     public static StringBuilder toHtml(News news)
     {
-        StringBuilder res = new StringBuilder("<div class=\"nu_news\" data-featherlight=\"/web?content&site=");
-        res.append(news.site_code).append("&date=").append(news.date).append("&link=").append(news.link);
-        res.append("\"><h2>");
-        res.append(news.title);
-        res.append("</h2><p>");
-        res.append(news.description);
-        res.append("</p><br><p><small><em>");
+        StringBuilder res = new StringBuilder("<div class='news' sitecode='")
+                .append(news.site_code)
+                .append("' title=\"")
+                .append(news.title.replace("\"","'"))
+                .append("\" age='")
+                .append(Date.getAge(news.date))
+                .append("' nid='")
+                .append(news.server_id)
+                .append("'><h3>")
+                .append(news.title)
+                .append("</h3><p>")
+                .append(news.description)
+                .append("</p><br><p><small><em>");
         for (String tag : news.tags)
             res.append("<span class='tag'> ").append(tag).append(" </span>");
         res.append("</em></small></p></div>");

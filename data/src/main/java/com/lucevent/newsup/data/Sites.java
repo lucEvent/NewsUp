@@ -138,7 +138,7 @@ public class Sites extends ArrayList<Site> {
                 new com.lucevent.newsup.data.section.ElAndroideLibreSections(), new com.lucevent.newsup.data.reader.ElAndroideLibre()));
         res.add(new Site(805, "Digital Trends", 0xff0098d9, SiteCountry.USA | SiteLanguage.ENGLISH | SiteCategory.TECHNOLOGY,
                 new com.lucevent.newsup.data.section.DigitalTrendsSections(), new com.lucevent.newsup.data.reader.DigitalTrends()));
-        res.add(new Site(810, "Lifehacker", 0xff94b330, SiteCountry.SPAIN | SiteLanguage.ENGLISH | SiteCategory.TECHNOLOGY,
+        res.add(new Site(810, "Lifehacker", 0xff94b330, SiteCountry.USA | SiteLanguage.ENGLISH | SiteCategory.TECHNOLOGY,
                 new com.lucevent.newsup.data.section.LifeHackerSections(), new com.lucevent.newsup.data.reader.LifeHacker()));
         res.add(new Site(815, "Xataka", 0xff558f22, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.TECHNOLOGY,
                 new com.lucevent.newsup.data.section.XatakaSections(), new com.lucevent.newsup.data.reader.Xataka()));

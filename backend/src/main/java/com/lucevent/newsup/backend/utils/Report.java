@@ -16,6 +16,9 @@ public class Report {
     public Long time;
 
     @Unindex
+    public String appVersion;
+
+    @Unindex
     public String ip;
 
     @Unindex

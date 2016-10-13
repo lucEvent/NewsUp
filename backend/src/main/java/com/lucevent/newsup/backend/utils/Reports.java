@@ -15,10 +15,11 @@ public class Reports {
         return new ArrayList<>(ofy().load().type(Report.class).list());
     }
 
-    public void addReport(String ip, String email, String message)
+    public void addReport(String version, String ip, String email, String message)
     {
         Report r = new Report();
         r.time = System.currentTimeMillis();
+        r.appVersion = version;
         r.ip = ip;
         r.email = email;
         r.message = message;

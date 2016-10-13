@@ -98,7 +98,11 @@ public class AppServlet extends HttpServlet {
 
         } else if (req.getParameter("report") != null) {
 
-            Data.reports.addReport(req.getRemoteAddr(), req.getParameter("email"), req.getParameter("message"));
+            Data.reports.addReport(
+                    req.getParameter("version"),
+                    req.getRemoteAddr(),
+                    req.getParameter("email"),
+                    req.getParameter("message"));
 
         } else if (req.getParameter("clear") != null) {
 

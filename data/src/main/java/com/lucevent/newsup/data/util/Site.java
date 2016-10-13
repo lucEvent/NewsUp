@@ -58,8 +58,13 @@ public class Site {
         for (int isection : isections)
             res.addAll(reader.readRssHeader(sections.get(isection).url));
 
-        for (News N : res)
-            N.site_code = code;
+        synchronized (News.NEWS_STATIC_SYNCHRONIZER) {
+            for (News N : res)
+            {
+                N.site_code = code;
+                N.server_id = News.SERVER_ID_ASSIGNER++;
+            }
+        }
 
         return res;
     }
