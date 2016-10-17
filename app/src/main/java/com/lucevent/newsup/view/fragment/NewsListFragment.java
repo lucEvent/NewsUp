@@ -35,9 +35,12 @@ import com.lucevent.newsup.data.util.NewsMap;
 import com.lucevent.newsup.data.util.Section;
 import com.lucevent.newsup.data.util.Sections;
 import com.lucevent.newsup.data.util.Site;
+import com.lucevent.newsup.io.BookmarksManager;
 import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.AppData;
 import com.lucevent.newsup.kernel.NewsManager;
+import com.lucevent.newsup.net.MainChangeListener;
+import com.lucevent.newsup.permission.StoragePermissionHandler;
 import com.lucevent.newsup.services.StatisticsService;
 import com.lucevent.newsup.view.adapter.NewsAdapter;
 import com.lucevent.newsup.view.dialog.SectionsDialog;
@@ -48,7 +51,7 @@ import com.lucevent.newsup.view.util.OnBackPressedListener;
 import java.lang.ref.WeakReference;
 
 public class NewsListFragment extends android.app.Fragment implements View.OnClickListener,
-        OnBackPressedListener {
+        View.OnLongClickListener, OnBackPressedListener {
 
     public static NewsListFragment instanceFor(int site_code)
     {
@@ -89,9 +92,12 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
 
     public void setUp()
     {
-        if (currentSiteCode == lastLoadedSiteCode)
+        if (currentSiteCode == lastLoadedSiteCode) {
+            adapter.notifyDataSetChanged();
             return;
+        }
 
+        adapter.showSiteLogo(currentSite == null);
         adapter.clear();
         progressBar.setVisibility(ProgressBar.VISIBLE);
         switch (currentSiteCode) {
@@ -127,6 +133,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
     private NewsManager dataManager;
     private NewsAdapter adapter;
     private Handler handler;
+    private StoragePermissionHandler permissionHandler;
 
     private View mainView;
     private NewsView newsView;
@@ -140,15 +147,18 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
+        Context context = getActivity();
+
         handler = new Handler(this);
-        dataManager = new NewsManager(getActivity(), handler);
+        dataManager = new NewsManager(context, handler);
+        permissionHandler = new StoragePermissionHandler(context);
 
         lastLoadedSiteCode = -9;
         setSite(getArguments().getInt(AppCode.SEND_SITE_CODE));
 
         if (!AppSettings.DEBUG)
-            getActivity().startService(
-                    new Intent(getActivity(), StatisticsService.class)
+            context.startService(
+                    new Intent(context, StatisticsService.class)
                             .putExtra(AppCode.SEND_REQUEST_CODE, StatisticsService.REQ_SEND)
             );
     }
@@ -159,8 +169,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         if (adapter == null) {
             mainView = inflater.inflate(R.layout.f_news_list, container, false);
 
-            adapter = new NewsAdapter(new NewsArray(), this);
-            adapter.showSiteLogo(currentSite == null);
+            adapter = new NewsAdapter(new NewsArray(), this, this, onBookmarkClick);
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             layoutManager.setAutoMeasureEnabled(true);
@@ -179,7 +188,8 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
             recyclerView.setAdapter(adapter);
 
             newsView = (NewsView) mainView.findViewById(R.id.news_view);
-            newsView.setFragmentContext(this, ((Main) getActivity()).drawer);
+            newsView.setFragmentContext(this, getActivity() instanceof Main ? ((Main) getActivity()).drawer : null);
+            newsView.setBookmarkChangeListener(onBookmarkClick);
 
             btn_sections = (FloatingActionButton) mainView.findViewById(R.id.button_sections);
             btn_sections.setOnClickListener(onSectionsAction);
@@ -299,6 +309,13 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         });
 
         dialog.show();
+    }
+
+    @Override
+    public boolean onLongClick(View v)
+    {
+        //// TODO: 14/10/2016  
+        return false;
     }
 
     static class Handler extends android.os.Handler {
@@ -421,7 +438,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         @Override
         public boolean onMenuItemClick(MenuItem item)
         {
-            ((Main) getActivity()).onReplaceFragment(SiteSettingsFragment.instanceFor(currentSite.code), R.id.nav_settings, true);
+            ((MainChangeListener) getActivity()).onReplaceFragment(SiteSettingsFragment.instanceFor(currentSite.code), R.id.nav_settings, true);
             return true;
         }
     };
@@ -438,10 +455,34 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         }
     };
 
+    private View tempBookmarkButton;
+
+    private View.OnClickListener onBookmarkClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v)
+        {
+            if (permissionHandler.checkAndAsk(NewsListFragment.this)) {
+                News news = (News) v.getTag();
+
+                BookmarksManager.toggleBookmark(news);
+
+                newsView.setBookmarkButtonImage(v);
+                adapter.update(news);
+
+            } else
+                tempBookmarkButton = v;
+        }
+    };
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults)
     {
-        newsView.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (permissionHandler.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
+            News news = (News) tempBookmarkButton.getTag();
+            BookmarksManager.toggleBookmark(news);
+            newsView.setBookmarkButtonImage(tempBookmarkButton);
+            adapter.update(news);
+        }
     }
 
 }

@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ContextThemeWrapper;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -31,6 +32,7 @@ public class DownloadScheduleEditorActivity extends AppCompatActivity {
 
     public static final int ACTION_CREATE = 0;
     public static final int ACTION_MODIFY = 1;
+    public static final int ACTION_CREATE_ONE = 2;
 
     private int action;
     private DownloadSchedule originalSchedule;
@@ -81,6 +83,15 @@ public class DownloadScheduleEditorActivity extends AppCompatActivity {
             selected_sites = new HashSet<>(originalSchedule.sites_codes.length);
             for (int code : originalSchedule.sites_codes)
                 selected_sites.add(Integer.toString(code));
+        } else if (action == ACTION_CREATE_ONE) {
+            int site_code = (int) getIntent().getExtras().get(AppCode.SEND_SITE_CODE);
+
+            Button ss = (Button) findViewById(R.id.select_sites);
+            ss.setText(AppData.getSiteByCode(site_code).name);
+            ss.setEnabled(false);
+
+            selected_sites = new HashSet<>(1);
+            selected_sites.add(Integer.toString(site_code));
         }
     }
 
@@ -173,8 +184,8 @@ public class DownloadScheduleEditorActivity extends AppCompatActivity {
 
         int[] sites_codes = new int[selected_sites.size()];
         int index = 0;
-        for (String scode : selected_sites)
-            sites_codes[index++] = Integer.parseInt(scode);
+        for (String site_code : selected_sites)
+            sites_codes[index++] = Integer.parseInt(site_code);
 
         ScheduleManager dataManager = new ScheduleManager(this);
         if (action == ACTION_MODIFY) {
@@ -189,6 +200,7 @@ public class DownloadScheduleEditorActivity extends AppCompatActivity {
         } else
             dataManager.createDownloadSchedule(hour, minute, notify, repeat, days, sites_codes);
 
+        Toast.makeText(this, R.string.msg_download_set_successfully, Toast.LENGTH_SHORT).show();
         setResult(RESULT_OK);
         finish();
     }

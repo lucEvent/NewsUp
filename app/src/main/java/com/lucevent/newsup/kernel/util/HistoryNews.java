@@ -14,6 +14,15 @@ public class HistoryNews extends News {
         this.site_code = site_code;
     }
 
+    public News toNews()
+    {
+        News res = new News(id, title, link, description, date, tags);
+        res.content = content;
+        res.enclosures = enclosures;
+        res.site_code = site_code;
+        return res;
+    }
+
     @Override
     public int compareTo(News o)
     {

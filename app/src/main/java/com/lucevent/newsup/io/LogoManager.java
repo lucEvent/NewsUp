@@ -2,6 +2,8 @@ package com.lucevent.newsup.io;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 
 import com.lucevent.newsup.AppSettings;
@@ -61,6 +63,16 @@ public class LogoManager {
             }
         }
         return res;
+    }
+
+    public static Bitmap getBitmap(int site_code)
+    {
+        try {
+            return BitmapFactory.decodeStream(dataManager.open(site_code + ".png"));
+        } catch (Exception e) {
+            AppSettings.printerror("[LM] [EXCEPTION] Couldn't read asset " + site_code + ".png", e);
+        }
+        return null;
     }
 
 }

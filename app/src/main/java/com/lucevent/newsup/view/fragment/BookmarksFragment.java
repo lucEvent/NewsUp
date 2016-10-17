@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,22 +23,24 @@ import com.lucevent.newsup.data.util.NewsMap;
 import com.lucevent.newsup.io.BookmarksManager;
 import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.NewsManager;
+import com.lucevent.newsup.permission.StoragePermissionHandler;
 import com.lucevent.newsup.view.adapter.NewsAdapter;
 import com.lucevent.newsup.view.util.ContentLoader;
 import com.lucevent.newsup.view.util.NewsView;
 import com.lucevent.newsup.view.util.OnBackPressedListener;
-import com.lucevent.newsup.view.util.OnBookmarkChangeListener;
 
 import java.lang.ref.WeakReference;
 
 public class BookmarksFragment extends android.app.Fragment implements View.OnClickListener,
-        OnBackPressedListener, OnBookmarkChangeListener {
+        View.OnLongClickListener, OnBackPressedListener {
 
-    private BookmarksManager dataManager;
     private NewsAdapter adapter;
     private NewsMap bookmarks;
 
     private NewsView newsView;
+    private Handler handler;
+    private StoragePermissionHandler permissionHandler;
+    private boolean displayingNews = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -45,9 +48,10 @@ public class BookmarksFragment extends android.app.Fragment implements View.OnCl
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        dataManager = new BookmarksManager(new Handler(this));
+        handler = new Handler(this);
+        permissionHandler = new StoragePermissionHandler(getActivity());
 
-        adapter = new NewsAdapter(new NewsArray(), this);
+        adapter = new NewsAdapter(new NewsArray(), this, this, onBookmarkClick);
         adapter.showSiteLogo(true);
     }
 
@@ -85,15 +89,13 @@ public class BookmarksFragment extends android.app.Fragment implements View.OnCl
 
         newsView = (NewsView) view.findViewById(R.id.news_view);
         newsView.setFragmentContext(this, ((Main) getActivity()).drawer);
-        newsView.setBookmarkChangeListener(this);
+        newsView.setBookmarkChangeListener(onBookmarkClick);
 
         view.findViewById(R.id.button_sections).setVisibility(View.GONE);
 
-        dataManager.getBookmarkedNews();
+        BookmarksManager.getBookmarkedNews(handler);
         return view;
     }
-
-    private boolean displayingNews = false;
 
     @Override
     public boolean onBackPressed()
@@ -118,10 +120,54 @@ public class BookmarksFragment extends android.app.Fragment implements View.OnCl
     }
 
     @Override
-    public void onBookmarkChange()
+    public boolean onLongClick(View v)
     {
-        adapter.setNewDataSet(bookmarks);
+        //// TODO: 14/10/2016
+        return false;
     }
+
+    private MenuItem.OnMenuItemClickListener onDeleteAllAction = new MenuItem.OnMenuItemClickListener() {
+        @Override
+        public boolean onMenuItemClick(MenuItem item)
+        {
+            new AlertDialog.Builder(getActivity())
+                    .setMessage(R.string.msg_confirm_to_remove_all_saved_news)
+                    .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            BookmarksManager.removeAllEntries();
+                            adapter.clear();
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, null)
+                    .show();
+            return true;
+        }
+    };
+
+    private View tempBookmarkButton;
+
+    private View.OnClickListener onBookmarkClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v)
+        {
+            if (permissionHandler.checkAndAsk(BookmarksFragment.this)) {
+                News news = (News) v.getTag();
+
+                if (BookmarksManager.isBookmarked(news)) {
+                    bookmarks.remove(news);
+                    adapter.remove(news);
+                } else {
+                    bookmarks.add(news);
+                    adapter.setNewDataSet(bookmarks);
+                }
+                BookmarksManager.toggleBookmark(news);
+                newsView.setBookmarkButtonImage(v);
+            } else
+                tempBookmarkButton = v;
+        }
+    };
 
     static class Handler extends android.os.Handler {
 
@@ -150,24 +196,13 @@ public class BookmarksFragment extends android.app.Fragment implements View.OnCl
         }
     }
 
-    private MenuItem.OnMenuItemClickListener onDeleteAllAction = new MenuItem.OnMenuItemClickListener() {
-        @Override
-        public boolean onMenuItemClick(MenuItem item)
-        {
-            new AlertDialog.Builder(getActivity())
-                    .setMessage(R.string.msg_confirm_to_remove_all_saved_news)
-                    .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-                            dataManager.removeAllEntries();
-                            adapter.clear();
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel, null)
-                    .show();
-            return true;
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults)
+    {
+        if (permissionHandler.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
+            BookmarksManager.toggleBookmark((News) tempBookmarkButton.getTag());
+            newsView.setBookmarkButtonImage(tempBookmarkButton);
         }
-    };
+    }
 
 }

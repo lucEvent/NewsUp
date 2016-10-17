@@ -42,7 +42,7 @@ class Data {
             ObjectifyService.run(new VoidWork() {
                 public void vrun()
                 {
-                    stats = Statistics.initialize(sites);
+                    stats = Statistics.getInstance();
                 }
             });
 

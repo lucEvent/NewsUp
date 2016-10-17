@@ -40,7 +40,7 @@ public class ScheduleManager extends NewsManager {
                                                    boolean repeat, boolean[] days, int[] sites_codes)
     {
         DownloadSchedule schedule = dbmanager.insertDownloadSchedule(hour, minute, notify, repeat, days, sites_codes);
-        downloadSchedules.add(schedule);
+        getDownloadSchedules().add(schedule);
         return schedule;
     }
 

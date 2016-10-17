@@ -4,7 +4,7 @@ import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
 import com.lucevent.newsup.backend.utils.BackendParser;
 import com.lucevent.newsup.backend.utils.Report;
-import com.lucevent.newsup.backend.utils.SiteStat;
+import com.lucevent.newsup.backend.utils.SiteStats;
 import com.lucevent.newsup.backend.utils.Statistics;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
@@ -44,7 +44,7 @@ public class AppServlet extends HttpServlet {
 
             Site site = Data.sites.getSiteByCode(Integer.parseInt(parts[0]));
             if (req.getParameter("nc") == null)
-                Data.stats.count(Data.sites.indexOf(site), req.getRemoteAddr());
+                Data.stats.count(site, req.getRemoteAddr(), req.getParameter("v"));
 
             int[] sections = new int[parts.length - 1];
             for (int i = 0; i < sections.length; i++) {
@@ -80,7 +80,7 @@ public class AppServlet extends HttpServlet {
         } else if (req.getParameter("stats") != null) {
 
             if (req.getParameter("reset") != null)
-                Data.stats.reset(Data.sites);
+                Data.stats.reset();
 
             String options = req.getParameter("options");
             StringBuilder sb = new StringBuilder();
@@ -92,8 +92,8 @@ public class AppServlet extends HttpServlet {
 
             String[] values = req.getParameter("values").split(",");
             for (int i = 0; i < values.length; i += 2) {
-                int site_index = Data.sites.getIndexByCode(Integer.parseInt(values[i]));
-                Data.stats.read(site_index, Integer.parseInt(values[i + 1]));
+                Site site = Data.sites.getSiteByCode(Integer.parseInt(values[i]));
+                Data.stats.read(site, Integer.parseInt(values[i + 1]));
             }
 
         } else if (req.getParameter("report") != null) {
@@ -113,19 +113,12 @@ public class AppServlet extends HttpServlet {
     }
 
     @Override
-    public void destroy()
-    {
-        super.destroy();
-        Data.stats.save();
-    }
-
-    @Override
     public void init() throws ServletException
     {
         super.init();
 
         ObjectifyFactory oFactory = ObjectifyService.factory();
-        oFactory.register(SiteStat.class);
+        oFactory.register(SiteStats.class);
         oFactory.register(Statistics.class);
         oFactory.register(Report.class);
         oFactory.begin();

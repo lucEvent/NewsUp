@@ -5,8 +5,9 @@ import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Ignore;
 import com.googlecode.objectify.annotation.Unindex;
 import com.googlecode.objectify.cmd.LoadType;
-import com.lucevent.newsup.data.Sites;
 import com.lucevent.newsup.data.util.Site;
+
+import java.util.ArrayList;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
@@ -22,11 +23,7 @@ public class Statistics {
     @Ignore
     public Long lastStart;
 
-    @Unindex
-    private SiteStat[] siteStats;
-
-
-    public static Statistics initialize(Sites sites)
+    public static Statistics getInstance()
     {
         LoadType<Statistics> db = ofy().load().type(Statistics.class);
 
@@ -39,7 +36,7 @@ public class Statistics {
         } else {
 
             statistics = new Statistics();
-            initializeStats(statistics, sites);
+            initializeStats(statistics);
 
             ofy().save().entity(statistics).now();
 
@@ -47,55 +44,65 @@ public class Statistics {
         return statistics;
     }
 
-    public void count(int position, String ip)
+    public void count(Site site, String ip, String version)
     {
         synchronized (this) {
-            siteStats[position].nAccesses++;
-            siteStats[position].lastAccess = System.currentTimeMillis();
-            siteStats[position].lastIp = ip;
-            ofy().save().entity(this);//save()    //possible improvement? save only when the server instance is destroyed
+            SiteStats siteStats = getSiteStats(site);
+            siteStats.nAccesses++;
+            siteStats.lastAccess = System.currentTimeMillis();
+            siteStats.lastIp = ip;
+            siteStats.fromVersion = version;
+            ofy().save().entity(siteStats).now();
         }
     }
 
-    public void read(int position, int n)
+    public void read(Site site, int n)
     {
         synchronized (this) {
-            siteStats[position].nNewsRead += n;
-            ofy().save().entity(this);//save()    //possible improvement? save only when the server instance is destroyed
+            SiteStats siteStats = getSiteStats(site);
+            siteStats.nNewsRead += n;
+            ofy().save().entity(siteStats).now();
         }
     }
 
-    public SiteStat[] getSiteStats()
+    public ArrayList<SiteStats> getSiteStats()
     {
-        return siteStats;
+        return new ArrayList<>(ofy().load().type(SiteStats.class).list());
     }
 
-    public void save()
+    public void reset()
     {
+        initializeStats(this);
         ofy().save().entity(this).now();
+        ofy().delete().entities(
+                ofy().load().type(SiteStats.class).list()
+        );
     }
 
-    public void reset(Sites sites)
-    {
-        initializeStats(this, sites);
-        ofy().save().entity(this).now();
-    }
-
-    private static void initializeStats(Statistics stats, Sites sites)
+    private static void initializeStats(Statistics stats)
     {
         stats.since = System.currentTimeMillis();
         stats.lastStart = System.currentTimeMillis();
-        stats.siteStats = new SiteStat[sites.size()];
-        for (int i = 0; i < sites.size(); i++) {
-            Site site = sites.get(i);
-            stats.siteStats[i] = new SiteStat();
-            stats.siteStats[i].siteName = site.name;
-            stats.siteStats[i].siteCode = site.code;
-            stats.siteStats[i].nAccesses = 0;
-            stats.siteStats[i].nNewsRead = 0;
-            stats.siteStats[i].lastAccess = 0;
-            stats.siteStats[i].lastIp = "";
+    }
+
+    private SiteStats getSiteStats(Site site)
+    {
+        SiteStats res = ofy().load().type(SiteStats.class)
+                .id(site.code)
+                .now();
+
+        if (res == null) {
+            res = new SiteStats();
+            res.siteName = site.name;
+            res.siteCode = site.code;
+            res.nAccesses = 0;
+            res.nNewsRead = 0;
+            res.lastAccess = 0;
+            res.lastIp = "";
+            res.fromVersion = "";
         }
+
+        return res;
     }
 
 }

@@ -2,30 +2,35 @@ package com.lucevent.newsup.backend.utils;
 
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Unindex;
 
 @Entity
-public class SiteStat {
+public class SiteStats {
 
     @Unindex
-    public String siteName;
+    String siteName;
 
     @Id
-    public long siteCode;
+    @Index
+    long siteCode;
 
     @Unindex
-    public int nAccesses;
+    int nAccesses;
 
     @Unindex
-    public int nNewsRead;
+    int nNewsRead;
 
     @Unindex
-    public long lastAccess;
+    long lastAccess;
 
     @Unindex
-    public String lastIp;
+    String lastIp;
 
-    public SiteStat()
+    @Unindex
+    String fromVersion;
+
+    SiteStats()
     {
     }
 

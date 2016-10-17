@@ -55,6 +55,7 @@ public class Abc extends com.lucevent.newsup.data.util.NewsReader {
         if (news.content.isEmpty()) {
             Document d = Jsoup.parse(news.description);
             d.select(".remision-galeria").remove();
+            d.select("h1,h2").tagName("h3");
 
             news.content = d.outerHtml();
 

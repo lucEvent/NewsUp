@@ -4,8 +4,8 @@
 
     <!-- * ******************** Labels **************************** * -->
     <string name="my_news">Mina nyheter</string>
-    <string name="saved_for_later">Bokmärkta nyheter</string>
-    <string name="read_news">Lästa nyheter</string>
+    <string name="bookmarks">Bokmärken</string>
+    <string name="read_news">Nyligen lästa</string>
     <string name="settings">Inställningar</string>
     <string name="statistics">Statistiker</string>
     <string name="about">Om</string>
@@ -82,7 +82,6 @@
     <string name="msg_unlocked_notes">Anteckningar olåsta</string>
     <string name="msg_app_must_restart_to_apply_changes">App måste startas om för att verkställa ändringarna</string>
     <string name="msg_disk_permission_denied">du kan INTE bokmärke nyheter tills du bevilja tillstånd</string>
-    <string name="msg_read_phone_state_permission_denied">Utan detta tillstånd, kan vi inte lägga om nedladdningarna efter en telefon omstart</string>
     <string name="msg_empty_input">Tom ingång</string>
 
 

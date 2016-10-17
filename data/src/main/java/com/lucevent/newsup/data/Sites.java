@@ -27,7 +27,7 @@ public class Sites extends ArrayList<Site> {
 
     public static Sites getDefault(boolean finnishSites)
     {
-        Sites res = new Sites(60);
+        Sites res = new Sites(80);
         // Spanish newspapers
         res.add(new Site(100, "El Pais", 0xffffffff, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.NEWSPAPER,
                 new com.lucevent.newsup.data.section.ElPaisSections(), new com.lucevent.newsup.data.reader.ElPais()));
@@ -95,7 +95,6 @@ public class Sites extends ArrayList<Site> {
             res.add(new Site(415, "Yle", 0xff00b4c4, SiteCountry.FINLAND | SiteLanguage.FINNISH | SiteCategory.NEWSPAPER,
                     new com.lucevent.newsup.data.section.YleSections(), new com.lucevent.newsup.data.reader.Yle()));
         }
-//        res.add(new Site(420, "Yle Svenska", 0xff, new com.lucevent.newsup.data.section.YleSvenskaSections(), new com.lucevent.newsup.data.reader.YleSvenska()));
 
         // British newspapers
         res.add(new Site(500, "BBC", 0xffa62e30, SiteCountry.UK | SiteLanguage.ENGLISH | SiteCategory.NEWSPAPER,
@@ -130,8 +129,6 @@ public class Sites extends ArrayList<Site> {
                 new com.lucevent.newsup.data.section.SiberianTimesSections(), new com.lucevent.newsup.data.reader.SiberianTimes()));
         res.add(new Site(725, "The Times of India", 0xff8e1e1d, SiteCountry.INDIA | SiteLanguage.ENGLISH | SiteCategory.NEWSPAPER,
                 new com.lucevent.newsup.data.section.TheTimesOfIndiaSections(), new com.lucevent.newsup.data.reader.TheTimesOfIndia()));
-//        res.add(new Site(705, "The Huffington Post (Australia)", 0xff2c705f, new com.lucevent.newsup.data.section.HuffingtonPostAustraliaSections(), new com.lucevent.newsup.data.reader.HuffingtonPostAustralia()));
-//        res.add(new Site(710, "The Huffington Post (Brasil)", 0xff2c705f, new com.lucevent.newsup.data.section.HuffingtonPostBrasilSections(), new com.lucevent.newsup.data.reader.HuffingtonPostBrasil()));
 
         // Technology sites
         res.add(new Site(800, "El Androide Libre", 0xffa3c23e, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.TECHNOLOGY,
@@ -197,11 +194,8 @@ public class Sites extends ArrayList<Site> {
 
         res.add(new Site(1035, "Dogster", 0xff547a94, SiteCountry.USA | SiteLanguage.ENGLISH | SiteCategory.MAGAZINE,
                 new com.lucevent.newsup.data.section.DogsterSections(), new com.lucevent.newsup.data.reader.Dogster()));
-//        res.add(new Site(, "The Bark", 0xff, new com.lucevent.newsup.data.section.TheBarkSections(), new com.lucevent.newsup.data.reader.TheBark()));
-
         res.add(new Site(1040, "El Jueves", 0xffcb1f1f, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.MAGAZINE,
                 new com.lucevent.newsup.data.section.ElJuevesSections(), new com.lucevent.newsup.data.reader.ElJueves()));
-//        res.add(new Site(, "National Geographic", 0xff, new com.lucevent.newsup.data.section.NationalGeographicSections(), new com.lucevent.newsup.data.reader.NationalGeographic()));
 
         // Astronomy (1200)
         res.add(new Site(1030, "Sky and Telescope", 0xffd92326, SiteCountry.USA | SiteLanguage.ENGLISH | SiteCategory.ASTRONOMY,
@@ -210,8 +204,6 @@ public class Sites extends ArrayList<Site> {
                 new com.lucevent.newsup.data.section.SpaceNewsSections(), new com.lucevent.newsup.data.reader.SpaceNews()));
         //       res.add(new Site(1210, "Space.com", 0xff000000, SiteCountry.USA | SiteLanguage.ENGLISH | SiteCategory.ASTRONOMY,
         //               new com.lucevent.newsup.data.section.SpaceSections(), new com.lucevent.newsup.data.reader.Space()));
-        //      res.add(new Site(1215, "NASA", 0xffxxxxxx, SiteCountry.USA | SiteLanguage.ENGLISH | SiteCategory.ASTRONOMY,
-        //              new com.lucevent.newsup.data.section.NASASections(), new com.lucevent.newsup.data.reader.NASA()));
 
         // Videogames (1300)
         res.add(new Site(1300, "Meristation", 0xffff6a00, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.VIDEOGAMES,
@@ -237,16 +229,6 @@ public class Sites extends ArrayList<Site> {
                 return site;
 
         return null;
-    }
-
-    public int getIndexByCode(int code)
-    {
-        for (int i = 0; i < size(); i++) {
-            Site site = get(i);
-            if (site.code == code)
-                return i;
-        }
-        return -1;
     }
 
 }

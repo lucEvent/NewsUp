@@ -4,8 +4,8 @@
 
     <!-- * ******************** Labels **************************** * -->
     <string name="my_news">Mis noticias</string>
-    <string name="saved_for_later">Noticias marcadas</string>
-    <string name="read_news">Noticias leídas</string>
+    <string name="bookmarks">Marcadores</string>
+    <string name="read_news">Leídas recientemente</string>
     <string name="settings">Configuración</string>
     <string name="statistics">Estadísticas</string>
     <string name="about">Información</string>
@@ -82,7 +82,6 @@
     <string name="msg_invalid_code">Código inválido</string>
     <string name="msg_app_must_restart_to_apply_changes">Debes reiniciar la app para aplicar cambios</string>
     <string name="msg_disk_permission_denied">NO podrás marcar noticias hasta que no concedas este permiso</string>
-    <string name="msg_read_phone_state_permission_denied">Sin este permiso, las descargas no podrán reprogramarse tras un reinicio del dispositivo</string>
     <string name="msg_confirm_to_reset_statistics">Confirma para restaurar las estadísticas</string>
     <string name="msg_empty_input">Anotación vacía</string>
 

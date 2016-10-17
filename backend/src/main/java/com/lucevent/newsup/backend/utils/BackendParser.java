@@ -1,6 +1,7 @@
 package com.lucevent.newsup.backend.utils;
 
 import com.lucevent.newsup.data.util.Date;
+import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.Section;
@@ -22,7 +23,10 @@ public class BackendParser {
         if (news.content != null && !news.content.isEmpty()) res.append(news.content);
         res.append("</content><categories>");
         res.append(news.tags.toString());
-        res.append("</categories></item>");
+        res.append("</categories>");
+        for (Enclosure e : news.enclosures)
+            res.append("<enclosure>").append(e.src).append("</enclosure>");
+        res.append("</item>");
         return res;
     }
 
@@ -31,7 +35,7 @@ public class BackendParser {
         StringBuilder res = new StringBuilder("<div class='news' sitecode='")
                 .append(news.site_code)
                 .append("' title=\"")
-                .append(news.title.replace("\"","'"))
+                .append(news.title.replace("\"", "'"))
                 .append("\" age='")
                 .append(Date.getAge(news.date))
                 .append("' nid='")
@@ -71,33 +75,34 @@ public class BackendParser {
     public static StringBuilder toHtml(Statistics stats, String options)
     {
         StringBuilder sb = new StringBuilder();
+        sb.append("<span class='starts'>Since ").append(Date.getAge(stats.since));
+        sb.append(" / Last start ").append(Date.getAge(stats.lastStart)).append("</span>");
 
         StatisticsSet statisticsSet;
 
         if (options.contains("s")) {
-            sb.append("\n # Statistics ordered by site name #\n\n");
+            sb.append("<span class='order'>site name</span>");
             statisticsSet = new StatisticsSet(stats.getSiteStats(), StatisticsSet.CMP_SITE_NAME);
             appendHtml(sb, statisticsSet);
         }
         if (options.contains("n")) {
-            sb.append("\n # Statistics ordered by number of requests #\n\n");
+            sb.append("<span class='order'>number of requests</span>");
             statisticsSet = new StatisticsSet(stats.getSiteStats(), StatisticsSet.CMP_N_ACCESSES);
             appendHtml(sb, statisticsSet);
         }
         if (options.contains("t")) {
-            sb.append("\n # Statistics ordered by last access time #\n\n");
+            sb.append("<span class='order'>last access time</span>");
             statisticsSet = new StatisticsSet(stats.getSiteStats(), StatisticsSet.CMP_LAST_ACCESS);
             appendHtml(sb, statisticsSet);
         }
         if (options.contains("r")) {
-            sb.append("\n # Statistics ordered by readings #\n\n");
+            sb.append("<span class='order'>readings</span>");
             statisticsSet = new StatisticsSet(stats.getSiteStats(), StatisticsSet.CMP_READINGS);
             appendHtml(sb, statisticsSet);
         }
 
         if (options.isEmpty()) {
-            SiteStat[] siteStats = stats.getSiteStats();
-            for (SiteStat ss : siteStats)
+            for (SiteStats ss : stats.getSiteStats())
                 if (ss.nAccesses != 0)
                     sb.append("\t").append(ss.siteName).append(": ").append(ss.nAccesses).append(" requests\n");
         }
@@ -108,24 +113,38 @@ public class BackendParser {
 
     private static void appendHtml(StringBuilder sb, StatisticsSet statisticsSet)
     {
-        for (SiteStat ss : statisticsSet)
+        sb.append("<table><tr>" +
+                "<th>Site</th>" +
+                "<th># Accesses</th>" +
+                "<th># Readings</th>" +
+                "<th>Last access</th>" +
+                "<th>Last ip</th>" +
+                "<th>From version</th>" +
+                "</tr>");
+
+        for (SiteStats ss : statisticsSet)
             if (ss.nAccesses > 0)
-                sb.append("\t").append(ss.siteName).append(":").append(paddings[(ss.siteName.length() + 1) >> 3])
-                        .append(ss.nAccesses).append(" requests\t")
-                        .append(ss.nNewsRead).append(" reads |\t[last ")
-                        .append(Date.getAge(ss.lastAccess))
-                        .append("]\t[from ").append(ss.lastIp).append("]\n");
+                sb.append("<tr><td>").append(ss.siteName)
+                        .append("</td><td>").append(ss.nAccesses)
+                        .append("</td><td>").append(ss.nNewsRead)
+                        .append("</td><td>").append(Date.getAge(ss.lastAccess))
+                        .append("</td><td>").append(ss.lastIp)
+                        .append("</td><td>").append(ss.fromVersion)
+                        .append("</td></tr>");
+
+        sb.append("</table>");
     }
 
     private static void appendEntries(StringBuilder sb, StatisticsSet statisticsSet)
     {
-        for (SiteStat ss : statisticsSet)
+        for (SiteStats ss : statisticsSet)
             if (ss.nAccesses > 0)
                 sb.append("<site cd='").append(ss.siteCode)
                         .append("' rq='").append(ss.nAccesses)
                         .append("' rd='").append(ss.nNewsRead)
                         .append("' lt='").append(ss.lastAccess)
                         .append("' ip='").append(ss.lastIp)
+                        .append("' v='").append(ss.fromVersion)
                         .append("'/>");
     }
 

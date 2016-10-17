@@ -44,6 +44,7 @@
             android:background="@color/colorPrimary"
             android:gravity="bottom"
             android:paddingBottom="10dp"
+            android:paddingEnd="10dp"
             android:paddingStart="20dp"
             android:text="@string/schedule_download"
             android:textAppearance="?android:attr/textAppearanceMedium"
@@ -130,6 +131,7 @@
                     android:clickable="true"
                     android:onClick="onCheckboxStateChange"
                     android:paddingBottom="5dp"
+                    android:paddingEnd="10dp"
                     android:paddingStart="10dp"
                     android:paddingTop="5dp">
 
@@ -141,7 +143,7 @@
                         android:background="@null"
                         android:checked="true"
                         android:clickable="false"
-                        android:padding="5dip"
+                        android:padding="5dp"
                         android:text="@string/repeat"/>
 
                 </LinearLayout>
@@ -154,6 +156,7 @@
                     android:clickable="true"
                     android:onClick="onCheckboxStateChange"
                     android:paddingBottom="5dp"
+                    android:paddingEnd="10dp"
                     android:paddingStart="10dp"
                     android:paddingTop="5dp">
 
@@ -165,7 +168,7 @@
                         android:background="@null"
                         android:checked="true"
                         android:clickable="false"
-                        android:padding="5dip"
+                        android:padding="5dp"
                         android:text="@string/notify"/>
 
                 </LinearLayout>

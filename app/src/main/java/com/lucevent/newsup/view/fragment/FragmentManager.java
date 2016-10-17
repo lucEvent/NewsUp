@@ -3,6 +3,7 @@ package com.lucevent.newsup.view.fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.util.Pair;
 
@@ -19,7 +20,7 @@ public class FragmentManager {
 
     public Fragment currentFragment;
 
-    public FragmentManager(Activity context, NavigationView navigationView, int containerId)
+    public FragmentManager(Activity context, @Nullable NavigationView navigationView, int containerId)
     {
         this.fManager = context.getFragmentManager();
         this.navigationView = navigationView;
@@ -70,7 +71,8 @@ public class FragmentManager {
         stack.remove(stackSize);
         stackSize--;
 
-        navigationView.setCheckedItem(stack.get(stackSize).first);
+        if (navigationView != null)
+            navigationView.setCheckedItem(stack.get(stackSize).first);
 
         currentFragment = stack.get(stackSize).second;
         return currentFragment;
@@ -90,7 +92,8 @@ public class FragmentManager {
         stack.add(tmp);
         stackSize = 0;
 
-        navigationView.setCheckedItem(tmp.first);
+        if (navigationView != null)
+            navigationView.setCheckedItem(tmp.first);
 
         currentFragment = tmp.second;
         return currentFragment;

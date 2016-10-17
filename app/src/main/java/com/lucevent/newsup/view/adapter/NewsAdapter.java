@@ -9,26 +9,31 @@ import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.NewsMap;
+import com.lucevent.newsup.io.BookmarksManager;
 import com.lucevent.newsup.view.adapter.viewholder.NewsViewHolder;
 
 import java.util.Collection;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> {
 
-    public static final int CHUNK = 15;
+    private static final int CHUNK = 15;
 
     private int dataSetVisibleCount;
 
     private final NewsMap dataMap;
     private final NewsArray dataSet;
-    private View.OnClickListener itemListener;
+    private final View.OnClickListener onClick, onBookmarkClick;
+    private final View.OnLongClickListener onLongClick;
 
     private boolean showSiteLogo;
 
-    public NewsAdapter(NewsArray dataSet, View.OnClickListener itemListener)
+    public NewsAdapter(NewsArray dataSet, View.OnClickListener onClick, View.OnLongClickListener onLongClick,
+                       View.OnClickListener onBookmarkClick)
     {
         this.dataSet = dataSet;
-        this.itemListener = itemListener;
+        this.onClick = onClick;
+        this.onLongClick = onLongClick;
+        this.onBookmarkClick = onBookmarkClick;
         this.dataSetVisibleCount = Math.min(CHUNK, dataSet.size());
 
         this.dataMap = new NewsMap();
@@ -39,25 +44,22 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> {
     public NewsViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.i_news, parent, false);
-        v.setOnClickListener(itemListener);
-        return new NewsViewHolder(v);
+        v.setOnClickListener(onClick);
+        v.setOnLongClickListener(onLongClick);
+        return new NewsViewHolder(v, onBookmarkClick);
     }
 
     @Override
     public void onBindViewHolder(NewsViewHolder holder, int position)
     {
-        NewsViewHolder.populateViewHolder(holder, dataSet.get(position), showSiteLogo);
+        News news = dataSet.get(position);
+        NewsViewHolder.populateViewHolder(holder, news, showSiteLogo, BookmarksManager.isBookmarked(news));
     }
 
     @Override
     public int getItemCount()
     {
         return dataSetVisibleCount;
-    }
-
-    public int getActualItemCount()
-    {
-        return dataSet.size();
     }
 
     public void loadMoreData()
@@ -113,6 +115,32 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> {
             else
                 notifyItemRangeChanged(0, dataSetVisibleCount);
         }
+    }
+
+    public void remove(News news)
+    {
+        int position = -1;
+        for (int i = 0; i < dataSet.size(); i++) {
+            if (dataSet.get(i).compareTo(news) == 0) {
+                position = i;
+                break;
+            }
+        }
+        dataSet.remove(position);
+        dataSetVisibleCount--;
+        notifyItemRemoved(position);
+    }
+
+    public void update(News news)
+    {
+        int position = -1;
+        for (int i = 0; i < dataSet.size(); i++) {
+            if (dataSet.get(i).id == news.id) {
+                position = i;
+                break;
+            }
+        }
+        notifyItemChanged(position);
     }
 
     public void clear()

@@ -5,21 +5,15 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:fontFamily">sans-serif</item>
     </style>
 
     <style name="listItemContainer">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginBottom">@dimen/i_margin_top_bottom</item>
-        <item name="android:layout_marginLeft">@dimen/i_margin_left_right</item>
-        <item name="android:layout_marginRight">@dimen/i_margin_left_right</item>
-        <item name="android:layout_marginTop">@dimen/i_margin_top_bottom</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:elevation">@dimen/i_item_elevation</item>
         <item name="android:background">@drawable/ripple</item>
-        <item name="android:elevation">@dimen/i_elevation</item>
-        <item name="android:paddingBottom">10dip</item>
-        <item name="android:paddingLeft">15dip</item>
-        <item name="android:paddingRight">15dip</item>
-        <item name="android:paddingTop">15dip</item>
     </style>
 
     <style name="themeDialog" parent="Base.Theme.AppCompat.Dialog">

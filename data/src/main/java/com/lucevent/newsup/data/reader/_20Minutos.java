@@ -23,6 +23,7 @@ public class _20Minutos extends com.lucevent.newsup.data.util.NewsReader {
     {
         org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(prop.text());
         doc.select("body > br, body > img, body > a").remove();
+        doc.select("h1,h2").tagName("h3");
 
         return doc.select("body").html();
     }

@@ -11,7 +11,7 @@
         <item
             android:id="@+id/nav_saved_news"
             android:icon="@drawable/ic_bookmark"
-            android:title="@string/saved_for_later"/>
+            android:title="@string/bookmarks"/>
         <item
             android:id="@+id/nav_read_news"
             android:icon="@drawable/ic_history"

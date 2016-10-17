@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:fontFamily">sans-serif</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -20,15 +21,8 @@
     <style name="listItemContainer">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginBottom">@dimen/i_margin_top_bottom</item>
-        <item name="android:layout_marginLeft">@dimen/i_margin_left_right</item>
-        <item name="android:layout_marginRight">@dimen/i_margin_left_right</item>
-        <item name="android:layout_marginTop">@dimen/i_margin_top_bottom</item>
+        <item name="android:layout_marginBottom">10dp</item>
         <item name="android:background">@drawable/sel_list_item</item>
-        <item name="android:paddingBottom">10dip</item>
-        <item name="android:paddingLeft">15dip</item>
-        <item name="android:paddingRight">15dip</item>
-        <item name="android:paddingTop">15dip</item>
     </style>
 
     <style name="dayPicker">

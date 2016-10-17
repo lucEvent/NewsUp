@@ -21,6 +21,7 @@ import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.AppData;
 import com.lucevent.newsup.kernel.NewsManager;
 import com.lucevent.newsup.kernel.ScheduleManager;
+import com.lucevent.newsup.net.MainChangeListener;
 import com.lucevent.newsup.services.util.DownloadSchedule;
 
 import java.text.DecimalFormat;
@@ -153,7 +154,7 @@ public class AppSettingsFragment extends PreferenceFragment
         @Override
         public boolean onPreferenceClick(Preference preference)
         {
-            ((Main) getActivity()).onReplaceFragment(new ScheduleDownloadSettingsFragment(), R.id.nav_settings, true);
+            ((MainChangeListener) getActivity()).onReplaceFragment(new ScheduleDownloadSettingsFragment(), R.id.nav_settings, true);
             return true;
         }
     };

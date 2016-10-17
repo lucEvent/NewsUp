@@ -1,9 +1,7 @@
 package com.lucevent.newsup;
 
-import android.Manifest;
 import android.app.Fragment;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -20,9 +18,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.lucevent.newsup.data.Sites;
 import com.lucevent.newsup.data.util.Site;
@@ -32,6 +30,7 @@ import com.lucevent.newsup.kernel.AppData;
 import com.lucevent.newsup.kernel.NewsManager;
 import com.lucevent.newsup.kernel.ScheduleManager;
 import com.lucevent.newsup.net.MainChangeListener;
+import com.lucevent.newsup.permission.StoragePermissionHandler;
 import com.lucevent.newsup.services.ScheduledDownloadReceiver;
 import com.lucevent.newsup.view.activity.ContactActivity;
 import com.lucevent.newsup.view.activity.SelectSitesActivity;
@@ -52,6 +51,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
     private FragmentManager fragmentManager;
     private NewsManager dataManager;
+    private StoragePermissionHandler permissionHandler;
 
     public DrawerLayout drawer;
 
@@ -62,6 +62,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
         AppSettings.initialize(this, this);
         dataManager = new NewsManager(this);
+        permissionHandler = new StoragePermissionHandler(this);
 
         if (AppSettings.firstStart()) {
             Intent intent = new Intent(this, SelectSitesActivity.class);
@@ -177,11 +178,10 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     @Override
     public boolean onNavigationItemSelected(MenuItem item)
     {
-        navigateTo(item.getItemId());
-        return true;
+        return navigateTo(item.getItemId());
     }
 
-    private void navigateTo(int where)
+    private boolean navigateTo(int where)
     {
         Fragment fragment = null;
         String title;
@@ -195,15 +195,12 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 isNewsFragment = true;
                 break;
             case R.id.nav_saved_news:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !diskPermissionGranted()) {
-                    requestPermissions(
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
-                            AppCode.REQUEST_PERMISSION_WRITE_IN_STORAGE);
-                    return;
+                if (permissionHandler.checkAndAsk(this)) {
+                    fragment = new BookmarksFragment();
+                    title = getString(R.string.bookmarks);
+                    break;
                 }
-                fragment = new BookmarksFragment();
-                title = getString(R.string.saved_for_later);
-                break;
+                return false;
             case R.id.nav_read_news:
                 fragment = new HistorialFragment();
                 title = getString(R.string.read_news);
@@ -216,7 +213,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 Intent intent = new Intent(this, SelectSitesActivity.class);
                 intent.putExtra(AppCode.SEND_PURPOSE, SelectSitesActivity.For.ADD_CONTENT);
                 startActivityForResult(intent, AppCode.REQUEST_ADD_CONTENT);
-                return;
+                return true;
             case R.id.nav_notes:
                 fragment = new NotesFragment();
                 title = getString(R.string.notes);
@@ -227,7 +224,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 break;
             case R.id.nav_contact:
                 startActivity(new Intent(this, ContactActivity.class));
-                return;
+                return false;
             case R.id.nav_about:
                 fragment = new AboutFragment();
                 title = getString(R.string.about);
@@ -255,6 +252,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
         setTitle(title);
         setUpColors(colorCode);
+        return true;
     }
 
     private void setUpColors(int colorCode)
@@ -286,7 +284,13 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             //noinspection ConstantConditions
             ab.getNavigationIcon().setColorFilter(Color.BLACK, PorterDuff.Mode.MULTIPLY);
 
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (statusBarColor == 0xffcccccc) {
+                drawer.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                statusBarColor = barColor;
+            } else
+                drawer.setSystemUiVisibility(0);
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -316,29 +320,10 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults)
     {
-        switch (requestCode) {
-            case AppCode.REQUEST_PERMISSION_WRITE_IN_STORAGE: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the contacts-related task you need to do.
-                    onNavigationItemSelected(((NavigationView) findViewById(R.id.nav_view)).getMenu().findItem(R.id.nav_saved_news));
-
-                } else {
-
-                    // permission denied, boo!
-                    Toast.makeText(this, R.string.msg_disk_permission_denied, Toast.LENGTH_SHORT).show();
-
-                }
-                break;
-            }
+        if (permissionHandler.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
+            navigateTo(R.id.nav_saved_news);
+            ((NavigationView) findViewById(R.id.nav_view)).setCheckedItem(R.id.nav_saved_news);
         }
-    }
-
-    private boolean diskPermissionGranted()
-    {
-        return ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 
 }

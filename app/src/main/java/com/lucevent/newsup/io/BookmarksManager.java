@@ -23,12 +23,7 @@ public class BookmarksManager {
     private static ArrayList<Integer> bookmarkedNewsIdsList;
     private static NewsMap bookmarkedNewsMap;
 
-    private Handler handler;
-
-    public BookmarksManager(Handler handler)
-    {
-        this.handler = handler;
-
+    static {
         File dir = new File(SDManager.getDirectory(), BOOKMARKS_DIR);
         if (!dir.exists())
             dir.mkdirs();
@@ -36,15 +31,18 @@ public class BookmarksManager {
         readBookmarkedNewsIds();
     }
 
-    public boolean isBookmarked(News news)
+    public static boolean isBookmarked(News news)
     {
         int id = getNewsFileCode(news);
         return readBookmarkedNewsIds().contains(id);
     }
 
-    private ArrayList<Integer> readBookmarkedNewsIds()
+    private static ArrayList<Integer> readBookmarkedNewsIds()
     {
-        if (bookmarkedNewsIdsList == null || bookmarkedNewsIdsList.isEmpty()) {
+        if (bookmarkedNewsIdsList == null)
+            bookmarkedNewsIdsList = new ArrayList<>();
+
+        if (bookmarkedNewsIdsList.isEmpty()) {
             try {
                 File dir = new File(SDManager.getDirectory(), BOOKMARKS_DIR);
 
@@ -57,16 +55,21 @@ public class BookmarksManager {
                     bookmarkedNewsIdsList.add(in.readInt());
 
                 in.close();
-            } catch (Exception e) {
-
-                if (bookmarkedNewsIdsList == null)
-                    bookmarkedNewsIdsList = new ArrayList<>();
+            } catch (Exception ignored) {
             }
         }
         return bookmarkedNewsIdsList;
     }
 
-    public void bookmarkNews(News news)
+    public static void toggleBookmark(News news)
+    {
+        if (isBookmarked(news))
+            unBookmarkNews(news);
+        else
+            bookmarkNews(news);
+    }
+
+    private static void bookmarkNews(News news)
     {
         if (bookmarkedNewsMap != null) bookmarkedNewsMap.add(news);
 
@@ -96,7 +99,7 @@ public class BookmarksManager {
         }
     }
 
-    public boolean unBookmarkNews(News news)
+    private static boolean unBookmarkNews(News news)
     {
         if (bookmarkedNewsIdsList == null) readBookmarkedNewsIds();
 
@@ -114,7 +117,7 @@ public class BookmarksManager {
         return false;
     }
 
-    private void saveBookmarksIndex()
+    private static void saveBookmarksIndex()
     {
         File dir = new File(SDManager.getDirectory(), BOOKMARKS_DIR);
         try {
@@ -130,7 +133,7 @@ public class BookmarksManager {
         }
     }
 
-    public void getBookmarkedNews()
+    public static void getBookmarkedNews(final Handler handler)
     {
         new Thread(new Runnable() {
             @Override
@@ -169,7 +172,7 @@ public class BookmarksManager {
         }).start();
     }
 
-    public void removeAllEntries()
+    public static void removeAllEntries()
     {
         bookmarkedNewsIdsList.clear();
         bookmarkedNewsMap.clear();
@@ -177,7 +180,7 @@ public class BookmarksManager {
         for (File f : files) f.delete();
     }
 
-    private int getNewsFileCode(News news)
+    private static int getNewsFileCode(News news)
     {
         return (news.link + news.date).hashCode();
     }

@@ -1,6 +1,8 @@
 package com.lucevent.newsup.net;
 
 import com.lucevent.newsup.AppSettings;
+import com.lucevent.newsup.data.util.Enclosure;
+import com.lucevent.newsup.data.util.Enclosures;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.Site;
@@ -8,12 +10,13 @@ import com.lucevent.newsup.data.util.Tags;
 
 public final class NewsReader {
 
-    private static final int HASH_TITLE = "title".hashCode();
-    private static final int HASH_LINK = "link".hashCode();
-    private static final int HASH_DATE = "date".hashCode();
-    private static final int HASH_DESCRIPTION = "description".hashCode();
-    private static final int HASH_CATEGORIES = "categories".hashCode();
-    private static final int HASH_CONTENT = "content".hashCode();
+    private static final int HASH_TITLE = 110371416;
+    private static final int HASH_LINK = 3321850;
+    private static final int HASH_DATE = 3076014;
+    private static final int HASH_DESCRIPTION = -1724546052;
+    private static final int HASH_CATEGORIES = 1296516636;
+    private static final int HASH_CONTENT = 951530617;
+    private static final int HASH_ENCLOSURE = 1432853874;
 
     private static final String query_index = "http://newsup-2406.appspot.com/app?news&" + (AppSettings.DEBUG ? "nc&" : "") + "site=";
     private static final String query_content = "http://newsup-2406.appspot.com/app?content&site=";
@@ -46,32 +49,36 @@ public final class NewsReader {
         for (org.jsoup.nodes.Element item : doc.select("item")) {
             String title = "", link = "", description = "", content = "", categories = "";
             long date = 0;
+            Enclosures enclosures = new Enclosures();
 
             for (org.jsoup.nodes.Element prop : item.children()) {
-                int taghash = prop.tagName().hashCode();
 
-                if (taghash == HASH_TITLE)
-                    title = prop.html();
-
-                else if (taghash == HASH_LINK)
-                    link = prop.html();
-
-                else if (taghash == HASH_DATE)
-                    date = Long.parseLong(prop.html());
-
-                else if (taghash == HASH_DESCRIPTION)
-                    description = prop.text();
-
-                else if (taghash == HASH_CATEGORIES)
-                    categories = prop.html();
-
-                else if (taghash == HASH_CONTENT)
-                    content = prop.html();
-
+                switch (prop.tagName().hashCode()) {
+                    case HASH_TITLE:
+                        title = prop.html();
+                        break;
+                    case HASH_LINK:
+                        link = prop.html();
+                        break;
+                    case HASH_DATE:
+                        date = Long.parseLong(prop.html());
+                        break;
+                    case HASH_DESCRIPTION:
+                        description = prop.text();
+                        break;
+                    case HASH_CATEGORIES:
+                        categories = prop.html();
+                        break;
+                    case HASH_CONTENT:
+                        content = prop.html();
+                        break;
+                    case HASH_ENCLOSURE:
+                        enclosures.add(new Enclosure(prop.text(), "image", ""));
+                }
             }
             if (!title.isEmpty()) {
                 News news = new News(title, link, description, date, new Tags(categories));
-
+                news.enclosures = enclosures;
                 if (!content.isEmpty())
                     news.content = content;
 

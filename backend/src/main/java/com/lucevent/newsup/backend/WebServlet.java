@@ -1,7 +1,7 @@
 package com.lucevent.newsup.backend;
 
 import com.lucevent.newsup.backend.utils.BackendParser;
-import com.lucevent.newsup.data.util.Date;
+import com.lucevent.newsup.backend.utils.Reports;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.Site;
@@ -40,26 +40,17 @@ public class WebServlet extends HttpServlet {
 
             Site site = Data.sites.getSiteByCode(Integer.parseInt(parts[0]));
             Site sitev2 = Data.sitesV2.getSiteByCode(Integer.parseInt(parts[0]));
-            Data.stats.count(Data.sites.indexOf(site), req.getRemoteAddr());
+            Data.stats.count(site, req.getRemoteAddr(), "web");
 
             int[] sections = new int[parts.length - 1];
             for (int i = 0; i < sections.length; i++)
                 sections[i] = Integer.parseInt(parts[i + 1]);
 
             NewsArray news = site.readNewsHeaders(sections);
-            long t = System.nanoTime();
             sitev2.news.addAll(news);
-            long t2 = System.nanoTime();
             site.news.addAll(news);
-            long t3 = System.nanoTime();
-            System.out.println("Add times ["+(t2-t)+"] vs ["+(t3-t2)+"]");
 
             resp.getWriter().println(BackendParser.toHtml(news).toString());
-
-            String f = "<li><a><div class='site' id='%d'><img src='img/%d.png'>%s</div></a></li>";
-            for(Site s : Data.sitesV2){
-                System.out.println(String.format(f,s.code,s.code,s.name));
-            }
 
         } else if (req.getParameter("content") != null) {
 
@@ -88,19 +79,22 @@ public class WebServlet extends HttpServlet {
         } else if (req.getParameter("stats") != null) {
 
             if (req.getParameter("reset") != null)
-                Data.stats.reset(Data.sitesV2);
-
-            StringBuilder sb = new StringBuilder();
-            sb.append("Since ").append(Date.getAge(Data.stats.since)).append("\n\n");
-            sb.append("Last start ").append(Date.getAge(Data.stats.lastStart)).append("\n\n");
+                Data.stats.reset();
 
             String options = req.getParameter("options");
-            sb.append(BackendParser.toHtml(Data.stats, options != null ? options : ""));
+            StringBuilder sb = BackendParser.toHtml(Data.stats, options != null ? options : "");
 
             resp.getWriter().println(sb);
 
-        }
+        } else if (req.getParameter("reports") != null) {
 
+            int user = req.getParameter("user").hashCode();
+            int pass = req.getParameter("pass").hashCode();
+
+            if (user == Reports.VALID_USERNAME && pass == Reports.VALID_PASSWORD)
+                resp.getWriter().println(Data.reports.getHtmlReports());
+
+        }
     }
 
     @Override

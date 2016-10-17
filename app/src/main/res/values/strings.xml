@@ -1,13 +1,13 @@
 <resources>
 
     <string name="app_name" translatable="false">NewsUp</string>
-    <string name="app_version" translatable="false">X.X.X</string>
+    <string name="app_version" translatable="false">2.0.0.not.final</string>
     <string name="version">version</string>
 
     <!-- * ******************** Labels **************************** * -->
     <string name="my_news">My news</string>
-    <string name="saved_for_later">Bookmarked news</string>
-    <string name="read_news">Read news</string>
+    <string name="bookmarks">Bookmarks</string>
+    <string name="read_news">Recently read</string>
     <string name="settings">Settings</string>
     <string name="statistics">Statistics</string>
     <string name="about">About</string>
@@ -83,7 +83,6 @@
     <string name="msg_unlocked_notes">Notes unlocked</string>
     <string name="msg_app_must_restart_to_apply_changes">App must be restarted to apply changes</string>
     <string name="msg_disk_permission_denied">you CANNOT bookmark news until you grant permission</string>
-    <string name="msg_read_phone_state_permission_denied">Without this permission, we CANNOT re-schedule the downloads after a phone restart</string>
     <string name="msg_confirm_to_reset_statistics">Confirm to reset statistics</string>
     <string name="msg_empty_input">Empty input</string>
 
@@ -124,14 +123,15 @@
     <string name="pref_favorite_key" translatable="false">site_pref2</string>
     <string name="pref_main_sections_key" translatable="false">site_pref3</string>
     <string name="pref_download_sections_key" translatable="false">site_pref4</string>
-
+    <string name="pref_shortcut_key" translatable="false">site_pref5</string>
+    <string name="pref_schedule_one_download_key" translatable="false">site_pref6</string>
 
     <!-- ***************************** ***************** ********************************** -->
-    <string name="about_content_header" translatable="false">News Up X.X.X</string>
+    <string name="about_content_header" translatable="false">News Up 2.0.0.not.final</string>
     <string name="about_content_contact">Developed by Rafael J. Lucena\nContact: rafaa89(at)gmail.com</string>
     <string name="about_content_title_new_features">Last features and improvements:</string>
     <string name="about_content_new_features" translatable="false">
-        Version 1.8.X 2016-10-XX:\n
+        Version 2.0.0.not.final 2016-10-XX:\nNew: Shortcuts for each site in home screen.\nNews List view changed.\nBookmark from the same news list.\nSome texts changed for better understanding.\nIn android 6 and above: Dark icons on notification bar with \'light-color\' sites.\nSchedule a download directly from one particular site preference screen.\nErrors fixed and improvements.\n
         \nVersion 1.8.0 2016-10-10:\nAdded support for newspapers \'The Herald Scotland\', \'The Guardian\', \'The New York Times\' and \'The Times of India\', and online magazines and blogs \'Clipset\', \'Elle Spain\', \'Google Earth Blog\', \'TechCrunch\', \'The Intercept\' and \'Vice\'.\n
         \nVersion 1.7.2 2016-10-02:\nNew: Report/Suggestion option.\nBookmarked news list updating fixed.\nSite selection screen now orders by device locale, and each section by site name.\nFull-translated to swedish.\nPartially translated to Finnish.\nLoading animation comes up when loading a section too now.\nMore errors fixed and improvements.\n
         \nVersion 1.7.0 2016-09-24:\nAdded support for newspapers \'Abc\', \'Metro UK\', \'Siberian Times\' and \'USA Today\', and online magazines and blogs \'Digital Inspiration\', \'Meristation\', \'PC World\', \'The Verge\' and \'Vandal\'.\nBugs fixed.\n
@@ -201,6 +201,14 @@
     <!-- ***************************** ***************** ********************************** -->
     <string name="navigation_drawer_open" translatable="false">Open drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close drawer</string>
+
+
+    <string name="pref_shortcut">Create shortcut</string>
+    <string name="pref_shortcut_summary">Tap to place a shortcut for this site in your home screen</string>
+    <string name="pref_schedule_one_download">Schedule a download</string>
+
+    <string name="msg_shortcut_created">A shortcut for %s has been place in your home screen</string>
+    <string name="msg_download_set_successfully">Download set successfully</string>
 
 
 </resources>

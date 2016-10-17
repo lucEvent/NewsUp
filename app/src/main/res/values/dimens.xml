@@ -10,7 +10,7 @@
 
     <dimen name="i_margin_left_right">8dp</dimen>
     <dimen name="i_margin_top_bottom">4dp</dimen>
-    <dimen name="i_elevation">4dp</dimen>
+    <dimen name="i_item_elevation">1dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
 </resources>

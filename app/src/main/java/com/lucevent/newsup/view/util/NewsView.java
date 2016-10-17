@@ -1,16 +1,12 @@
 package com.lucevent.newsup.view.util;
 
-import android.Manifest;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
-import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -24,25 +20,22 @@ import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.io.BookmarksManager;
-import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.AppData;
 
 public class NewsView extends RelativeLayout {
 
     private News currentNews;
-    private BookmarksManager bookmarksManager;
 
     private Fragment fragmentContext;
     private DrawerLayout drawer;
     private ActionBar actionBar;
-    private OnBookmarkChangeListener bookmarkChangeListener;
 
     private WebView webView;
     private FloatingActionButton button_bookmark, button_share;
@@ -53,8 +46,6 @@ public class NewsView extends RelativeLayout {
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.v_news, this, true);
-
-        bookmarksManager = new BookmarksManager(null);
 
         webView = (WebView) findViewById(R.id.webview);
         webView.setOnTouchListener(onNewsContentTouch);
@@ -67,25 +58,24 @@ public class NewsView extends RelativeLayout {
         webSettings.setDisplayZoomControls(false);
 
         button_bookmark = (FloatingActionButton) findViewById(R.id.button_bookmark);
-        button_bookmark.setOnClickListener(onBookmarkAction);
         button_share = (FloatingActionButton) findViewById(R.id.button_share);
         button_share.setOnClickListener(onShareAction);
     }
 
-    public void setFragmentContext(Fragment context, DrawerLayout drawer)
+    public void setFragmentContext(Fragment context, @Nullable DrawerLayout drawer)
     {
         this.fragmentContext = context;
         this.actionBar = ((AppCompatActivity) context.getActivity()).getSupportActionBar();
         this.drawer = drawer;
     }
 
-    public void setBookmarkChangeListener(OnBookmarkChangeListener bookmarkChangeListener)
+    public void setBookmarkChangeListener(View.OnClickListener bookmarkChangeListener)
     {
-        this.bookmarkChangeListener = bookmarkChangeListener;
+        button_bookmark.setOnClickListener(bookmarkChangeListener);
     }
 
     private static final String NEWS_STYLE = "<style>" +
-            "body { margin: 20px }" +
+            "body { margin: 20px; font-family: sans-serif-light; font-weight: 300; font-size: 17px; line-height: 1.7; }" +
             "blockquote{margin:10px;padding:5px 10px 5px 10px;background-color:#f2f2f2}" +
             "a{color: #%a_color;}" +
             "</style>";
@@ -102,16 +92,12 @@ public class NewsView extends RelativeLayout {
             "div > h2 > a > img {width: 0; height:0;margin: 0; padding: 0}" +
             "</style>";
 
-    private static final String FONT_STYLE = "<style>" +
-            "@font-face { font-family: customfont; src: url(\"fonts/customfont.woff\"); }" +
-            "body { font-family: customfont; font-weight: 300; font-size: 17px; line-height: 1.7; }" +
-            "</style>";
-
     private static final String TWITTER_STYLE = "<script type=\"text/javascript\" src=\"https://platform.twitter.com/widgets.js\"></script>";
 
     public void displayNews(News news)
     {
         currentNews = news;
+        button_bookmark.setTag(news);
 
         //  hiding System UI
         Window w = fragmentContext.getActivity().getWindow();
@@ -122,7 +108,8 @@ public class NewsView extends RelativeLayout {
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
-        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        if (drawer != null)
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         actionBar.hide();
 
         // displaying current news
@@ -132,7 +119,6 @@ public class NewsView extends RelativeLayout {
         int a_color = (site.color == 0xffffffff ? 0xcccccc : site.color & 0xffffff);
 
         String style = site.getStyle() +
-                FONT_STYLE +
                 NEWS_STYLE.replace("%a_color", String.format("%06x", a_color)) +
                 (isInternetAvailable() ? GRAPHYCS_STYLE : GRAPHYCS_STYLE_NO_INTERNET) +
                 TWITTER_STYLE;
@@ -141,7 +127,7 @@ public class NewsView extends RelativeLayout {
 
         webView.loadDataWithBaseURL("file:///android_asset/", webContent, "text/html", "utf-8", null);
 
-        setBookmarkButtonImage();
+        setBookmarkButtonImage(button_bookmark);
     }
 
     public void resume()
@@ -161,7 +147,8 @@ public class NewsView extends RelativeLayout {
         w.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         w.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
 
-        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        if (drawer != null)
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
         // hiding news
         actionBar.show();
@@ -176,38 +163,15 @@ public class NewsView extends RelativeLayout {
         return ni != null && ni.isConnected() && ni.isAvailable();
     }
 
-    private void setBookmarkButtonImage()
+    public void setBookmarkButtonImage(View view)
     {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || permissionGranted()) {
-            if (bookmarksManager.isBookmarked(currentNews))
-                button_bookmark.setImageResource(R.drawable.ic_bookmark);
+        News news = (News) view.getTag();
+        if (BookmarksManager.isBookmarked(news))
+            ((ImageView) view).setImageResource(R.drawable.ic_bookmark);
 
-            else
-                button_bookmark.setImageResource(R.drawable.ic_bookmark_border);
-        }
+        else
+            ((ImageView) view).setImageResource(R.drawable.ic_bookmark_border);
     }
-
-    private View.OnClickListener onBookmarkAction = new View.OnClickListener() {
-        @Override
-        public void onClick(View v)
-        {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !permissionGranted()) {
-                fragmentContext.requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                Manifest.permission.READ_EXTERNAL_STORAGE},
-                        AppCode.REQUEST_PERMISSION_WRITE_IN_STORAGE);
-            } else {
-                if (bookmarksManager.isBookmarked(currentNews))
-                    bookmarksManager.unBookmarkNews(currentNews);
-                else
-                    bookmarksManager.bookmarkNews(currentNews);
-
-                setBookmarkButtonImage();
-
-                if (bookmarkChangeListener != null)
-                    bookmarkChangeListener.onBookmarkChange();
-            }
-        }
-    };
 
     private View.OnClickListener onShareAction = new View.OnClickListener() {
         @Override
@@ -353,34 +317,6 @@ public class NewsView extends RelativeLayout {
 
         button_share.startAnimation(animation);
         button_bookmark.startAnimation(animation);
-    }
-
-    private boolean permissionGranted()
-    {
-        return ContextCompat.checkSelfPermission(getContext(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
-    }
-
-    /**
-     * @return true if the result was handled, false if the result wasn't about this permission
-     */
-    public boolean onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults)
-    {
-        switch (requestCode) {
-            case AppCode.REQUEST_PERMISSION_WRITE_IN_STORAGE: {
-
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    bookmarksManager = new BookmarksManager(null);
-                    setBookmarkButtonImage();
-
-                } else
-                    Toast.makeText(fragmentContext.getActivity(), R.string.msg_disk_permission_denied, Toast.LENGTH_LONG).show();
-
-                return true;
-            }
-        }
-        return false;
     }
 
 }

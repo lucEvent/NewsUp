@@ -35,6 +35,7 @@ public class EuropaPress extends com.lucevent.newsup.data.util.NewsReader {
             return;
 
         e.select(".FechaPublicacionNoticia,.captionv2,script,.related-content-no-image,.related-content").remove();
+        e.select("h1,h2").tagName("h3");
 
         news.content = img.outerHtml() + e.outerHtml();
         news.content = news.content.replace("Cargando el vídeo....", "");

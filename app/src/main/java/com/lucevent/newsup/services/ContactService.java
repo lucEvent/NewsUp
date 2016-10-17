@@ -63,7 +63,7 @@ public class ContactService extends Service {
                     Connection.Response response = Jsoup.connect("http://newsup-2406.appspot.com/app?report")
                             .method(Connection.Method.POST)
                             .postDataCharset("UTF-8")
-                            .data("version", getString(R.string.app_version),"email", email, "message", message)
+                            .data("version", getString(R.string.app_version), "email", email, "message", message)
                             .execute();
 
                     handler.obtainMessage(response.statusCode() == 200 ? AppCode.REPORT_SEND_OK : AppCode.ERROR).sendToTarget();

@@ -1,22 +1,16 @@
 package com.lucevent.newsup.view.fragment;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.kernel.AppCode;
@@ -39,11 +33,6 @@ public class ScheduleDownloadSettingsFragment extends Fragment {
         dataManager = new ScheduleManager(getActivity());
         adapter = new DownloadScheduleAdapter(dataManager.getDownloadSchedules(), onModifyAction, onDeleteAction);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ContextCompat.checkSelfPermission(getContext(),
-                Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE},
-                    AppCode.REQUEST_PERMISSION_READ_PHONE_STATE);
-        }
     }
 
     @Override
@@ -81,27 +70,6 @@ public class ScheduleDownloadSettingsFragment extends Fragment {
 
             ScheduledDownloadReceiver.scheduleDownloads(getActivity(),
                     dataManager.getDownloadSchedules());
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults)
-    {
-        switch (requestCode) {
-            case AppCode.REQUEST_PERMISSION_READ_PHONE_STATE: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the contacts-related task you need to do.
-
-                } else {
-
-                    // permission denied, boo!
-                    Toast.makeText(getActivity(), R.string.msg_read_phone_state_permission_denied, Toast.LENGTH_SHORT).show();
-
-                }
-                break;
-            }
         }
     }
 

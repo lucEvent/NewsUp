@@ -5,8 +5,8 @@
     android:layout_height="wrap_content"
     android:background="@drawable/ripple"
     android:clickable="true"
-    android:paddingBottom="10dip"
-    android:paddingStart="50dip"
-    android:paddingTop="10dip"
+    android:paddingBottom="10dp"
+    android:paddingStart="50dp"
+    android:paddingTop="10dp"
     android:text="Section"
     android:textAppearance="?android:attr/textAppearanceMedium"/>
