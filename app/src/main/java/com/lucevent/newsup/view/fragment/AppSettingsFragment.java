@@ -23,6 +23,7 @@ import com.lucevent.newsup.kernel.NewsManager;
 import com.lucevent.newsup.kernel.ScheduleManager;
 import com.lucevent.newsup.net.MainChangeListener;
 import com.lucevent.newsup.services.util.DownloadSchedule;
+import com.lucevent.newsup.view.activity.SelectSitesActivity;
 
 import java.text.DecimalFormat;
 import java.util.Random;
@@ -30,10 +31,14 @@ import java.util.Random;
 public class AppSettingsFragment extends PreferenceFragment
         implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private static final int PREF_MASK_MAIN_SITES = 0x01;
-    private static final int PREF_MASK_SCHEDULE_DOWNLOADS = 0x02;
-    private static final int PREF_MASK_CLEAN_CACHE = 0x04;
-    private static final int PREF_MASK_KEEP_NEWS = 0x10;
+    private static final int PREF_MAIN_SITES_MASK = 0x01;
+    private static final int PREF_FAVORITES_MASK = 0x01;
+    private static final int PREF_SCHEDULE_DOWNLOADS_MASK = 0x02;
+    private static final int PREF_CLEAN_CACHE_MASK = 0x04;
+    private static final int PREF_KEEP_NEWS_MASK = 0x10;
+
+    private static final int REQUEST_SELECT_MAIN = 0;
+    private static final int REQUEST_SELECT_FAVORITE = 1;
 
     @Override
     public void onCreate(final Bundle savedInstanceState)
@@ -41,6 +46,8 @@ public class AppSettingsFragment extends PreferenceFragment
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.app_preferences);
 
+        findPreference(AppSettings.PREF_MAIN_SITES_KEY).setOnPreferenceClickListener(onSelectMainSites);
+        findPreference(AppSettings.PREF_FAVORITE_SITES_KEY).setOnPreferenceClickListener(onSelectFavoriteSites);
         findPreference(getString(R.string.pref_sites_settings_key)).setOnPreferenceClickListener(onSiteSettingsAction);
         findPreference(AppSettings.PREF_SCHEDULE_DOWNLOADS_KEY).setOnPreferenceClickListener(onScheduleDownloadSettingsAction);
     }
@@ -65,12 +72,15 @@ public class AppSettingsFragment extends PreferenceFragment
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
     {
         if (key.equals(AppSettings.PREF_MAIN_SITES_KEY)) {
-            setUpPreferenceSummaries(PREF_MASK_MAIN_SITES);
-            ((Main) getActivity()).onMainistsChange();
+            setUpPreferenceSummaries(PREF_MAIN_SITES_MASK);
+            ((MainChangeListener) getActivity()).onMainistsChange();
+        } else if (key.equals(AppSettings.PREF_FAVORITE_SITES_KEY)) {
+            ((MainChangeListener) getActivity()).onFavoritesChange();
+            setUpPreferenceSummaries(PREF_FAVORITES_MASK);
         } else if (key.equals(AppSettings.PREF_SCHEDULE_DOWNLOADS_KEY))
-            setUpPreferenceSummaries(PREF_MASK_SCHEDULE_DOWNLOADS);
+            setUpPreferenceSummaries(PREF_SCHEDULE_DOWNLOADS_MASK);
         else if (key.equals(AppSettings.PREF_CLEAN_CACHE_KEY))
-            setUpPreferenceSummaries(PREF_MASK_CLEAN_CACHE);
+            setUpPreferenceSummaries(PREF_CLEAN_CACHE_MASK);
         else if (key.equals(AppSettings.PREF_PRO_CODE_KEY)) {
 
             String code = sharedPreferences.getString(AppSettings.PREF_PRO_CODE_KEY, "");
@@ -98,12 +108,12 @@ public class AppSettingsFragment extends PreferenceFragment
             ((EditTextPreference) findPreference(AppSettings.PREF_PRO_CODE_KEY)).setText("");
 
         } else if (key.equals(AppSettings.PREF_KEEP_NEWS_KEY))
-            setUpPreferenceSummaries(PREF_MASK_KEEP_NEWS);
+            setUpPreferenceSummaries(PREF_KEEP_NEWS_MASK);
     }
 
     private void setUpPreferenceSummaries(int preferencesMask)
     {
-        if ((preferencesMask & PREF_MASK_MAIN_SITES) != 0) {
+        if ((preferencesMask & PREF_MAIN_SITES_MASK) != 0) {
             int[] codes = AppSettings.getMainSitesCodes();
             StringBuilder sb = new StringBuilder(AppData.getSiteByCode(codes[0]).name);
             for (int c = 1; c < codes.length; ++c)
@@ -111,7 +121,11 @@ public class AppSettingsFragment extends PreferenceFragment
 
             findPreference(AppSettings.PREF_MAIN_SITES_KEY).setSummary(sb);
         }
-        if ((preferencesMask & PREF_MASK_SCHEDULE_DOWNLOADS) != 0) {
+        if ((preferencesMask & PREF_FAVORITES_MASK) != 0) {
+            findPreference(AppSettings.PREF_FAVORITE_SITES_KEY)
+                    .setSummary(getString(R.string.x_favorites, AppSettings.getFavoriteSitesCodes().length));
+        }
+        if ((preferencesMask & PREF_SCHEDULE_DOWNLOADS_MASK) != 0) {
             ScheduleManager scheduleManager = new ScheduleManager(getActivity());
 
             StringBuilder sb = new StringBuilder();
@@ -122,12 +136,12 @@ public class AppSettingsFragment extends PreferenceFragment
             }
             findPreference(AppSettings.PREF_SCHEDULE_DOWNLOADS_KEY).setSummary(sb);
         }
-        if ((preferencesMask & PREF_MASK_CLEAN_CACHE) != 0) {
+        if ((preferencesMask & PREF_CLEAN_CACHE_MASK) != 0) {
 
             String dataSize = new DecimalFormat("#0.00").format(NewsManager.getCacheSize() / 1048576.0);
             findPreference(AppSettings.PREF_CLEAN_CACHE_KEY).setSummary(dataSize + " MB");
         }
-        if ((preferencesMask & PREF_MASK_KEEP_NEWS) != 0) {
+        if ((preferencesMask & PREF_KEEP_NEWS_MASK) != 0) {
             ListPreference p = (ListPreference) findPreference(AppSettings.PREF_KEEP_NEWS_KEY);
 
             CharSequence currentValue = p.getValue();
@@ -140,6 +154,43 @@ public class AppSettingsFragment extends PreferenceFragment
             p.setSummary(p.getEntries()[currentPosition]);
         }
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case REQUEST_SELECT_MAIN:
+                ((MainChangeListener) getActivity()).onMainistsChange();
+                break;
+            case REQUEST_SELECT_FAVORITE:
+                ((MainChangeListener) getActivity()).onFavoritesChange();
+                break;
+        }
+
+    }
+
+    private Preference.OnPreferenceClickListener onSelectMainSites = new Preference.OnPreferenceClickListener() {
+        @Override
+        public boolean onPreferenceClick(Preference preference)
+        {
+            Intent intent = new Intent(getActivity(), SelectSitesActivity.class);
+            intent.putExtra(AppCode.SEND_PURPOSE, SelectSitesActivity.For.SELECT_MAIN);
+            startActivityForResult(intent, REQUEST_SELECT_MAIN);
+            return true;
+        }
+    };
+
+    private Preference.OnPreferenceClickListener onSelectFavoriteSites = new Preference.OnPreferenceClickListener() {
+        @Override
+        public boolean onPreferenceClick(Preference preference)
+        {
+            Intent intent = new Intent(getActivity(), SelectSitesActivity.class);
+            intent.putExtra(AppCode.SEND_PURPOSE, SelectSitesActivity.For.SELECT_FAVORITES);
+            startActivityForResult(intent, REQUEST_SELECT_FAVORITE);
+            return true;
+        }
+    };
 
     private Preference.OnPreferenceClickListener onSiteSettingsAction = new Preference.OnPreferenceClickListener() {
         @Override

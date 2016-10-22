@@ -86,7 +86,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         else
             currentSite = null;
 
-        Sections sections = currentSite != null ? currentSite.sections : new Sections();
+        Sections sections = currentSite != null ? currentSite.getSections() : new Sections();
         sectionsDialog = new SectionsDialog(getActivity(), sections, onSectionSelected);
     }
 
@@ -118,12 +118,12 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
                 break;
 
             case -1:
-                dataManager.getMainNews();
+                dataManager.getMainNews(handler);
                 getActivity().setTitle(R.string.my_news);
                 break;
 
             default:
-                dataManager.getNewsOf(currentSite, null);
+                dataManager.getNewsOf(currentSite, null, handler);
                 getActivity().setTitle(currentSite.name);
         }
         lastLoadedSiteCode = currentSiteCode;
@@ -150,7 +150,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         Context context = getActivity();
 
         handler = new Handler(this);
-        dataManager = new NewsManager(context, handler);
+        dataManager = new NewsManager(context);
         permissionHandler = new StoragePermissionHandler(context);
 
         lastLoadedSiteCode = -9;
@@ -267,7 +267,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         NewsManager.readContentOf(news);
 
         if (news.content != null && !news.content.isEmpty()) {
-            newsView.displayNews(news);
+            newsView.displayNews(news, v);
             btn_sections.setVisibility(View.GONE);
             displayingNews = true;
             NewsManager.addToHistory(news);
@@ -333,7 +333,6 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
             NewsListFragment service = context.get();
             switch (msg.what) {
                 case AppCode.NEWS_MAP_READ:
-                case AppCode.NEWS_MAP_FRAGMENT_READ:
                     NewsMap news = (NewsMap) msg.obj;
 
                     if (news.isEmpty())
@@ -386,7 +385,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
             ab.setTitle(currentSite.name);
 
             btn_sections.setVisibility(ImageButton.VISIBLE);
-            btn_sections.setBackgroundTintList(ColorStateList.valueOf(currentSite.color));
+            btn_sections.setBackgroundTintList(ColorStateList.valueOf(currentSite.color == 0xffffffff ? 0xff666666 : currentSite.color));
 
             setFavoriteIcon();
             Drawable icon_conf = appmenu.getItem(1).setVisible(true).getIcon();
@@ -450,7 +449,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
             adapter.clear();
             progressBar.setVisibility(ProgressBar.VISIBLE);
             Section section = (Section) v.getTag();
-            dataManager.getNewsOf(currentSite, new int[]{currentSite.sections.indexOf(section)});
+            dataManager.getNewsOf(currentSite, new int[]{currentSite.getSections().indexOf(section)}, handler);
             sectionsDialog.dismiss();
         }
     };

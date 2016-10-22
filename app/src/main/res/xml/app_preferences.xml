@@ -2,11 +2,17 @@
 
     <PreferenceCategory android:title="@string/pref_title_general">
 
-        <com.lucevent.newsup.view.preference.SiteMultiSelectPreference
+        <Preference
             android:entries="@null"
             android:entryValues="@null"
             android:key="@string/pref_main_sites_key"
             android:title="@string/pref_main_sites"/>
+
+        <Preference
+            android:entries="@null"
+            android:entryValues="@null"
+            android:key="@string/pref_favorite_sites_key"
+            android:title="@string/pref_favorite_sites"/>
 
         <Preference
             android:key="@string/pref_sites_settings_key"

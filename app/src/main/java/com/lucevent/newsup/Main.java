@@ -157,7 +157,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             SubMenu fab_menu = navigationView.getMenu().findItem(R.id.nav_header_favorites).getSubMenu();
             fab_menu.clear();
 
-            Sites favorites = dataManager.getFavoritesSites();
+            Sites favorites = dataManager.getFavoriteSites();
             for (Site site : favorites) {
                 MenuItem mi = fab_menu.add(2, site.code, Menu.NONE, site.name);
                 configureMenuItem(mi, site);
@@ -209,9 +209,9 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 fragment = new StatisticsFragment();
                 title = getString(R.string.statistics);
                 break;
-            case R.id.nav_add_content:
+            case R.id.nav_more_publications:
                 Intent intent = new Intent(this, SelectSitesActivity.class);
-                intent.putExtra(AppCode.SEND_PURPOSE, SelectSitesActivity.For.ADD_CONTENT);
+                intent.putExtra(AppCode.SEND_PURPOSE, SelectSitesActivity.For.SELECT_ONE);
                 startActivityForResult(intent, AppCode.REQUEST_ADD_CONTENT);
                 return true;
             case R.id.nav_notes:

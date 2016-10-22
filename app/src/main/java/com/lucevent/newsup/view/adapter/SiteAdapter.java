@@ -1,6 +1,7 @@
 package com.lucevent.newsup.view.adapter;
 
 import android.content.Context;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,15 +20,13 @@ import com.lucevent.newsup.io.LogoManager;
 import com.lucevent.newsup.kernel.AppData;
 import com.lucevent.newsup.view.util.SiteScatterMap;
 
-import java.util.HashMap;
-
 public class SiteAdapter {
 
     public enum Order {
         BY_NAME, BY_COUNTRY, BY_LANGUAGE, BY_CATEGORY
     }
 
-    private HashMap<Integer, View> viewMap;
+    private SparseArray<View> viewMap;
 
     private String[] titles_languages, titles_countries, titles_types;
     private final int[] language_weights, country_weights;
@@ -41,7 +40,7 @@ public class SiteAdapter {
         country_weights = context.getResources().getIntArray(R.array.site_country_weights);
     }
 
-    public HashMap<Integer, View> createView(Context context, ViewGroup parent, int rowSize, Order order, String filter)
+    public SparseArray<View> createView(Context context, ViewGroup parent, int rowSize, Order order, String filter)
     {
         String[] titles;
         int shift;
@@ -100,7 +99,7 @@ public class SiteAdapter {
         TableRow row = null;
         int number = 0;
         if (viewMap == null) {
-            viewMap = new HashMap<>(AppData.sites.size());
+            viewMap = new SparseArray<>(AppData.sites.size());
             for (Site s : AppData.sites) {
 
                 if (number % rowSize == 0) {
@@ -113,7 +112,7 @@ public class SiteAdapter {
                 ((TextView) v.findViewById(R.id.site_name)).setText(s.name);
                 ((ImageView) v.findViewById(R.id.site_icon)).setImageDrawable(LogoManager.getLogo(s.code, LogoManager.Size.SELECT_SCREEN));
 
-                viewMap.put(s.code, v);
+                viewMap.append(s.code, v);
             }
         }
 

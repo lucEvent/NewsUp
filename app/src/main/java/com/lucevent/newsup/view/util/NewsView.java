@@ -3,14 +3,17 @@ package com.lucevent.newsup.view.util;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,6 +21,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
+import android.view.animation.TranslateAnimation;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
@@ -60,12 +64,18 @@ public class NewsView extends RelativeLayout {
         button_bookmark = (FloatingActionButton) findViewById(R.id.button_bookmark);
         button_share = (FloatingActionButton) findViewById(R.id.button_share);
         button_share.setOnClickListener(onShareAction);
+
+
+   //     gd = new GestureDetectorCompat(context, onGestureListener);
     }
+
+  //  GestureDetectorCompat gd;
 
     public void setFragmentContext(Fragment context, @Nullable DrawerLayout drawer)
     {
         this.fragmentContext = context;
         this.actionBar = ((AppCompatActivity) context.getActivity()).getSupportActionBar();
+        this.actionBar.setShowHideAnimationEnabled(false);
         this.drawer = drawer;
     }
 
@@ -75,7 +85,7 @@ public class NewsView extends RelativeLayout {
     }
 
     private static final String NEWS_STYLE = "<style>" +
-            "body { margin: 20px; font-family: sans-serif-light; font-weight: 300; font-size: 17px; line-height: 1.7; }" +
+            "body { margin: 20px; font-family: sans-serif-light; font-weight: 300; font-size: 17px; line-height: 1.7; background-color: #eee; }" +
             "blockquote{margin:10px;padding:5px 10px 5px 10px;background-color:#f2f2f2}" +
             "a{color: #%a_color;}" +
             "</style>";
@@ -94,26 +104,14 @@ public class NewsView extends RelativeLayout {
 
     private static final String TWITTER_STYLE = "<script type=\"text/javascript\" src=\"https://platform.twitter.com/widgets.js\"></script>";
 
-    public void displayNews(News news)
+    private int viewHeight = -1;
+    private View newsItemView;
+
+    public void displayNews(News news, final View from)
     {
         currentNews = news;
         button_bookmark.setTag(news);
-
-        //  hiding System UI
-        Window w = fragmentContext.getActivity().getWindow();
-        w.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        w.getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LOW_PROFILE
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-
-        if (drawer != null)
-            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        actionBar.hide();
-
-        // displaying current news
-        setVisibility(View.VISIBLE);
+        newsItemView = from;
 
         Site site = AppData.getSiteByCode(currentNews.site_code);
         int a_color = (site.color == 0xffffffff ? 0xcccccc : site.color & 0xffffff);
@@ -126,8 +124,38 @@ public class NewsView extends RelativeLayout {
         String webContent = style + "<h2>" + currentNews.title + "</h2>" + currentNews.content;
 
         webView.loadDataWithBaseURL("file:///android_asset/", webContent, "text/html", "utf-8", null);
+        //     webView.loadData(webContent, "text/html", "utf-8");
 
         setBookmarkButtonImage(button_bookmark);
+
+        if (drawer != null)
+            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
+
+        actionBar.hide();
+
+        setVisibility(View.VISIBLE);
+
+        if (viewHeight == -1) {
+            Rect r = new Rect();
+            fragmentContext.getActivity().getWindow().getDecorView().getWindowVisibleDisplayFrame(r);
+            viewHeight = getHeight() + actionBar.getHeight() + r.top;
+        }
+
+        AppAnimator.expandMoving(this, from, viewHeight, new AppAnimator.AppAnimatorListener() {
+            @Override
+            public void onAnimationEnd(Animation animation)
+            {
+                //  hiding System UI
+                Window w = fragmentContext.getActivity().getWindow();
+                w.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                w.getDecorView().setSystemUiVisibility(
+                        View.SYSTEM_UI_FLAG_LOW_PROFILE
+                                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            }
+        });
     }
 
     public void resume()
@@ -147,13 +175,20 @@ public class NewsView extends RelativeLayout {
         w.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         w.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
 
-        if (drawer != null)
-            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-
-        // hiding news
         actionBar.show();
-        setVisibility(View.GONE);
-        webView.loadUrl("about:blank");
+
+
+        AppAnimator.collapseMoving(this, newsItemView, viewHeight, new AppAnimator.AppAnimatorListener() {
+            @Override
+            public void onAnimationEnd(Animation animation)
+            {
+                if (drawer != null)
+                    drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+
+                webView.loadUrl("about:blank");
+                setVisibility(View.GONE);
+            }
+        });
     }
 
     private boolean isInternetAvailable()
@@ -193,6 +228,8 @@ public class NewsView extends RelativeLayout {
         @Override
         public boolean onTouch(View v, MotionEvent event)
         {
+     //        gd.onTouchEvent(event);
+
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     synchronized (onNewsContentTouch) {
@@ -216,7 +253,39 @@ public class NewsView extends RelativeLayout {
                                 actionHide.notify();
                             }
                     }
+
+                    if (swipingDown) {
+                        swipingDown = false;
+
+
+                        TranslateAnimation swipeAnimation = new TranslateAnimation(0, 0, swipedDown, 0);
+                        swipeAnimation.setDuration((long) (swipedDown / 2));
+                        swipeAnimation.setFillAfter(true);
+
+                        webView.setAnimation(swipeAnimation);
+                    }
+                    //TODO
                     break;
+            /*    case MotionEvent.ACTION_MOVE:
+
+                    if (swipingDown) {
+                  //      webView.setTranslationY(previousY-event.getY());
+                    }
+                    if (webView.getScrollY() == 0) {
+                        if (start){
+                            start=false;
+                        }
+                        else{
+                            swipingDown = true;
+                            previousY = event.getY();
+                        }
+
+                    }
+                    else
+
+                    break;
+                default:
+                    System.out.println("Other... " + event.getAction());*/
             }
             return false;
         }
@@ -255,6 +324,84 @@ public class NewsView extends RelativeLayout {
         });
     };
 
+    private boolean swipingDown = false;
+    private float swipedDown = 0;
+    private GestureDetector.OnGestureListener onGestureListener = new GestureDetector.OnGestureListener() {
+        @Override
+        public boolean onDown(MotionEvent e)
+        {
+            System.out.println("onDown");
+            return false;
+        }
+
+        @Override
+        public void onShowPress(MotionEvent e)
+        {
+            System.out.println("onShowPress");
+        }
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent e)
+        {
+            System.out.println("onSingleTapUp");
+            return false;
+        }
+
+        private boolean nocount = false;
+
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
+        {
+            System.out.println("onScroll");
+            if (swipingDown) {
+
+                if (nocount) {
+
+                    float from = swipedDown;
+                    float to = swipedDown - (3 * distanceY);
+                    swipedDown = to;
+
+                    if (swipedDown < 0) {
+                        to = 0;
+                        swipingDown = false;
+                    }
+
+                    TranslateAnimation swipeAnimation = new TranslateAnimation(0, 0, from, to);
+                    swipeAnimation.setDuration(100);
+                    swipeAnimation.setFillAfter(true);
+
+                    webView.startAnimation(swipeAnimation);
+                    webView.setScrollY(0);
+                }
+                nocount = !nocount;
+            } else if (distanceY < 0) {//scrolling down
+
+                if (webView.getScrollY() == 0) {
+                    //closing news
+                    swipingDown = true;
+                    nocount = true;
+                    swipedDown = 0;
+                    return true;
+                }
+
+            }
+            return false;
+        }
+
+        @Override
+        public void onLongPress(MotionEvent e)
+        {
+            System.out.println("onLongPress");
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
+        {
+            System.out.println("onFling");
+            return false;
+        }
+    };
+
     public void buttonsOut()
     {
         ScaleAnimation animation = new ScaleAnimation(
@@ -262,26 +409,12 @@ public class NewsView extends RelativeLayout {
                 1f, 0f, // Start and end values for the Y axis scaling
                 Animation.RELATIVE_TO_SELF, 0.5f, // Pivot point of X scaling
                 Animation.RELATIVE_TO_SELF, 0.5f); // Pivot point of Y scaling
-
         animation.setDuration(500);
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation)
-            {
-            }
+        animation.setFillBefore(true);
+        animation.setFillAfter(false);
 
-            @Override
-            public void onAnimationEnd(Animation animation)
-            {
-                button_share.setVisibility(View.GONE);
-                button_bookmark.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation)
-            {
-            }
-        });
+        button_share.setVisibility(View.GONE);
+        button_bookmark.setVisibility(View.GONE);
 
         button_share.startAnimation(animation);
         button_bookmark.startAnimation(animation);
@@ -296,24 +429,11 @@ public class NewsView extends RelativeLayout {
                 Animation.RELATIVE_TO_SELF, 0.5f); // Pivot point of Y scaling
 
         animation.setDuration(500);
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation)
-            {
-                button_share.setVisibility(View.VISIBLE);
-                button_bookmark.setVisibility(View.VISIBLE);
-            }
+        animation.setFillBefore(true);
+        animation.setFillAfter(true);
 
-            @Override
-            public void onAnimationEnd(Animation animation)
-            {
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation)
-            {
-            }
-        });
+        button_share.setVisibility(View.VISIBLE);
+        button_bookmark.setVisibility(View.VISIBLE);
 
         button_share.startAnimation(animation);
         button_bookmark.startAnimation(animation);

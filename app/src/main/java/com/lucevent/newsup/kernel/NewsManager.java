@@ -20,8 +20,6 @@ import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.io.DBManager;
 import com.lucevent.newsup.io.LogoManager;
 import com.lucevent.newsup.io.SDManager;
-import com.lucevent.newsup.kernel.util.Note;
-import com.lucevent.newsup.kernel.util.Notes;
 import com.lucevent.newsup.net.NewsReader;
 
 import java.util.ArrayList;
@@ -30,7 +28,6 @@ import java.util.Locale;
 public class NewsManager {
 
     private Context context;
-    private Handler handler;
 
     /**
      * Managers
@@ -40,22 +37,11 @@ public class NewsManager {
     protected static SDManager sdmanager;
     private static LogoManager logoManager;
 
-    private Notes notes;
-
-    /**
-     * Static variables
-     **/
     private static ConnectivityManager connectivityManager;
 
-    public NewsManager(Context context)
-    {
-        this(context, null);
-    }
-
-    public NewsManager(Context context, @Nullable Handler handler)
+    public NewsManager(@NonNull Context context)
     {
         this.context = context;
-        this.handler = handler;
 
         Date.setTitles(context.getResources().getStringArray(R.array.date_messages));
 
@@ -66,7 +52,7 @@ public class NewsManager {
             sdmanager = new SDManager(context);
 
         if (newsreader == null && ProSettings.isProModeActivated())
-            newsreader = new NewsReader();
+            newsreader = new NewsReader(context.getString(R.string.app_version));
 
         if (connectivityManager == null)
             connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -79,44 +65,14 @@ public class NewsManager {
             logoManager = LogoManager.getInstance(context, AppData.sites.size());
     }
 
-    public void getNewsOf(Site site, int[] sections)
+    public Sites getFavoriteSites()
     {
-        if (isInternetAvailable())
-            new NewsLoader(site, sections);
-        else
-            new NoInternetTask(site);
-    }
-
-    public void getMainNews()
-    {
-        if (isInternetAvailable())
-            new NewsLoader();
-        else
-            new NoInternetTask(null);
-    }
-
-    public boolean download_News_for_service(int[] sites_codes)
-    {
-        if (isInternetAvailable()) {
-            for (int site_code : sites_codes) {
-                try {
-
-                    Site site = AppData.getSiteByCode(site_code);
-                    NewsSiteLoader loader = new NewsSiteLoader(site, AppSettings.getDownloadSections(site));
-                    loader.run();
-
-                    for (News N : loader.newsToSave) {
-                        dbmanager.insertNews(N);
-                        sdmanager.saveNews(N);
-                    }
-
-                } catch (Exception e) {
-                    AppSettings.printerror("[NM] FATAL ERROR DURING SERVICE :(", e);
-                }
-            }
-            return true;
+        int[] favorite_codes = AppSettings.getFavoriteSitesCodes();
+        Sites res = new Sites(favorite_codes.length);
+        for (int code : favorite_codes) {
+            res.add(AppData.getSiteByCode(code));
         }
-        return false;
+        return res;
     }
 
     public News getNewsById(int id)
@@ -124,178 +80,173 @@ public class NewsManager {
         return dbmanager.readNews(id);
     }
 
-    public static void addToHistory(News news)
+    public void getNewsOf(@NonNull final Site site, @Nullable final int[] sections, @NonNull final Handler handler)
     {
-        dbmanager.insertHistoryNews(news);
+        new Thread(new Runnable() {
+            @Override
+            public void run()
+            {
+                if (isInternetAvailable()) {
+                    int[] fSections = sections == null ? AppSettings.getMainSections(site) : sections;
+
+                    NewsArray news = readNewsOf(site, fSections, handler, true);
+                    for (News N : news) {
+                        try {
+                            dbmanager.insertNews(N);
+                            sdmanager.saveNews(N);
+                        } catch (Exception e) {
+                            AppSettings.printerror("[NM2] Error when dbmanager.insertNews(N) in readNewsOf", e);
+                        }
+                    }
+                    handler.obtainMessage(AppCode.NEWS_LOADED).sendToTarget();
+                } else
+                    taskNoInternet(site, handler);
+            }
+        }).start();
     }
 
-    private class NewsLoader {
-
-        private final Site site;
-        private final int[] sections;
-
-        NewsLoader(@NonNull Site site, int[] sections)
-        {
-            this.site = site;
-            this.sections = sections;
-            new Thread(task_load_news_from).start();
-        }
-
-        private Runnable task_load_news_from = new Runnable() {
-
+    public void getMainNews(@NonNull final Handler handler)
+    {
+        new Thread(new Runnable() {
             @Override
             public void run()
             {
-                AppSettings.printlog("[NM] Reading from: " + site.name);
+                if (isInternetAvailable()) {
+                    int[] main_codes = AppSettings.getMainSitesCodes();
+                    NewsSiteLoader[] tasks = new NewsSiteLoader[main_codes.length];
 
-                int[] finalSections = sections;
-                if (finalSections == null)
-                    finalSections = AppSettings.getMainSections(site);
+                    for (int i = 0; i < main_codes.length; ++i) {
+                        Site site = AppData.getSiteByCode(main_codes[i]);
+                        tasks[i] = new NewsSiteLoader(site, AppSettings.getMainSections(site), handler);
+                        tasks[i].start();
+                    }
 
-                NewsMap tempNewsMap;
-                if (newsreader != null)
-                    tempNewsMap = new NewsMap(newsreader.readNewsHeaders(site, finalSections));
-                else
-                    tempNewsMap = new NewsMap(site.readNewsHeaders(finalSections));
+                    long timeBound = System.currentTimeMillis() - AppSettings.getKeepTime() * 1000;
+                    for (NewsSiteLoader task : tasks) {
+                        try {
+                            task.join();
+                        } catch (InterruptedException e) {
+                            AppSettings.printerror("", e);
+                        }
 
-                tempNewsMap.setCode(site.code);
-
-                handler.obtainMessage(AppCode.NEWS_MAP_READ, tempNewsMap).sendToTarget();
-                handler.obtainMessage(AppCode.NEWS_LOADED).sendToTarget();
-
-                getSiteHistory(site);
-                //    handler.obtainMessage(NEWS_READ_HISTORY, site.history).sendToTarget(); //TODO solo historial de la section
-
-                NewsArray tempNewsArray = new NewsArray();
-                tempNewsArray.addAll(tempNewsMap);
-                for (int i = 0; i < tempNewsArray.size(); ++i) {    // At first: set id of news that are already in the DB
-                    News N = tempNewsArray.get(i);
-                    if (site.news.contains(N))
-                        N.id = site.news.ceiling(N).id;
-                }
-
-                int failCounter = 0;
-                for (News N : tempNewsMap) {    // Next: read news content and store news that were not in the DB
-
-                    if (N.id == -1) {   // id was not set in previous step, means it is not in the history
-
-                        if (N.content == null || N.content.isEmpty())   // if there's need, read the content
-                            if (newsreader != null)
-                                newsreader.readNewsContent(site, N);
-                            else
-                                site.readNewsContent(N);
-
-                        if (N.content != null && !N.content.isEmpty()) { // If there is content, we save it...
-
-                            try {   // We insert it in the database
-                                dbmanager.insertNews(N);
+                        for (News N : task.newsToSave)
+                            try {
+                                if (N.date >= timeBound) {
+                                    dbmanager.insertNews(N);
+                                    sdmanager.saveNews(N);
+                                }
                             } catch (Exception e) {
-                                AppSettings.printerror("[NM] Error when dbmanager.insertNews(N)", e);
+                                AppSettings.printerror("[NM2] Error when dbmanager.insertNews(N) in readMainNews", e);
                             }
-                            site.news.add(N);
-                            sdmanager.saveNews(N); // and we save it in the disc
-
-                        } else
-                            failCounter++;
                     }
-                }
-                AppSettings.printlog("[NM] [" + site.name + "] News impossible to read: " + failCounter);
+                    handler.obtainMessage(AppCode.NEWS_LOADED).sendToTarget();
+
+                    AppSettings.printlog("Time bound: " + Date.getAge(timeBound));
+                    NewsArray oldNews = dbmanager.deleteOldNews(timeBound);
+                    for (News N : oldNews)
+                        sdmanager.deleteNews(N);
+
+                    AppSettings.printlog("[NM] readMainNews has finished");
+                } else
+                    taskNoInternet(null, handler);
             }
+        }).start();
+    }
 
-        };
+    public NewsArray getScheduledNews(@NonNull int[] siteCodes)
+    {
+        if (isInternetAvailable()) {
+            NewsArray res = new NewsArray();
+            for (int siteCode : siteCodes) {
+                try {
 
-        NewsLoader()
-        {
-            site = null;
-            sections = null;
-            new Thread(task_load_mainpage_news).start();
-        }
+                    Site site = AppData.getSiteByCode(siteCode);
+                    NewsArray news = readNewsOf(site, AppSettings.getDownloadSections(site), null, false);
 
-        private Runnable task_load_mainpage_news = new Runnable() {
-
-            @Override
-            public void run()
-            {
-
-                int[] main_codes = AppSettings.getMainSitesCodes();
-                NewsSiteLoader[] tasks = new NewsSiteLoader[main_codes.length];
-
-                for (int i = 0; i < main_codes.length; ++i) {
-                    Site site = AppData.getSiteByCode(main_codes[i]);
-                    tasks[i] = new NewsSiteLoader(site, AppSettings.getMainSections(site));
-                    tasks[i].start();
-                }
-
-                long timeBound = System.currentTimeMillis() - AppSettings.getKeepTime() * 1000;
-                for (NewsSiteLoader task : tasks) {
-                    try {
-                        task.join();
-                    } catch (InterruptedException e) {
-                        AppSettings.printerror("", e);
-                    }
-
-                    NewsMap newstosave = task.newsToSave;
-                    for (News N : newstosave)
-                        if (N.date >= timeBound) {
+                    for (News N : news) {
+                        if (N.id == -1) {
                             dbmanager.insertNews(N);
                             sdmanager.saveNews(N);
                         }
-                }
-                handler.obtainMessage(AppCode.NEWS_LOADED).sendToTarget();
+                    }
+                    res.addAll(news);
 
-                AppSettings.printlog("Time bound: " + Date.getAge(timeBound));
-                NewsArray oldNews = dbmanager.deleteOldNews(timeBound);
-                for (News N : oldNews) {
-                    sdmanager.deleteNews(N);
+                } catch (Exception e) {
+                    AppSettings.printerror("[NM] FATAL ERROR DURING SERVICE :(", e);
                 }
-
-                AppSettings.printlog("[NM] NewsLoader has finished");
             }
-        };
+            return res;
+        }
+        return null;
     }
 
-    private class NewsSiteLoader extends Thread {
+    private void taskNoInternet(@Nullable final Site site, @NonNull final Handler handler)
+    {
+        handler.obtainMessage(AppCode.NO_INTERNET, null).sendToTarget();
+        if (site != null) {
 
-        final Site site;
-        final int[] sections;
+            NewsMap history = getHistoryOf(site);
+            handler.obtainMessage(AppCode.NEWS_MAP_READ, history).sendToTarget();
 
-        NewsMap newsToSave;
+        } else {
 
-        NewsSiteLoader(Site site, int[] sections)
-        {
-            this.site = site;
-            this.sections = sections;
+            for (int siteCode : AppSettings.getMainSitesCodes()) {
+                NewsMap history = getHistoryOf(AppData.getSiteByCode(siteCode));
+                handler.obtainMessage(AppCode.NEWS_MAP_READ, history).sendToTarget();
+            }
         }
+        handler.obtainMessage(AppCode.NEWS_LOADED).sendToTarget();
+    }
 
-        @Override
-        public void run()
-        {
-            newsToSave = new NewsMap();
+    private NewsArray readNewsOf(@NonNull Site site, @NonNull int[] sections, @Nullable Handler handler, boolean onlyNew)
+    {
+        NewsArray news;
+        if (newsreader != null)
+            news = newsreader.readNewsHeaders(site.code, sections);
+        else
+            news = site.readNewsHeaders(sections);
 
-            getSiteHistory(site);
+        news.setCode(site.code);
 
-            NewsMap tempNewsMap;
-            if (newsreader != null)
-                tempNewsMap = new NewsMap(newsreader.readNewsHeaders(site, sections));
-            else
-                tempNewsMap = new NewsMap(site.readNewsHeaders(sections));
+        if (handler != null)
+            handler.obtainMessage(AppCode.NEWS_MAP_READ, new NewsMap(news)).sendToTarget();
 
-            tempNewsMap.setCode(site.code);
+        NewsMap history = getHistoryOf(site);
 
-            if (handler != null)
-                handler.obtainMessage(AppCode.NEWS_MAP_READ, tempNewsMap).sendToTarget();
-
-            NewsArray tempNewsArray = new NewsArray();
-            tempNewsArray.addAll(tempNewsMap);
-            for (int i = 0; i < tempNewsArray.size(); ++i) {    // At first: set id of news that are already in the DB
-                News N = tempNewsArray.get(i);
-                if (site.news.contains(N))
-                    N.id = site.news.ceiling(N).id;
+        if (onlyNew) {
+            for (int i = 0; i < news.size(); ++i) {    // At first: set id of news that are already in the DB
+                News N = news.get(i);
+                if (history.contains(N)) {
+                    N.id = history.ceiling(N).id;
+                    news.remove(i);
+                    i--;
+                }
             }
 
-            for (News N : tempNewsMap) {    // Next: read news content and store news that were not in the DB
+            NewsMap newsMap = new NewsMap(news);
+            for (News N : newsMap) {    // Next: read news content and store news that were not in the DB
 
-                if (N.id == -1) {   // id was not set in previous step, means it is not in the history
+                if (N.content == null || N.content.isEmpty())   // if there's need, read the content
+                    if (newsreader != null)
+                        newsreader.readNewsContent(site, N);
+                    else
+                        site.readNewsContent(N);
+
+                if (N.content != null && !N.content.isEmpty())  // If there is content, we save it...
+                    history.add(N);
+                else
+                    news.remove(N);
+            }
+
+        } else {
+
+            NewsMap newsMap = new NewsMap(news);
+            for (News N : newsMap) {    // Next: read news content and store news that were not in the DB
+
+                if (history.contains(N))
+                    N.id = history.ceiling(N).id;
+
+                else {   // id was not set in previous step, means it is not in the history
 
                     if (N.content == null || N.content.isEmpty())   // if there's need, read the content
                         if (newsreader != null)
@@ -303,13 +254,56 @@ public class NewsManager {
                         else
                             site.readNewsContent(N);
 
-                    if (N.content != null && !N.content.isEmpty()) { // If there is content, we save it...
-                        newsToSave.add(N); // ... in the buffer. The master thread will save it in DB and disc
-                        site.news.add(N);
-                    }
+                    if (N.content != null && !N.content.isEmpty())  // If there is content, we save it...
+                        history.add(N);
+                    else
+                        news.remove(N);
                 }
             }
         }
+        return news;
+    }
+
+    private NewsMap getHistoryOf(Site site)
+    {
+        if (site.news == null || site.news.isEmpty()) {
+            try {
+                site.news = dbmanager.readNews(site);
+            } catch (Exception e) {
+                dbmanager = new DBManager(context);
+                return getHistoryOf(site);
+            }
+        }
+        return site.news;
+    }
+
+    private boolean isInternetAvailable()
+    {
+        NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnected();
+    }
+
+    private class NewsSiteLoader extends Thread {
+
+        final Site site;
+        final int[] sections;
+        final Handler handler;
+
+        NewsArray newsToSave;
+
+        NewsSiteLoader(Site site, int[] sections, Handler handler)
+        {
+            this.site = site;
+            this.sections = sections;
+            this.handler = handler;
+        }
+
+        @Override
+        public void run()
+        {
+            newsToSave = readNewsOf(site, sections, handler, true);
+        }
+
     }
 
     public static News readContentOf(News news)
@@ -344,79 +338,9 @@ public class NewsManager {
         }
     }
 
-    private Site getSiteHistory(Site site)
+    public static void addToHistory(News news)
     {
-        if (site.news == null || site.news.isEmpty()) {
-            try {
-                site.news = dbmanager.readNews(site);
-            } catch (Exception e) {
-                dbmanager = new DBManager(context);
-                return getSiteHistory(site);
-            }
-        }
-        return site;
-    }
-
-    private class NoInternetTask extends Thread {
-
-        private final Site site;
-
-        private NoInternetTask(Site site)
-        {
-            this.site = site;
-            this.start();
-        }
-
-        @Override
-        public void run()
-        {
-            handler.obtainMessage(AppCode.NO_INTERNET, null).sendToTarget();
-            if (site != null) {
-
-                getSiteHistory(site);
-                handler.obtainMessage(AppCode.NEWS_MAP_READ, site.news).sendToTarget();
-
-            } else {
-
-                for (int isite : AppSettings.getMainSitesCodes()) {
-                    Site site = AppData.getSiteByCode(isite);
-
-                    site = getSiteHistory(site);
-
-                    handler.obtainMessage(AppCode.NEWS_MAP_FRAGMENT_READ, site.news).sendToTarget();
-                }
-            }
-            handler.obtainMessage(AppCode.NEWS_LOADED).sendToTarget();
-        }
-    }
-
-    public Sites getFavoritesSites()
-    {
-        int[] favorite_codes = AppSettings.getFavoriteSitesCodes();
-        Sites res = new Sites(favorite_codes.length);
-        for (int code : favorite_codes) {
-            res.add(AppData.getSiteByCode(code));
-        }
-        return res;
-    }
-
-    public static long getCacheSize()
-    {
-        return sdmanager.getCacheSize();
-    }
-
-    public static void cleanCache()
-    {
-        sdmanager.wipeData();
-        dbmanager.wipeData();
-        for (Site s : AppData.sites)
-            s.news = new NewsMap();
-    }
-
-    private boolean isInternetAvailable()
-    {
-        NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
-        return activeNetwork != null && activeNetwork.isConnected();
+        dbmanager.insertHistoryNews(news);
     }
 
     public ArrayList<Pair<Integer, Integer>> getReadingStats()
@@ -429,24 +353,17 @@ public class NewsManager {
         dbmanager.deleteReadingStats();
     }
 
-    public void createNote(String note)
+    public static long getCacheSize()
     {
-        notes.add(dbmanager.insertNote(note));
+        return sdmanager.getCacheSize();
     }
 
-    public void deleteNote(int note_position)
+    public static void cleanCache()
     {
-        Note note = notes.remove(note_position);
-        dbmanager.deleteNote(note.id);
-    }
-
-    public Notes getNotes()
-    {
-        if (notes == null)
-            notes = dbmanager.readNotes();
-
-        return notes;
+        sdmanager.wipeData();
+        dbmanager.wipeData();
+        for (Site s : AppData.sites)
+            s.news.clear();
     }
 
 }
-

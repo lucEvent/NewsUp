@@ -21,7 +21,7 @@
     <string name="disabled">Disabled</string>
     <string name="enabled">Enabled</string>
     <string name="reset">Reset</string>
-    <string name="add_content">Add content</string>
+    <string name="more_publications">More publications</string>
     <string name="select_fav_publications">Select your favorite\npublications</string>
     <string name="x_country">Country: <b>%1$s</b></string>
     <string name="x_language">Language: <b>%1$s</b></string>
@@ -131,7 +131,7 @@
     <string name="about_content_contact">Developed by Rafael J. Lucena\nContact: rafaa89(at)gmail.com</string>
     <string name="about_content_title_new_features">Last features and improvements:</string>
     <string name="about_content_new_features" translatable="false">
-        Version 2.0.0.not.final 2016-10-XX:\nNew: Shortcuts for each site in home screen.\nNews List view changed.\nBookmark from the same news list.\nSome texts changed for better understanding.\nIn android 6 and above: Dark icons on notification bar with \'light-color\' sites.\nSchedule a download directly from one particular site preference screen.\nErrors fixed and improvements.\n
+        Version 2.0.0.not.final 2016-10-XX:\nNew: Shortcuts for each site in home screen.\nNews List view changed.\nBookmark from the same news list.\nSome texts changed for better understanding.\nIn android 6 and above: Dark icons on notification bar with \'light-color\' sites.\nSchedule a download directly from one particular site preference screen.\nDark gray sections button for white color sites.\nFavorites added to preferences (finally).\nMain sites selection improved.\nSchedule downloads list now gives indications when there are no downloads scheduled.\nNo more repeated news in History news list.\nNotifications improved :)\nErrors fixed and improvements.\n
         \nVersion 1.8.0 2016-10-10:\nAdded support for newspapers \'The Herald Scotland\', \'The Guardian\', \'The New York Times\' and \'The Times of India\', and online magazines and blogs \'Clipset\', \'Elle Spain\', \'Google Earth Blog\', \'TechCrunch\', \'The Intercept\' and \'Vice\'.\n
         \nVersion 1.7.2 2016-10-02:\nNew: Report/Suggestion option.\nBookmarked news list updating fixed.\nSite selection screen now orders by device locale, and each section by site name.\nFull-translated to swedish.\nPartially translated to Finnish.\nLoading animation comes up when loading a section too now.\nMore errors fixed and improvements.\n
         \nVersion 1.7.0 2016-09-24:\nAdded support for newspapers \'Abc\', \'Metro UK\', \'Siberian Times\' and \'USA Today\', and online magazines and blogs \'Digital Inspiration\', \'Meristation\', \'PC World\', \'The Verge\' and \'Vandal\'.\nBugs fixed.\n
@@ -209,6 +209,12 @@
 
     <string name="msg_shortcut_created">A shortcut for %s has been place in your home screen</string>
     <string name="msg_download_set_successfully">Download set successfully</string>
+    <string name="pref_favorite_sites">Favorite publications</string>
+    <string name="x_favorites">%d favorites</string>
+    <string name="schedule_one_now">Schedule one now</string>
+    <string name="no_downloads_scheduled">There are no downloads scheduled</string>
+    <string name="delete_caps">DELETE</string>
+    <string name="expand_to_see_headlines">Expand to see the headlines</string>
 
 
 </resources>

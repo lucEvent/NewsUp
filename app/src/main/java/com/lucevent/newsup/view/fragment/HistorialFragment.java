@@ -120,7 +120,7 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
 
         displayingNews = true;
         NewsManager.addToHistory(news);
-        newsView.displayNews(news.toNews());
+        newsView.displayNews(news.toNews(), v);
     }
 
     @Override
@@ -145,7 +145,6 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
             HistorialFragment service = context.get();
             switch (msg.what) {
                 case AppCode.NEWS_MAP_READ:
-                case AppCode.NEWS_MAP_FRAGMENT_READ:
                     service.adapter.addAll((NewsMap) msg.obj);
                     break;
                 case AppCode.ERROR:

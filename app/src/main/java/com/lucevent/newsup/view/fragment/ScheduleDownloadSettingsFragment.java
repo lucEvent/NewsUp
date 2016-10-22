@@ -35,6 +35,8 @@ public class ScheduleDownloadSettingsFragment extends Fragment {
 
     }
 
+    private View noDownloadsScreen;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -48,6 +50,11 @@ public class ScheduleDownloadSettingsFragment extends Fragment {
         recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+
+        noDownloadsScreen = view.findViewById(R.id.no_downloads);
+
+        if (adapter.getItemCount() == 0)
+            noDownloadsScreen.setVisibility(View.VISIBLE);
 
         view.findViewById(R.id.button_sections).setOnClickListener(onAddAction);
 
@@ -70,6 +77,9 @@ public class ScheduleDownloadSettingsFragment extends Fragment {
 
             ScheduledDownloadReceiver.scheduleDownloads(getActivity(),
                     dataManager.getDownloadSchedules());
+
+            if (noDownloadsScreen.getVisibility() == View.VISIBLE)
+                noDownloadsScreen.setVisibility(View.GONE);
         }
     }
 
@@ -104,11 +114,14 @@ public class ScheduleDownloadSettingsFragment extends Fragment {
                         @Override
                         public void onClick(DialogInterface dialog, int which)
                         {
+
                             DownloadSchedule schedule = (DownloadSchedule) v.getTag();
                             adapter.remove(schedule);
                             dataManager.deleteDownloadSchedule(schedule);
-                            ScheduledDownloadReceiver.scheduleDownloads(getActivity(),
-                                    dataManager.getDownloadSchedules());
+                            ScheduledDownloadReceiver.scheduleDownloads(getActivity(), dataManager.getDownloadSchedules());
+
+                            if (adapter.getItemCount() == 0)
+                                noDownloadsScreen.setVisibility(View.VISIBLE);
                         }
                     })
                     .setNegativeButton(R.string.cancel, null)

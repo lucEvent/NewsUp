@@ -88,17 +88,17 @@ public class SectionsMultiSelectPreference extends DialogPreference {
 
         public int getCount()
         {
-            return site.sections.size();
+            return site.getSections().size();
         }
 
         public Object getItem(int position)
         {
-            return site.sections.get(position);
+            return site.getSections().get(position);
         }
 
         public long getItemId(int position)
         {
-            return site.sections.get(position).hashCode();
+            return site.getSections().get(position).hashCode();
         }
 
         public View getView(final int position, View view, ViewGroup parent)
@@ -106,7 +106,7 @@ public class SectionsMultiSelectPreference extends DialogPreference {
             if (view == null)
                 view = inflater.inflate(R.layout.pi_multi_select, parent, false);
 
-            Section section = site.sections.get(position);
+            Section section = site.getSections().get(position);
 
             CheckBox checkbox = (CheckBox) view.findViewById(R.id.checkbox);
             checkbox.setText(section.name);

@@ -13,6 +13,7 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -28,14 +29,13 @@ import com.lucevent.newsup.R;
 import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.view.adapter.SiteAdapter;
 
-import java.util.HashMap;
 import java.util.TreeSet;
 
 public class SelectSitesActivity extends AppCompatActivity implements
         AdapterView.OnItemSelectedListener, TextWatcher, View.OnFocusChangeListener {
 
     public enum For {
-        APP_FIRST_START, FAVORITES, ADD_CONTENT
+        APP_FIRST_START, SELECT_MAIN, SELECT_FAVORITES, SELECT_ONE
     }
 
     private For purpose;
@@ -43,7 +43,7 @@ public class SelectSitesActivity extends AppCompatActivity implements
     private String currentSearch = "";
 
     private SiteAdapter siteAdapter;
-    private HashMap<Integer, View> siteViewsMap;
+    private SparseArray<View> siteViewsMap;
 
     @SuppressWarnings("ConstantConditions")
     @Override
@@ -78,20 +78,26 @@ public class SelectSitesActivity extends AppCompatActivity implements
 
         purpose = (For) getIntent().getExtras().get(AppCode.SEND_PURPOSE);
 
-        switch (purpose) {
-            case ADD_CONTENT:
-                TextView intro = (TextView) findViewById(R.id.introduction);
-                intro.setText("");
-                intro.setPadding(0, 0, 0, 0);
-                ((CollapsingToolbarLayout.LayoutParams) intro.getLayoutParams()).setMargins(0, 0, 0, 0);
 
-                findViewById(R.id.button_bar).setVisibility(View.GONE);
-
-                NestedScrollView scrollView = (NestedScrollView) findViewById(R.id.scrollView);
-                scrollView.setPadding(0, 0, 0, 0);
-                break;
+        if (purpose != For.APP_FIRST_START) {
+            TextView intro = (TextView) findViewById(R.id.introduction);
+            intro.setText("");
+            intro.setPadding(0, 0, 0, 0);
+            ((CollapsingToolbarLayout.LayoutParams) intro.getLayoutParams()).setMargins(0, 0, 0, 0);
+            NestedScrollView scrollView = (NestedScrollView) findViewById(R.id.scrollView);
+            scrollView.setPadding(0, 0, 0, 0);
+        }
+        if (purpose == For.SELECT_ONE) {
+            findViewById(R.id.button_bar).setVisibility(View.GONE);
         }
 
+    }
+
+    private void setSelected(int[] codes)
+    {
+        nSitesSelected = codes.length;
+        for (int code : codes)
+            siteViewsMap.get(code).setSelected(true);
     }
 
     private int nSitesSelected = 0;
@@ -99,7 +105,7 @@ public class SelectSitesActivity extends AppCompatActivity implements
 
     public void actionToggle(View view)
     {
-        if (purpose == For.ADD_CONTENT) {
+        if (purpose == For.SELECT_ONE) {
             setResult((Integer) view.getTag());
             finish();
         } else {
@@ -138,6 +144,16 @@ public class SelectSitesActivity extends AppCompatActivity implements
             }
 
         siteViewsMap = siteAdapter.createView(this, (ViewGroup) findViewById(R.id.container), 4, currentOrder, currentSearch);
+
+        switch (purpose) {
+            case SELECT_MAIN:
+                setSelected(AppSettings.getMainSitesCodes());
+                break;
+            case SELECT_FAVORITES:
+                setSelected(AppSettings.getFavoriteSitesCodes());
+                break;
+        }
+
     }
 
     @Override
@@ -154,13 +170,25 @@ public class SelectSitesActivity extends AppCompatActivity implements
 
         TreeSet<String> codeSet = new TreeSet<>();
 
-        for (HashMap.Entry<Integer, View> entry : siteViewsMap.entrySet())
-            if (entry.getValue().isSelected())
-                codeSet.add(Integer.toString(entry.getKey()));
+        for (int i = 0; i < siteViewsMap.size(); i++)
+            if (siteViewsMap.valueAt(i).isSelected())
+                codeSet.add(Integer.toString(siteViewsMap.keyAt(i)));
 
-        AppSettings.setMainSitesCodes(codeSet);
-        AppSettings.setFavoriteSitesCodes(codeSet);
-        startActivity(new Intent(this, com.lucevent.newsup.Main.class));
+        switch (purpose) {
+            case APP_FIRST_START:
+                AppSettings.setMainSitesCodes(codeSet);
+                AppSettings.setFavoriteSitesCodes(codeSet);
+                startActivity(new Intent(this, com.lucevent.newsup.Main.class));
+                break;
+            case SELECT_MAIN:
+                AppSettings.setMainSitesCodes(codeSet);
+                setResult(RESULT_OK);
+                break;
+            case SELECT_FAVORITES:
+                AppSettings.setFavoriteSitesCodes(codeSet);
+                setResult(RESULT_OK);
+                break;
+        }
         finish();
     }
 

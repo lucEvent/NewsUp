@@ -37,9 +37,9 @@
         android:checkableBehavior="single">
 
         <item
-            android:id="@+id/nav_add_content"
+            android:id="@+id/nav_more_publications"
             android:icon="@drawable/ic_add"
-            android:title="@string/add_content"/>
+            android:title="@string/more_publications"/>
 
         <item
             android:id="@+id/nav_notes"

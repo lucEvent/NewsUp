@@ -18,25 +18,24 @@ public final class NewsReader {
     private static final int HASH_CONTENT = 951530617;
     private static final int HASH_ENCLOSURE = 1432853874;
 
-    private static final String query_index = "http://newsup-2406.appspot.com/app?news&" + (AppSettings.DEBUG ? "nc&" : "") + "site=";
+    private static final String query_index = "http://newsup-2406.appspot.com/app?news&site=%s%s&v=%s" + (AppSettings.DEBUG ? "&nc" : "");
     private static final String query_content = "http://newsup-2406.appspot.com/app?content&site=";
+    private final String version;
 
-    public NewsReader()
+    public NewsReader(String version)
     {
+        this.version = version;
     }
 
-    public final NewsArray readNewsHeaders(Site site, int[] sections)
+    public final NewsArray readNewsHeaders(int siteCode, int[] sections)
     {
         StringBuilder sectArray = new StringBuilder(sections.length * 3);
         for (int section : sections) sectArray.append(',').append(section);
 
-        String query = query_index + site.code + sectArray;
+        String query = String.format(query_index, siteCode, sectArray.toString(), version);
         AppSettings.printlog("Query: " + query);
 
-        NewsArray res = readRssPage(query);
-        if (!res.isEmpty())
-            site.prior_news = res.get(0);
-        return res;
+        return readRssPage(query);
     }
 
     private NewsArray readRssPage(String rsslink)

@@ -10,28 +10,28 @@ public class Site {
 
     public final int info;
 
-    public Sections sections;
-
     public NewsMap news;
 
+    private Class readerClass;
     private NewsReader reader;
 
-    public News prior_news;
+    private Class sectionsClass;
+    private Sections sections;
 
     /**
      *
      */
     private final boolean isDarkColor;
 
-    public Site(int code, String name, int color, int info, Sections sections, NewsReader reader)
+    public Site(int code, String name, int color, int info, Class sectionsClass, Class readerClass)
     {
         this.code = code;
         this.name = name;
         this.info = 0x1000000 | info;
         this.color = color;
-        this.sections = sections;
+        this.sectionsClass = sectionsClass;
+        this.readerClass = readerClass;
         this.news = new NewsMap();
-        this.reader = reader;
 
         isDarkColor = (((color >> 16) & 0xFF) < 0x7F) || (((color >> 8) & 0xFF) < 0x7F) || ((color & 0xFF) < 0x7F);
     }
@@ -51,16 +51,29 @@ public class Site {
         return ((info >> SiteCategory.shift) & 0xFF);
     }
 
+    public Sections getSections()
+    {
+        if (sections == null)
+            sections = (Sections) load(sectionsClass);
+        return sections;
+    }
+
+    public NewsReader getReader()
+    {
+        if (reader == null)
+            reader = (NewsReader) load(readerClass);
+        return reader;
+    }
+
     public NewsArray readNewsHeaders(int[] isections)
     {
         NewsArray res = new NewsArray();
 
         for (int isection : isections)
-            res.addAll(reader.readRssHeader(sections.get(isection).url));
+            res.addAll(getReader().readRssHeader(getSections().get(isection).url));
 
         synchronized (News.NEWS_STATIC_SYNCHRONIZER) {
-            for (News N : res)
-            {
+            for (News N : res) {
                 N.site_code = code;
                 N.server_id = News.SERVER_ID_ASSIGNER++;
             }
@@ -71,7 +84,7 @@ public class Site {
 
     public void readNewsContent(News news)
     {
-        reader.readNewsContent(news);
+        getReader().readNewsContent(news);
     }
 
     public boolean hasDarkColor()
@@ -81,7 +94,17 @@ public class Site {
 
     public String getStyle()
     {
-        return reader.style;
+        return getReader().style;
+    }
+
+    private Object load(Class _class)
+    {
+        try {
+            return _class.getConstructor().newInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

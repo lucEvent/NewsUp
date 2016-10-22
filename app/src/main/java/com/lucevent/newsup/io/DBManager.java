@@ -239,6 +239,7 @@ public class DBManager {
 
         synchronized (this) {
             SQLiteDatabase database = db.getWritableDatabase();
+            database.delete(DBHistoryNews.db, DBHistoryNews.news_id + "=" + news.id, null);
             database.insert(DBHistoryNews.db, null, values);
             values.clear();
 
@@ -257,6 +258,7 @@ public class DBManager {
             cursor.close();
             database.close();
         }
+
     }
 
     public DownloadSchedule insertDownloadSchedule(int hour, int minute, boolean notify,

@@ -17,7 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lucevent.newsup.R;
-import com.lucevent.newsup.kernel.NewsManager;
+import com.lucevent.newsup.kernel.NoteManager;
 import com.lucevent.newsup.view.adapter.NoteAdapter;
 import com.lucevent.newsup.view.util.ListItemSwipeCallback;
 import com.lucevent.newsup.view.util.ListItemSwipeListener;
@@ -27,17 +27,19 @@ public class NotesFragment extends Fragment implements TextView.OnEditorActionLi
     private EditText input;
     private NoteAdapter adapter;
 
-    private NewsManager dataManager;
+    private NoteManager noteManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         Context context = getActivity();
+
+        if (noteManager == null) {
+            noteManager = new NoteManager(context);
+            adapter = new NoteAdapter(context, noteManager.getNotes());
+        }
+
         View view = inflater.inflate(R.layout.f_drawer, container, false);
-
-        dataManager = new NewsManager(context);
-
-        adapter = new NoteAdapter(context, dataManager.getNotes());
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         layoutManager.setAutoMeasureEnabled(true);
@@ -46,6 +48,7 @@ public class NotesFragment extends Fragment implements TextView.OnEditorActionLi
         recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+
 
         ItemTouchHelper.Callback callback = new ListItemSwipeCallback(this, (TextView) view.findViewById(R.id.swipe_message));
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
@@ -77,7 +80,7 @@ public class NotesFragment extends Fragment implements TextView.OnEditorActionLi
             Toast.makeText(getActivity(), R.string.msg_empty_input, Toast.LENGTH_SHORT).show();
 
         else {
-            dataManager.createNote(in);
+            noteManager.createNote(in);
             adapter.notifyDataSetChanged();
             input.setText("");
         }
@@ -87,7 +90,7 @@ public class NotesFragment extends Fragment implements TextView.OnEditorActionLi
     @Override
     public void onItemDismiss(int position)
     {
-        dataManager.deleteNote(position);
+        noteManager.deleteNote(position);
         adapter.notifyItemRemoved(position);
     }
 

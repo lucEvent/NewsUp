@@ -19,7 +19,7 @@
     <string name="disabled">Deaktiverad</string>
     <string name="enabled">Aktiverad</string>
     <string name="reset">Återställa</string>
-    <string name="add_content">Lägg till innehåll</string>
+    <string name="more_publications">Mer publikationer</string>
     <string name="select_fav_publications">Välj dina favorit\npublikationer</string>
     <string name="x_country">Land: <b>%1$s</b></string>
     <string name="x_language">Språk: <b>%1$s</b></string>
