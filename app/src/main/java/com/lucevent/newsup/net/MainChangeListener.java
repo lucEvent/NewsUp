@@ -10,4 +10,6 @@ public interface MainChangeListener {
 
     void onReplaceFragment(Fragment f, int navigationViewIndex, boolean addToStack);
 
+    void onLoadImagesPreferenceChanged();
+
 }

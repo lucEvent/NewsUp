@@ -43,6 +43,7 @@ public class AppServlet extends HttpServlet {
             String[] parts = site_request.split(",");
 
             Site site = Data.sites.getSiteByCode(Integer.parseInt(parts[0]));
+            Site sitev2 = Data.sitesV2.getSiteByCode(Integer.parseInt(parts[0]));
             if (req.getParameter("nc") == null)
                 Data.stats.count(site, req.getRemoteAddr(), req.getParameter("v"));
 
@@ -53,10 +54,29 @@ public class AppServlet extends HttpServlet {
 
             NewsArray news = site.readNewsHeaders(sections);
             site.news.addAll(news);
+            sitev2.news.addAll(news);
 
             resp.getWriter().println(BackendParser.toEntry(news).toString());
 
         } else if (req.getParameter("content") != null) {
+
+            String snid = req.getParameter("nid");
+            if (snid != null) {
+                Site site = Data.sitesV2.getSiteByCode(Integer.parseInt(req.getParameter("site")));
+
+                News bait = new News(-1, "", "", "", 0, null);
+                bait.server_id = Long.parseLong(req.getParameter("nid"));
+
+                News prey = site.news.ceiling(bait);
+                if (prey != null && prey.server_id == bait.server_id) {
+
+                    if (prey.content == null || prey.content.isEmpty())
+                        site.readNewsContent(prey);
+
+                    resp.getWriter().print(prey.content == null ? "" : prey.content);
+                }
+                return;
+            }
 
             Site site = Data.sites.getSiteByCode(Integer.parseInt(req.getParameter("site")));
             String link = req.getParameter("link");
@@ -67,16 +87,12 @@ public class AppServlet extends HttpServlet {
 
             if (prey != null && prey.compareTo(bait) == 0) {
 
-                if (prey.content == null || prey.content.isEmpty()) {
+                if (prey.content == null || prey.content.isEmpty())
                     site.readNewsContent(prey);
-                }
 
-                if (prey.content == null) {
-                    resp.getWriter().println("");
-                } else {
-                    resp.getWriter().println(prey.content);
-                }
+                resp.getWriter().print(prey.content == null ? "" : prey.content);
             }
+
         } else if (req.getParameter("stats") != null) {
 
             if (req.getParameter("reset") != null)

@@ -8,7 +8,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -20,13 +19,13 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
-import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.Site;
@@ -42,7 +41,9 @@ public class NewsView extends RelativeLayout {
     private ActionBar actionBar;
 
     private WebView webView;
-    private FloatingActionButton button_bookmark, button_share;
+    private FloatingActionButton button_bookmark;
+    private NewsSideToolbar sideToolbar;
+    private boolean nightMode;
 
     public NewsView(Context context, AttributeSet attrs)
     {
@@ -61,15 +62,17 @@ public class NewsView extends RelativeLayout {
         webSettings.setBuiltInZoomControls(false);
         webSettings.setDisplayZoomControls(false);
 
+        sideToolbar = (NewsSideToolbar) findViewById(R.id.side_toolbar);
+
         button_bookmark = (FloatingActionButton) findViewById(R.id.button_bookmark);
-        button_share = (FloatingActionButton) findViewById(R.id.button_share);
-        button_share.setOnClickListener(onShareAction);
+        findViewById(R.id.button_share).setOnClickListener(onShareAction);
+        findViewById(R.id.button_night).setOnClickListener(onNightModeSelected);
 
-
-   //     gd = new GestureDetectorCompat(context, onGestureListener);
+        nightMode = AppSettings.getNightModeStatus();
+        //     gd = new GestureDetectorCompat(context, onGestureListener);
     }
 
-  //  GestureDetectorCompat gd;
+    //  GestureDetectorCompat gd;
 
     public void setFragmentContext(Fragment context, @Nullable DrawerLayout drawer)
     {
@@ -85,9 +88,9 @@ public class NewsView extends RelativeLayout {
     }
 
     private static final String NEWS_STYLE = "<style>" +
-            "body { margin: 20px; font-family: sans-serif-light; font-weight: 300; font-size: 17px; line-height: 1.7; background-color: #eee; }" +
+            "body {margin:20px;font-family:sans-serif-light;font-weight:300;font-size:17px;line-height:1.7;background-color:#%bg_c;color:#%t_c;}" +
             "blockquote{margin:10px;padding:5px 10px 5px 10px;background-color:#f2f2f2}" +
-            "a{color: #%a_color;}" +
+            "a{color:#%a_c;}" +
             "</style>";
 
     private static final String GRAPHYCS_STYLE = "<style>" +
@@ -113,24 +116,12 @@ public class NewsView extends RelativeLayout {
         button_bookmark.setTag(news);
         newsItemView = from;
 
-        Site site = AppData.getSiteByCode(currentNews.site_code);
-        int a_color = (site.color == 0xffffffff ? 0xcccccc : site.color & 0xffffff);
-
-        String style = site.getStyle() +
-                NEWS_STYLE.replace("%a_color", String.format("%06x", a_color)) +
-                (isInternetAvailable() ? GRAPHYCS_STYLE : GRAPHYCS_STYLE_NO_INTERNET) +
-                TWITTER_STYLE;
-
-        String webContent = style + "<h2>" + currentNews.title + "</h2>" + currentNews.content;
-
-        webView.loadDataWithBaseURL("file:///android_asset/", webContent, "text/html", "utf-8", null);
-        //     webView.loadData(webContent, "text/html", "utf-8");
+        updateNewsView();
 
         setBookmarkButtonImage(button_bookmark);
 
         if (drawer != null)
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-
 
         actionBar.hide();
 
@@ -158,6 +149,25 @@ public class NewsView extends RelativeLayout {
         });
     }
 
+    private void updateNewsView()
+    {
+        Site site = AppData.getSiteByCode(currentNews.site_code);
+        int a_color = (site.color == 0xffffffff ? 0xcccccc : site.color & 0xffffff);
+
+        String style = site.getStyle() +
+                NEWS_STYLE.replace("%a_c", String.format("%06x", a_color)) +
+                NEWS_STYLE.replace("%t_c", nightMode ? "fff" : "000") +
+                NEWS_STYLE.replace("%bg_c", nightMode ? "222" : "fff") +
+                (isInternetAvailable() ? GRAPHYCS_STYLE : GRAPHYCS_STYLE_NO_INTERNET) +
+                TWITTER_STYLE;
+
+        String webContent = style + "<h2>" + currentNews.title + "</h2>" + currentNews.content;
+
+        int scroll = webView.getScrollY();
+        webView.loadDataWithBaseURL("", webContent, "text/html", "utf-8", null);
+        webView.setScrollY(scroll);
+    }
+
     public void resume()
     {
         webView.onResume();
@@ -177,7 +187,6 @@ public class NewsView extends RelativeLayout {
 
         actionBar.show();
 
-
         AppAnimator.collapseMoving(this, newsItemView, viewHeight, new AppAnimator.AppAnimatorListener() {
             @Override
             public void onAnimationEnd(Animation animation)
@@ -189,6 +198,10 @@ public class NewsView extends RelativeLayout {
                 setVisibility(View.GONE);
             }
         });
+
+        if (!sideToolbar.closed) {
+            sideToolbar.close();
+        }
     }
 
     private boolean isInternetAvailable()
@@ -208,7 +221,7 @@ public class NewsView extends RelativeLayout {
             ((ImageView) view).setImageResource(R.drawable.ic_bookmark_border);
     }
 
-    private View.OnClickListener onShareAction = new View.OnClickListener() {
+    private final View.OnClickListener onShareAction = new View.OnClickListener() {
         @Override
         public void onClick(View v)
         {
@@ -220,43 +233,31 @@ public class NewsView extends RelativeLayout {
         }
     };
 
-    private final View.OnTouchListener onNewsContentTouch = new View.OnTouchListener() {
+    private final View.OnClickListener onNightModeSelected = new View.OnClickListener() {
+        @Override
+        public void onClick(View v)
+        {
+            nightMode = !nightMode;
+            updateNewsView();
+            AppSettings.setNightModeStatus(nightMode);
+        }
+    };
 
-        private static final int DEFAULT_WAITING_TIME = 3500;
-        private Boolean buttons_visible = true;
+    private final View.OnTouchListener onNewsContentTouch = new View.OnTouchListener() {
 
         @Override
         public boolean onTouch(View v, MotionEvent event)
         {
-     //        gd.onTouchEvent(event);
+            //        gd.onTouchEvent(event);
 
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    synchronized (onNewsContentTouch) {
 
-                        if (!buttons_visible) {
-                            buttonsIn();
-                            buttons_visible = true;
-                        } else {
-                            if (actionHide.getState() == Thread.State.RUNNABLE || actionHide.getState() == Thread.State.TIMED_WAITING)
-                                actionHide.interrupt();
-                        }
-                    }
                     break;
                 case MotionEvent.ACTION_UP:
-                    synchronized (onNewsContentTouch) {
-
-                        if (actionHide.getState() == Thread.State.NEW)
-                            actionHide.start();
-                        else if (actionHide.getState() == Thread.State.WAITING)
-                            synchronized (actionHide) {
-                                actionHide.notify();
-                            }
-                    }
 
                     if (swipingDown) {
                         swipingDown = false;
-
 
                         TranslateAnimation swipeAnimation = new TranslateAnimation(0, 0, swipedDown, 0);
                         swipeAnimation.setDuration((long) (swipedDown / 2));
@@ -264,10 +265,8 @@ public class NewsView extends RelativeLayout {
 
                         webView.setAnimation(swipeAnimation);
                     }
-                    //TODO
                     break;
             /*    case MotionEvent.ACTION_MOVE:
-
                     if (swipingDown) {
                   //      webView.setTranslationY(previousY-event.getY());
                     }
@@ -281,8 +280,6 @@ public class NewsView extends RelativeLayout {
                         }
 
                     }
-                    else
-
                     break;
                 default:
                     System.out.println("Other... " + event.getAction());*/
@@ -290,38 +287,6 @@ public class NewsView extends RelativeLayout {
             return false;
         }
 
-        final Thread actionHide = new Thread(new Runnable() {
-            @Override
-            public void run()
-            {
-                //noinspection InfiniteLoopStatement
-                while (true)
-                    try {
-                        Thread.sleep(DEFAULT_WAITING_TIME);
-                        synchronized (onNewsContentTouch) {
-                            fragmentContext.getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run()
-                                {
-                                    buttonsOut();
-                                }
-                            });
-                            buttons_visible = false;
-                        }
-                        synchronized (actionHide) {
-                            actionHide.wait();
-                        }
-
-                    } catch (Exception e) {
-                        try {
-                            synchronized (actionHide) {
-                                actionHide.wait();
-                            }
-                        } catch (Exception ignored) {
-                        }
-                    }
-            }
-        });
     };
 
     private boolean swipingDown = false;
@@ -401,42 +366,5 @@ public class NewsView extends RelativeLayout {
             return false;
         }
     };
-
-    public void buttonsOut()
-    {
-        ScaleAnimation animation = new ScaleAnimation(
-                1f, 0f, // Start and end values for the X axis scaling
-                1f, 0f, // Start and end values for the Y axis scaling
-                Animation.RELATIVE_TO_SELF, 0.5f, // Pivot point of X scaling
-                Animation.RELATIVE_TO_SELF, 0.5f); // Pivot point of Y scaling
-        animation.setDuration(500);
-        animation.setFillBefore(true);
-        animation.setFillAfter(false);
-
-        button_share.setVisibility(View.GONE);
-        button_bookmark.setVisibility(View.GONE);
-
-        button_share.startAnimation(animation);
-        button_bookmark.startAnimation(animation);
-    }
-
-    public void buttonsIn()
-    {
-        ScaleAnimation animation = new ScaleAnimation(
-                0f, 1f, // Start and end values for the X axis scaling
-                0f, 1f, // Start and end values for the Y axis scaling
-                Animation.RELATIVE_TO_SELF, 0.5f, // Pivot point of X scaling
-                Animation.RELATIVE_TO_SELF, 0.5f); // Pivot point of Y scaling
-
-        animation.setDuration(500);
-        animation.setFillBefore(true);
-        animation.setFillAfter(true);
-
-        button_share.setVisibility(View.VISIBLE);
-        button_bookmark.setVisibility(View.VISIBLE);
-
-        button_share.startAnimation(animation);
-        button_bookmark.startAnimation(animation);
-    }
 
 }

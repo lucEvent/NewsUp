@@ -36,6 +36,7 @@
         <activity
             android:name=".SiteMain"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:taskAffinity=".SiteMain"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

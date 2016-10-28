@@ -1,6 +1,7 @@
 package com.lucevent.newsup.backend;
 
 import com.lucevent.newsup.backend.utils.BackendParser;
+import com.lucevent.newsup.data.util.Enclosures;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.Site;
@@ -60,6 +61,7 @@ public class MainServlet extends HttpServlet {
 
         News news = new News(title.toString(), applink, description.toString(), System.currentTimeMillis(), new Tags());
         news.content = content.toString();
+        news.enclosures = new Enclosures();
         return news;
     }
 
@@ -88,7 +90,7 @@ public class MainServlet extends HttpServlet {
 
             int site_code = Integer.parseInt(parts[0]);
             Site site = Data.sites.getSiteByCode(site_code);
-            Data.stats.count(site, req.getRemoteAddr(), req.getParameter("0.16.3"));
+            Data.stats.count(site, req.getRemoteAddr(), "0.16.3");
 
             int[] sections = new int[parts.length - 1];
             for (int i = 0; i < sections.length; i++) {

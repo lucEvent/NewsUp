@@ -11,7 +11,9 @@ public class BackendParser {
 
     public static StringBuilder toEntry(News news)
     {
-        StringBuilder res = new StringBuilder("<item><title>");
+        StringBuilder res = new StringBuilder("<item><sid>");
+        res.append(news.server_id);
+        res.append("</sid><title>");
         res.append(news.title);
         res.append("</title><link>");
         res.append(news.link);

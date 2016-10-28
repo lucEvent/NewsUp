@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.util.SparseArray;
 
@@ -64,14 +66,33 @@ public class LogoManager {
         return res;
     }
 
-    public static Bitmap getBitmap(int site_code)
+    public static Bitmap getBitmap(int site_code, int appIconSize)
     {
+        int fifth = appIconSize / 5;
+        int visibleSize = 3 * fifth;
+
+        Bitmap bitmap = null;
         try {
-            return BitmapFactory.decodeStream(dataManager.open(site_code + ".png"));
+            bitmap = BitmapFactory.decodeStream(dataManager.open(site_code + ".png"));
+
+            if (bitmap.getWidth() != visibleSize || bitmap.getHeight() != visibleSize)
+                bitmap = Bitmap.createScaledBitmap(bitmap, visibleSize, visibleSize, true);
+/*
+            Paint bg = new Paint();
+            bg.setAlpha(0);
+
+            Bitmap res = Bitmap.createBitmap(appIconSize,appIconSize,null);
+            Canvas c = new Canvas(res);
+            c.drawRect(0, 0, appIconSize, appIconSize, bg);
+            c.drawBitmap(bitmap, fifth, fifth, null);
+
+            bitmap=res;
+*/
+
         } catch (Exception e) {
             AppSettings.printerror("[LM] [EXCEPTION] Couldn't read asset " + site_code + ".png", e);
         }
-        return null;
+        return bitmap;
     }
 
 }

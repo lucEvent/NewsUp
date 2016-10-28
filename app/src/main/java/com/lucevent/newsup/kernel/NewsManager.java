@@ -27,6 +27,8 @@ import java.util.Locale;
 
 public class NewsManager {
 
+    private static final double MAX_SITE_PETITIONS_SIMULTANEOUSLY_ON_SERVER = 5;
+
     private Context context;
 
     /**
@@ -89,7 +91,7 @@ public class NewsManager {
                 if (isInternetAvailable()) {
                     int[] fSections = sections == null ? AppSettings.getMainSections(site) : sections;
 
-                    NewsArray news = readNewsOf(site, fSections, handler, true);
+                    NewsArray news = readNewsOf(site, fSections, handler, true, false);
                     for (News N : news) {
                         try {
                             dbmanager.insertNews(N);
@@ -115,9 +117,15 @@ public class NewsManager {
                     int[] main_codes = AppSettings.getMainSitesCodes();
                     NewsSiteLoader[] tasks = new NewsSiteLoader[main_codes.length];
 
-                    for (int i = 0; i < main_codes.length; ++i) {
+                    int i;
+                    for (i = 0; i < Math.min(MAX_SITE_PETITIONS_SIMULTANEOUSLY_ON_SERVER, main_codes.length); ++i) {
                         Site site = AppData.getSiteByCode(main_codes[i]);
-                        tasks[i] = new NewsSiteLoader(site, AppSettings.getMainSections(site), handler);
+                        tasks[i] = new NewsSiteLoader(site, AppSettings.getMainSections(site), handler, false);
+                        tasks[i].start();
+                    }
+                    for (; i < main_codes.length; ++i) {
+                        Site site = AppData.getSiteByCode(main_codes[i]);
+                        tasks[i] = new NewsSiteLoader(site, AppSettings.getMainSections(site), handler, true);
                         tasks[i].start();
                     }
 
@@ -161,7 +169,7 @@ public class NewsManager {
                 try {
 
                     Site site = AppData.getSiteByCode(siteCode);
-                    NewsArray news = readNewsOf(site, AppSettings.getDownloadSections(site), null, false);
+                    NewsArray news = readNewsOf(site, AppSettings.getDownloadSections(site), null, false, false/* de momento */);
 
                     for (News N : news) {
                         if (N.id == -1) {
@@ -198,7 +206,7 @@ public class NewsManager {
         handler.obtainMessage(AppCode.NEWS_LOADED).sendToTarget();
     }
 
-    private NewsArray readNewsOf(@NonNull Site site, @NonNull int[] sections, @Nullable Handler handler, boolean onlyNew)
+    private NewsArray readNewsOf(@NonNull Site site, @NonNull int[] sections, @Nullable Handler handler, boolean onlyNew, boolean forceDevice)
     {
         NewsArray news;
         if (newsreader != null)
@@ -227,7 +235,7 @@ public class NewsManager {
             for (News N : newsMap) {    // Next: read news content and store news that were not in the DB
 
                 if (N.content == null || N.content.isEmpty())   // if there's need, read the content
-                    if (newsreader != null)
+                    if (newsreader != null && !forceDevice)
                         newsreader.readNewsContent(site, N);
                     else
                         site.readNewsContent(N);
@@ -249,7 +257,7 @@ public class NewsManager {
                 else {   // id was not set in previous step, means it is not in the history
 
                     if (N.content == null || N.content.isEmpty())   // if there's need, read the content
-                        if (newsreader != null)
+                        if (newsreader != null && !forceDevice)
                             newsreader.readNewsContent(site, N);
                         else
                             site.readNewsContent(N);
@@ -288,20 +296,22 @@ public class NewsManager {
         final Site site;
         final int[] sections;
         final Handler handler;
+        final boolean forceDevice;
 
         NewsArray newsToSave;
 
-        NewsSiteLoader(Site site, int[] sections, Handler handler)
+        NewsSiteLoader(Site site, int[] sections, Handler handler, boolean forceDevice)
         {
             this.site = site;
             this.sections = sections;
             this.handler = handler;
+            this.forceDevice = forceDevice;
         }
 
         @Override
         public void run()
         {
-            newsToSave = readNewsOf(site, sections, handler, true);
+            newsToSave = readNewsOf(site, sections, handler, true, forceDevice);
         }
 
     }

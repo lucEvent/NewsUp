@@ -95,4 +95,9 @@ public class SiteMain extends AppCompatActivity implements MainChangeListener {
         fragmentManager.replaceFragment(f, navigationViewIndex, addToStack);
     }
 
+    @Override
+    public void onLoadImagesPreferenceChanged()
+    {
+    }
+
 }

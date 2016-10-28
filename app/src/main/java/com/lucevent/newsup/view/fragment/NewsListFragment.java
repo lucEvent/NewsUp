@@ -47,8 +47,14 @@ import com.lucevent.newsup.view.dialog.SectionsDialog;
 import com.lucevent.newsup.view.util.ContentLoader;
 import com.lucevent.newsup.view.util.NewsView;
 import com.lucevent.newsup.view.util.OnBackPressedListener;
+import com.lucevent.newsup.view.util.OnMoreSectionsClickListener;
 
 import java.lang.ref.WeakReference;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class NewsListFragment extends android.app.Fragment implements View.OnClickListener,
         View.OnLongClickListener, OnBackPressedListener {
@@ -75,6 +81,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
     }
 
     public int currentSiteCode, lastLoadedSiteCode;
+    private boolean showSectionsButton;
     private Site currentSite;
     private SectionsDialog sectionsDialog;
 
@@ -102,6 +109,8 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         progressBar.setVisibility(ProgressBar.VISIBLE);
         switch (currentSiteCode) {
             case -2:
+                adapter.setOnMoreSectionsClick(null);
+                showSectionsButton = false;
 
                 int[] news_ids = getArguments().getIntArray(AppCode.SEND_NEWS_IDS);
                 assert news_ids != null : "Arguments can't be recovered";
@@ -118,16 +127,25 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
                 break;
 
             case -1:
+                showSectionsButton = false;
+                adapter.setOnMoreSectionsClick(null);
                 dataManager.getMainNews(handler);
                 getActivity().setTitle(R.string.my_news);
                 break;
 
             default:
+                showSectionsButton = currentSite.getSections().size() > 1;
+                adapter.setOnMoreSectionsClick(showSectionsButton ? onMoreSectionsClick : null);
                 dataManager.getNewsOf(currentSite, null, handler);
                 getActivity().setTitle(currentSite.name);
         }
         lastLoadedSiteCode = currentSiteCode;
         setUpColors();
+    }
+
+    public void onLoadImagesPreferenceChanged()
+    {
+        adapter.loadImages(AppSettings.loadImages());
     }
 
     private NewsManager dataManager;
@@ -139,7 +157,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
     private NewsView newsView;
     private RecyclerView recyclerView;
     private FloatingActionButton btn_sections;
-    private ProgressBar progressBar;
+    private View progressBar;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -170,6 +188,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
             mainView = inflater.inflate(R.layout.f_news_list, container, false);
 
             adapter = new NewsAdapter(new NewsArray(), this, this, onBookmarkClick);
+            adapter.loadImages(AppSettings.loadImages());
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             layoutManager.setAutoMeasureEnabled(true);
@@ -194,7 +213,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
             btn_sections = (FloatingActionButton) mainView.findViewById(R.id.button_sections);
             btn_sections.setOnClickListener(onSectionsAction);
 
-            progressBar = (ProgressBar) mainView.findViewById(R.id.progress_bar);
+            progressBar = mainView.findViewById(R.id.progress_bar);
         }
         setUp();
         return mainView;
@@ -249,7 +268,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
     public boolean onBackPressed()
     {
         if (displayingNews) {
-            if (currentSite != null)
+            if (showSectionsButton)
                 btn_sections.setVisibility(View.VISIBLE);
             newsView.hideNews();
             displayingNews = false;
@@ -318,6 +337,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         return false;
     }
 
+
     static class Handler extends android.os.Handler {
 
         private final WeakReference<NewsListFragment> context;
@@ -384,8 +404,11 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
 
             ab.setTitle(currentSite.name);
 
-            btn_sections.setVisibility(ImageButton.VISIBLE);
-            btn_sections.setBackgroundTintList(ColorStateList.valueOf(currentSite.color == 0xffffffff ? 0xff666666 : currentSite.color));
+            if (showSectionsButton) {
+                btn_sections.setVisibility(ImageButton.VISIBLE);
+                btn_sections.setBackgroundTintList(ColorStateList.valueOf(currentSite.color == 0xffffffff ? 0xff666666 : currentSite.color));
+            } else
+                btn_sections.setVisibility(ImageButton.GONE);
 
             setFavoriteIcon();
             Drawable icon_conf = appmenu.getItem(1).setVisible(true).getIcon();
@@ -470,6 +493,42 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
 
             } else
                 tempBookmarkButton = v;
+        }
+    };
+
+    private OnMoreSectionsClickListener onMoreSectionsClick = new OnMoreSectionsClickListener() {
+        @Override
+        public Set<Section> sections()
+        {
+            Set<Section> res;
+            Sections s = currentSite.getSections();
+            if (s.size() <= 9) {
+                res = new HashSet<>(s.size());
+                res.addAll(s);
+            } else {
+                res = new TreeSet<>(new Comparator<Section>() {
+                    @Override
+                    public int compare(Section s1, Section s2)
+                    {
+                        return s1.name.compareTo(s2.name);
+                    }
+                });
+                Random r = new Random();
+                while (res.size() < 9) {
+                    int pos;
+                    do {
+                        pos = r.nextInt(s.size());
+                    } while (s.get(pos).level == -1);
+                    res.add(s.get(pos));
+                }
+            }
+            return res;
+        }
+
+        @Override
+        public void onClick(View v)
+        {
+            onSectionSelected.onClick(v);
         }
     };
 

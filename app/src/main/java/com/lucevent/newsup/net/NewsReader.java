@@ -17,9 +17,10 @@ public final class NewsReader {
     private static final int HASH_CATEGORIES = 1296516636;
     private static final int HASH_CONTENT = 951530617;
     private static final int HASH_ENCLOSURE = 1432853874;
+    private static final int HASH_SERVER_ID = 113870;
 
     private static final String query_index = "http://newsup-2406.appspot.com/app?news&site=%s%s&v=%s" + (AppSettings.DEBUG ? "&nc" : "");
-    private static final String query_content = "http://newsup-2406.appspot.com/app?content&site=";
+    private static final String query_content = "http://newsup-2406.appspot.com/app?content&site=%d&nid=%d";
     private final String version;
 
     public NewsReader(String version)
@@ -47,7 +48,7 @@ public final class NewsReader {
 
         for (org.jsoup.nodes.Element item : doc.select("item")) {
             String title = "", link = "", description = "", content = "", categories = "";
-            long date = 0;
+            long date = 0, sid = -1;
             Enclosures enclosures = new Enclosures();
 
             for (org.jsoup.nodes.Element prop : item.children()) {
@@ -73,10 +74,15 @@ public final class NewsReader {
                         break;
                     case HASH_ENCLOSURE:
                         enclosures.add(new Enclosure(prop.text(), "image", ""));
+                        break;
+                    case HASH_SERVER_ID:
+                        sid = Long.parseLong(prop.text());
+                        break;
                 }
             }
             if (!title.isEmpty()) {
                 News news = new News(title, link, description, date, new Tags(categories));
+                news.server_id = sid;
                 news.enclosures = enclosures;
                 if (!content.isEmpty())
                     news.content = content;
@@ -99,7 +105,7 @@ public final class NewsReader {
 
     public final News readNewsContent(Site site, News news)
     {
-        String query = query_content + site.code + "&date=" + news.date + "&link=" + news.link;
+        String query = String.format(query_content, news.site_code, news.server_id);
 
         org.jsoup.nodes.Document doc = getDocument(query);
         if (doc != null) {

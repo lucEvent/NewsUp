@@ -116,7 +116,7 @@ public class BookmarksFragment extends android.app.Fragment implements View.OnCl
 
         displayingNews = true;
         NewsManager.addToHistory(news);
-        newsView.displayNews(news,v);
+        newsView.displayNews(news, v);
     }
 
     @Override

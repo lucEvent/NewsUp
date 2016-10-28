@@ -3,6 +3,7 @@ package com.lucevent.newsup.view.activity;
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -17,16 +18,12 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.lucevent.newsup.R;
-import com.lucevent.newsup.data.Sites;
-import com.lucevent.newsup.data.SitesMap;
 import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.AppData;
 import com.lucevent.newsup.kernel.ScheduleManager;
 import com.lucevent.newsup.services.util.DownloadSchedule;
-import com.lucevent.newsup.view.adapter.SiteMultiSelectAdapter;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Arrays;
 
 public class DownloadScheduleEditorActivity extends AppCompatActivity {
 
@@ -42,7 +39,7 @@ public class DownloadScheduleEditorActivity extends AppCompatActivity {
     private CheckBox repeat, notify;
     private int hour = 0, minute = 0;
 
-    private Set<String> selected_sites = new HashSet<>();
+    private int[] selected_sites = new int[0];
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
@@ -80,18 +77,14 @@ public class DownloadScheduleEditorActivity extends AppCompatActivity {
             repeat.setChecked(originalSchedule.repeat);
             notify.setChecked(originalSchedule.notify);
 
-            selected_sites = new HashSet<>(originalSchedule.sites_codes.length);
-            for (int code : originalSchedule.sites_codes)
-                selected_sites.add(Integer.toString(code));
+            selected_sites = Arrays.copyOfRange(originalSchedule.sites_codes, 0, originalSchedule.sites_codes.length);
         } else if (action == ACTION_CREATE_ONE) {
             int site_code = (int) getIntent().getExtras().get(AppCode.SEND_SITE_CODE);
+            selected_sites = new int[]{site_code};
 
             Button ss = (Button) findViewById(R.id.select_sites);
             ss.setText(AppData.getSiteByCode(site_code).name);
             ss.setEnabled(false);
-
-            selected_sites = new HashSet<>(1);
-            selected_sites.add(Integer.toString(site_code));
         }
     }
 
@@ -135,36 +128,27 @@ public class DownloadScheduleEditorActivity extends AppCompatActivity {
         checkbox.toggle();
     }
 
-    private Sites sites;
-
     public void onSelectSitesAction(View v)
     {
-        if (sites == null)
-            sites = new Sites(new SitesMap(AppData.sites, SitesMap.SITE_COMPARATOR_BY_NAME));
+        Intent intent = new Intent(this, SelectSitesActivity.class);
+        intent.putExtra(AppCode.SEND_PURPOSE, SelectSitesActivity.For.SELECT_DOWNLOAD);
+        intent.putExtra(AppCode.SEND_SELECTED, selected_sites);
+        startActivityForResult(intent, 0);
+    }
 
-        SiteMultiSelectAdapter adapter = new SiteMultiSelectAdapter(DownloadScheduleEditorActivity.this,
-                sites, selected_sites);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
 
-        new AlertDialog.Builder(DownloadScheduleEditorActivity.this)
-                .setAdapter(adapter, null)
-                .setCancelable(false)
-                .setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        if (selected_sites.size() == 0)
-                            new AlertDialog.Builder(DownloadScheduleEditorActivity.this)
-                                    .setMessage(R.string.msg_must_select_at_least_one)
-                                    .setNegativeButton(R.string.dismiss, null)
-                                    .show();
-                    }
-                })
-                .show();
+        if (resultCode == RESULT_OK) {
+            selected_sites = (int[]) data.getExtras().get(AppCode.SEND_SELECTED);
+        }
     }
 
     public void actionSave(View view)
     {
-        if (selected_sites.isEmpty()) {
+        if (selected_sites.length == 0) {
             Toast.makeText(this, R.string.msg_must_select_at_least_one_site, Toast.LENGTH_SHORT).show();
             return;
         }
@@ -182,11 +166,6 @@ public class DownloadScheduleEditorActivity extends AppCompatActivity {
         boolean notify = this.notify.isChecked();
         boolean repeat = this.repeat.isChecked();
 
-        int[] sites_codes = new int[selected_sites.size()];
-        int index = 0;
-        for (String site_code : selected_sites)
-            sites_codes[index++] = Integer.parseInt(site_code);
-
         ScheduleManager dataManager = new ScheduleManager(this);
         if (action == ACTION_MODIFY) {
             originalSchedule.hour = hour;
@@ -194,11 +173,11 @@ public class DownloadScheduleEditorActivity extends AppCompatActivity {
             originalSchedule.notify = notify;
             originalSchedule.repeat = repeat;
             originalSchedule.days = days;
-            originalSchedule.sites_codes = sites_codes;
+            originalSchedule.sites_codes = selected_sites;
 
             dataManager.updateDownloadSchedule(originalSchedule);
         } else
-            dataManager.createDownloadSchedule(hour, minute, notify, repeat, days, sites_codes);
+            dataManager.createDownloadSchedule(hour, minute, notify, repeat, days, selected_sites);
 
         Toast.makeText(this, R.string.msg_download_set_successfully, Toast.LENGTH_SHORT).show();
         setResult(RESULT_OK);

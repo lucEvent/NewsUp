@@ -118,6 +118,7 @@
     <string name="pref_clean_cache_key" translatable="false">app_pref5</string>
     <string name="pref_pro_code_key" translatable="false">app_pref7</string>
     <string name="pref_keep_news_key" translatable="false">app_pref8</string>
+    <string name="pref_load_images_key" translatable="false">app_pref9</string>
 
     <string name="pref_show_in_my_feed_key" translatable="false">site_pref1</string>
     <string name="pref_favorite_key" translatable="false">site_pref2</string>
@@ -131,18 +132,36 @@
     <string name="about_content_contact">Developed by Rafael J. Lucena\nContact: rafaa89(at)gmail.com</string>
     <string name="about_content_title_new_features">Last features and improvements:</string>
     <string name="about_content_new_features" translatable="false">
-        Version 2.0.0.not.final 2016-10-XX:\nNew: Shortcuts for each site in home screen.\nNews List view changed.\nBookmark from the same news list.\nSome texts changed for better understanding.\nIn android 6 and above: Dark icons on notification bar with \'light-color\' sites.\nSchedule a download directly from one particular site preference screen.\nDark gray sections button for white color sites.\nFavorites added to preferences (finally).\nMain sites selection improved.\nSchedule downloads list now gives indications when there are no downloads scheduled.\nNo more repeated news in History news list.\nNotifications improved :)\nErrors fixed and improvements.\n
+        Version 2.0.0.not.final 2016-10-XX:\n
+        New: Shortcuts for each site in home screen.\n
+        New: Pictures on news list (and preference to show/hide them).\n
+        New: More sections shown at the end of the news list (if available).\n
+        New animations and some animation changes.\n
+        News List view changed.\n
+        Bookmark from the same news list.\n
+        Some texts changed for better understanding.\n
+        Schedule a download directly from one particular site preference screen.\n
+        Dark gray sections button for white color sites.\n
+        Favorites added to preferences (finally).\n
+        Main sites selection improved.\n
+        Schedule downloads list now gives indications when there are no downloads scheduled.\n
+        No more repeated news in History news list.\n
+        Notifications improved :).\n
+        For fast connections: news download improved when there are many sites in main.\n
+        New option buttons in news view (Plus night/day view option added).\n
+        Sections button hidden when a site has only one section.\n
+        White icon color issue in Kitkat devices solved.\n
+        In android 6 and above: Dark icons on notification bar with \'light-color\' sites.\n
+        Errors fixed and improvements.\n
         \nVersion 1.8.0 2016-10-10:\nAdded support for newspapers \'The Herald Scotland\', \'The Guardian\', \'The New York Times\' and \'The Times of India\', and online magazines and blogs \'Clipset\', \'Elle Spain\', \'Google Earth Blog\', \'TechCrunch\', \'The Intercept\' and \'Vice\'.\n
         \nVersion 1.7.2 2016-10-02:\nNew: Report/Suggestion option.\nBookmarked news list updating fixed.\nSite selection screen now orders by device locale, and each section by site name.\nFull-translated to swedish.\nPartially translated to Finnish.\nLoading animation comes up when loading a section too now.\nMore errors fixed and improvements.\n
         \nVersion 1.7.0 2016-09-24:\nAdded support for newspapers \'Abc\', \'Metro UK\', \'Siberian Times\' and \'USA Today\', and online magazines and blogs \'Digital Inspiration\', \'Meristation\', \'PC World\', \'The Verge\' and \'Vandal\'.\nBugs fixed.\n
         \nVersion 1.6.0 2016-09-12:\nNewsView: images, videos and iframes are hidden when there is no internet connection.\nFixed severe bug when a schedule is executed while the user is interacting with the app.\nFixed severe bug opening news from notification.\nSupport for tweets.\nNews load faster.\nAdded animation to show that news are loading.\nIntroducing notes with Pro code.\nAvoid news reloading when unnecessary.\nBug fixes and improvements.\n
-        \nVersion 1.5.1 2016-07-08:\nNew sites: VilaWeb, Mashable.\nScreen overlapping on navigation back fixed, plus coherence with drawer row selected.\n
+        \nVersion 1.5.1 2016-07-08:\nScreen overlapping on navigation back fixed, plus coherence with drawer row selected.\n
         \nVersion 1.5.0 2016-07-01:\nInit screen to select your favorite sites.\nDrawer list reconfigured.\n
         \nVersion 1.4.0 2016-06-25:\nMarshmallow support!!\nIMPORTANT FIX: Huge leak when closing news view fixed.\nNews display style improved (margins).\nZoom disabled.\n
         \nVersion 1.3.0 2016-06-16:\nStatistics improved.\nNew: Pro codes.\nAbout screen performance improved.\nDatabase bug fixed.\n
         \nVersion 1.2.3 2016-06-02:\nNew "Keep time" preference to control storage limits.\nLogs enabled/disabled easier for developing.\n
-        \nVersion 1.2.0 2016-05-15:\nNew sites: \'Digital Camera\', \'Verne\' and \'Hipertextual\'.\n
-        \nVersion 1.1.0 2016-05-14:\nNew sites: \'Huffington Post USA\' and \'Huffington Post Canada\'.\n
         \nVersion 1.0.0 2016-04-19:\nLollipop support!!\nSettings standardized.\nMinimum version supported: Kitkat\n
     </string>
     <string name="about_content_title_comming_soon">What\'s coming soon?:</string>
@@ -206,15 +225,20 @@
     <string name="pref_shortcut">Create shortcut</string>
     <string name="pref_shortcut_summary">Tap to place a shortcut for this site in your home screen</string>
     <string name="pref_schedule_one_download">Schedule a download</string>
+    <string name="pref_favorite_sites">Favorite publications</string>
+    <string name="pref_title_content">Content</string>
+    <string name="pref_load_images">Load images</string>
+    <string name="pref_load_images_summary">Set to ON consumes more battery and network data</string>
 
     <string name="msg_shortcut_created">A shortcut for %s has been place in your home screen</string>
     <string name="msg_download_set_successfully">Download set successfully</string>
-    <string name="pref_favorite_sites">Favorite publications</string>
+
     <string name="x_favorites">%d favorites</string>
     <string name="schedule_one_now">Schedule one now</string>
     <string name="no_downloads_scheduled">There are no downloads scheduled</string>
     <string name="delete_caps">DELETE</string>
     <string name="expand_to_see_headlines">Expand to see the headlines</string>
+    <string name="see_something_else">See something else?</string>
 
 
 </resources>

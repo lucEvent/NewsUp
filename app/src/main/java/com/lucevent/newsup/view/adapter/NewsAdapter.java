@@ -11,12 +11,15 @@ import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.NewsMap;
 import com.lucevent.newsup.io.BookmarksManager;
 import com.lucevent.newsup.view.adapter.viewholder.NewsViewHolder;
+import com.lucevent.newsup.view.util.OnMoreSectionsClickListener;
 
 import java.util.Collection;
 
-public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> {
+public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final int CHUNK = 15;
+    private static final int CHUNK = 10;
+    private static final int TYPE_NEWS = 0;
+    private static final int TYPE_MORE = 1;
 
     private int dataSetVisibleCount;
 
@@ -24,8 +27,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> {
     private final NewsArray dataSet;
     private final View.OnClickListener onClick, onBookmarkClick;
     private final View.OnLongClickListener onLongClick;
+    private OnMoreSectionsClickListener onMoreClick;
 
-    private boolean showSiteLogo;
+    private boolean showSiteLogo, loadImage;
 
     public NewsAdapter(NewsArray dataSet, View.OnClickListener onClick, View.OnLongClickListener onLongClick,
                        View.OnClickListener onBookmarkClick)
@@ -38,48 +42,80 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> {
 
         this.dataMap = new NewsMap();
         this.showSiteLogo = true;
+        this.loadImage = true;
     }
 
     @Override
-    public NewsViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.i_news, parent, false);
-        v.setOnClickListener(onClick);
-        v.setOnLongClickListener(onLongClick);
-        return new NewsViewHolder(v, onBookmarkClick);
+        RecyclerView.ViewHolder vh;
+        if (viewType == TYPE_NEWS) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.i_news, parent, false);
+            v.setOnClickListener(onClick);
+//            v.setOnLongClickListener(onLongClick);
+            vh = new NewsViewHolder(v, onBookmarkClick);
+        } else {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.i_more_sections, parent, false);
+            vh = new MoreSectionsViewHolder(v, onMoreClick);
+        }
+        return vh;
     }
 
     @Override
-    public void onBindViewHolder(NewsViewHolder holder, int position)
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position)
     {
-        News news = dataSet.get(position);
-        NewsViewHolder.populateViewHolder(holder, news, showSiteLogo, BookmarksManager.isBookmarked(news));
+        if (holder instanceof NewsViewHolder) {
+            News news = dataSet.get(position);
+            ((NewsViewHolder) holder).populate(news, showSiteLogo, loadImage, BookmarksManager.isBookmarked(news));
+        } else
+            ((MoreSectionsViewHolder) holder).populate();
     }
 
     @Override
-    public int getItemCount()
+    public final int getItemCount()
     {
         return dataSetVisibleCount;
     }
 
-    public void loadMoreData()
+    @Override
+    public int getItemViewType(int position)
     {
-        int dataAdded = Math.min(this.dataSetVisibleCount + CHUNK, dataSet.size()) - dataSetVisibleCount;
+        return onMoreClick == null ? TYPE_NEWS : (position < dataSet.size() ? TYPE_NEWS : TYPE_MORE);
+    }
+
+    public final void loadMoreData()
+    {
+        int dataAdded = Math.min(dataSetVisibleCount + CHUNK, dataSet.size()) - dataSetVisibleCount;
         if (dataAdded > 0) {
             try {
                 notifyItemRangeInserted(dataSetVisibleCount, dataAdded);
             } catch (Exception ignored) {
             }
-            this.dataSetVisibleCount += dataAdded;
+            dataSetVisibleCount += dataAdded;
+        } else if (dataSetVisibleCount == dataSet.size()) {
+            if (onMoreClick != null) {
+                notifyItemRangeInserted(dataSetVisibleCount, 1);
+                dataSetVisibleCount++;
+            }
         }
     }
 
-    public void showSiteLogo(boolean showSiteLogo)
+    public final void showSiteLogo(boolean showSiteLogo)
     {
         this.showSiteLogo = showSiteLogo;
     }
 
-    public void setNewDataSet(Collection<News> dataSet)
+    public final void setOnMoreSectionsClick(OnMoreSectionsClickListener onMoreClickListener)
+    {
+        this.onMoreClick = onMoreClickListener;
+    }
+
+    public void loadImages(boolean loadImages)
+    {
+        this.loadImage = loadImages;
+    }
+
+    public final void setNewDataSet(Collection<News> dataSet)
     {
         synchronized (this.dataSet) {
             this.dataMap.clear();
@@ -101,23 +137,21 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> {
         }
     }
 
-    public void addAll(Collection<News> dataSet)
+    public final void addAll(Collection<News> dataSet)
     {
         synchronized (this.dataSet) {
             this.dataMap.addAll(dataSet);
             this.dataSet.clear();
             this.dataSet.addAll(dataMap);
 
-            int current = dataSetVisibleCount;
-            dataSetVisibleCount = Math.min(dataSetVisibleCount + CHUNK, this.dataSet.size());
-            if (current == 0)
-                notifyItemRangeInserted(0, dataSetVisibleCount);
-            else
-                notifyItemRangeChanged(0, dataSetVisibleCount);
+            if (dataSetVisibleCount == 0)
+                dataSetVisibleCount = Math.min(CHUNK, this.dataSet.size());
+
+            notifyItemRangeChanged(0, dataSetVisibleCount);
         }
     }
 
-    public void remove(News news)
+    public final void remove(News news)
     {
         int position = -1;
         for (int i = 0; i < dataSet.size(); i++) {
@@ -131,7 +165,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> {
         notifyItemRemoved(position);
     }
 
-    public void update(News news)
+    public final void update(News news)
     {
         int position = -1;
         for (int i = 0; i < dataSet.size(); i++) {
@@ -143,7 +177,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> {
         notifyItemChanged(position);
     }
 
-    public void clear()
+    public final void clear()
     {
         dataSet.clear();
         dataMap.clear();

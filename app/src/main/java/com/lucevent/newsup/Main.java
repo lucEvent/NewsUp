@@ -105,6 +105,22 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         newsFragment.setRetainInstance(true);
 
         fragmentManager.addFragment(newsFragment, R.id.nav_my_news);
+
+        /**
+         // For 2.0.0 release to correct some errors //
+         // 1.
+         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+         SharedPreferences.Editor editor = sp.edit();
+         editor.putBoolean(ProSettings.STATISTICS_KEY, false);
+         editor.apply();
+         // 2.
+         HashSet<String> hs = new HashSet<>(1);
+         hs.add("0");
+         AppSettings.setMainSections(AppData.getSiteByCode(200), hs);
+         AppSettings.setMainSections(AppData.getSiteByCode(205), hs);
+         AppSettings.setDownloadSections(AppData.getSiteByCode(200), hs);
+         AppSettings.setDownloadSections(AppData.getSiteByCode(205), hs);
+         **/
     }
 
     @Override
@@ -315,6 +331,12 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     public void onReplaceFragment(Fragment f, int navigationViewIndex, boolean addToStack)
     {
         fragmentManager.replaceFragment(f, navigationViewIndex, addToStack);
+    }
+
+    @Override
+    public void onLoadImagesPreferenceChanged()
+    {
+        newsFragment.onLoadImagesPreferenceChanged();
     }
 
     @Override

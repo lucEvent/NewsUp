@@ -53,7 +53,7 @@
 
         <item
             android:id="@+id/nav_contact"
-            android:icon="@android:drawable/ic_dialog_email"
+            android:icon="@drawable/ic_reports"
             android:title="@string/report_n_contact"/>
 
         <item

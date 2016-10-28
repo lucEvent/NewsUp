@@ -22,6 +22,7 @@ public interface AppCode {
     String SEND_DOWNLOAD_SCHEDULE = "download_schedule";
     String SEND_PURPOSE = "purpose";
     String SEND_REQUEST_CODE = "req_code";
+    String SEND_SELECTED = "selected";
 
     String ACTION = "action";
     String RESTART = "restart";

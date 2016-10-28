@@ -21,6 +21,8 @@ public class AppSettings {
     private static Set<String> DEFAULT_MAIN_SECTIONS;
     private static Set<String> DEFAULT_DOWNLOAD_SECTIONS;
     private static final String DEFAULT_KEEP_TIME = "2592000";
+    private static final boolean DEFAULT_LOAD_IMAGES = true;
+    private static final boolean DEFAULT_NIGHT_MODE = false;
 
     public static String PREF_MAIN_SITES_KEY;
     public static String PREF_FAVORITE_SITES_KEY;
@@ -28,6 +30,9 @@ public class AppSettings {
     public static String PREF_CLEAN_CACHE_KEY;
     public static String PREF_PRO_CODE_KEY;
     public static String PREF_KEEP_NEWS_KEY;
+    public static String PREF_LOAD_IMAGES_KEY;
+    private static final String PREF_NIGHT_MODE_KEY = "night_mode";
+
 
     public static String PREF_SITE_MAIN_SECTIONS_KEY;
     public static String PREF_SITE_DOWNLOAD_SECTIONS_KEY;
@@ -44,6 +49,7 @@ public class AppSettings {
             PREF_CLEAN_CACHE_KEY = context.getString(R.string.pref_clean_cache_key);
             PREF_PRO_CODE_KEY = context.getString(R.string.pref_pro_code_key);
             PREF_KEEP_NEWS_KEY = context.getString(R.string.pref_keep_news_key);
+            PREF_LOAD_IMAGES_KEY = context.getString(R.string.pref_load_images_key);
 
             PREF_SITE_MAIN_SECTIONS_KEY = context.getString(R.string.pref_main_sections_key);
             PREF_SITE_DOWNLOAD_SECTIONS_KEY = context.getString(R.string.pref_download_sections_key);
@@ -181,6 +187,11 @@ public class AppSettings {
         changeListener.onMainistsChange();
     }
 
+    public static boolean loadImages()
+    {
+        return preferences.getBoolean(PREF_LOAD_IMAGES_KEY, DEFAULT_LOAD_IMAGES);
+    }
+
     private static int[] getIntArray(Set<String> set)
     {
         int index = 0;
@@ -202,6 +213,18 @@ public class AppSettings {
     public static long getKeepTime()
     {
         return Long.parseLong(preferences.getString(PREF_KEEP_NEWS_KEY, DEFAULT_KEEP_TIME));
+    }
+
+    public static boolean getNightModeStatus()
+    {
+        return preferences.getBoolean(PREF_NIGHT_MODE_KEY, DEFAULT_NIGHT_MODE);
+    }
+
+    public static void setNightModeStatus(boolean status)
+    {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(PREF_NIGHT_MODE_KEY, status);
+        editor.apply();
     }
 
     public static void printerror(String msg, Exception e)

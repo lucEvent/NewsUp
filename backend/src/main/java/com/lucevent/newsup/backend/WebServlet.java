@@ -74,7 +74,7 @@ public class WebServlet extends HttpServlet {
 
             Site site = Data.sitesV2.getSiteByCode(Integer.parseInt(s_site));
 
-            resp.getWriter().println(BackendParser.toHtml(site.sections).toString());
+            resp.getWriter().println(BackendParser.toHtml(site.getSections()).toString());
 
         } else if (req.getParameter("stats") != null) {
 

@@ -1,5 +1,6 @@
 package com.lucevent.newsup.view.fragment;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -105,13 +106,13 @@ public class SiteSettingsFragment extends android.preference.PreferenceFragment
 
             Intent shortcutIntent = new Intent(context, SiteMain.class);
             shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//            shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             shortcutIntent.putExtra(AppCode.SEND_SITE_CODE, currentSite.code);
 
             Intent addIntent = new Intent();
             addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
             addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, currentSite.name);
-            addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, LogoManager.getBitmap(currentSite.code));
+            addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, LogoManager.getBitmap(currentSite.code, 10));
             addIntent.putExtra("duplicate", true);
             addIntent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
             context.sendBroadcast(addIntent);

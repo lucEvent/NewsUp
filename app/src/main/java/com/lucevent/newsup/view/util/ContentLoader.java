@@ -23,9 +23,9 @@ public abstract class ContentLoader extends RecyclerView.OnScrollListener {
         int totalItemCount = mLinearLayoutManager.getItemCount();
         int lastVisibleItem = mLinearLayoutManager.findLastVisibleItemPosition();
 
-        if ((totalItemCount - visibleItemCount) <= (lastVisibleItem + THRESHOLD)) {
+        if (totalItemCount > 0 &&
+                (totalItemCount - visibleItemCount) <= (lastVisibleItem + THRESHOLD))
             onLoadMore();
-        }
     }
 
     public abstract void onLoadMore();

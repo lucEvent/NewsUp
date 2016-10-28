@@ -18,10 +18,6 @@
             android:key="@string/pref_sites_settings_key"
             android:title="@string/pref_sites_settings"/>
 
-        <Preference
-            android:key="@string/pref_schedule_downloads_key"
-            android:title="@string/pref_schedule_downloads"/>
-
         <EditTextPreference
             android:defaultValue=""
             android:hint="@string/hint_pref_pro_mode"
@@ -30,7 +26,11 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/pref_title_data">
+    <PreferenceCategory android:title="@string/pref_title_content">
+
+        <Preference
+            android:key="@string/pref_schedule_downloads_key"
+            android:title="@string/pref_schedule_downloads"/>
 
         <ListPreference
             android:defaultValue="2592000"
@@ -38,6 +38,17 @@
             android:entryValues="@array/keep_time_values"
             android:key="@string/pref_keep_news_key"
             android:title="@string/pref_keep_news"/>
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="@string/pref_load_images_key"
+            android:summary="@string/pref_load_images_summary"
+            android:title="@string/pref_load_images"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_title_data">
+
 
         <com.lucevent.newsup.view.preference.CleanCachePreference
             android:key="@string/pref_clean_cache_key"

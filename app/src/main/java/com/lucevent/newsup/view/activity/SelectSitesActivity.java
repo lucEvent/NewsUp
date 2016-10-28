@@ -35,7 +35,7 @@ public class SelectSitesActivity extends AppCompatActivity implements
         AdapterView.OnItemSelectedListener, TextWatcher, View.OnFocusChangeListener {
 
     public enum For {
-        APP_FIRST_START, SELECT_MAIN, SELECT_FAVORITES, SELECT_ONE
+        APP_FIRST_START, SELECT_MAIN, SELECT_FAVORITES, SELECT_DOWNLOAD, SELECT_ONE
     }
 
     private For purpose;
@@ -123,10 +123,11 @@ public class SelectSitesActivity extends AppCompatActivity implements
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id)
     {
-        if (currentOrder == null)
+        boolean firstStart = false;
+        if (currentOrder == null) {
             currentOrder = SiteAdapter.Order.BY_LANGUAGE;
-
-        else
+            firstStart = true;
+        } else
             switch (position) {
                 default:
                 case 0:
@@ -145,15 +146,18 @@ public class SelectSitesActivity extends AppCompatActivity implements
 
         siteViewsMap = siteAdapter.createView(this, (ViewGroup) findViewById(R.id.container), 4, currentOrder, currentSearch);
 
-        switch (purpose) {
-            case SELECT_MAIN:
-                setSelected(AppSettings.getMainSitesCodes());
-                break;
-            case SELECT_FAVORITES:
-                setSelected(AppSettings.getFavoriteSitesCodes());
-                break;
+        if (firstStart) {
+            switch (purpose) {
+                case SELECT_MAIN:
+                    setSelected(AppSettings.getMainSitesCodes());
+                    break;
+                case SELECT_FAVORITES:
+                    setSelected(AppSettings.getFavoriteSitesCodes());
+                    break;
+                case SELECT_DOWNLOAD:
+                    setSelected((int[]) getIntent().getExtras().get(AppCode.SEND_SELECTED));
+            }
         }
-
     }
 
     @Override
@@ -187,6 +191,16 @@ public class SelectSitesActivity extends AppCompatActivity implements
             case SELECT_FAVORITES:
                 AppSettings.setFavoriteSitesCodes(codeSet);
                 setResult(RESULT_OK);
+                break;
+            case SELECT_DOWNLOAD:
+                int index = 0;
+                int[] selected = new int[codeSet.size()];
+                for (String s : codeSet)
+                    selected[index++] = Integer.parseInt(s);
+
+                Intent intent = new Intent();
+                intent.putExtra(AppCode.SEND_SELECTED, selected);
+                setResult(RESULT_OK, intent);
                 break;
         }
         finish();

@@ -23,7 +23,7 @@
         android:id="@+id/button_sections"
         style="@style/floatingButton"
         android:layout_gravity="bottom|end"
-        android:src="@drawable/ic_add"
+        android:src="@drawable/ic_add_white"
         app:backgroundTint="@color/colorPrimary"
         app:rippleColor="@color/colorAccent"/>
 
