@@ -27,6 +27,11 @@
     <string name="notes">Anotacions</string>
     <string name="send">Enviar</string>
     <string name="report_n_contact">Informa &amp; Contacta</string>
+    <string name="x_favorites">%d favorits</string>
+    <string name="schedule_one_now">Programa una ara</string>
+    <string name="no_downloads_scheduled">No hi ha descàrregues programades</string>
+    <string name="expand_to_see_headlines">Expandeix per veure els titulars</string>
+    <string name="see_something_else">Interessat en algun tema més?</string>
 
     <string name="mon">Dl</string>
     <string name="tue">Dm</string>
@@ -54,6 +59,7 @@
     <string name="thats_it">Això és tot</string>
     <string name="add">Afegeix</string>
     <string name="delete">Eliminar</string>
+    <string name="delete_caps">ELIMINAR</string>
 
 
     <!-- * ******************** Hints **************************** * -->
@@ -84,6 +90,8 @@
     <string name="msg_disk_permission_denied">NO podràs marcar notícies fins que no concedeixis aquest permís</string>
     <string name="msg_confirm_to_reset_statistics">Confirma per restaurar les estadístiques</string>
     <string name="msg_empty_input">Anotació buida</string>
+    <string name="msg_shortcut_created">S\'ha creat un accés directe per %s a la teva finestra d\'inici</string>
+    <string name="msg_download_set_successfully">Descarga programada</string>
 
 
     <!-- * *************** Activities and fragment's titles ********************* * -->
@@ -98,6 +106,7 @@
     <!-- ***************************** Settings strings ********************************** -->
     <string name="pref_title_general">General</string>
     <string name="pref_title_data">Dades</string>
+    <string name="pref_title_content">Contingut</string>
 
     <string name="pref_clean_cache">Neteja la caché</string>
     <string name="pref_main_sites">Publicacions principals</string>
@@ -109,6 +118,12 @@
     <string name="pref_download_sections">Seccions de descàrrega</string>
     <string name="pref_pro_code">Codi PRO</string>
     <string name="pref_keep_news">Guardar notícies</string>
+    <string name="pref_shortcut">Crear accés directe</string>
+    <string name="pref_shortcut_summary">Toca per ficar un accés directe a la finestra d\'inici</string>
+    <string name="pref_schedule_one_download">Programa una descàrrega</string>
+    <string name="pref_favorite_sites">Publicacions favorites</string>
+    <string name="pref_load_images">Carregar imatges</string>
+    <string name="pref_load_images_summary">Activat consumeix més bateria i dades</string>
 
     <!-- ***************************** ***************** ********************************** -->
     <string name="about_content_contact">Desenvolupat per Rafael J. Lucena\nContacte: rafaa89(arrova)gmail.com</string>

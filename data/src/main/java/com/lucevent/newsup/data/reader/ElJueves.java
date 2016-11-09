@@ -53,11 +53,14 @@ public class ElJueves extends com.lucevent.newsup.data.util.NewsReader {
         Elements article;
         String finalcontent;
         if (news.link.contains(".es/news/") || news.link.contains(".es/jarticulos/")
-                || news.link.contains(".es/vloggers/")) {
+                || news.link.contains(".es/vloggers/") || news.link.contains(".es/articulos/")) {
             article = main.select(".row .sub-title,.row .detailMedia,.row #detail");
 
             if (article.isEmpty())
                 article = main.select(".vineta img");
+
+            for (Element e : article.select("h2"))
+                e.tagName("h4");
 
             finalcontent = article.outerHtml();
         } else if (news.link.contains(".es/manda-guevos/")) {

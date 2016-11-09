@@ -22,7 +22,7 @@ public class HelsinkiSanomatSections extends Sections {
 
         add(new Section("Teemat", null, -1));
         add(new Section("Ruoka", "http://www.hs.fi/rss/?osastot=ruoka", 1));
-        add(new Section("Elämä & Terveys", "http://www.hs.fi/uutiset/osastoittain/rss?osastot=elama,koti,terveys,tyyli,matka,ihmiset", 1));
+        add(new Section("El\u00E4m\u00E4 & Terveys", "http://www.hs.fi/uutiset/osastoittain/rss?osastot=elama,koti,terveys,tyyli,matka,ihmiset", 1));
         add(new Section("Tiede", "http://www.hs.fi/rss/?osastot=tiede", 1));
         add(new Section("Autot", "http://www.hs.fi/rss/?osastot=autot", 1));
         add(new Section("Tekniikka", "http://www.hs.fi/rss/?osastot=tekniikka", 1));

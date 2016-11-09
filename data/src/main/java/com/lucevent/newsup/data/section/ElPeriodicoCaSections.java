@@ -18,15 +18,20 @@ public class ElPeriodicoCaSections extends Sections {
         add(new Section("Tecnologia", "http://www.elperiodico.cat/ca/rss/tecnologia/rss.xml", 0));
         add(new Section("Esports", "http://www.elperiodico.cat/ca/rss/esports/rss.xml", 0));
         add(new Section("Oci i cultura", "http://www.elperiodico.cat/ca/rss/oci-i-cultura/rss.xml", 0));
+        add(new Section("Ci\u00E8ncia", "http://www.elperiodico.cat/ca/rss/ciencia/rss.xml", 0));
+        add(new Section("Medi ambient", "http://www.elperiodico.cat/ca/rss/medi-ambient/rss.xml", 0));
+        add(new Section("Sanitat", "http://www.elperiodico.cat/ca/rss/sanitat/rss.xml", 0));
+        add(new Section("Gent i TV", "http://www.elperiodico.cat/ca/rss/gent/rss.xml", 0));
+        add(new Section("eXtra", "http://www.elperiodico.cat/ca/rss/extra/rss.xml", 0));
+        add(new Section("Canal Bellesa", "http://www.elperiodico.cat/ca/rss/bellesa/rss.xml", 0));
 
         add(new Section("Ciutats", null, -1));
         add(new Section("Barcelona", "http://www.elperiodico.cat/ca/rss/barcelona/rss.xml", 1));
-        add(new Section("L'Hospitalet", "http://www.elperiodico.cat/ca/rss/hospitalet/rss.xml", 1));
         add(new Section("Sabadell", "http://www.elperiodico.cat/ca/rss/sabadell/rss.xml", 1));
         add(new Section("Badalona", "http://www.elperiodico.cat/ca/rss/badalona/rss.xml", 1));
 
         add(new Section("Blogs", null, -1));
-        add(new Section("Los restaurantes de Pau Arenós", "http://rdp.elperiodico.com/feed/?_ga=1.183745446.1073564764.1445817152", 1));
+        add(new Section("Los restaurantes de Pau Aren\u00F3s", "http://rdp.elperiodico.com/feed/?_ga=1.183745446.1073564764.1445817152", 1));
         add(new Section("El Tourmalet", "http://tourmalet.elperiodico.com/feed/?_ga=1.183745446.1073564764.1445817152", 1));
         add(new Section("Bloglobal", "http://blogs.elperiodico.com/bloglobal/feed/?_ga=1.183745446.1073564764.1445817152", 1));
         add(new Section("Destinos ", "http://www.visitdestinos.com/feed/", 1));

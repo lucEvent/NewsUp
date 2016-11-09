@@ -27,6 +27,11 @@
     <string name="notes">Anteckningar</string>
     <string name="send">Skicka</string>
     <string name="report_n_contact">Anmäla &amp; Kontakta</string>
+    <string name="x_favorites">%d favoriter</string>
+    <string name="schedule_one_now">Schemalägga en nu</string>
+    <string name="no_downloads_scheduled">Det finns inga nedladdningar schemalagda</string>
+    <string name="expand_to_see_headlines">Expandera att se huvudrubrikerna</string>
+    <string name="see_something_else">Intresserad av något annat?</string>
 
     <string name="mon">Mån</string>
     <string name="tue">Tis</string>
@@ -53,6 +58,7 @@
     <string name="thats_it">Det är allt</string>
     <string name="add">Lägg till</string>
     <string name="delete">Radera</string>
+    <string name="delete_caps">RADERA</string>
 
 
     <!-- * ******************** Hints **************************** * -->
@@ -83,6 +89,8 @@
     <string name="msg_app_must_restart_to_apply_changes">App måste startas om för att verkställa ändringarna</string>
     <string name="msg_disk_permission_denied">du kan INTE bokmärke nyheter tills du bevilja tillstånd</string>
     <string name="msg_empty_input">Tom ingång</string>
+    <string name="msg_shortcut_created">En genväg för %s har lagts på startskärmen</string>
+    <string name="msg_download_set_successfully">Nedladdning schemalagts framgångsrikt</string>
 
 
     <!-- * *************** Activities and fragment's titles ********************* * -->
@@ -97,6 +105,7 @@
     <!-- ***************************** Settings strings ********************************** -->
     <string name="pref_title_general">Allmän</string>
     <string name="pref_title_data">Data</string>
+    <string name="pref_title_content">Innehåll</string>
 
     <string name="pref_clean_cache">Städa cache</string>
     <string name="pref_main_sites">Huvudpublikationer</string>
@@ -108,6 +117,12 @@
     <string name="pref_download_sections">Nedladdningssektioner</string>
     <string name="pref_pro_code">PRO kod</string>
     <string name="pref_keep_news">Förvara nyheter</string>
+    <string name="pref_shortcut">Skapa genväg</string>
+    <string name="pref_shortcut_summary">Tryck för att placera en genväg för denna publikation i startskärmen</string>
+    <string name="pref_schedule_one_download">Schemalägg en nedladdning</string>
+    <string name="pref_favorite_sites">Favorit publikationer</string>
+    <string name="pref_load_images">Ladda bilder</string>
+    <string name="pref_load_images_summary">Ställ in på ON konsumerar mer batteri och nätverksdata</string>
 
 
     <!-- ***************************** ***************** ********************************** -->

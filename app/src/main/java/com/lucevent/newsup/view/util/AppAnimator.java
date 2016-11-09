@@ -20,7 +20,7 @@ public class AppAnimator {
         animationSet.addAnimation(movement);
         animationSet.addAnimation(resizing);
         animationSet.setDuration(animationTime);
-        animationSet.setFillAfter(true);
+        animationSet.setFillAfter(false);
         animationSet.setFillBefore(true);
 
         view.startAnimation(animationSet);

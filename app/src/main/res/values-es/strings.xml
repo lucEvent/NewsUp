@@ -27,6 +27,11 @@
     <string name="notes">Anotaciones</string>
     <string name="send">Enviar</string>
     <string name="report_n_contact">Informa &amp; Contacta</string>
+    <string name="x_favorites">%d favoritos</string>
+    <string name="schedule_one_now">Programa una ahora</string>
+    <string name="no_downloads_scheduled">No hay descargas programadas</string>
+    <string name="expand_to_see_headlines">Expande para ver los titulares</string>
+    <string name="see_something_else">Te interesa algún tema más?</string>
 
     <string name="mon">Lun</string>
     <string name="tue">Mar</string>
@@ -54,6 +59,7 @@
     <string name="thats_it">Eso es todo</string>
     <string name="add">Añade</string>
     <string name="delete">Eliminar</string>
+    <string name="delete_caps">ELIMINAR</string>
 
 
     <!-- * ******************** Hints **************************** * -->
@@ -84,6 +90,8 @@
     <string name="msg_disk_permission_denied">NO podrás marcar noticias hasta que no concedas este permiso</string>
     <string name="msg_confirm_to_reset_statistics">Confirma para restaurar las estadísticas</string>
     <string name="msg_empty_input">Anotación vacía</string>
+    <string name="msg_shortcut_created">Se ha creado un acceso directo para %s en tu ventana de inicio</string>
+    <string name="msg_download_set_successfully">Descarga programada</string>
 
 
     <!-- * *************** Activities and fragment's titles ********************* * -->
@@ -98,6 +106,7 @@
     <!-- ***************************** Settings strings ********************************** -->
     <string name="pref_title_general">General</string>
     <string name="pref_title_data">Datos</string>
+    <string name="pref_title_content">Contenido</string>
 
     <string name="pref_clean_cache">Limpia la caché</string>
     <string name="pref_main_sites">Publicaciones principales</string>
@@ -109,6 +118,12 @@
     <string name="pref_download_sections">Secciones de descarga</string>
     <string name="pref_pro_code">Código PRO</string>
     <string name="pref_keep_news">Guardar noticias</string>
+    <string name="pref_shortcut">Crear acceso directo</string>
+    <string name="pref_shortcut_summary">Toca para colocar un acceso directo en la ventana de inicio</string>
+    <string name="pref_schedule_one_download">Programa una descarga</string>
+    <string name="pref_favorite_sites">Publicaciones favoritas</string>
+    <string name="pref_load_images">Cargar imágenes</string>
+    <string name="pref_load_images_summary">Activado consume más batería y datos</string>
 
     <!-- ***************************** ***************** ********************************** -->
     <string name="about_content_contact">Desarrollado por Rafael J. Lucena\nContacto: rafaa89(arroba)gmail.com</string>

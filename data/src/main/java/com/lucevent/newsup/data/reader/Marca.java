@@ -1,9 +1,9 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class Marca extends com.lucevent.newsup.data.util.NewsReader {
 
@@ -32,36 +32,42 @@ public class Marca extends com.lucevent.newsup.data.util.NewsReader {
     {
         doc.select("script").remove();
 
-        org.jsoup.select.Elements ee = doc.select(".news-item");
+        Elements article = doc.select(".news-item");
 
-        if (ee.isEmpty()) {
+        if (article.isEmpty()) {
 
-            ee = doc.select("#contenido-noticia");
+            article = doc.select("#contenido-noticia");
 
-            if (!ee.isEmpty()) {
+            if (!article.isEmpty()) {
 
-                org.jsoup.select.Elements img = doc.select(".cubrereproductor noscript");
-                org.jsoup.select.Elements content = doc.select(".cuerpo_articulo > p");
+                Elements img = doc.select(".cubrereproductor noscript");
+                Elements content = doc.select(".cuerpo_articulo > p");
 
                 if (content.isEmpty()) {
-                    news.content = ee.select(".bloque-foto img").outerHtml();
+                    news.content = article.select(".bloque-foto img").outerHtml();
                 } else {
                     news.content = img.html() + content.outerHtml();
                 }
             }
+            news.content = news.content.replace("style=\"", "none=\"");
         } else {
 
-            org.jsoup.select.Elements img = doc.select("figure");
-            org.jsoup.select.Elements content = doc.select("[itemprop=\"articleBody\"] > p");
+            article = doc.select(".full-image:not([itemprop='articleBody'] .full-image),[itemprop='video']:not([itemprop='articleBody'] [itemprop='video']),[itemprop='articleBody'] > p,[itemprop='articleBody'] > blockquote,[itemprop='articleBody'] figure,h3.list-header");
+            if (!article.isEmpty()) {
 
-            if (!content.isEmpty()) {
+                for (Element video : article.select("[itemprop='video']")) {
+                    String noscript = video.select("noscript").html();
+                    String descr = video.select("[itemprop='description']").text();
+                    video.html(noscript + "<figcaption>" + descr + "</figcaption>");
 
-                String simage = img.html().replace("\"//", "\"http://").replace("noscript", "p");
-                news.content = simage + content.outerHtml();
+                    video.removeAttr("itemtype").removeAttr("class").removeAttr("itemprop");
+                }
+                for (Element e : article.select("[style]"))
+                    e.removeAttr("style");
 
+                news.content = article.outerHtml().replace("src=\"//", "src=\"http://");
             }
         }
-        news.content = news.content.replace("style=\"", "none=\"");
     }
 
 }

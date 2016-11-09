@@ -3,6 +3,7 @@ package com.lucevent.newsup.view.util;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -16,6 +17,7 @@ import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -72,6 +74,28 @@ public class NewsView extends RelativeLayout {
         //     gd = new GestureDetectorCompat(context, onGestureListener);
     }
 
+    @Override
+    protected void onConfigurationChanged(Configuration newConfig)
+    {
+        super.onConfigurationChanged(newConfig);
+
+        ViewGroup.LayoutParams layoutParams = getLayoutParams();
+
+        if (viewHeight != -2) {
+            int aux = viewWidth;
+            viewWidth = viewHeight;
+            viewHeight = aux;
+        }
+
+        if (getVisibility() == View.VISIBLE) {
+
+            layoutParams.width = -1;
+            layoutParams.height = -1;
+
+            requestLayout();
+        }
+    }
+
     //  GestureDetectorCompat gd;
 
     public void setFragmentContext(Fragment context, @Nullable DrawerLayout drawer)
@@ -87,9 +111,15 @@ public class NewsView extends RelativeLayout {
         button_bookmark.setOnClickListener(bookmarkChangeListener);
     }
 
-    private static final String NEWS_STYLE = "<style>" +
-            "body {margin:20px;font-family:sans-serif-light;font-weight:300;font-size:17px;line-height:1.7;background-color:#%bg_c;color:#%t_c;}" +
-            "blockquote{margin:10px;padding:5px 10px 5px 10px;background-color:#f2f2f2}" +
+    private static final String NEWS_STYLE_DAY = "<style>" +
+            "body {margin:20px;font-family:sans-serif-light;font-weight:300;font-size:17px;line-height:1.7;background-color:#fff;color:#000;}" +
+            "blockquote{margin:10px;padding:5px 10px 5px 10px;background-color:#eee}" +
+            "a{color:#%a_c;}" +
+            "</style>";
+
+    private static final String NEWS_STYLE_NIGHT = "<style>" +
+            "body {margin:20px;font-family:sans-serif-light;font-weight:300;font-size:17px;line-height:1.7;background-color:#222;color:#fff;}" +
+            "blockquote{margin:10px;padding:5px 10px 5px 10px;background-color:#333}" +
             "a{color:#%a_c;}" +
             "</style>";
 
@@ -107,7 +137,8 @@ public class NewsView extends RelativeLayout {
 
     private static final String TWITTER_STYLE = "<script type=\"text/javascript\" src=\"https://platform.twitter.com/widgets.js\"></script>";
 
-    private int viewHeight = -1;
+    private int viewWidth = -2;
+    private int viewHeight = -2;
     private View newsItemView;
 
     public void displayNews(News news, final View from)
@@ -116,7 +147,7 @@ public class NewsView extends RelativeLayout {
         button_bookmark.setTag(news);
         newsItemView = from;
 
-        updateNewsView();
+        updateNewsView(0);
 
         setBookmarkButtonImage(button_bookmark);
 
@@ -127,10 +158,11 @@ public class NewsView extends RelativeLayout {
 
         setVisibility(View.VISIBLE);
 
-        if (viewHeight == -1) {
+        if (viewHeight == -2) {
             Rect r = new Rect();
             fragmentContext.getActivity().getWindow().getDecorView().getWindowVisibleDisplayFrame(r);
             viewHeight = getHeight() + actionBar.getHeight() + r.top;
+            viewWidth = getWidth();
         }
 
         AppAnimator.expandMoving(this, from, viewHeight, new AppAnimator.AppAnimatorListener() {
@@ -149,23 +181,22 @@ public class NewsView extends RelativeLayout {
         });
     }
 
-    private void updateNewsView()
+    private void updateNewsView(int scroll)
     {
         Site site = AppData.getSiteByCode(currentNews.site_code);
         int a_color = (site.color == 0xffffffff ? 0xcccccc : site.color & 0xffffff);
 
+        String news_style = nightMode ? NEWS_STYLE_NIGHT : NEWS_STYLE_DAY;
         String style = site.getStyle() +
-                NEWS_STYLE.replace("%a_c", String.format("%06x", a_color)) +
-                NEWS_STYLE.replace("%t_c", nightMode ? "fff" : "000") +
-                NEWS_STYLE.replace("%bg_c", nightMode ? "222" : "fff") +
+                news_style.replace("%a_c", String.format("%06x", a_color)) +
                 (isInternetAvailable() ? GRAPHYCS_STYLE : GRAPHYCS_STYLE_NO_INTERNET) +
                 TWITTER_STYLE;
 
-        String webContent = style + "<h2>" + currentNews.title + "</h2>" + currentNews.content;
+        String webContent = style + "<h3>" + currentNews.title + "</h3>" + currentNews.content;
 
-        int scroll = webView.getScrollY();
         webView.loadDataWithBaseURL("", webContent, "text/html", "utf-8", null);
-        webView.setScrollY(scroll);
+        if (scroll > 0)
+            webView.setScrollY(scroll);
     }
 
     public void resume()
@@ -187,6 +218,7 @@ public class NewsView extends RelativeLayout {
 
         actionBar.show();
 
+        webView.setScrollY(0);
         AppAnimator.collapseMoving(this, newsItemView, viewHeight, new AppAnimator.AppAnimatorListener() {
             @Override
             public void onAnimationEnd(Animation animation)
@@ -238,7 +270,7 @@ public class NewsView extends RelativeLayout {
         public void onClick(View v)
         {
             nightMode = !nightMode;
-            updateNewsView();
+            updateNewsView(webView.getScrollY());
             AppSettings.setNightModeStatus(nightMode);
         }
     };
@@ -278,7 +310,6 @@ public class NewsView extends RelativeLayout {
                             swipingDown = true;
                             previousY = event.getY();
                         }
-
                     }
                     break;
                 default:

@@ -1,11 +1,13 @@
 package com.lucevent.newsup.io;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.SparseArray;
 
@@ -66,28 +68,24 @@ public class LogoManager {
         return res;
     }
 
-    public static Bitmap getBitmap(int site_code, int appIconSize)
+    public static Bitmap createHomeScreenIcon(Context context, int site_code)
     {
-        int fifth = appIconSize / 5;
-        int visibleSize = 3 * fifth;
-
         Bitmap bitmap = null;
         try {
+
             bitmap = BitmapFactory.decodeStream(dataManager.open(site_code + ".png"));
 
-            if (bitmap.getWidth() != visibleSize || bitmap.getHeight() != visibleSize)
-                bitmap = Bitmap.createScaledBitmap(bitmap, visibleSize, visibleSize, true);
-/*
-            Paint bg = new Paint();
-            bg.setAlpha(0);
+            int min = Math.min(Math.round(((float) ((ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE)).getLauncherLargeIconSize()) * 1.25f), Math.max(bitmap.getWidth(), bitmap.getHeight()));
+            int round = Math.round(0.105454547f * ((float) min));
+            int i = min + (round * 2);
 
-            Bitmap res = Bitmap.createBitmap(appIconSize,appIconSize,null);
-            Canvas c = new Canvas(res);
-            c.drawRect(0, 0, appIconSize, appIconSize, bg);
-            c.drawBitmap(bitmap, fifth, fifth, null);
-
-            bitmap=res;
-*/
+            Bitmap finalBitmap = Bitmap.createBitmap(i, i, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(finalBitmap);
+            Paint paint = new Paint(1);
+            paint.setFilterBitmap(true);
+            Rect rect = new Rect(round, round, i - round, i - round);
+            canvas.drawBitmap(bitmap, null, rect, paint);
+            return finalBitmap;
 
         } catch (Exception e) {
             AppSettings.printerror("[LM] [EXCEPTION] Couldn't read asset " + site_code + ".png", e);

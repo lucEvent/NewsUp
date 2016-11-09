@@ -36,6 +36,7 @@ public class HuffingtonPostUKSections extends Sections {
         add(new Section("Tech", "http://www.huffingtonpost.co.uk/feeds/verticals/uk-tech/blog.xml", 1));
         add(new Section("Sport", "http://www.huffingtonpost.co.uk/feeds/verticals/uk-sport/blog.xml", 1));
         add(new Section("Parents", "http://www.huffingtonpost.co.uk/feeds/verticals/uk-parents/blog.xml", 1));
+
     }
 
 }

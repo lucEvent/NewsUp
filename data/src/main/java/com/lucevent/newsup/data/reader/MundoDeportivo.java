@@ -1,5 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.nodes.Element;
@@ -33,6 +34,12 @@ public class MundoDeportivo extends com.lucevent.newsup.data.util.NewsReader {
         if (idash != -1)
             description = description.substring(idash + 2);
         return description.replace("...", "");
+    }
+
+    @Override
+    protected Enclosure parseEnclosure(Element prop)
+    {
+        return new Enclosure(prop.attr("url").replace("a/thumbnail", ""), prop.attr("type"), prop.attr("length"));
     }
 
     @Override

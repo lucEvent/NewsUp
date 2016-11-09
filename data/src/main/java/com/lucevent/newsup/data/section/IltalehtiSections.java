@@ -16,7 +16,7 @@ public class IltalehtiSections extends Sections {
         add(new Section("Urheilu-uutiset", "http://www.iltalehti.fi/rss/urheilu.xml", 0));
         add(new Section("Formula 1", "http://www.iltalehti.fi/rss/formulat.xml", 1));
         add(new Section("Jalkapallo", "http://www.iltalehti.fi/rss/jalkapallo.xml", 1));
-        add(new Section("J‰‰kiekko", "http://www.iltalehti.fi/rss/jaakiekko.xml", 1));
+        add(new Section("J\u00E4\u00E4kiekko", "http://www.iltalehti.fi/rss/jaakiekko.xml", 1));
         add(new Section("Ralli", "http://www.iltalehti.fi/rss/ralli.xml", 1));
 
         add(new Section("Viihde", "http://www.iltalehti.fi/rss/viihde.xml", 0));

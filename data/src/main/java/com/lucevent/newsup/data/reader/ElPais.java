@@ -2,6 +2,9 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
 
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 public class ElPais extends com.lucevent.newsup.data.util.NewsReader {
 
     /**
@@ -26,26 +29,40 @@ public class ElPais extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
-        org.jsoup.select.Elements e = doc.select("#cuerpo_noticia");
-        org.jsoup.select.Elements img = doc.select(".contenedor_fotonoticia_compartir");
-        if (!e.isEmpty() || !img.isEmpty()) {
-            String simg = "";
-            if (!img.isEmpty()) simg = img.select("img").outerHtml();
+        Elements article = doc.select("#articulo-introduccion p,[representativeofpage='true'] img,#cuerpo_noticia > p,#cuerpo_noticia > h3,#cuerpo_noticia > .sumario_foto img,.sumario_eskup .sumario__interior,.articulo-apertura .articulo-media");
 
-            String mas = doc.select("div[id$=\"|despiece\"]").outerHtml();
-            String links = doc.select("div[id$=\"|apoyos\"]").outerHtml();
+        if (article.isEmpty()) {
+            article = doc.select("#contenedorfotos figure");
 
-            e.select("div[id$=\"|despiece\"],div[id$=\"|apoyos\"],div[id$=\"|html\"]").remove();
-            e.select("script").remove();
+            if (article.isEmpty()) {
 
-            news.content = simg + e.outerHtml() + mas + links;
-        } else {
-            e = doc.select(".entry-content");
-            e.select("script").remove();
-            if (!e.text().isEmpty()) {
-                news.content = e.html();
+                article = doc.select("article .photo_description img:not(img[src='']),#article_container > div:not(.adv_aside,.aside_summary),#article_container > p");
+
+                if (article.isEmpty())
+                    article = doc.select(".entry-content");
+                else
+                    article.select("script,noscript").remove();
+
+            } else {
+                for (Element div : article.select(".sin_enlace")) {
+                    Elements imgs = div.select("meta[itemprop='url']");
+                    if (!imgs.isEmpty()) {
+                        Element img = imgs.get(0);
+                        img.tagName("img");
+                        img.attr("src", img.attr("content"));
+                        img.removeAttr("content");
+                        div.html(img.outerHtml());
+                    }
+                }
             }
+
+        } else {
+            article.select(".sin_enlace,script,noscript").remove();
+
+            for (Element img : article.select("img"))
+                img.removeAttr("title").removeAttr("srcset").removeAttr("alt").removeAttr("width").removeAttr("height").removeAttr("itemprop");
         }
+        news.content = article.outerHtml();
     }
 
 }

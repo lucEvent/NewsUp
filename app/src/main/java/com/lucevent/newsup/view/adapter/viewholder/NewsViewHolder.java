@@ -44,7 +44,6 @@ public class NewsViewHolder extends RecyclerView.ViewHolder {
 
         if (loadImage) {
             if (news.enclosures != null && !news.enclosures.isEmpty()) {
-                //     System.out.println("Src:" + news.enclosures.get(0).src);
                 picture.setImageBitmap(null);
                 Picasso.with(picture.getContext())
                         .load(news.enclosures.get(0).src)

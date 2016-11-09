@@ -37,6 +37,10 @@ public class NewsSideToolbar extends RelativeLayout implements View.OnClickListe
         actions[0] = (FloatingActionButton) findViewById(R.id.button_bookmark);
         actions[1] = (FloatingActionButton) findViewById(R.id.button_share);
         actions[2] = (FloatingActionButton) findViewById(R.id.button_night);
+
+        actions[0].setEnabled(false);
+        actions[1].setEnabled(false);
+        actions[2].setEnabled(false);
     }
 
     @Override
@@ -63,6 +67,7 @@ public class NewsSideToolbar extends RelativeLayout implements View.OnClickListe
                     .setDuration(ANIMATION_TIME)
                     .setInterpolator(new AccelerateDecelerateInterpolator())
                     .start();
+            actions[i].setEnabled(false);
         }
         closed = true;
     }
@@ -82,6 +87,7 @@ public class NewsSideToolbar extends RelativeLayout implements View.OnClickListe
                     .setDuration(ANIMATION_TIME)
                     .setInterpolator(new AccelerateDecelerateInterpolator())
                     .start();
+            actions[i].setEnabled(true);
         }
         closed = false;
     }

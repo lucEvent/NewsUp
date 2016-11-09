@@ -35,11 +35,11 @@ public class ElConfidencial extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected String parseContent(Element prop)
     {
-        String content = prop.html().replace("&lt;", "<").replace("&gt;", ">").replace("&amp;#039;", "'");
-
-        org.jsoup.nodes.Element article = org.jsoup.Jsoup.parse(content).select("body").get(0);
+        org.jsoup.nodes.Element article = org.jsoup.Jsoup.parse(prop.text()).select("body").get(0);
         article.children().last().remove();
         article.select("h1,h2").tagName("h3");
+        for (Element e : article.select("img"))
+            e.removeAttr("alt").removeAttr("class").removeAttr("data-height").removeAttr("data-width").removeAttr("longdesc");
 
         return article.html();
     }

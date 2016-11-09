@@ -35,15 +35,16 @@
         </activity>
         <activity
             android:name=".SiteMain"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="orientation|screenSize"
             android:taskAffinity=".SiteMain"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="NEW_SITE"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".view.activity.DownloadScheduleEditorActivity"
+            android:configChanges="orientation"
             android:parentActivityName=".Main"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -52,6 +53,7 @@
         </activity>
         <activity
             android:name=".view.activity.SelectSitesActivity"
+            android:configChanges="orientation"
             android:parentActivityName=".Main"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

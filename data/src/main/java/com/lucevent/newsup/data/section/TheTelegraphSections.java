@@ -21,10 +21,9 @@ public class TheTelegraphSections extends Sections {
         add(new Section("Football", "http://www.telegraph.co.uk/football/rss.xml", 1));
         add(new Section("Cricket", "http://www.telegraph.co.uk/cricket/rss.xml", 1));
 
-        add(new Section("Culture", "http://www.telegraph.co.uk/culture/rss.xml", 0));
+        add(new Section("Culture", null, -1));
         add(new Section("Art", "http://www.telegraph.co.uk/art/rss.xml", 1));
         add(new Section("Books", "http://www.telegraph.co.uk/books/rss.xml", 1));
-        add(new Section("Film", "http://www.telegraph.co.uk/film/rss.xml", 1));
         add(new Section("Music", "http://www.telegraph.co.uk/music/rss.xml", 1));
         add(new Section("TV", "http://www.telegraph.co.uk/tv/rss.xml", 1));
         add(new Section("Radio", "http://www.telegraph.co.uk/radio/rss.xml", 1));

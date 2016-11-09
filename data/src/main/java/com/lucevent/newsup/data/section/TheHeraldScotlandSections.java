@@ -68,7 +68,6 @@ public class TheHeraldScotlandSections extends Sections {
         add(new Section("Top chef tips", "http://www.heraldscotland.com/life_style/food_and_drink/celebrity_recipes/rss", 1));
         add(new Section("Food News", "http://www.heraldscotland.com/life_style/food_and_drink/latest/rss", 1));
         add(new Section("Drink", "http://www.heraldscotland.com/life_style/food_and_drink/drink/rss", 1));
-        add(new Section("Opinion", "http://www.heraldscotland.com/life_style/food_and_drink/opinion/rss", 1));
         add(new Section("Technology", "http://www.heraldscotland.com/life_style/technology/rss", 1));
         add(new Section("Travel", "http://www.heraldscotland.com/life_style/travel/rss", 1));
         add(new Section("Leisure", "http://www.heraldscotland.com/life_style/outdoors_leisure/rss", 1));

@@ -9,7 +9,7 @@ public class RacoCatalaSections extends Sections {
     {
         super();
 
-        add(new Section("Notícies", "http://www.racocatala.cat/feed/rss.php", 0));
+        add(new Section("Not\u00EDcies", "http://www.racocatala.cat/feed/rss.php", 0));
 
     }
 

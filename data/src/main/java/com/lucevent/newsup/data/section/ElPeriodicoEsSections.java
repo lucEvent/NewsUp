@@ -18,11 +18,15 @@ public class ElPeriodicoEsSections extends Sections {
         add(new Section("Tecnolog\u00EDa", "http://www.elperiodico.com/es/rss/tecnologia/rss.xml", 0));
         add(new Section("Deportes", "http://www.elperiodico.com/es/rss/deportes/rss.xml", 0));
         add(new Section("Ocio y cultura", "http://www.elperiodico.com/es/rss/ocio-y-cultura/rss.xml", 0));
+        add(new Section("Ciencia", "http://www.elperiodico.com/es/rss/ciencia/rss.xml", 0));
+        add(new Section("Medio ambiente", "http://www.elperiodico.com/es/rss/medio-ambiente/rss.xml", 0));
+        add(new Section("Sanidad", "http://www.elperiodico.com/es/rss/sanidad/rss.xml", 0));
+        add(new Section("Gente y TV", "http://www.elperiodico.com/es/rss/gente/rss.xml", 0));
+        add(new Section("eXtra", "http://www.elperiodico.com/es/rss/extra/rss.xml", 0));
 
         add(new Section("Ciudades", null, -1));
         add(new Section("Barcelona", "http://www.elperiodico.com/es/rss/barcelona/rss.xml", 1));
         add(new Section("L'Hospitalet", "http://www.elperiodico.com/es/rss/hospitalet/rss.xml", 1));
-        add(new Section("Cornell\u00E0", "http://www.elperiodico.com/es/rss/cornella/rss.xml", 1));
         add(new Section("Sabadell", "http://www.elperiodico.com/es/rss/sabadell/rss.xml", 1));
         add(new Section("Badalona", "http://www.elperiodico.com/es/rss/badalona/rss.xml", 1));
         add(new Section("Santa Coloma", "http://www.elperiodico.com/es/rss/santa-coloma/rss.xml", 1));
@@ -31,11 +35,11 @@ public class ElPeriodicoEsSections extends Sections {
         add(new Section("Motor", "http://www.elperiodico.com/es/rss/motor/rss.xml", 0));
 
         add(new Section("Blogs", null, -1));
-        add(new Section("Los restaurantes de Pau Aren\u00F3s", "http://rdp.elperiodico.com/feed/?_ga=1.183745446.1073564764.1445817152", 1));
-        add(new Section("El Tourmalet", "http://tourmalet.elperiodico.com/feed/?_ga=1.183745446.1073564764.1445817152", 1));
-        add(new Section("Bloglobal", "http://blogs.elperiodico.com/bloglobal/feed/?_ga=1.183745446.1073564764.1445817152", 1));
-        add(new Section("Destinos ", "http://www.visitdestinos.com/feed/", 1));
-        add(new Section("+ Digital", "http://blogs.elperiodico.com/masdigital/feed?_ga=1.183745446.1073564764.1445817152", 1));
+        add(new Section("Los restaurantes de Pau Aren\u00F3s", "http://rdp.elperiodico.com/feed/?_ga=1.214333143.1954951623.1458825034", 1));
+        add(new Section("El Tourmalet", "http://tourmalet.elperiodico.com/feed/?_ga=1.214333143.1954951623.1458825034", 1));
+        add(new Section("Bloglobal", "http://blogs.elperiodico.com/bloglobal/feed/?_ga=1.214333143.1954951623.1458825034", 1));
+        add(new Section("Destinos", "http://www.visitdestinos.com/feed/", 1));
+        add(new Section("+ Digital", "http://blogs.elperiodico.com/masdigital/feed?_ga=1.214333143.1954951623.1458825034", 1));
 
     }
 

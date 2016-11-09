@@ -29,7 +29,6 @@ public class YleSections extends Sections {
         add(new Section("Pelit", "http://yle.fi/uutiset/rss/uutiset.rss?osasto=pelit", 0));
         add(new Section("N\u00e4k\u00f6kulmat", "http://yle.fi/uutiset/rss/uutiset.rss?osasto=nakokulmat", 0));
         add(new Section("Blogit", "http://yle.fi/uutiset/rss/uutiset.rss?osasto=Blogi", 0));
-        add(new Section("Plus", "http://yle.fi/uutiset/rss/uutiset.rss?osasto=Plus", 0));
         add(new Section("Ilmasto", "http://yle.fi/uutiset/rss/uutiset.rss?osasto=ilmasto", 0));
 
         add(new Section("Alueet", null, -1));
@@ -78,7 +77,6 @@ public class YleSections extends Sections {
         add(new Section("News in English", "http://yle.fi/uutiset/rss/uutiset.rss?osasto=news", 0));
         add(new Section("S\u00e1pmi", "http://yle.fi/uutiset/rss/uutiset.rss?osasto=sapmi", 0));
         add(new Section("Novosti", "http://yle.fi/uutiset/rss/uutiset.rss?osasto=novosti", 0));
-        add(new Section("Yle Uudizet karjalakse", "http://yle.fi/uutiset/rss/uutiset.rss?osasto=karjalakse", 0));
 
     }
 
