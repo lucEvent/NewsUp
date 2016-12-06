@@ -23,11 +23,9 @@ public class ElPeriodicoCaSections extends Sections {
         add(new Section("Sanitat", "http://www.elperiodico.cat/ca/rss/sanitat/rss.xml", 0));
         add(new Section("Gent i TV", "http://www.elperiodico.cat/ca/rss/gent/rss.xml", 0));
         add(new Section("eXtra", "http://www.elperiodico.cat/ca/rss/extra/rss.xml", 0));
-        add(new Section("Canal Bellesa", "http://www.elperiodico.cat/ca/rss/bellesa/rss.xml", 0));
 
         add(new Section("Ciutats", null, -1));
         add(new Section("Barcelona", "http://www.elperiodico.cat/ca/rss/barcelona/rss.xml", 1));
-        add(new Section("Sabadell", "http://www.elperiodico.cat/ca/rss/sabadell/rss.xml", 1));
         add(new Section("Badalona", "http://www.elperiodico.cat/ca/rss/badalona/rss.xml", 1));
 
         add(new Section("Blogs", null, -1));

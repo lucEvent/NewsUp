@@ -2,8 +2,6 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
 
-import java.io.IOException;
-
 public class EuropaPress extends com.lucevent.newsup.data.util.NewsReader {
 
     /**
@@ -45,7 +43,7 @@ public class EuropaPress extends com.lucevent.newsup.data.util.NewsReader {
     {
         try {
             return org.jsoup.Jsoup.connect(link).get();
-        } catch (IOException ignored) {
+        } catch (Exception ignored) {
         }
         return super.getDocument(link);
     }

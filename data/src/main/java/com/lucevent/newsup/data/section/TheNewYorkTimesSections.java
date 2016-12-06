@@ -82,10 +82,8 @@ public class TheNewYorkTimesSections extends Sections {
         add(new Section("Autos", "http://rss.nytimes.com/services/xml/rss/nyt/Automobiles.xml", 0));
 
         add(new Section("Lens Blog", "http://lens.blogs.nytimes.com/feed/", 0));
-        add(new Section("The Public Editor's Journal", "http://publiceditor.blogs.nytimes.com/feed/", 0));
 
         add(new Section("Other Blog", null, -1));
-        add(new Section("Wordplay Blog", "http://wordplay.blogs.nytimes.com/feed/", 1));
         add(new Section("Obituaries", "http://rss.nytimes.com/services/xml/rss/nyt/Obituaries.xml", 1));
         add(new Section("Times Wire", "http://www.nytimes.com/timeswire/feeds/", 1));
         add(new Section("Most E-Mailed", "http://www.nytimes.com/services/xml/rss/nyt/pop_top.xml", 1));

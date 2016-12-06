@@ -34,6 +34,7 @@
     }
     function closeNews(data) {
         $("#article_box")[0].style.visibility = 'hidden';
+        $("#content").html("");
         $("#news_list")[0].style.visibility = 'visible';
         $("body").scrollTop(scrolled);
     }

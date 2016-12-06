@@ -14,7 +14,7 @@ public class TechCrunchSections extends Sections {
         add(new Section("Fundings and Exits", "http://feeds.feedburner.com/TechCrunch/fundings-exits", 0));
         add(new Section("Social", "http://feeds.feedburner.com/TechCrunch/social", 0));
         add(new Section("Mobile", "http://feeds.feedburner.com/Mobilecrunch", 0));
-        add(new Section("Gadgets ", "http://feeds.feedburner.com/crunchgear", 0));
+        add(new Section("Gadgets", "http://feeds.feedburner.com/crunchgear", 0));
         add(new Section("Europe", "http://feeds.feedburner.com/Techcrunch/europe", 0));
         add(new Section("Enterprise / TechCrunchIT", "http://feeds.feedburner.com/TechCrunchIT", 0));
         add(new Section("GreenTech", "http://feeds.feedburner.com/TechCrunch/greentech", 0));

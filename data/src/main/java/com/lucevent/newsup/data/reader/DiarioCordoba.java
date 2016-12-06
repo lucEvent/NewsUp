@@ -5,7 +5,6 @@ import com.lucevent.newsup.data.util.News;
 import org.jsoup.nodes.Element;
 import org.jsoup.parser.Parser;
 
-import java.io.IOException;
 import java.net.URL;
 
 public class DiarioCordoba extends com.lucevent.newsup.data.util.NewsReader {
@@ -46,7 +45,7 @@ public class DiarioCordoba extends com.lucevent.newsup.data.util.NewsReader {
     {
         try {
             return org.jsoup.Jsoup.parse(new URL(rsslink).openStream(), "ISO-8859-1", rsslink, Parser.xmlParser());
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return super.getDocument(rsslink);

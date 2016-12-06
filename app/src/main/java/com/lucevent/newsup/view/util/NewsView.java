@@ -124,7 +124,7 @@ public class NewsView extends RelativeLayout {
             "</style>";
 
     private static final String GRAPHYCS_STYLE = "<style>" +
-            "iframe, video {width: 100%; margin: 0; padding: 0}" +
+            "iframe, video {width: 100%; height:auto; margin: 0; padding: 0}" +
             "img, figure {width: 100%; height:auto; margin: 0; padding: 0}" +
             "div > h2 > a > img {width: auto;}" +
             "</style>";

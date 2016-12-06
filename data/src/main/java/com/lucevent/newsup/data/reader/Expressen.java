@@ -30,64 +30,50 @@ public class Expressen extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
-        doc.select("script").remove();
+        Elements widgets, preamble, article;
 
-        Elements firstElements, preamble, content;
+        article = doc.select(".b-article__body");
+        if (!article.isEmpty()) {
 
-        content = doc.select(".text--article-body");
+            widgets = doc.select(".b-article__top-widgets figure img:not(noscript figure img,.b-slideshow__item--video img),.b-article__top-widgets iframe");
+            preamble = doc.select(".b-article__preamble");
 
-        if (!content.isEmpty()) {
-
-            firstElements = doc.select(".slideshow").select("img,.text--image-caption");
-            for (Element p : firstElements.select("img")) {
-                String src = p.attr("data-src");
-                src = src.replace("_format_", "16x9").replace("_width_", "600").replace("_quality_", "90");
-                p.attr("src", src);
+            for (Element img : widgets) {
+                if (img.tagName().equals("img")) {
+                    String srcset = img.attr("data-srcset");
+                    if (!srcset.isEmpty())
+                        img.attr("srcset", srcset).removeAttr("data-srcset");
+                    if (img.attr("src").isEmpty() && img.attr("srcset").isEmpty())
+                        img.tagName("div");
+                }
             }
 
-            preamble = doc.select(".text--article-preamble");
-
-            content.select("h2").remove();
         } else {
 
-            firstElements = doc.select(".b-article .b-article__top-widgets");
-            for (Element e : firstElements.select("noscript"))
-                e.tagName("p");
-            firstElements.select(".b-image__caption-toggle,.b-slideshow__fullscreen-btn,.b-slider__pagination__bullet").remove();
-            firstElements = firstElements.select("span");
-            for (Element e : firstElements)
-                e.removeAttr("class");
+            widgets = doc.select(".tv-widget-container iframe,.slideshow__wrapper");
+            preamble = doc.select(".text--article-preamble");
+            article = doc.select(".text--article-body");
 
-            content = doc.select(".b-article .b-article__body__content");
-
-            if (!content.isEmpty()) {
-
-                preamble = doc.select("#article-preamble");
-
-            } else {
-
-                preamble = doc.select(".text--article-preamble");
-                content = doc.select(".article__content-body");
-
+            for (Element img : widgets.select("img,iframe")) {
+                String src = img.attr("data-src");
+                src = src.replace("_format_", "16x9").replace("_width_", "600").replace("_quality_", "90");
+                img.attr("src", src).removeAttr("data-src").removeAttr("alt").removeAttr("data-base-ttid");
+                img.parent().parent().html(img.outerHtml());
             }
-        }
-        for (Element e : content.select("a,strong")) {
-            String text = e.text();
-            if (text.startsWith("LÄS MER") || text.startsWith("Läs mer")
-                    || text.startsWith("LÄS OCKSÅ"))
-                e.parent().remove();
+
         }
 
-        for (Element img : firstElements.select("img"))
-            img.attr("srcset", "");
-        for (Element img : content.select("img"))
-            img.attr("srcset", "");
+        article.select("h2").tagName("h3");
+        for (Element mer : article.select("strong,a")) {
+            String text = mer.text();
+            if (text.startsWith("L\u00C4S MER") || text.startsWith("L\u00E4s mer")
+                    || text.startsWith("L\u00C4S OCKS\u00C5") || text.startsWith("L\u00C4S \u00C4VEN"))
+                mer.parent().remove();
+        }
+        article.select("[style]").removeAttr("style");
+        article.select(".b-photo__description-wrap").remove();
 
-        String s_preamble = "<p>" + preamble.html() + "</p>";
-        String s_firsts = "<p>" + firstElements.html().replace("style=", "n=") + "</p>";
-        String s_content = content.html().replace("<p>&nbsp;</p>", "").replace("style=", "n=");
-
-        news.content = s_preamble + s_firsts + "<hr>" + s_content;
+        news.content = widgets.outerHtml() + "<b>" + preamble.html() + "</b><br>" + article.html().replace("<p>&nbsp;</p>", "");
     }
 
 }

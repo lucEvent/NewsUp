@@ -4,8 +4,6 @@ import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.nodes.Element;
 
-import java.io.IOException;
-
 public class Make extends com.lucevent.newsup.data.util.NewsReader {
 
     /**
@@ -60,7 +58,7 @@ public class Make extends com.lucevent.newsup.data.util.NewsReader {
     {
         try {
             return org.jsoup.Jsoup.connect(pagelink).userAgent(USER_AGENT).get();
-        } catch (IOException ignored) {
+        } catch (Exception ignored) {
         }
         return super.getDocument(pagelink);
     }

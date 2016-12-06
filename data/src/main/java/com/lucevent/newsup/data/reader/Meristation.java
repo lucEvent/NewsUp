@@ -5,8 +5,6 @@ import com.lucevent.newsup.data.util.News;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import java.io.IOException;
-
 public class Meristation extends com.lucevent.newsup.data.util.NewsReader {
 
     // tags: [dc:creator, description, guid, item, link, pubdate, title]
@@ -44,7 +42,7 @@ public class Meristation extends com.lucevent.newsup.data.util.NewsReader {
             return org.jsoup.Jsoup.connect(pagelink)
                     .timeout(10000)
                     .get();
-        } catch (IOException ignored) {
+        } catch (Exception ignored) {
         }
         return super.getDocument(pagelink);
     }

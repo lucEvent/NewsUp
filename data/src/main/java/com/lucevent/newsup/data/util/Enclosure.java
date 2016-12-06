@@ -37,4 +37,9 @@ public class Enclosure implements Serializable {
         return "";
     }
 
+    public static String iframe(String src)
+    {
+        return "<iframe frameborder='0' allowfullscreen src=\"" + src + "\"></iframe>";
+    }
+
 }

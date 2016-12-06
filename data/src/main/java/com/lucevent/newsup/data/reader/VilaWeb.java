@@ -1,6 +1,7 @@
 package com.lucevent.newsup.data.reader;
 
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class VilaWeb extends com.lucevent.newsup.data.util.NewsReader {
@@ -24,5 +25,16 @@ public class VilaWeb extends com.lucevent.newsup.data.util.NewsReader {
         return descr.substring(0, 300 < descr.length() ? 300 : descr.length()) + "...";
     }
 
-}
+    @Override
+    protected String parseContent(Element prop)
+    {
+        Document doc = org.jsoup.Jsoup.parse(prop.text());
 
+        doc.select("[style]").removeAttr("style");
+        doc.select("[width]").removeAttr("width");
+        doc.select("[height]").removeAttr("height");
+
+        return doc.html().replace("src=\"/", "src=\"http:/");
+    }
+    
+}

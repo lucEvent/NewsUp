@@ -21,7 +21,7 @@
     <string name="reset">Restaurar</string>
     <string name="more_publications">Més publicacions</string>
     <string name="select_fav_publications">Sel·lecciona les teves\npublicacions favorites</string>
-    <string name="x_country">Pais: <b>%1$s</b></string>
+    <string name="x_country">País: <b>%1$s</b></string>
     <string name="x_language">Idioma: <b>%1$s</b></string>
     <string name="x_category">Categoria: <b>%1$s</b></string>
     <string name="notes">Anotacions</string>
@@ -67,7 +67,7 @@
     <string name="search">Busca</string>
     <string name="hint_create_note">Inserta anotació</string>
     <string name="hint_email">El teu email (opcional)</string>
-    <string name="hint_message_suggestion_report">El teu missatje, suggeriment o informe d\'error</string>
+    <string name="hint_message_suggestion_report">El teu missatge, suggeriment o informe d\'error</string>
 
 
     <!-- * ******************** Messages **************************** * -->
@@ -75,23 +75,23 @@
     <string name="msg_confirm_clean_app_data">Confirma per netejar totes les dades</string>
     <string name="msg_confirm_to_clear_history">Confirma per eliminar l\'historial</string>
     <string name="msg_must_select_at_least_one">Has de sel·leccionar al menys UNA</string>
-    <string name="msg_confirm_to_go_back">Confirma para anar endarrere</string>
+    <string name="msg_confirm_to_go_back">Confirma per anar endarrere</string>
     <string name="msg_must_select_at_least_one_site">Has de sel·leccionar al menys UNA publicació</string>
     <string name="msg_confirm_to_delete">Confirma per eliminar</string>
     <string name="msg_must_select_at_least_one_day">Has de sel·leccionar al menys UN dia</string>
     <string name="msg_cant_load_content">No es pot carregar el contingut</string>
-    <string name="msg_news_not_found">Oohh… La aplicació es increïble però encara no pot llegir aquesta noticia.\n¿Què fem?</string>
+    <string name="msg_news_not_found">Oohh… La aplicació es increïble però encara no pot llegir aquesta notícia.\n¿Què fem?</string>
     <string name="msg_no_internet_connection">No hi ha connexió a internet</string>
     <string name="msg_unlocked_finnish">Publicacions fineses desbloquejades</string>
     <string name="msg_unlocked_statistics">Estadístiques desbloquejades</string>
     <string name="msg_unlocked_notes">Notes desbloquejades</string>
     <string name="msg_invalid_code">Codi invàlid</string>
-    <string name="msg_app_must_restart_to_apply_changes">Has de reinicialitzar la app per aplicar canvis</string>
+    <string name="msg_app_must_restart_to_apply_changes">Has de reinicialitzar l\'app per aplicar canvis</string>
     <string name="msg_disk_permission_denied">NO podràs marcar notícies fins que no concedeixis aquest permís</string>
     <string name="msg_confirm_to_reset_statistics">Confirma per restaurar les estadístiques</string>
     <string name="msg_empty_input">Anotació buida</string>
     <string name="msg_shortcut_created">S\'ha creat un accés directe per %s a la teva finestra d\'inici</string>
-    <string name="msg_download_set_successfully">Descarga programada</string>
+    <string name="msg_download_set_successfully">Descàrrega programada</string>
 
 
     <!-- * *************** Activities and fragment's titles ********************* * -->

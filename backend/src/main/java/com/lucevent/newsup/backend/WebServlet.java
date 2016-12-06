@@ -65,7 +65,7 @@ public class WebServlet extends HttpServlet {
                 if (prey.content == null || prey.content.isEmpty())
                     site.readNewsContent(prey);
 
-                resp.getWriter().println(prey.content == null ? "" : prey.content);
+                resp.getWriter().println(prey.content == null ? "" : site.getStyle() + prey.content);
             }
 
         } else if (req.getParameter("sections") != null) {
@@ -82,7 +82,11 @@ public class WebServlet extends HttpServlet {
                 Data.stats.reset();
 
             String options = req.getParameter("options");
-            StringBuilder sb = BackendParser.toHtml(Data.stats, options != null ? options : "");
+            String filters = req.getParameter("only");
+            StringBuilder sb = BackendParser
+                    .toHtml(Data.stats,
+                            options != null ? options : "",
+                            filters != null ? filters.split(",") : null);
 
             resp.getWriter().println(sb);
 

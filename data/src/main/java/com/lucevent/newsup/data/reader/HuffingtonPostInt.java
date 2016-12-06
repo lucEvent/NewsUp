@@ -1,5 +1,8 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosure;
+
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class HuffingtonPostInt extends com.lucevent.newsup.data.util.NewsReader {
@@ -21,25 +24,44 @@ public class HuffingtonPostInt extends com.lucevent.newsup.data.util.NewsReader 
     @Override
     protected String parseContent(Element prop)
     {
-        org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(prop.text().replace("<br />", "<p></p>"));
+        Document doc = org.jsoup.Jsoup.parse(prop.text().replace("<br />", "<p></p>"));
 
-        org.jsoup.select.Elements ads = doc.select("strong");
-        for (org.jsoup.nodes.Element ad : ads)
-            if (ad.text().contains("SEE ALSO:"))
-                ad.parent().remove();
-            else if (ad.text().contains("READ MORE:"))
-                ad.remove();
-
-        doc.select("ul").remove();
+        doc.getElementsByTag("h2").tagName("h3");
 
         String content = doc.html();
-        int index = content.indexOf("<hh-");
-        if (index != -1) {
-            int indexM = content.indexOf("-hh>", index + 4);
-            int index2 = content.indexOf("-hh>", indexM + 4);
-            content = content.replace(content.substring(index, index2 + 4), "");
+
+        int i0 = content.indexOf("type=type=");
+        if (i0 != -1) {
+            int i1 = content.indexOf("articlesList=", i0);
+            if (i1 != -1) {
+                i1 = content.indexOf("<", i1);
+                content = content.substring(0, i0) + content.substring(i1, content.length());
+            }
         }
-        return content;
+
+        i0 = content.indexOf("<hh-");
+        if (i0 != -1) {
+            int i1 = content.indexOf("-hh>", i0 + 4);
+            i1 = content.indexOf("-hh>", i1 + 4);
+            content = content.replace(content.substring(i0, i1 + 4), "");
+        }
+        return content.replace("=\"/", "=\"http:/");
+    }
+
+    @Override
+    protected Enclosure parseEnclosure(Element prop)
+    {
+        String type = prop.attr("type");
+        if (type.startsWith("image")) {
+            String url = prop.attr("url");
+            if (url.contains("74_58"))
+                url = url.replace("74_58", "300_219");
+            else if (url.contains("-mini")) {
+                url = url.replace("-mini", "-large300");
+            }
+            return new Enclosure(url, type, "");
+        }
+        return null;
     }
 
 }

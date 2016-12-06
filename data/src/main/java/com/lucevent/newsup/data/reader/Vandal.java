@@ -9,7 +9,6 @@ import org.jsoup.parser.Parser;
 import org.jsoup.parser.XmlTreeBuilder;
 import org.jsoup.select.Elements;
 
-import java.io.IOException;
 import java.net.URL;
 
 public class Vandal extends com.lucevent.newsup.data.util.NewsReader {
@@ -78,7 +77,7 @@ public class Vandal extends com.lucevent.newsup.data.util.NewsReader {
     {
         try {
             return org.jsoup.Jsoup.parse(new URL(pagelink).openStream(), "ISO-8859-1", pagelink, new Parser(new XmlTreeBuilder()));
-        } catch (IOException ignore) {
+        } catch (Exception ignore) {
         }
         return super.getDocument(pagelink);
     }

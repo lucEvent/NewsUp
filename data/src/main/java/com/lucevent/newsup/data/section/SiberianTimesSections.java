@@ -13,8 +13,6 @@ public class SiberianTimesSections extends Sections {
         add(new Section("Ecology", "http://siberiantimes.com/ecology/rss", 0));
         add(new Section("Science", "http://siberiantimes.com/science/rss", 0));
         add(new Section("Sport", "http://siberiantimes.com/sport/rss", 0));
-        add(new Section("Health & lifestyle", "http://siberiantimes.com/healthandlifestyle/rss", 0));
-        add(new Section("Culture", "http://siberiantimes.com/culture/rss", 0));
 
     }
 

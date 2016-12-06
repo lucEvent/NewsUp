@@ -33,10 +33,20 @@
         app:rippleColor="@color/colorAccent"/>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/by_time"
+        android:id="@+id/by_readings"
         style="@style/floatingButton"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/by_nrequests"
+        android:src="@drawable/ic_read_white"
+        app:backgroundTint="@color/colorPrimary"
+        app:fabSize="mini"
+        app:rippleColor="@color/colorAccent"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/by_time"
+        style="@style/floatingButton"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/by_readings"
         android:src="@drawable/ic_access_time"
         app:backgroundTint="@color/colorPrimary"
         app:fabSize="mini"

@@ -1,16 +1,20 @@
 package com.lucevent.newsup.view.adapter.viewholder;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jakewharton.picasso.OkHttp3Downloader;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.util.Date;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.io.LogoManager;
 import com.squareup.picasso.Picasso;
+
+import okhttp3.OkHttpClient;
 
 public class NewsViewHolder extends RecyclerView.ViewHolder {
 
@@ -44,8 +48,12 @@ public class NewsViewHolder extends RecyclerView.ViewHolder {
 
         if (loadImage) {
             if (news.enclosures != null && !news.enclosures.isEmpty()) {
+
                 picture.setImageBitmap(null);
-                Picasso.with(picture.getContext())
+
+                new Picasso.Builder(picture.getContext())
+                        .downloader(new OkHttp3Downloader(new OkHttpClient()))
+                        .build()
                         .load(news.enclosures.get(0).src)
                         .fit()
                         .into(picture);
@@ -56,7 +64,7 @@ public class NewsViewHolder extends RecyclerView.ViewHolder {
         } else
             picture.setVisibility(View.GONE);
 
-        title.setText(news.title);
+        title.setText(Html.fromHtml(news.title));
         description.setText(news.description);
         date.setText(Date.getAge(news.date));
         bookmarkButton.setImageResource(bookmarked ? R.drawable.ic_bookmark : R.drawable.ic_bookmark_border);

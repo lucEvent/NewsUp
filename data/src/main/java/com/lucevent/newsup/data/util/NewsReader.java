@@ -3,7 +3,6 @@ package com.lucevent.newsup.data.util;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 public abstract class NewsReader {
@@ -107,7 +106,10 @@ public abstract class NewsReader {
                         tags.add(parseCategory(prop));
                         break;
                     case ENCLOSURE:
-                        enclosures.add(parseEnclosure(prop));
+                        Enclosure enc = parseEnclosure(prop);
+                        if (enc != null)
+                            enclosures.add(enc);
+                        break;
                 }
             }
             if (!title.isEmpty()) {
@@ -125,12 +127,12 @@ public abstract class NewsReader {
     {
         try {
             return org.jsoup.Jsoup.connect(pagelink).userAgent(USER_AGENT).get();
-        } catch (IOException e) {
+        } catch (Exception e) {
 //            System.out.println("[" + e.getClass().getSimpleName() + "] Can't read page. Trying again");
         }
         try {
             return org.jsoup.Jsoup.connect(pagelink).get();
-        } catch (IOException e) {
+        } catch (Exception e) {
 //            System.out.println("[" + e.getClass().getSimpleName() + "] Couldn't read page: " + pagelink);
         }
         return null;
@@ -141,7 +143,7 @@ public abstract class NewsReader {
         return news;
     }
 
-    public News readNewsContent(News news)
+    public final News readNewsContent(News news)
     {
         org.jsoup.nodes.Document doc = getDocument(news.link);
         if (doc != null) {

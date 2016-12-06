@@ -98,6 +98,9 @@ public class StatisticsService extends Service {
                     case SORT_BY_NUM_REQUESTS:
                         url = "http://newsup-2406.appspot.com/app?stats&options=n";
                         break;
+                    case SORT_BY_READINGS:
+                        url = "http://newsup-2406.appspot.com/app?stats&options=r";
+                        break;
                     case SORT_BY_TIME:
                         url = "http://newsup-2406.appspot.com/app?stats&options=t";
                 }
@@ -120,9 +123,10 @@ public class StatisticsService extends Service {
                     Site site = AppData.getSiteByCode(siteCode);
                     String siteName = site == null ? "Unknown" : site.name;
                     int nAccesses = Integer.parseInt(siteData.attr("rq"));
+                    int readings = Integer.parseInt(siteData.attr("rd"));
                     long lastAccess = Long.parseLong(siteData.attr("lt"));
-                    String lastIp = siteData.attr("ip");
-                    siteStats.add(new SiteStat(siteName, siteCode, nAccesses, lastAccess, lastIp));
+                    String version = siteData.attr("v");
+                    siteStats.add(new SiteStat(siteName, siteCode, nAccesses, readings, lastAccess, version));
                 }
 
                 Statistics statistics = new Statistics(since, lastStart, siteStats);

@@ -4,11 +4,7 @@ import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
-
-import java.io.IOException;
-import java.net.URL;
 
 public class ElPeriodicoEs extends com.lucevent.newsup.data.util.NewsReader {
 
@@ -33,52 +29,35 @@ public class ElPeriodicoEs extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected String parseDescription(Element prop)
     {
-        return org.jsoup.Jsoup.parse(prop.text()).text();
+        return org.jsoup.Jsoup.parse(prop.text()).text().replace("&lt;br /&gt;", ". ");
     }
 
     @Override
     protected String parseContent(Element prop)
     {
         Document doc = org.jsoup.Jsoup.parse(prop.text());
-        for (Element e : doc.select("[style]"))
-            e.removeAttr("style");
-
+        doc.select("[style]").removeAttr("style");
         doc.select("h1,h2").tagName("h3");
-
         return doc.html().replace("<span>", "").replace("</span>", "").replace("<p>&nbsp;</p>", "");
-    }
-
-    @Override
-    protected Document getDocument(String rsslink)
-    {
-        if (rsslink.endsWith("rss/rss_portada.xml")) {
-            try {
-                return org.jsoup.Jsoup.parse(new URL(rsslink).openStream(), "ISO-8859-1", rsslink, Parser.xmlParser());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return super.getDocument(rsslink);
     }
 
     @Override
     protected void readNewsContent(Document doc, News news)
     {
-        doc.select("script").remove();
+        Elements article = doc.select(".ep-img img,.ep-galeria .slider img,.ep-video img,"
+                + ".comp iframe:not(.cuerpo-noticia iframe,.cuerpo-opinion iframe),"
+                + ".cuerpo-noticia > *:not(.complementos,.despiece,.destacado,.claves,.frase),"
+                + ".cuerpo-opinion > *:not(.complementos,.despiece,.destacado,.claves,.frase)");
 
-        Elements intro = doc.select(".ep-video,.unit > .ep-img,.unit > .ep-galeria");
-        intro.select(".carousel").remove();
-        intro = intro.select("img");
+        article.select(".despiece-bottom").tagName("blockquote");
 
-        Elements content = doc.select(".cuerpo-noticia,.cuerpo-opinion");
+        if (article.isEmpty()) {
+            article = doc.select("article .onbcn-slider > *,article .onbcn-detail-body > *:not(.box-left)");
+        }
+        article.select("[width]").removeAttr("width");
+        article.select("[style]").removeAttr("style");
 
-        content.select(".fecha,.carousel,.thumb-pie,.cred").remove();
-        content = content.select("p,a > img,h2,h3,h4,h5,h6");
-
-        news.content = intro.outerHtml() + content.outerHtml();
-        if (news.content.length() < 80)
-            news.content = null;
-
+        news.content = article.outerHtml().replace("src=\"/", "src=\"http:/");
     }
 
 }

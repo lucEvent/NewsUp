@@ -2,7 +2,6 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
 
-import java.io.IOException;
 import java.net.URL;
 
 public class Iltalehti extends com.lucevent.newsup.data.util.NewsReader {
@@ -26,7 +25,7 @@ public class Iltalehti extends com.lucevent.newsup.data.util.NewsReader {
     {
         try {
             return org.jsoup.Jsoup.parse(new URL(rsslink).openStream(), "ISO-8859-1", rsslink);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return super.getDocument(rsslink);

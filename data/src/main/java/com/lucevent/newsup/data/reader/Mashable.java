@@ -3,13 +3,14 @@ package com.lucevent.newsup.data.reader;
 import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class Mashable extends com.lucevent.newsup.data.util.NewsReader {
 
-    // Tags [category, content:encoded, description, guid, item, link, mash:thumbnail, media:thumbnail, pubdate, title, wfw:commentrss]
+    // Tags [category, content:encoded, dc:creator, description, guid, item, link, mash:thumbnail, media:thumbnail, pubdate, title]
 
     public Mashable()
     {
@@ -31,38 +32,66 @@ public class Mashable extends com.lucevent.newsup.data.util.NewsReader {
     }
 
     @Override
-    protected void readNewsContent(Document document, News news)
+    protected void readNewsContent(Document doc, News news)
     {
-        document.select("script").remove();
+        Elements article = doc.select(".article-image,.article-content");
 
-        Elements story = document.select("#story");
+        if (!article.isEmpty()) {
+            article.select("script,.see-also,.viral-next-up,figcaption,.image-credit").remove();
 
-        Elements img = story.select(".article-image");
-        Elements content = story.select(".article-content");
-
-        if (!content.isEmpty()) {
-            content.select(".viral-next-up,.see-also,.review-card").remove();
-            news.content = img.outerHtml() + content.outerHtml().replace("src=\"//", "src=\"http://");
-        } else {
-
-            Elements video = document.select("#player [data-sourcefile]");
-            if (!video.isEmpty()) {
-
-                String src = video.get(0).attr("data-sourcefile");
-                news.content = "<video controls><source src=\"" + src + "\" type=\"video/mp4\"></video>";
-            } else {
-                Elements longcards = document.select(".long-card");
-
-                if (!longcards.isEmpty()) {
-
-                    longcards = longcards.select("[data-type=\"ImageBlock\"] img,[data-type=\"TextBlock\"] p");
-                    news.content = longcards.outerHtml();
-                } else {
-                    System.out.println("NO CONTENT FOUND");
-                }
+            for (Element e : article.select("h2")) {
+                String text = e.text();
+                if (text.startsWith("RELATED:")
+                        || text.startsWith("BONUS:"))
+                    e.remove();
             }
 
+            article.select("h1,h2").tagName("h3");
+            article.select("ol,li").tagName("p");
+
+            Elements mashVideos = article.select(".content-mash-video");
+            if (mashVideos.size() == 1)
+                mashVideos.get(0).remove();
+            else
+                for (Element e : mashVideos)
+                    parseVideo(e);
+
+            article.select("[style]").removeAttr("style");
+
+        } else {
+            article = doc.select(".video-hub .content-mash-video");
+
+            if (!article.isEmpty()) {
+                parseVideo(article.get(0));
+
+                Elements dscr = doc.select(".video-hub #current-video-info");
+                dscr.select("#video-title,#video-shares,script").remove();
+                article.addAll(dscr);
+
+            } else {
+                article = doc.select(".long-card");
+
+                if (!article.isEmpty()) {
+                    article = article.select("[data-type='ImageBlock'] img,[data-type='TextBlock'] p");
+                }
+            }
         }
+        news.content = article.outerHtml().replace("=\"//", "=\"http://");
+    }
+
+    private void parseVideo(Element video)
+    {
+        String src = video.attr("data-sourcefile");
+        if (src.isEmpty())
+            src = video.attr("data-embedurl");
+
+        for (Attribute attr : video.attributes())
+            video.removeAttr(attr.getKey());
+
+        video.tagName("iframe");
+        video.attr("src", src);
+        video.attr("allowfullscreen", "");
+        video.attr("frameborder", "0");
     }
 
 }

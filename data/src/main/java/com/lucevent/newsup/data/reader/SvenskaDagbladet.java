@@ -2,6 +2,9 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
 
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 public class SvenskaDagbladet extends com.lucevent.newsup.data.util.NewsReader {
 
     // tags: [category, description, guid, item, link, pubdate, title]
@@ -19,7 +22,7 @@ public class SvenskaDagbladet extends com.lucevent.newsup.data.util.NewsReader {
     }
 
     @Override
-    protected String parseDescription(org.jsoup.nodes.Element prop)
+    protected String parseDescription(Element prop)
     {
         return org.jsoup.Jsoup.parse(prop.text()).text();
     }
@@ -27,11 +30,11 @@ public class SvenskaDagbladet extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
-        org.jsoup.select.Elements e = doc.select(".Deck,.Body");
+        Elements e = doc.select(".Deck,.Body");
 
-        e.select(".Body-ad,.AdPositionData,.Body-pull,figcaption,.Quote,.ExternalLink").remove();
+        e.select(".Body-ad,.AdPositionData,.Body-pull,figcaption,.Quote,.ExternalLink,.Ad").remove();
 
-        for (org.jsoup.nodes.Element img : e.select("img")) {
+        for (Element img : e.select("img")) {
             String src = img.attr("srcset");
 
             if (!src.startsWith("http:"))
@@ -41,11 +44,13 @@ public class SvenskaDagbladet extends com.lucevent.newsup.data.util.NewsReader {
             if (i != -1)
                 src = src.substring(0, i);
 
-            img.attr("src", src);
-            img.attr("srcset", "");
+            img.attr("src", src).removeAttr("srcset");
         }
+        e.select("h2").tagName("h3");
+        e.select("[class]").removeAttr("class");
+        e.select("[alt]").removeAttr("alt");
 
-        news.content = e.html();
+        news.content = e.html().replace("=\"//", "=\"http://").replace("=\"/", "=\"http://www.svd.se/");
     }
 
 }

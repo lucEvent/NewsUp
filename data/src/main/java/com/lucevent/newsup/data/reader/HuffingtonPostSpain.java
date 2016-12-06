@@ -1,5 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.nodes.Document;
@@ -23,14 +24,14 @@ public class HuffingtonPostSpain extends com.lucevent.newsup.data.util.NewsReade
                 new int[]{TAG_DESCRIPTION},
                 new int[]{TAG_PUBDATE, TAG_UPDATED},
                 new int[]{TAG_CATEGORY},
-                new int[]{TAG_ENCLOSURE});
+                new int[]{TAG_ENCLOSURE, TAG_LINK});
     }
 
     @Override
     protected String parseDescription(Element prop)
     {
         String description = org.jsoup.Jsoup.parse(prop.text()).text();
-        int index = description.indexOf("Leer más:");
+        int index = description.indexOf("Leer m\u00e1s:");
         if (index != -1)
             description = description.substring(0, index);
         return description;
@@ -49,34 +50,47 @@ public class HuffingtonPostSpain extends com.lucevent.newsup.data.util.NewsReade
 
         cleanBlockquotes(body.select("blockquote"));
 
+        for (Element e : body.select("[src*='big.assets.h'],[src*='gen/2966946']"))
+            e.parent().remove();
+
         String content = body.outerHtml();
         index = content.indexOf("<hh--");
         if (index != -1)
             content = content.substring(0, index);
 
-        return content;
+        return content.replace("src=\"/", "src=\"http:/");
     }
 
     @Override
     protected void readNewsContent(Document doc, News news)
     {
-        doc.select("script").remove();
+        Elements article = doc.select(".entry__body > div.content-list-component,.top-media--image,.top-media--video,.twitter-tweet,.twitter-video,.pull-quote,.entry__body .listicle");
 
-        org.jsoup.select.Elements e = doc.select(".top-media,.entry__body");
-        e.select("[style=\"display: none;\"],.slideshow-thumb,.tag-cloud,.comment-button,.corrections-links,.read-more,.extra-content").remove();
+        for (Element e : article.select("[src*='big.assets.h'],[src*='gen/2966946']")) {
+            e.parent().remove();
+        }
+        article.select("[class]:not(blockquote)").removeAttr("class");
+        article.select("li").tagName("p");
+        article.select("h1,h2").tagName("h3");
 
-        cleanBlockquotes(e.select("blockquote"));
+        news.content = article.outerHtml().replace("src=\"/", "src=\"http:/");
+    }
 
-        for (Element ps : e.select(".entry__body > p"))
-            if (ps.text().isEmpty())
-                ps.remove();
+    @Override
+    protected Enclosure parseEnclosure(Element prop)
+    {
+        String type = prop.attr("type");
+        if (type.startsWith("image")) {
 
-        Element ps = e.select("div").last();
-        if (ps != null)
-            if (ps.text().contains("Ve a nuestra portada"))
-                ps.remove();
-
-        news.content = e.html();
+            String src;
+            if (prop.attr("rel").isEmpty()) {
+                src = prop.attr("url").replace("-mini", "-large300");
+            } else {
+                src = prop.attr("href").replace("-154x114", "-large300");
+            }
+            return new Enclosure(src, type, "");
+        }
+        return null;
     }
 
     private void cleanBlockquotes(Elements select)
@@ -84,9 +98,9 @@ public class HuffingtonPostSpain extends com.lucevent.newsup.data.util.NewsReade
         for (Element bq : select) {
             String text = bq.text();
 
-            if (text.contains("ADEMÁS") || text.contains("TE PUEDE INTERESAR")
-                    || text.contains("AVÍSANOS") || text.contains("MÁS SOBRE")
-                    || text.contains("MÁS PARA"))
+            if (text.contains("ADEM\u00C1S") || text.contains("TE PUEDE INTERESAR")
+                    || text.contains("AV\u00CDSANOS") || text.contains("M\u00C1S SOBRE")
+                    || text.contains("M\u00C1S PARA"))
                 bq.remove();
         }
     }

@@ -12,12 +12,12 @@ public class ElMundoSections extends Sections {
         add(new Section("Portada", "http://estaticos.elmundo.es/elmundo/rss/portada.xml", 0));
         add(new Section("Espa\u00F1a", "http://estaticos.elmundo.es/elmundo/rss/espana.xml", 0));
         add(new Section("Internacional", "http://estaticos.elmundo.es/elmundo/rss/internacional.xml", 0));
-        add(new Section("Econom\u00E9a", "http://estaticos.elmundo.es/elmundo/rss/economia.xml", 0));
+        add(new Section("Econom\u00EDa", "http://estaticos.elmundo.es/elmundo/rss/economia.xml", 0));
         add(new Section("Cultura", "http://estaticos.elmundo.es/elmundo/rss/cultura.xml", 0));
         add(new Section("Ciencia", "http://estaticos.elmundo.es/elmundo/rss/ciencia.xml", 0));
 
         add(new Section("Ciudades", null, -1));
-        add(new Section("Alicante", "http://estaticos.elmundo.es/elmundo/rss/alicante.xml", 0));
+        add(new Section("Alicante", "http://estaticos.elmundo.es/elmundo/rss/alicante.xml", 1));
         add(new Section("Castell\u00F3n", "http://estaticos.elmundo.es/elmundo/rss/castellon.xml", 1));
         add(new Section("Madrid", "http://estaticos.elmundo.es/elmundo/rss/madrid.xml", 1));
         add(new Section("M\u00E1laga", "http://estaticos.elmundo.es/elmundo/rss/andalucia_malaga.xml", 1));
@@ -25,8 +25,8 @@ public class ElMundoSections extends Sections {
         add(new Section("Valencia", "http://estaticos.elmundo.es/elmundo/rss/valencia.xml", 1));
 
         add(new Section("Regiones", null, -1));
-        add(new Section("Pa\u00E9s Vasco", "http://estaticos.elmundo.es/elmundo/rss/paisvasco.xml", 1));
-        add(new Section("Andaluc\u00E9a", "http://estaticos.elmundo.es/elmundo/rss/andalucia.xml", 1));
+        add(new Section("Pa\u00EDs Vasco", "http://estaticos.elmundo.es/elmundo/rss/paisvasco.xml", 1));
+        add(new Section("Andaluc\u00EDa", "http://estaticos.elmundo.es/elmundo/rss/andalucia.xml", 1));
 
         add(new Section("Deportes", "http://estaticos.elmundo.es/elmundodeporte/rss/portada.xml", 0));
         add(new Section("F\u00FAtbol", "http://estaticos.elmundo.es/elmundodeporte/rss/futbol.xml", 1));

@@ -6,6 +6,7 @@ import com.lucevent.newsup.backend.utils.BackendParser;
 import com.lucevent.newsup.backend.utils.Report;
 import com.lucevent.newsup.backend.utils.SiteStats;
 import com.lucevent.newsup.backend.utils.Statistics;
+import com.lucevent.newsup.backend.utils.TimeStats;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.Site;
@@ -135,6 +136,7 @@ public class AppServlet extends HttpServlet {
 
         ObjectifyFactory oFactory = ObjectifyService.factory();
         oFactory.register(SiteStats.class);
+        oFactory.register(TimeStats.class);
         oFactory.register(Statistics.class);
         oFactory.register(Report.class);
         oFactory.begin();

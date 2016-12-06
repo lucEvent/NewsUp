@@ -7,6 +7,8 @@ import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.Section;
 import com.lucevent.newsup.data.util.Sections;
 
+import java.util.ArrayList;
+
 public class BackendParser {
 
     public static StringBuilder toEntry(News news)
@@ -74,32 +76,47 @@ public class BackendParser {
         return sb;
     }
 
-    public static StringBuilder toHtml(Statistics stats, String options)
+    public static StringBuilder toHtml(Statistics stats, String options, String[] filters)
     {
         StringBuilder sb = new StringBuilder();
         sb.append("<span class='starts'>Since ").append(Date.getAge(stats.since));
         sb.append(" / Last start ").append(Date.getAge(stats.lastStart)).append("</span>");
 
+        ArrayList<SiteStats> allStats = stats.getSiteStats();
+        ArrayList<SiteStats> siteStats;
+        if (filters == null)
+            siteStats = allStats;
+        else {
+            siteStats = new ArrayList<>(filters.length);
+            for (SiteStats ss : allStats) {
+                for (String filter : filters) {
+                    if (ss.siteName.toLowerCase().contains(filter.toLowerCase())) {
+                        siteStats.add(ss);
+                        break;
+                    }
+                }
+            }
+        }
         StatisticsSet statisticsSet;
 
         if (options.contains("s")) {
             sb.append("<span class='order'>site name</span>");
-            statisticsSet = new StatisticsSet(stats.getSiteStats(), StatisticsSet.CMP_SITE_NAME);
+            statisticsSet = new StatisticsSet(siteStats, StatisticsSet.CMP_SITE_NAME);
             appendHtml(sb, statisticsSet);
         }
         if (options.contains("n")) {
             sb.append("<span class='order'>number of requests</span>");
-            statisticsSet = new StatisticsSet(stats.getSiteStats(), StatisticsSet.CMP_N_ACCESSES);
+            statisticsSet = new StatisticsSet(siteStats, StatisticsSet.CMP_N_ACCESSES);
             appendHtml(sb, statisticsSet);
         }
         if (options.contains("t")) {
             sb.append("<span class='order'>last access time</span>");
-            statisticsSet = new StatisticsSet(stats.getSiteStats(), StatisticsSet.CMP_LAST_ACCESS);
+            statisticsSet = new StatisticsSet(siteStats, StatisticsSet.CMP_LAST_ACCESS);
             appendHtml(sb, statisticsSet);
         }
         if (options.contains("r")) {
             sb.append("<span class='order'>readings</span>");
-            statisticsSet = new StatisticsSet(stats.getSiteStats(), StatisticsSet.CMP_READINGS);
+            statisticsSet = new StatisticsSet(siteStats, StatisticsSet.CMP_READINGS);
             appendHtml(sb, statisticsSet);
         }
 
@@ -116,6 +133,7 @@ public class BackendParser {
     private static void appendHtml(StringBuilder sb, StatisticsSet statisticsSet)
     {
         sb.append("<table><tr>" +
+                "<th>#</th>" +
                 "<th>Site</th>" +
                 "<th># Accesses</th>" +
                 "<th># Readings</th>" +
@@ -124,9 +142,11 @@ public class BackendParser {
                 "<th>From version</th>" +
                 "</tr>");
 
+        int i = 1;
         for (SiteStats ss : statisticsSet)
             if (ss.nAccesses > 0)
-                sb.append("<tr><td>").append(ss.siteName)
+                sb.append("<tr><td>").append(i++)
+                        .append("</td><td>").append(ss.siteName)
                         .append("</td><td>").append(ss.nAccesses)
                         .append("</td><td>").append(ss.nNewsRead)
                         .append("</td><td>").append(Date.getAge(ss.lastAccess))
@@ -145,7 +165,6 @@ public class BackendParser {
                         .append("' rq='").append(ss.nAccesses)
                         .append("' rd='").append(ss.nNewsRead)
                         .append("' lt='").append(ss.lastAccess)
-                        .append("' ip='").append(ss.lastIp)
                         .append("' v='").append(ss.fromVersion)
                         .append("'/>");
     }

@@ -1,9 +1,9 @@
- html, body, div, span, iframe, p, blockquote, a, img, strong, ul, li, form, table, article, aside, footer, header, nav, section {
-            margin: 0;
-            padding: 0;
-            border: 0;
-            vertical-align: baseline;
-        }
+html, body, div, span, iframe, p, blockquote, a, img, strong, ul, li, form, table, article, aside, footer, header, nav, section {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    vertical-align: baseline;
+}
 article, aside, footer, header, nav, section {
     display: block;
 }
@@ -212,6 +212,7 @@ div.news:hover {
 }
 #content iframe, video {
     width: 100%;
+    height:auto;
     margin: 15px 0;
     padding: 0
 }
@@ -220,9 +221,6 @@ div.news:hover {
     height:auto;
     margin: 15px 0;
     padding: 0;
-}
-#content div > h2 > a > img {
-    width: auto;
 }
 .closer {
     display: inline-block;

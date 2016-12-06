@@ -23,6 +23,9 @@ public class Statistics {
     @Ignore
     public Long lastStart;
 
+    @Ignore
+    private TimeStats timeStats;
+
     public static Statistics getInstance()
     {
         LoadType<Statistics> db = ofy().load().type(Statistics.class);
@@ -36,12 +39,17 @@ public class Statistics {
         } else {
 
             statistics = new Statistics();
-            initializeStats(statistics);
 
             ofy().save().entity(statistics).now();
 
         }
+        statistics.timeStats = TimeStats.getInstance();
+
         return statistics;
+    }
+
+    private Statistics() {
+        initializeStats(this);
     }
 
     public void count(Site site, String ip, String version)

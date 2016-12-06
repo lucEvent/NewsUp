@@ -29,7 +29,7 @@ public class Yle extends com.lucevent.newsup.data.util.NewsReader {
                 for (Enclosure e : news.enclosures)
                     img += e.html();
 
-                news.content = "<meta charset=\"UTF-8\">" + img + news.content;
+                news.content = "<meta charset='UTF-8'>" + img + news.content;
             }
         return news;
     }

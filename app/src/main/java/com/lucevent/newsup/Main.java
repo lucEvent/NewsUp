@@ -105,7 +105,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         newsFragment.setRetainInstance(true);
 
         fragmentManager.addFragment(newsFragment, R.id.nav_my_news);
-
     }
 
     @Override

@@ -36,7 +36,7 @@ public class Reports {
                     .append("</span><span class='version'>")
                     .append(r.appVersion)
                     .append("</span><span class='message'>")
-                    .append(r.message)
+                    .append(r.message.replace("<", "&lt").replace(">", "&gt").replace("\n", "<br>").replace("\t","&nbsp;&nbsp;"))
                     .append("</span></div>");
         }
         return sb.toString();

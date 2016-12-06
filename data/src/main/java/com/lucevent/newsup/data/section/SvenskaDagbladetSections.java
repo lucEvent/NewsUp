@@ -87,7 +87,6 @@ public class SvenskaDagbladetSections extends Sections {
         add(new Section("Halvtid f\u00F6r L\u00F6fvens regering", "http://www.svd.se/feed/articles/story/halvtid-for-lofvens-regering.rss", 1));
         add(new Section("Harrisons historia", "http://www.svd.se/feed/articles/story/harrisons-historia.rss", 1));
         add(new Section("Hotet mot Sverige", "http://www.svd.se/feed/articles/story/hotet-mot-sverige.rss", 1));
-        add(new Section("H\u00E5llbar energi", "http://www.svd.se/feed/articles/story/hallbar-energi.rss", 1));
         add(new Section("Id-kontrollerna", "http://www.svd.se/feed/articles/story/id-kontrollerna.rss", 1));
         add(new Section("Jordb\u00E4vningarna i Italien", "http://www.svd.se/feed/articles/story/jordbavningarna-i-italien.rss", 1));
         add(new Section("Kampen om Vita huset", "http://www.svd.se/feed/articles/story/kampen-om-vita-huset.rss", 1));
@@ -102,7 +101,6 @@ public class SvenskaDagbladetSections extends Sections {
         add(new Section("Saab-konkursen", "http://www.svd.se/feed/articles/story/saab-konkursen.rss", 1));
         add(new Section("Scenh\u00F6sten 2016", "http://www.svd.se/feed/articles/story/scenhosten-2016.rss", 1));
         add(new Section("SD:s gala p\u00E5 Grand Hotel", "http://www.svd.se/feed/articles/story/sds-gala-pa-grand-hotel.rss", 1));
-        add(new Section("Skottd\u00E5det i M\u00FCnchen", "http://www.svd.se/feed/articles/story/skottdadet-i-munchen.rss", 1));
         add(new Section("S\u00E4kerhetsr\u00E5det", "http://www.svd.se/feed/articles/story/sakerhetsradet.rss", 1));
         add(new Section("Terrorn i Europa", "http://www.svd.se/feed/articles/story/terrorn-i-europa.rss", 1));
         add(new Section("Tove Lifvendahls val", "http://www.svd.se/feed/articles/story/tove-lifvendahls-val.rss", 1));

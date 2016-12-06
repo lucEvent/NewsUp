@@ -27,7 +27,6 @@ public class ElPeriodicoEsSections extends Sections {
         add(new Section("Ciudades", null, -1));
         add(new Section("Barcelona", "http://www.elperiodico.com/es/rss/barcelona/rss.xml", 1));
         add(new Section("L'Hospitalet", "http://www.elperiodico.com/es/rss/hospitalet/rss.xml", 1));
-        add(new Section("Sabadell", "http://www.elperiodico.com/es/rss/sabadell/rss.xml", 1));
         add(new Section("Badalona", "http://www.elperiodico.com/es/rss/badalona/rss.xml", 1));
         add(new Section("Santa Coloma", "http://www.elperiodico.com/es/rss/santa-coloma/rss.xml", 1));
 

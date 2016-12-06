@@ -10,9 +10,9 @@
         <item>Fa %d anys</item>
     </string-array>
     <string-array name="keep_time_titles">
-        <item>No guardar-les (no recomendat)</item>
+        <item>No guardar-les (no recomanat)</item>
         <item>1 setmana</item>
-        <item>1 mes (recomendat)</item>
+        <item>1 mes (recomanat)</item>
         <item>3 mesos</item>
         <item>6 mesos</item>
         <item>Per sempre</item>

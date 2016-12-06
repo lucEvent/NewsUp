@@ -31,7 +31,7 @@ import java.lang.ref.WeakReference;
 public class StatisticsFragment extends android.app.Fragment {
 
     public enum SortOrder {
-        SORT_BY_NAME, SORT_BY_NUM_REQUESTS, SORT_BY_TIME
+        SORT_BY_NAME, SORT_BY_NUM_REQUESTS, SORT_BY_TIME, SORT_BY_READINGS
     }
 
     public static final SortOrder DEFAULT_ORDER = SortOrder.SORT_BY_NUM_REQUESTS;
@@ -69,14 +69,17 @@ public class StatisticsFragment extends android.app.Fragment {
 
         View bbyname = mainView.findViewById(R.id.by_sitename);
         View bbynrequest = mainView.findViewById(R.id.by_nrequests);
+        View bbyreadings = mainView.findViewById(R.id.by_readings);
         View bbytime = mainView.findViewById(R.id.by_time);
 
         bbyname.setTag(SortOrder.SORT_BY_NAME);
         bbynrequest.setTag(SortOrder.SORT_BY_NUM_REQUESTS);
+        bbyreadings.setTag(SortOrder.SORT_BY_READINGS);
         bbytime.setTag(SortOrder.SORT_BY_TIME);
 
         bbyname.setOnClickListener(onOrderChanged);
         bbynrequest.setOnClickListener(onOrderChanged);
+        bbyreadings.setOnClickListener(onOrderChanged);
         bbytime.setOnClickListener(onOrderChanged);
 
         return mainView;

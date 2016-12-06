@@ -8,17 +8,20 @@ public class SiteStat {
 
     public final int nAccesses;
 
+    public final int readings;
+
     public final long lastAccess;
 
-    public final String lastIp;
+    public final String version;
 
-    public SiteStat(String siteName, int siteCode, int nAccesses, long lastAccess, String lastIp)
+    public SiteStat(String siteName, int siteCode, int nAccesses, int readings, long lastAccess, String version)
     {
         this.siteName = siteName;
         this.siteCode = siteCode;
         this.nAccesses = nAccesses;
+        this.readings = readings;
         this.lastAccess = lastAccess;
-        this.lastIp = lastIp;
+        this.version = version;
     }
 
 }

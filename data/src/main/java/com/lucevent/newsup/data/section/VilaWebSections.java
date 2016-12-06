@@ -21,7 +21,6 @@ public class VilaWebSections extends Sections {
 
         add(new Section("M\u00F3n", "http://www.vilaweb.cat/categoria/mon/feed/", 0));
         add(new Section("\u00C1frica", "http://www.vilaweb.cat/categoria/mon/africa/feed/", 1));
-        add(new Section("L'Alguer-Sardenya", "http://www.vilaweb.cat/categoria/mon/alguer/feed/", 1));
         add(new Section("Am\u00E8rica", "http://www.vilaweb.cat/categoria/mon/america/feed/", 1));
         add(new Section("\u00C1sia-Pac\u00EDfic", "http://www.vilaweb.cat/categoria/mon/asia-pacific/feed/", 1));
         add(new Section("Europa", "http://www.vilaweb.cat/categoria/mon/europa/feed/", 1));
@@ -38,7 +37,6 @@ public class VilaWebSections extends Sections {
         add(new Section("Policia i just\u00EDcia", "http://www.vilaweb.cat/categoria/societat/policia-i-justicia/feed/", 1));
 
         add(new Section("Opini\u00F3", "http://www.vilaweb.cat/categoria/opinio/feed/", 0));
-        add(new Section("An\u00E0lisi", "http://www.vilaweb.cat/categoria/opinio/analisi/feed/", 1));
         add(new Section("Editorial", "http://www.vilaweb.cat/categoria/opinio/editorial/feed/", 1));
         add(new Section("Mail obert", "http://www.vilaweb.cat/categoria/opinio/mail-obert/feed/", 1));
         add(new Section("Opini\u00F3 contundent", "http://www.vilaweb.cat/categoria/opinio/opinions-contundents/feed/", 1));
