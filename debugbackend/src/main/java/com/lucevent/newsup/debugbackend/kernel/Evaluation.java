@@ -4,6 +4,6 @@ public interface Evaluation {
 
     String description();
 
-    boolean evalutate(com.lucevent.newsup.data.util.News news);
+    boolean evaluate(com.lucevent.newsup.data.util.News news);
 
 }

@@ -7,6 +7,7 @@ import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.kernel.util.Compressor;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -72,6 +73,25 @@ public class SDManager {
             directory.mkdir();
 
         return directory;
+    }
+
+    public static String readRaw(Context context, int id)
+    {
+        try {
+            BufferedInputStream stream = new BufferedInputStream(context.getResources().openRawResource(id));
+
+            byte[] bytes = new byte[4096];
+            int bytesRead;
+            StringBuilder sb = new StringBuilder();
+            while ((bytesRead = stream.read(bytes, 0, bytes.length)) != -1)
+                sb.append(new String(bytes, 0, bytesRead));
+
+            return sb.toString();
+        } catch (Exception e) {
+            AppSettings.printerror("Error in readRaw", e);
+            e.printStackTrace();
+        }
+        return "";
     }
 
     public long getCacheSize()

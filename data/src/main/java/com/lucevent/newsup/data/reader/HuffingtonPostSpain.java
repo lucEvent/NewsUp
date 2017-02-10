@@ -40,7 +40,9 @@ public class HuffingtonPostSpain extends com.lucevent.newsup.data.util.NewsReade
     @Override
     protected String parseContent(Element prop)
     {
-        Element body = org.jsoup.Jsoup.parse(prop.text().replace("<br />", "<p></p>")).getElementsByTag("body").get(0);
+        Element body = org.jsoup.Jsoup.parse(prop.text().replace("<br />", "<p></p>")).body();
+        body.select("script").remove();
+
         Elements ee = body.children();
 
         int index = ee.indexOf(ee.select("blockquote").last()) - 1;
@@ -69,6 +71,13 @@ public class HuffingtonPostSpain extends com.lucevent.newsup.data.util.NewsReade
         for (Element e : article.select("[src*='big.assets.h'],[src*='gen/2966946']")) {
             e.parent().remove();
         }
+        for (Element script : article.select("script")) {
+            String html = script.html();
+            if (html.isEmpty())
+                script.remove();
+            else script.parent().html(html);
+        }
+
         article.select("[class]:not(blockquote)").removeAttr("class");
         article.select("li").tagName("p");
         article.select("h1,h2").tagName("h3");

@@ -8,6 +8,8 @@ import org.jsoup.select.Elements;
 
 public class ElPeriodicoCa extends com.lucevent.newsup.data.util.NewsReader {
 
+    private static final String SITE_STYLE = "<style>.subtitle{font-size:12px;padding:2px 10px;display:block;}</style>";
+
     /**
      * Tags
      * [                                       description, guid, item, link, pubdate, title]
@@ -24,6 +26,17 @@ public class ElPeriodicoCa extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{});
+
+        this.style = SITE_STYLE;
+    }
+
+    @Override
+    protected String parseLink(Element prop)
+    {
+        String link = prop.text();
+        if (link.startsWith("/"))
+            link = "http://www.elperiodico.cat" + link;
+        return link;
     }
 
     @Override
@@ -44,20 +57,26 @@ public class ElPeriodicoCa extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected void readNewsContent(Document doc, News news)
     {
+        doc.select("script").remove();
+
         Elements article = doc.select(".ep-img img,.ep-galeria .slider img,.ep-video img,"
                 + ".comp iframe:not(.cuerpo-noticia iframe,.cuerpo-opinion iframe),"
                 + ".cuerpo-noticia > *:not(.complementos,.despiece,.destacado,.claves,.frase),"
                 + ".cuerpo-opinion > *:not(.complementos,.despiece,.destacado,.claves,.frase)");
 
-        article.select(".despiece-bottom").tagName("blockquote");
-
         if (article.isEmpty()) {
-            article = doc.select("article .onbcn-slider > *,article .onbcn-detail-body > *:not(.box-left)");
+            article = doc.select("article .onbcn-slider,article .onbcn-detail-body");
+
+            article.select(".custom-navigation,.box-left,.player-zeta-ob").remove();
         }
+
+        article.select(".despiece-bottom").tagName("blockquote");
+        article.select("h2").tagName("h3");
+
         article.select("[width]").removeAttr("width");
         article.select("[style]").removeAttr("style");
 
-        news.content = article.outerHtml().replace("src=\"/", "src=\"http:/");
+        news.content = article.outerHtml();
     }
 
 }

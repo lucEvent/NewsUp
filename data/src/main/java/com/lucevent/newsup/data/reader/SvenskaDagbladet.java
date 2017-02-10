@@ -2,6 +2,7 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
 
+import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -32,13 +33,13 @@ public class SvenskaDagbladet extends com.lucevent.newsup.data.util.NewsReader {
     {
         Elements e = doc.select(".Deck,.Body");
 
-        e.select(".Body-ad,.AdPositionData,.Body-pull,figcaption,.Quote,.ExternalLink,.Ad").remove();
+        e.select(".Body-ad,.AdPositionData,.Body-pull,figcaption,.Quote,.ExternalLink,.Ad,script,.ThumbnailList,.paywall-loader").remove();
 
-        for (Element img : e.select("img")) {
+        for (Element img : e.select("img[srcset]")) {
             String src = img.attr("srcset");
 
-            if (!src.startsWith("http:"))
-                src = "http:" + src;
+            for (Attribute attr : img.attributes())
+                img.removeAttr(attr.getKey());
 
             int i = src.indexOf(" ");
             if (i != -1)
@@ -47,10 +48,9 @@ public class SvenskaDagbladet extends com.lucevent.newsup.data.util.NewsReader {
             img.attr("src", src).removeAttr("srcset");
         }
         e.select("h2").tagName("h3");
-        e.select("[class]").removeAttr("class");
         e.select("[alt]").removeAttr("alt");
 
-        news.content = e.html().replace("=\"//", "=\"http://").replace("=\"/", "=\"http://www.svd.se/");
+        news.content = e.html();
     }
 
 }

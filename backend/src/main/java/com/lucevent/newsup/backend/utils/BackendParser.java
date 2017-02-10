@@ -87,10 +87,13 @@ public class BackendParser {
         if (filters == null)
             siteStats = allStats;
         else {
+            for (int i = 0; i < filters.length; i++)
+                filters[i] = filters[i].trim().toLowerCase();
+
             siteStats = new ArrayList<>(filters.length);
             for (SiteStats ss : allStats) {
                 for (String filter : filters) {
-                    if (ss.siteName.toLowerCase().contains(filter.toLowerCase())) {
+                    if (ss.siteName.toLowerCase().contains(filter)) {
                         siteStats.add(ss);
                         break;
                     }

@@ -2,6 +2,8 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
 
+import org.jsoup.nodes.Document;
+
 public class FriaTider extends com.lucevent.newsup.data.util.NewsReader {
 
     // tags: [comments, dc:creator, description, guid, item, link, pubdate, title]
@@ -22,10 +24,27 @@ public class FriaTider extends com.lucevent.newsup.data.util.NewsReader {
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
         org.jsoup.select.Elements e = doc.select(".field-items,.standfirst");
-        e.select(".image-credit").remove();
+        e.select(".image-credit,script").remove();
 
+        e.select("#bargraph").attr("style", "height:400px;");
         if (!e.isEmpty())
             news.content = e.html();
+    }
+
+    @Override
+    protected Document getDocument(String pagelink)
+    {
+        try {
+            return org.jsoup.Jsoup.connect(pagelink).timeout(10000).userAgent(USER_AGENT).get();
+        } catch (Exception e) {
+            System.out.println("[" + e.getClass().getSimpleName() + "] Can't read page. Trying again");
+        }
+        try {
+            return org.jsoup.Jsoup.connect(pagelink).timeout(10000).get();
+        } catch (Exception e) {
+            System.out.println("[" + e.getClass().getSimpleName() + "] Couldn't read page: " + pagelink);
+        }
+        return null;
     }
 
 }

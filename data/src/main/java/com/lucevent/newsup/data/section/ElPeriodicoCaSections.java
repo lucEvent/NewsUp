@@ -29,11 +29,8 @@ public class ElPeriodicoCaSections extends Sections {
         add(new Section("Badalona", "http://www.elperiodico.cat/ca/rss/badalona/rss.xml", 1));
 
         add(new Section("Blogs", null, -1));
-        add(new Section("Los restaurantes de Pau Aren\u00F3s", "http://rdp.elperiodico.com/feed/?_ga=1.183745446.1073564764.1445817152", 1));
-        add(new Section("El Tourmalet", "http://tourmalet.elperiodico.com/feed/?_ga=1.183745446.1073564764.1445817152", 1));
         add(new Section("Bloglobal", "http://blogs.elperiodico.com/bloglobal/feed/?_ga=1.183745446.1073564764.1445817152", 1));
         add(new Section("Destinos ", "http://www.visitdestinos.com/feed/", 1));
-        add(new Section("+ Digital", "http://blogs.elperiodico.com/masdigital/feed?_ga=1.183745446.1073564764.1445817152", 1));
 
     }
 

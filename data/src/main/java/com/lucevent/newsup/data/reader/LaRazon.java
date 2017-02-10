@@ -1,5 +1,7 @@
 package com.lucevent.newsup.data.reader;
 
+import org.jsoup.nodes.Element;
+
 public class LaRazon extends com.lucevent.newsup.data.util.NewsReader {
 
     /**
@@ -20,5 +22,13 @@ public class LaRazon extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{},
                 new int[]{TAG_MEDIA_CONTENT});
     }
-    
+
+    @Override
+    protected String parseContent(Element prop)
+    {
+        org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(prop.text().replace("\u201D", "'"));
+        doc.select("script").remove();
+        return doc.body().html();
+    }
+
 }

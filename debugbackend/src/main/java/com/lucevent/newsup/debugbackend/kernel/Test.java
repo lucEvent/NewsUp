@@ -8,6 +8,7 @@ import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.debugbackend.data.Database;
 import com.lucevent.newsup.debugbackend.data.TaskData;
 import com.lucevent.newsup.debugbackend.data.TaskState;
+import com.lucevent.newsup.debugbackend.util.ReportCallback;
 
 
 public class Test {
@@ -20,50 +21,52 @@ public class Test {
     }
 
     /**
-     * @return id of the task performed
+     * @return report of the task performed
      */
-    public String doTest()
+    public String doTest(ReportCallback urgentCallback)
     {
         Sites sites = Sites.getDefault(true);
-        Evaluation[] evals = new Evaluation[]{WITHCONTENT, TH2};
+        Evaluation[] evals = new Evaluation[]{WITHCONTENT, TH2, SCRIPTS, LINKS, STYLES};
 
         TaskState taskState = db.getCurrentTask();
         TaskData data = db.getTaskData(taskState, evals.length);
 
         db.newRound(taskState);
 
-        for (; data.currentEvaluatingSite < sites.size(); data.currentEvaluatingSite++, db.save(data, true)) {
+        if (data.currentEvaluatingSite < sites.size()) {
             Site site = sites.get(data.currentEvaluatingSite);
 
             for (; data.currentEvaluatingSection < site.getSections().size(); data.currentEvaluatingSection++, db.save(data, true)) {
                 Section section = site.getSections().get(data.currentEvaluatingSection);
                 if (section.url != null) {
 
+                    int[] tempValues = new int[data.siteTestResults.length];
+                    for (int i = 0; i < tempValues.length; i++)
+                        tempValues[i] = 0;
+
                     NewsArray news = site.readNewsHeaders(new int[]{data.currentEvaluatingSection});
                     for (News N : news) {
                         if (N.content == null || N.content.isEmpty()) {
 //                            try {
 //                                Thread.sleep(500);
-//                            } catch (InterruptedException ex) {
-//                                System.out.println("InterruptedException: " + ex.toString());
+//                            } catch (InterruptedException ignored) {
 //                            }
                             site.readNewsContent(N);
                         }
-                        for (int t = 0; t < evals.length; t++) {
-                            Evaluation test = evals[t];
-                            if (test.evalutate(N)) {
-                                data.siteTestResults[t]++;
-                            }
-                        }
+                        for (int t = 0; t < evals.length; t++)
+                            if (evals[t].evaluate(N))
+                                tempValues[t]++;
                     }
+
                     data.siteNumNews += news.size();
+                    for (int i = 0; i < tempValues.length; i++)
+                        data.siteTestResults[i] += tempValues[i];
                 }
             }
 
             // Log save
             StringBuilder sb = new StringBuilder();
-            sb.append("** ").append(site.name).append(" **\n");
-            sb.append("\n\tResultados:\n");
+            sb.append("\tResultados para ").append(site.name).append("\n");
             sb.append("\t\t").append(data.siteNumNews).append(" noticias\n");
             for (int i = 0; i < data.siteTestResults.length; i++) {
                 String dscr = evals[i].description();
@@ -73,15 +76,23 @@ public class Test {
             }
             sb.append("_________________________________________________\n\n");
 
-            db.saveLog(taskState, data.currentEvaluatingSite, sb.toString());
+            String partialReport = sb.toString();
+            db.saveLog(taskState, data.currentEvaluatingSite, partialReport);
+
+            if ((data.siteNumNews / 2) > data.siteTestResults[0] || data.siteNumNews == 0)
+                urgentCallback.report(partialReport);
 
             data.totalNumNews += data.siteNumNews;
             for (int t = 0; t < evals.length; t++) {
                 data.totalTestResults[t] += data.siteTestResults[t];
                 data.siteTestResults[t] = 0;
             }
+            data.currentEvaluatingSite++;
             data.currentEvaluatingSection = 0;
             data.siteNumNews = 0;
+            db.save(data, false);
+
+            return null;
         }
 
         // Total results log save
@@ -105,13 +116,13 @@ public class Test {
         @Override
         public String description()
         {
-            return "contienen <h2>";
+            return "contienen <h2>|<h1>";
         }
 
         @Override
-        public boolean evalutate(News news)
+        public boolean evaluate(News news)
         {
-            return news.content.contains("<h2>");
+            return news.content.contains("<h2>") | news.content.contains("<h1>");
         }
     };
 
@@ -123,9 +134,51 @@ public class Test {
         }
 
         @Override
-        public boolean evalutate(News news)
+        public boolean evaluate(News news)
         {
             return news.content != null && !news.content.isEmpty();
+        }
+    };
+
+    private static final Evaluation SCRIPTS = new Evaluation() {
+        @Override
+        public String description()
+        {
+            return "tienen scripts";
+        }
+
+        @Override
+        public boolean evaluate(News news)
+        {
+            return news.content.contains("</script>");
+        }
+    };
+
+    private static final Evaluation LINKS = new Evaluation() {
+        @Override
+        public String description()
+        {
+            return "con links partidos";
+        }
+
+        @Override
+        public boolean evaluate(News news)
+        {
+            return news.content.contains("src=\"/") || news.content.contains("href=\"/");
+        }
+    };
+
+    private static final Evaluation STYLES = new Evaluation() {
+        @Override
+        public String description()
+        {
+            return "tienen styles";
+        }
+
+        @Override
+        public boolean evaluate(News news)
+        {
+            return news.content.contains("</style>") || news.content.contains("style=\"");
         }
     };
 

@@ -1,10 +1,12 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosure;
+
 import org.jsoup.nodes.Element;
 
 public class DigitalInspiration extends com.lucevent.newsup.data.util.NewsReader {
 
-    // tags: [category, content:encoded, dc:creator, description, enclosure, guid, item, link, pubdate, title]
+    // tags: [category, content:encoded, dc:creator, description, enclosure, guid, item, link, post-id, pubdate, title]
 
     public DigitalInspiration()
     {
@@ -19,25 +21,36 @@ public class DigitalInspiration extends com.lucevent.newsup.data.util.NewsReader
     }
 
     @Override
+    protected Enclosure parseEnclosure(Element prop)
+    {
+        String src = prop.attr("url");
+        return src.endsWith(".jpg") ?
+                new Enclosure(src, prop.attr("type"), prop.attr("length")) : null;
+    }
+
+    @Override
     protected String parseContent(Element prop)
     {
-        org.jsoup.nodes.Document d = org.jsoup.Jsoup.parse(prop.text());
-        d.select("script").remove();
+        org.jsoup.nodes.Document article = org.jsoup.Jsoup.parse(prop.text());
+        article.select("script").remove();
 
-        for (Element ytv : d.select(".youtube-player"))
-            ytv.prepend("<iframe src=\"https://www.youtube.com/embed/" +
-                    ytv.attr("data-id") + "\" frameborder=\"0\" allowfullscreen></iframe>");
+        for (Element ytv : article.select(".youtube-player,.youtube"))
+            ytv.html(Enclosure.iframe("https://www.youtube.com/embed/" + ytv.attr("data-id")));
 
-        for (Element s : d.select("[style]"))
-            s.removeAttr("style");
 
-        String content = d.html();
+        for (Element code : article.select("pre"))
+            code.tagName("p").wrap("code");
+
+        article.select("h2").tagName("h3");
+        article.select("[style]").removeAttr("style");
+
+        String content = article.html();
 
         int index = content.lastIndexOf("<hr>");
         if (index != -1)
             content = content.substring(0, index);
 
-        return content.replace("<pre ", "<code><p ").replace("/pre>", "/p></code>");
+        return content;
     }
 
 }

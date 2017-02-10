@@ -68,7 +68,6 @@ public class SiteCountry {
     public static final int UKRAINE = 62;
     public static final int URUGUAY = 63;
     public static final int VENEZUELA = 64;
-    public static final int EUROPE = 65;
-    public static final int WORLD = 66;
+    public static final int VARIOUS = 65;
 
 }

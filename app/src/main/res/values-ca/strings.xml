@@ -92,6 +92,9 @@
     <string name="msg_empty_input">Anotació buida</string>
     <string name="msg_shortcut_created">S\'ha creat un accés directe per %s a la teva finestra d\'inici</string>
     <string name="msg_download_set_successfully">Descàrrega programada</string>
+    <string name="msg_message_empty">El missatge no pot estar buit</string>
+    <string name="msg_message_sent">Missatge enviat :)</string>
+    <string name="msg_error_occurred">S\'ha produït un error :(</string>
 
 
     <!-- * *************** Activities and fragment's titles ********************* * -->

@@ -2,6 +2,7 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class RacoCatala extends com.lucevent.newsup.data.util.NewsReader {
@@ -23,7 +24,15 @@ public class RacoCatala extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected Enclosure parseEnclosure(Element prop)
     {
-        return new Enclosure(prop.text(), "image", "");
+        return new Enclosure(prop.text().replace("/100/100/", "/700/400/"), "image", "");
+    }
+
+    @Override
+    protected String parseContent(Element prop)
+    {
+        Document doc = org.jsoup.Jsoup.parse(prop.text());
+        doc.select("script").remove();
+        return doc.body().html();
     }
 
 }

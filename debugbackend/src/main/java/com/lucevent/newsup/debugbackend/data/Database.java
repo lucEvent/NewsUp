@@ -1,7 +1,5 @@
 package com.lucevent.newsup.debugbackend.data;
 
-import com.google.appengine.api.datastore.KeyFactory;
-
 import java.util.Comparator;
 import java.util.TreeSet;
 
@@ -16,7 +14,7 @@ public class Database {
     public TaskState getCurrentTask()
     {
         TaskState res = ofy().load().type(TaskState.class)
-                .filter("finishTime", -1)
+                .filter("finishTime", -1L)
                 .first().now();
 
         if (res == null) {
@@ -33,9 +31,7 @@ public class Database {
 
     public TaskData getTaskData(TaskState taskState, int evaluations)
     {
-        TaskData res = ofy().load().type(TaskData.class)
-                .filterKey(KeyFactory.createKey("taskId", taskState.startTime))
-                .first().now();
+        TaskData res = ofy().load().type(TaskData.class).id(taskState.startTime).now();
 
         if (res == null) {
 

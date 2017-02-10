@@ -10,7 +10,6 @@ public class AndroidAuthoritySections extends Sections {
         super();
 
         add(new Section("Lasts", "http://feed.androidauthority.com/", 0));
-        add(new Section("News", "http://www.androidauthority.com/news/feed/", 0));
 
         add(new Section("Reviews", "http://www.androidauthority.com/reviews/feed/", 0));
         add(new Section("Apps", "http://www.androidauthority.com/tag/app-reviews/feed/", 1));

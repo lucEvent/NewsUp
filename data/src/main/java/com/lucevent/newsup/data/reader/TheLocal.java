@@ -2,10 +2,14 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Date;
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class TheLocal extends com.lucevent.newsup.data.util.NewsReader {
+
+    private static final String SITE_STYLE = "<style>i{font-size:12px;padding:2px 10px;display:block;}</style>";
 
     // tags: [description, enclosure, guid, item, link, pubdate, title]
 
@@ -19,6 +23,8 @@ public class TheLocal extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{},
                 new int[]{TAG_ENCLOSURE});
+
+        this.style = SITE_STYLE;
     }
 
     @Override
@@ -30,16 +36,30 @@ public class TheLocal extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
-        org.jsoup.select.Elements content = doc.select("#main_picture_article > img,.articleTeaser,.articleContent");
+        Elements article = doc.select("#article-photo,#article-description,#article-body");
+        article.select(".ad_container,script").remove();
 
-        org.jsoup.select.Elements imgs = content.select("img");
-        for (org.jsoup.nodes.Element img : imgs) {
-            String src = "http://www.thelocal.com" + img.attr("src");
-            img.attr("src", src);
-            img.attr("style", "");
+        article.select("#article-description").tagName("h4");
+        article.select("[style]").removeAttr("style");
+
+        for (Element img : article.select("img,amp-img")) {
+            img.tagName("img");
+            NewsStylist.cleanAttributes(img, "src");
+        }
+        for (Element ro : article.select("strong")) {
+            String text = ro.text();
+            if (text.startsWith("READ ALSO")
+                    || text.startsWith("READ MORE")
+                    || text.startsWith("See also")) {
+                try {
+                    ro.parent().remove();
+                } catch (Exception ignored) {
+                    ro.remove();
+                }
+            }
         }
 
-        news.content = content.outerHtml();
+        news.content = "<base href='http://www.thelocal.com/'>" + article.outerHtml();
     }
 
 }

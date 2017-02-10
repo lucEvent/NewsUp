@@ -1,43 +1,71 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
+
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class RollingStone extends com.lucevent.newsup.data.util.NewsReader {
 
-    // tags: [content:encoded, description, enclosure, guid, item, link, pubdate, title]
+    private static final String SITE_STYLE = "<style>.collection-nav-nojs{padding:0;list-style:none;}.collection-nav-nojs a{color:#fff;background-color:#c81429;display:block;mar" +
+            "gin:1em;padding:.8em;font-size:22px;text-align:center;text-transform:uppercase;border-radius:.25em;text-decoration:none;}</style>";
+
+    // tags: [content:encoded, guid, item, link, media:content, media:group, media:thumbnail, pubdate, title]
 
     public RollingStone()
     {
         super(TAG_ITEM_ITEMS,
                 new int[]{TAG_TITLE},
                 new int[]{TAG_LINK},
-                new int[]{TAG_DESCRIPTION},
+                new int[]{TAG_CONTENT_ENCODED},
                 new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{},
-                new int[]{TAG_ENCLOSURE});
+                new int[]{TAG_MEDIA_CONTENT});
+
+        this.style = SITE_STYLE;
+    }
+
+    @Override
+    protected String parseDescription(Element prop)
+    {
+        return org.jsoup.Jsoup.parse(prop.text()).text();
+    }
+
+    @Override
+    protected Enclosure parseEnclosure(Element prop)
+    {
+        String url = prop.attr("url");
+        if (url.contains("/featured/")) {
+            return new Enclosure(url, prop.attr("type"), prop.attr("length"));
+        }
+        return null;
     }
 
     @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
-        org.jsoup.select.Elements img = doc.select(".article-img-holder img,.article-img-holder iframe");
-        org.jsoup.select.Elements content = doc.select(".article-content,.long-list-item");
+        Elements article = doc.select(".lead-container img,.lead-container iframe,.article-content");
 
-        if (content.isEmpty()) {
-            img = doc.select("article .asset-container img,article .asset-container iframe");
-            content = doc.select("article .body-text");
+        if (article.isEmpty()) {
+            article = doc.select(".collection-set");
 
-            if (content.isEmpty())
+            if (article.isEmpty()) {
                 return;
-            else
-                content.select(".related-article").remove();
-
-        } else {
-            content.select(".related-article,.social-icons-container,.related-topics,.sidebar").remove();
+            } else {
+                article.select(".total,.collection-info,.collection-item-media-player").remove();
+            }
         }
+        article.select(".module-related,#module-more-news,figcaption,script").remove();
 
-        news.content = img.outerHtml() + content.outerHtml();
+        NewsStylist.cleanAttributes(article.select("img"), "src");
+
+        for (Element e : article.select("[src^='//']"))
+            e.attr("src", "http:" + e.attr("src"));
+
+        news.content = article.outerHtml();
     }
 
 }

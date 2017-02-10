@@ -91,6 +91,9 @@
     <string name="msg_empty_input">Tom ingång</string>
     <string name="msg_shortcut_created">En genväg för %s har lagts på startskärmen</string>
     <string name="msg_download_set_successfully">Nedladdning schemalagts framgångsrikt</string>
+    <string name="msg_message_empty">Meddelandet kan inte vara tom</string>
+    <string name="msg_message_sent">Meddelande skickat :)</string>
+    <string name="msg_error_occurred">Ett fel har inträffat :(</string>
 
 
     <!-- * *************** Activities and fragment's titles ********************* * -->

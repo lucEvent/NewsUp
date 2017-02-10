@@ -2,8 +2,13 @@ package com.lucevent.newsup.data.reader;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.parser.Parser;
 
 public class GoogleEarthBlog extends com.lucevent.newsup.data.util.NewsReader {
+
+    private static final String SITE_STYLE = "<style>img+br+i{font-size:12px;padding:2px 10px;display:block;}img[src$='mac-cmdkey.gif'],img[src$='gelogoicon.gif'],img[src*='/ic" +
+            "ons/']{width:4%;}code{display:block;padding: 5px 0;width:100%;overflow:scroll;font-size:16px;font-family:courier;}code:before{content:'Slide left to see more';colo" +
+            "r:#777777;display:block;padding:12px 0 5px;}</style>";
 
     //tags: [category, content:encoded, dc:creator, description, guid, item, link, post-id, pubdate, title]
 
@@ -11,31 +16,58 @@ public class GoogleEarthBlog extends com.lucevent.newsup.data.util.NewsReader {
     {
         super(TAG_ITEM_ITEMS,
                 new int[]{TAG_TITLE},
-                new int[]{"comments".hashCode()},
+                new int[]{TAG_LINK},
                 new int[]{TAG_DESCRIPTION},
                 new int[]{TAG_CONTENT_ENCODED},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{});
+
+        this.style = SITE_STYLE;
     }
 
     @Override
     protected String parseDescription(Element prop)
     {
-        return org.jsoup.Jsoup.parse(prop.text()).text();
+        String description = org.jsoup.Jsoup.parse(prop.text()).text();
+
+        int index = description.indexOf(" […]");
+        if (index > 0)
+            description = description.substring(0, index) + "...";
+
+        return description;
     }
 
-    @Override
     protected String parseContent(Element prop)
     {
         Document doc = org.jsoup.Jsoup.parse(prop.text());
+        doc.select("script").remove();
 
-        for (Element e : doc.select("[style]"))
-            e.removeAttr("style");
-        for (Element e : doc.select("[width],[height]"))
-            e.removeAttr("width").removeAttr("height");
+        doc.select("h1,h2").tagName("h3");
+        doc.select("[style]").removeAttr("style");
+        doc.select("[width]").removeAttr("width");
+        doc.select("iframe").attr("frameborder", "0");
 
-        return doc.html().replace("/gelogoicon.gif\"", "/gelogoicon.gif\" style=\"width:4%\"");
+        for (Element img : doc.select("img")) {
+            String src = img.attr("src");
+            img.attr("src", src.replace("resize=150%2C150", "resize=676%2C530"));
+            if (src.endsWith("mac-cmdkey.gif") && src.endsWith("gelogoicon.gif") && src.contains("/icons/"))
+                img.wrap("<p>");
+        }
+        return doc.body().html();
+    }
+
+    @Override
+    protected org.jsoup.nodes.Document getDocument(String rsslink)
+    {
+        try {
+            return org.jsoup.Jsoup.connect(rsslink)
+                    .parser(Parser.xmlParser())
+                    .userAgent(USER_AGENT)
+                    .get();
+        } catch (Exception ignored) {
+        }
+        return super.getDocument(rsslink);
     }
 
 }

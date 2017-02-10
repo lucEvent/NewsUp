@@ -43,13 +43,20 @@ public class Marca extends com.lucevent.newsup.data.util.NewsReader {
                 Elements img = doc.select(".cubrereproductor noscript");
                 Elements content = doc.select(".cuerpo_articulo > p");
 
+
                 if (content.isEmpty()) {
-                    news.content = article.select(".bloque-foto img").outerHtml();
+                    content = article.select(".bloque-foto img");
+                    content.select("[style]").removeAttr("style");
+
+                    news.content = content.outerHtml();
                 } else {
+                    content.select("[style]").removeAttr("style");
+
                     news.content = img.html() + content.outerHtml();
                 }
+            } else {
+                // TODO: 10/02/2017
             }
-            news.content = news.content.replace("style=\"", "none=\"");
         } else {
 
             article = doc.select(".full-image:not([itemprop='articleBody'] .full-image),[itemprop='video']:not([itemprop='articleBody'] [itemprop='video']),[itemprop='articleBody'] > p,[itemprop='articleBody'] > blockquote,[itemprop='articleBody'] figure,h3.list-header");
@@ -62,8 +69,7 @@ public class Marca extends com.lucevent.newsup.data.util.NewsReader {
 
                     video.removeAttr("itemtype").removeAttr("class").removeAttr("itemprop");
                 }
-                for (Element e : article.select("[style]"))
-                    e.removeAttr("style");
+                article.select("[style]").removeAttr("style");
 
                 news.content = article.outerHtml().replace("src=\"//", "src=\"http://");
             }

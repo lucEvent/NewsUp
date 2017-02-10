@@ -1,15 +1,21 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class TheTelegraph extends com.lucevent.newsup.data.util.NewsReader {
 
     /**
-     * Tags:[author, category,              enclosure, guid, item, link, pubdate, title]
-     * Tags:[author, category, description, enclosure, guid, item, link, pubdate, title]
+     * Tags:
+     * [author, category,              enclosure, guid, item, link, pubdate, title]
+     * [author, category, description, enclosure, guid, item, link, pubdate, title]
      */
 
     public TheTelegraph()
@@ -37,59 +43,103 @@ public class TheTelegraph extends com.lucevent.newsup.data.util.NewsReader {
         return cats.length > 0 ? cats[cats.length - 1] : "";
     }
 
-    private static final String garbage = "[itemprop=\"caption\"],[itemprop=\"copyrightHolder\"],.video-player__image-controls-wrapper";
-    int t = 1;
-
     @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
-        doc.select("script").remove();
+        Elements article = doc.select(".article__content");
 
-        String content = "";
-        Elements intro = doc.select(".article__content .hero-area-wrapper");
-        intro.select(garbage).remove();
-        cleanImages(intro.select("img"));
+        if (article.isEmpty()) {
 
-        Element article = doc.select("article[itemprop=\"articleBody\"]").first();
-        if (article == null) {
+            article = doc.select(".gallery");
 
-            Elements articles = doc.select(".gallery__content img,.gallery__content p");
+            if (article.isEmpty()) {
 
-            if (articles.isEmpty()) {
+                article = doc.select(".page__feature img,.info-bar__container,.page-article,.product-gallery__thumbnail");
 
-                articles = doc.select(".main-column");
+                if (article.isEmpty()) {
 
-                if (articles.isEmpty()) {
-                    //todo
-                    System.out.println("No content");
+                    article = doc.select("#slideshow,#TourContainer");
+
+                    article.select("#breadcrumb,#accommodation_pane,#deckplan_pane,#gallery_pane,#reviews_pane,#supplierdetails").remove();
+                    article.select("[style]").removeAttr("style");
+                    article.select("[class]").removeAttr("class");
+                    article.select("[id]").removeAttr("id");
+                    article.select("h2").tagName("h3");
 
                 } else {
+                    article.select(".product-supplier,.article__footer,.social-share,[itemprop='articleBody'],.gallery-trigger").remove();
 
-                    articles.select("style,.html-block").remove();
-                    String rootUrl = news.link.replace("index.html", "");
-                    content = articles.outerHtml().replace("=\"/", "=\"http:/").replace("=\"./", "=\"" + rootUrl);
+                    article.select("h2").tagName("h3");
+                    article.select(".departure-dates__section-header").tagName("b");
 
+                    for (Element img : article.select(".product-gallery__thumbnail img"))
+                        img.attr("src", img.attr("src").replace("-thumbnail", ""));
+                    for (Element galleryItem : article.select(".product-gallery__thumbnail"))
+                        galleryItem.tagName("p").removeAttr("id").removeAttr("class").removeAttr("aria-labels").removeAttr("data-thumbnail-index");
                 }
             } else {
-                content = articles.outerHtml();
+
+                String data = article.select(".gallery__elements").html();
+                data = "{items:" + data.substring(0, data.length()).replace("\n", "") + "}";
+
+                StringBuilder sb = new StringBuilder();
+                try {
+                    JSONArray items = new JSONObject(data).optJSONArray("items");
+                    for (int i = 0; i < items.length(); i++) {
+                        JSONObject item = items.getJSONObject(i);
+
+                        String imgsrc = item.getString("image-src").replace("-small", "-large");
+                        String text = item.getString("image-caption");
+
+                        sb.append("<p>").append(text).append("</p>");
+                        sb.append("<img src='").append(imgsrc).append("'>");
+                    }
+
+                } catch (JSONException e) {
+                    System.out.println("JSON exception:" + e.getMessage());
+                }
+
+                news.content = "<base href='http://www.telegraph.co.uk/'>" + sb.toString();
+                return;
             }
-
         } else {
-            article.select(garbage).remove();
-            cleanImages(article.select("img"));
-
-            content = intro.outerHtml() + article.outerHtml();
+            article = article.select("header img:not(.videoPlayer img),header .videoPlayer,[itemprop='articleBody']");
         }
 
-        news.content = content.replace("=\"/", "=\"http://www.telegraph.co.uk/");
-    }
+        if (news.link.contains("/travel/destinations/")) {
+            article.select(".snippetReference,.travelProductListing").remove();
 
-    private void cleanImages(Elements imgs)
-    {
-        for (Element img : imgs) {
-            img.after("<img src=\"" + img.attr("src") + "\"/>");
-            img.remove();
+            article.select("ul").tagName("blockquote");
+            article.select("li").tagName("center");
         }
+
+        for (Element img : article.select(".articleBodyImage")) {
+            img.html(img.select("noscript").html());
+        }
+        for (Element img : article.select("img")) {
+            img.attr("src", img.attr("src").replace("-small", "-large"));
+            NewsStylist.cleanAttributes(img, "src");
+        }
+        for (Element video : article.select(".videoPlayer")) {
+            Elements div = video.select(".video-player");
+            if (!div.isEmpty()) {
+                String video_id = div.get(0).attr("id").replace("video-", "");
+                video.html(Enclosure.iframe("https://static.telegraph.co.uk/tpp-secure/video.html?embed=" + video_id));
+            }
+        }
+        for (Element iframe : article.select(".htmlEmbed")) {
+            Elements div = iframe.select("aside");
+            if (!div.isEmpty()) {
+                String iframe_src = div.get(0).attr("data-html-uri");
+                if (iframe_src.startsWith("//"))
+                    iframe_src = "http:" + iframe_src;
+
+                iframe.html(Enclosure.iframe(iframe_src));
+            }
+        }
+        article.select("script").remove();
+
+        news.content = "<base href='http://www.telegraph.co.uk/'>" + article.outerHtml();
     }
 
 }

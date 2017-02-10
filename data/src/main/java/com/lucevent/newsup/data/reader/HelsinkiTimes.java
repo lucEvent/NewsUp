@@ -1,8 +1,10 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
 
-import org.jsoup.nodes.Element;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 public class HelsinkiTimes extends com.lucevent.newsup.data.util.NewsReader {
 
@@ -21,23 +23,28 @@ public class HelsinkiTimes extends com.lucevent.newsup.data.util.NewsReader {
     }
 
     @Override
-    protected String parseDescription(Element prop)
+    protected News onNewsRead(News news)
     {
-        return org.jsoup.Jsoup.parseBodyFragment(prop.text()).text();
+        Document doc = org.jsoup.Jsoup.parse(news.description);
+
+        Elements enc = doc.select("img");
+        if (!enc.isEmpty())
+            news.enclosures.add(new Enclosure(enc.get(0).attr("src"), "image", ""));
+
+        news.description = doc.text();
+
+        return news;
     }
 
     @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
-        org.jsoup.select.Elements e = doc.select(".item-page > p,.item-page .thumbnail img");
+        Elements article = doc.select(".article-content-main");
+        article.select("figcaption,script,.infobox").remove();
 
-        if (!e.isEmpty()) {
+        article.select("[style]").removeAttr("style");
 
-            for (org.jsoup.nodes.Element img : e.select("img"))
-                img.attr("src", "http://www.helsinkitimes.fi" + img.attr("src"));
-
-            news.content = e.outerHtml();
-        }
+        news.content = article.outerHtml().replace("src=\"/", "src=\"http://www.helsinkitimes.fi/");
     }
 
 }

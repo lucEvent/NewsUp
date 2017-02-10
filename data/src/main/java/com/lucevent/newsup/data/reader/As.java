@@ -2,6 +2,7 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -73,65 +74,61 @@ public class As extends com.lucevent.newsup.data.util.NewsReader {
                     int vEnd = content.indexOf(".mp4", vStart);
                     String videoURL = content.substring(vStart + 39, vEnd + 4);
 
-                    news.content = "<iframe frameborder='0' allowfullscreen src='http://as.com" + videoURL + "'></iframe>" + news.description;
+                    news.content = Enclosure.iframe("http://as.com" + videoURL) + news.description;
                     return;
                 }
             }
         }
 
-        article = doc.select("[itemprop=\"articleBody\"");
+        article = doc.select("[itemprop='articleBody']");
         if (!article.isEmpty()) {
-            for (Element escudo : article.select(".escudo-equipo img"))
-                escudo.attr("style", "width:10%");
-            for (Element e : article.select("[class]"))
-                e.removeAttr("class");
-            for (Element e : article.select("h2"))
-                e.tagName("h3");
-            article.select("section").remove();
+
+            article.select("script,section,.noticias-rel,.cont-art-tags").remove();
+            article.select("h2").tagName("h3");
+            article.select(".escudo-equipo img").attr("style", "width:10%");
 
             news.content = getEnclosures(news) + article.outerHtml();
-        } else {
 
+        } else {
             article = doc.select("#contenedorfotos");
             if (!article.isEmpty()) {
-
-                article = article.select("[itemprop=\"contentURL\"],[itemprop=\"headline\"]");
-                for (Element img : article.select("[itemprop=\"contentURL\"]")) {
-                    String src = img.attr("content");
-                    img.attr("src", src);
-                    img.removeAttr("content");
-                    img.removeAttr("itemprop");
+                article = article.select("[itemprop='contentURL'],[itemprop='headline']");
+                for (Element img : article.select("[itemprop='contentURL']")) {
                     img.tagName("img");
+
+                    String src = img.attr("content");
+                    NewsStylist.cleanAttributes(img);
+                    img.attr("src", src);
                 }
+                article.select("[itemprop='headline']").tagName("p").select("h2,span").remove();
+
                 news.content = article.outerHtml();
-
             } else {
-
                 article = doc.select("#contenido-interior > p,.entry-content > p,.floatFix > p,.floatFix > figure");
                 if (article.isEmpty()) {
 
                     article = doc.select("#columna2");
                     if (article.isEmpty()) {
-
                         article = doc.select(".marcador-generico,.cmt-live");
                         if (article.isEmpty()) {
 
                             article = doc.select(".post");
                             if (article.isEmpty()) {
-                                // No content found // TODO: 06/11/2016
+                                // No content found
                                 return;
                             } else {
-                                article.select(".post-info,.post-ftr,#comments,.comments,.redes,#comment-form,h2").remove();
+                                article.select(".post-info,.post-ftr,#comments,.comments,.redes,#comment-form,h2,a[rel='prev'],a[rel='next'],a[rel='author'],script,aside").remove();
                             }
                         }
                     } else {
                         article.select(".redes,.menu_post,.archivado,script").remove();
                     }
                 }
-                for (Element e : article.select("h2"))
-                    e.tagName("h3");
-                for (Element e : article.select("[class]"))
-                    e.removeAttr("class");
+                for (Element e : article.select("[src^='//']"))
+                    e.attr("src", "http:" + e.attr("src"));
+
+                article.select("[class]").removeAttr("class");
+                article.select("h2").tagName("h3");
 
                 news.content = getEnclosures(news) + article.html();
             }

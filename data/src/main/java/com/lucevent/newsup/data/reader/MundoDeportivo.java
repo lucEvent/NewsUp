@@ -2,6 +2,7 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -30,10 +31,15 @@ public class MundoDeportivo extends com.lucevent.newsup.data.util.NewsReader {
     protected String parseDescription(Element prop)
     {
         String description = prop.text();
+
+        if (description.contains("&lt;"))
+            return "";
+
         int idash = description.indexOf("- ");
         if (idash != -1)
             description = description.substring(idash + 2);
-        return description.replace("...", "");
+
+        return description;
     }
 
     @Override
@@ -45,9 +51,25 @@ public class MundoDeportivo extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
-        Elements e = doc.select(".story-leaf-figure,.story-leaf-body-video,.story-leaf-body .story-leaf-txt-p,.live-scribble");
+        Elements article = doc.select("article.gallery-leaf");
 
-        news.content = e.outerHtml().replace("src=\"/", "src=\"http:/");
+        if (article.isEmpty()) {
+            article = doc.select(".story-leaf-figure,.story-leaf-body-video,.story-leaf-body .story-leaf-txt-p,.live-scribble");
+            article.select("script,style,meta,figcaption").remove();
+
+            article.select("h1,h2").tagName("h3");
+        } else {
+            article = article.select(".gallery-leaf-image,.gallery-leaf-title");
+            article.select(".gallery-leaf-title").tagName("p");
+        }
+
+        NewsStylist.cleanAttributes(article.select("figure"));
+        NewsStylist.cleanAttributes(article.select("img"), "src");
+
+        for (Element item : article.select("[src^=//]"))
+            item.attr("src", "http:" + item.attr("src"));
+
+        news.content = article.outerHtml();
     }
 
 }

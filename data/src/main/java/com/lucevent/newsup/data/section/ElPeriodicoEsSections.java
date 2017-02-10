@@ -34,11 +34,8 @@ public class ElPeriodicoEsSections extends Sections {
         add(new Section("Motor", "http://www.elperiodico.com/es/rss/motor/rss.xml", 0));
 
         add(new Section("Blogs", null, -1));
-        add(new Section("Los restaurantes de Pau Aren\u00F3s", "http://rdp.elperiodico.com/feed/?_ga=1.214333143.1954951623.1458825034", 1));
-        add(new Section("El Tourmalet", "http://tourmalet.elperiodico.com/feed/?_ga=1.214333143.1954951623.1458825034", 1));
         add(new Section("Bloglobal", "http://blogs.elperiodico.com/bloglobal/feed/?_ga=1.214333143.1954951623.1458825034", 1));
         add(new Section("Destinos", "http://www.visitdestinos.com/feed/", 1));
-        add(new Section("+ Digital", "http://blogs.elperiodico.com/masdigital/feed?_ga=1.214333143.1954951623.1458825034", 1));
 
     }
 

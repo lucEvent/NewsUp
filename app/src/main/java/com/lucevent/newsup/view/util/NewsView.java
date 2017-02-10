@@ -32,6 +32,7 @@ import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.io.BookmarksManager;
+import com.lucevent.newsup.io.SDManager;
 import com.lucevent.newsup.kernel.AppData;
 
 public class NewsView extends RelativeLayout {
@@ -71,6 +72,10 @@ public class NewsView extends RelativeLayout {
         findViewById(R.id.button_night).setOnClickListener(onNightModeSelected);
 
         nightMode = AppSettings.getNightModeStatus();
+
+        SCRIPTS = "<script async defer>" + SDManager.readRaw(context, R.raw.instagram) + "</script>" +
+                "<script type='text/javascript'>" + SDManager.readRaw(context, R.raw.twitter) + "</script>";
+
         //     gd = new GestureDetectorCompat(context, onGestureListener);
     }
 
@@ -112,30 +117,30 @@ public class NewsView extends RelativeLayout {
     }
 
     private static final String NEWS_STYLE_DAY = "<style>" +
-            "body {margin:20px;font-family:sans-serif-light;font-weight:300;font-size:17px;line-height:1.7;background-color:#fff;color:#000;}" +
+            "body{margin:20px;font-family:sans-serif-light;font-weight:300;font-size:17px;line-height:1.7;background-color:#fff;color:#000;}" +
             "blockquote{margin:10px;padding:5px 10px 5px 10px;background-color:#eee}" +
             "a{color:#%a_c;}" +
             "</style>";
 
     private static final String NEWS_STYLE_NIGHT = "<style>" +
-            "body {margin:20px;font-family:sans-serif-light;font-weight:300;font-size:17px;line-height:1.7;background-color:#222;color:#fff;}" +
+            "body{margin:20px;font-family:sans-serif-light;font-weight:300;font-size:17px;line-height:1.7;background-color:#222;color:#fff;}" +
             "blockquote{margin:10px;padding:5px 10px 5px 10px;background-color:#333}" +
             "a{color:#%a_c;}" +
             "</style>";
 
     private static final String GRAPHYCS_STYLE = "<style>" +
-            "iframe, video {width: 100%; height:auto; margin: 0; padding: 0}" +
-            "img, figure {width: 100%; height:auto; margin: 0; padding: 0}" +
-            "div > h2 > a > img {width: auto;}" +
+            "iframe,video{width:100%;margin:0;padding:0;min-height:250px}" +
+            "img,figure{width:100%;height:auto;margin:0;padding:0}" +
+            "div > h2 > a > img {width:auto;}" +
             "</style>";
 
     private static final String GRAPHYCS_STYLE_NO_INTERNET = "<style>" +
-            "iframe, video {width: 0; height: 0; margin: 0; padding: 0}" +
-            "img, figure {width: 0; height:0; margin: 0; padding: 0}" +
-            "div > h2 > a > img {width: 0; height:0;margin: 0; padding: 0}" +
+            "iframe,video{width:0;height:0;margin:0;padding:0}" +
+            "img,figure{width:0;height:0;margin:0;padding:0}" +
+            "div > h2 > a > img{width:0;height:0;margin:0;padding:0}" +
             "</style>";
 
-    private static final String TWITTER_STYLE = "<script type=\"text/javascript\" src=\"https://platform.twitter.com/widgets.js\"></script>";
+    private static String SCRIPTS = "";
 
     private int viewWidth = -2;
     private int viewHeight = -2;
@@ -190,7 +195,7 @@ public class NewsView extends RelativeLayout {
         String style = site.getStyle() +
                 news_style.replace("%a_c", String.format("%06x", a_color)) +
                 (isInternetAvailable() ? GRAPHYCS_STYLE : GRAPHYCS_STYLE_NO_INTERNET) +
-                TWITTER_STYLE;
+                SCRIPTS;
 
         String webContent = style + "<h3>" + currentNews.title + "</h3>" + currentNews.content;
 

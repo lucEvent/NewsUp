@@ -42,7 +42,7 @@
         <item>Rus</item>
         <item>Suec</item>
         <item>Urdú</item>
-        <item>Molts</item>
+        <item>Varis</item>
     </string-array>
     <string-array name="site_countries">
         <item>Alemanya</item>
@@ -109,12 +109,11 @@
         <item>Ucraïna</item>
         <item>Uruguai</item>
         <item>Veneçuela</item>
-        <item>Europa</item>
-        <item>Món</item>
+        <item>Varis</item>
     </string-array>
     <string-array name="site_categories">
-        <item>Diaris</item>
-        <item>Diaris Esportius</item>
+        <item>Notícies</item>
+        <item>Notícies esportives</item>
         <item>Tecnologia</item>
         <item>Blogs</item>
         <item>Revistes</item>
@@ -122,6 +121,7 @@
         <item>Ciència</item>
         <item>Videojocs</item>
         <item>Estil de vida</item>
+        <item>Motor</item>
     </string-array>
     <integer-array name="site_language_weights">
         <item>10</item>

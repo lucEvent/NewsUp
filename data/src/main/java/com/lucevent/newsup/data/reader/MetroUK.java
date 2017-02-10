@@ -2,6 +2,7 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
@@ -54,10 +55,10 @@ public class MetroUK extends com.lucevent.newsup.data.util.NewsReader {
             video.attr("controls", "");
             video.parent().html(video.outerHtml());
         }
-        article.select("img").removeAttr("alt").removeAttr("width").removeAttr("height");
+        NewsStylist.cleanAttributes(article.select("img"), "src");
         article.select("[style]").removeAttr("style");
         article.select("[class]:not([class^='twitter'])").removeAttr("class");
-        article.select("h2").tagName("h3");
+        article.select("h1,h2").tagName("h3");
 
         news.content = article.html().replace("<p></p>", "").replace("<p>&nbsp;</p>", "");
     }

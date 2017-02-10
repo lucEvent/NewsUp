@@ -1,9 +1,10 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Element;
-
+import org.jsoup.select.Elements;
 
 public class DigitalTrends extends com.lucevent.newsup.data.util.NewsReader {
 
@@ -24,16 +25,41 @@ public class DigitalTrends extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected String parseDescription(Element prop)
     {
-        return org.jsoup.Jsoup.parseBodyFragment(prop.text()).getElementsByTag("p").get(0).text();
+        return org.jsoup.Jsoup.parse(prop.text()).getElementsByTag("p").get(0).text();
     }
 
     @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
-        org.jsoup.select.Elements e = doc.select(".dt-video-container,.dt-iframe-header-media,.attachment-dt_header_media,.attachment-dt_header_media_full_width,article");
+        Elements header = doc.select(".m-header-media").select("img,iframe");
+        Elements article = doc.select("article[itemprop='articleBody']");
 
-        if (!e.isEmpty())
-            news.content = e.outerHtml();
+        if (article.isEmpty()) {
+
+            header = doc.select(".alpha .m-testimonial,.m-good-bad");
+            article = doc.select("article[itemprop='reviewBody']");
+
+            article.select(".m-linked-product,.m-comparable-products,.m-accessory-pack").remove();
+        }
+
+        article.select(".alignright,.m-related-video,script,.h-nonessential,.zoom-button,.m-image-credit").remove();
+
+        article.select("h2,.m-our-take").tagName("h3");
+        header.select("iframe[height]").removeAttr("height");
+        article.select("iframe[height]").removeAttr("height");
+
+        for (Element e : article.select("strong")) {
+            String text = e.text();
+            if (text.startsWith("More") || text.startsWith("Related"))
+                e.parent().text("");
+        }
+        for (Element e : article.select("a img")) {
+            String src = e.attr("src");
+            if (src.endsWith("button-150x39.png") || src.endsWith("-smallest-325x325.jpg"))
+                e.parent().remove();
+        }
+
+        news.content = NewsStylist.cleanComments(header.outerHtml() + article.outerHtml());
     }
 
 }

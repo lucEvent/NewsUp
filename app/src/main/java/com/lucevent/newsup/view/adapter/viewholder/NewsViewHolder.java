@@ -46,21 +46,17 @@ public class NewsViewHolder extends RecyclerView.ViewHolder {
         } else
             logo.setVisibility(View.GONE);
 
-        if (loadImage) {
-            if (news.enclosures != null && !news.enclosures.isEmpty()) {
+        if (loadImage && news.enclosures != null && !news.enclosures.isEmpty() && !news.enclosures.get(0).src.isEmpty()) {
+            picture.setImageBitmap(null);
 
-                picture.setImageBitmap(null);
+            new Picasso.Builder(picture.getContext())
+                    .downloader(new OkHttp3Downloader(new OkHttpClient()))
+                    .build()
+                    .load(news.enclosures.get(0).src)
+                    .fit()
+                    .into(picture);
 
-                new Picasso.Builder(picture.getContext())
-                        .downloader(new OkHttp3Downloader(new OkHttpClient()))
-                        .build()
-                        .load(news.enclosures.get(0).src)
-                        .fit()
-                        .into(picture);
-
-                picture.setVisibility(View.VISIBLE);
-            } else
-                picture.setVisibility(View.GONE);
+            picture.setVisibility(View.VISIBLE);
         } else
             picture.setVisibility(View.GONE);
 

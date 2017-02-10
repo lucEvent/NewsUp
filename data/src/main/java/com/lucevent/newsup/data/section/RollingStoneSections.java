@@ -9,23 +9,32 @@ public class RollingStoneSections extends Sections {
     {
         super();
 
-        add(new Section("All news", "http://www.rollingstone.com/news.rss", 0));
+        add(new Section("Main", "http://www.rollingstone.com/rss", 0));
 
-        add(new Section("Music", "http://www.rollingstone.com/music.rss", 0));
-        add(new Section("Album Reviews", "http://www.rollingstone.com/music/albumreviews.rss", 1));
+        add(new Section("News", "http://www.rollingstone.com/music+movies+culture+politics+sports/rss", 0));
+        add(new Section("Music", "http://www.rollingstone.com/music/rss", 1));
+        add(new Section("Movies", "http://www.rollingstone.com/movies/rss", 1));
+        add(new Section("Culture", "http://www.rollingstone.com/culture/rss", 1));
+        add(new Section("Politics", "http://www.rollingstone.com/politics/rss", 1));
+        add(new Section("Sports", "http://www.rollingstone.com/sports/rss", 1));
+        add(new Section("TV", "http://www.rollingstone.com/tv/rss", 1));
+        add(new Section("Long Reads", "http://www.rollingstone.com/long-reads/rss", 0));
+        add(new Section("Country", "http://www.rollingstone.com/country/rss", 0));
 
-        add(new Section("Movies", "http://www.rollingstone.com/movies.rss", 0));
-        add(new Section("Movie Reviews", "http://www.rollingstone.com/movies/reviews.rss", 1));
+        add(new Section("Reviews", null, -1));
+        add(new Section("Movie Reviews", "http://www.rollingstone.com/reviews/rss", 1));
+        add(new Section("Album Reviews", "http://www.rollingstone.com/albumreviews/rss", 1));
+        add(new Section("Song Reviews", "http://www.rollingstone.com/songreviews/rss", 1));
+        add(new Section("Live Reviews", "http://www.rollingstone.com/live-reviews/rss", 1));
 
-        add(new Section("Culture", "http://www.rollingstone.com/culture.rss", 0));
-        add(new Section("Politics", "http://www.rollingstone.com/politics.rss", 0));
-        add(new Section("Sports", "http://www.rollingstone.com/sports.rss", 0));
-        add(new Section("All videos", "http://www.rollingstone.com/videos.rss", 0));
-
-        add(new Section("Authors", null, -1));
-        add(new Section("Rob Sheffield", "http://www.rollingstone.com/contributor/rob-sheffield.rss", 1));
-        add(new Section("David Fricke", "http://www.rollingstone.com/contributor/david-fricke.rss", 1));
-        add(new Section("Tim Dickinson", "http://www.rollingstone.com/contributor/tim-dickinson.rss", 1));
+        add(new Section("Videos", "http://www.rollingstone.com/videos/rss", 0));
+        add(new Section("Lists", "http://www.rollingstone.com/lists/rss", 0));
+        add(new Section("Galleries", "http://www.rollingstone.com/pictures/rss", 0));
+        add(new Section("Interviews", "http://www.rollingstone.com/features/rss", 0));
+        add(new Section("Glixel", "http://www.rollingstone.com/glixel/rss", 0));
+        add(new Section("Ram Report", "http://www.rollingstone.com/country/ram-report/rss", 0));
+        add(new Section("Had to Be There", "http://www.rollingstone.com/had-to-be-there/rss", 0));
+        add(new Section("Podcasts", "http://www.rollingstone.com/topic/podcast/rss", 0));
 
     }
 

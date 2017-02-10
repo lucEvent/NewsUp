@@ -92,6 +92,9 @@
     <string name="msg_empty_input">Anotación vacía</string>
     <string name="msg_shortcut_created">Se ha creado un acceso directo para %s en tu ventana de inicio</string>
     <string name="msg_download_set_successfully">Descarga programada</string>
+    <string name="msg_message_empty">El mensaje no puede estar vacío</string>
+    <string name="msg_message_sent">Mensaje enviado :)</string>
+    <string name="msg_error_occurred">Ha ocurrido un error :(</string>
 
 
     <!-- * *************** Activities and fragment's titles ********************* * -->

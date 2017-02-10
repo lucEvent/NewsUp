@@ -1,8 +1,13 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.NewsStylist;
+
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class Clipset extends com.lucevent.newsup.data.util.NewsReader {
+
+    private static final String SITE_STYLE = "<style>.wp-caption-text{font-size:12px;padding:2px 10px;display:block;}</style>";
 
     //tags: [category, content:encoded, dc:creator, description, guid, item, link, pubdate, title]
 
@@ -16,6 +21,8 @@ public class Clipset extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{});
+
+        this.style = SITE_STYLE;
     }
 
     @Override
@@ -27,12 +34,21 @@ public class Clipset extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected String parseContent(Element prop)
     {
-        String content = prop.text();
-        int index = content.lastIndexOf("<p>");
-        if (index != -1)
-            content = content.substring(0, index);
+        Document doc = org.jsoup.Jsoup.parse(prop.text());
 
-        return content.replace("width=\"","x=\"").replace("height=\"","y=\"");
+        for (Element e : doc.select("map")) {
+            e.parent().remove();
+        }
+        doc.select(".wp-embedded-content,script").remove();
+
+        doc.select("h2").tagName("h3");
+        doc.select("h5").tagName("blockquote");
+        doc.select("[srcset]").removeAttr("srcset");
+        doc.select("[style]").removeAttr("style");
+
+        NewsStylist.cleanAttributes(doc.select("img"), "src");
+
+        return doc.body().html();
     }
 
 }

@@ -35,9 +35,9 @@ public class SkyAndTelescope extends com.lucevent.newsup.data.util.NewsReader {
     protected String parseContent(Element prop)
     {
         org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(prop.text());
-        for (org.jsoup.nodes.Element e : doc.getElementsByAttribute("style"))
-            e.attr("style", "");
-        return doc.select("body").html();
+        doc.select("[style]").removeAttr("style");
+        doc.select("h2").tagName("h3");
+        return "<base href='http://www.skyandtelescope.com/'>" + doc.select("body").html();
     }
 
 }

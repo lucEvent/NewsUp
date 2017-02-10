@@ -27,7 +27,8 @@ public class ElDiario extends com.lucevent.newsup.data.util.NewsReader {
     protected String parseContent(Element prop)
     {
         org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(prop.text());
-        doc.select("a,img[width=\"1\"],br").remove();
+        doc.select("a,img[width='1'],br,script").remove();
+        doc.select("h1,h2").tagName("h3");
         return doc.select("body").html();
     }
 

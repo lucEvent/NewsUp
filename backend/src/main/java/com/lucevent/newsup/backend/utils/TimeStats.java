@@ -50,9 +50,9 @@ public class TimeStats {
             calendar.setFirstDayOfWeek(Calendar.MONDAY);
 
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
-            int dayOfTheWeek = calendar.get(Calendar.DAY_OF_WEEK);
+            int dayOfTheWeek = (calendar.get(Calendar.DAY_OF_WEEK) - Calendar.MONDAY + 7) % 7;
 
-            values[dayOfTheWeek * hour]++;  //// TODO: 06/12/2016
+            values[(dayOfTheWeek * 24) + hour]++;
 
             ofy().save().entity(this).now();
         }
@@ -60,8 +60,10 @@ public class TimeStats {
 
     public void reset()
     {
-        initialize(this);
-        ofy().save().entity(this).now();
+        synchronized (this) {
+            initialize(this);
+            ofy().save().entity(this).now();
+        }
     }
 
     private static void initialize(TimeStats timeStats)
@@ -71,4 +73,18 @@ public class TimeStats {
             timeStats.values[i] = 0;
         }
     }
+
+    @Override
+    public String toString()
+    {
+        StringBuilder b = new StringBuilder();
+        b.append('[');
+        for (int i = 0; ; i++) {
+            b.append(values[i]);
+            if (i == values.length - 1)
+                return b.append(']').toString();
+            b.append(", ");
+        }
+    }
+
 }

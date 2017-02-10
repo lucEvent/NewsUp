@@ -3,6 +3,7 @@ package com.lucevent.newsup.backend;
 import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
 import com.lucevent.newsup.backend.utils.BackendParser;
+import com.lucevent.newsup.backend.utils.MonthStats;
 import com.lucevent.newsup.backend.utils.Report;
 import com.lucevent.newsup.backend.utils.SiteStats;
 import com.lucevent.newsup.backend.utils.Statistics;
@@ -137,6 +138,7 @@ public class AppServlet extends HttpServlet {
         ObjectifyFactory oFactory = ObjectifyService.factory();
         oFactory.register(SiteStats.class);
         oFactory.register(TimeStats.class);
+        oFactory.register(MonthStats.class);
         oFactory.register(Statistics.class);
         oFactory.register(Report.class);
         oFactory.begin();

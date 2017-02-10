@@ -30,6 +30,7 @@ public class Medium extends com.lucevent.newsup.data.util.NewsReader {
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
         org.jsoup.select.Elements e = doc.select("main section .section-content");
+        e.select(".graf--title").remove();
 
         for (org.jsoup.nodes.Element title : e.select("h3")) {
             title.remove();
@@ -40,6 +41,7 @@ public class Medium extends com.lucevent.newsup.data.util.NewsReader {
             org.jsoup.select.Elements img = fig.select("noscript");
             fig.html(img.html());
         }
+        e.select("h2").tagName("h3");
 
         news.content = e.html();
     }

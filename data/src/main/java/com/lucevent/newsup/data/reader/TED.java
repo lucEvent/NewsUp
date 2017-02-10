@@ -1,16 +1,20 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
 
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class TED extends com.lucevent.newsup.data.util.NewsReader {
 
     /**
      * Tags
-     * [category, comments, content:encoded, dc:creator, description, guid, item, link, media:content, media:thumbnail, media:title, pubdate, title]
-     * [category, description, enclosure, guid, item, jwplayer:talkid, link, media:content, media:thumbnail, pubdate, title]
+     * [category, description, guid, item, link, media:content, media:thumbnail, pubdate, title | enclosure, jwplayer:talkid ]
+     * [category, description, guid, item, link, media:content, media:thumbnail, pubdate, title | content:encoded, dc:creator, media:title]
      */
+
     public TED()
     {
         super(TAG_ITEM_ITEMS,
@@ -20,7 +24,7 @@ public class TED extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_CONTENT_ENCODED},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{TAG_MEDIA_CONTENT});
+                new int[]{TAG_ENCLOSURE, "media:thumbnail".hashCode()});
     }
 
     @Override
@@ -32,20 +36,42 @@ public class TED extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected String parseContent(Element prop)
     {
-        org.jsoup.nodes.Element content = org.jsoup.Jsoup.parse(prop.text()).body();
-        for (org.jsoup.nodes.Element e : content.select("[style]"))
-            e.removeAttr("style");
+        Document doc = org.jsoup.Jsoup.parse(prop.text());
+        doc.select("[rel='nofollow'] ~ *,[rel='nofollow'],.wp-caption-text,img[src^='http://pixel.wp.com']").remove();
 
-        content.select("[rel=\"nofollow\"] ~ *,[rel=\"nofollow\"]").remove();
-        return content.html();
+        doc.select(".wp-caption").tagName("p");
+        doc.select("[style]").removeAttr("style");
+        doc.select("h2").tagName("h3");
+        doc.select("iframe").attr("frameborder", "0");
+
+        NewsStylist.cleanAttributes(doc.select("img"), "src");
+        return doc.body().html();
+    }
+
+    @Override
+    protected Enclosure parseEnclosure(Element prop)
+    {
+        String type = prop.attr("type");
+        if (!type.contains("video"))
+            type = "image";
+
+        return new Enclosure(prop.attr("url"), type, prop.attr("length"));
     }
 
     @Override
     protected News onNewsRead(News news)
     {
-        if (news.content.isEmpty() && !news.enclosures.isEmpty())
-            news.content = news.enclosures.get(0).html() + "<p>" + news.description + "</p>";
-
+        if (news.content.isEmpty() && !news.enclosures.isEmpty()) {
+            for (int i = 0; i < news.enclosures.size(); i++) {
+                Enclosure e = news.enclosures.get(i);
+                if (e.isVideo()) {
+                    news.enclosures.remove(i);
+                    news.content = e.html();
+                    break;
+                }
+            }
+            news.content += "<p>" + news.description + "</p>";
+        }
         return news;
     }
 

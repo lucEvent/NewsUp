@@ -28,7 +28,7 @@ public abstract class NewsReader {
     protected static final int TAG_IMAGE = "image".hashCode();
     protected static final int TAG_PUBLISHED = "published".hashCode();
 
-    protected static final String USER_AGENT = "Mozilla/5.0 (Linux; Android 5.0.1; GT-I9300 Build/KVT49L) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.94 Mobile Safari/537.36";
+    protected static final String USER_AGENT = "Mozilla/5.0 (Linux; Android 6.0.1; GT-I9300 Build/MOB30Z) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.91 Mobile Safari/537.36";
 
     private static final int TITLE = 0;
     private static final int LINK = 1;
@@ -112,7 +112,7 @@ public abstract class NewsReader {
                         break;
                 }
             }
-            if (!title.isEmpty()) {
+            if (!title.isEmpty() && !link.isEmpty()) {
                 News news = new News(title, link, description, date, tags);
                 news.content = content;
                 news.enclosures = enclosures;
@@ -195,6 +195,16 @@ public abstract class NewsReader {
     protected Enclosure parseEnclosure(Element prop)
     {
         return new Enclosure(prop.attr("url"), prop.attr("type"), prop.attr("length"));
+    }
+
+    protected org.jsoup.nodes.Document jsoupParse(Element prop)
+    {
+        return org.jsoup.Jsoup.parse(prop.text());
+    }
+
+    protected org.jsoup.nodes.Document jsoupParse(String data)
+    {
+        return org.jsoup.Jsoup.parse(data);
     }
 
 }

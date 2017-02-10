@@ -24,6 +24,9 @@ public class Vice extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected long parseDate(Element prop)
     {
+        String date = prop.text();
+        if (date.length() < 24)
+            return 0;
         return Date.toDate(prop.text().substring(0, 24));
     }
 

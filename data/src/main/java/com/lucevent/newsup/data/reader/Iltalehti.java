@@ -1,6 +1,7 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
 
 import java.net.URL;
 
@@ -25,8 +26,7 @@ public class Iltalehti extends com.lucevent.newsup.data.util.NewsReader {
     {
         try {
             return org.jsoup.Jsoup.parse(new URL(rsslink).openStream(), "ISO-8859-1", rsslink);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
         return super.getDocument(rsslink);
     }
@@ -37,12 +37,13 @@ public class Iltalehti extends com.lucevent.newsup.data.util.NewsReader {
         org.jsoup.select.Elements e = doc.select("isense");
 
         if (!e.isEmpty()) {
-            e.select(".author,.important-articles-t,.kp-share-area").remove();
+            e.select(".author,.important-articles-t,.kp-share-area,.kuvateksti,.fb-comments__outer-container,.recommended-toaster,#tuoreimmat,script").remove();
 
-            for (org.jsoup.nodes.Element style : e.select("[style]"))
-                style.attr("style", "");
+            e.select("[style]").removeAttr("style");
 
-            news.content = e.html();
+            NewsStylist.cleanAttributes(e.select("img"), "src");
+
+            news.content = NewsStylist.cleanComments(e.html());
         }
     }
 

@@ -79,6 +79,9 @@
     <string name="msg_empty_input">Empty input</string>
     <string name="msg_shortcut_created">A shortcut for %s has been place in your home screen</string>
     <string name="msg_download_set_successfully">Download set successfully</string>
+    <string name="msg_message_empty">Message can\'t be empty</string>
+    <string name="msg_message_sent">Message sent :)</string>
+    <string name="msg_error_occurred">An error has occurred :(</string>
     <string name="title_frg_settings_of">Settings of %1$s</string>
     <string name="menu_favorite">Favorite</string>
     <string name="menu_settings">Site settings</string>

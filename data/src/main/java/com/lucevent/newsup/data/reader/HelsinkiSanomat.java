@@ -2,56 +2,49 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
 
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 public class HelsinkiSanomat extends com.lucevent.newsup.data.util.NewsReader {
 
-    //Tags:[category, guid, item, link, pubdate, title]
+    //Tags: [category, description, enclosure, guid, item, link, media:content, pubdate, title]
 
     public HelsinkiSanomat()
     {
         super(TAG_ITEM_ITEMS,
                 new int[]{TAG_TITLE},
                 new int[]{TAG_LINK},
-                new int[]{},
+                new int[]{TAG_DESCRIPTION},
                 new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{});
+                new int[]{TAG_ENCLOSURE});
     }
 
     @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
-        org.jsoup.select.Elements intro = doc.select(".scalable-article-top > .main-image-area > .img-wrapper");
-        org.jsoup.select.Elements content = doc.select(".article-text-content");
+        Elements image = doc.select(".article-main-image noscript img");
+        Elements article = doc.select("[itemprop='articleBody']");
 
-        if (content.isEmpty()) {
-            content = doc.select(".additional-article");
+        if (article.isEmpty()) {
+            return;
+        }
+        article.select(".hidden,script,[itemprop='video']").remove();
 
-            if (content.isEmpty()) {
-                content = doc.select(".entry");
+        for (Element figure : article.select("figure.image")) {
+            figure.removeAttr("class");
 
-                if (content.isEmpty())
-                    return;
+            Elements img = figure.select("img");
+            if (!img.isEmpty())
+                figure.html(img.outerHtml());
+        }
 
-            } else {
-                org.jsoup.nodes.Element article = content.get(0);
+        article.select("h2").tagName("h3");
+        article.select(".votsikko").tagName("h4");
 
-                intro = article.select(".entry-top > .main-image-area > .img-wrapper");
-                for (org.jsoup.nodes.Element img : intro.select("img"))
-                    img.attr("src", img.attr("lazy-src"));
-
-                content = article.select(".entry-content > .text");
-            }
-        } else
-            content.select(".related-article,.embedded-ad,.credit,script").remove();
-
-        for (org.jsoup.nodes.Element style : intro.select("[style]"))
-            style.attr("style", "");
-        
-        for (org.jsoup.nodes.Element style : content.select("[style]"))
-            style.attr("style", "");
-
-        news.content = intro.outerHtml() + content.html();
+        news.content = image.outerHtml().replace("src=\"//", "src=\"http://") + "<p>" + article.outerHtml()
+                .replace("href=\"/", "href=\"http://www.hs.fi/").replace("src=\"//", "src=\"http://").replace("<br>", "</p><p>") + "</p>";
     }
 
 }

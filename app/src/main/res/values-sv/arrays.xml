@@ -42,7 +42,7 @@
         <item>Ryska</item>
         <item>Svenska</item>
         <item>Urdu</item>
-        <item>Många</item>
+        <item>Olika</item>
     </string-array>
     <string-array name="site_countries">
         <item>Tyskland</item>
@@ -109,12 +109,11 @@
         <item>Ukraina</item>
         <item>Uruguay</item>
         <item>Venezuela</item>
-        <item>Europa</item>
-        <item>Världen</item>
+        <item>Olika</item>
     </string-array>
     <string-array name="site_categories">
-        <item>Tidningar</item>
-        <item>Sport Tidningar</item>
+        <item>Nyheter</item>
+        <item>Sportnyheter</item>
         <item>Teknik</item>
         <item>Bloggar</item>
         <item>Tidskrifter</item>
@@ -122,6 +121,7 @@
         <item>Science</item>
         <item>Videospel</item>
         <item>Livsstil</item>
+        <item>Bilnyheter</item>
     </string-array>
     <integer-array name="site_language_weights">
         <item>5</item>

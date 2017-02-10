@@ -1,7 +1,7 @@
 <resources>
 
     <string name="app_name" translatable="false">NewsUp</string>
-    <string name="app_version" translatable="false">2.0.2</string>
+    <string name="app_version" translatable="false">2.1.0</string>
     <string name="version">version</string>
 
     <!-- * ******************** Labels **************************** * -->
@@ -93,6 +93,9 @@
     <string name="msg_empty_input">Empty input</string>
     <string name="msg_shortcut_created">A shortcut for %s has been place in your home screen</string>
     <string name="msg_download_set_successfully">Download set successfully</string>
+    <string name="msg_message_empty">Message can\'t be empty</string>
+    <string name="msg_message_sent">Message sent :)</string>
+    <string name="msg_error_occurred">An error has occurred :(</string>
 
 
     <!-- * *************** Activities and fragment's titles ********************* * -->
@@ -143,11 +146,11 @@
     <string name="pref_schedule_one_download_key" translatable="false">site_pref6</string>
 
     <!-- ***************************** ***************** ********************************** -->
-    <string name="about_content_header" translatable="false">News Up 2.0.2</string>
+    <string name="about_content_header" translatable="false">News Up 2.1.0</string>
     <string name="about_content_contact">Developed by Rafael J. Lucena\nContact: rafaa89(at)gmail.com</string>
     <string name="about_content_title_new_features">Last features and improvements:</string>
     <string name="about_content_new_features" translatable="false">
-        Version 2.0.2 2016-12-XX:\nSections and Readers updated.\n
+        Version 2.1.0 2017-02-10:\nAdded support for \'Andro4all\', \'Topes de gama\', \'La Patilla\', \'Cosmo Noticias\', \'Life Science Sweden\', \'Teknikens Värld\', \'Código Nuevo\', \'The Geek Hammer\' and \'The Bolivar commercial\'. Sections and Readers updated. Instagram photos support.\n
         \nVersion 2.0.0 2016-11-09:\nNew: Shortcuts for each site in home screen.\nNew: Pictures on news list (and preference to show/hide them).\nNew: More sections shown at the end of the news list (if available).\nNew animations and some animation changes.\nNews List view changed.\nBookmark from News list.\nSome texts changed for better understanding.\nSchedule a download directly from one particular site preference screen.\nDark gray sections button for white color sites.\nFavorites added to preferences (finally).\nMain/Favorite/Schedule sites selection improved.\nSchedule downloads list now gives indications when there are no downloads scheduled.\nNo more repeated news in History news list.\nNotifications improved :).\nFor fast connections: news download improved when there are many sites in main.\nNew option buttons in news view (Plus night/day view option added).\nSections button hidden when a site has only one section.\nWhite icon color issue in Kitkat devices solved.\nIn android 6 and above: Dark icons on notification bar with \'light-color\' sites.\nErrors fixed and improvements.\n
         \nVersion 1.8.0 2016-10-10:\nAdded support for newspapers \'The Herald Scotland\', \'The Guardian\', \'The New York Times\' and \'The Times of India\', and online magazines and blogs \'Clipset\', \'Elle Spain\', \'Google Earth Blog\', \'TechCrunch\', \'The Intercept\' and \'Vice\'.\n
         \nVersion 1.7.2 2016-10-02:\nNew: Report/Suggestion option.\nBookmarked news list updating fixed.\nSite selection screen now orders by device locale, and each section by site name.\nFull-translated to swedish.\nPartially translated to Finnish.\nLoading animation comes up when loading a section too now.\nMore errors fixed and improvements.\n
@@ -162,19 +165,13 @@
     </string>
     <string name="about_content_title_comming_soon">What\'s coming soon?:</string>
     <string name="about_content_comming_soon" translatable="false">
-        ** In next version (2.0.3) **\n
+        ** In next versions **\n
         - Preview on tap - like in Instagram (maybe)\n
         - Error fixing and slight improvements\n
-        \n** In version (2.1.0) **\n
         - Support for:\n
-        \t- La Patilla\n
         \t- National geographic\n
         \t- Revista cuore (Spain)\n
         \t- Interviu\n
-        \t- Life Science Sweden\n
-        \t- Teknikensvarld\n
-        \t- TLife.guru\n
-        \t- Edx\n
         \t- Motherboard\n
         \t- Vice News\n
         \t- IGN España\n

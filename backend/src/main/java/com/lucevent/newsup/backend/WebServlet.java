@@ -86,7 +86,7 @@ public class WebServlet extends HttpServlet {
             StringBuilder sb = BackendParser
                     .toHtml(Data.stats,
                             options != null ? options : "",
-                            filters != null ? filters.split(",") : null);
+                            filters != null && !filters.isEmpty() ? filters.split(",") : null);
 
             resp.getWriter().println(sb);
 
@@ -97,6 +97,11 @@ public class WebServlet extends HttpServlet {
 
             if (user == Reports.VALID_USERNAME && pass == Reports.VALID_PASSWORD)
                 resp.getWriter().println(Data.reports.getHtmlReports());
+
+        } else if (req.getParameter("stats_distribution") != null) {
+
+            resp.setContentType("json");
+            resp.getWriter().println(Data.stats.getDistribution());
 
         }
     }

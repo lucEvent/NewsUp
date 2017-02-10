@@ -9,7 +9,11 @@ public class LifeHackerSections extends Sections {
     {
         super();
 
-        add(new Section("Main", "http://feeds.gawker.com/lifehacker/vip", 0));
+        add(new Section("Homepage", "http://lifehacker.com/rss/vip", 0));
+        add(new Section("Skillet", "http://skillet.lifehacker.com/rss/vip", 0));
+        add(new Section("Two cents", "http://twocents.lifehacker.com/rss/vip", 0));
+        add(new Section("Vitals", "http://vitals.lifehacker.com/rss/vip", 0));
+        add(new Section("Gear", "http://gear.lifehacker.com/rss/vip", 0));
 
     }
 

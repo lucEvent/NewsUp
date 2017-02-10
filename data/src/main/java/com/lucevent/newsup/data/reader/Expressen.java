@@ -67,11 +67,16 @@ public class Expressen extends com.lucevent.newsup.data.util.NewsReader {
         for (Element mer : article.select("strong,a")) {
             String text = mer.text();
             if (text.startsWith("L\u00C4S MER") || text.startsWith("L\u00E4s mer")
-                    || text.startsWith("L\u00C4S OCKS\u00C5") || text.startsWith("L\u00C4S \u00C4VEN"))
-                mer.parent().remove();
+                    || text.startsWith("L\u00C4S OCKS\u00C5") || text.startsWith("L\u00C4S \u00C4VEN")) {
+                try {
+                    mer.parent().remove();
+                } catch (Exception notParentFound) {
+                    mer.remove();
+                }
+            }
         }
         article.select("[style]").removeAttr("style");
-        article.select(".b-photo__description-wrap").remove();
+        article.select(".b-photo__description-wrap,script").remove();
 
         news.content = widgets.outerHtml() + "<b>" + preamble.html() + "</b><br>" + article.html().replace("<p>&nbsp;</p>", "");
     }

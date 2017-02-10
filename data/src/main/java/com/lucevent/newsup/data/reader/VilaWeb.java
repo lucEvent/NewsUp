@@ -29,12 +29,13 @@ public class VilaWeb extends com.lucevent.newsup.data.util.NewsReader {
     protected String parseContent(Element prop)
     {
         Document doc = org.jsoup.Jsoup.parse(prop.text());
+        doc.select("script[src~=twitter],script[src~=instagram],noscript,#tlTagContainer").remove();
 
         doc.select("[style]").removeAttr("style");
         doc.select("[width]").removeAttr("width");
-        doc.select("[height]").removeAttr("height");
+        doc.select("h2").tagName("h3");
 
         return doc.html().replace("src=\"/", "src=\"http:/");
     }
-    
+
 }

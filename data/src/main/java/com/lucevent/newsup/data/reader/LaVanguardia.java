@@ -1,14 +1,25 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class LaVanguardia extends com.lucevent.newsup.data.util.NewsReader {
 
-    /**
-     * [category, description, enclosure, guid, item, link, pubdate, title]
-     */
+    private static final String BOOKS_STYLE = "<style>.html-books-h2{background-color:#fff;border-top:3px solid #aab4bf;color:#3e4d67;padding:12px;font-size:18px;}.text-center{" +
+            "text-align:center;color:#000;margin-bottom:20px;font-size:18px;line-height:26px;}.html-books-article{margin-bottom:10px;overflow:hidden;padding-bottom:10px;backgro" +
+            "und-color:#f3f3f3;} .html-books-number{background-color:#3e4d67;padding:5px 20px;margin:0 0 2px 0;display:block;font-size:1.625rem;color:#fff;}.html-book-item{marg" +
+            "in:0 -8px 0;font-size:.625rem;background-color:#eaeaea;color:#3e4d67;font-family:Arial,Helvetica;padding:5px;line-height:1.625rem;text-align:center;}.html-book-bac" +
+            "kground{background-color:#f3f3f3;padding:5px 15px ;border-left:3px solid #fff;}.html-books .image{margin:1px auto;display:block;width:83px;}.html-books-titlebook{c" +
+            "olor:#3e4d67;font-size:.938rem;line-height:1.125rem;}.html-books-authorbook,.html-books-publisherbook{color:#3e4d67;font-size:14px;line-height:16px;margin-bottom:2" +
+            "0px;}.html-books-description{color:#3e4d67;font-size:14px;line-height:16px;}.html-books-ul{color:#3e4d67;margin:20px 0;font-size:14px;line-height:16px;padding-left" +
+            ":15px;}.col-xs-2,.col-xs-3{width:20%;float:left;}.col-xs-4{width:35%;float:left;}.col-xs-7{width:80%;float:left;}.col-xs-8{width:65%;float:left; }.col-xs-12{width:" +
+            "100%;display:block;}</style>";
+
+    // tags: [category, description, enclosure, guid, item, link, pubdate, title]
 
     public LaVanguardia()
     {
@@ -33,15 +44,57 @@ public class LaVanguardia extends com.lucevent.newsup.data.util.NewsReader {
     }
 
     @Override
+    protected Enclosure parseEnclosure(Element prop)
+    {
+        return new Enclosure(prop.attr("url").replace("a/thumbnail", ""), prop.attr("type"), prop.attr("length"));
+    }
+
+    @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
-        org.jsoup.select.Elements e = doc.select("[itemprop=\"articleBody\"]");
+        Elements article = doc.select("#single-player,.story-leaf-body-video:not([itemprop='articleBody'] .story-leaf-body-video),[itemprop='articleBody']");
 
-        for (org.jsoup.nodes.Element style : e.select("[style]"))
-            style.removeAttr("style");
+        if (article.isEmpty()) {
+            return;
+        } else if (!article.select(".multimedia-leaf-txt").isEmpty()) {
+            Elements imgs = doc.select("#multimedia-gallery-leaf img");
+            Elements txts = doc.select(".multimedia-leaf-txt p");
+            Elements gallery = new Elements();
+            for (int i = 0; i < imgs.size(); i++) {
+                Element img = imgs.get(i);
+                String src = img.attr("data-src");
+                NewsStylist.cleanAttributes(img);
+                img.attr("src", src);
 
-        if (!e.isEmpty())
-            news.content = e.html();
+                gallery.add(imgs.get(i));
+                gallery.add(txts.get(i));
+            }
+            news.content = gallery.outerHtml();
+            return;
+        }
+        article.select("figcaption,.tpl-related-inside-story,.hidden,.button-login-premium,ins,.html-books-header,.wp-caption-text,script").remove();
+
+        article.select("h1,h2").tagName("h3");
+        article.select("[style]").removeAttr("style");
+        article.select("iframe").attr("frameborder", "0");
+
+        for (Element e : article.select("[data-mediaset-src]"))
+            e.attr("src", e.attr("data-mediaset-src"))
+                    .removeAttr("data-mediaset-src");
+
+        for (Element e : article.select(".story-leaf-despiece"))
+            e.html(e.text())
+                    .tagName("h3")
+                    .removeAttr("class");
+
+        NewsStylist.cleanAttributes(article.select("img"), "src");
+        NewsStylist.completeSrcHttp(article);
+
+        news.content = article.outerHtml();
+
+        if (!article.select(".html-books").isEmpty())
+            news.content = BOOKS_STYLE + news.content;
+
     }
 
 }

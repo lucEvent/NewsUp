@@ -9,7 +9,31 @@ public class ElleSections extends Sections {
     {
         super();
 
-        add(new Section("Principal", "http://www.elle.es/rss/all.xml", 0));
+        add(new Section("Todo", "http://www.elle.es/rss/all.xml", 0));
+        add(new Section("Moda", "http://www.elle.es/rss/moda.xml", 0));
+        add(new Section("Belleza", "http://www.elle.es/rss/belleza.xml", 0));
+        add(new Section("Star Style", "http://www.elle.es/rss/star-style.xml", 0));
+        add(new Section("Living", "http://www.elle.es/rss/living.xml", 0));
+        add(new Section("Extra Elle", "http://www.elle.es/rss/extra-elle.xml", 0));
+
+        add(new Section("Blogs", null, -1));
+        add(new Section("Ana Albadalejo", "http://anaalbadalejo.blogs.elle.es/feed/", 1));
+        add(new Section("Ana Fernandez", "http://ana-fernandez.blogs.elle.es/feed/", 1));
+        add(new Section("Art manias", "http://art-manias.blogs.elle.es/feed/", 1));
+        add(new Section("Boda a la vista", "http://boda-a-la-vista.blogs.elle.es/feed/", 1));
+        add(new Section("Diario de estilo", "http://diario-de-estilo.blogs.elle.es/feed/", 1));
+        add(new Section("Diario de una estudiante", "http://diario-de-una-estudiante.blogs.elle.es/feed/", 1));
+        add(new Section("Honeydressing", "http://honeydressing.blogs.elle.es/feed/", 1));
+        add(new Section("Mammamia", "http://mammamia.blogs.elle.es/feed/", 1));
+        add(new Section("Miss mass", "http://miss-mass.blogs.elle.es/feed/", 1));
+        add(new Section("Paula Echevarria", "http://paula-echevarria.blogs.elle.es/feed/", 1));
+        add(new Section("Raquel del rosario", "http://raquel-del-rosario.blogs.elle.es/feed/", 1));
+        add(new Section("Sara Carbonero", "http://sara-carbonero.blogs.elle.es/feed/", 1));
+        add(new Section("The eye of the Iger", "http://the-eye-of-the-iger.blogs.elle.es/feed/", 1));
+        add(new Section("The list", "http://the-list.blogs.elle.es/feed/", 1));
+        add(new Section("Time for fashion", "http://time-for-fashion.blogs.elle.es/feed/", 1));
+        add(new Section("Twist and shot", "http://twistandshot.blogs.elle.es/feed/", 1));
+        add(new Section("Vicky Berrocal", "http://vicky-berrocal.blogs.elle.es/feed/", 1));
 
     }
 

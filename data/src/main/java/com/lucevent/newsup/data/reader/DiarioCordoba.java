@@ -32,10 +32,22 @@ public class DiarioCordoba extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
-        org.jsoup.select.Elements e = doc.select(".bxGaleriaNoticia img,#CuerpoDeLaNoticia");
+        org.jsoup.select.Elements e = doc.select(".bxGaleriaNoticia img:not(.PlayVideo,.ThumbNail),.PlayerVideoBOTR,#CuerpoDeLaNoticia");
 
         if (e.isEmpty())
             return;
+
+        e.select("script").remove();
+
+        for (Element video : e.select(".PlayerVideoBOTR")) {
+            video.tagName("video");
+
+            String src = video.attr("id");
+            int i1 = src.indexOf("_") + 1;
+            int i2 = src.indexOf("_", i1);
+            src = "http://content.jwplatform.com/videos/" + src.substring(i1, i2) + ".mp4";
+            video.attr("src", src).attr("controls", "");
+        }
 
         news.content = e.outerHtml();
     }

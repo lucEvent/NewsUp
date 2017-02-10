@@ -26,6 +26,9 @@ public class Statistics {
     @Ignore
     private TimeStats timeStats;
 
+    @Ignore
+    private MonthStats monthStats;
+
     public static Statistics getInstance()
     {
         LoadType<Statistics> db = ofy().load().type(Statistics.class);
@@ -44,11 +47,13 @@ public class Statistics {
 
         }
         statistics.timeStats = TimeStats.getInstance();
+        statistics.monthStats = MonthStats.getInstance();
 
         return statistics;
     }
 
-    private Statistics() {
+    private Statistics()
+    {
         initializeStats(this);
     }
 
@@ -62,6 +67,8 @@ public class Statistics {
             siteStats.fromVersion = version;
             ofy().save().entity(siteStats).now();
         }
+        timeStats.count();
+        monthStats.count();
     }
 
     public void read(Site site, int n)
@@ -80,11 +87,19 @@ public class Statistics {
 
     public void reset()
     {
-        initializeStats(this);
-        ofy().save().entity(this).now();
-        ofy().delete().entities(
-                ofy().load().type(SiteStats.class).list()
-        );
+        synchronized (this) {
+            initializeStats(this);
+            ofy().save().entity(this).now();
+            ofy().delete().entities(
+                    ofy().load().type(SiteStats.class).list()
+            );
+        }
+        timeStats.reset();
+    }
+
+    public void newMonth()
+    {
+        monthStats = MonthStats.getInstance();
     }
 
     private static void initializeStats(Statistics stats)
@@ -113,4 +128,8 @@ public class Statistics {
         return res;
     }
 
+    public String getDistribution()
+    {
+        return timeStats.toString();
+    }
 }

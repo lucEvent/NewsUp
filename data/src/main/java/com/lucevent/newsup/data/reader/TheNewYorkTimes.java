@@ -4,7 +4,12 @@ import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
 
 public class TheNewYorkTimes extends com.lucevent.newsup.data.util.NewsReader {
 
@@ -35,6 +40,9 @@ public class TheNewYorkTimes extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected void readNewsContent(Document doc, News news)
     {
+    //    news.content = doc.outerHtml();
+    //    if (true) return;
+
         Elements article = doc.select("article .p-block:not(.article-interactive)");
         article.select(".lazyload,.image-caption,.image-credit").remove();
 
@@ -50,10 +58,10 @@ public class TheNewYorkTimes extends com.lucevent.newsup.data.util.NewsReader {
 
                     article = doc.select("[data-view=\"slideshow-slide\"]");
 
-                    if (article.isEmpty())
+                    if (article.isEmpty()) {
+                        System.out.println("Returning");
                         return;
-
-                    else {
+                    } else {
                         for (Element e : article) {
                             String text = e.select(".slide-text p").text();
                             String img = e.attr("data-view-src");
@@ -83,5 +91,36 @@ public class TheNewYorkTimes extends com.lucevent.newsup.data.util.NewsReader {
 
         news.content = article.outerHtml();
     }
+/*
+    protected org.jsoup.nodes.Document getDocument(String pagelink)
+    {
+        try {
 
+            URL oracle = new URL(pagelink);
+            BufferedReader in = new BufferedReader(new InputStreamReader(oracle.openStream()));
+
+            StringBuilder sb = new StringBuilder();
+            String inputLine;
+            while ((inputLine = in.readLine()) != null)
+                sb.append(inputLine);
+            in.close();
+
+            System.out.println("Link:"+pagelink);
+            System.out.println("Size:"+sb.length());
+            System.out.println(sb);
+            return org.jsoup.Jsoup.parse(sb.toString(), "", new org.jsoup.parser.Parser(new org.jsoup.parser.XmlTreeBuilder()));
+
+      //  System.out.println("Asereje:"+pagelink);
+      //      return org.jsoup.Jsoup.connect(pagelink)
+       //             .referrer("https://www.google.com/")
+       //             .userAgent("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html")
+       ///             .timeout(10000)
+       //             .get();
+        } catch (Exception e) {
+            System.out.println("[NYTimes] Couldn't read page: " + pagelink);
+            e.printStackTrace();
+        }
+        return null;
+    }
+*/
 }

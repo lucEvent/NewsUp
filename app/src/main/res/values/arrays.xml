@@ -50,7 +50,7 @@
         <item>Russian</item>
         <item>Swedish</item>
         <item>Urdu</item>
-        <item>Many</item>
+        <item>Various</item>
     </string-array>
     <string-array name="site_countries">
         <item>Germany</item>
@@ -117,12 +117,11 @@
         <item>Ukraine</item>
         <item>Uruguay</item>
         <item>Venezuela</item>
-        <item>Europe</item>
-        <item>World</item>
+        <item>Various</item>
     </string-array>
     <string-array name="site_categories">
-        <item>Newspapers</item>
-        <item>Sport Newspapers</item>
+        <item>News</item>
+        <item>Sports News</item>
         <item>Technology</item>
         <item>Blogs</item>
         <item>Magazines</item>
@@ -130,6 +129,7 @@
         <item>Science</item>
         <item>Videogames</item>
         <item>Lifestyle</item>
+        <item>Motor</item>
     </string-array>
     <integer-array name="site_language_weights">
         <item>10</item>

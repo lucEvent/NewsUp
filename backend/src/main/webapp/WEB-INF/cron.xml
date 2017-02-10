@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cronentries>
-   <!-- <cron>
-        <url>/updatecontent</url>
-        <description>Updates all the sites content</description>
-        <schedule>every 60 minutes synchronized</schedule>
-    </cron> -->
+    <cron>
+        <url>/manager?new_month</url>
+        <description>Start view counter for the new month</description>
+        <schedule>1 of jan,feb,mar,apr,may,jun,jul,aug,sep,oct,nov,dec 00:00</schedule>
+    </cron>
 </cronentries>

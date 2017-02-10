@@ -1,6 +1,7 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -38,12 +39,19 @@ public class ElPais extends com.lucevent.newsup.data.util.NewsReader {
 
                 article = doc.select("article .photo_description img:not(img[src='']),#article_container > div:not(.adv_aside,.aside_summary),#article_container > p");
 
-                if (article.isEmpty())
+                if (article.isEmpty()) {
                     article = doc.select(".entry-content");
-                else
-                    article.select("script,noscript").remove();
 
+                    article.select("h2").tagName("h3");
+                    article.select("img[style],span[style]").removeAttr("style");
+                    article.select("script").remove();
+
+                } else {
+                    article.select("script,noscript").remove();
+                }
             } else {
+                article.select("script").remove();
+
                 for (Element div : article.select(".sin_enlace")) {
                     Elements imgs = div.select("meta[itemprop='url']");
                     if (!imgs.isEmpty()) {
@@ -55,12 +63,9 @@ public class ElPais extends com.lucevent.newsup.data.util.NewsReader {
                     }
                 }
             }
-
         } else {
             article.select(".sin_enlace,script,noscript").remove();
-
-            for (Element img : article.select("img"))
-                img.removeAttr("title").removeAttr("srcset").removeAttr("alt").removeAttr("width").removeAttr("height").removeAttr("itemprop");
+            NewsStylist.cleanAttributes(article.select("img"), "src");
         }
         news.content = article.outerHtml();
     }

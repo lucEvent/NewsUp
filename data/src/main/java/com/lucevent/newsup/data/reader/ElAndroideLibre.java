@@ -6,25 +6,41 @@ import org.jsoup.nodes.Element;
 public class ElAndroideLibre extends com.lucevent.newsup.data.util.NewsReader {
 
     private static final String SITE_STYLE =
-            "<style>#APP{width:650px;padding:5px 0;margin:auto auto 20px;border:1px solid #bfbfbf;position:relative;font-family:Roboto,Arial,sans-serif;color:#464646;" +
-                    "-webkit-box-shadow:0 4px 5px -2px rgba(0,0,0,.5);-moz-box-shadow:0 4px 5px -2px rgba(0,0,0,.5);box-shadow:0 4px 5px -2px rgba(0,0,0,.5)}#APPcolum" +
-                    "n1{display:table-cell;width:74px;padding:0 5px;vertical-align:top}#APPcolumn2{display:table-cell;width:376px;padding:0 5px;vertical-align:top}#AP" +
-                    "Pcolumn3{display:table-cell;width:165px;padding:0 10px 0 5px;vertical-align:top}#APPimagen{float:left;margin-top:5px;margin-left:5px;height:74px;" +
-                    "width:74px}#APPimagen img{height:74px;width:74px}#APPvaloracion{float:left;height:10px;width:67px;overflow:hidden;margin-left:8px;margin-top:5px}" +
-                    "#APPvaloracion2{height:10px;width:67px;overflow:hidden}#APP a{color:#464646;font-family:Roboto,Arial,sans-serif;text-decoration:none;font-weight:" +
-                    "400}#APPnombre{float:left;line-height:35px;font-size:21px;font-weight:700;width:100%;overflow:hidden}#APPnombre a{font-weight:700;color:#464646!i" +
-                    "mportant}#APPandroid,#APPautor,#APPversion{float:left;line-height:20px;font-size:13px;width:100%;overflow:hidden}#APPtamano{float:left;line-heigh" +
-                    "t:20px;font-size:13px;width:100%;text-align:right;overflow:hidden;margin-top:5px}#APPinstalarDesktop{display:block}#APPinstalarMobile{display:non" +
-                    "e}@media screen and (max-width:728px){#APPinstalarDesktop{display:none}#APPinstalarMobile{display:block}}.APPinstalar{margin-top:5px;width:100%;f" +
-                    "loat:left;height:30px;-webkit-box-shadow:0 1px 4px 0 rgba(0,0,0,.37);-moz-box-shadow:0 1px 4px 0 rgba(0,0,0,.37);box-shadow:0 1px 4px 0 rgba(0,0," +
-                    "0,.37)}.APPinstalarBoton{width:100%;height:100%;text-align:center;line-height:30px;color:#fff;font-size:16px;text-transform:uppercase;background-" +
-                    "size:22px 22px;background-position:left center;background-repeat:no-repeat;background-position-x:4px;text-indent:22px}.APPinstalarBoton:hover{bac" +
-                    "kground-color:#2196F3}.APPinstalarBotonGP{background-color:#2196F3}.APPinstalarBotonUTD{background-color:#338ed7}.APPinstalarBotonAmazon{backgrou" +
-                    "nd-color:#f69b06}@media screen and (max-width:700px){#APPcolumn2{width:100%}#APPcolumn3{padding:10px 10%;width:80%;display:block;float:left}#APP{" +
-                    "width:97%;margin-left:1%;float:left}#APPnombre{height:auto}#APPandroid,#APPautor,#APPtamano,#APPversion{display:none}#APPinstalar{top:auto;left:a" +
-                    "uto;right:10px;bottom:10px}}</style>";
+            "<style>" +
+                    "#APP{width:80%;padding:5px 0;margin:20px auto;border:1px solid #bfbfbf;border-radius:2px;color:#464646;}#APPcolumn1{width:30%;padding:0 5px;vertical-align:" +
+                    "top}#APPcolumn2{padding:0 5px;vertical-align:top}#APPcolumn3{padding:0 10px;vertical-align:top}#APPimagen{margin:5px;}#APPvaloracion{width:67px;margin:5px;}" +
+                    "#APPvaloracion2{width:67px;}#APP a{color:#464646;text-decoration:none;font-weight:400}#APPnombre{line-height:35px;font-size:21px;font-weight:bold;width:100%" +
+                    ";}#APPnombre a{font-weight:700;color:#464646;}#APPandroid,#APPautor,#APPversion,#APPtamano{line-height:20px;font-size:14px;}.APPinstalarBoton{margin:5px aut" +
+                    "o;padding:1px 10px;text-align:center;line-height:30px;color:#fff;font-size:16px;text-transform:uppercase;}.APPinstalarBotonGP{background-color:#2196F3}.APPi" +
+                    "nstalarBotonUTD{background-color:#227dc6}.APPinstalarBotonAmazon{background-color:#f69b06}#singlePostContentWidgetDevice{width:500px;margin:20px auto;border" +
+                    ":1px solid #bfbfbf;background:#fff;box-shadow:0 4px 5px -2px rgba(0,0,0,0.5);border-radius:10px}#singlePostContentWidgetDeviceImage{float:left;width:150px;h" +
+                    "eight:250px;margin:10px;background-size:cover;background-repeat:no-repeat;background-position:center center}#singlePostContentWidgetDeviceImage img{width:15" +
+                    "0px;height:250px}#singlePostContentWidgetDevice h2{float:right;margin:10px;width:310px;font-size:25px}.singlePostContentWidgetDeviceLine{clear:both;width:10" +
+                    "0%;height:1px;background:#bfbfbf}#singlePostContentWidgetDeviceScore{width:60px;float:right;margin:0 20px;line-height:60px;font-size:27px;border:5px solid #" +
+                    "bfbfbf;border-radius:50%;text-align:center;margin-left:0}#singlePostContentWidgetDeviceScore span{font-size:14px}#singlePostContentWidgetDeviceSpec{width:23" +
+                    "7px;float:left;margin:10px;padding:0;margin-top:-3px;margin-bottom:0;margin-top:-77px}#singlePostContentWidgetDeviceSpec li{margin-left:17px;text-indent:-17" +
+                    "px}#singlePostContentWidgetDeviceSpecShowMorePlus{color:#464646;font-weight:normal;font-size:13px}#singlePostContentWidgetDeviceSpecShowMoreMinus{color:#464" +
+                    "646;font-weight:normal;font-size:13px}#singlePostContentWidgetDeviceImages{float:right;margin:10px;width:310px;margin-top:5px}.singlePostContentWidgetDevice" +
+                    "Image{float:left;width:23%;margin:0 1%;height:93px;background-size:cover;background-repeat:no-repeat;background-position:center center}.singlePostContentWid" +
+                    "getDeviceImage img{width:100%;height:100%}#singlePostContentWidgetDevicePVP{float:left;margin:10px;width:170px;font-size:25px}.singlePostContentWidgetDevice" +
+                    "Buy{float:right;margin:10px;width:285px;height:25px}.singlePostContentWidgetDeviceBuyImg{float:left;width:100px;height:25px}.singlePostContentWidgetDeviceBu" +
+                    "yPrice{float:left;height:25px}.singlePostContentWidgetDeviceBuyLink{display:inline-block;width:100px;float:right;background:#2196f3;text-align:center;line-h" +
+                    "eight:25px;color:#fff;font-size:16px;text-transform:uppercase;text-decoration:none;height:25px}#singlePostContentWidgetDeviceOpinions{display:table-row}#sin" +
+                    "glePostContentWidgetDeviceLike{width:230px;padding:10px;display:table-cell}#singlePostContentWidgetDeviceDislike{width:229px;padding:10px;border-left:1px so" +
+                    "lid #bfbfbf;display:table-cell}#singlePostContentWidgetDeviceLike span,#singlePostContentWidgetDeviceDislike span{display:inline-block;width:100%;text-align" +
+                    ":center;margin-bottom:10px;font-weight:bold;font-size:17px}#singlePostContentWidgetDeviceLike ul,#singlePostContentWidgetDeviceDislike ul{margin:0;padding:0" +
+                    "}#singlePostContentWidgetDeviceLike ul li,#singlePostContentWidgetDeviceDislike ul li{margin-left:17px;text-indent:-17px}#singlePostContentWidgetDeviceTags{" +
+                    "margin:10px}@media screen and (max-width:550px){#singlePostContentWidgetDevice{width:320px}#singlePostContentWidgetDevice h2{width:100%;text-align:center;ma" +
+                    "rgin:10px 0}#singlePostContentWidgetDeviceScore{margin:20px 10px;float:left}#singlePostContentWidgetDeviceImage{margin:10px auto;float:none;width:75px;heigh" +
+                    "t:125px}#singlePostContentWidgetDeviceImage img{width:75px;height:125px}#singlePostContentWidgetDeviceSpec{width:192px;margin:0 10px;float:right}#singlePost" +
+                    "ContentWidgetDeviceImages{margin:10px 5px;display:none}.singlePostContentWidgetDeviceBuy{width:300px}#singlePostContentWidgetDeviceLike{width:300px;padding:" +
+                    "10px;float:left}#singlePostContentWidgetDeviceDislike{width:300px;padding:10px;float:left;border:0;border-top:1px solid #bfbfbf}}.zio{padding:5px 0;width:80" +
+                    "%;text-align:center;border:1px solid rgb(212,212,196);border-radius:15px;margin:10px auto;font-weight:bold;}.zio>img{width:30%;}.ziotitle{margin:15px;}.high" +
+                    "light{color:rgb(0,150,136);line-height:35px;}.apibutton{width:60%;margin:5px auto;border-radius:30px;padding:2%;background-color:rgb(0,150,136);color:white;" +
+                    "}.zio a{text-decoration:none;}table{display:block;padding: 5px 0;width:100%;overflow:scroll;font-size:16px;}table:before{content:'Desliza para ver m\u00E1s'" +
+                    ";color:#777777;display:block;padding:12px 0 5px;}</style>";
 
-    // tags:  [category, content:encoded, dc:creator, description, guid, item, link, pubdate, title]
+    // tags: [category, content:encoded, dc:creator, description, guid, item, link, pubdate, title]
 
     public ElAndroideLibre()
     {
@@ -57,7 +73,7 @@ public class ElAndroideLibre extends com.lucevent.newsup.data.util.NewsReader {
         Document doc = org.jsoup.Jsoup.parse(prop.text());
 
         doc.select("h2").tagName("h3");
-        doc.select(".blockquoteLink").remove();
+        doc.select(".blockquoteLink,script,.zioamz,#APPinstalarDesktop").remove();
 
         return doc.body().html().replace("src=\"/", "src=\"http:/");
     }

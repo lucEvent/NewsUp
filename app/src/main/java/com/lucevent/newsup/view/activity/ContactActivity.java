@@ -57,7 +57,7 @@ public class ContactActivity extends AppCompatActivity {
                 EditText et_message = (EditText) findViewById(R.id.in_message);
                 String message = et_message.getText().toString();
                 if (message.isEmpty()) {
-                    Toast.makeText(this, "Message can't be empty", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.msg_message_empty, Toast.LENGTH_SHORT).show();
                     et_message.requestFocus();
                     return true;
                 }
@@ -94,12 +94,12 @@ public class ContactActivity extends AppCompatActivity {
             ContactActivity service = context.get();
             switch (msg.what) {
                 case AppCode.REPORT_SEND_OK:
-                    Toast.makeText(service, "Message send :)", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(service, R.string.msg_message_sent, Toast.LENGTH_SHORT).show();
                     service.finish();
                     break;
                 default:
                 case AppCode.ERROR:
-                    Toast.makeText(service, "An error has ocurred :(", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(service, R.string.msg_error_occurred, Toast.LENGTH_SHORT).show();
             }
         }
 

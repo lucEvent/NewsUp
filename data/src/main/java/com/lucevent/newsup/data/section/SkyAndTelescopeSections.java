@@ -9,20 +9,50 @@ public class SkyAndTelescopeSections extends Sections {
     {
         super();
 
-        add(new Section("Astronomy News", "http://www.skyandtelescope.com/astronomy-news/feed/", 0));
-        add(new Section("Night Sky News", "http://www.skyandtelescope.com/astronomy-news/observing-news/feed/", 1));
-        add(new Section("Solar system", "http://www.skyandtelescope.com/astronomy-news/solar-system/feed/", 1));
-        add(new Section("Spacecraft and Space missions", "http://www.skyandtelescope.com/astronomy-news/spacecraft-and-space-missions/feed/", 1));
+        add(new Section("Home", "http://www.skyandtelescope.com/feed/", 0));
+
+        add(new Section("News", "http://www.skyandtelescope.com/astronomy-news/feed/", 0));
+        add(new Section("Observing News", "http://www.skyandtelescope.com/astronomy-news/observing-news/feed/", 1));
+        add(new Section("Solar System", "http://www.skyandtelescope.com/astronomy-news/solar-system/feed/", 1));
+        add(new Section("Spacecraft & Space Missions", "http://www.skyandtelescope.com/astronomy-news/spacecraft-and-space-missions/feed/", 1));
         add(new Section("Exoplanets", "http://www.skyandtelescope.com/astronomy-news/exoplanets/feed/", 1));
         add(new Section("Galaxies", "http://www.skyandtelescope.com/astronomy-news/galaxies/feed/", 1));
+        add(new Section("Cosmology", "http://www.skyandtelescope.com/astronomy-news/cosmology/feed/", 1));
+        add(new Section("Astrobiology", "http://www.skyandtelescope.com/astronomy-news/astrobiology/feed/", 1));
+        add(new Section("Astronomy & Society", "http://www.skyandtelescope.com/astronomy-news/astronomy-and-society/feed/", 1));
         add(new Section("Black holes", "http://www.skyandtelescope.com/astronomy-news/black-holes/feed/", 1));
-        add(new Section("People, Places and Events", "http://www.skyandtelescope.com/astronomy-news/people-places-and-events/feed/", 1));
+        add(new Section("Milky-way", "http://www.skyandtelescope.com/astronomy-news/milky-way/feed/", 1));
+        add(new Section("People, places and events", "http://www.skyandtelescope.com/astronomy-news/people-places-and-events/feed/", 1));
+        add(new Section("Professional telescopes", "http://www.skyandtelescope.com/astronomy-news/professional-telescopes/feed/", 1));
+        add(new Section("Stellar Science", "http://www.skyandtelescope.com/astronomy-news/stellar-science/feed/", 1));
 
-        add(new Section("This Week's Sky at a Glance", "http://www.skyandtelescope.com/observing/sky-at-a-glance/feed/", 0));
-        add(new Section("SkyTour Podcast", "http://www.skyandtelescope.com/observing/astronomy-podcasts/feed/", 0));
-        add(new Section("Explore the Night with Bob King", "http://www.skyandtelescope.com/astronomy-blogs/explore-night-bob-king/feed/", 0));
-        add(new Section("Observing Tips & Techniques", "http://www.skyandtelescope.com/observing/feed/", 0));
-        add(new Section("Astronomy Resources & Education", "http://www.skyandtelescope.com/astronomy-resources/feed/", 0));
+        add(new Section("Observing", "http://www.skyandtelescope.com/observing/feed/", 0));
+        add(new Section("This Week's Sky at a Glance", "http://www.skyandtelescope.com/observing/sky-at-a-glance/feed/", 1));
+        add(new Section("Stargazer's Corner", "http://www.skyandtelescope.com/observing/stargazers-corner/feed/", 1));
+        add(new Section("Observing Projects", "http://www.skyandtelescope.com/observing/astronomy-stargazing-projects/feed/", 1));
+        add(new Section("Astronomy Podcasts", "http://www.skyandtelescope.com/observing/astronomy-podcasts/feed/", 1));
+
+        add(new Section("Equipment", null, -1));
+        add(new Section("Choosing Equipment", "http://www.skyandtelescope.com/astronomy-equipment/choosing-astronomy-equipment/feed/", 1));
+        add(new Section("Telescopes", "http://www.skyandtelescope.com/astronomy-equipment/choosing-astronomy-equipment/telescopes/feed/", 1));
+        add(new Section("New Product Showcase", "http://www.skyandtelescope.com/astronomy-equipment/new-products/feed/", 1));
+
+        add(new Section("Resources & Education", "http://www.skyandtelescope.com/astronomy-resources/feed/", 0));
+        add(new Section("Learn the Sky", "http://www.skyandtelescope.com/astronomy-resources/stargazing-basics/learn-the-sky/feed/", 1));
+        add(new Section("Astrophotography", "http://www.skyandtelescope.com/astronomy-resources/astrophotography-tips/feed/", 1));
+        add(new Section("Orbital Path Podcasts", "http://www.skyandtelescope.com/astronomy-resources/orbital-path-astronomy-podcast/feed/", 1));
+
+        add(new Section("Astronomy Blogs", "http://www.skyandtelescope.com/astronomy-blogs/feed/", 0));
+        add(new Section("Explore the Night - Bob King", "http://www.skyandtelescope.com/astronomy-blogs/explore-night-bob-king/feed/", 1));
+        add(new Section("Astrophotography - Jerry Lodriguss", "http://www.skyandtelescope.com/astronomy-blogs/astrophotography-jerry-lodriguss/feed/", 1));
+        add(new Section("Astronomy in Space - David Dickinson", "http://www.skyandtelescope.com/astronomy-blogs/astronomy-space-david-dickinson/feed/", 1));
+        add(new Section("Cosmic Relief - David Grinspoon", "http://www.skyandtelescope.com/astronomy-blogs/cosmic-relief-david-grinspoon/feed/", 1));
+
+        add(new Section("Events events", "http://www.skyandtelescope.com/astronomy-events/feed/", 0));
+        add(new Section("Get Involved", "http://www.skyandtelescope.com/get-involved/feed/", 0));
+        add(new Section("Editor's Choice Archive", "http://www.skyandtelescope.com/online-gallery/editors-choice-photos/feed/", 0));
+        add(new Section("Videos", "http://www.skyandtelescope.com/astronomy-videos/feed/", 0));
+        add(new Section("Magazine", "http://www.skyandtelescope.com/sky-and-telescope-magazine/feed/", 0));
 
     }
 
