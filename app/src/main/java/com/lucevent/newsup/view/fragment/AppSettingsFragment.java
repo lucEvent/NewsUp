@@ -19,7 +19,7 @@ import com.lucevent.newsup.ProSettings;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.AppData;
-import com.lucevent.newsup.kernel.NewsManager;
+import com.lucevent.newsup.kernel.KernelManager;
 import com.lucevent.newsup.kernel.ScheduleManager;
 import com.lucevent.newsup.net.MainChangeListener;
 import com.lucevent.newsup.services.util.DownloadSchedule;
@@ -140,7 +140,7 @@ public class AppSettingsFragment extends PreferenceFragment
         }
         if ((preferencesMask & PREF_CLEAN_CACHE_MASK) != 0) {
 
-            String dataSize = new DecimalFormat("#0.00").format(NewsManager.getCacheSize() / 1048576.0);
+            String dataSize = new DecimalFormat("#0.00").format(KernelManager.getCacheSize() / 1048576.0);
             findPreference(AppSettings.PREF_CLEAN_CACHE_KEY).setSummary(dataSize + " MB");
         }
         if ((preferencesMask & PREF_KEEP_NEWS_MASK) != 0) {

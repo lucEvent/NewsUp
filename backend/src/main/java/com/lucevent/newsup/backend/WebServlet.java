@@ -38,8 +38,7 @@ public class WebServlet extends HttpServlet {
 
             String[] parts = site_request.split(",");
 
-            Site site = Data.sites.getSiteByCode(Integer.parseInt(parts[0]));
-            Site sitev2 = Data.sitesV2.getSiteByCode(Integer.parseInt(parts[0]));
+            Site site = Data.sitesV2.getSiteByCode(Integer.parseInt(parts[0]));
             Data.stats.count(site, req.getRemoteAddr(), "web");
 
             int[] sections = new int[parts.length - 1];
@@ -47,7 +46,6 @@ public class WebServlet extends HttpServlet {
                 sections[i] = Integer.parseInt(parts[i + 1]);
 
             NewsArray news = site.readNewsHeaders(sections);
-            sitev2.news.addAll(news);
             site.news.addAll(news);
 
             resp.getWriter().println(BackendParser.toHtml(news).toString());
@@ -56,16 +54,13 @@ public class WebServlet extends HttpServlet {
 
             Site site = Data.sitesV2.getSiteByCode(Integer.parseInt(req.getParameter("site")));
 
-            News bait = new News(-1, "", "", "", 0, null);
-            bait.server_id = Long.parseLong(req.getParameter("nid"));
+            News prey = site.news.get(Integer.parseInt(req.getParameter("nid")));
+            if (prey != null) {
 
-            News prey = site.news.ceiling(bait);
-            if (prey != null && prey.server_id == bait.server_id) {
-
-                if (prey.content == null || prey.content.isEmpty())
+                if (prey.content.isEmpty())
                     site.readNewsContent(prey);
 
-                resp.getWriter().println(prey.content == null ? "" : site.getStyle() + prey.content);
+                resp.getWriter().print(prey.content);
             }
 
         } else if (req.getParameter("sections") != null) {

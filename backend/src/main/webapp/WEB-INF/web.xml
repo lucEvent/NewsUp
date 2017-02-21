@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee">
     <servlet>
-        <servlet-name>MainServlet</servlet-name>
-        <servlet-class>com.lucevent.newsup.backend.MainServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>MainServlet</servlet-name>
-        <url-pattern>/request</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
         <servlet-name>AppServlet</servlet-name>
         <servlet-class>com.lucevent.newsup.backend.AppServlet</servlet-class>
         <load-on-startup>1</load-on-startup>

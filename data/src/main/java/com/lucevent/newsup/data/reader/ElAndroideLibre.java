@@ -1,5 +1,7 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.NewsStylist;
+
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
@@ -75,7 +77,10 @@ public class ElAndroideLibre extends com.lucevent.newsup.data.util.NewsReader {
         doc.select("h2").tagName("h3");
         doc.select(".blockquoteLink,script,.zioamz,#APPinstalarDesktop").remove();
 
-        return doc.body().html().replace("src=\"/", "src=\"http:/");
+        Element body = doc.body();
+        NewsStylist.completeSrcHttp(body);
+
+        return body.html();
     }
 
 }

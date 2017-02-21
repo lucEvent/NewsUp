@@ -13,7 +13,7 @@ public class Site {
     public NewsMap news;
 
     private Class readerClass;
-    private NewsReader reader;
+    private Reader reader;
 
     private Class sectionsClass;
     private Sections sections;
@@ -31,7 +31,6 @@ public class Site {
         this.color = color;
         this.sectionsClass = sectionsClass;
         this.readerClass = readerClass;
-        this.news = new NewsMap();
 
         isDarkColor = (((color >> 16) & 0xFF) < 0x7F) || (((color >> 8) & 0xFF) < 0x7F) || ((color & 0xFF) < 0x7F);
     }
@@ -58,10 +57,10 @@ public class Site {
         return sections;
     }
 
-    public NewsReader getReader()
+    public Reader getReader()
     {
         if (reader == null)
-            reader = (NewsReader) load(readerClass);
+            reader = (Reader) load(readerClass);
         return reader;
     }
 
@@ -72,19 +71,12 @@ public class Site {
         for (int isection : isections)
             res.addAll(getReader().readRssHeader(getSections().get(isection).url));
 
-        synchronized (News.NEWS_STATIC_SYNCHRONIZER) {
-            for (News N : res) {
-                N.site_code = code;
-                N.server_id = News.SERVER_ID_ASSIGNER++;
-            }
-        }
-
         return res;
     }
 
     public void readNewsContent(News news)
     {
-        getReader().readNewsContent(news);
+        getReader().readContent(news);
     }
 
     public boolean hasDarkColor()

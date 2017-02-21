@@ -1,6 +1,7 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -71,7 +72,9 @@ public class Marca extends com.lucevent.newsup.data.util.NewsReader {
                 }
                 article.select("[style]").removeAttr("style");
 
-                news.content = article.outerHtml().replace("src=\"//", "src=\"http://");
+                NewsStylist.completeSrcHttp(article);
+
+                news.content = article.outerHtml();
             }
         }
     }

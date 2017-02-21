@@ -45,7 +45,7 @@ public class Xataka extends com.lucevent.newsup.data.util.NewsReader {
         doc.select("body > h4 ~ *,body > h4,.feedflare,[width='1']").remove();
 
         doc.select("li").tagName("p");
-        doc.select("h2").tagName("h3");
+        doc.select("h1,h2").tagName("h3");
         doc.select("script").remove();
         doc.select("[style]:not(.instagram-media,.instagram-media *)").removeAttr("style");
 

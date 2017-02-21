@@ -8,6 +8,7 @@ import com.lucevent.newsup.backend.utils.Report;
 import com.lucevent.newsup.backend.utils.SiteStats;
 import com.lucevent.newsup.backend.utils.Statistics;
 import com.lucevent.newsup.backend.utils.TimeStats;
+import com.lucevent.newsup.backend.utils.UpdateMessageCreator;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.Site;
@@ -41,58 +42,64 @@ public class AppServlet extends HttpServlet {
         if (req.getParameter("news") != null) {
 
             String site_request = req.getParameter("site");
-
             String[] parts = site_request.split(",");
+            Site site = Data.sitesV2.getSiteByCode(Integer.parseInt(parts[0]));
 
-            Site site = Data.sites.getSiteByCode(Integer.parseInt(parts[0]));
-            Site sitev2 = Data.sitesV2.getSiteByCode(Integer.parseInt(parts[0]));
             if (req.getParameter("nc") == null)
                 Data.stats.count(site, req.getRemoteAddr(), req.getParameter("v"));
 
-            int[] sections = new int[parts.length - 1];
-            for (int i = 0; i < sections.length; i++) {
-                sections[i] = Integer.parseInt(parts[i + 1]);
+            if (UpdateMessageCreator.needsUpdate(req.getParameter("v"))) {
+                NewsArray alert = new NewsArray();
+                alert.add(UpdateMessageCreator.generateUpdateNews(site));
+                resp.getWriter().println(BackendParser.toEntry(alert).toString());
+                return;
             }
+
+            int[] sections = new int[parts.length - 1];
+            for (int i = 0; i < sections.length; i++)
+                sections[i] = Integer.parseInt(parts[i + 1]);
 
             NewsArray news = site.readNewsHeaders(sections);
             site.news.addAll(news);
-            sitev2.news.addAll(news);
 
             resp.getWriter().println(BackendParser.toEntry(news).toString());
 
         } else if (req.getParameter("content") != null) {
+            Site site = Data.sitesV2.getSiteByCode(Integer.parseInt(req.getParameter("site")));
 
-            String snid = req.getParameter("nid");
-            if (snid != null) {
-                Site site = Data.sitesV2.getSiteByCode(Integer.parseInt(req.getParameter("site")));
+            String link = req.getParameter("l");
+            if (link != null) {
+                int id = link.hashCode();
 
-                News bait = new News(-1, "", "", "", 0, null);
-                bait.server_id = Long.parseLong(req.getParameter("nid"));
+                News news = site.news.get(id);
+                if (news == null) {
+                    news = new News(id, "", link, "", -1, null);
+                    news.content = "";
+                }
+                if (news.content.isEmpty())
+                    site.readNewsContent(news);
 
-                News prey = site.news.ceiling(bait);
-                if (prey != null && prey.server_id == bait.server_id) {
+                if (!news.content.isEmpty()) {
+                    resp.getWriter().print(news.content);
 
-                    if (prey.content == null || prey.content.isEmpty())
-                        site.readNewsContent(prey);
-
-                    resp.getWriter().print(prey.content == null ? "" : prey.content);
+                    site.news.put(id, news);
                 }
                 return;
             }
 
-            Site site = Data.sites.getSiteByCode(Integer.parseInt(req.getParameter("site")));
-            String link = req.getParameter("link");
-            long date = Long.parseLong(req.getParameter("date"));
+            String news_id = req.getParameter("nid");
+            if (news_id == null) {
+                resp.getWriter().print(UpdateMessageCreator.generateContent(site));
+                return;
+            }
 
-            News bait = new News("", link, "", date, null);
-            News prey = site.news.ceiling(bait);
+            News prey = site.news.get(Integer.parseInt(news_id));
+            if (prey != null) {
 
-            if (prey != null && prey.compareTo(bait) == 0) {
-
-                if (prey.content == null || prey.content.isEmpty())
+                if (prey.content.isEmpty())
                     site.readNewsContent(prey);
 
-                resp.getWriter().print(prey.content == null ? "" : prey.content);
+                resp.getWriter().print(prey.content);
             }
 
         } else if (req.getParameter("stats") != null) {
@@ -110,7 +117,7 @@ public class AppServlet extends HttpServlet {
 
             String[] values = req.getParameter("values").split(",");
             for (int i = 0; i < values.length; i += 2) {
-                Site site = Data.sites.getSiteByCode(Integer.parseInt(values[i]));
+                Site site = Data.sitesV2.getSiteByCode(Integer.parseInt(values[i]));
                 Data.stats.read(site, Integer.parseInt(values[i + 1]));
             }
 
@@ -124,7 +131,7 @@ public class AppServlet extends HttpServlet {
 
         } else if (req.getParameter("clear") != null) {
 
-            for (Site site : Data.sites)
+            for (Site site : Data.sitesV2)
                 site.news.clear();
 
         }

@@ -3,7 +3,6 @@ package com.lucevent.newsup.view.fragment;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,31 +13,25 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.Main;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
-import com.lucevent.newsup.data.util.NewsMap;
 import com.lucevent.newsup.io.BookmarksManager;
-import com.lucevent.newsup.kernel.AppCode;
-import com.lucevent.newsup.kernel.NewsManager;
+import com.lucevent.newsup.kernel.KernelManager;
 import com.lucevent.newsup.permission.StoragePermissionHandler;
 import com.lucevent.newsup.view.adapter.NewsAdapter;
 import com.lucevent.newsup.view.util.ContentLoader;
 import com.lucevent.newsup.view.util.NewsView;
 import com.lucevent.newsup.view.util.OnBackPressedListener;
 
-import java.lang.ref.WeakReference;
-
 public class BookmarksFragment extends android.app.Fragment implements View.OnClickListener,
         View.OnLongClickListener, OnBackPressedListener {
 
     private NewsAdapter adapter;
-    private NewsMap bookmarks;
 
     private NewsView newsView;
-    private Handler handler;
+
     private StoragePermissionHandler permissionHandler;
     private boolean displayingNews = false;
 
@@ -48,7 +41,6 @@ public class BookmarksFragment extends android.app.Fragment implements View.OnCl
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        handler = new Handler(this);
         permissionHandler = new StoragePermissionHandler(getActivity());
 
         adapter = new NewsAdapter(new NewsArray(), this, this, onBookmarkClick);
@@ -93,7 +85,8 @@ public class BookmarksFragment extends android.app.Fragment implements View.OnCl
 
         view.findViewById(R.id.button_sections).setVisibility(View.GONE);
 
-        BookmarksManager.getBookmarkedNews(handler);
+        adapter.setNewDataSet(BookmarksManager.getBookmarkedNews());
+
         return view;
     }
 
@@ -112,10 +105,10 @@ public class BookmarksFragment extends android.app.Fragment implements View.OnCl
     public void onClick(View v)
     {
         News news = (News) v.getTag();
-        NewsManager.readContentOf(news);
+        KernelManager.readContentOf(news);
 
         displayingNews = true;
-        NewsManager.addToHistory(news);
+        KernelManager.addToHistory(news);
         newsView.displayNews(news, v);
     }
 
@@ -155,46 +148,20 @@ public class BookmarksFragment extends android.app.Fragment implements View.OnCl
             if (permissionHandler.checkAndAsk(BookmarksFragment.this)) {
                 News news = (News) v.getTag();
 
-                if (BookmarksManager.isBookmarked(news)) {
-                    bookmarks.remove(news);
-                    adapter.remove(news);
-                } else {
-                    bookmarks.add(news);
-                    adapter.setNewDataSet(bookmarks);
-                }
+                boolean wasBookmarked = BookmarksManager.isBookmarked(news);
+
                 BookmarksManager.toggleBookmark(news);
+
+                if (wasBookmarked)
+                    adapter.remove(news);
+                else
+                    adapter.setNewDataSet(BookmarksManager.getBookmarkedNews());
+
                 newsView.setBookmarkButtonImage(v);
             } else
                 tempBookmarkButton = v;
         }
     };
-
-    static class Handler extends android.os.Handler {
-
-        private final WeakReference<BookmarksFragment> context;
-
-        Handler(BookmarksFragment context)
-        {
-            this.context = new WeakReference<>(context);
-        }
-
-        @Override
-        public void handleMessage(Message msg)
-        {
-            BookmarksFragment service = context.get();
-            switch (msg.what) {
-                case AppCode.NEWS_MAP_READ:
-                    service.bookmarks = (NewsMap) msg.obj;
-                    service.adapter.addAll(service.bookmarks);
-                    break;
-                case AppCode.ERROR:
-                    AppSettings.printerror("[BMF] Error received by the Handler", null);
-                    break;
-                default:
-                    AppSettings.printerror("[BMF] OPTION UNKNOWN: " + msg.what, null);
-            }
-        }
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults)

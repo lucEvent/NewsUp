@@ -1,6 +1,7 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
+import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -24,8 +25,9 @@ public class HuffingtonPostUK extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected String parseContent(Element prop)
     {
-        String text = prop.text().replace("<br />", "<p></p>");
+        String text = prop.text();
         Document doc = org.jsoup.Jsoup.parse(text);
+        doc.select("br").tagName("p");
 
         for (Element e : doc.select("strong")) {
             if (e.text().startsWith("SEE ALSO:"))
@@ -33,7 +35,10 @@ public class HuffingtonPostUK extends com.lucevent.newsup.data.util.NewsReader {
         }
         doc.select("[style]").removeAttr("style");
 
-        String content = doc.html();
+        Element body = doc.body();
+        NewsStylist.completeSrcHttp(body);
+
+        String content = body.html();
 
         int i0 = content.indexOf("type=type=");
         if (i0 != -1) {
@@ -43,7 +48,7 @@ public class HuffingtonPostUK extends com.lucevent.newsup.data.util.NewsReader {
                 content = content.substring(0, i0) + content.substring(i1, content.length());
             }
         }
-        return content.replace("=\"/", "=\"http:/");
+        return content;
     }
 
     @Override

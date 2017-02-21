@@ -8,7 +8,7 @@ import com.lucevent.newsup.services.util.DownloadSchedule;
 
 import java.util.ArrayList;
 
-public class ScheduleManager extends NewsManager {
+public class ScheduleManager extends KernelManager {
 
     private static ArrayList<DownloadSchedule> downloadSchedules;
 

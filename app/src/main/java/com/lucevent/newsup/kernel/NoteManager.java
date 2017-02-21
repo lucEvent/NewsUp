@@ -5,7 +5,7 @@ import android.content.Context;
 import com.lucevent.newsup.kernel.util.Note;
 import com.lucevent.newsup.kernel.util.Notes;
 
-public class NoteManager extends NewsManager {
+public class NoteManager extends KernelManager {
 
     private Notes notes;
 

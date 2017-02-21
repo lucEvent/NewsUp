@@ -2,8 +2,117 @@
 <html>
 <head>
     <title>News Up Debugger</title>
+    <meta charset="utf-8">
+    <link rel="icon" href="img/app.png" type="image/png"/>
+    <link rel="stylesheet" href="styles.css"/>
+    <script type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>
+    <script async defer src='http://platform.instagram.com/es_ES/embeds.js'></script>
+    <script src="jquery-3.1.1.min.js"></script>
+    <script>
+    var v_title, v_author, v_age;
+    var current_site =-1;
+    var scrolled;
+
+    function display_list(data) {
+        $("#news_list").html(data);
+      //   $("#news_list").text(error);
+          scrolled = $("body").scrollTop();
+        $("body").scrollTop(0);
+        $("#article_box")[0].style.visibility = 'visible';
+        $("#news_list")[0].style.visibility = 'hidden';
+        $("#title").text(v_title);
+        $("#date").text(v_age);
+        $("#content").html(data);
+         $("#article_box")[0].style.visibility = 'hidden';
+        $("#content").html("");
+        $("#news_list")[0].style.visibility = 'visible';
+        $("body").scrollTop(scrolled);
+    }
+
+	$(document).ready(function () {
+
+        $("#article_box")[0].style.visibility = 'hidden';
+
+        $(".site").click(function() {
+
+            var code = $(this).attr("id");
+            current_site=code;
+
+            $.ajax("/web?index&site=" + code + ",0", {
+                success: display_list,
+                error: display_error("Error loading news from .site")
+            });
+            $.ajax("/web?sections&site=" + code, {
+                success: display_sections,
+                error: display_error("Error loading sections from .site")
+            });
+
+            $("#news_list").text("");
+
+            var site_info = $("#site_info");
+            site_info.find("img").eq(0).attr('src',"img/"+ code + ".png");
+            site_info.find("span").eq(0).text($(this).text());
+
+        });
+
+        $("#145").click();
+
+        $(".closer").click(function() {
+            closeNews();
+        })
+        .mouseenter(function() {
+            $(this).find("img").eq(0).attr('src',"http://newsup-2406.appspot.com/img/ic_arrow_back_hover.svg");
+        })
+        .mouseleave(function() {
+            $(this).find("img").eq(0).attr('src',"http://newsup-2406.appspot.com/img/ic_arrow_back.svg");
+        });
+
+        $('#sel_country').change(function() {
+            sCountry = $(this).val();
+
+           $('.site').hide();
+           $(parseSelection()).show();
+
+        });
+        $('#sel_language').change(function() {
+            sLanguage = $(this).val();
+
+            $('.site').hide();
+            $(parseSelection()).show();
+
+        });
+        $('#sel_category').change(function() {
+            sCategory = $(this).val();
+
+            $('.site').hide();
+            $(parseSelection()).show();
+        });
+
+    });
+
+    $(document).on('click', '.section', function() {
+        var section_index = $(this).attr('index');
+
+        $.ajax("/web?index&site=" + current_site + "," + section_index, {
+            success: display_list,
+            error: display_error("Error loading news from .section")
+        });
+    });
+    </script>
+    <style>
+    #errors_container{
+        width: 200px;
+        background: #eee;
+    }
+    </style>
 </head>
 <body>
+
+<aside id="errors_container">
+</aside>
+
+<article id="error_display">
+</article>
 
 </body>
 </html>

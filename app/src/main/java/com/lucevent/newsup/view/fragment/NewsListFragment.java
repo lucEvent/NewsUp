@@ -31,14 +31,13 @@ import com.lucevent.newsup.Main;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
-import com.lucevent.newsup.data.util.NewsMap;
 import com.lucevent.newsup.data.util.Section;
 import com.lucevent.newsup.data.util.Sections;
 import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.io.BookmarksManager;
 import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.AppData;
-import com.lucevent.newsup.kernel.NewsManager;
+import com.lucevent.newsup.kernel.KernelManager;
 import com.lucevent.newsup.net.MainChangeListener;
 import com.lucevent.newsup.permission.StoragePermissionHandler;
 import com.lucevent.newsup.services.StatisticsService;
@@ -50,6 +49,7 @@ import com.lucevent.newsup.view.util.OnBackPressedListener;
 import com.lucevent.newsup.view.util.OnMoreSectionsClickListener;
 
 import java.lang.ref.WeakReference;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Random;
@@ -115,14 +115,14 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
                 int[] news_ids = getArguments().getIntArray(AppCode.SEND_NEWS_IDS);
                 assert news_ids != null : "Arguments can't be recovered";
 
-                NewsMap newsMap = new NewsMap();
+                NewsArray newsMap = new NewsArray();
 
                 for (int news_id : news_ids)
                     if (news_id > 0)
                         newsMap.add(dataManager.getNewsById(news_id));
 
                 getActivity().setTitle(R.string.app_name);
-                handler.obtainMessage(AppCode.NEWS_MAP_READ, newsMap).sendToTarget();
+                handler.obtainMessage(AppCode.NEWS_COLLECTION, newsMap).sendToTarget();
                 handler.obtainMessage(AppCode.NEWS_LOADED).sendToTarget();
                 break;
 
@@ -148,7 +148,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         adapter.loadImages(AppSettings.loadImages());
     }
 
-    private NewsManager dataManager;
+    private KernelManager dataManager;
     private NewsAdapter adapter;
     private Handler handler;
     private StoragePermissionHandler permissionHandler;
@@ -168,7 +168,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         Context context = getActivity();
 
         handler = new Handler(this);
-        dataManager = new NewsManager(context);
+        dataManager = new KernelManager(context);
         permissionHandler = new StoragePermissionHandler(context);
 
         lastLoadedSiteCode = -9;
@@ -283,16 +283,16 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         final News news = (News) v.getTag();
         final Context context = getActivity();
 
-        NewsManager.readContentOf(news);
+        KernelManager.readContentOf(news);
 
         if (news.content != null && !news.content.isEmpty()) {
             newsView.displayNews(news, v);
             btn_sections.setVisibility(View.GONE);
             displayingNews = true;
-            NewsManager.addToHistory(news);
+            KernelManager.addToHistory(news);
             return;
         }
-        NewsManager.fetchContentOf(news);
+        KernelManager.fetchContentOf(news);
 
         View view = LayoutInflater.from(context).inflate(R.layout.d_news_not_found, null);
 
@@ -352,14 +352,14 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         {
             NewsListFragment service = context.get();
             switch (msg.what) {
-                case AppCode.NEWS_MAP_READ:
-                    NewsMap news = (NewsMap) msg.obj;
+                case AppCode.NEWS_COLLECTION:
+                    Collection<News> news = (Collection<News>) msg.obj;
 
                     if (news.isEmpty())
                         return;
 
                     if (service.currentSiteCode > 0 &&
-                            news.first().site_code != service.currentSiteCode)
+                            news.iterator().next().site_code != service.currentSiteCode)
                         return;
 
                     service.adapter.addAll(news);

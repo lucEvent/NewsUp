@@ -27,7 +27,7 @@ import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.io.LogoManager;
 import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.AppData;
-import com.lucevent.newsup.kernel.NewsManager;
+import com.lucevent.newsup.kernel.KernelManager;
 import com.lucevent.newsup.kernel.ScheduleManager;
 import com.lucevent.newsup.net.MainChangeListener;
 import com.lucevent.newsup.permission.StoragePermissionHandler;
@@ -50,7 +50,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     private NewsListFragment newsFragment;
 
     private FragmentManager fragmentManager;
-    private NewsManager dataManager;
+    private KernelManager dataManager;
     private StoragePermissionHandler permissionHandler;
 
     public DrawerLayout drawer;
@@ -61,7 +61,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         super.onCreate(savedInstanceState);
 
         AppSettings.initialize(this, this);
-        dataManager = new NewsManager(this);
+        dataManager = new KernelManager(this);
         permissionHandler = new StoragePermissionHandler(this);
 
         if (AppSettings.firstStart()) {

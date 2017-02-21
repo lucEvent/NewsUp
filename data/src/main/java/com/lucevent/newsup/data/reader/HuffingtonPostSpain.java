@@ -2,6 +2,7 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -43,8 +44,9 @@ public class HuffingtonPostSpain extends com.lucevent.newsup.data.util.NewsReade
         Element body = org.jsoup.Jsoup.parse(prop.text().replace("<br />", "<p></p>")).body();
         body.select("script").remove();
 
-        Elements ee = body.children();
+        body.select("h1,h2").tagName("h3");
 
+        Elements ee = body.children();
         int index = ee.indexOf(ee.select("blockquote").last()) - 1;
         if (index >= 0)
             for (; index < ee.size(); ++index)
@@ -53,14 +55,19 @@ public class HuffingtonPostSpain extends com.lucevent.newsup.data.util.NewsReade
         cleanBlockquotes(body.select("blockquote"));
 
         for (Element e : body.select("[src*='big.assets.h'],[src*='gen/2966946']"))
-            e.parent().remove();
+            try {
+                e.parent().remove();
+            } catch (Exception ignored) {
+            }
+
+        NewsStylist.completeSrcHttp(body);
 
         String content = body.outerHtml();
         index = content.indexOf("<hh--");
         if (index != -1)
             content = content.substring(0, index);
 
-        return content.replace("src=\"/", "src=\"http:/");
+        return content;
     }
 
     @Override
@@ -68,9 +75,12 @@ public class HuffingtonPostSpain extends com.lucevent.newsup.data.util.NewsReade
     {
         Elements article = doc.select(".entry__body > div.content-list-component,.top-media--image,.top-media--video,.twitter-tweet,.twitter-video,.pull-quote,.entry__body .listicle");
 
-        for (Element e : article.select("[src*='big.assets.h'],[src*='gen/2966946']")) {
-            e.parent().remove();
-        }
+        for (Element e : article.select("[src*='big.assets.h'],[src*='gen/2966946']"))
+            try {
+                e.parent().remove();
+            } catch (Exception ignored) {
+            }
+
         for (Element script : article.select("script")) {
             String html = script.html();
             if (html.isEmpty())
@@ -82,7 +92,9 @@ public class HuffingtonPostSpain extends com.lucevent.newsup.data.util.NewsReade
         article.select("li").tagName("p");
         article.select("h1,h2").tagName("h3");
 
-        news.content = article.outerHtml().replace("src=\"/", "src=\"http:/");
+        NewsStylist.completeSrcHttp(article);
+
+        news.content = article.outerHtml();
     }
 
     @Override

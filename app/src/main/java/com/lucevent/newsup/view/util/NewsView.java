@@ -84,8 +84,6 @@ public class NewsView extends RelativeLayout {
     {
         super.onConfigurationChanged(newConfig);
 
-        ViewGroup.LayoutParams layoutParams = getLayoutParams();
-
         if (viewHeight != -2) {
             int aux = viewWidth;
             viewWidth = viewHeight;
@@ -93,6 +91,8 @@ public class NewsView extends RelativeLayout {
         }
 
         if (getVisibility() == View.VISIBLE) {
+
+            ViewGroup.LayoutParams layoutParams = getLayoutParams();
 
             layoutParams.width = -1;
             layoutParams.height = -1;
@@ -166,7 +166,7 @@ public class NewsView extends RelativeLayout {
         if (viewHeight == -2) {
             Rect r = new Rect();
             fragmentContext.getActivity().getWindow().getDecorView().getWindowVisibleDisplayFrame(r);
-            viewHeight = getHeight() + actionBar.getHeight() + r.top;
+            viewHeight = ((ViewGroup) getParent()).getHeight() + actionBar.getHeight() + r.top;
             viewWidth = getWidth();
         }
 

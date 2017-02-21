@@ -14,7 +14,7 @@ public class BackendParser {
     public static StringBuilder toEntry(News news)
     {
         StringBuilder res = new StringBuilder("<item><sid>");
-        res.append(news.server_id);
+        res.append(news.id);    // deprecated
         res.append("</sid><title>");
         res.append(news.title);
         res.append("</title><link>");
@@ -43,7 +43,7 @@ public class BackendParser {
                 .append("\" age='")
                 .append(Date.getAge(news.date))
                 .append("' nid='")
-                .append(news.server_id)
+                .append(news.id)
                 .append("'><h3>")
                 .append(news.title)
                 .append("</h3><p>")

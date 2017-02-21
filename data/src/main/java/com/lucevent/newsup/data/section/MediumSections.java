@@ -125,7 +125,6 @@ public class MediumSections extends Sections {
         add(new Section("The Startup", "https://medium.com/feed/swlh", 0));
         add(new Section("The Synapse", "https://medium.com/feed/synapse", 0));
         add(new Section("The Washington Post", "https://medium.com/feed/thewashingtonpost", 0));
-        add(new Section("The White House", "https://medium.com/feed/the-white-house", 0));
         add(new Section("The year of the looking glass", "https://medium.com/feed/the-year-of-the-looking-glass", 0));
         add(new Section("ThinkProgress", "https://thinkprogress.org/feed", 0));
         add(new Section("Thrive Global", "https://journal.thriveglobal.com/feed", 0));

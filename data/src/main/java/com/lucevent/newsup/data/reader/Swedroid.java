@@ -1,5 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class Swedroid extends com.lucevent.newsup.data.util.NewsReader {
@@ -38,8 +39,11 @@ public class Swedroid extends com.lucevent.newsup.data.util.NewsReader {
     protected String parseContent(Element prop)
     {
         String content = prop.text();
-        if (content.length() > 0)
-            content = content.replace("style=", "none=");
+        if (content.length() > 0) {
+            Document doc = jsoupParse(content);
+            doc.select("[style]").removeAttr("style");
+            content = doc.body().html();
+        }
         return content;
     }
 

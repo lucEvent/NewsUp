@@ -13,7 +13,7 @@ import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.AppData;
-import com.lucevent.newsup.kernel.NewsManager;
+import com.lucevent.newsup.kernel.KernelManager;
 import com.lucevent.newsup.kernel.stats.SiteStat;
 import com.lucevent.newsup.kernel.stats.SiteStats;
 import com.lucevent.newsup.kernel.stats.Statistics;
@@ -168,7 +168,7 @@ public class StatisticsService extends Service {
                 try {
                     Thread.sleep(60000);    // sendUpdate after 1 minute
 
-                    NewsManager manager = new NewsManager(StatisticsService.this);
+                    KernelManager manager = new KernelManager(StatisticsService.this);
                     ArrayList<Pair<Integer, Integer>> readingStats = manager.getReadingStats();
 
                     if (!readingStats.isEmpty()) {

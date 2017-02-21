@@ -2,6 +2,7 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -34,15 +35,18 @@ public class TheVerge extends com.lucevent.newsup.data.util.NewsReader {
     protected String parseContent(Element prop)
     {
         Document d = Jsoup.parse(prop.text());
-        d.select("h1,h2").tagName("h3");
 
         Elements article = d.select(".m-snippet");
+
+        d.select("h1,h2").tagName("h3");
+        NewsStylist.completeSrcHttp(article);
+
         if (article.size() < 2) {
             d.select("hr").remove();
-            return d.html().replace("src=\"/", "src=\"http:/");
+            return d.html();
         }
         article.select(".lede").remove();
-        return article.outerHtml().replace("src=\"/", "src=\"http:/");
+        return article.outerHtml();
     }
 
     @Override
@@ -64,14 +68,14 @@ public class TheVerge extends com.lucevent.newsup.data.util.NewsReader {
                         if (index != -1)
                             url = url.substring(index + 5, url.length());
 
-                        news.content += "<video controls><source src=\"" + url + "\" type=\"video/mp4\"></video>" +
+                        news.content += "<video controls><source src='" + url + "' type='video/mp4'></video>" +
                                 "<a href='" + url + "'>See externally</a>";
 
                     }
                 }
             } else {
                 String video_id = v.first().attr("data-volume-uuid");
-                news.content += new Enclosure("https://volume.vox-cdn.com/embed/" + video_id, "video", "").html() +
+                news.content += Enclosure.iframe("https://volume.vox-cdn.com/embed/" + video_id) +
                         "<a href='https://volume.vox-cdn.com/embed/" + video_id + "'>See externally</a>";
                 v.remove();
             }

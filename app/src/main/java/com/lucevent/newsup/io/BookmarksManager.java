@@ -1,11 +1,8 @@
 package com.lucevent.newsup.io;
 
-import android.os.Handler;
-
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsMap;
 import com.lucevent.newsup.data.util.Tags;
-import com.lucevent.newsup.kernel.AppCode;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,77 +10,70 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
+import java.util.Collection;
 
 public class BookmarksManager {
 
     private static final String BOOKMARKS_DIR = "bookmarks/";
     private static final String BOOKMARKS_IND = "index.nu";
 
-    private static ArrayList<Integer> bookmarkedNewsIdsList;
-    private static NewsMap bookmarkedNewsMap;
+    private static NewsMap bookmarksMap;
 
     static {
         File dir = new File(SDManager.getDirectory(), BOOKMARKS_DIR);
         if (!dir.exists())
             dir.mkdirs();
 
-        readBookmarkedNewsIds();
+        readBookmarkIds();
     }
 
     public static boolean isBookmarked(News news)
     {
-        int id = getNewsFileCode(news);
-        return readBookmarkedNewsIds().contains(id);
+        return readBookmarkIds().containsKey(news.id);
     }
 
-    private static ArrayList<Integer> readBookmarkedNewsIds()
+    private static NewsMap readBookmarkIds()
     {
-        if (bookmarkedNewsIdsList == null)
-            bookmarkedNewsIdsList = new ArrayList<>();
+        if (bookmarksMap == null)
+            bookmarksMap = new NewsMap();
 
-        if (bookmarkedNewsIdsList.isEmpty()) {
+        if (bookmarksMap.isEmpty()) {
             try {
                 File dir = new File(SDManager.getDirectory(), BOOKMARKS_DIR);
 
                 ObjectInputStream in = new ObjectInputStream(new FileInputStream(new File(dir, BOOKMARKS_IND)));
 
                 int nNews = in.readInt();
-                bookmarkedNewsIdsList = new ArrayList<>(nNews);
-
                 for (int i = 0; i < nNews; i++)
-                    bookmarkedNewsIdsList.add(in.readInt());
+                    bookmarksMap.put(in.readInt(), null);
 
                 in.close();
             } catch (Exception ignored) {
             }
         }
-        return bookmarkedNewsIdsList;
+        return bookmarksMap;
     }
 
     public static void toggleBookmark(News news)
     {
         if (isBookmarked(news))
-            unBookmarkNews(news);
+            unBookmark(news);
         else
-            bookmarkNews(news);
+            bookmark(news);
     }
 
-    private static void bookmarkNews(News news)
+    private static void bookmark(News news)
     {
-        if (bookmarkedNewsMap != null) bookmarkedNewsMap.add(news);
+        if (bookmarksMap == null) readBookmarkIds();
 
-        if (bookmarkedNewsIdsList == null) readBookmarkedNewsIds();
+        bookmarksMap.put(news.id, news);
 
-        int id = getNewsFileCode(news);
-
-        bookmarkedNewsIdsList.add(id);
         saveBookmarksIndex();
 
         File dir = new File(SDManager.getDirectory(), BOOKMARKS_DIR);
 
         try {
-            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File(dir, "b" + id)));
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File(dir, "b" + news.id)));
 
             out.writeObject(news.title);
             out.writeObject(news.link);
@@ -99,20 +89,19 @@ public class BookmarksManager {
         }
     }
 
-    private static boolean unBookmarkNews(News news)
+    private static boolean unBookmark(News news)
     {
-        if (bookmarkedNewsIdsList == null) readBookmarkedNewsIds();
+        if (bookmarksMap == null) readBookmarkIds();
 
-        Integer id = getNewsFileCode(news);
-        if (bookmarkedNewsIdsList.remove(id)) {
+        if (bookmarksMap.containsKey(news.id)) {
+
+            bookmarksMap.remove(news.id);
+
             saveBookmarksIndex();
-
-            if (bookmarkedNewsMap != null)
-                bookmarkedNewsMap.remove(news);
 
             File dir = new File(SDManager.getDirectory(), BOOKMARKS_DIR);
 
-            return new File(dir, "b" + id).delete();
+            return new File(dir, "b" + news.id).delete();
         }
         return false;
     }
@@ -123,8 +112,8 @@ public class BookmarksManager {
         try {
             ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File(dir, BOOKMARKS_IND)));
 
-            out.writeInt(bookmarkedNewsIdsList.size());
-            for (Integer I : bookmarkedNewsIdsList)
+            out.writeInt(bookmarksMap.size());
+            for (Integer I : bookmarksMap.keySet())
                 out.writeInt(I);
 
             out.close();
@@ -133,56 +122,42 @@ public class BookmarksManager {
         }
     }
 
-    public static void getBookmarkedNews(final Handler handler)
+    public static Collection<News> getBookmarkedNews()
     {
-        new Thread(new Runnable() {
-            @Override
-            public void run()
-            {
-                if (bookmarkedNewsMap == null) {
-                    if (bookmarkedNewsIdsList == null) readBookmarkedNewsIds();
+        readBookmarkIds();
+        if (!bookmarksMap.isEmpty() && bookmarksMap.get(bookmarksMap.firstKey()) == null) {
 
-                    bookmarkedNewsMap = new NewsMap();
+            File dir = new File(SDManager.getDirectory(), BOOKMARKS_DIR);
 
-                    File dir = new File(SDManager.getDirectory(), BOOKMARKS_DIR);
+            for (Integer id : bookmarksMap.keySet()) {
+                try {
+                    ObjectInputStream in = new ObjectInputStream(new FileInputStream(new File(dir, "b" + id)));
 
-                    for (Integer id : bookmarkedNewsIdsList) {
-                        try {
-                            ObjectInputStream in = new ObjectInputStream(new FileInputStream(new File(dir, "b" + id)));
+                    String title = (String) in.readObject();
+                    String link = (String) in.readObject();
+                    String description = (String) in.readObject();
+                    long date = in.readLong();
+                    String categories = (String) in.readObject();
 
-                            String title = (String) in.readObject();
-                            String link = (String) in.readObject();
-                            String description = (String) in.readObject();
-                            long date = in.readLong();
-                            String categories = (String) in.readObject();
+                    News news = new News(id, title, link, description, date, new Tags(categories));
+                    news.content = (String) in.readObject();
+                    news.site_code = in.readInt();
 
-                            News news = new News(-2, title, link, description, date, new Tags(categories));
-                            news.content = (String) in.readObject();
-                            news.site_code = in.readInt();
-
-                            bookmarkedNewsMap.add(news);
-                            in.close();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
+                    bookmarksMap.put(id, news);
+                    in.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                handler.obtainMessage(AppCode.NEWS_MAP_READ, bookmarkedNewsMap).sendToTarget();
             }
-        }).start();
+        }
+        return bookmarksMap.values();
     }
 
     public static void removeAllEntries()
     {
-        bookmarkedNewsIdsList.clear();
-        bookmarkedNewsMap.clear();
+        bookmarksMap.clear();
         File[] files = new File(SDManager.getDirectory(), BOOKMARKS_DIR).listFiles();
         for (File f : files) f.delete();
-    }
-
-    private static int getNewsFileCode(News news)
-    {
-        return (news.link + news.date).hashCode();
     }
 
 }

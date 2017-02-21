@@ -16,6 +16,7 @@ import com.lucevent.newsup.io.Database.DBHistoryNews;
 import com.lucevent.newsup.io.Database.DBNews;
 import com.lucevent.newsup.io.Database.DBNote;
 import com.lucevent.newsup.io.Database.DBReadingStats;
+import com.lucevent.newsup.kernel.util.HistoryNews;
 import com.lucevent.newsup.kernel.util.Note;
 import com.lucevent.newsup.kernel.util.Notes;
 import com.lucevent.newsup.services.util.DownloadSchedule;
@@ -45,7 +46,7 @@ public class DBManager {
 
                 News news = DBNews.parse(cursor);
                 news.site_code = site.code;
-                result.add(news);
+                result.put(news.id, news);
 
                 cursor.moveToNext();
             }
@@ -87,7 +88,8 @@ public class DBManager {
             if (cursor.moveToFirst())
                 do {
 
-                    result.add(DBHistoryNews.parse(cursor));
+                    HistoryNews news = DBHistoryNews.parse(cursor);
+                    result.put(news.id, news);
 
                 } while (cursor.moveToNext());
 
@@ -212,6 +214,7 @@ public class DBManager {
     public void insertNews(News news)
     {
         ContentValues values = new ContentValues();
+        values.put(Database.id, news.id);
         values.put(DBNews.site_code, news.site_code);
         values.put(DBNews.title, news.title);
         values.put(DBNews.link, news.link);
@@ -221,7 +224,7 @@ public class DBManager {
 
         synchronized (this) {
             SQLiteDatabase database = db.getWritableDatabase();
-            news.id = (int) database.insert(DBNews.db, null, values);
+            database.insert(DBNews.db, null, values);
             database.close();
         }
     }

@@ -54,7 +54,7 @@ public class Test {
                             site.readNewsContent(N);
                         }
                         for (int t = 0; t < evals.length; t++)
-                            if (evals[t].evaluate(N))
+                            if (evals[t].evaluate(N, db))
                                 tempValues[t]++;
                     }
 
@@ -112,6 +112,11 @@ public class Test {
         return db.getFullReport(taskState);
     }
 
+    public void clearLogs()
+    {
+        db.clearLogs();
+    }
+
     private static final Evaluation TH2 = new Evaluation() {
         @Override
         public String description()
@@ -120,9 +125,13 @@ public class Test {
         }
 
         @Override
-        public boolean evaluate(News news)
+        public boolean evaluate(News news, Database db)
         {
-            return news.content.contains("<h2>") | news.content.contains("<h1>");
+            boolean evaluation = news.content.contains("<h2>") | news.content.contains("<h1>");
+            if (evaluation) {
+                db.saveErrorOn(news);
+            }
+            return evaluation;
         }
     };
 
@@ -134,7 +143,7 @@ public class Test {
         }
 
         @Override
-        public boolean evaluate(News news)
+        public boolean evaluate(News news, Database db)
         {
             return news.content != null && !news.content.isEmpty();
         }
@@ -148,7 +157,7 @@ public class Test {
         }
 
         @Override
-        public boolean evaluate(News news)
+        public boolean evaluate(News news, Database db)
         {
             return news.content.contains("</script>");
         }
@@ -162,9 +171,9 @@ public class Test {
         }
 
         @Override
-        public boolean evaluate(News news)
+        public boolean evaluate(News news, Database db)
         {
-            return news.content.contains("src=\"/") || news.content.contains("href=\"/");
+            return (news.content.contains("src=\"/") || news.content.contains("href=\"/")) && !news.content.contains("<base ");
         }
     };
 
@@ -176,7 +185,7 @@ public class Test {
         }
 
         @Override
-        public boolean evaluate(News news)
+        public boolean evaluate(News news, Database db)
         {
             return news.content.contains("</style>") || news.content.contains("style=\"");
         }

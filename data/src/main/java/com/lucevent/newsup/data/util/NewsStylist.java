@@ -53,9 +53,20 @@ public final class NewsStylist {
             e.attr("src", "http:" + e.attr("src"));
     }
 
+    public static void completeSrcHttp(Element article)
+    {
+        for (Element e : article.select("[src^='//']"))
+            e.attr("src", "http:" + e.attr("src"));
+    }
+
     public static String video(String src)
     {
         return "<video controls src='" + src + "'></video>";
+    }
+
+    public static String base(String baseUrl)
+    {
+        return "<base href='" + baseUrl + "'>";
     }
 
     /**

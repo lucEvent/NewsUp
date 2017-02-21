@@ -1,6 +1,7 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
+import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -28,7 +29,10 @@ public class HuffingtonPostInt extends com.lucevent.newsup.data.util.NewsReader 
 
         doc.getElementsByTag("h2").tagName("h3");
 
-        String content = doc.html();
+        Element body = doc.body();
+        NewsStylist.completeSrcHttp(body);
+
+        String content = body.html();
 
         int i0 = content.indexOf("type=type=");
         if (i0 != -1) {
@@ -45,7 +49,7 @@ public class HuffingtonPostInt extends com.lucevent.newsup.data.util.NewsReader 
             i1 = content.indexOf("-hh>", i1 + 4);
             content = content.replace(content.substring(i0, i1 + 4), "");
         }
-        return content.replace("=\"/", "=\"http:/");
+        return content;
     }
 
     @Override

@@ -6,16 +6,10 @@ import com.lucevent.newsup.backend.utils.Reports;
 import com.lucevent.newsup.backend.utils.Statistics;
 import com.lucevent.newsup.data.Sites;
 import com.lucevent.newsup.data.util.Date;
-import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsMap;
 import com.lucevent.newsup.data.util.Site;
 
-import java.util.Comparator;
-
 class Data {
-
-    @Deprecated
-    static Sites sites;
 
     static Sites sitesV2;
 
@@ -26,18 +20,11 @@ class Data {
     Data()
     {
         Date.setTitles(new String[]{"%d seconds ago", "%d minutes ago", "%d hours ago", "%d days ago", "%d months ago", "%d years ago",});
-        if (sites == null) {
-            sites = Sites.getDefault(true);
+        if (sitesV2 == null) {
             sitesV2 = Sites.getDefault(true);
-            for (Site s : sitesV2) {
-                s.news = new NewsMap(new Comparator<News>() {
-                    @Override
-                    public int compare(News n1, News n2)
-                    {
-                        return Long.compare(n1.server_id, n2.server_id);
-                    }
-                });
-            }
+
+            for (Site s : sitesV2)
+                s.news = new NewsMap();
 
             ObjectifyService.run(new VoidWork() {
                 public void vrun()

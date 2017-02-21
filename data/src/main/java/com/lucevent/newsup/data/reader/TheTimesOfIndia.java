@@ -1,6 +1,7 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -65,7 +66,7 @@ public class TheTimesOfIndia extends com.lucevent.newsup.data.util.NewsReader {
         article = articles.get(0);
         article.select("script,style,.forcehide,.ad1,.readalso").remove();
 
-        news.content = (img == null ? "" : img.outerHtml()) + article.outerHtml().replace("src=\"/", "src=\"http://timesofindia.indiatimes.com/");
+        news.content = NewsStylist.base("http://timesofindia.indiatimes.com/") +(img == null ? "" : img.outerHtml()) + article.outerHtml();
         news.content = news.content.replace("<br>", "<p></p>");
     }
 

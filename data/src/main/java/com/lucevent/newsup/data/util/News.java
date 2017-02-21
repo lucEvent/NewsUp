@@ -4,11 +4,7 @@ import java.io.Serializable;
 
 public class News implements Comparable<News>, Serializable {
 
-    public static final Object NEWS_STATIC_SYNCHRONIZER = new Object();
-    public static Integer SERVER_ID_ASSIGNER = 1;
-
-    public int id;
-    public long server_id;
+    public final int id;
 
     public String title, link, description, content;
 
@@ -32,7 +28,7 @@ public class News implements Comparable<News>, Serializable {
 
     public News(String title, String link, String description, long date, Tags categories)
     {
-        this(-1, title, link, description, date, categories);
+        this(link.hashCode(), title, link, description, date, categories);
     }
 
     public void setSite(Site site)
@@ -44,7 +40,7 @@ public class News implements Comparable<News>, Serializable {
     public int compareTo(News o)
     {
         int comparison = Long.compare(this.date, o.date);
-        return comparison != 0 ? -comparison : this.link.compareTo(o.link);
+        return comparison != 0 ? -comparison : Integer.compare(this.id, o.id);
     }
 
 }

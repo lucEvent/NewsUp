@@ -225,6 +225,8 @@ public class Sites extends ArrayList<Site> {
                 com.lucevent.newsup.data.section.MeristationSections.class, com.lucevent.newsup.data.reader.Meristation.class));
         res.add(new Site(1305, "Vandal", 0xffffffff, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.VIDEOGAMES,
                 com.lucevent.newsup.data.section.VandalSections.class, com.lucevent.newsup.data.reader.Vandal.class));
+        res.add(new Site(1310, "Pokemon Go", 0xff152bd5, SiteCountry.USA | SiteLanguage.VARIOUS | SiteCategory.VIDEOGAMES,
+                com.lucevent.newsup.data.section.PokemonGoSections.class, com.lucevent.newsup.data.reader.PokemonGo.class));
 
         // LifeStyle (1400)
         res.add(new Site(1400, "Vice", 0xff000000, SiteCountry.VARIOUS | SiteLanguage.VARIOUS | SiteCategory.LIFESTYLE,

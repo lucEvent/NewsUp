@@ -1,6 +1,10 @@
 package com.lucevent.newsup.debugbackend.data;
 
+import com.googlecode.objectify.Key;
+import com.lucevent.newsup.data.util.News;
+
 import java.util.Comparator;
+import java.util.List;
 import java.util.TreeSet;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
@@ -86,6 +90,12 @@ public class Database {
         ofy().save().entity(log).now();
     }
 
+    public void clearLogs()
+    {
+        List<Key<Log>> keys = ofy().load().type(Log.class).keys().list();
+        ofy().delete().keys(keys).now();
+    }
+
     public String getFullReport(TaskState taskState)
     {
         TreeSet<Log> logs = new TreeSet<>(new Comparator<Log>() {
@@ -104,6 +114,16 @@ public class Database {
             res.append(log.data);
 
         return res.toString();
+    }
+
+    public void saveErrorOn(News news)
+    {
+        Error error = new Error();
+        error.n_link = news.link;
+        error.n_content = news.content;
+        error.n_site = news.site_code;
+
+        ofy().save().entity(error).now();
     }
 
 }

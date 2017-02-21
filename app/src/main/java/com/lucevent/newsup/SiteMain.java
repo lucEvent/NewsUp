@@ -14,7 +14,7 @@ import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.io.LogoManager;
 import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.AppData;
-import com.lucevent.newsup.kernel.NewsManager;
+import com.lucevent.newsup.kernel.KernelManager;
 import com.lucevent.newsup.net.MainChangeListener;
 import com.lucevent.newsup.view.fragment.FragmentManager;
 import com.lucevent.newsup.view.fragment.NewsListFragment;
@@ -30,7 +30,7 @@ public class SiteMain extends AppCompatActivity implements MainChangeListener {
         super.onCreate(savedInstanceState);
 
         AppSettings.initialize(this, this);
-        new NewsManager(this);
+        new KernelManager(this);
 
         setContentView(R.layout.a_site_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

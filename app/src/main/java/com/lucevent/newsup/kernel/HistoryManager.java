@@ -26,7 +26,7 @@ public class HistoryManager {
             public void run()
             {
                 NewsMap news = dbmanager.readHistoryNews();
-                handler.obtainMessage(AppCode.NEWS_MAP_READ, news).sendToTarget();
+                handler.obtainMessage(AppCode.NEWS_COLLECTION, news.values()).sendToTarget();
             }
         }).start();
     }

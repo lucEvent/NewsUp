@@ -7,7 +7,7 @@ import android.util.AttributeSet;
 
 import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.R;
-import com.lucevent.newsup.kernel.NewsManager;
+import com.lucevent.newsup.kernel.KernelManager;
 
 public class CleanCachePreference extends android.preference.DialogPreference {
 
@@ -26,7 +26,7 @@ public class CleanCachePreference extends android.preference.DialogPreference {
                     @Override
                     public void onClick(DialogInterface dialog, int which)
                     {
-                        NewsManager.cleanCache();
+                        KernelManager.cleanCache();
                         AppSettings.setCleanCache();
                     }
                 });

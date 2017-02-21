@@ -19,11 +19,10 @@ import com.lucevent.newsup.Main;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
-import com.lucevent.newsup.data.util.NewsMap;
 import com.lucevent.newsup.io.BookmarksManager;
 import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.HistoryManager;
-import com.lucevent.newsup.kernel.NewsManager;
+import com.lucevent.newsup.kernel.KernelManager;
 import com.lucevent.newsup.kernel.util.HistoryNews;
 import com.lucevent.newsup.permission.StoragePermissionHandler;
 import com.lucevent.newsup.view.adapter.NewsAdapter;
@@ -32,6 +31,7 @@ import com.lucevent.newsup.view.util.NewsView;
 import com.lucevent.newsup.view.util.OnBackPressedListener;
 
 import java.lang.ref.WeakReference;
+import java.util.Collection;
 
 public class HistorialFragment extends android.app.Fragment implements View.OnClickListener,
         View.OnLongClickListener, OnBackPressedListener {
@@ -116,10 +116,10 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
     {
         HistoryNews news = (HistoryNews) v.getTag();
 
-        NewsManager.readContentOf(news);
+        KernelManager.readContentOf(news);
 
         displayingNews = true;
-        NewsManager.addToHistory(news);
+        KernelManager.addToHistory(news);
         newsView.displayNews(news.toNews(), v);
     }
 
@@ -144,8 +144,8 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
         {
             HistorialFragment service = context.get();
             switch (msg.what) {
-                case AppCode.NEWS_MAP_READ:
-                    service.adapter.addAll((NewsMap) msg.obj);
+                case AppCode.NEWS_COLLECTION:
+                    service.adapter.addAll(((Collection<News>) msg.obj));
                     break;
                 case AppCode.ERROR:
                     AppSettings.printerror("[HF] Error received by the Handler", null);

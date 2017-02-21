@@ -38,7 +38,9 @@ public class MainServlet extends HttpServlet implements ReportCallback {
 
         if (req.getParameter("fulltest") != null) {
 
-            String fullReport = new Test().doTest(this);
+            Test test = new Test();
+
+            String fullReport = test.doTest(this);
 
             if (fullReport != null) {
                 Calendar calendar = new GregorianCalendar();
@@ -46,6 +48,8 @@ public class MainServlet extends HttpServlet implements ReportCallback {
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
                 int month = calendar.get(Calendar.MONTH) + 1;
                 Net.sendReport("Test report " + day + "/" + month, fullReport);
+
+                test.clearLogs();
             }
 
         }
@@ -61,6 +65,7 @@ public class MainServlet extends HttpServlet implements ReportCallback {
         oFactory.register(Log.class);
         oFactory.register(TaskState.class);
         oFactory.register(TaskData.class);
+        oFactory.register(com.lucevent.newsup.debugbackend.data.Error.class);
         oFactory.begin();
     }
 

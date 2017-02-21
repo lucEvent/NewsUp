@@ -5,7 +5,6 @@ import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.Enclosures;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
-import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.data.util.Tags;
 
 public final class NewsReader {
@@ -17,10 +16,12 @@ public final class NewsReader {
     private static final int HASH_CATEGORIES = 1296516636;
     private static final int HASH_CONTENT = 951530617;
     private static final int HASH_ENCLOSURE = 1432853874;
-    private static final int HASH_SERVER_ID = 113870;
+
+    public static final int NUM_SERVERS = 8;
+    private static final String[] SERVER_IDS = {"newsup-1", "newsup-2", "newsup-3", "newsup-4", "newsup-5", "newsup-1", "newsup-2", "newsup-3"};
 
     private static final String query_index = "http://newsup-2406.appspot.com/app?news&site=%s%s&v=%s" + (AppSettings.DEBUG ? "&nc" : "");
-    private static final String query_content = "http://newsup-2406.appspot.com/app?content&site=%d&nid=%d";
+    private static final String query_content = "http://%s.appspot.com/app?content&site=%d&l=%s";
     private final String version;
 
     public NewsReader(String version)
@@ -48,7 +49,7 @@ public final class NewsReader {
 
         for (org.jsoup.nodes.Element item : doc.select("item")) {
             String title = "", link = "", description = "", content = "", categories = "";
-            long date = 0, sid = -1;
+            long date = 0;
             Enclosures enclosures = new Enclosures();
 
             for (org.jsoup.nodes.Element prop : item.children()) {
@@ -75,17 +76,12 @@ public final class NewsReader {
                     case HASH_ENCLOSURE:
                         enclosures.add(new Enclosure(prop.text(), "image", ""));
                         break;
-                    case HASH_SERVER_ID:
-                        sid = Long.parseLong(prop.text());
-                        break;
                 }
             }
             if (!title.isEmpty()) {
                 News news = new News(title, link, description, date, new Tags(categories));
-                news.server_id = sid;
                 news.enclosures = enclosures;
-                if (!content.isEmpty())
-                    news.content = content;
+                news.content = content;
 
                 res.add(news);
             }
@@ -103,11 +99,10 @@ public final class NewsReader {
         return null;
     }
 
-    public final News readNewsContent(Site site, News news)
+    public final News readNewsContent(int server, News news)
     {
-        String query = String.format(query_content, news.site_code, news.server_id);
-
-        org.jsoup.nodes.Document doc = getDocument(query);
+        String query = String.format(query_content, SERVER_IDS[server], news.site_code, news.link);
+        org.jsoup.nodes.Document doc = getDocument(query);      //// TODO: 17/02/2017 not necessary to parse into a doc, the string is already ok
         if (doc != null) {
             String content = doc.html();
 

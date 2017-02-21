@@ -1,5 +1,7 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.NewsStylist;
+
 import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -34,7 +36,11 @@ public class LifeHacker extends com.lucevent.newsup.data.util.NewsReader {
                 e.removeAttr(attr.getKey());
             e.attr("href", href);
         }
-        return doc.body().html().replace("src=\"//", "src=\"http://").replace("src=\"/", "src=\"http://lifehacker.com/");
+
+        Element body = doc.body();
+        NewsStylist.completeSrcHttp(body);
+
+        return NewsStylist.base("http://lifehacker.com/") + doc.body().html();
     }
 
 }

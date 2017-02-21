@@ -1,9 +1,10 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
 
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 public class Meristation extends com.lucevent.newsup.data.util.NewsReader {
 
@@ -24,14 +25,27 @@ public class Meristation extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected News onNewsRead(News news)
     {
-        Document d = Jsoup.parse(news.description);
+        Document doc = jsoupParse(news.description);
 
-        news.description = d.select(".field-field-seo-description .field-items").text();
+        news.description = doc.select(".field-field-seo-description .field-items").text();
 
-        d.select("h2").tagName("h3");
-        d.select(".field,.darwin-phpbb-comments-link").remove();
-        news.content = d.outerHtml();
+        doc.select("script,.field,.darwin-phpbb-comments-link,.galeriaContent").remove();
 
+        for (Element e : doc.select("#videoEmbed")) {
+            String src = "http://www.dailymotion.com/embed/video/" + e.parent().attr("video");
+            e.parent().html(Enclosure.iframe(src));
+        }
+        for (Element e : doc.select(".galeriaAmpliacion")) {
+            StringBuilder sb = new StringBuilder();
+            for (Element img : e.select(".gal_data li"))
+                sb.append("<img src='").append(img.attr("data-path")).append("'>");
+
+            e.html(sb.toString());
+        }
+
+        doc.select("h1,h2").tagName("h3");
+
+        news.content = doc.html();
         return news;
     }
 

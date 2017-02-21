@@ -42,7 +42,6 @@ public class ElPais extends com.lucevent.newsup.data.util.NewsReader {
                 if (article.isEmpty()) {
                     article = doc.select(".entry-content");
 
-                    article.select("h2").tagName("h3");
                     article.select("img[style],span[style]").removeAttr("style");
                     article.select("script").remove();
 
@@ -67,6 +66,8 @@ public class ElPais extends com.lucevent.newsup.data.util.NewsReader {
             article.select(".sin_enlace,script,noscript").remove();
             NewsStylist.cleanAttributes(article.select("img"), "src");
         }
+        article.select("h1,h2").tagName("h3");
+
         news.content = article.outerHtml();
     }
 

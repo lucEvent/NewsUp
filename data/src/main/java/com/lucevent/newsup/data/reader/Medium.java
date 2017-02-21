@@ -1,12 +1,21 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
 
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class Medium extends com.lucevent.newsup.data.util.NewsReader {
 
-    // Tags:      [dc:creator, description, guid, item, link, pubdate, title]
+    /**
+     * Tags:
+     * [category, content:encoded, dc:creator, description, guid, item, link, pubdate, title]
+     * [category,                  dc:creator, description, guid, item, link, pubdate, title]
+     * [category, content:encoded, dc:creator,              guid, item, link, pubdate, title]
+     */
 
     public Medium()
     {
@@ -14,36 +23,64 @@ public class Medium extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_TITLE},
                 new int[]{TAG_GUID},
                 new int[]{TAG_DESCRIPTION},
-                new int[]{},
+                new int[]{TAG_CONTENT_ENCODED},
                 new int[]{TAG_PUBDATE},
-                new int[]{},
+                new int[]{TAG_CATEGORY},
                 new int[]{});
     }
 
     @Override
-    protected String parseDescription(Element prop)
+    protected String parseContent(Element prop)
     {
-        return org.jsoup.Jsoup.parse(prop.text()).select(".medium-feed-snippet").html();
+        Document doc = jsoupParse(prop);
+        doc.select("script,[width=1],figcaption").remove();
+        doc.select("h1,h2").tagName("h3");
+        return doc.body().html();
+    }
+
+    @Override
+    protected News onNewsRead(News news)
+    {
+        if (news.description != null) {
+            Document doc = jsoupParse(news.description);
+
+            Elements img = doc.select("img");
+            if (!img.isEmpty())
+                news.enclosures.add(new Enclosure(img.first().attr("src"), "image", ""));
+
+            news.description = doc.select(".medium-feed-snippet").text();
+        }
+        return news;
     }
 
     @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
-        org.jsoup.select.Elements e = doc.select("main section .section-content");
-        e.select(".graf--title").remove();
+        Elements e = doc.select("main section .section-content");
+        e.select("script,.graf--title").remove();
 
-        for (org.jsoup.nodes.Element title : e.select("h3")) {
-            title.remove();
-            break;
+        for (Element fig : e.select("figure:has(noscript)")) {
+            fig.html(fig.select("noscript").html());
+            NewsStylist.cleanAttributes(fig);
         }
 
-        for (org.jsoup.nodes.Element fig : e.select("figure")) {
-            org.jsoup.select.Elements img = fig.select("noscript");
-            fig.html(img.html());
-        }
-        e.select("h2").tagName("h3");
+        e.select("h1,h2").tagName("h3");
+        e.select(".section-inner,.graf,.progressiveMedia-noscript").removeAttr("class");
 
         news.content = e.html();
+    }
+
+    @Override
+    protected Document getDocument(String pagelink)
+    {
+        try {
+            return org.jsoup.Jsoup.connect(pagelink)
+                    .timeout(10000)
+                    .userAgent(USER_AGENT)
+                    .get();
+        } catch (Exception ignored) {
+        }
+        return null;
     }
 
 }

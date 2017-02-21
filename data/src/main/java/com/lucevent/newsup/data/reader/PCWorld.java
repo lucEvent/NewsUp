@@ -54,7 +54,7 @@ public class PCWorld extends com.lucevent.newsup.data.util.NewsReader {
         if (!news.link.contains("pcworld")) {
 
             if (news.link.contains("greenbot.com")) {
-                article = article.select(".hero-img,.deck,[itemprop=\"reviewBody\"],[itemprop=\"articleBody\"]");
+                article = article.select(".hero-img,.deck,[itemprop='reviewBody'],[itemprop='articleBody']");
                 article.select("h2").tagName("h3");
                 news.content = article.html();
             }
@@ -64,10 +64,13 @@ public class PCWorld extends com.lucevent.newsup.data.util.NewsReader {
             article.select(".image-info,#ss-bottom-nav").remove();
             article.select("h2").tagName("h3");
 
-            news.content = article.html().replace("data-original", "src");
+            for (Element e : article.select("[data-original]"))
+                e.attr("src", e.attr("data-original")).removeAttr("data-original");
+
+            news.content = article.html();
 
         } else {
-            article.select(".breadcrumbs,[itemprop=\"name\"],.sharing-tools,#comment-bubble-idgcsmb,.article-meta,script,.department,.similar-videos,link").remove();
+            article.select(".breadcrumbs,[itemprop='name'],.sharing-tools,#comment-bubble-idgcsmb,.article-meta,script,.department,.similar-videos,link").remove();
             article.select(".pagination,.tocWrapper,.product-sidebar").remove();
             article.select("h2").tagName("h3");
 

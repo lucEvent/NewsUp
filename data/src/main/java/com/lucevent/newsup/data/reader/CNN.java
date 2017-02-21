@@ -74,22 +74,22 @@ public class CNN extends com.lucevent.newsup.data.util.NewsReader {
 
         if (doc.baseUri().contains("/videos/")) {
             Elements article = doc.select(".media__video--thumbnail,.el__video-collection__main-wrapper .media__video-description");
-            article.select("script").remove();
+            article.select("script,style").remove();
             article.select("img").wrap("<p>").removeAttr("alt");
             news.content = article.html();
             return;
         } else if (doc.baseUri().contains("/gallery/")) {
             Elements article = doc.select(".el-carousel__wrapper noscript,.el-carousel__wrapper .el__gallery_image-title");
-            article.select("script").remove();
+            article.select("script,style").remove();
             article.select("img").wrap("<p>").removeAttr("alt");
             news.content = article.html();
             return;
         } else if (doc.baseUri().contains("/money.cnn")) {
 
             Elements article = doc.select("#storytext");
-            article.select(".video-play,.cnnVidFooter,figcaption,#storyFooter,.clearfix,.storytimestamp,script").remove();
+            article.select(".video-play,.cnnVidFooter,figcaption,#storyFooter,.clearfix,.storytimestamp,script,style").remove();
 
-            article.select("h2").tagName("h3");
+            article.select("h1,h2").tagName("h3");
             for (Element link : article.select("a")) {
                 String text = link.text();
                 if (text.startsWith("Related:"))
@@ -103,7 +103,7 @@ public class CNN extends com.lucevent.newsup.data.util.NewsReader {
         Elements article = doc.select("#body-text > .l-container");
 
         article.select("script,.el__leafmedia--storyhighlights,.ad,.zn-body__read-more,.el__article--embed,.el__leafmedia--factbox,.js__video--standard,.el-editorial-source,.el__leafmedia--featured-video-collection").remove();
-        article.select(".el-editorial-note,.el__gallery--standard,.el__gallery--expandable,.el__video--expandable,.cnn-mapbox").remove();
+        article.select(".el-editorial-note,.el__gallery--standard,.el__gallery--expandable,.el__video--expandable,.cnn-mapbox,style").remove();
 
         for (Element e : article.select(".zn-body__paragraph"))
             e.tagName("p").removeAttr("class");
@@ -126,6 +126,7 @@ public class CNN extends com.lucevent.newsup.data.util.NewsReader {
                 link.remove();
             }
         }
+        article.select("h1,h2").tagName("h3");
 
         news.content = article.outerHtml();
     }

@@ -27,7 +27,7 @@ public class Verne extends com.lucevent.newsup.data.util.NewsReader {
     protected void readNewsContent(Document doc, News news)
     {
         Elements article = doc.select("[itemprop='articleBody']");
-        article.select("meta,.pie_video,.nota_pie,figcaption,script[src*='twitter'],script[src*='instagram'],.cont-art-tags").remove();
+        article.select("meta,.pie_video,.nota_pie,figcaption,script[src*='twitter'],script[src*='instagram'],.cont-art-tags,.buscador-contenedor").remove();
 
         for (Element e : article.select(".embed iframe"))
             e.attr("src", e.attr("data-src"));
@@ -55,7 +55,7 @@ public class Verne extends com.lucevent.newsup.data.util.NewsReader {
         for (Element e : article.select("[src^='//']"))
             e.attr("src", "http:" + e.attr("src"));
 
-        article.select("h2").tagName("h3");
+        article.select("h1,h2").tagName("h3");
 
         news.content = article.html();
     }

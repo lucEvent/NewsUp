@@ -1,30 +1,26 @@
 package com.lucevent.newsup.data.util;
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.TreeSet;
+import java.util.TreeMap;
 
-public class NewsMap extends TreeSet<News> {
+/**
+ * A NewsMap is a Map which sorts News by its id
+ */
+public class NewsMap extends TreeMap<Integer, News> {
 
     public NewsMap()
     {
         super();
     }
 
-    public NewsMap(Collection<? extends News> c)
+    public void add(News news)
     {
-        super(c);
+        put(news.id, news);
     }
 
-    public NewsMap(Comparator<News> comparator)
+    public void addAll(NewsArray news)
     {
-        super(comparator);
-    }
-
-    public void setCode(int code)
-    {
-        for (News N : this)
-            N.site_code = code;
+        for (News n : news)
+            put(n.id, n);
     }
 
 }

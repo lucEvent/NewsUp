@@ -5,7 +5,7 @@ import org.jsoup.select.Elements;
 
 import java.util.HashMap;
 
-public abstract class NewsReader {
+public abstract class NewsReader extends Reader {
 
     protected static final String TAG_ITEM_ITEMS = "item";
     protected static final String TAG_ITEM_ENTRY = "entry";
@@ -28,8 +28,6 @@ public abstract class NewsReader {
     protected static final int TAG_IMAGE = "image".hashCode();
     protected static final int TAG_PUBLISHED = "published".hashCode();
 
-    protected static final String USER_AGENT = "Mozilla/5.0 (Linux; Android 6.0.1; GT-I9300 Build/MOB30Z) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.91 Mobile Safari/537.36";
-
     private static final int TITLE = 0;
     private static final int LINK = 1;
     private static final int DATE = 2;
@@ -40,8 +38,6 @@ public abstract class NewsReader {
 
     private String itemTag;
     private HashMap<Integer, Integer> tagMap;
-
-    public String style = "";
 
     public NewsReader(String itemTag, int[] titleTags, int[] linkTags, int[] descriptionTags,
                       int[] contentTags, int[] dateTags, int[] categoryTags, int[] enclosureTags)
@@ -64,6 +60,7 @@ public abstract class NewsReader {
             tagMap.put(enclosure, ENCLOSURE);
     }
 
+    @Override
     public final NewsArray readRssHeader(String rss_link)
     {
         org.jsoup.nodes.Document doc = getDocument(rss_link);
@@ -123,35 +120,12 @@ public abstract class NewsReader {
         return result;
     }
 
-    protected org.jsoup.nodes.Document getDocument(String pagelink)
-    {
-        try {
-            return org.jsoup.Jsoup.connect(pagelink).userAgent(USER_AGENT).get();
-        } catch (Exception e) {
-//            System.out.println("[" + e.getClass().getSimpleName() + "] Can't read page. Trying again");
-        }
-        try {
-            return org.jsoup.Jsoup.connect(pagelink).get();
-        } catch (Exception e) {
-//            System.out.println("[" + e.getClass().getSimpleName() + "] Couldn't read page: " + pagelink);
-        }
-        return null;
-    }
-
     protected News onNewsRead(News news)
     {
         return news;
     }
 
-    public final News readNewsContent(News news)
-    {
-        org.jsoup.nodes.Document doc = getDocument(news.link);
-        if (doc != null) {
-            readNewsContent(doc, news);
-        }
-        return news;
-    }
-
+    @Override
     protected void readNewsContent(org.jsoup.nodes.Document document, News news)
     {
         //To implement by Subclasses in case they need
@@ -195,16 +169,6 @@ public abstract class NewsReader {
     protected Enclosure parseEnclosure(Element prop)
     {
         return new Enclosure(prop.attr("url"), prop.attr("type"), prop.attr("length"));
-    }
-
-    protected org.jsoup.nodes.Document jsoupParse(Element prop)
-    {
-        return org.jsoup.Jsoup.parse(prop.text());
-    }
-
-    protected org.jsoup.nodes.Document jsoupParse(String data)
-    {
-        return org.jsoup.Jsoup.parse(data);
     }
 
 }
