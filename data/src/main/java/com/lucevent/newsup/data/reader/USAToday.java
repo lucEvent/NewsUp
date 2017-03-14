@@ -88,7 +88,7 @@ public class USAToday extends com.lucevent.newsup.data.util.NewsReader {
                 }
 
             } catch (JSONException e) {
-                System.out.println("JSON exeption:" + e.getMessage());
+                //System.out.println("JSON exeption:" + e.getMessage());
             }
             news.content = sb.toString();
             return;

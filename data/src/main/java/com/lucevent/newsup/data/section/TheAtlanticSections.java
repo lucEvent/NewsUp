@@ -26,8 +26,8 @@ public class TheAtlanticSections extends Sections {
         add(new Section("News", "https://www.theatlantic.com/feed/channel/news/", 0));
         add(new Section("Press Releases", "https://www.theatlantic.com/feed/channel/press-releases/", 0));
         add(new Section("Newsletters", "https://www.theatlantic.com/feed/channel/newsletters/", 0));
-        add(new Section("Photo", "http://feeds.feedburner.com/theatlantic/infocus", 0));
-        add(new Section("Notes", "http://feeds.feedburner.com/TheAtlanticNotes", 0));
+        add(new Section("Photo", "https://www.theatlantic.com/photo/feed/app/", 0));
+        add(new Section("Notes", "https://www.theatlantic.com/feed/notes/", 0));
 
         add(new Section("Writers", null, -1));
         add(new Section("Nadine Ajaka", "https://www.theatlantic.com/feed/author/nadine-ajaka/", 1));
@@ -53,8 +53,6 @@ public class TheAtlanticSections extends Sections {
         add(new Section("Alexia Fern\u00E1ndez Campbell", "https://www.theatlantic.com/feed/author/alexia-fernandez-campbell/", 1));
         add(new Section("Clare Foran", "https://www.theatlantic.com/feed/author/clare-foran/", 1));
         add(new Section("Matt Ford", "https://www.theatlantic.com/feed/author/matt-ford/", 1));
-        add(new Section("Ron Fournier", "https://www.theatlantic.com/feed/author/ron-fournier/", 1));
-        add(new Section("Caitlin Frazier", "https://www.theatlantic.com/feed/author/caitlin-frazier/", 1));
         add(new Section("Conor Friedersdorf", "https://www.theatlantic.com/feed/author/conor-friedersdorf/", 1));
         add(new Section("Uri Friedman", "https://www.theatlantic.com/feed/author/uri-friedman/", 1));
         add(new Section("David Frum", "https://www.theatlantic.com/feed/author/david-frum/", 1));
@@ -72,14 +70,12 @@ public class TheAtlanticSections extends Sections {
         add(new Section("Spencer Kornhaber", "https://www.theatlantic.com/feed/author/spencer-kornhaber/", 1));
         add(new Section("Adrienne LaFrance", "https://www.theatlantic.com/feed/author/adrienne-lafrance/", 1));
         add(new Section("Bourree Lam", "https://www.theatlantic.com/feed/author/bourree-lam/", 1));
-        add(new Section("Juleyka Lantigua-Williams", "https://www.theatlantic.com/feed/author/juleyka-lantigua-williams/", 1));
         add(new Section("Andrew McGill", "https://www.theatlantic.com/feed/author/andrew-mcgill/", 1));
         add(new Section("Robinson Meyer", "https://www.theatlantic.com/feed/author/robinson-meyer/", 1));
         add(new Section("Vann R. Newkirk II", "https://www.theatlantic.com/feed/author/vann-newkirk/", 1));
         add(new Section("Christopher Orr", "https://www.theatlantic.com/feed/author/christopher-orr/", 1));
         add(new Section("J. Weston Phippen", "https://www.theatlantic.com/feed/author/j-weston-phippen/", 1));
         add(new Section("Joe Pinsker", "https://www.theatlantic.com/feed/author/joe-pinsker/", 1));
-        add(new Section("Sam Price-Waldman", "https://www.theatlantic.com/feed/author/sam-price-waldman/", 1));
         add(new Section("Jeremy Raff", "https://www.theatlantic.com/feed/author/jeremy-raff/", 1));
         add(new Section("Rebecca J. Rosen", "https://www.theatlantic.com/feed/author/rebecca-rosen/", 1));
         add(new Section("Alana Semuels", "https://www.theatlantic.com/feed/author/alana-semuels/", 1));
@@ -87,13 +83,11 @@ public class TheAtlanticSections extends Sections {
         add(new Section("Alan Taylor", "https://www.theatlantic.com/feed/author/alan-taylor/", 1));
         add(new Section("Matt Thompson", "https://www.theatlantic.com/feed/author/matt-thompson/", 1));
         add(new Section("Derek Thompson", "https://www.theatlantic.com/feed/author/derek-thompson/", 1));
-        add(new Section("Matt Vasilogambros", "https://www.theatlantic.com/feed/author/matt-vasilogambros/", 1));
         add(new Section("Kaveh Waddell", "https://www.theatlantic.com/feed/author/kaveh-waddell/", 1));
         add(new Section("Gillian B. White", "https://www.theatlantic.com/feed/author/gillian-b-white/", 1));
         add(new Section("Alia Wong", "https://www.theatlantic.com/feed/author/alia-wong/", 1));
 
-        add(new Section("The Wire", "http://feeds.feedburner.com/TheAtlanticWire", 0));
-        add(new Section("CityLab", "http://feeds.feedburner.com/TheAtlanticCities", 0));
+        add(new Section("CityLab", "https://www.citylab.com/feeds/posts/", 0));
 
     }
 

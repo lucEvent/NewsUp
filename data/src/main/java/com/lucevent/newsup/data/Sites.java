@@ -36,9 +36,9 @@ public class Sites extends ArrayList<Site> {
                 com.lucevent.newsup.data.section._20MinutosSections.class, com.lucevent.newsup.data.reader._20Minutos.class));
         res.add(new Site(110, "El Mundo", 0xffffffff, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.NEWS,
                 com.lucevent.newsup.data.section.ElMundoSections.class, com.lucevent.newsup.data.reader.ElMundo.class));
-        res.add(new Site(115, "As", 0xffba0202, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.SPORTS_NEWS,
+        res.add(new Site(115, "As", 0xffba0202, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.SPORT_NEWS,
                 com.lucevent.newsup.data.section.AsSections.class, com.lucevent.newsup.data.reader.As.class));
-        res.add(new Site(120, "Marca", 0xff04394a, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.SPORTS_NEWS,
+        res.add(new Site(120, "Marca", 0xff04394a, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.SPORT_NEWS,
                 com.lucevent.newsup.data.section.MarcaSections.class, com.lucevent.newsup.data.reader.Marca.class));
         res.add(new Site(125, "El Confidencial", 0xff145f85, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.NEWS,
                 com.lucevent.newsup.data.section.ElConfidencialSections.class, com.lucevent.newsup.data.reader.ElConfidencial.class));
@@ -54,6 +54,8 @@ public class Sites extends ArrayList<Site> {
                 com.lucevent.newsup.data.section.DiarioCordobaSections.class, com.lucevent.newsup.data.reader.DiarioCordoba.class));
         res.add(new Site(155, "Abc", 0xff21435c, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.NEWS,
                 com.lucevent.newsup.data.section.AbcSections.class, com.lucevent.newsup.data.reader.Abc.class));
+        res.add(new Site(160, "El Peri\u00F3dico Extremadura", 0xff357d7c, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.NEWS,
+                com.lucevent.newsup.data.section.ElPeriodicoExtremaduraSections.class, com.lucevent.newsup.data.reader.ElPeriodicoExtremadura.class));
 
         // Catalan news
         res.add(new Site(200, "El Peri\u00F3dico (Cat)", 0xff0088c7, SiteCountry.SPAIN | SiteLanguage.CATALAN | SiteCategory.NEWS,
@@ -62,9 +64,9 @@ public class Sites extends ArrayList<Site> {
                 com.lucevent.newsup.data.section.ElPeriodicoEsSections.class, com.lucevent.newsup.data.reader.ElPeriodicoEs.class));
         res.add(new Site(210, "La Vanguardia", 0xff1a4970, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.NEWS,
                 com.lucevent.newsup.data.section.LaVanguardiaSections.class, com.lucevent.newsup.data.reader.LaVanguardia.class));
-        res.add(new Site(215, "Sport", 0xffd61a1a, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.SPORTS_NEWS,
+        res.add(new Site(215, "Sport", 0xffd61a1a, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.SPORT_NEWS,
                 com.lucevent.newsup.data.section.SportSections.class, com.lucevent.newsup.data.reader.Sport.class));
-        res.add(new Site(220, "Mundo Deportivo", 0xff242424, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.SPORTS_NEWS,
+        res.add(new Site(220, "Mundo Deportivo", 0xff242424, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.SPORT_NEWS,
                 com.lucevent.newsup.data.section.MundoDeportivoSections.class, com.lucevent.newsup.data.reader.MundoDeportivo.class));
         res.add(new Site(225, "Rac\u00F3 Catal\u00E0", 0xffff6347, SiteCountry.SPAIN | SiteLanguage.CATALAN | SiteCategory.NEWS,
                 com.lucevent.newsup.data.section.RacoCatalaSections.class, com.lucevent.newsup.data.reader.RacoCatala.class));
@@ -80,6 +82,8 @@ public class Sites extends ArrayList<Site> {
                 com.lucevent.newsup.data.section.DagensNyheterSections.class, com.lucevent.newsup.data.reader.DagensNyheter.class));
         res.add(new Site(315, "Svenska Dagbladet", 0xffffffff, SiteCountry.SWEDEN | SiteLanguage.SWEDISH | SiteCategory.NEWS,
                 com.lucevent.newsup.data.section.SvenskaDagbladetSections.class, com.lucevent.newsup.data.reader.SvenskaDagbladet.class));
+        res.add(new Site(320, "G\u00F6teborgs-Posten", 0xff005a9a, SiteCountry.SWEDEN | SiteLanguage.SWEDISH | SiteCategory.NEWS,
+                com.lucevent.newsup.data.section.GoteborgsPostenSections.class, com.lucevent.newsup.data.reader.GoteborgsPosten.class));
         res.add(new Site(325, "Fria Tider", 0xffffffff, SiteCountry.SWEDEN | SiteLanguage.SWEDISH | SiteCategory.NEWS,
                 com.lucevent.newsup.data.section.FriaTiderSections.class, com.lucevent.newsup.data.reader.FriaTider.class));
         res.add(new Site(330, "Metro", 0xff007d3c, SiteCountry.SWEDEN | SiteLanguage.SWEDISH | SiteCategory.NEWS,
@@ -110,6 +114,8 @@ public class Sites extends ArrayList<Site> {
                 com.lucevent.newsup.data.section.TheGuardianSections.class, com.lucevent.newsup.data.reader.TheGuardian.class));
         res.add(new Site(525, "The Herald Scotland", 0xffffffff, SiteCountry.UK | SiteLanguage.ENGLISH | SiteCategory.NEWS,
                 com.lucevent.newsup.data.section.TheHeraldScotlandSections.class, com.lucevent.newsup.data.reader.TheHeraldScotland.class));
+        res.add(new Site(530, "The Conversation UK", 0xffe43a3c, SiteCountry.UK | SiteLanguage.ENGLISH | SiteCategory.NEWS,/*Analysis, Commentary, Research, News*/
+                com.lucevent.newsup.data.section.TheConversationUKSections.class, com.lucevent.newsup.data.reader.TheConversation.class));
 
         // American news
         res.add(new Site(600, "CNN", 0xffc20000, SiteCountry.USA | SiteLanguage.ENGLISH | SiteCategory.NEWS,
@@ -122,6 +128,10 @@ public class Sites extends ArrayList<Site> {
                 com.lucevent.newsup.data.section.TheNewYorkTimesSections.class, com.lucevent.newsup.data.reader.TheNewYorkTimes.class));
         res.add(new Site(620, "The Bolivar Commercial", 0xffffffff, SiteCountry.USA | SiteLanguage.ENGLISH | SiteCategory.NEWS,
                 com.lucevent.newsup.data.section.TheBolivarCommercialSections.class, com.lucevent.newsup.data.reader.TheBolivarCommercial.class));
+        res.add(new Site(625, "Chicago Sun-Times", 0xff333333, SiteCountry.USA | SiteLanguage.ENGLISH | SiteCategory.NEWS,
+                com.lucevent.newsup.data.section.ChicagoSunTimesSections.class, com.lucevent.newsup.data.reader.ChicagoSunTimes.class));
+        res.add(new Site(630, "The Conversation US", 0xffe43a3c, SiteCountry.USA | SiteLanguage.ENGLISH | SiteCategory.NEWS,
+                com.lucevent.newsup.data.section.TheConversationUSSections.class, com.lucevent.newsup.data.reader.TheConversation.class));
 
         //Other newspapers or news websites
         res.add(new Site(700, "The Local", 0xfff76e05, SiteCountry.VARIOUS | SiteLanguage.ENGLISH | SiteCategory.NEWS,
@@ -134,6 +144,14 @@ public class Sites extends ArrayList<Site> {
                 com.lucevent.newsup.data.section.TheTimesOfIndiaSections.class, com.lucevent.newsup.data.reader.TheTimesOfIndia.class));
         res.add(new Site(730, "La Patilla", 0xff4B8E40, SiteCountry.VENEZUELA | SiteLanguage.SPANISH | SiteCategory.NEWS,
                 com.lucevent.newsup.data.section.LaPatillaSections.class, com.lucevent.newsup.data.reader.LaPatilla.class));
+        res.add(new Site(735, "The Conversation Australia", 0xffe43a3c, SiteCountry.AUSTRALIA | SiteLanguage.ENGLISH | SiteCategory.NEWS,
+                com.lucevent.newsup.data.section.TheConversationAustraliaSections.class, com.lucevent.newsup.data.reader.TheConversation.class));
+        res.add(new Site(740, "The Conversation Africa", 0xffe43a3c, SiteCountry.VARIOUS | SiteLanguage.ENGLISH | SiteCategory.NEWS,
+                com.lucevent.newsup.data.section.TheConversationAfricaSections.class, com.lucevent.newsup.data.reader.TheConversation.class));
+        res.add(new Site(745, "The Conversation France", 0xffe43a3c, SiteCountry.FRANCE | SiteLanguage.FRENCH | SiteCategory.NEWS,
+                com.lucevent.newsup.data.section.TheConversationFranceSections.class, com.lucevent.newsup.data.reader.TheConversation.class));
+        res.add(new Site(750, "El Imparcial", 0xff00adef, SiteCountry.MEXICO | SiteLanguage.SPANISH | SiteCategory.NEWS,
+                com.lucevent.newsup.data.section.ElImparcialSections.class, com.lucevent.newsup.data.reader.ElImparcial.class));
 
         // Technology sites
         res.add(new Site(800, "El Androide Libre", 0xffa3c23e, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.TECHNOLOGY,
@@ -172,6 +190,8 @@ public class Sites extends ArrayList<Site> {
                 com.lucevent.newsup.data.section.TopesDeGamaSections.class, com.lucevent.newsup.data.reader.TopesDeGama.class));
         res.add(new Site(885, "The Geek Hammer", 0xff00A3EB, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.TECHNOLOGY,
                 com.lucevent.newsup.data.section.TheGeekHammerSections.class, com.lucevent.newsup.data.reader.TheGeekHammer.class));
+        res.add(new Site(890, "Omicrono", 0xff323232, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.TECHNOLOGY,
+                com.lucevent.newsup.data.section.OmicronoSections.class, com.lucevent.newsup.data.reader.Omicrono.class));
 
         // Blog sites
         res.add(new Site(900, "Medium", 0xffffffff, SiteCountry.USA | SiteLanguage.ENGLISH | SiteCategory.BLOG,
@@ -213,12 +233,12 @@ public class Sites extends ArrayList<Site> {
                 com.lucevent.newsup.data.section.SkyAndTelescopeSections.class, com.lucevent.newsup.data.reader.SkyAndTelescope.class));
         res.add(new Site(1050, "Space News", 0xffffffff, SiteCountry.USA | SiteLanguage.ENGLISH | SiteCategory.ASTRONOMY,
                 com.lucevent.newsup.data.section.SpaceNewsSections.class, com.lucevent.newsup.data.reader.SpaceNews.class));
-        //       res.add(new Site(1210, "Space.com", 0xff000000, SiteCountry.USA | SiteLanguage.ENGLISH | SiteCategory.ASTRONOMY,
-        //               com.lucevent.newsup.data.section.SpaceSections.class, com.lucevent.newsup.data.reader.Space.class));
         res.add(new Site(1215, "Cosmo Noticias", 0xff181818, SiteCountry.CHILE | SiteLanguage.SPANISH | SiteCategory.ASTRONOMY,
                 com.lucevent.newsup.data.section.CosmoNoticiasSections.class, com.lucevent.newsup.data.reader.CosmoNoticias.class));
         res.add(new Site(1220, "Universe Today", 0xff6963ac, SiteCountry.CANADA | SiteLanguage.ENGLISH | SiteCategory.ASTRONOMY,
                 com.lucevent.newsup.data.section.UniverseTodaySections.class, com.lucevent.newsup.data.reader.UniverseToday.class));
+        res.add(new Site(1225, "Astronomy Now", 0xffdd3333, SiteCountry.UK | SiteLanguage.ENGLISH | SiteCategory.ASTRONOMY,
+                com.lucevent.newsup.data.section.AstronomyNowSections.class, com.lucevent.newsup.data.reader.AstronomyNow.class));
 
         // Videogames (1300)
         res.add(new Site(1300, "Meristation", 0xffff6a00, SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.VIDEOGAMES,
@@ -242,24 +262,28 @@ public class Sites extends ArrayList<Site> {
         res.add(new Site(1600, "Teknikens V\u00E4rld", 0xffEE1D23, SiteCountry.SWEDEN | SiteLanguage.SWEDISH | SiteCategory.MOTOR,
                 com.lucevent.newsup.data.section.TeknikensVarldSections.class, com.lucevent.newsup.data.reader.TeknikensVarld.class));
 
+        // Entertainment (1700)
+        res.add(new Site(1700, "Coming Soon", 0xff000000, SiteCountry.USA | SiteLanguage.ENGLISH | SiteCategory.ENTERTAINMENT,
+                com.lucevent.newsup.data.section.ComingSoonSections.class, com.lucevent.newsup.data.reader.ComingSoon.class));
+        res.add(new Site(1705, "The Chive", 0xff000000, SiteCountry.USA | SiteLanguage.ENGLISH | SiteCategory.ENTERTAINMENT,
+                com.lucevent.newsup.data.section.TheChiveSections.class, com.lucevent.newsup.data.reader.TheChive.class));
+
+        // Fitness (1800)
+        res.add(new Site(1800, "Full M\u00FAsculo", 0xff000000, SiteCountry.VARIOUS | SiteLanguage.SPANISH | SiteCategory.FITNESS,
+                com.lucevent.newsup.data.section.FullMusculoSections.class, com.lucevent.newsup.data.reader.FullMusculo.class));
+
+
         //Coming soon
 /*
-        res.add(new Site(320, "Goteborgs Posten", 0xff005c9e, SiteCountry.SWEDEN | SiteLanguage.SWEDISH | SiteCategory.NEWS, com.lucevent.newsup.data.section.GoteborgsPostenSections.class, com.lucevent.newsup.data.reader.GoteborgsPosten.class));
+        res.add(new Site(1210, "Space.com", 0xff000000, SiteCountry.USA | SiteLanguage.ENGLISH | SiteCategory.ASTRONOMY, com.lucevent.newsup.data.section.SpaceSections.class, com.lucevent.newsup.data.reader.Space.class));
         res.add(new Site(XXXX2, "National Geographic", 0xffXXXXX, SiteCountry. | SiteLanguage. | SiteCategory., com.lucevent.newsup.data.section.NationalGeographicSections.class, com.lucevent.newsup.data.reader.NationalGeographic.class));
         res.add(new Site(XXXX3, "Cuore", 0xffXXXXX, SiteCountry. | SiteLanguage. | SiteCategory., com.lucevent.newsup.data.section.CuoreSections.class, com.lucevent.newsup.data.reader.Cuore.class));
         res.add(new Site(XXXX4, "Interviu", 0xffXXXXX, SiteCountry. | SiteLanguage. | SiteCategory., com.lucevent.newsup.data.section.InterviuSections.class, com.lucevent.newsup.data.reader.Interviu.class));
         res.add(new Site(XXXX9, "Motherboard", 0xffXXXXX, SiteCountry. | SiteLanguage. | SiteCategory., com.lucevent.newsup.data.section.MotherboardSections.class, com.lucevent.newsup.data.reader.Motherboard.class));
-        res.add(new Site(XXXX0, "Vice News", 0xffXXXXX, SiteCountry. | SiteLanguage. | SiteCategory., com.lucevent.newsup.data.section.ViceNewsSections.class, com.lucevent.newsup.data.reader.ViceNews.class));
         res.add(new Site(XXXX1, "Vogue España", 0xffXXXXX, SiteCountry. | SiteLanguage. | SiteCategory., com.lucevent.newsup.data.section.VogueESSections.class, com.lucevent.newsup.data.reader.VogueES.class));
         res.add(new Site(XXXX2, "IGN España", 0xffXXXXX, SiteCountry. | SiteLanguage. | SiteCategory., com.lucevent.newsup.data.section.IGNESSections.class, com.lucevent.newsup.data.reader.IGNES.class));
-        res.add(new Site(XXXX6, "Chicago Sun-Times", 0xffXXXXX, SiteCountry. | SiteLanguage. | SiteCategory., com.lucevent.newsup.data.section.ChicagoSunTimesSections.class, com.lucevent.newsup.data.reader.ChicagoSunTimes.class));
         res.add(new Site(XXXX7, "Wwwhat's New", 0xffXXXXX, SiteCountry. | SiteLanguage. | SiteCategory., com.lucevent.newsup.data.section.WwwhatsNewSections.class, com.lucevent.newsup.data.reader.WwwhatsNew.class));
-        res.add(new Site(XXXX8, "ElImparcial", 0xffXXXXX, SiteCountry. | SiteLanguage. | SiteCategory., com.lucevent.newsup.data.section.ElImparcialSections.class, com.lucevent.newsup.data.reader.ElImparcial.class));
-        res.add(new Site(XXXX9, "Astronomy Now", 0xffXXXXX, SiteCountry. | SiteLanguage. | SiteCategory., com.lucevent.newsup.data.section.AstronomyNowSections.class, com.lucevent.newsup.data.reader.AstronomyNow.class));
-        res.add(new Site(XXXX1, "Cinco Días", 0xffXXXXX, SiteCountry. | SiteLanguage. | SiteCategory., com.lucevent.newsup.data.section.CincoDiasSections.class, com.lucevent.newsup.data.reader.CincoDias.class));
-        res.add(new Site(XXXX2, "theCHIVE", 0xffXXXXX, SiteCountry. | SiteLanguage. | SiteCategory., com.lucevent.newsup.data.section.theCHIVESections.class, com.lucevent.newsup.data.reader.theCHIVE.class));
-        res.add(new Site(XXXX4, "ComingSoon", 0xffXXXXX, SiteCountry. | SiteLanguage. | SiteCategory., com.lucevent.newsup.data.section.ComingSoonSections.class, com.lucevent.newsup.data.reader.ComingSoon.class));
-*/
+   */
         return res;
     }
 

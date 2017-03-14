@@ -122,6 +122,9 @@
         <item>Videospel</item>
         <item>Livsstil</item>
         <item>Bilnyheter</item>
+        <item>Underhållning</item>
+        <item>Fitness</item>
+        <item>Musik</item>
     </string-array>
     <integer-array name="site_language_weights">
         <item>5</item>

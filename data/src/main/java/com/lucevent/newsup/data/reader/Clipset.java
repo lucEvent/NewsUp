@@ -1,13 +1,15 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class Clipset extends com.lucevent.newsup.data.util.NewsReader {
 
-    private static final String SITE_STYLE = "<style>.wp-caption-text{font-size:12px;padding:2px 10px;display:block;}</style>";
+    private static final String SITE_STYLE = "<style>figcaption,.wp-caption-text{font-size:12px;padding:2px 10px;display:block;}</style>";
 
     //tags: [category, content:encoded, dc:creator, description, guid, item, link, pubdate, title]
 
@@ -17,7 +19,7 @@ public class Clipset extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_TITLE},
                 new int[]{TAG_LINK},
                 new int[]{TAG_DESCRIPTION},
-                new int[]{TAG_CONTENT_ENCODED},
+                new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{});
@@ -32,23 +34,16 @@ public class Clipset extends com.lucevent.newsup.data.util.NewsReader {
     }
 
     @Override
-    protected String parseContent(Element prop)
+    protected void readNewsContent(Document doc, News news)
     {
-        Document doc = org.jsoup.Jsoup.parse(prop.text());
-
-        for (Element e : doc.select("map")) {
-            e.parent().remove();
-        }
+        Elements article = doc.select("article").select(".video-destacado,.imagen-destacada,.subtitular,.contenido-post");
         doc.select(".wp-embedded-content,script").remove();
 
-        doc.select("h2").tagName("h3");
-        doc.select("h5").tagName("blockquote");
-        doc.select("[srcset]").removeAttr("srcset");
         doc.select("[style]").removeAttr("style");
 
         NewsStylist.cleanAttributes(doc.select("img"), "src");
 
-        return doc.body().html();
+        news.content = article.outerHtml();
     }
 
 }

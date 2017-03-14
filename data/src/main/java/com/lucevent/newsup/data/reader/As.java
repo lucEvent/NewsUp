@@ -84,7 +84,7 @@ public class As extends com.lucevent.newsup.data.util.NewsReader {
         if (!article.isEmpty()) {
 
             article.select("script,section,.noticias-rel,.cont-art-tags").remove();
-            article.select("h2").tagName("h3");
+            article.select("h1,h2").tagName("h3");
             article.select(".escudo-equipo img").attr("style", "width:10%");
 
             news.content = getEnclosures(news) + article.outerHtml();
@@ -128,7 +128,7 @@ public class As extends com.lucevent.newsup.data.util.NewsReader {
                     e.attr("src", "http:" + e.attr("src"));
 
                 article.select("[class]").removeAttr("class");
-                article.select("h2").tagName("h3");
+                article.select("h1,h2").tagName("h3");
 
                 news.content = getEnclosures(news) + article.html();
             }

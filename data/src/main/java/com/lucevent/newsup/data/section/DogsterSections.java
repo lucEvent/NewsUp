@@ -10,8 +10,6 @@ public class DogsterSections extends Sections {
         super();
 
         add(new Section("News", "http://www.dogster.com/feed/", 0));
-        add(new Section("The Scoop", "http://www.dogster.com/the-scoop/feed/", 0));
-        add(new Section("Lifestyle", "http://www.dogster.com/lifestyle/feed/", 0));
 
     }
 

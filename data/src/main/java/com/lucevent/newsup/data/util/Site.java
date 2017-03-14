@@ -7,6 +7,7 @@ public class Site {
     public final String name;
 
     public final int color;
+    private final double colorDarkness;
 
     public final int info;
 
@@ -18,11 +19,6 @@ public class Site {
     private Class sectionsClass;
     private Sections sections;
 
-    /**
-     *
-     */
-    private final boolean isDarkColor;
-
     public Site(int code, String name, int color, int info, Class sectionsClass, Class readerClass)
     {
         this.code = code;
@@ -32,7 +28,7 @@ public class Site {
         this.sectionsClass = sectionsClass;
         this.readerClass = readerClass;
 
-        isDarkColor = (((color >> 16) & 0xFF) < 0x7F) || (((color >> 8) & 0xFF) < 0x7F) || ((color & 0xFF) < 0x7F);
+        colorDarkness = 1 - (0.299 * ((color >> 16) & 0xFF) + 0.587 * ((color >> 8) & 0xFF) + 0.114 * (color & 0xFF)) / 255;
     }
 
     public int getCountry()
@@ -79,9 +75,14 @@ public class Site {
         getReader().readContent(news);
     }
 
-    public boolean hasDarkColor()
+    public double getColorDarkness()
     {
-        return isDarkColor;
+        return colorDarkness;
+    }
+
+    public boolean needsBrightColors()
+    {
+        return colorDarkness >= 0.3;
     }
 
     public String getStyle()

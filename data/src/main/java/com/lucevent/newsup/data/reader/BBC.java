@@ -86,7 +86,7 @@ public class BBC extends com.lucevent.newsup.data.util.NewsReader {
 
                             article.select("[class]").removeAttr("class");
                             article.select("[data-reactid]").removeAttr("data-reactid");
-                            article.select("h2").tagName("h3");
+                            article.select("h1,h2").tagName("h3");
 
                             news.content = article.html();
                             return;
@@ -147,7 +147,7 @@ public class BBC extends com.lucevent.newsup.data.util.NewsReader {
 
         article.select(".mpu-ad,.media-with-caption,.media-player-wrapper,figcaption,style,script,ul:has(a)").remove();
 
-        article.select("h2").tagName("h3");
+        article.select("h1,h2").tagName("h3");
 
         news.content = article.outerHtml();
     }

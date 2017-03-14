@@ -36,13 +36,11 @@ public class FriaTider extends com.lucevent.newsup.data.util.NewsReader {
     {
         try {
             return org.jsoup.Jsoup.connect(pagelink).timeout(10000).userAgent(USER_AGENT).get();
-        } catch (Exception e) {
-            System.out.println("[" + e.getClass().getSimpleName() + "] Can't read page. Trying again");
+        } catch (Exception ignored) {
         }
         try {
             return org.jsoup.Jsoup.connect(pagelink).timeout(10000).get();
-        } catch (Exception e) {
-            System.out.println("[" + e.getClass().getSimpleName() + "] Couldn't read page: " + pagelink);
+        } catch (Exception ignored) {
         }
         return null;
     }

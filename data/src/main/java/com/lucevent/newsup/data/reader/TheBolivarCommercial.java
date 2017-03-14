@@ -2,6 +2,7 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -21,6 +22,8 @@ public class TheBolivarCommercial extends com.lucevent.newsup.data.util.NewsRead
                 new int[]{TAG_UPDATED},
                 new int[]{TAG_CATEGORY},
                 new int[]{});
+
+        this.style = NewsStylist.base("http://www.bolivarcommercial.com/");
     }
 
     @Override
@@ -51,7 +54,7 @@ public class TheBolivarCommercial extends com.lucevent.newsup.data.util.NewsRead
         article.select(".wf_caption span").remove();
         article.select("[style]").removeAttr("style");
 
-        news.content = "<base href='http://www.bolivarcommercial.com'>" + article.outerHtml();
+        news.content = article.outerHtml();
         return news;
     }
 

@@ -24,7 +24,7 @@ public class TheLocal extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{},
                 new int[]{TAG_ENCLOSURE});
 
-        this.style = SITE_STYLE;
+        this.style = NewsStylist.base("http://www.thelocal.com/") + SITE_STYLE;
     }
 
     @Override
@@ -59,7 +59,7 @@ public class TheLocal extends com.lucevent.newsup.data.util.NewsReader {
             }
         }
 
-        news.content = "<base href='http://www.thelocal.com/'>" + article.outerHtml();
+        news.content = article.outerHtml();
     }
 
 }

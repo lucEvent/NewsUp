@@ -16,12 +16,10 @@ import android.view.ViewGroup;
 import com.lucevent.newsup.Main;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.io.BookmarksManager;
 import com.lucevent.newsup.kernel.KernelManager;
 import com.lucevent.newsup.permission.StoragePermissionHandler;
 import com.lucevent.newsup.view.adapter.NewsAdapter;
-import com.lucevent.newsup.view.util.ContentLoader;
 import com.lucevent.newsup.view.util.NewsView;
 import com.lucevent.newsup.view.util.OnBackPressedListener;
 
@@ -43,7 +41,7 @@ public class BookmarksFragment extends android.app.Fragment implements View.OnCl
 
         permissionHandler = new StoragePermissionHandler(getActivity());
 
-        adapter = new NewsAdapter(new NewsArray(), this, this, onBookmarkClick);
+        adapter = new NewsAdapter(this, this, onBookmarkClick);
         adapter.showSiteLogo(true);
     }
 
@@ -69,13 +67,6 @@ public class BookmarksFragment extends android.app.Fragment implements View.OnCl
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(false);
-        recyclerView.addOnScrollListener(new ContentLoader(layoutManager) {
-            @Override
-            public void onLoadMore()
-            {
-                adapter.loadMoreData();
-            }
-        });
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 

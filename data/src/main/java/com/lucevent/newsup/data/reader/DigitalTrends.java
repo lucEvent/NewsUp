@@ -58,6 +58,10 @@ public class DigitalTrends extends com.lucevent.newsup.data.util.NewsReader {
             if (src.endsWith("button-150x39.png") || src.endsWith("-smallest-325x325.jpg"))
                 e.parent().remove();
         }
+        for (Element e : article.select(".m-quick-take")) {
+            e.select(".title").tagName("b");
+            e.tagName("blockquote");
+        }
 
         news.content = NewsStylist.cleanComments(header.outerHtml() + article.outerHtml());
     }

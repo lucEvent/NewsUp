@@ -20,7 +20,7 @@ public class DagensNyheterSections extends Sections {
         add(new Section("Ekonomi", "http://www.dn.se/ekonomi/rss/", 0));
         add(new Section("Politik", "http://www.dn.se/nyheter/politik/rss", 0));
         add(new Section("Vetenskap", "http://www.dn.se/nyheter/vetenskap/rss", 0));
-        add(new Section("Motor", "http://www.dn.se/motor/rss", 0));
+        add(new Section("Motor", "http://www.dn.se/ekonomi/motor/rss", 0));
 
         add(new Section("Sport", "http://www.dn.se/sport/rss/", 0));
         add(new Section("Ishockey", "http://www.dn.se/sport/ishockey/rss", 1));

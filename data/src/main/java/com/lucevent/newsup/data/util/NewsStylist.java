@@ -64,6 +64,11 @@ public final class NewsStylist {
         return "<video controls src='" + src + "'></video>";
     }
 
+    public static String img(String src)
+    {
+        return "<img src='" + src + "'>";
+    }
+
     public static String base(String baseUrl)
     {
         return "<base href='" + baseUrl + "'>";
@@ -80,7 +85,7 @@ public final class NewsStylist {
     {
         try {
             int istart = data.indexOf(start);
-            int iend = data.indexOf(end, istart) + (inclusive ? end.length() : 0);
+            int iend = data.indexOf(end, istart + start.length()) + (inclusive ? end.length() : 0);
             return data.substring(istart + (inclusive ? 0 : start.length()), iend);
         } catch (Exception ignored) {
             ignored.printStackTrace();

@@ -5,7 +5,7 @@ public class SiteCategory {
     public static final int shift = 16;
 
     public static final int NEWS = 1 << shift;
-    public static final int SPORTS_NEWS = 2 << shift;
+    public static final int SPORT_NEWS = 2 << shift;
     public static final int TECHNOLOGY = 3 << shift;
     public static final int BLOG = 4 << shift;
     public static final int MAGAZINE = 5 << shift;
@@ -14,5 +14,8 @@ public class SiteCategory {
     public static final int VIDEOGAMES = 8 << shift;
     public static final int LIFESTYLE = 9 << shift;
     public static final int MOTOR = 10 << shift;
+    public static final int ENTERTAINMENT = 11 << shift;
+    public static final int FITNESS = 12 << shift;
+    public static final int MUSIC = 13 << shift;
 
 }

@@ -1,15 +1,18 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosure;
+import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
+
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class Swedroid extends com.lucevent.newsup.data.util.NewsReader {
 
-    /**
-     * Tags
-     * [category, content:encoded, dc:creator, description, guid, item, link, pubdate, title]
-     * [category, content:encoded, dc:creator, description, guid, item, link, pubdate, title, enclosure]
-     */
+    private static final String SITE_STYLE = "<style>.wp-caption-text{font-size:12px;padding:2px 10px;display:block;}tr,th,td{padding:3px 10px;}</style>";
+
+    // Tags [category, content:encoded, dc:creator, description, guid, item, link, post-id, pubdate, title]
 
     public Swedroid()
     {
@@ -20,31 +23,45 @@ public class Swedroid extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_CONTENT_ENCODED},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{TAG_ENCLOSURE});
-    }
+                new int[]{});
 
-    @Override
-    protected String parseDescription(Element prop)
-    {
-        String description = org.jsoup.Jsoup.parse(prop.text()).text();
-
-        int s = description.indexOf("[…]");
-        if (s != -1) {
-            description = description.substring(s);
-        }
-        return description;
+        this.style = SITE_STYLE;
     }
 
     @Override
     protected String parseContent(Element prop)
     {
-        String content = prop.text();
-        if (content.length() > 0) {
-            Document doc = jsoupParse(content);
-            doc.select("[style]").removeAttr("style");
-            content = doc.body().html();
+        Document doc = jsoupParse(prop);
+        doc.select("script,#review-statistics").remove();
+
+        doc.select("[style]").removeAttr("style");
+
+        for (Element img : doc.select("img")) {
+            String remove = "-" + img.attr("width") + "x" + img.attr("height");
+            String src = img.attr("src").replace(remove, "");
+            NewsStylist.cleanAttributes(img);
+            img.attr("src", src);
         }
-        return content;
+
+        return doc.body().html();
+    }
+
+    @Override
+    protected News onNewsRead(News news)
+    {
+        Document description = jsoupParse(news.description);
+        Elements imgs = description.select("img");
+        if (!imgs.isEmpty()) {
+            Element img = imgs.first();
+            news.enclosures.add(new Enclosure(img.attr("src"), "image", ""));
+        }
+
+        news.description = description.text();
+        int i = news.description.indexOf("[");
+        if (i != -1)
+            news.description = news.description.substring(0, i) + "...";
+
+        return news;
     }
 
 }

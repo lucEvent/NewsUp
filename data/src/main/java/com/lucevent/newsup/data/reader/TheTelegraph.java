@@ -28,6 +28,8 @@ public class TheTelegraph extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_ENCLOSURE});
+
+        this.style = NewsStylist.base("http://www.telegraph.co.uk/");
     }
 
     @Override
@@ -96,10 +98,10 @@ public class TheTelegraph extends com.lucevent.newsup.data.util.NewsReader {
                     }
 
                 } catch (JSONException e) {
-                    System.out.println("JSON exception:" + e.getMessage());
+                    //System.out.println("JSON exception:" + e.getMessage());
                 }
 
-                news.content = "<base href='http://www.telegraph.co.uk/'>" + sb.toString();
+                news.content = sb.toString();
                 return;
             }
         } else {
@@ -139,7 +141,7 @@ public class TheTelegraph extends com.lucevent.newsup.data.util.NewsReader {
         }
         article.select("script").remove();
 
-        news.content = "<base href='http://www.telegraph.co.uk/'>" + article.outerHtml();
+        news.content = article.outerHtml();
     }
 
 }

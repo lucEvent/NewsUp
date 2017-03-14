@@ -9,7 +9,7 @@ public class Xataka extends com.lucevent.newsup.data.util.NewsReader {
             ":uppercase;font-size:16px;line-height:28.8px;margin-top:0;margin-bottom:24px;border-top:1px solid #e9e9e9;border-bottom:1px solid #e9e9e9;padding:20px 0;}ta" +
             "ble>div:first-child{min-width:300px;}table{display:block;min-width:100%;width:auto !important;overflow:scroll;border-collapse:collapse;background:#fff;font-" +
             "size:14px;line-height:20px;border-top:1px solid #e9e9e9;}table caption{-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-smoothing:a" +
-            "ntialiased;text-rendering:optimizeLegibility;font-family:Tofino,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:400;font-size:16px;line-height:2" +
+            "ntialiased;text-rendering:optimizeLegibility;font-family:Roboto,sans-serif;font-weight:400;font-size:16px;line-height:2" +
             "4px;font-weight:bold;padding:24px 9px 12px;}table th,table td{padding:12px 9px;}table th p,table td p{margin:0;}table thead{position:-webkit-sticky;position" +
             ":-moz-sticky;position:-ms-sticky;position:-o-sticky;position:sticky;top:0px;}table th{font-size:13px;line-height:16px;text-transform:uppercase;font-weight:n" +
             "ormal;}table thead th{vertical-align:bottom;border-bottom:2px solid #080b0f;background:#fff;}table td,table tbody th{border-bottom:1px solid #e9e9e9;}table:" +

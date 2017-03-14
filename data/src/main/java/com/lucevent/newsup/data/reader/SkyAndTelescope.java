@@ -1,5 +1,7 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.NewsStylist;
+
 import org.jsoup.nodes.Element;
 
 public class SkyAndTelescope extends com.lucevent.newsup.data.util.NewsReader {
@@ -19,6 +21,8 @@ public class SkyAndTelescope extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_ENCLOSURE});
+
+        this.style = NewsStylist.base("http://www.skyandtelescope.com/");
     }
 
     @Override
@@ -37,7 +41,7 @@ public class SkyAndTelescope extends com.lucevent.newsup.data.util.NewsReader {
         org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(prop.text());
         doc.select("[style]").removeAttr("style");
         doc.select("h2").tagName("h3");
-        return "<base href='http://www.skyandtelescope.com/'>" + doc.select("body").html();
+        return doc.select("body").html();
     }
 
 }

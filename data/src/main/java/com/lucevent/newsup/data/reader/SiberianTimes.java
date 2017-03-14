@@ -20,13 +20,15 @@ public class SiberianTimes extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_ENCLOSURE});
+
+        this.style = NewsStylist.base("http://siberiantimes.com/");
     }
 
     @Override
     protected void readNewsContent(Document doc, News news)
     {
         Elements article = doc.select(".topListItems");
-        news.content = NewsStylist.base("http://siberiantimes.com/") + article.html();
+        news.content = article.html();
     }
 
 }

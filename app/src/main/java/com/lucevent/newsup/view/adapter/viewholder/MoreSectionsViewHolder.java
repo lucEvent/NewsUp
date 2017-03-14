@@ -1,4 +1,4 @@
-package com.lucevent.newsup.view.adapter;
+package com.lucevent.newsup.view.adapter.viewholder;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

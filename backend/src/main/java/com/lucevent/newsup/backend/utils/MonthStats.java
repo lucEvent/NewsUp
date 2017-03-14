@@ -2,6 +2,7 @@ package com.lucevent.newsup.backend.utils;
 
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Unindex;
 
 import java.util.Calendar;
@@ -15,6 +16,7 @@ public class MonthStats {
     private static final String[] MONTH_TO_STRING = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
     @Id
+    @Index
     public String month;
 
     @Unindex

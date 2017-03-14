@@ -20,6 +20,8 @@ public class HelsinkiSanomat extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_ENCLOSURE});
+
+        this.style = NewsStylist.base("http://www.hs.fi/");
     }
 
     @Override
@@ -47,7 +49,7 @@ public class HelsinkiSanomat extends com.lucevent.newsup.data.util.NewsReader {
         NewsStylist.completeSrcHttp(image);
         NewsStylist.completeSrcHttp(article);
 
-        news.content = NewsStylist.base("http://www.hs.fi/") + image.outerHtml() + "<p>" + article.outerHtml().replace("<br>", "</p><p>") + "</p>";
+        news.content = image.outerHtml() + "<p>" + article.outerHtml().replace("<br>", "</p><p>") + "</p>";
     }
 
 }

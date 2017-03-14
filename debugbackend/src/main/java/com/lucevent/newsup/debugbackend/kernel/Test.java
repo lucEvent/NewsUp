@@ -46,6 +46,7 @@ public class Test {
 
                     NewsArray news = site.readNewsHeaders(new int[]{data.currentEvaluatingSection});
                     for (News N : news) {
+                        N.site_code = site.code;
                         if (N.content == null || N.content.isEmpty()) {
 //                            try {
 //                                Thread.sleep(500);
@@ -79,7 +80,7 @@ public class Test {
             String partialReport = sb.toString();
             db.saveLog(taskState, data.currentEvaluatingSite, partialReport);
 
-            if ((data.siteNumNews / 2) > data.siteTestResults[0] || data.siteNumNews == 0)
+            if (data.siteNumNews == 0 || (data.siteNumNews / 2) < data.siteTestResults[0])
                 urgentCallback.report(partialReport);
 
             data.totalNumNews += data.siteNumNews;
@@ -139,13 +140,13 @@ public class Test {
         @Override
         public String description()
         {
-            return "tienen contenido";
+            return "estan vac\u00EDas";
         }
 
         @Override
         public boolean evaluate(News news, Database db)
         {
-            return news.content != null && !news.content.isEmpty();
+            return news.content == null || news.content.isEmpty();
         }
     };
 
@@ -173,7 +174,7 @@ public class Test {
         @Override
         public boolean evaluate(News news, Database db)
         {
-            return (news.content.contains("src=\"/") || news.content.contains("href=\"/")) && !news.content.contains("<base ");
+            return news.content.contains("src=\"/") || news.content.contains("href=\"/");
         }
     };
 

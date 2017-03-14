@@ -1,5 +1,7 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.NewsStylist;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -33,9 +35,12 @@ public class VilaWeb extends com.lucevent.newsup.data.util.NewsReader {
 
         doc.select("[style]").removeAttr("style");
         doc.select("[width]").removeAttr("width");
-        doc.select("h2").tagName("h3");
+        doc.select("h1,h2").tagName("h3");
 
-        return doc.html().replace("src=\"/", "src=\"http:/");
+        Element article = doc.body();
+        NewsStylist.completeSrcHttp(article);
+
+        return article.html();
     }
 
 }

@@ -26,6 +26,8 @@ public class TheTimesOfIndia extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_MEDIA_CONTENT});
+
+        this.style = NewsStylist.base("http://timesofindia.indiatimes.com/");
     }
 
     @Override
@@ -66,7 +68,7 @@ public class TheTimesOfIndia extends com.lucevent.newsup.data.util.NewsReader {
         article = articles.get(0);
         article.select("script,style,.forcehide,.ad1,.readalso").remove();
 
-        news.content = NewsStylist.base("http://timesofindia.indiatimes.com/") +(img == null ? "" : img.outerHtml()) + article.outerHtml();
+        news.content = (img == null ? "" : img.outerHtml()) + article.outerHtml();
         news.content = news.content.replace("<br>", "<p></p>");
     }
 

@@ -121,7 +121,7 @@
     </string-array>
     <string-array name="site_categories">
         <item>News</item>
-        <item>Sports News</item>
+        <item>Sport News</item>
         <item>Technology</item>
         <item>Blogs</item>
         <item>Magazines</item>
@@ -130,6 +130,9 @@
         <item>Videogames</item>
         <item>Lifestyle</item>
         <item>Motor</item>
+        <item>Entertainment</item>
+        <item>Fitness</item>
+        <item>Music</item>
     </string-array>
     <integer-array name="site_language_weights">
         <item>10</item>

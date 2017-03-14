@@ -122,6 +122,9 @@
         <item>Videojocs</item>
         <item>Estil de vida</item>
         <item>Motor</item>
+        <item>Entreteniment</item>
+        <item>Fitness</item>
+        <item>Música</item>
     </string-array>
     <integer-array name="site_language_weights">
         <item>10</item>

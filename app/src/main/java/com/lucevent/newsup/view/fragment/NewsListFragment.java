@@ -43,7 +43,6 @@ import com.lucevent.newsup.permission.StoragePermissionHandler;
 import com.lucevent.newsup.services.StatisticsService;
 import com.lucevent.newsup.view.adapter.NewsAdapter;
 import com.lucevent.newsup.view.dialog.SectionsDialog;
-import com.lucevent.newsup.view.util.ContentLoader;
 import com.lucevent.newsup.view.util.NewsView;
 import com.lucevent.newsup.view.util.OnBackPressedListener;
 import com.lucevent.newsup.view.util.OnMoreSectionsClickListener;
@@ -145,7 +144,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
 
     public void onLoadImagesPreferenceChanged()
     {
-        adapter.loadImages(AppSettings.loadImages());
+        adapter.setLoadImages(AppSettings.loadImages());
     }
 
     private KernelManager dataManager;
@@ -187,8 +186,8 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         if (adapter == null) {
             mainView = inflater.inflate(R.layout.f_news_list, container, false);
 
-            adapter = new NewsAdapter(new NewsArray(), this, this, onBookmarkClick);
-            adapter.loadImages(AppSettings.loadImages());
+            adapter = new NewsAdapter(this, this, onBookmarkClick);
+            adapter.setLoadImages(AppSettings.loadImages());
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             layoutManager.setAutoMeasureEnabled(true);
@@ -196,13 +195,6 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
             recyclerView = (RecyclerView) mainView.findViewById(R.id.list);
             recyclerView.setNestedScrollingEnabled(false);
             recyclerView.setHasFixedSize(false);
-            recyclerView.addOnScrollListener(new ContentLoader(layoutManager) {
-                @Override
-                public void onLoadMore()
-                {
-                    adapter.loadMoreData();
-                }
-            });
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setAdapter(adapter);
 
@@ -363,7 +355,8 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
                         return;
 
                     service.adapter.addAll(news);
-                    service.recyclerView.smoothScrollToPosition(0);
+                    if (service.adapter.getItemCount() == 0)
+                        service.recyclerView.smoothScrollToPosition(0);
                     break;
                 case AppCode.NEWS_LOADED:
                     service.progressBar.setVisibility(ProgressBar.GONE);
@@ -413,7 +406,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
             setFavoriteIcon();
             Drawable icon_conf = appmenu.getItem(1).setVisible(true).getIcon();
 
-            if (currentSite.hasDarkColor()) {
+            if (currentSite.needsBrightColors()) {
                 btn_sections.clearColorFilter();
                 icon_conf.clearColorFilter();
 
@@ -432,7 +425,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
 
         appmenu.getItem(0).setVisible(true).setIcon(icon_fav);
 
-        if (currentSite.hasDarkColor())
+        if (currentSite.needsBrightColors())
             icon_fav.clearColorFilter();
         else
             icon_fav.setColorFilter(Color.BLACK, PorterDuff.Mode.MULTIPLY);

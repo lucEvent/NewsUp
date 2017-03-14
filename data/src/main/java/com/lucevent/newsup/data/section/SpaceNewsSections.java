@@ -12,7 +12,6 @@ public class SpaceNewsSections extends Sections {
         add(new Section("Space news", "http://spacenews.com/feed/", 0));
         add(new Section("News", "http://spacenews.com/segment/news/feed/", 0));
         add(new Section("Opinion", "http://spacenews.com/segment/opinion/feed/", 0));
-        add(new Section("Video", "http://spacenews.com/segment/video/feed/", 0));
         add(new Section("Launch", "http://spacenews.com/section/launch/feed/", 0));
         add(new Section("Business", "http://spacenews.com/section/business/feed/", 0));
         add(new Section("Missions", "http://spacenews.com/section/missions/feed/", 0));

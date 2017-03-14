@@ -35,6 +35,10 @@ import com.lucevent.newsup.io.BookmarksManager;
 import com.lucevent.newsup.io.SDManager;
 import com.lucevent.newsup.kernel.AppData;
 
+import java.text.DecimalFormat;
+import java.util.Comparator;
+import java.util.TreeSet;
+
 public class NewsView extends RelativeLayout {
 
     private News currentNews;
@@ -123,8 +127,8 @@ public class NewsView extends RelativeLayout {
             "</style>";
 
     private static final String NEWS_STYLE_NIGHT = "<style>" +
-            "body{margin:20px;font-family:sans-serif-light;font-weight:300;font-size:17px;line-height:1.7;background-color:#222;color:#fff;}" +
-            "blockquote{margin:10px;padding:5px 10px 5px 10px;background-color:#333}" +
+            "body{margin:20px;font-family:sans-serif-light;font-weight:300;font-size:17px;line-height:1.7;background-color:#000;color:#fff;}" +
+            "blockquote{margin:10px;padding:5px 10px 5px 10px;background-color:#111}" +
             "a{color:#%a_c;}" +
             "</style>";
 
@@ -139,6 +143,28 @@ public class NewsView extends RelativeLayout {
             "img,figure{width:0;height:0;margin:0;padding:0}" +
             "div > h2 > a > img{width:0;height:0;margin:0;padding:0}" +
             "</style>";
+
+    private String computeStyle(Site site)
+    {
+        int a_color;
+        if (nightMode) {
+            if (site.getColorDarkness() > 0.95)
+                a_color = 0x555555;
+            else if (site.getColorDarkness() > 0.7)
+                a_color = Utils.brighter(site.color, 1.2 - site.getColorDarkness()) & 0xffffff;
+            else
+                a_color = site.color & 0xffffff;
+        } else
+            a_color = (site.getColorDarkness() < 0.3 ? Utils.darker(site.color, 0.6) : site.color) & 0xffffff;
+
+
+        String news_style = nightMode ? NEWS_STYLE_NIGHT : NEWS_STYLE_DAY;
+
+        return site.getStyle() +
+                news_style.replace("%a_c", String.format("%06x", a_color)) +
+                (isInternetAvailable() ? GRAPHYCS_STYLE : GRAPHYCS_STYLE_NO_INTERNET) +
+                SCRIPTS;
+    }
 
     private static String SCRIPTS = "";
 
@@ -189,15 +215,8 @@ public class NewsView extends RelativeLayout {
     private void updateNewsView(int scroll)
     {
         Site site = AppData.getSiteByCode(currentNews.site_code);
-        int a_color = (site.color == 0xffffffff ? 0xcccccc : site.color & 0xffffff);
 
-        String news_style = nightMode ? NEWS_STYLE_NIGHT : NEWS_STYLE_DAY;
-        String style = site.getStyle() +
-                news_style.replace("%a_c", String.format("%06x", a_color)) +
-                (isInternetAvailable() ? GRAPHYCS_STYLE : GRAPHYCS_STYLE_NO_INTERNET) +
-                SCRIPTS;
-
-        String webContent = style + "<h3>" + currentNews.title + "</h3>" + currentNews.content;
+        String webContent = computeStyle(site) + "<h3>" + currentNews.title + "</h3>" + currentNews.content;
 
         webView.loadDataWithBaseURL("", webContent, "text/html", "utf-8", null);
         if (scroll > 0)

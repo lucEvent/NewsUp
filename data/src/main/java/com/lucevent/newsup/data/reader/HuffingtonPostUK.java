@@ -34,6 +34,7 @@ public class HuffingtonPostUK extends com.lucevent.newsup.data.util.NewsReader {
                 e.parent().remove();
         }
         doc.select("[style]").removeAttr("style");
+        doc.select("h1,h2").tagName("h3");
 
         Element body = doc.body();
         NewsStylist.completeSrcHttp(body);

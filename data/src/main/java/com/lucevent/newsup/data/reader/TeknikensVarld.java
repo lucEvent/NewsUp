@@ -22,6 +22,8 @@ public class TeknikensVarld extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_MEDIA_CONTENT});
+
+        this.style = NewsStylist.base("http://teknikensvarld.se/");
     }
 
     @Override
@@ -41,7 +43,7 @@ public class TeknikensVarld extends com.lucevent.newsup.data.util.NewsReader {
 
         NewsStylist.cleanAttributes(doc.select("img"), "src");
 
-        news.content = "<base href='http://teknikensvarld.se/'>" + article.html();
+        news.content = article.html();
     }
 
 }

@@ -59,7 +59,7 @@ public class TheNewYorkTimes extends com.lucevent.newsup.data.util.NewsReader {
                     article = doc.select("[data-view=\"slideshow-slide\"]");
 
                     if (article.isEmpty()) {
-                        System.out.println("Returning");
+                        ///System.out.println("Returning");
                         return;
                     } else {
                         for (Element e : article) {

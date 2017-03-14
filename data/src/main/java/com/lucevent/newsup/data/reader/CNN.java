@@ -62,8 +62,7 @@ public class CNN extends com.lucevent.newsup.data.util.NewsReader {
     {
         try {
             return org.jsoup.Jsoup.connect(pagelink).get();
-        } catch (IOException e) {
-            System.out.println("[" + e.getClass().getSimpleName() + "] Couldn't read page: " + pagelink);
+        } catch (IOException ignored) {
         }
         return super.getDocument(pagelink);
     }
@@ -71,20 +70,20 @@ public class CNN extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
-
-        if (doc.baseUri().contains("/videos/")) {
+        String url = doc.baseUri();
+        if (url.contains("/videos/")) {
             Elements article = doc.select(".media__video--thumbnail,.el__video-collection__main-wrapper .media__video-description");
             article.select("script,style").remove();
             article.select("img").wrap("<p>").removeAttr("alt");
             news.content = article.html();
             return;
-        } else if (doc.baseUri().contains("/gallery/")) {
+        } else if (url.contains("/gallery/")) {
             Elements article = doc.select(".el-carousel__wrapper noscript,.el-carousel__wrapper .el__gallery_image-title");
             article.select("script,style").remove();
             article.select("img").wrap("<p>").removeAttr("alt");
             news.content = article.html();
             return;
-        } else if (doc.baseUri().contains("/money.cnn")) {
+        } else if (url.contains("/money.cnn")) {
 
             Elements article = doc.select("#storytext");
             article.select(".video-play,.cnnVidFooter,figcaption,#storyFooter,.clearfix,.storytimestamp,script,style").remove();

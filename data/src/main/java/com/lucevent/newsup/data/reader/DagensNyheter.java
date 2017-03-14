@@ -37,6 +37,7 @@ public class DagensNyheter extends com.lucevent.newsup.data.util.NewsReader {
         Elements preamble = doc.select(".article__body .article__lead");
         Elements content = doc.select(".article__body .article__body-content");
         content.select(".ad-outer-container,script").remove();
+        content.select("h1,h2").tagName("h3");
 
         news.content = preamble.html() + imgs.html() + content.html();
     }

@@ -20,6 +20,8 @@ public class LifeHacker extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{});
+
+        this.style = NewsStylist.base("http://lifehacker.com/");
     }
 
     @Override
@@ -40,7 +42,7 @@ public class LifeHacker extends com.lucevent.newsup.data.util.NewsReader {
         Element body = doc.body();
         NewsStylist.completeSrcHttp(body);
 
-        return NewsStylist.base("http://lifehacker.com/") + doc.body().html();
+        return doc.body().html();
     }
 
 }

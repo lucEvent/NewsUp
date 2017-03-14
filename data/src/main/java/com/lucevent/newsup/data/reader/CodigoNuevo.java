@@ -33,6 +33,7 @@ public class CodigoNuevo extends com.lucevent.newsup.data.util.NewsReader {
     {
         Document doc = jsoupParse(prop);
         doc.select("script").remove();
+        doc.select("h1,h2").tagName("h3");
 
         for (Element e : doc.select("img")) {
             e.attr("src", e.attr("src").replace("-300x200", ""));

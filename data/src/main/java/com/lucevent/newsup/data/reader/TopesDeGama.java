@@ -72,7 +72,7 @@ public class TopesDeGama extends com.lucevent.newsup.data.util.NewsReader {
                     sb.append("<img src='").append(item.getString("src")).append("'></p>");
                 }
             } catch (JSONException e) {
-                System.out.println("JSON exeption:" + e.getMessage());
+                //System.out.println("JSON exeption:" + e.getMessage());
             }
             slides.html(sb.toString());
             NewsStylist.cleanAttributes(slides);
@@ -94,6 +94,7 @@ public class TopesDeGama extends com.lucevent.newsup.data.util.NewsReader {
             }
         }
         NewsStylist.cleanAttributes(article.select("img"), "src");
+        article.select("[style]").removeAttr("style");
 
         news.content = article.html();
     }

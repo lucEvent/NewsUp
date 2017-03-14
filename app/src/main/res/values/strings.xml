@@ -1,7 +1,7 @@
 <resources>
 
     <string name="app_name" translatable="false">NewsUp</string>
-    <string name="app_version" translatable="false">2.1.2</string>
+    <string name="app_version" translatable="false">2.2.0</string>
     <string name="version">version</string>
 
     <!-- * ******************** Labels **************************** * -->
@@ -146,17 +146,17 @@
     <string name="pref_schedule_one_download_key" translatable="false">site_pref6</string>
 
     <!-- ***************************** ***************** ********************************** -->
-    <string name="about_content_header" translatable="false">News Up 2.1.2</string>
+    <string name="about_content_header" translatable="false">News Up 2.2.0</string>
     <string name="about_content_contact">Developed by Rafael J. Lucena\nContact: rafaa89(at)gmail.com</string>
     <string name="about_content_title_new_features">Last features and improvements:</string>
     <string name="about_content_new_features" translatable="false">
-        Version 2.1.2 2017-02-XX:\n
+        Version 2.2.0 2017-03-14:\nLoading of news list optimized.\nNight mode improved.\nSupport for Astronomy Now, Chicago Suntimes, Comming soon, El Imparcial (Mx), El Periódico Extremadura, Full Músculo, Göteborgs-Posten, Omicrono, The Chive and The Conversation (UK, US, Australia, Africa and France versions).\n
         \nVersion 2.1.1 2017-02-21:\nSupport for Pokemon Go news.\nNew and faster download system.\n
-        \nVersion 2.1.0 2017-02-10:\nAdded support for \'Andro4all\', \'Topes de gama\', \'La Patilla\', \'Cosmo Noticias\', \'Life Science Sweden\', \'Teknikens Värld\', \'Código Nuevo\', \'The Geek Hammer\' and \'The Bolivar commercial\'. Sections and Readers updated. Instagram photos support.\n
+        \nVersion 2.1.0 2017-02-10:\nAdded support for Andro4all, Topes de gama, La Patilla, Cosmo Noticias, Life Science Sweden, Teknikens Värld, Código Nuevo, The Geek Hammer and The Bolivar commercial. Sections and Readers updated. Instagram photos support.\n
         \nVersion 2.0.0 2016-11-09:\nNew: Shortcuts for each site in home screen.\nNew: Pictures on news list (and preference to show/hide them).\nNew: More sections shown at the end of the news list (if available).\nNew animations and some animation changes.\nNews List view changed.\nBookmark from News list.\nSome texts changed for better understanding.\nSchedule a download directly from one particular site preference screen.\nDark gray sections button for white color sites.\nFavorites added to preferences (finally).\nMain/Favorite/Schedule sites selection improved.\nSchedule downloads list now gives indications when there are no downloads scheduled.\nNo more repeated news in History news list.\nNotifications improved :).\nFor fast connections: news download improved when there are many sites in main.\nNew option buttons in news view (Plus night/day view option added).\nSections button hidden when a site has only one section.\nWhite icon color issue in Kitkat devices solved.\nIn android 6 and above: Dark icons on notification bar with \'light-color\' sites.\nErrors fixed and improvements.\n
-        \nVersion 1.8.0 2016-10-10:\nAdded support for newspapers \'The Herald Scotland\', \'The Guardian\', \'The New York Times\' and \'The Times of India\', and online magazines and blogs \'Clipset\', \'Elle Spain\', \'Google Earth Blog\', \'TechCrunch\', \'The Intercept\' and \'Vice\'.\n
+        \nVersion 1.8.0 2016-10-10:\nAdded support for newspapers The Herald Scotland, The Guardian and The Times of India, and online magazines and blogs Clipset, Elle Spain, Google Earth Blog, TechCrunch, The Intercept and Vice.\n
         \nVersion 1.7.2 2016-10-02:\nNew: Report/Suggestion option.\nBookmarked news list updating fixed.\nSite selection screen now orders by device locale, and each section by site name.\nFull-translated to swedish.\nPartially translated to Finnish.\nLoading animation comes up when loading a section too now.\nMore errors fixed and improvements.\n
-        \nVersion 1.7.0 2016-09-24:\nAdded support for newspapers \'Abc\', \'Metro UK\', \'Siberian Times\' and \'USA Today\', and online magazines and blogs \'Digital Inspiration\', \'Meristation\', \'PC World\', \'The Verge\' and \'Vandal\'.\nBugs fixed.\n
+        \nVersion 1.7.0 2016-09-24:\nAdded support for newspapers Abc, Metro UK, Siberian Times and USA Today, and online magazines and blogs Digital Inspiration, Meristation, PC World, The Verge and Vandal.\nBugs fixed.\n
         \nVersion 1.6.0 2016-09-12:\nNewsView: images, videos and iframes are hidden when there is no internet connection.\nFixed severe bug when a schedule is executed while the user is interacting with the app.\nFixed severe bug opening news from notification.\nSupport for tweets.\nNews load faster.\nAdded animation to show that news are loading.\nIntroducing notes with Pro code.\nAvoid news reloading when unnecessary.\nBug fixes and improvements.\n
         \nVersion 1.5.1 2016-07-08:\nScreen overlapping on navigation back fixed, plus coherence with drawer row selected.\n
         \nVersion 1.5.0 2016-07-01:\nInit screen to select your favorite sites.\nDrawer list reconfigured.\n
@@ -167,22 +167,23 @@
     </string>
     <string name="about_content_title_comming_soon">What\'s coming soon?:</string>
     <string name="about_content_comming_soon" translatable="false">
-        ** In next versions **\n
         - Preview on tap - like in Instagram (maybe)\n
-        - Error fixing and slight improvements\n
-        - Support for:\n
-        \t- National geographic\n
-        \t- Revista cuore (Spain)\n
-        \t- Interviu\n
-        \t- Motherboard\n
-        \t- Vice News\n
-        \t- IGN España\n
-        \t- Vogue España\n
-        \t- GoteborgsPosten\n
-        \t- Many more\n
-        \n** Soon **\n
+        - Error fixing and improvements\n
         - New logo\n
         - Improve display of news\n
+        - Support for:\n
+        \t- National geographic\n
+        \t- WWWhat\'s new?\n
+        \t- Motherboard\n
+        \t- Vogue España\n
+        \t- IGN España\n
+        \t- Tech Eye\n
+        \t- La web del gadget\n
+        \t- Lucky Puppy\n
+        \t- The Berry\n
+        \t- Revista cuore (Spain)\n
+        \t- Interviu\n
+        \t- Many more\n
     </string>
     <string name="about_content_title_next_sites">Possible support for:</string>
     <string name="about_content_next_sites" translatable="false">
@@ -193,8 +194,6 @@
         - The Wall Street Journal (USA)\n
         - Independent (UK)\n
         \nMAGAZINES:\n
-        - Space.com\n
-        - NASA\n
         - Vagabond\n
         - Science magazine\n
         - The bark\n

@@ -12,7 +12,7 @@ public class Report {
     @Index
     private Long id;
 
-    @Unindex
+    @Index
     public Long time;
 
     @Unindex

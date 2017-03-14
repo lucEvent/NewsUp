@@ -269,9 +269,9 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             Site site = AppData.getSiteByCode(colorCode);
 
             barColor = site.color;
-            textColor = site.hasDarkColor() ? Color.WHITE : Color.BLACK;
+            textColor = site.needsBrightColors() ? Color.WHITE : Color.BLACK;
             statusBarColor = barColor == 0xffffffff ? 0xffcccccc : barColor;
-            navBlack = !site.hasDarkColor();
+            navBlack = !site.needsBrightColors();
         }
         //noinspection ConstantConditions
         ab.setBackgroundColor(barColor);

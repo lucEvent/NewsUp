@@ -3,6 +3,9 @@ package com.lucevent.newsup.data.reader;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsStylist;
 
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
 import java.net.URL;
 
 public class Iltalehti extends com.lucevent.newsup.data.util.NewsReader {
@@ -22,7 +25,7 @@ public class Iltalehti extends com.lucevent.newsup.data.util.NewsReader {
     }
 
     @Override
-    protected org.jsoup.nodes.Document getDocument(String rsslink)
+    protected Document getDocument(String rsslink)
     {
         try {
             return org.jsoup.Jsoup.parse(new URL(rsslink).openStream(), "ISO-8859-1", rsslink);
@@ -32,18 +35,19 @@ public class Iltalehti extends com.lucevent.newsup.data.util.NewsReader {
     }
 
     @Override
-    protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+    protected void readNewsContent(Document doc, News news)
     {
-        org.jsoup.select.Elements e = doc.select("isense");
+        Elements article = doc.select("isense");
 
-        if (!e.isEmpty()) {
-            e.select(".author,.important-articles-t,.kp-share-area,.kuvateksti,.fb-comments__outer-container,.recommended-toaster,#tuoreimmat,script").remove();
+        if (!article.isEmpty()) {
+            article.select(".author,.important-articles-t,.kp-share-area,.kuvateksti,.fb-comments__outer-container,.recommended-toaster,#tuoreimmat,script").remove();
 
-            e.select("[style]").removeAttr("style");
+            article.select("[style]").removeAttr("style");
+            article.select("h1,h2").tagName("h3");
 
-            NewsStylist.cleanAttributes(e.select("img"), "src");
+            NewsStylist.cleanAttributes(article.select("img"), "src");
 
-            news.content = NewsStylist.cleanComments(e.html());
+            news.content = NewsStylist.cleanComments(article.html());
         }
     }
 

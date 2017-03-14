@@ -1,15 +1,18 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosure;
+import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
+
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class SpaceNews extends com.lucevent.newsup.data.util.NewsReader {
 
-    /**
-     * Tags
-     * [category, content:encoded, dc:creator, description,            guid, item, link, pubdate, title]
-     * [category, content:encoded, dc:creator, description, enclosure, guid, item, link, pubdate, title]
-     */
+    private static final String SITE_STYLE = "<style>.wp-caption-text{font-size:12px;padding:2px 10px;display:block;}</style>";
+
+    // Tags: [category, content:encoded, dc:creator, description, guid, item, link, pubdate, title]
 
     public SpaceNews()
     {
@@ -20,31 +23,48 @@ public class SpaceNews extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_CONTENT_ENCODED},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{TAG_ENCLOSURE});
-    }
+                new int[]{});
 
-    @Override
-    protected String parseDescription(Element prop)
-    {
-        return org.jsoup.Jsoup.parse(prop.text()).text().replace("SpaceNews.com", "");
+        this.style = SITE_STYLE;
     }
 
     @Override
     protected String parseContent(Element prop)
     {
-        Document doc = org.jsoup.Jsoup.parse(prop.text());
+        Document doc = jsoupParse(prop);
+        doc.select(".ctx-clearfix,.ctx-article-root,script").remove();
 
-        for (Element img : doc.select("img")) {
-            img.removeAttr("width");
-            img.removeAttr("height");
-            img.removeAttr("srcset");
-            img.removeAttr("style");
-            img.removeAttr("class");
-            img.removeAttr("sizes");
+        for (Element e : doc.select("img")) {
+            String src = clearImgSrc(e);
+            NewsStylist.cleanAttributes(e);
+            e.attr("src", src);
         }
-        doc.select(".ctx-clearfix,a[rel=\"nofollow\"]").remove();
 
-        return doc.html();
+        doc.select("[style]").removeAttr("style");
+        doc.select(".pullquote,.pullquoteleft").tagName("blockquote");
+
+        return doc.body().html();
+    }
+
+    @Override
+    protected News onNewsRead(News news)
+    {
+        if (!news.description.isEmpty()) {
+            Document doc = jsoupParse(news.description);
+
+            Elements imgs = doc.select("img");
+            if (!imgs.isEmpty())
+                news.enclosures.add(new Enclosure(clearImgSrc(imgs.first()), "image", ""));
+
+            news.description = doc.text().replace("SpaceNews.com", "");
+        }
+        return news;
+    }
+
+    private String clearImgSrc(Element img)
+    {
+        String remove = "-" + img.attr("width") + "x" + img.attr("height");
+        return img.attr("src").replace(remove, "");
     }
 
 }

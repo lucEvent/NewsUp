@@ -112,16 +112,19 @@
         <item>Useat</item>
     </string-array>
     <string-array name="site_categories">
-        <item>Sanomalehdet</item>
-        <item>Sport Sanomalehdet</item>
+        <item>Uutiset</item>
+        <item>Urheilu-uutisia</item>
         <item>Teknologia</item>
         <item>Blogit</item>
-        <item>Lehdet</item>
+        <item>Aikakauslehdet</item>
         <item>Tähtitiede</item>
-        <item>Science</item>
+        <item>Tiede</item>
         <item>Videopelit</item>
         <item>Elämäntapa</item>
         <item>Moottori</item>
+        <item>Viihde</item>
+        <item>Fitness</item>
+        <item>Musiikki</item>
     </string-array>
     <integer-array name="site_language_weights">
         <item>4</item>

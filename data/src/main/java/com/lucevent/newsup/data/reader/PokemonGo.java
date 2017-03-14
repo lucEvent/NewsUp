@@ -17,6 +17,7 @@ public class PokemonGo extends com.lucevent.newsup.data.util.Reader {
 
     public PokemonGo()
     {
+        this.style = NewsStylist.base("http://pokemongolive.com/");
     }
 
     @Override
@@ -84,7 +85,7 @@ public class PokemonGo extends com.lucevent.newsup.data.util.Reader {
                 year = parts[0];
                 break;
             case "ko":
-                parts = date.replace("\uD7A3 ", ".").replace("\uD7A3 ", ".").replace("\uc77c ", "").split("\\.");
+                parts = date.replace("\uB144 ", ".").replace("\uC6D4 ", ".").replace("\uC77C", "").split("\\.");
                 day = parts[2];
                 month = parts[1];
                 year = parts[0];
@@ -103,7 +104,7 @@ public class PokemonGo extends com.lucevent.newsup.data.util.Reader {
         try { // 2/8/17
             return sdf.parse(date).getTime();
         } catch (Exception e) {
-            System.out.println("Error converting date: " + date);
+            //System.out.println("Error converting date: " + date);
         }
         return -1L;
     }
@@ -114,7 +115,7 @@ public class PokemonGo extends com.lucevent.newsup.data.util.Reader {
         Elements article = doc.select(".grid__item > div.grid__item--10-cols--gt-md");
         article.select("iframe").attr("frameborder", "0");
 
-        news.content = NewsStylist.base("http://pokemongolive.com/") + article.outerHtml();
+        news.content = article.outerHtml();
     }
 
 }

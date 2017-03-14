@@ -50,7 +50,7 @@ public class SiteMain extends AppCompatActivity implements MainChangeListener {
         //noinspection ConstantConditions
         toolbar.setLogo(LogoManager.getLogo(code, LogoManager.Size.ACTION_BAR));
         toolbar.setBackgroundColor(site.color);
-        toolbar.setTitleTextColor(site.hasDarkColor() ? Color.WHITE : Color.BLACK);
+        toolbar.setTitleTextColor(site.needsBrightColors() ? Color.WHITE : Color.BLACK);
 
         int statusBarColor = site.color;
         if (statusBarColor == 0xffffffff) {

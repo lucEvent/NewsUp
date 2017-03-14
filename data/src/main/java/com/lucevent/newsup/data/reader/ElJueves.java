@@ -27,6 +27,8 @@ public class ElJueves extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{},
                 new int[]{TAG_ENCLOSURE});
+
+        this.style = NewsStylist.base("http://www.eljueves.es/");
     }
 
     @Override
@@ -49,44 +51,62 @@ public class ElJueves extends com.lucevent.newsup.data.util.NewsReader {
         return news;
     }
 
+    @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
         doc.select("script").remove();
 
         Elements main = doc.select("#main");
 
+        String tag = NewsStylist.subStringBetween(news.link, "http://www.eljueves.es/", "/", false);
         Elements article;
-        if (news.link.contains("/news/") || news.link.contains("/jarticulos/")
-                || news.link.contains("/vloggers/") || news.link.contains("/articulos/")
-                || news.link.contains("/opinion/")) {
-            article = main.select(".row .sub-title,.row .detailMedia,.row #detail");
+        switch (tag) {
+            case "news":
+            case "opinion":
+                // jarticulos/vloggers/articulos
+                article = main.select(".fgs-slider .slide[id] img");
+                if (!article.isEmpty()) {
+                    for (Element img : article.select("img[data-src]"))
+                        img.attr("src", img.attr("data-src"));
+                    break;
+                }
 
-            if (article.isEmpty())
                 article = main.select(".vineta img");
+                if (!article.isEmpty())
+                    break;
 
-            article.select("h2").tagName("h4");
+                article = main.select(".sub-title,.detailMedia img,#detail");
+                article.select("h2").tagName("h4");
+                article.select("[style]").removeAttr("style");
+                break;
+            case "manda-guevos":
 
-        } else if (news.link.contains("/manda-guevos/")) {
+                article = main.select("article").get(0).select(".sub-title,.detailMedia,#detail");
 
-            article = main.select("article").get(0).select(".row .sub-title,.row .detailMedia,.row #detail");
+                for (Element e : article.select("figure.detalle-img"))
+                    e.html(e.select("img").outerHtml());
 
-        } else if (news.link.contains("/temazo/") || news.link.contains("/sexo/") || news.link.contains("/mmmh/")) {
+                break;
+            case "mmmh":
+            case "temazo":
+                // sexo
 
-            article = main.select("#slider-temazo .slide");
-            article.select(".relacionats").remove();
+                article = main.select(".fgs-slider .slide[id] img");
 
-            for (Element e : article.select("[data-src]"))
-                e.attr("src", e.attr("data-src")).removeAttr("data-src");
+                for (Element img : article.select("img[data-src]"))
+                    img.attr("src", img.attr("data-src"));
 
+                break;
+            case "blogs":
 
-        } else if (news.link.contains("/blogs/")) {
-            article = main.select("article").get(0).select("#detail");
-
-        } else {
-            return;
+                article = main.select("article").get(0).select("#detail");
+                break;
+            default:
+                return;
         }
 
-        news.content = NewsStylist.base("http://www.eljueves.es/") + NewsStylist.cleanComments(article.outerHtml());
+        NewsStylist.cleanAttributes(article.select("img"), "src");
+        news.content = NewsStylist.cleanComments(article.outerHtml());
     }
 
 }

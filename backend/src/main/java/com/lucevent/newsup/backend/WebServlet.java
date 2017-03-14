@@ -60,7 +60,7 @@ public class WebServlet extends HttpServlet {
                 if (prey.content.isEmpty())
                     site.readNewsContent(prey);
 
-                resp.getWriter().print(prey.content);
+                resp.getWriter().print(site.getStyle() + prey.content);
             }
 
         } else if (req.getParameter("sections") != null) {
