@@ -16,6 +16,7 @@ import com.lucevent.newsup.io.Database.DBHistoryNews;
 import com.lucevent.newsup.io.Database.DBNews;
 import com.lucevent.newsup.io.Database.DBNote;
 import com.lucevent.newsup.io.Database.DBReadingStats;
+import com.lucevent.newsup.io.Database.DBiNewsSection;
 import com.lucevent.newsup.kernel.util.HistoryNews;
 import com.lucevent.newsup.kernel.util.Note;
 import com.lucevent.newsup.kernel.util.Notes;
@@ -57,6 +58,31 @@ public class DBManager {
         return result;
     }
 
+    public ArrayList<Integer> getNewsIdsOf(Site site, int[] sections)
+    {
+        ArrayList<Integer> res = new ArrayList<>();
+
+        synchronized (this) {
+            SQLiteDatabase database = db.getReadableDatabase();
+
+            for (int section : sections) {
+
+                Cursor cursor = database.query(DBiNewsSection.db, DBiNewsSection.cols,
+                        DBiNewsSection.site_code + "=" + site.code + " AND " + DBiNewsSection.section + "=" + section, null, null, null, null);
+
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    res.add(DBiNewsSection.newsId(cursor));
+                    cursor.moveToNext();
+                }
+                cursor.close();
+            }
+            database.close();
+        }
+        AppSettings.printlog("[DB] NEWS IN " + site.name + " DATABASE (just some sections): " + res.size());
+        return res;
+    }
+
     public News readNews(int id)
     {
         News news = null;
@@ -66,10 +92,8 @@ public class DBManager {
             Cursor cursor = database.query(DBNews.db, DBNews.cols, Database.id + "=" + id, null, null, null, null);
 
             if (cursor.moveToFirst()) {
-
                 news = DBNews.parse(cursor);
                 news.site_code = cursor.getInt(1);
-
             }
             cursor.close();
             database.close();
@@ -222,9 +246,15 @@ public class DBManager {
         values.put(DBNews.description, news.description);
         values.put(DBNews.tags, news.tags.toString());
 
+        ContentValues sectValues = new ContentValues();
+        sectValues.put(DBiNewsSection.site_code, news.site_code);
+        sectValues.put(DBiNewsSection.section, news.section);
+        sectValues.put(DBiNewsSection.news_id, news.id);
+
         synchronized (this) {
             SQLiteDatabase database = db.getWritableDatabase();
             database.insert(DBNews.db, null, values);
+            database.insert(DBiNewsSection.db, null, sectValues);
             database.close();
         }
     }
@@ -375,6 +405,7 @@ public class DBManager {
             SQLiteDatabase database = db.getWritableDatabase();
             database.delete(DBNews.db, null, null);
             database.delete(DBHistoryNews.db, null, null);
+            database.delete(DBiNewsSection.db, null, null);
             database.close();
         }
     }

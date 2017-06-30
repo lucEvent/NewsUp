@@ -7,8 +7,6 @@ import org.jsoup.nodes.Element;
 
 public class CosmoNoticias extends com.lucevent.newsup.data.util.NewsReader {
 
-    private static final String SITE_STYLE = "<style>.wp-caption-text{display:block;font-size:14px;color:grey;padding:2px 15px;}</style>";
-
     //tags: [category, content:encoded, dc:creator, description, guid, item, link, post-id, pubdate, title]
 
     public CosmoNoticias()
@@ -21,8 +19,6 @@ public class CosmoNoticias extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{});
-
-        this.style = SITE_STYLE;
     }
 
     @Override
@@ -37,6 +33,7 @@ public class CosmoNoticias extends com.lucevent.newsup.data.util.NewsReader {
         Document doc = jsoupParse(prop);
 
         doc.select("h1,h2").tagName("h3");
+        doc.select(".wp-caption-text").tagName("figcaption");
         doc.select("[style]").removeAttr("style");
         doc.select("[onclick]").removeAttr("onclick");
 

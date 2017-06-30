@@ -114,7 +114,7 @@ public class SiteSettingsFragment extends android.preference.PreferenceFragment
             addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
             addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
             addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, currentSite.name);
-            addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, LogoManager.createHomeScreenIcon(context, currentSite.code));
+            addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, LogoManager.homeScreenIcon(context, currentSite.code));
             context.sendBroadcast(addIntent);
 
             Toast.makeText(context, getString(R.string.msg_shortcut_created, currentSite.name), Toast.LENGTH_SHORT).show();

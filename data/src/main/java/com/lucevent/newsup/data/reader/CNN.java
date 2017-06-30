@@ -7,8 +7,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.IOException;
-
 public class CNN extends com.lucevent.newsup.data.util.NewsReader {
 
     /**
@@ -62,7 +60,7 @@ public class CNN extends com.lucevent.newsup.data.util.NewsReader {
     {
         try {
             return org.jsoup.Jsoup.connect(pagelink).get();
-        } catch (IOException ignored) {
+        } catch (Exception ignored) {
         }
         return super.getDocument(pagelink);
     }

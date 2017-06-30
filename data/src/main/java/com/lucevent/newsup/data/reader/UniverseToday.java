@@ -5,8 +5,6 @@ import org.jsoup.nodes.Element;
 
 public class UniverseToday extends com.lucevent.newsup.data.util.NewsReader {
 
-    private static final String SITE_STYLE = "<style>.wp-caption-text{display:block;font-size:14px;color:grey;padding:2px 15px;}</style>";
-
     //tags:[category, content:encoded, dc:creator, description, guid, item, link, post-id, pubdate, title]
 
     public UniverseToday()
@@ -19,8 +17,6 @@ public class UniverseToday extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{});
-
-        this.style = SITE_STYLE;
     }
 
     @Override
@@ -36,8 +32,9 @@ public class UniverseToday extends com.lucevent.newsup.data.util.NewsReader {
         doc.select("script").remove();
 
         doc.select("h1,h2").tagName("h3");
+        doc.select(".wp-caption-text").tagName("figcaption");
         doc.select("[style]").removeAttr("style");
-        doc.select("iframe").attr("frameborder","0");
+        doc.select("iframe").attr("frameborder", "0");
 
         return doc.body().html();
     }

@@ -13,6 +13,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
+import android.widget.TextView;
 
 import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.Main;
@@ -38,6 +40,8 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
     private StoragePermissionHandler permissionHandler;
     private NewsAdapter adapter;
     private NewsView newsView;
+
+    private View noContentMessage;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -72,6 +76,8 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
         newsView.setBookmarkChangeListener(onBookmarkClick);
 
         view.findViewById(R.id.button_sections).setVisibility(View.GONE);
+
+        noContentMessage = view.findViewById(R.id.no_content);
 
         dataManager.getReadNews();
 
@@ -136,10 +142,13 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
             HistorialFragment service = context.get();
             switch (msg.what) {
                 case AppCode.NEWS_COLLECTION:
-                    service.adapter.addAll(((Collection<News>) msg.obj));
-                    break;
+                    Collection<News> news = (Collection<News>) msg.obj;
+                    if (!news.isEmpty()) {
+                        service.adapter.addAll(news);
+                        break;
+                    }
                 case AppCode.ERROR:
-                    AppSettings.printerror("[HF] Error received by the Handler", null);
+                    service.displayNoRecordsMessage();
                     break;
                 default:
                     AppSettings.printerror("[HF] OPTION UNKNOWN: " + msg.what, null);
@@ -151,18 +160,20 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
         @Override
         public boolean onMenuItemClick(MenuItem item)
         {
-            new AlertDialog.Builder(getActivity())
-                    .setMessage(R.string.msg_confirm_to_clear_history)
-                    .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-                            dataManager.clearHistory();
-                            adapter.clear();
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel, null)
-                    .show();
+            if (adapter.getItemCount() > 0)
+                new AlertDialog.Builder(getActivity())
+                        .setMessage(R.string.msg_confirm_to_clear_history)
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                dataManager.clearHistory();
+                                adapter.clear();
+                                displayNoRecordsMessage();
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, null)
+                        .show();
             return true;
         }
     };
@@ -201,6 +212,14 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
             newsView.setBookmarkButtonImage(tempBookmarkButton);
             adapter.update(news);
         }
+    }
+
+    private void displayNoRecordsMessage()
+    {
+        if (noContentMessage instanceof ViewStub)
+            noContentMessage = ((ViewStub) noContentMessage).inflate();
+
+        ((TextView) noContentMessage.findViewById(R.id.message)).setText(R.string.msg_no_history);
     }
 
 }

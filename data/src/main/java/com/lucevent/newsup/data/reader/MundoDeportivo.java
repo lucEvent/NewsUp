@@ -65,9 +65,7 @@ public class MundoDeportivo extends com.lucevent.newsup.data.util.NewsReader {
 
         NewsStylist.cleanAttributes(article.select("figure"));
         NewsStylist.cleanAttributes(article.select("img"), "src");
-
-        for (Element item : article.select("[src^=//]"))
-            item.attr("src", "http:" + item.attr("src"));
+        NewsStylist.repairLinks(article);
 
         news.content = article.outerHtml();
     }

@@ -62,20 +62,25 @@ public class LogoManager {
                 res = Drawable.createFromStream(dataManager.open(site_code + ".png"), null);
                 map.append(site_code, res);
             } catch (Exception e) {
-                AppSettings.printerror("[LM] [EXCEPTION] Couldn't read asset " + site_code + ".png", e);
+                AppSettings.printerror("[LM] Couldn't read asset " + site_code + ".png", e);
             }
         }
         return res;
     }
 
-    public static Bitmap createHomeScreenIcon(Context context, int site_code)
+    public static Bitmap homeScreenIcon(Context context, int site_code)
+    {
+        return iconBitmap(context, site_code, 1.25f);
+    }
+
+    private static Bitmap iconBitmap(Context context, int site_code, float resizeValue)
     {
         Bitmap bitmap = null;
         try {
 
             bitmap = BitmapFactory.decodeStream(dataManager.open(site_code + ".png"));
 
-            int min = Math.min(Math.round(((float) ((ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE)).getLauncherLargeIconSize()) * 1.25f), Math.max(bitmap.getWidth(), bitmap.getHeight()));
+            int min = Math.min(Math.round(((float) ((ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE)).getLauncherLargeIconSize()) * resizeValue), Math.max(bitmap.getWidth(), bitmap.getHeight()));
             int round = Math.round(0.105454547f * ((float) min));
             int i = min + (round * 2);
 

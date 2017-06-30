@@ -85,22 +85,16 @@ public class NewsReaderManager {
                 try {
                     NewsArray news = readHeaders(site, AppSettings.getDownloadSections(site));
 
-                    NewsMap history = storageCallback.getHistoryOf(site);
-                    //deb
-                    for (News nh : history.values())
-                        System.out.println("[" + nh.id + "] " + nh.link);
-                    //end
+                    NewsMap history = storageCallback.getSavedNews(site);
 
                     for (News n : news) {
                         if (!history.containsKey(n.id)) {
-                            System.out.println("NoC: [" + n.id + "] " + n.link);
                             readContent(server % NewsReader.NUM_SERVERS, site, n);
 
                             if (!n.content.isEmpty())
                                 storageCallback.saveNews(n);
 
-                        } else
-                            System.out.println("SiC: [" + n.id + "] " + n.link);
+                        }
                     }
                     res.addAll(news);
 
@@ -117,7 +111,7 @@ public class NewsReaderManager {
     {
         NewsPetition petition = new NewsPetition();
         petition.site = site;
-        petition.sections = sections;
+        petition.sections = sections == null ? AppSettings.getMainSections(site) : sections;
         synchronized (petitionQueue) {
             petitionQueue.add(petition);
             petitionQueue.notify();
@@ -156,13 +150,12 @@ public class NewsReaderManager {
                 }
 
                 if (connectivityManager.isInternetAvailable()) {
-                    int[] sections = petition.sections == null ? AppSettings.getMainSections(petition.site) : petition.sections;
 
-                    NewsArray news = readHeaders(petition.site, sections);
+                    NewsArray news = readHeaders(petition.site, petition.sections);
 
                     if (news != null) {
 
-                        storageCallback.getHistoryOf(petition.site);
+                        storageCallback.getSavedNews(petition.site);
 
                         // Send news to Kernel
                         uiCallback.obtainMessage(AppCode.NEWS_COLLECTION, news).sendToTarget();
@@ -204,7 +197,7 @@ public class NewsReaderManager {
 
                 Site site = AppData.getSiteByCode(news.site_code);
 
-                NewsMap history = storageCallback.getHistoryOf(site);
+                NewsMap history = storageCallback.getSavedNews(site);
                 if (!history.containsKey(news.id)) {
 
                     if (news.content.isEmpty())
@@ -226,13 +219,14 @@ public class NewsReaderManager {
         uiCallback.obtainMessage(AppCode.NO_INTERNET, null).sendToTarget();
         if (petition.site != null) {
 
-            NewsMap history = storageCallback.getHistoryOf(petition.site);
+            NewsMap history = storageCallback.getSavedNews(petition.site, petition.sections);
             uiCallback.obtainMessage(AppCode.NEWS_COLLECTION, history.values()).sendToTarget();
 
         } else {
 
             for (int siteCode : AppSettings.getMainSitesCodes()) {
-                NewsMap history = storageCallback.getHistoryOf(AppData.getSiteByCode(siteCode));
+                Site site = AppData.getSiteByCode(siteCode);
+                NewsMap history = storageCallback.getSavedNews(site, AppSettings.getMainSections(site));
                 uiCallback.obtainMessage(AppCode.NEWS_COLLECTION, history.values()).sendToTarget();
             }
         }

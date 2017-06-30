@@ -25,12 +25,12 @@ public class HuffingtonPostInt extends com.lucevent.newsup.data.util.NewsReader 
     @Override
     protected String parseContent(Element prop)
     {
-        Document doc = org.jsoup.Jsoup.parse(prop.text().replace("<br />", "<p></p>"));
+        Document doc = jsoupParse(prop.text().replace("<br />", "<p></p>"));
 
-        doc.getElementsByTag("h2").tagName("h3");
+        doc.select("h1,h2").tagName("h3");
 
         Element body = doc.body();
-        NewsStylist.completeSrcHttp(body);
+        NewsStylist.repairLinks(body);
 
         String content = body.html();
 

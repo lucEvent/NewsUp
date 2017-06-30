@@ -38,6 +38,8 @@ public class SelectSitesActivity extends AppCompatActivity implements
         APP_FIRST_START, SELECT_MAIN, SELECT_FAVORITES, SELECT_DOWNLOAD, SELECT_ONE
     }
 
+    private static final SiteAdapter.Order DEFAULT_ORDER = SiteAdapter.Order.BY_LANGUAGE;
+
     private For purpose;
     private SiteAdapter.Order currentOrder;
     private String currentSearch = "";
@@ -58,7 +60,7 @@ public class SelectSitesActivity extends AppCompatActivity implements
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent)
             {
-                // this part is needed for hiding the original view
+                // this part is needed to hide the original view
                 View view = super.getView(position, convertView, parent);
                 view.setVisibility(View.GONE);
 
@@ -125,7 +127,7 @@ public class SelectSitesActivity extends AppCompatActivity implements
     {
         boolean firstStart = false;
         if (currentOrder == null) {
-            currentOrder = SiteAdapter.Order.BY_LANGUAGE;
+            currentOrder = DEFAULT_ORDER;
             firstStart = true;
         } else
             switch (position) {
@@ -214,6 +216,9 @@ public class SelectSitesActivity extends AppCompatActivity implements
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count)
     {
+        if (currentOrder == null)
+            currentOrder = DEFAULT_ORDER;
+
         currentSearch = s.toString();
         siteViewsMap = siteAdapter.createView(this, (ViewGroup) findViewById(R.id.container), 4, currentOrder, currentSearch);
     }

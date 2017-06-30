@@ -23,7 +23,6 @@ public class SkyAndTelescopeSections extends Sections {
         add(new Section("Black holes", "http://www.skyandtelescope.com/astronomy-news/black-holes/feed/", 1));
         add(new Section("Milky-way", "http://www.skyandtelescope.com/astronomy-news/milky-way/feed/", 1));
         add(new Section("People, places and events", "http://www.skyandtelescope.com/astronomy-news/people-places-and-events/feed/", 1));
-        add(new Section("Professional telescopes", "http://www.skyandtelescope.com/astronomy-news/professional-telescopes/feed/", 1));
         add(new Section("Stellar Science", "http://www.skyandtelescope.com/astronomy-news/stellar-science/feed/", 1));
 
         add(new Section("Observing", "http://www.skyandtelescope.com/observing/feed/", 0));
@@ -32,13 +31,7 @@ public class SkyAndTelescopeSections extends Sections {
         add(new Section("Observing Projects", "http://www.skyandtelescope.com/observing/astronomy-stargazing-projects/feed/", 1));
         add(new Section("Astronomy Podcasts", "http://www.skyandtelescope.com/observing/astronomy-podcasts/feed/", 1));
 
-        add(new Section("Equipment", null, -1));
-        add(new Section("Choosing Equipment", "http://www.skyandtelescope.com/astronomy-equipment/choosing-astronomy-equipment/feed/", 1));
-        add(new Section("Telescopes", "http://www.skyandtelescope.com/astronomy-equipment/choosing-astronomy-equipment/telescopes/feed/", 1));
-        add(new Section("New Product Showcase", "http://www.skyandtelescope.com/astronomy-equipment/new-products/feed/", 1));
-
         add(new Section("Resources & Education", "http://www.skyandtelescope.com/astronomy-resources/feed/", 0));
-        add(new Section("Learn the Sky", "http://www.skyandtelescope.com/astronomy-resources/stargazing-basics/learn-the-sky/feed/", 1));
         add(new Section("Astrophotography", "http://www.skyandtelescope.com/astronomy-resources/astrophotography-tips/feed/", 1));
         add(new Section("Orbital Path Podcasts", "http://www.skyandtelescope.com/astronomy-resources/orbital-path-astronomy-podcast/feed/", 1));
 
@@ -46,7 +39,6 @@ public class SkyAndTelescopeSections extends Sections {
         add(new Section("Explore the Night - Bob King", "http://www.skyandtelescope.com/astronomy-blogs/explore-night-bob-king/feed/", 1));
         add(new Section("Astrophotography - Jerry Lodriguss", "http://www.skyandtelescope.com/astronomy-blogs/astrophotography-jerry-lodriguss/feed/", 1));
         add(new Section("Astronomy in Space - David Dickinson", "http://www.skyandtelescope.com/astronomy-blogs/astronomy-space-david-dickinson/feed/", 1));
-        add(new Section("Cosmic Relief - David Grinspoon", "http://www.skyandtelescope.com/astronomy-blogs/cosmic-relief-david-grinspoon/feed/", 1));
 
         add(new Section("Events events", "http://www.skyandtelescope.com/astronomy-events/feed/", 0));
         add(new Section("Get Involved", "http://www.skyandtelescope.com/get-involved/feed/", 0));

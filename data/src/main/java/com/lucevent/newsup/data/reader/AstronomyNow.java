@@ -7,8 +7,6 @@ import org.jsoup.nodes.Element;
 
 public class AstronomyNow extends com.lucevent.newsup.data.util.NewsReader {
 
-    private static final String SITE_STYLE = "<style>figcaption{font-size:12px;padding:5px 10px 20px;display:block;}</style>";
-
     //tags: [category, content:encoded, dc:creator, description, guid, item, link, pubdate, title]
 
     public AstronomyNow()
@@ -21,8 +19,6 @@ public class AstronomyNow extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{});
-
-        this.style = SITE_STYLE;
     }
 
     @Override

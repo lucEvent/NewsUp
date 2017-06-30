@@ -2,6 +2,7 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -52,8 +53,7 @@ public class Verne extends com.lucevent.newsup.data.util.NewsReader {
                 video.html(Enclosure.iframe(script.substring(i1, i2).replace("watch?v=", "embed/")));
             }
         }
-        for (Element e : article.select("[src^='//']"))
-            e.attr("src", "http:" + e.attr("src"));
+        NewsStylist.repairLinks(article);
 
         article.select("h1,h2").tagName("h3");
 

@@ -30,6 +30,16 @@
         <url-pattern>/manager</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>DevelopmentServer</servlet-name>
+        <servlet-class>com.lucevent.newsup.backend.DevelopmentServer</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DevelopmentServer</servlet-name>
+        <url-pattern>/dev</url-pattern>
+    </servlet-mapping>
+
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>

@@ -140,6 +140,7 @@ public class TheTelegraph extends com.lucevent.newsup.data.util.NewsReader {
             }
         }
         article.select("script").remove();
+        article.select("h1,h2").tagName("h3");
 
         news.content = article.outerHtml();
     }

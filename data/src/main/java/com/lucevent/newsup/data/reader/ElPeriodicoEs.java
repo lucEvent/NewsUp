@@ -8,8 +8,6 @@ import org.jsoup.select.Elements;
 
 public class ElPeriodicoEs extends com.lucevent.newsup.data.util.NewsReader {
 
-    private static final String SITE_STYLE = "<style>.subtitle{font-size:12px;padding:2px 10px;display:block;}</style>";
-
     /**
      * Tags
      * [description, guid, item, link, pubdate, title]
@@ -26,8 +24,6 @@ public class ElPeriodicoEs extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{});
-
-        this.style = SITE_STYLE;
     }
 
     @Override
@@ -51,6 +47,7 @@ public class ElPeriodicoEs extends com.lucevent.newsup.data.util.NewsReader {
         Document doc = org.jsoup.Jsoup.parse(prop.text());
         doc.select("[style]").removeAttr("style");
         doc.select("h1,h2").tagName("h3");
+        doc.select(".subtitle").tagName("figcaption");
         return doc.html().replace("<span>", "").replace("</span>", "").replace("<p>&nbsp;</p>", "");
     }
 
@@ -72,6 +69,7 @@ public class ElPeriodicoEs extends com.lucevent.newsup.data.util.NewsReader {
 
         article.select(".despiece-bottom").tagName("blockquote");
         article.select("h2").tagName("h3");
+        article.select(".subtitle").tagName("figcaption");
 
         article.select("[width]").removeAttr("width");
         article.select("[style]").removeAttr("style");

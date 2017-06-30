@@ -33,23 +33,15 @@ public class ElPais extends com.lucevent.newsup.data.util.NewsReader {
         Elements article = doc.select("#articulo-introduccion p,[representativeofpage='true'] img,#cuerpo_noticia > p,#cuerpo_noticia > h3,#cuerpo_noticia > .sumario_foto img,.sumario_eskup .sumario__interior,.articulo-apertura .articulo-media");
 
         if (article.isEmpty()) {
-            article = doc.select("#contenedorfotos figure");
 
+            article = doc.select("#contenedorfotos figure");
             if (article.isEmpty()) {
 
                 article = doc.select("article .photo_description img:not(img[src='']),#article_container > div:not(.adv_aside,.aside_summary),#article_container > p");
-
                 if (article.isEmpty()) {
                     article = doc.select(".entry-content");
-
-                    article.select("img[style],span[style]").removeAttr("style");
-                    article.select("script").remove();
-
-                } else {
-                    article.select("script,noscript").remove();
                 }
             } else {
-                article.select("script").remove();
 
                 for (Element div : article.select(".sin_enlace")) {
                     Elements imgs = div.select("meta[itemprop='url']");
@@ -63,10 +55,16 @@ public class ElPais extends com.lucevent.newsup.data.util.NewsReader {
                 }
             }
         } else {
-            article.select(".sin_enlace,script,noscript").remove();
-            NewsStylist.cleanAttributes(article.select("img"), "src");
+            article.select(".sin_enlace").remove();
         }
+        article.select("style,script,noscript,.copyfoto").remove();
+
         article.select("h1,h2").tagName("h3");
+        article.select(".wp-caption-text").tagName("figcaption");
+        article.select("[style]").removeAttr("style");
+
+        NewsStylist.cleanAttributes(article.select("img"), "src");
+        NewsStylist.repairLinks(article);
 
         news.content = article.outerHtml();
     }

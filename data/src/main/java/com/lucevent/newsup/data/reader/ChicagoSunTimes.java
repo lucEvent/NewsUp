@@ -8,8 +8,6 @@ import org.jsoup.nodes.Element;
 
 public class ChicagoSunTimes extends com.lucevent.newsup.data.util.NewsReader {
 
-    private static final String SITE_STYLE = "<style>.wp-caption-text{font-size:12px;padding:2px 10px;display:block;}tr,th,td{padding:3px 10px;}</style>";
-
     /**
      * Tags
      * [category, content:encoded, dc:creator, description, enclosure, guid, item, link, media:content, media:credit, media:text, media:thumbnail, media:title, pubdate, title]
@@ -26,8 +24,6 @@ public class ChicagoSunTimes extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_MEDIA_CONTENT});
-
-        this.style = SITE_STYLE;
     }
 
     @Override
@@ -43,6 +39,7 @@ public class ChicagoSunTimes extends com.lucevent.newsup.data.util.NewsReader {
         doc.select("script,a[rel='nofollow'],img[width='1']").remove();
 
         doc.select("h1,h2").tagName("h3");
+        doc.select(".wp-caption-text").tagName("figcaption");
         doc.select("[style]").removeAttr("style");
         doc.select("iframe").attr("frameborder", "0");
 

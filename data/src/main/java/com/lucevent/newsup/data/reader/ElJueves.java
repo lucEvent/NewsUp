@@ -64,8 +64,9 @@ public class ElJueves extends com.lucevent.newsup.data.util.NewsReader {
             case "news":
             case "opinion":
                 // jarticulos/vloggers/articulos
-                article = main.select(".fgs-slider .slide[id] img");
+                article = main.select(".fgs-slider .slide[id]");
                 if (!article.isEmpty()) {
+                    article = article.select("img,.txt");
                     for (Element img : article.select("img[data-src]"))
                         img.attr("src", img.attr("data-src"));
                     break;

@@ -35,10 +35,6 @@ import com.lucevent.newsup.io.BookmarksManager;
 import com.lucevent.newsup.io.SDManager;
 import com.lucevent.newsup.kernel.AppData;
 
-import java.text.DecimalFormat;
-import java.util.Comparator;
-import java.util.TreeSet;
-
 public class NewsView extends RelativeLayout {
 
     private News currentNews;
@@ -122,12 +118,14 @@ public class NewsView extends RelativeLayout {
 
     private static final String NEWS_STYLE_DAY = "<style>" +
             "body{margin:20px;font-family:sans-serif-light;font-weight:300;font-size:17px;line-height:1.7;background-color:#fff;color:#000;}" +
+            "figcaption{font-size:12px;padding:2px 10px;display:block;}" +
             "blockquote{margin:10px;padding:5px 10px 5px 10px;background-color:#eee}" +
             "a{color:#%a_c;}" +
             "</style>";
 
     private static final String NEWS_STYLE_NIGHT = "<style>" +
             "body{margin:20px;font-family:sans-serif-light;font-weight:300;font-size:17px;line-height:1.7;background-color:#000;color:#fff;}" +
+            "figcaption{font-size:12px;padding:2px 10px;display:block;}" +
             "blockquote{margin:10px;padding:5px 10px 5px 10px;background-color:#111}" +
             "a{color:#%a_c;}" +
             "</style>";

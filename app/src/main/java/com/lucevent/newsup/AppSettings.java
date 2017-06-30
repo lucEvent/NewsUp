@@ -95,7 +95,7 @@ public class AppSettings {
 
     public static Set<String> getMainSectionsString(Site site)
     {
-        return preferences.getStringSet(PREF_SITE_MAIN_SECTIONS_KEY + site.code, DEFAULT_MAIN_SECTIONS);
+        return new HashSet<>(preferences.getStringSet(PREF_SITE_MAIN_SECTIONS_KEY + site.code, DEFAULT_MAIN_SECTIONS));
     }
 
 

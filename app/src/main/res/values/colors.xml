@@ -12,6 +12,8 @@
     <color name="disabled">#ffcccccc</color>
     <color name="ripple_pressed">#22000000</color>
     <color name="ripple_pressed_dark">#55999999</color>
-
+    <color name="drawer_btn_pressed">#ffebebeb</color>
+    <color name="drawer_btn_checked">#ffdcdcdc</color>
+    <color name="drawer_icon_default_tint">#737373</color>
 
 </resources>

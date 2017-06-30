@@ -1,8 +1,9 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
 
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.parser.Parser;
@@ -28,46 +29,58 @@ public class Vandal extends com.lucevent.newsup.data.util.NewsReader {
     }
 
     @Override
-    protected String parseContent(Element prop)
+    protected News onNewsRead(News news)
     {
-        String content = prop.text();
-        if (content.length() > 1000) {
-            Document d = Jsoup.parse(content);
+        Document doc = jsoupParse(news.content);
+        if (news.content.length() > 1000) {
+            doc.select("script").remove();
 
-            Elements videos = d.select("a[href^=\"http://www.vandal.net/video\"]");
-
-            for (Element v : videos) {
-                String link = v.attr("href");
+            for (Element video : doc.select("a[href^='http://www.vandal.net/video']")) {
+                String link = video.attr("href");
                 String video_id = link.substring(28, link.indexOf("/", 28));
 
-                v.previousElementSibling()
-                        .append(
-                                "<video controls><source src=\"http://videosold.vandalimg.com/mp4/" + video_id + ".mp4\" type=\"video/mp4\"></video>"
-                        );
-                v.remove();
+                NewsStylist.cleanAttributes(video);
+                video.tagName("video")
+                        .attr("controls", "")
+                        .html("<source src='http://videosold.vandalimg.com/mp4/" + video_id + ".mp4' type='video/mp4'>");
             }
-            d.select("br").tagName("p");
-            return d.outerHtml();
-        }
-        return "";
+            for (Element img : doc.select("img[src^='http://media.vandalimg.com/t200']"))
+                img.attr("src",
+                        img.attr("src").replace("http://media.vandalimg.com/t200", "http://mediamaster.vandal.net/m"));
 
+            for (Element e : doc.select(".fright"))
+                e.tagName("blockquote").removeAttr("style");
+
+            doc.select("br").tagName("p");
+
+            Element article = doc.body();
+            NewsStylist.repairLinks(article);
+            news.content = article.html();
+        } else {
+            news.description = doc.text();
+            news.content = "";
+        }
+        return news;
     }
 
     @Override
     protected void readNewsContent(Document doc, News news)
     {
-        Elements video = doc.select("meta[property=\"og:video\"]");
+        Elements video = doc.select("meta[property='og:video']");
         if (!video.isEmpty()) {
             String link = video.first().attr("content");
 
-            news.content = "<iframe allowfullscreen src='" + link + "'></iframe>";
+            news.content = Enclosure.iframe(link);
 
-            Elements dscr = doc.select("meta[name=\"description\"]");
+            Elements dscr = doc.select("meta[name='description']");
             if (!dscr.isEmpty())
                 news.content += "<p>" + dscr.first().attr("content") + "</p>";
 
         } else {
-            Elements e = doc.select(".contenidoprincipal [class=\"tn mt10\"]");
+            Elements e = doc.select(".contenidoprincipal [class='tn mt10']");
+            doc.select("[style]").removeAttr("style");
+            doc.select("[onclick]").removeAttr("onclick");
+            NewsStylist.cleanAttributes(e.select("img"), "src");
             news.content = e.outerHtml();
         }
     }

@@ -10,6 +10,8 @@ public class News implements Comparable<News>, Serializable {
 
     public long date;
 
+    public int section;
+
     public final Tags tags;
 
     public Enclosures enclosures;

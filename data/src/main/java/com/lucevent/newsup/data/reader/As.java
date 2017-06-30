@@ -124,8 +124,7 @@ public class As extends com.lucevent.newsup.data.util.NewsReader {
                         article.select(".redes,.menu_post,.archivado,script").remove();
                     }
                 }
-                for (Element e : article.select("[src^='//']"))
-                    e.attr("src", "http:" + e.attr("src"));
+                NewsStylist.repairLinks(article);
 
                 article.select("[class]").removeAttr("class");
                 article.select("h1,h2").tagName("h3");

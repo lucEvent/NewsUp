@@ -50,7 +50,7 @@ public class People extends com.lucevent.newsup.data.util.NewsReader {
             img.removeAttr("data-src").removeAttr("width").removeAttr("height");
         }
 
-        article.select("h2").tagName("h3");
+        article.select("h1,h2").tagName("h3");
 
         news.content = article.html().replace("<p>&nbsp;</p>", "");
     }

@@ -9,8 +9,6 @@ import org.jsoup.select.Elements;
 
 public class TheLocal extends com.lucevent.newsup.data.util.NewsReader {
 
-    private static final String SITE_STYLE = "<style>i{font-size:12px;padding:2px 10px;display:block;}</style>";
-
     // tags: [description, enclosure, guid, item, link, pubdate, title]
 
     public TheLocal()
@@ -24,7 +22,7 @@ public class TheLocal extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{},
                 new int[]{TAG_ENCLOSURE});
 
-        this.style = NewsStylist.base("http://www.thelocal.com/") + SITE_STYLE;
+        this.style = NewsStylist.base("http://www.thelocal.com/");
     }
 
     @Override
@@ -40,6 +38,8 @@ public class TheLocal extends com.lucevent.newsup.data.util.NewsReader {
         article.select(".ad_container,script").remove();
 
         article.select("#article-description").tagName("h4");
+        article.select("h1,h2").tagName("h3");
+        article.select("i").tagName("figcaption");
         article.select("[style]").removeAttr("style");
 
         for (Element img : article.select("img,amp-img")) {

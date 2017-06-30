@@ -2,20 +2,20 @@ package com.lucevent.newsup.view.util;
 
 import android.animation.Animator;
 import android.content.Context;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.RelativeLayout;
 
 import com.lucevent.newsup.R;
 
-public class NewsSideToolbar extends RelativeLayout implements View.OnClickListener, Animator.AnimatorListener {
+public class NewsSideToolbar extends CoordinatorLayout implements View.OnClickListener, Animator.AnimatorListener {
 
     private static final int ANIMATION_TIME = 200;
 
-    private FloatingActionButton trigger;
+    private View trigger;
     public boolean closed;
 
     private FloatingActionButton[] actions;
@@ -27,7 +27,7 @@ public class NewsSideToolbar extends RelativeLayout implements View.OnClickListe
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.v_news_side_toolbar, this, true);
 
-        trigger = (FloatingActionButton) findViewById(R.id.button_trigger);
+        trigger = (View) findViewById(R.id.button_trigger);
         trigger.setOnClickListener(this);
 
         closed = true;

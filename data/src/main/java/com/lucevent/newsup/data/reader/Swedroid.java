@@ -10,7 +10,7 @@ import org.jsoup.select.Elements;
 
 public class Swedroid extends com.lucevent.newsup.data.util.NewsReader {
 
-    private static final String SITE_STYLE = "<style>.wp-caption-text{font-size:12px;padding:2px 10px;display:block;}tr,th,td{padding:3px 10px;}</style>";
+    private static final String SITE_STYLE = "<style>tr,th,td{padding:3px 10px;}</style>";
 
     // Tags [category, content:encoded, dc:creator, description, guid, item, link, post-id, pubdate, title]
 
@@ -34,7 +34,9 @@ public class Swedroid extends com.lucevent.newsup.data.util.NewsReader {
         Document doc = jsoupParse(prop);
         doc.select("script,#review-statistics").remove();
 
+        doc.select("h1,h2").tagName("h3");
         doc.select("[style]").removeAttr("style");
+        doc.select(".wp-caption-text").tagName("figcaption");
 
         for (Element img : doc.select("img")) {
             String remove = "-" + img.attr("width") + "x" + img.attr("height");

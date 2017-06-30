@@ -9,10 +9,11 @@ public class GizmodoSections extends Sections {
     {
         super();
 
-        add(new Section("Main site", "http://feeds.gawker.com/gizmodo/full", 0));
-        add(new Section("UK version", "http://feeds.feedburner.com/uk/gizmodo", 0));
-        add(new Section("Spain version", "http://feeds.gawker.com/esgizmodo/full", 0));
-        add(new Section("Australia version", "http://feeds.gizmodo.com.au/gizmodoaustralia", 0));
+        add(new Section("Homepage", "http://gizmodo.com/rss/vip", 0));
+        add(new Section("Sploid", "http://sploid.gizmodo.com/rss/vip", 0));
+        add(new Section("Paleofuture", "http://paleofuture.gizmodo.com/rss/vip", 0));
+        add(new Section("io9", "http://io9.gizmodo.com/rss/vip", 0));
+        add(new Section("Field guide", "http://fieldguide.gizmodo.com/rss/vip", 0));
 
     }
 

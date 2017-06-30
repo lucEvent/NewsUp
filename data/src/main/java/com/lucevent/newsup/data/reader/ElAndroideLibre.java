@@ -74,11 +74,11 @@ public class ElAndroideLibre extends com.lucevent.newsup.data.util.NewsReader {
     {
         Document doc = org.jsoup.Jsoup.parse(prop.text());
 
-        doc.select("h2").tagName("h3");
+        doc.select("h1,h2").tagName("h3");
         doc.select(".blockquoteLink,script,.zioamz,#APPinstalarDesktop").remove();
 
         Element body = doc.body();
-        NewsStylist.completeSrcHttp(body);
+        NewsStylist.repairLinks(body);
 
         return body.html();
     }

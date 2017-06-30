@@ -9,28 +9,28 @@ import com.googlecode.objectify.annotation.Unindex;
 public class SiteStats {
 
     @Unindex
-    String siteName;
+    public String siteName;
 
     @Id
     @Index
-    long siteCode;
+    public long siteCode;
 
     @Unindex
-    int nAccesses;
+    public int nAccesses;
 
     @Unindex
-    int nNewsRead;
+    public int nNewsRead;
 
     @Unindex
-    long lastAccess;
+    public long lastAccess;
 
     @Unindex
-    String lastIp;
+    public String lastIp;
 
     @Unindex
-    String fromVersion;
+    public String fromVersion;
 
-    SiteStats()
+    public SiteStats()
     {
     }
 

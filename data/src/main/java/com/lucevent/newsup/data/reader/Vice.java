@@ -1,6 +1,7 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Date;
+import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -35,13 +36,14 @@ public class Vice extends com.lucevent.newsup.data.util.NewsReader {
     {
         Document doc = org.jsoup.Jsoup.parse(prop.text());
 
-        for (Element e : doc.select("[style]"))
-            e.removeAttr("style");
-        for (Element e : doc.select("iframe"))
-            e.attr("frameborder", "0");
+        doc.select("[style]").removeAttr("style");
+        doc.select("iframe").attr("frameborder", "0");
         doc.select("h1,h2").tagName("h3");
 
-        return doc.html().replace("src=\"/", "src=\"http:/");
+        Element article = doc.body();
+        NewsStylist.repairLinks(article);
+
+        return article.html();
     }
 
 }

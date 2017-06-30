@@ -2,9 +2,9 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class ComputerHoy extends com.lucevent.newsup.data.util.NewsReader {
@@ -77,17 +77,13 @@ public class ComputerHoy extends com.lucevent.newsup.data.util.NewsReader {
         } else
             article.select(".adcuadrado,blockquote,.galeria-inline").remove();
 
-        for (Element iframe : article.select("iframe")) {
-            String src = iframe.attr("src");
-            if (!src.startsWith("http"))
-                iframe.attr("src", "http:" + src);
-        }
-
         article.select("h2").tagName("h3");
         article.select("img[style],iframe[style]").removeAttr("style");
         article.select("[onmouseover]").removeAttr("onmouseover");
         article.select("[onmouseout]").removeAttr("onmouseout");
         article.select("meta,.valoracion").remove();
+
+        NewsStylist.repairLinks(article);
 
         news.content = img.outerHtml() + article.outerHtml();
     }

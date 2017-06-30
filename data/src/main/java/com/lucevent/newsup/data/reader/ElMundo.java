@@ -40,7 +40,7 @@ public class ElMundo extends com.lucevent.newsup.data.util.NewsReader {
         article.select("noscript").tagName("div");
         article.select("[style]").removeAttr("style");
 
-        NewsStylist.completeSrcHttp(article);
+        NewsStylist.repairLinks(article);
 
         if (!article.isEmpty())
             news.content = article.html();

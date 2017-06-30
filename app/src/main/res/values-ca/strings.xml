@@ -95,7 +95,9 @@
     <string name="msg_message_empty">El missatge no pot estar buit</string>
     <string name="msg_message_sent">Missatge enviat :)</string>
     <string name="msg_error_occurred">S\'ha produït un error :(</string>
-
+    <string name="msg_no_history">Llista buida</string>
+    <string name="msg_no_bookmarks">Encara no has marcat cap notícia</string>
+    <string name="msg_minimum_one_checked">Una secció ha de romandre marcada</string>
 
     <!-- * *************** Activities and fragment's titles ********************* * -->
     <string name="title_frg_settings_of">Configuració de %1$s</string>

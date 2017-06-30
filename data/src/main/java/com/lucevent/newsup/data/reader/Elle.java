@@ -2,6 +2,7 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Document;
@@ -116,8 +117,8 @@ public class Elle extends com.lucevent.newsup.data.util.NewsReader {
             }
             e.removeAttr("class");
         }
-        for (Element e : article.select("script[src^=//]"))
-            e.attr("src", "http:" + e.attr("src"));
+
+        NewsStylist.repairLinks(article);
 
         article.select("h2").tagName("h3");
 

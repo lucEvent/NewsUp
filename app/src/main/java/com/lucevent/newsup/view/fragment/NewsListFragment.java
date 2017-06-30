@@ -17,6 +17,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -92,8 +93,10 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         else
             currentSite = null;
 
-        Sections sections = currentSite != null ? currentSite.getSections() : new Sections();
-        sectionsDialog = new SectionsDialog(getActivity(), sections, onSectionSelected);
+        if (sectionsDialog == null)
+            sectionsDialog = new SectionsDialog(getActivity(), currentSite, onSectionSelected);
+        else
+            sectionsDialog.setSections(currentSite);
     }
 
     public void setUp()
@@ -107,7 +110,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         adapter.clear();
         progressBar.setVisibility(ProgressBar.VISIBLE);
         switch (currentSiteCode) {
-            case -2:
+            case -2:    // Load from notification
                 adapter.setOnMoreSectionsClick(null);
                 showSectionsButton = false;
 
@@ -125,7 +128,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
                 handler.obtainMessage(AppCode.NEWS_LOADED).sendToTarget();
                 break;
 
-            case -1:
+            case -1:    // Main sites
                 showSectionsButton = false;
                 adapter.setOnMoreSectionsClick(null);
                 dataManager.getMainNews(handler);
@@ -215,8 +218,11 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
     public void onResume()
     {
         super.onResume();
+
         if (displayingNews)
             newsView.resume();
+
+        sectionsDialog.setSections(currentSite);
     }
 
     @Override
@@ -330,7 +336,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
     }
 
 
-    static class Handler extends android.os.Handler {
+    private static class Handler extends android.os.Handler {
 
         private final WeakReference<NewsListFragment> context;
 
@@ -355,7 +361,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
                         return;
 
                     service.adapter.addAll(news);
-                    if (service.adapter.getItemCount() == 0)
+                    if (service.adapter.getItemCount() == 0 || service.recyclerView.computeVerticalScrollOffset() == 0)
                         service.recyclerView.smoothScrollToPosition(0);
                     break;
                 case AppCode.NEWS_LOADED:
@@ -464,8 +470,8 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         {
             adapter.clear();
             progressBar.setVisibility(ProgressBar.VISIBLE);
-            Section section = (Section) v.getTag();
-            dataManager.getNewsOf(currentSite, new int[]{currentSite.getSections().indexOf(section)}, handler);
+            int iSection = (int) v.getTag();
+            dataManager.getNewsOf(currentSite, new int[]{iSection}, handler);
             sectionsDialog.dismiss();
         }
     };
@@ -491,19 +497,21 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
 
     private OnMoreSectionsClickListener onMoreSectionsClick = new OnMoreSectionsClickListener() {
         @Override
-        public Set<Section> sections()
+        public Set<Pair<Integer, Section>> sections()
         {
-            Set<Section> res;
+            Set<Pair<Integer, Section>> res;
             Sections s = currentSite.getSections();
             if (s.size() <= 9) {
                 res = new HashSet<>(s.size());
-                res.addAll(s);
+                for (int i = 0; i < s.size(); i++)
+                    res.add(new Pair<>(i, s.get(i)));
+
             } else {
-                res = new TreeSet<>(new Comparator<Section>() {
+                res = new TreeSet<>(new Comparator<Pair<Integer, Section>>() {
                     @Override
-                    public int compare(Section s1, Section s2)
+                    public int compare(Pair<Integer, Section> s1, Pair<Integer, Section> s2)
                     {
-                        return s1.name.compareTo(s2.name);
+                        return s1.second.name.compareTo(s2.second.name);
                     }
                 });
                 Random r = new Random();
@@ -512,7 +520,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
                     do {
                         pos = r.nextInt(s.size());
                     } while (s.get(pos).level == -1);
-                    res.add(s.get(pos));
+                    res.add(new Pair<>(pos, s.get(pos)));
                 }
             }
             return res;

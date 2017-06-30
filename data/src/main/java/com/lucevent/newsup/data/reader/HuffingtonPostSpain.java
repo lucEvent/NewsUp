@@ -60,7 +60,7 @@ public class HuffingtonPostSpain extends com.lucevent.newsup.data.util.NewsReade
             } catch (Exception ignored) {
             }
 
-        NewsStylist.completeSrcHttp(body);
+        NewsStylist.repairLinks(body);
 
         String content = body.outerHtml();
         index = content.indexOf("<hh--");
@@ -92,7 +92,7 @@ public class HuffingtonPostSpain extends com.lucevent.newsup.data.util.NewsReade
         article.select("li").tagName("p");
         article.select("h1,h2").tagName("h3");
 
-        NewsStylist.completeSrcHttp(article);
+        NewsStylist.repairLinks(article);
 
         news.content = article.outerHtml();
     }

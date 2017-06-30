@@ -10,8 +10,6 @@ import org.jsoup.select.Elements;
 
 public class SpaceNews extends com.lucevent.newsup.data.util.NewsReader {
 
-    private static final String SITE_STYLE = "<style>.wp-caption-text{font-size:12px;padding:2px 10px;display:block;}</style>";
-
     // Tags: [category, content:encoded, dc:creator, description, guid, item, link, pubdate, title]
 
     public SpaceNews()
@@ -24,8 +22,6 @@ public class SpaceNews extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{});
-
-        this.style = SITE_STYLE;
     }
 
     @Override
@@ -42,6 +38,7 @@ public class SpaceNews extends com.lucevent.newsup.data.util.NewsReader {
 
         doc.select("[style]").removeAttr("style");
         doc.select(".pullquote,.pullquoteleft").tagName("blockquote");
+        doc.select(".wp-caption-text").tagName("figcaption");
 
         return doc.body().html();
     }

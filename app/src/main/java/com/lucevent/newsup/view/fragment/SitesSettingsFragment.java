@@ -1,36 +1,43 @@
 package com.lucevent.newsup.view.fragment;
 
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceScreen;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.lucevent.newsup.Main;
 import com.lucevent.newsup.R;
+import com.lucevent.newsup.data.Sites;
 import com.lucevent.newsup.data.SitesMap;
-import com.lucevent.newsup.data.util.Site;
-import com.lucevent.newsup.io.LogoManager;
 import com.lucevent.newsup.kernel.AppData;
+import com.lucevent.newsup.view.adapter.SiteListAdapter;
 
-public class SitesSettingsFragment extends android.preference.PreferenceFragment
-        implements Preference.OnPreferenceClickListener {
+import java.util.Collections;
+
+public class SitesSettingsFragment extends android.app.Fragment implements View.OnClickListener {
 
     @Override
-    public void onCreate(final Bundle savedInstanceState)
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.sites_list_preferences);
+        View view = inflater.inflate(R.layout.f_news_list, container, false);
 
-        PreferenceScreen sitesPreferenceScreen = getPreferenceScreen();
-        SitesMap sites = new SitesMap(AppData.sites, SitesMap.SITE_COMPARATOR_BY_NAME);
-        for (Site site : sites) {
-            Preference p = new Preference(getActivity());
-            p.setIcon(LogoManager.getLogo(site.code, LogoManager.Size.ACTION_BAR));
-            p.setTitle(site.name);
-            p.setKey(Integer.toString(site.code));
-            p.setOnPreferenceClickListener(this);
+        Sites sites = new Sites(AppData.sites);
+        Collections.sort(sites, SitesMap.SITE_COMPARATOR_BY_NAME);
 
-            sitesPreferenceScreen.addPreference(p);
-        }
+        SiteListAdapter adapter = new SiteListAdapter(sites, this);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setAutoMeasureEnabled(true);
+
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
+        recyclerView.setNestedScrollingEnabled(false);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+
+        return view;
     }
 
     @Override
@@ -41,11 +48,10 @@ public class SitesSettingsFragment extends android.preference.PreferenceFragment
     }
 
     @Override
-    public boolean onPreferenceClick(Preference preference)
+    public void onClick(final View v)
     {
-        int code = Integer.parseInt(preference.getKey());
+        int code = (int) v.getTag();
         ((Main) getActivity()).onReplaceFragment(SiteSettingsFragment.instanceFor(code), R.id.nav_settings, true);
-        return true;
     }
 
 }

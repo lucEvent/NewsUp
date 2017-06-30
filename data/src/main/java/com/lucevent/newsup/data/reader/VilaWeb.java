@@ -38,7 +38,7 @@ public class VilaWeb extends com.lucevent.newsup.data.util.NewsReader {
         doc.select("h1,h2").tagName("h3");
 
         Element article = doc.body();
-        NewsStylist.completeSrcHttp(article);
+        NewsStylist.repairLinks(article);
 
         return article.html();
     }

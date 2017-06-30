@@ -6,9 +6,8 @@ import org.jsoup.parser.Parser;
 
 public class GoogleEarthBlog extends com.lucevent.newsup.data.util.NewsReader {
 
-    private static final String SITE_STYLE = "<style>img+br+i{font-size:12px;padding:2px 10px;display:block;}img[src$='mac-cmdkey.gif'],img[src$='gelogoicon.gif'],img[src*='/ic" +
-            "ons/']{width:4%;}code{display:block;padding: 5px 0;width:100%;overflow:scroll;font-size:16px;font-family:courier;}code:before{content:'Slide left to see more';colo" +
-            "r:#777777;display:block;padding:12px 0 5px;}</style>";
+    private static final String SITE_STYLE = "<style>img[src$='mac-cmdkey.gif'],img[src$='gelogoicon.gif'],img[src*='/icons/']{width:4%;}code{display:block;padding: 5px 0;wid" +
+            "th:100%;overflow:scroll;font-size:16px;font-family:courier;}code:before{content:'Slide left to see more';color:#777777;display:block;padding:12px 0 5px;}</style>";
 
     //tags: [category, content:encoded, dc:creator, description, guid, item, link, post-id, pubdate, title]
 
@@ -44,6 +43,7 @@ public class GoogleEarthBlog extends com.lucevent.newsup.data.util.NewsReader {
         doc.select("script").remove();
 
         doc.select("h1,h2").tagName("h3");
+        doc.select("img+br+i").tagName("figcaption");
         doc.select("[style]").removeAttr("style");
         doc.select("[width]").removeAttr("width");
         doc.select("iframe").attr("frameborder", "0");

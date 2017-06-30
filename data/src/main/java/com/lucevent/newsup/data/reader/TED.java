@@ -41,7 +41,7 @@ public class TED extends com.lucevent.newsup.data.util.NewsReader {
 
         doc.select(".wp-caption").tagName("p");
         doc.select("[style]").removeAttr("style");
-        doc.select("h2").tagName("h3");
+        doc.select("h1,h2").tagName("h3");
         doc.select("iframe").attr("frameborder", "0");
 
         NewsStylist.cleanAttributes(doc.select("img"), "src");

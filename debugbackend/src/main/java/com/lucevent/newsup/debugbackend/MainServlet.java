@@ -3,8 +3,7 @@ package com.lucevent.newsup.debugbackend;
 import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
 import com.lucevent.newsup.debugbackend.data.Log;
-import com.lucevent.newsup.debugbackend.data.TaskData;
-import com.lucevent.newsup.debugbackend.data.TaskState;
+import com.lucevent.newsup.debugbackend.data.Task;
 import com.lucevent.newsup.debugbackend.kernel.Test;
 import com.lucevent.newsup.debugbackend.net.Net;
 import com.lucevent.newsup.debugbackend.util.ReportCallback;
@@ -52,8 +51,8 @@ public class MainServlet extends HttpServlet implements ReportCallback {
                 test.clearLogs();
             }
 
+            return;
         }
-
     }
 
     @Override
@@ -63,8 +62,7 @@ public class MainServlet extends HttpServlet implements ReportCallback {
 
         ObjectifyFactory oFactory = ObjectifyService.factory();
         oFactory.register(Log.class);
-        oFactory.register(TaskState.class);
-        oFactory.register(TaskData.class);
+        oFactory.register(Task.class);
         oFactory.register(com.lucevent.newsup.debugbackend.data.Error.class);
         oFactory.begin();
     }

@@ -4,14 +4,16 @@ import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.util.List;
+
 public final class NewsStylist {
 
     public static void cleanAttributes(Elements elems)
     {
         for (Element elem : elems) {
-            for (Attribute attr : elem.attributes()) {
+            List<Attribute> attrs = elem.attributes().asList();
+            for (Attribute attr : attrs)
                 elem.removeAttr(attr.getKey());
-            }
         }
     }
 
@@ -19,26 +21,30 @@ public final class NewsStylist {
     {
         for (Element elem : elems) {
             String atk = elem.attr(keep);
-            for (Attribute attr : elem.attributes()) {
+
+            List<Attribute> attrs = elem.attributes().asList();
+            for (Attribute attr : attrs)
                 elem.removeAttr(attr.getKey());
-            }
+
             elem.attr(keep, atk);
         }
     }
 
     public static void cleanAttributes(Element elem)
     {
-        for (Attribute attr : elem.attributes()) {
+        List<Attribute> attrs = elem.attributes().asList();
+        for (Attribute attr : attrs)
             elem.removeAttr(attr.getKey());
-        }
     }
 
     public static void cleanAttributes(Element elem, String keep)
     {
         String atk = elem.attr(keep);
-        for (Attribute attr : elem.attributes()) {
+
+        List<Attribute> attrs = elem.attributes().asList();
+        for (Attribute attr : attrs)
             elem.removeAttr(attr.getKey());
-        }
+
         elem.attr(keep, atk);
     }
 
@@ -47,16 +53,22 @@ public final class NewsStylist {
         return s.replaceAll("(?s)<!--.*?-->", "");
     }
 
-    public static void completeSrcHttp(Elements article)
+    public static void repairLinks(Elements elems)
     {
-        for (Element e : article.select("[src^='//']"))
+        for (Element e : elems.select("[src^='//']"))
             e.attr("src", "http:" + e.attr("src"));
+
+        for (Element e : elems.select("[href^='//']"))
+            e.attr("href", "http:" + e.attr("href"));
     }
 
-    public static void completeSrcHttp(Element article)
+    public static void repairLinks(Element elems)
     {
-        for (Element e : article.select("[src^='//']"))
+        for (Element e : elems.select("[src^='//']"))
             e.attr("src", "http:" + e.attr("src"));
+
+        for (Element e : elems.select("[href^='//']"))
+            e.attr("href", "http:" + e.attr("href"));
     }
 
     public static String video(String src)

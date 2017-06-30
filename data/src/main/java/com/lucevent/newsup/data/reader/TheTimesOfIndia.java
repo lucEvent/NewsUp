@@ -11,10 +11,9 @@ public class TheTimesOfIndia extends com.lucevent.newsup.data.util.NewsReader {
 
     /**
      * tags:
-     * [category, cmsid, dc:creator, description, guid, item, link,                                                                           pubdate, title]
-     * [                             description, guid, item, link,                                                                           pubdate, title]
-     * [                             description, guid, item, link, media:category, media:content, media:rating, media:text, media:thumbnail, pubdate, title]
-     **/
+     * [                             description, guid, item, link, pubdate, title]
+     * [category, cmsid, dc:creator, description, guid, item, link, pubdate, title]
+     */
 
     public TheTimesOfIndia()
     {
@@ -36,40 +35,37 @@ public class TheTimesOfIndia extends com.lucevent.newsup.data.util.NewsReader {
         String link = prop.text();
         if (!link.startsWith("http:"))
             link = "http://timesofindia.indiatimes.com/" + link;
+
         return link;
     }
 
     @Override
     protected void readNewsContent(Document doc, News news)
     {
-        Elements imgs = doc.select(".agencymainimg img");
-        Element img = null;
-        if (!imgs.isEmpty()) {
-            img = imgs.first();
-            img.attr("src", "http://timesofindia.indiatimes.com/" + img.attr("data-src"));
+        doc.select(".forcehide").remove();
+
+        Elements article = doc.select(".articleimg .vidContent,.agencymainimg,.articlehighlights,.article-txt");
+
+        if (article.isEmpty()) {
+            article = doc.select(".article .content");
+
+            for (Element img : article.select("img[src^='../..']"))
+                img.attr("src", img.attr("src").replace("../..", "http://blogs.timesofindia.indiatimes.com"));
+
         }
-        Elements articles = doc.select(".article-txt");
-        Element article;
-        if (articles.isEmpty()) {
-            articles = doc.select(".article .content");
+        article.select("script,.articlehighlights h3,.ad1,.dontmiss,.readalso,.track:not(.newsincontext),.vidAdContainer").remove();
 
-            if (!articles.isEmpty()) {
+        for (Element img : article.select("img[data-src]"))
+            img.attr("src", img.attr("data-src"));
 
-                for (Element e : articles.select("[style]"))
-                    e.removeAttr("style");
-                for (Element e : articles.select("[width],[height]")) {
-                    e.removeAttr("width");
-                    e.removeAttr("height");
-                }
-                news.content = articles.outerHtml().replace("src=\"../..", "src=\"http://blogs.timesofindia.indiatimes.com/");
-            }
-            return;
-        }
-        article = articles.get(0);
-        article.select("script,style,.forcehide,.ad1,.readalso").remove();
+        NewsStylist.cleanAttributes(article.select("img"), "src");
 
-        news.content = (img == null ? "" : img.outerHtml()) + article.outerHtml();
-        news.content = news.content.replace("<br>", "<p></p>");
+        article.select("h1,h2").tagName("h3");
+        article.select("[style]").removeAttr("style");
+        article.select(".clearfix").tagName("p");
+        article.select(".agencytxt,.italictext,.wp-caption-text").tagName("figcaption");
+
+        news.content = article.html().replace("<br> <br>", "</p><p>");
     }
 
 }

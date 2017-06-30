@@ -16,7 +16,7 @@ import com.lucevent.newsup.services.util.DownloadSchedule;
 public class Database extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "newsup.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     public static final String id = "_id";
 
@@ -47,6 +47,28 @@ public class Database extends SQLiteOpenHelper {
         {
             return new News(c.getInt(0), c.getString(2), c.getString(3), c.getString(5),
                     c.getLong(4), new Tags(c.getString(6)));
+        }
+    }
+
+    static final class DBiNewsSection {
+        static final String db = "isection";
+
+        static final String site_code = "site_id";
+        static final String section = "section";
+        static final String news_id = "news_id";
+
+        static final String[] cols = {site_code, section, news_id};
+
+        static final String creator =
+                "CREATE TABLE " + db + " (" +
+                        site_code + " INTEGER," +
+                        section + " INTEGER," +
+                        news_id + " INTEGER" +
+                        ");";
+
+        static int newsId(Cursor c)
+        {
+            return c.getInt(2);
         }
     }
 
@@ -193,6 +215,7 @@ public class Database extends SQLiteOpenHelper {
         db.execSQL(DBDownloadSchedule.creator);
         db.execSQL(DBReadingStats.creator);
         db.execSQL(DBNote.creator);
+        db.execSQL(DBiNewsSection.creator);
     }
 
     @Override
@@ -205,6 +228,8 @@ public class Database extends SQLiteOpenHelper {
                 db.execSQL(DBReadingStats.creator);
                 db.execSQL(DBNote.creator);
             case 2:
+                db.execSQL(DBiNewsSection.creator);
+            case 3:
                 // Delete all needed tables
                 // db.execSQL("DROP TABLE "+ "db_xxxxxxxxxxxx");
                 // Create all needed tables

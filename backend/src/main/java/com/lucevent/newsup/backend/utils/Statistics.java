@@ -8,6 +8,8 @@ import com.googlecode.objectify.cmd.LoadType;
 import com.lucevent.newsup.data.util.Site;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.TreeSet;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
@@ -100,6 +102,20 @@ public class Statistics {
     public void newMonth()
     {
         monthStats = MonthStats.getInstance();
+    }
+
+    public TreeSet<MonthStats> getMonthStats()
+    {
+        TreeSet<MonthStats> res = new TreeSet<>(new Comparator<MonthStats>() {
+            @Override
+            public int compare(MonthStats o1, MonthStats o2)
+            {
+                int yearComparison = Integer.compare(o1.year, o2.year);
+                return yearComparison != 0 ? -yearComparison : -Integer.compare(o1.month, o2.month);
+            }
+        });
+        res.addAll(ofy().load().type(MonthStats.class).list());
+        return res;
     }
 
     private static void initializeStats(Statistics stats)

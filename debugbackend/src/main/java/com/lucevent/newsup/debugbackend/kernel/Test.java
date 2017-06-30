@@ -6,8 +6,7 @@ import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.Section;
 import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.debugbackend.data.Database;
-import com.lucevent.newsup.debugbackend.data.TaskData;
-import com.lucevent.newsup.debugbackend.data.TaskState;
+import com.lucevent.newsup.debugbackend.data.Task;
 import com.lucevent.newsup.debugbackend.util.ReportCallback;
 
 
@@ -28,23 +27,22 @@ public class Test {
         Sites sites = Sites.getDefault(true);
         Evaluation[] evals = new Evaluation[]{WITHCONTENT, TH2, SCRIPTS, LINKS, STYLES};
 
-        TaskState taskState = db.getCurrentTask();
-        TaskData data = db.getTaskData(taskState, evals.length);
+        Task task = db.getCurrentTask(evals.length);
 
-        db.newRound(taskState);
+        db.newRound(task);
 
-        if (data.currentEvaluatingSite < sites.size()) {
-            Site site = sites.get(data.currentEvaluatingSite);
+        if (task.currentEvaluatingSite < sites.size()) {
+            Site site = sites.get(task.currentEvaluatingSite);
 
-            for (; data.currentEvaluatingSection < site.getSections().size(); data.currentEvaluatingSection++, db.save(data, true)) {
-                Section section = site.getSections().get(data.currentEvaluatingSection);
+            for (; task.currentEvaluatingSection < site.getSections().size(); task.currentEvaluatingSection++, db.save(task, true)) {
+                Section section = site.getSections().get(task.currentEvaluatingSection);
                 if (section.url != null) {
 
-                    int[] tempValues = new int[data.siteTestResults.length];
+                    int[] tempValues = new int[task.siteTestResults.length];
                     for (int i = 0; i < tempValues.length; i++)
                         tempValues[i] = 0;
 
-                    NewsArray news = site.readNewsHeaders(new int[]{data.currentEvaluatingSection});
+                    NewsArray news = site.readNewsHeaders(new int[]{task.currentEvaluatingSection});
                     for (News N : news) {
                         N.site_code = site.code;
                         if (N.content == null || N.content.isEmpty()) {
@@ -59,39 +57,39 @@ public class Test {
                                 tempValues[t]++;
                     }
 
-                    data.siteNumNews += news.size();
+                    task.siteNumNews += news.size();
                     for (int i = 0; i < tempValues.length; i++)
-                        data.siteTestResults[i] += tempValues[i];
+                        task.siteTestResults[i] += tempValues[i];
                 }
             }
 
             // Log save
             StringBuilder sb = new StringBuilder();
             sb.append("\tResultados para ").append(site.name).append("\n");
-            sb.append("\t\t").append(data.siteNumNews).append(" noticias\n");
-            for (int i = 0; i < data.siteTestResults.length; i++) {
-                String dscr = evals[i].description();
-                int res = data.siteTestResults[i];
-                int negRes = data.siteNumNews - res;
-                sb.append("\t\t").append(res).append(" ").append(dscr).append(" (").append(negRes).append(" no)\n");
+            sb.append("\t\t").append(task.siteNumNews).append(" noticias\n");
+            for (int i = 0; i < task.siteTestResults.length; i++) {
+                int res = task.siteTestResults[i];
+                if (res > 0) {
+                    sb.append("\t\t").append(res).append(" ").append(evals[i].description()).append("\n");
+                }
             }
             sb.append("_________________________________________________\n\n");
 
             String partialReport = sb.toString();
-            db.saveLog(taskState, data.currentEvaluatingSite, partialReport);
+            db.saveLog(task.id, task.currentEvaluatingSite, partialReport);
 
-            if (data.siteNumNews == 0 || (data.siteNumNews / 2) < data.siteTestResults[0])
+            if (task.siteNumNews == 0 || (task.siteNumNews / 2) < task.siteTestResults[0])
                 urgentCallback.report(partialReport);
 
-            data.totalNumNews += data.siteNumNews;
+            task.totalNumNews += task.siteNumNews;
             for (int t = 0; t < evals.length; t++) {
-                data.totalTestResults[t] += data.siteTestResults[t];
-                data.siteTestResults[t] = 0;
+                task.totalTestResults[t] += task.siteTestResults[t];
+                task.siteTestResults[t] = 0;
             }
-            data.currentEvaluatingSite++;
-            data.currentEvaluatingSection = 0;
-            data.siteNumNews = 0;
-            db.save(data, false);
+            task.currentEvaluatingSite++;
+            task.currentEvaluatingSection = 0;
+            task.siteNumNews = 0;
+            db.save(task, false);
 
             return null;
         }
@@ -99,18 +97,18 @@ public class Test {
         // Total results log save
         StringBuilder sb = new StringBuilder();
         sb.append("** Resultados totales **\n");
-        sb.append("\t").append(data.totalNumNews).append(" noticias\n");
-        for (int i = 0; i < data.totalTestResults.length; i++) {
-            String dscr = evals[i].description();
-            int res = data.totalTestResults[i];
-            int negRes = data.totalNumNews - res;
-            sb.append("\t").append(res).append(" ").append(dscr).append(" (").append(negRes).append(" no)\n");
+        sb.append("\t").append(task.totalNumNews).append(" noticias\n");
+        for (int i = 0; i < task.totalTestResults.length; i++) {
+            int res = task.totalTestResults[i];
+            if (res > 0) {
+                sb.append("\t").append(res).append(" ").append(evals[i].description()).append("\n");
+            }
         }
-        db.saveLog(taskState, data.currentEvaluatingSite, sb.toString());
+        db.saveLog(task.id, task.currentEvaluatingSite, sb.toString());
 
-        db.finish(taskState);
+        db.finish(task);
 
-        return db.getFullReport(taskState);
+        return db.getFullReport(task);
     }
 
     public void clearLogs()

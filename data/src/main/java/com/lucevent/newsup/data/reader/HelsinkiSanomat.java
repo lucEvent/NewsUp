@@ -46,8 +46,8 @@ public class HelsinkiSanomat extends com.lucevent.newsup.data.util.NewsReader {
         article.select("h2").tagName("h3");
         article.select(".votsikko").tagName("h4");
 
-        NewsStylist.completeSrcHttp(image);
-        NewsStylist.completeSrcHttp(article);
+        NewsStylist.repairLinks(image);
+        NewsStylist.repairLinks(article);
 
         news.content = image.outerHtml() + "<p>" + article.outerHtml().replace("<br>", "</p><p>") + "</p>";
     }

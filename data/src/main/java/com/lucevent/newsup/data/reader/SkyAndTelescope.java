@@ -2,11 +2,13 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.NewsStylist;
 
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class SkyAndTelescope extends com.lucevent.newsup.data.util.NewsReader {
 
     /**
+     * tags:
      * [category, content:encoded, dc:creator, description,            guid, item, link, pubdate, title]
      * [category, content:encoded, dc:creator, description, enclosure, guid, item, link, pubdate, title]
      */
@@ -28,20 +30,25 @@ public class SkyAndTelescope extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected String parseDescription(Element prop)
     {
-        org.jsoup.select.Elements description = org.jsoup.Jsoup.parse(prop.text()).select("p");
-        if (!description.isEmpty()) {
-            return description.get(0).text();
-        }
-        return "";
+        String dscr = jsoupParse(prop).select("p").first().text();
+        return dscr.startsWith("The post") ? "" : dscr;
     }
 
     @Override
     protected String parseContent(Element prop)
     {
-        org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(prop.text());
+        Document doc = jsoupParse(prop);
+        doc.select("script").remove();
         doc.select("[style]").removeAttr("style");
-        doc.select("h2").tagName("h3");
-        return doc.select("body").html();
+        doc.select("h1,h2").tagName("h3");
+
+        for (Element e : doc.select(".wp-caption-text"))
+            e.tagName("figcaption")
+                    .removeAttr("class");
+
+        Element article = doc.body();
+        NewsStylist.repairLinks(article);
+        return article.html();
     }
 
 }

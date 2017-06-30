@@ -1,6 +1,7 @@
 package com.lucevent.newsup.view.adapter.viewholder;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 
@@ -38,18 +39,18 @@ public class MoreSectionsViewHolder extends RecyclerView.ViewHolder {
 
     public void populate()
     {
-        Set<Section> sections = onMoreClick.sections();
+        Set<Pair<Integer, Section>> sections = onMoreClick.sections();
         int i = 0;
         int charCounter = 0;
-        for (Section section : sections) {
+        for (Pair<Integer, Section> section : sections) {
             if (i % 3 == 0)
                 charCounter = 0;
 
-            charCounter += section.name.length();
+            charCounter += section.second.name.length();
             if (charCounter < 32) {
                 buttons[i].setVisibility(View.VISIBLE);
-                buttons[i].setText(section.name);
-                buttons[i].setTag(section);
+                buttons[i].setText(section.second.name);
+                buttons[i].setTag(section.first);
             } else
                 buttons[i].setVisibility(View.GONE);
 

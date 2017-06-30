@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
     <application>newsup-2406</application>
-<!--
-    All servers
-       <application>newsup-2406</application>
-       <application>newsup-1</application>
-       <application>newsup-2</application>
-       <application>newsup-3</application>
-       <application>newsup-4</application>
-       <application>newsup-5</application>
--->
+    <!--
+        All servers
+           <application>newsup-2406</application>
+           <application>newsup-1</application>
+           <application>newsup-2</application>
+           <application>newsup-3</application>
+           <application>newsup-4</application>
+           <application>newsup-5</application>
+    -->
     <version>2-2-0</version>
     <threadsafe>true</threadsafe>
 

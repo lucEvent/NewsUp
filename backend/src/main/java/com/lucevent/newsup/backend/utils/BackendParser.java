@@ -27,7 +27,9 @@ public class BackendParser {
         if (news.content != null && !news.content.isEmpty()) res.append(news.content);
         res.append("</content><categories>");
         res.append(news.tags.toString());
-        res.append("</categories>");
+        res.append("</categories><section>");
+        res.append(news.section);
+        res.append("</section>");
         for (Enclosure e : news.enclosures)
             res.append("<enclosure>").append(e.src).append("</enclosure>");
         res.append("</item>");

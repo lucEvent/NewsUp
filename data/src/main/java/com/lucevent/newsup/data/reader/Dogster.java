@@ -7,8 +7,6 @@ import org.jsoup.nodes.Element;
 
 public class Dogster extends com.lucevent.newsup.data.util.NewsReader {
 
-    private static final String SITE_STYLE = "<style>.wp-caption-text{font-size:12px;padding:2px 10px;display:block;}</style>";
-
     // Tags: [category, content:encoded, dc:creator, description, guid, item, link, pubdate, title]
 
     public Dogster()
@@ -21,8 +19,6 @@ public class Dogster extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{});
-
-        this.style = SITE_STYLE;
     }
 
     @Override
@@ -38,6 +34,7 @@ public class Dogster extends com.lucevent.newsup.data.util.NewsReader {
         doc.select("script").remove();
 
         doc.select("h1,h2").tagName("h3");
+        doc.select(".wp-caption-text").tagName("figcaption");
         doc.select("[style]").removeAttr("style");
         doc.select("[class^='m_'").removeAttr("class");
 

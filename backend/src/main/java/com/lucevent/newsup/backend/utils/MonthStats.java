@@ -17,7 +17,13 @@ public class MonthStats {
 
     @Id
     @Index
-    public String month;
+    public String id;
+
+    @Unindex
+    public int month;
+
+    @Unindex
+    public int year;
 
     @Unindex
     public long counter;
@@ -32,7 +38,9 @@ public class MonthStats {
         if (monthStats == null) {
 
             monthStats = new MonthStats();
-            monthStats.month = month;
+            monthStats.id = month;
+            monthStats.month = calendar.get(Calendar.MONTH)+1;
+            monthStats.year = calendar.get(Calendar.YEAR);
             monthStats.counter = 0;
 
             ofy().save().entity(monthStats).now();

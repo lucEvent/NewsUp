@@ -15,12 +15,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.SubMenu;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.lucevent.newsup.data.Sites;
 import com.lucevent.newsup.data.util.Site;
@@ -83,12 +85,12 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        assert navigationView != null : "Navigation view is null";
         navigationView.setNavigationItemSelectedListener(this);
 
         fragmentManager = new FragmentManager(this, navigationView, R.id.main_content);
 
-        updateDrawer(true);
+        setUpDrawer();
+        updateFavorites();
 
         Bundle extras = getIntent().getExtras();
         if (extras != null && extras.containsKey(AppCode.SEND_NEWS_IDS)) {
@@ -118,8 +120,10 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         } else if (fragmentManager.getBackStackEntryCount() > 0) {
 
             Fragment f = fragmentManager.popFragment();
-            if (f instanceof NewsListFragment)
+            if (f instanceof NewsListFragment) {
                 setUpColors(((NewsListFragment) f).currentSiteCode);
+                lastItemSelected = R.id.nav_my_news;
+            }
 
         } else super.onBackPressed();
     }
@@ -133,36 +137,83 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         }
     }
 
-    private void updateDrawer(boolean updateFavorites)
+    private void setUpDrawer()
     {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        assert navigationView != null : "Navigation view is null";
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
             navigationView.setItemIconTintList(null);
 
-        MenuItem stats = navigationView.getMenu().findItem(R.id.nav_stats);
+        View header = navigationView.getHeaderView(0);
+
+        ImageButton stats = (ImageButton) header.findViewById(R.id.nav_stats);
         if (ProSettings.checkEnabled(ProSettings.STATISTICS_KEY))
-            stats.setVisible(true);
+            stats.setVisibility(View.VISIBLE);
         else
-            stats.setVisible(false);
+            stats.setVisibility(View.GONE);
+
+        lastItemSelected = R.id.nav_my_news;
+        header.findViewById(R.id.nav_my_news).setSelected(true);
+
+        header.findViewById(R.id.nav_my_news).setOnLongClickListener(onDrawerActionBarButtonLongClick);
+        header.findViewById(R.id.nav_saved_news).setOnLongClickListener(onDrawerActionBarButtonLongClick);
+        header.findViewById(R.id.nav_read_news).setOnLongClickListener(onDrawerActionBarButtonLongClick);
+        header.findViewById(R.id.nav_stats).setOnLongClickListener(onDrawerActionBarButtonLongClick);
+        header.findViewById(R.id.nav_more_publications).setOnLongClickListener(onDrawerActionBarButtonLongClick);
 
         MenuItem notes = navigationView.getMenu().findItem(R.id.nav_notes);
         if (ProSettings.checkEnabled(ProSettings.NOTES_KEY))
             notes.setVisible(true);
         else
             notes.setVisible(false);
+    }
 
-        if (updateFavorites) {
-            SubMenu fab_menu = navigationView.getMenu().findItem(R.id.nav_header_favorites).getSubMenu();
-            fab_menu.clear();
-
-            Sites favorites = dataManager.getFavoriteSites();
-            for (Site site : favorites) {
-                MenuItem mi = fab_menu.add(2, site.code, Menu.NONE, site.name);
-                configureMenuItem(mi, site);
+    private View.OnLongClickListener onDrawerActionBarButtonLongClick = new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View v)
+        {
+            int msg = -1;
+            switch (v.getId()) {
+                case R.id.nav_my_news:
+                    msg = R.string.my_news;
+                    break;
+                case R.id.nav_saved_news:
+                    msg = R.string.bookmarks;
+                    break;
+                case R.id.nav_read_news:
+                    msg = R.string.read_news;
+                    break;
+                case R.id.nav_stats:
+                    msg = R.string.statistics;
+                    break;
+                case R.id.nav_more_publications:
+                    msg = R.string.more_publications;
             }
+
+            int x = v.getLeft();
+            int y = v.getTop() + 2 * v.getHeight();
+            Toast toast = Toast.makeText(v.getContext(), msg, Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.TOP | Gravity.START, x, y);
+            toast.show();
+
+            return true;
         }
+    };
+
+    private void updateFavorites()
+    {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+        Menu menu = navigationView.getMenu();
+
+        menu.removeGroup(R.id.group_favorites);
+
+        Sites favorites = dataManager.getFavoriteSites();
+        for (Site site : favorites) {
+            MenuItem mi = menu.add(R.id.group_favorites, site.code, 1, site.name);
+            configureMenuItem(mi, site);
+        }
+
         navigationView.invalidate();
     }
 
@@ -175,8 +226,19 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         mi.setCheckable(true);
     }
 
+    private int lastItemSelected;
+
+    public void onDrawerActionBarItemSelected(View v)
+    {
+        if (navigateTo(v.getId()) && v.getId() != R.id.nav_more_publications) {
+            fragmentManager.updateCheckedItem(v.getId(), lastItemSelected);
+
+            lastItemSelected = v.getId();
+        }
+    }
+
     @Override
-    public boolean onNavigationItemSelected(MenuItem item)
+    public boolean onNavigationItemSelected(@NonNull MenuItem item)
     {
         return navigateTo(item.getItemId());
     }
@@ -239,16 +301,21 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
         if (isNewsFragment) {
 
+            fragmentManager.setNavigationItemId(0, where);
+
             if (!(fragmentManager.currentFragment instanceof NewsListFragment))
                 fragmentManager.popToFirst();
 
-            else newsFragment.setUp();
-
-            fragmentManager.setNavigationItemId(0, where);
-
-        } else
+            else {
+                newsFragment.setUp();
+                fragmentManager.updateCheckedItem(where, lastItemSelected);
+            }
+        } else {
             fragmentManager.replaceFragment(fragment, where,
                     fragmentManager.currentFragment instanceof NewsListFragment);
+
+            fragmentManager.updateCheckedItem(where, lastItemSelected);
+        }
 
         setTitle(title);
         setUpColors(colorCode);
@@ -308,7 +375,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     @Override
     public void onFavoritesChange()
     {
-        updateDrawer(true);
+        updateFavorites();
     }
 
     @Override

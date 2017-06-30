@@ -12,8 +12,6 @@ import java.io.IOException;
 
 public class Make extends com.lucevent.newsup.data.util.NewsReader {
 
-    private static final String SITE_STYLE = "<style>.wp-caption-text{font-size:12px;padding:2px 10px;display:block;margin:0;}</style>";
-
     // Tags [category, dc:creator, description, guid, item, link, post-id, pubdate, title]
 
     public Make()
@@ -26,8 +24,6 @@ public class Make extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{});
-
-        this.style = SITE_STYLE;
     }
 
     @Override
@@ -60,10 +56,11 @@ public class Make extends com.lucevent.newsup.data.util.NewsReader {
                         .removeAttr("data-lazy-src");
             }
 
-            NewsStylist.cleanAttributes(img,"src");
+            NewsStylist.cleanAttributes(img, "src");
         }
 
         article.select("h1,h2").tagName("h3");
+        doc.select(".wp-caption-text").tagName("figcaption");
         article.select("[style]").removeAttr("style");
         article.select("[width]").removeAttr("width");
         article.select("iframe").attr("frameborder", "0");

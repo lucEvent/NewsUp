@@ -133,6 +133,9 @@
         <item>Entertainment</item>
         <item>Fitness</item>
         <item>Music</item>
+        <item>Economy</item>
+        <item>Politics</item>
+        <item>Various</item>
     </string-array>
     <integer-array name="site_language_weights">
         <item>10</item>

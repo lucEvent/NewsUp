@@ -7,7 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.lucevent.newsup.data.util.Sections;
+import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.view.adapter.SectionAdapter;
 
 public class SectionsDialog {
@@ -15,9 +15,9 @@ public class SectionsDialog {
     private SectionAdapter adapter;
     private Dialog dialog;
 
-    public SectionsDialog(Context context, Sections sections, View.OnClickListener onItemClickListener)
+    public SectionsDialog(Context context, Site site, View.OnClickListener onItemClickListener)
     {
-        adapter = new SectionAdapter(sections, onItemClickListener);
+        adapter = new SectionAdapter(site, onItemClickListener);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(context);
         layoutManager.setAutoMeasureEnabled(true);
@@ -33,9 +33,9 @@ public class SectionsDialog {
                 .create();
     }
 
-    public void setSections(Sections sections)
+    public void setSections(Site site)
     {
-        adapter.setNewDataSet(sections);
+        adapter.setNewDataSet(site);
     }
 
     public void show()

@@ -169,7 +169,6 @@ public class AppSettingsFragment extends PreferenceFragment
                 ((MainChangeListener) getActivity()).onFavoritesChange();
                 break;
         }
-
     }
 
     private Preference.OnPreferenceClickListener onSelectMainSites = new Preference.OnPreferenceClickListener() {

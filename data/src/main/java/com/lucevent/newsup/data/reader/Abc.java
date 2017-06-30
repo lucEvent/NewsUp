@@ -40,7 +40,7 @@ public class Abc extends com.lucevent.newsup.data.util.NewsReader {
     {
         org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(prop.text());
         doc.select("script").remove();
-        doc.select("h2").tagName("h3");
+        doc.select("h1,h2").tagName("h3");
         return doc.body().html();
     }
 

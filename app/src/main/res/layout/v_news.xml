@@ -12,10 +12,7 @@
 
     <com.lucevent.newsup.view.util.NewsSideToolbar
         android:id="@+id/side_toolbar"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:gravity="bottom|end"/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </merge>

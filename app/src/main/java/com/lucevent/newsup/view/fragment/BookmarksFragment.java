@@ -12,6 +12,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
+import android.widget.TextView;
 
 import com.lucevent.newsup.Main;
 import com.lucevent.newsup.R;
@@ -23,6 +25,8 @@ import com.lucevent.newsup.view.adapter.NewsAdapter;
 import com.lucevent.newsup.view.util.NewsView;
 import com.lucevent.newsup.view.util.OnBackPressedListener;
 
+import java.util.Collection;
+
 public class BookmarksFragment extends android.app.Fragment implements View.OnClickListener,
         View.OnLongClickListener, OnBackPressedListener {
 
@@ -32,6 +36,8 @@ public class BookmarksFragment extends android.app.Fragment implements View.OnCl
 
     private StoragePermissionHandler permissionHandler;
     private boolean displayingNews = false;
+
+    private View noContentMessage;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -74,9 +80,15 @@ public class BookmarksFragment extends android.app.Fragment implements View.OnCl
         newsView.setFragmentContext(this, ((Main) getActivity()).drawer);
         newsView.setBookmarkChangeListener(onBookmarkClick);
 
+        noContentMessage = view.findViewById(R.id.no_content);
+
         view.findViewById(R.id.button_sections).setVisibility(View.GONE);
 
-        adapter.setNewDataSet(BookmarksManager.getBookmarkedNews());
+        Collection<News> bmNews = BookmarksManager.getBookmarkedNews();
+        if (!bmNews.isEmpty())
+            adapter.setNewDataSet(bmNews);
+        else
+            displayNoBookmarksMessage();
 
         return view;
     }
@@ -114,18 +126,20 @@ public class BookmarksFragment extends android.app.Fragment implements View.OnCl
         @Override
         public boolean onMenuItemClick(MenuItem item)
         {
-            new AlertDialog.Builder(getActivity())
-                    .setMessage(R.string.msg_confirm_to_remove_all_saved_news)
-                    .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-                            BookmarksManager.removeAllEntries();
-                            adapter.clear();
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel, null)
-                    .show();
+            if (adapter.getItemCount() > 0)
+                new AlertDialog.Builder(getActivity())
+                        .setMessage(R.string.msg_confirm_to_remove_all_saved_news)
+                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                BookmarksManager.removeAllEntries();
+                                adapter.clear();
+                                displayNoBookmarksMessage();
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, null)
+                        .show();
             return true;
         }
     };
@@ -143,10 +157,13 @@ public class BookmarksFragment extends android.app.Fragment implements View.OnCl
 
                 BookmarksManager.toggleBookmark(news);
 
-                if (wasBookmarked)
+                if (wasBookmarked) {
                     adapter.remove(news);
-                else
-                    adapter.setNewDataSet(BookmarksManager.getBookmarkedNews());
+
+                    if (adapter.getItemCount() == 0)
+                        displayNoBookmarksMessage();
+                } else
+                    adapter.add(news);
 
                 newsView.setBookmarkButtonImage(v);
             } else
@@ -161,6 +178,14 @@ public class BookmarksFragment extends android.app.Fragment implements View.OnCl
             BookmarksManager.toggleBookmark((News) tempBookmarkButton.getTag());
             newsView.setBookmarkButtonImage(tempBookmarkButton);
         }
+    }
+
+    private void displayNoBookmarksMessage()
+    {
+        if (noContentMessage instanceof ViewStub)
+            noContentMessage = ((ViewStub) noContentMessage).inflate();
+
+        ((TextView) noContentMessage.findViewById(R.id.message)).setText(R.string.msg_no_bookmarks);
     }
 
 }

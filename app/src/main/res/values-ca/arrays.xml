@@ -125,6 +125,9 @@
         <item>Entreteniment</item>
         <item>Fitness</item>
         <item>Música</item>
+        <item>Economia</item>
+        <item>Política</item>
+        <item>Varis</item>
     </string-array>
     <integer-array name="site_language_weights">
         <item>10</item>

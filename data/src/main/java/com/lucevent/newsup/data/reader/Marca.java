@@ -72,7 +72,7 @@ public class Marca extends com.lucevent.newsup.data.util.NewsReader {
                 }
                 article.select("[style]").removeAttr("style");
 
-                NewsStylist.completeSrcHttp(article);
+                NewsStylist.repairLinks(article);
 
                 news.content = article.outerHtml();
             }

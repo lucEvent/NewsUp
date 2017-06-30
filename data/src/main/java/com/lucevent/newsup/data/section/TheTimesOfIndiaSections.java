@@ -9,24 +9,20 @@ public class TheTimesOfIndiaSections extends Sections {
     {
         super();
 
-        add(new Section("India", "http://timesofindia.indiatimes.com/rssfeeds/-2128936835.cms", 0));
+        add(new Section("Main", "http://timesofindia.indiatimes.com/rssfeeds/-2128936835.cms", 0));
         add(new Section("Top Stories", "http://timesofindia.indiatimes.com/rssfeedstopstories.cms", 0));
 
         add(new Section("World", "http://timesofindia.indiatimes.com/rssfeeds/296589292.cms", 0));
         add(new Section("NRI", "http://timesofindia.indiatimes.com/rssfeeds/7098551.cms", 1));
-        add(new Section("Pakistan", "http://timesofindia.indiatimes.com/rssfeeds/30359534.cms", 1));
         add(new Section("South Asia", "http://timesofindia.indiatimes.com/rssfeeds/3907412.cms", 1));
         add(new Section("UK", "http://timesofindia.indiatimes.com/rssfeeds/2177298.cms", 1));
         add(new Section("Europe", "http://timesofindia.indiatimes.com/rssfeeds/1898274.cms", 1));
-        add(new Section("China", "http://timesofindia.indiatimes.com/rssfeeds/1898184.cms", 1));
         add(new Section("Middle East", "http://timesofindia.indiatimes.com/rssfeeds/1898272.cms", 1));
 
         add(new Section("Business", "http://timesofindia.indiatimes.com/rssfeeds/1898055.cms", 0));
-        add(new Section("Cricket", "http://timesofindia.indiatimes.com/rssfeeds/4719161.cms", 0));
         add(new Section("Sports", "http://timesofindia.indiatimes.com/rssfeeds/4719148.cms", 0));
         add(new Section("Science", "http://timesofindia.indiatimes.com/rssfeeds/-2128672765.cms", 0));
         add(new Section("Environment", "http://timesofindia.indiatimes.com/rssfeeds/2647163.cms", 0));
-        add(new Section("Tech", "http://timesofindia.indiatimes.com/rssfeeds/5880659.cms", 0));
         add(new Section("Sunday TOI", "http://timesofindia.indiatimes.com/rssfeeds/1945062111.cms", 0));
         add(new Section("Entertainment", "http://timesofindia.indiatimes.com/rssfeeds/1081479906.cms", 0));
         add(new Section("Life & Style", "http://timesofindia.indiatimes.com/rssfeeds/2886704.cms", 0));
@@ -61,12 +57,9 @@ public class TheTimesOfIndiaSections extends Sections {
         add(new Section("Vadodara", "http://timesofindia.indiatimes.com/rssfeeds/3942666.cms", 1));
         add(new Section("Varanasi", "http://timesofindia.indiatimes.com/rssfeeds/3947071.cms", 1));
         add(new Section("Thane", "http://timesofindia.indiatimes.com/rssfeeds/3831863.cms", 1));
-        add(new Section("Thiruvananthapuram", "http://timesofindia.indiatimes.com/rssfeeds/878156304.cms", 1));
 
         add(new Section("All Blogs", "http://blogs.timesofindia.indiatimes.com/feed/defaultrss", 0));
-
-        add(new Section("Sunday TOI", null, -1));
-        add(new Section("All That Matters", "http://timesofindia.indiatimes.com/rssfeeds/1817966818.cms", 1));
+        add(new Section("All That Matters | Sunday Special", "http://timesofindia.indiatimes.com/rssfeeds/1817966818.cms", 1));
 
     }
 

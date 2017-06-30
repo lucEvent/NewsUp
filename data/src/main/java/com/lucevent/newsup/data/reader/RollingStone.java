@@ -61,9 +61,7 @@ public class RollingStone extends com.lucevent.newsup.data.util.NewsReader {
         article.select(".module-related,#module-more-news,figcaption,script").remove();
 
         NewsStylist.cleanAttributes(article.select("img"), "src");
-
-        for (Element e : article.select("[src^='//']"))
-            e.attr("src", "http:" + e.attr("src"));
+        NewsStylist.repairLinks(article);
 
         news.content = article.outerHtml();
     }

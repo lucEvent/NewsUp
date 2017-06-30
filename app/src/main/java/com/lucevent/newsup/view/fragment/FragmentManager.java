@@ -6,6 +6,9 @@ import android.app.FragmentTransaction;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.util.Pair;
+import android.view.View;
+
+import com.lucevent.newsup.R;
 
 import java.util.ArrayList;
 
@@ -15,7 +18,7 @@ public class FragmentManager {
     private NavigationView navigationView;
     private int containerId;
 
-    private int stackSize;
+    private int stackPointer;
     private ArrayList<Pair<Integer, Fragment>> stack;
 
     public Fragment currentFragment;
@@ -26,7 +29,7 @@ public class FragmentManager {
         this.navigationView = navigationView;
         this.containerId = containerId;
 
-        stackSize = 0;
+        stackPointer = 0;
         stack = new ArrayList<>();
     }
 
@@ -34,7 +37,7 @@ public class FragmentManager {
     {
         currentFragment = f;
 
-        stack.add(stackSize, new Pair<>(navigationViewIndex, f));
+        stack.add(stackPointer, new Pair<>(navigationViewIndex, f));
         fManager
                 .beginTransaction()
                 .add(containerId, f)
@@ -47,17 +50,17 @@ public class FragmentManager {
 
         FragmentTransaction ft = fManager
                 .beginTransaction()
-                .remove(stack.get(stackSize).second)
+                .remove(stack.get(stackPointer).second)
                 .add(containerId, f);
 
         if (addToStack) {
-            stackSize++;
+            stackPointer++;
             ft.addToBackStack(null);
         }
 
         ft.commit();
 
-        stack.add(stackSize, new Pair<>(navigationViewIndex, f));
+        stack.add(stackPointer, new Pair<>(navigationViewIndex, f));
     }
 
     public Fragment popFragment()
@@ -65,16 +68,15 @@ public class FragmentManager {
         fManager.popBackStack();
         fManager
                 .beginTransaction()
-                .remove(stack.get(stackSize).second)
+                .remove(stack.get(stackPointer).second)
                 .commit();
 
-        stack.remove(stackSize);
-        stackSize--;
+        int old_id = stack.remove(stackPointer).first;
+        stackPointer--;
 
-        if (navigationView != null)
-            navigationView.setCheckedItem(stack.get(stackSize).first);
+        updateCheckedItem(stack.get(stackPointer).first, old_id);
 
-        currentFragment = stack.get(stackSize).second;
+        currentFragment = stack.get(stackPointer).second;
         return currentFragment;
     }
 
@@ -84,16 +86,17 @@ public class FragmentManager {
 
         fManager
                 .beginTransaction()
-                .remove(stack.get(stackSize).second)
+                .remove(stack.get(stackPointer).second)
                 .commit();
+
+        int old_id = stack.remove(stackPointer).first;
 
         Pair<Integer, Fragment> tmp = stack.get(0);
         stack.clear();
         stack.add(tmp);
-        stackSize = 0;
+        stackPointer = 0;
 
-        if (navigationView != null)
-            navigationView.setCheckedItem(tmp.first);
+        updateCheckedItem(tmp.first, old_id);
 
         currentFragment = tmp.second;
         return currentFragment;
@@ -101,13 +104,36 @@ public class FragmentManager {
 
     public int getBackStackEntryCount()
     {
-        return stackSize;
+        return stackPointer;
     }
 
     public void setNavigationItemId(int position, int id)
     {
         Pair<Integer, Fragment> old = stack.remove(position);
         stack.add(position, new Pair<>(id, old.second));
+    }
+
+    public void updateCheckedItem(int new_item_id, int old_item_id)
+    {
+        if (navigationView != null) {
+            // uncheck old item (only if it belongs to the action bar)
+            if (navigationView.getMenu().findItem(old_item_id) == null) {
+                View v = navigationView.findViewById(old_item_id);
+                if (v != null)
+                    v.setSelected(false);
+            }
+
+            // check the new item
+            if (navigationView.getMenu().findItem(new_item_id) != null) {
+                navigationView.setCheckedItem(new_item_id);
+            } else {
+                navigationView.setCheckedItem(R.id.dummy);
+
+                View v = navigationView.findViewById(new_item_id);
+                if (v != null)
+                    v.setSelected(true);
+            }
+        }
     }
 
 }

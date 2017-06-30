@@ -3,7 +3,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.google.appengine:gradle-appengine-plugin:1.9.46'
+        classpath 'com.google.appengine:gradle-appengine-plugin:1.9.53'
     }
 }
 
@@ -19,11 +19,11 @@ sourceCompatibility = JavaVersion.VERSION_1_7
 targetCompatibility = JavaVersion.VERSION_1_7
 
 dependencies {
-    appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.49'
-    compile 'com.google.appengine:appengine-endpoints:1.9.49'
-    compile 'javax.servlet:servlet-api:2.5'
-    compile 'com.google.guava:guava:20.0'
-    compile 'com.googlecode.objectify:objectify:5.1.13'  //works with ObjectifyFilter in web.xml
+    appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.53'
+    compile 'com.google.appengine:appengine-endpoints:1.9.53'
+    compile 'com.google.guava:guava:22.0-android'
+    compile 'com.googlecode.objectify:objectify:5.1.17' //works with ObjectifyFilter in web.xml
+    compile 'javax.servlet:servlet-api:3.0-alpha-1'
     compile project(':data')
 }
 

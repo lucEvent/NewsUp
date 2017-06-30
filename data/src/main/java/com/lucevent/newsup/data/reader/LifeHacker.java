@@ -40,7 +40,7 @@ public class LifeHacker extends com.lucevent.newsup.data.util.NewsReader {
         }
 
         Element body = doc.body();
-        NewsStylist.completeSrcHttp(body);
+        NewsStylist.repairLinks(body);
 
         return doc.body().html();
     }

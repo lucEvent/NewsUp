@@ -44,10 +44,7 @@ public class SiteMain extends AppCompatActivity implements MainChangeListener {
         NewsListFragment newsFragment = NewsListFragment.instanceFor(code);
         fragmentManager.addFragment(newsFragment, R.id.nav_my_news);
 
-        setTitle(site.name);
-
-        // Setting colors
-        //noinspection ConstantConditions
+        toolbar.setTitle(site.name);
         toolbar.setLogo(LogoManager.getLogo(code, LogoManager.Size.ACTION_BAR));
         toolbar.setBackgroundColor(site.color);
         toolbar.setTitleTextColor(site.needsBrightColors() ? Color.WHITE : Color.BLACK);

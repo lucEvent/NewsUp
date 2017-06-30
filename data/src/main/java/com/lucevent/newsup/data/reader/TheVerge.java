@@ -1,13 +1,7 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.Enclosure;
-import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
-
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 public class TheVerge extends com.lucevent.newsup.data.util.NewsReader {
 
@@ -22,65 +16,23 @@ public class TheVerge extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_CONTENT},
                 new int[]{TAG_UPDATED},
                 new int[]{},
-                new int[]{TAG_LINK});
-    }
-
-    @Override
-    protected Enclosure parseEnclosure(Element prop)
-    {
-        return new Enclosure(prop.attr("href"), prop.attr("type"), "");
+                new int[]{});
     }
 
     @Override
     protected String parseContent(Element prop)
     {
-        Document d = Jsoup.parse(prop.text());
+        Document doc = jsoupParse(prop);
+        doc.select("script").remove();
 
-        Elements article = d.select(".m-snippet");
+        doc.select("h1,h2").tagName("h3");
+        doc.select("figure cite,.caption").tagName("figcaption");
+        doc.select("[style]:not(.instagram-media [style]").removeAttr("style");
 
-        d.select("h1,h2").tagName("h3");
-        NewsStylist.completeSrcHttp(article);
+        for (Element e : doc.select(".c-float-right,.c-float-left"))
+            e.tagName("blockquote").removeAttr("class");
 
-        if (article.size() < 2) {
-            d.select("hr").remove();
-            return d.html();
-        }
-        article.select(".lede").remove();
-        return article.outerHtml();
-    }
-
-    @Override
-    protected News onNewsRead(News news)
-    {
-        if (news.link.contains("theverge.com/video")) {
-            Document d = Jsoup.parse(news.content);
-            d.select("iframe").remove();
-
-            news.content = d.html();
-
-            Elements v = d.select(".volume-video");
-            if (v.isEmpty()) {
-                for (Enclosure e : news.enclosures) {
-                    if (e.isVideo()) {
-
-                        String url = e.src;
-                        int index = url.indexOf("?url=");
-                        if (index != -1)
-                            url = url.substring(index + 5, url.length());
-
-                        news.content += "<video controls><source src='" + url + "' type='video/mp4'></video>" +
-                                "<a href='" + url + "'>See externally</a>";
-
-                    }
-                }
-            } else {
-                String video_id = v.first().attr("data-volume-uuid");
-                news.content += Enclosure.iframe("https://volume.vox-cdn.com/embed/" + video_id) +
-                        "<a href='https://volume.vox-cdn.com/embed/" + video_id + "'>See externally</a>";
-                v.remove();
-            }
-        }
-        return news;
+        return doc.body().html();
     }
 
 }

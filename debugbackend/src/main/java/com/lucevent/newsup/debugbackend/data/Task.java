@@ -6,11 +6,20 @@ import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Unindex;
 
 @Entity
-public class TaskData {
+public class Task {
 
     @Id
     @Index
-    Long taskId;
+    public Long id;
+
+    @Index
+    public long startTime;
+
+    @Index
+    public long finishTime;
+
+    @Unindex
+    public int rounds;
 
     @Unindex
     public int currentEvaluatingSite;
@@ -29,5 +38,10 @@ public class TaskData {
 
     @Unindex
     public int siteTestResults[];
+
+    public Task()
+    {
+    }
+
 
 }

@@ -96,7 +96,7 @@ public class USAToday extends com.lucevent.newsup.data.util.NewsReader {
 
             Elements article = doc.select("#video-preview,.heropic,[itemprop='articleBody'] .page_section");
             article.select(".callout,.credit,figcaption,.disclaimer,.brightcove").remove();
-            article.select("h2").tagName("h3");
+            article.select("h1,h2").tagName("h3");
 
             for (Element e : article.select("h3"))
                 if (e.text().contains("Related Video"))
@@ -142,7 +142,7 @@ public class USAToday extends com.lucevent.newsup.data.util.NewsReader {
 
         article.select("script").remove();
         article.select("[width]").removeAttr("width");
-        article.select("h2").tagName("h3");
+        article.select("h1,h2").tagName("h3");
 
         news.content = article.outerHtml();
     }

@@ -72,7 +72,7 @@ public class LaVanguardia extends com.lucevent.newsup.data.util.NewsReader {
             news.content = gallery.outerHtml();
             return;
         }
-        article.select("figcaption,.tpl-related-inside-story,.hidden,.button-login-premium,ins,.html-books-header,.wp-caption-text,script").remove();
+        article.select(".tpl-related-inside-story,.hidden,.button-login-premium,ins,.html-books-header,.wp-caption-text,script").remove();
 
         article.select("h1,h2").tagName("h3");
         article.select("[style]").removeAttr("style");
@@ -88,7 +88,7 @@ public class LaVanguardia extends com.lucevent.newsup.data.util.NewsReader {
                     .removeAttr("class");
 
         NewsStylist.cleanAttributes(article.select("img"), "src");
-        NewsStylist.completeSrcHttp(article);
+        NewsStylist.repairLinks(article);
 
         news.content = article.outerHtml();
 

@@ -2,44 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group
-        android:id="@+id/group_1"
-        android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_my_news"
-            android:icon="@mipmap/ic_app"
-            android:title="@string/my_news"/>
-        <item
-            android:id="@+id/nav_saved_news"
-            android:icon="@drawable/ic_bookmark"
-            android:title="@string/bookmarks"/>
-        <item
-            android:id="@+id/nav_read_news"
-            android:icon="@drawable/ic_history"
-            android:title="@string/read_news"/>
-
-        <item
-            android:id="@+id/nav_stats"
-            android:icon="@drawable/ic_statistics"
-            android:title="@string/statistics"/>
+        android:id="@+id/group_favorites"
+        android:checkableBehavior="single"
+        android:orderInCategory="1">
 
     </group>
 
-    <item
-        android:id="@+id/nav_header_favorites"
-        android:title="@string/favorites">
-
-        <menu xmlns:android="http://schemas.android.com/apk/res/android"/>
-
-    </item>
-
     <group
-        android:id="@+id/group_3"
-        android:checkableBehavior="single">
-
-        <item
-            android:id="@+id/nav_more_publications"
-            android:icon="@drawable/ic_add"
-            android:title="@string/more_publications"/>
+        android:id="@+id/group_more_options"
+        android:checkableBehavior="single"
+        android:orderInCategory="2">
 
         <item
             android:id="@+id/nav_notes"
@@ -61,6 +33,13 @@
             android:icon="@drawable/ic_info"
             android:title="@string/about"/>
 
+    </group>
+
+    <group
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/dummy"
+            android:visible="false"/>
     </group>
 
 </menu>

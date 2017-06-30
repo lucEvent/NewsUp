@@ -2,8 +2,9 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
 
-import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -11,9 +12,10 @@ public class PCWorld extends com.lucevent.newsup.data.util.NewsReader {
 
     /**
      * tags:
-     * [author, categories, category, dc:creator, description, item, link, media:content, media:thumbnail, pubdate, title]
-     * [description, enclosure, guid, item, link, media:category, media:content, media:credit, media:description, media:keywords, media:thumbnail, media:title, pubdate, title]
-     **/
+     * [author, categories, category, dc:creator, description, enclosure, item, link, pubdate, title]
+     * [author, categories, category, dc:creator, description, enclosure, item, link, media:content, pubdate, title]
+     * [ description, enclosure, guid, item, link, media:category, media:content, media:credit, media:description, media:keywords, media:thumbnail, media:title, pubdate, title]
+     */
 
     public PCWorld()
     {
@@ -24,14 +26,15 @@ public class PCWorld extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY, "media:category".hashCode()},
-                new int[]{"media:thumbnail".hashCode(), TAG_MEDIA_CONTENT});
+                new int[]{TAG_ENCLOSURE, "media:content".hashCode(), "media:thumbnail".hashCode()});
     }
 
     @Override
     protected String parseDescription(Element prop)
     {
-        String dsc = Jsoup.parse(prop.text()).text();
-        return dsc.substring(0, Math.min(300, dsc.length()));
+        Document doc = jsoupParse(prop);
+        doc.select(".jumpTag").remove();
+        return doc.text();
     }
 
     @Override
@@ -40,42 +43,48 @@ public class PCWorld extends com.lucevent.newsup.data.util.NewsReader {
         if (news.link.contains("pcworld.com/video"))
             for (Enclosure e : news.enclosures)
                 if (e.isVideo()) {
-                    news.content = e.html();
+                    news.content = e.html() + "<p>" + news.description + "</p>";
+                    news.enclosures.remove(e);
                     break;
                 }
         return news;
     }
 
     @Override
-    protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+    protected void readNewsContent(Document doc, News news)
     {
         Elements article = doc.select("article");
 
-        if (!news.link.contains("pcworld")) {
+        if (!article.isEmpty()) {
+            Elements elems = article.select(".hero-img img,[itemprop='articleBody'],[itemprop='reviewBody']");
 
-            if (news.link.contains("greenbot.com")) {
-                article = article.select(".hero-img,.deck,[itemprop='reviewBody'],[itemprop='articleBody']");
-                article.select("h2").tagName("h3");
-                news.content = article.html();
-            }
-        } else if (article.isEmpty()) {
+            if (elems.isEmpty())
+                article = article.select(".product-hub-panoramic,.product-hub-articleBody");
+            else
+                article = elems;
 
-            article = doc.select(".carousel-inside-crop");
-            article.select(".image-info,#ss-bottom-nav").remove();
-            article.select("h2").tagName("h3");
-
-            for (Element e : article.select("[data-original]"))
-                e.attr("src", e.attr("data-original")).removeAttr("data-original");
-
-            news.content = article.html();
+            article.select("script,aside,.end-note,.credit,.product-list").remove();
 
         } else {
-            article.select(".breadcrumbs,[itemprop='name'],.sharing-tools,#comment-bubble-idgcsmb,.article-meta,script,.department,.similar-videos,link").remove();
-            article.select(".pagination,.tocWrapper,.product-sidebar").remove();
-            article.select("h2").tagName("h3");
 
-            news.content = article.html();
+            article = doc.select("#slides");
+
+            if (!article.isEmpty()) {
+                article = article.select(".carousel-items .slide");
+
+                for (Element slide : article) {
+                    NewsStylist.cleanAttributes(slide);
+                    slide.tagName("p");
+                    slide.html(slide.select("img:not(.lazyslide),.title,.body").outerHtml());
+                }
+                article.select(".title").tagName("h3");
+            }
+
         }
+        article.select("h1,h2").tagName("h3");
+        article.select("[style]:not(.instagram-media,.instagram-media *").removeAttr("style");
+
+        news.content = article.outerHtml();
     }
 
 }

@@ -16,24 +16,31 @@ public class NotificationBuilder {
     public static Notification build(Context context, Intent intent, String[] headlines)
     {
         PendingIntent resultPendingIntent =
-                PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent.getActivity(context, (int) System.currentTimeMillis(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        NotificationCompat.InboxStyle style = new NotificationCompat.InboxStyle();
-        for (String headline : headlines)
-            style.addLine(headline);
-
-        return new NotificationCompat.Builder(context)
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle("News Up")
-                .setContentText(context.getString(R.string.expand_to_see_headlines))
                 .setAutoCancel(true)
                 .setColor(0xff8BC34A)
                 .setLights(Color.GREEN, 1000, 2000)
                 .setVibrate(new long[]{500})
-                .setStyle(style)
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                .setContentIntent(resultPendingIntent)
-                .build();
+                .setContentIntent(resultPendingIntent);
+
+        if (headlines.length == 1) {
+            builder.setContentText(headlines[0]);
+
+        } else {
+            NotificationCompat.InboxStyle style = new NotificationCompat.InboxStyle();
+            for (String headline : headlines)
+                style.addLine(headline);
+
+            builder.setContentText(context.getString(R.string.expand_to_see_headlines))
+                    .setStyle(style);
+        }
+
+        return builder.build();
     }
 
     public static void notifyUser(Context context, Notification notification)

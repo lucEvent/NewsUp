@@ -64,8 +64,12 @@ public class Site {
     {
         NewsArray res = new NewsArray();
 
-        for (int isection : isections)
-            res.addAll(getReader().readRssHeader(getSections().get(isection).url));
+        for (int isection : isections) {
+            NewsArray nArray = getReader().readRssHeader(getSections().get(isection).url);
+            for (News n : nArray)
+                n.section = isection;
+            res.addAll(nArray);
+        }
 
         return res;
     }

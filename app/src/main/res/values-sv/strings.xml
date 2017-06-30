@@ -94,7 +94,9 @@
     <string name="msg_message_empty">Meddelandet kan inte vara tom</string>
     <string name="msg_message_sent">Meddelande skickat :)</string>
     <string name="msg_error_occurred">Ett fel har inträffat :(</string>
-
+    <string name="msg_no_history">Tom lista</string>
+    <string name="msg_no_bookmarks">Du har inte bokmärkt någon nyhet än</string>
+    <string name="msg_minimum_one_checked">En sektion måste kontrolleras</string>
 
     <!-- * *************** Activities and fragment's titles ********************* * -->
     <string name="title_frg_settings_of">Inställningar för %1$s</string>

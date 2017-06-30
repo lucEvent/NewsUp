@@ -8,8 +8,6 @@ import org.jsoup.select.Elements;
 
 public class ComingSoon extends com.lucevent.newsup.data.util.NewsReader {
 
-    private static final String SITE_STYLE = "<style>.caption{font-size:12px;padding:5px 10px 20px;display:block;}</style>";
-
     //tags: [category, content:encoded, dc:creator, description, guid, item, link, pubdate, title]
 
     public ComingSoon()
@@ -22,8 +20,6 @@ public class ComingSoon extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{});
-
-        this.style = SITE_STYLE;
     }
 
     @Override
@@ -54,6 +50,7 @@ public class ComingSoon extends com.lucevent.newsup.data.util.NewsReader {
                 rel.remove();
         }
         doc.select("h2:has(img)").tagName("p");
+        doc.select(".caption").tagName("figcaption");
         doc.select("script").remove();
 
         Elements titles = doc.select("h2");
@@ -62,7 +59,7 @@ public class ComingSoon extends com.lucevent.newsup.data.util.NewsReader {
             titles.tagName("h3");
         }
 
-        NewsStylist.completeSrcHttp(doc.body());
+        NewsStylist.repairLinks(doc.body());
         NewsStylist.cleanAttributes(doc.select("img"), "src");
 
         return doc.body().html();

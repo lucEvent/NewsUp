@@ -31,7 +31,7 @@ public class ProSettings {
 
     public static boolean checkEnabled(String key)
     {
-        return AppSettings.DEBUG || preferences.getBoolean(key, false);
+        return preferences != null && (AppSettings.DEBUG || preferences.getBoolean(key, false));
     }
 
     public static int checkProCode(String code)

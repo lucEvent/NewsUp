@@ -14,7 +14,6 @@ public class AndroidAuthority extends com.lucevent.newsup.data.util.NewsReader {
             ".aa_best_app_logo{width:100px;height:100px;border:2px solid #dfe8ea;float:left;margin:0 22px 0 0;}.aa_best_app_header{overflow:hidden;margin-bottom:10px;}.aa_best_" +
             "app_name{margin:0;padding:0;color:#3f3f3f;}.aa_best_app_price{line-height:16px;}.aa_best_app_button{display:inline-block;background:#55cc3a;border-radius:2px;margi" +
             "n:10px 0;overflow:hidden;padding:10px 25px;}.aa_best_app_button a{ text-decoration:none; color:#fff; font-size:14px; font-weight:bold;}" +
-            ".wp-caption-text{display:block;font-size:14px;color:grey;padding:2px 15px;margin:0}" +
             "</style>";
 
     /**
@@ -53,6 +52,7 @@ public class AndroidAuthority extends com.lucevent.newsup.data.util.NewsReader {
         doc.select("img[srcset]").removeAttr("srcset");
         doc.select("[style]").removeAttr("style");
         doc.select("h1,h2").tagName("h3");
+        doc.select(".wp-caption-text").tagName("figcaption");
 
         doc.select(".aa_best_app_desc").tagName("p");
 
@@ -70,7 +70,7 @@ public class AndroidAuthority extends com.lucevent.newsup.data.util.NewsReader {
         }
 
         NewsStylist.cleanAttributes(doc.select("img"), "src");
-        NewsStylist.completeSrcHttp(doc.body());
+        NewsStylist.repairLinks(doc.body());
 
         return doc.body().html();
     }

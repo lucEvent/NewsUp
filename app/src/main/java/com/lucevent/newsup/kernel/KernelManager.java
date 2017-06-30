@@ -98,18 +98,34 @@ public class KernelManager implements StorageCallback {
     }
 
     @Override
-    public NewsMap getHistoryOf(Site site)
+    public NewsMap getSavedNews(Site site)
     {
         if (site.news == null) {
             try {
                 site.news = dbmanager.readNews(site);
             } catch (Exception e) {
                 dbmanager = new DBManager(context);
-                return getHistoryOf(site);
+                return getSavedNews(site);
             }
         }
         return site.news;
     }
+
+    @Override
+    public NewsMap getSavedNews(Site site, int[] sections)
+    {
+        NewsMap siteNews = getSavedNews(site);
+        ArrayList<Integer> news_ids = dbmanager.getNewsIdsOf(site, sections);
+
+        NewsMap res = new NewsMap();
+        for (Integer id : news_ids) {
+            News n = siteNews.get(id);
+            if (n != null)
+                res.put(id, n);
+        }
+        return res;
+    }
+
 
     @Override
     public void deleteOldNews(long timeBound)
@@ -158,7 +174,8 @@ public class KernelManager implements StorageCallback {
         sdmanager.wipeData();
         dbmanager.wipeData();
         for (Site s : AppData.sites)
-            s.news.clear();
+            if (s.news != null)
+                s.news.clear();
     }
 
 }

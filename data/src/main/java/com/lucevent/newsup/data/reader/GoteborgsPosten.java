@@ -9,8 +9,6 @@ import org.jsoup.select.Elements;
 
 public class GoteborgsPosten extends com.lucevent.newsup.data.util.NewsReader {
 
-    private static final String SITE_STYLE = "<style>figcaption{font-size:12px;padding:2px 10px;display:block;}tr,th,td{padding:3px 10px;}</style>";
-
     /**
      * Tags
      * [                                       description, guid, item, link, pubdate, title]
@@ -29,7 +27,7 @@ public class GoteborgsPosten extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_CATEGORY},
                 new int[]{});
 
-        this.style = NewsStylist.base("http://www.gp.se/") + SITE_STYLE;
+        this.style = NewsStylist.base("http://www.gp.se/");
     }
 
     @Override

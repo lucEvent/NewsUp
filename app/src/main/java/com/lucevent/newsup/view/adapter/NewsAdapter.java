@@ -42,15 +42,18 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
-        RecyclerView.ViewHolder vh;
-        if (viewType == TYPE_NEWS) {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.i_news, parent, false);
-            v.setOnClickListener(onClick);
+        RecyclerView.ViewHolder vh = null;
+        switch (viewType) {
+            case TYPE_NEWS:
+                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.i_news, parent, false);
+                v.setOnClickListener(onClick);
 //            v.setOnLongClickListener(onLongClick);
-            vh = new NewsViewHolder(v, onBookmarkClick);
-        } else {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.i_more_sections, parent, false);
-            vh = new MoreSectionsViewHolder(v, onMoreClick);
+                vh = new NewsViewHolder(v, onBookmarkClick);
+                break;
+            case TYPE_MORE:
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.i_more_sections, parent, false);
+                vh = new MoreSectionsViewHolder(v, onMoreClick);
+                break;
         }
         return vh;
     }
@@ -121,6 +124,11 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             dataSet.add(new News(-9, "", "", "", -9, null));
 
         dataSet.endBatchedUpdates();
+    }
+
+    public void add(News item)
+    {
+        dataSet.add(item);
     }
 
     public boolean remove(News item)

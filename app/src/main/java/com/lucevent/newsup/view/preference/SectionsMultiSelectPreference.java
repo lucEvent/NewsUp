@@ -116,7 +116,6 @@ public class SectionsMultiSelectPreference extends DialogPreference {
             checkbox.setEnabled(section.level >= 0);
             checkbox.setTypeface(null, section.level > 0 ? Typeface.NORMAL : Typeface.BOLD);
 
-
             view.setTag(checkbox);
             view.setEnabled(section.level >= 0);
             view.setOnClickListener(new View.OnClickListener() {

@@ -9,6 +9,17 @@
         <servlet-name>MainServlet</servlet-name>
         <url-pattern>/task</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DevelopmentServer</servlet-name>
+        <servlet-class>com.lucevent.newsup.debugbackend.DevelopmentServer</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DevelopmentServer</servlet-name>
+        <url-pattern>/dev</url-pattern>
+    </servlet-mapping>
+
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>

@@ -3,6 +3,7 @@ package com.lucevent.newsup.debugbackend.data;
 import com.googlecode.objectify.Key;
 import com.lucevent.newsup.data.util.News;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.TreeSet;
@@ -15,63 +16,48 @@ public class Database {
     {
     }
 
-    public TaskState getCurrentTask()
+    public Task getCurrentTask(int default_test_results_size)
     {
-        TaskState res = ofy().load().type(TaskState.class)
+        Task res = ofy().load().type(Task.class)
                 .filter("finishTime", -1L)
                 .first().now();
 
         if (res == null) {
 
-            res = new TaskState();
+            res = new Task();
             res.startTime = System.currentTimeMillis();
             res.finishTime = -1L;
             res.rounds = 0;
-            ofy().save().entity(res).now();
-
-        }
-        return res;
-    }
-
-    public TaskData getTaskData(TaskState taskState, int evaluations)
-    {
-        TaskData res = ofy().load().type(TaskData.class).id(taskState.startTime).now();
-
-        if (res == null) {
-
-            res = new TaskData();
-            res.taskId = taskState.startTime;
             res.currentEvaluatingSite = 0;
             res.currentEvaluatingSection = 0;
             res.totalNumNews = 0;
-            res.totalTestResults = new int[evaluations];
+            res.totalTestResults = new int[default_test_results_size];
             res.siteNumNews = 0;
-            res.siteTestResults = new int[evaluations];
+            res.siteTestResults = new int[default_test_results_size];
 
-            for (int i = 0; i < evaluations; i++) {
+            for (int i = 0; i < default_test_results_size; i++) {
                 res.totalTestResults[i] = 0;
                 res.siteTestResults[i] = 0;
             }
 
             ofy().save().entity(res).now();
-
         }
         return res;
     }
 
-    public void newRound(TaskState taskState)
+    public void newRound(Task task)
     {
-        taskState.rounds++;
-        ofy().save().entity(taskState).now();
+        task.rounds++;
+        ofy().save().entity(task).now();
     }
 
-    public void finish(TaskState taskState)
+    public void finish(Task task)
     {
-        taskState.finishTime = System.currentTimeMillis();
-        ofy().save().entity(taskState).now();
+        task.finishTime = System.currentTimeMillis();
+        ofy().save().entity(task).now();
     }
 
-    public void save(TaskData data, boolean deferred)
+    public void save(Task data, boolean deferred)
     {
         if (deferred)
             ofy().defer().save().entity(data);
@@ -80,10 +66,10 @@ public class Database {
             ofy().save().entity(data).now();
     }
 
-    public void saveLog(TaskState taskState, int order, String data)
+    public void saveLog(long task_id, int order, String data)
     {
         Log log = new Log();
-        log.taskId = taskState.startTime;
+        log.taskId = task_id;
         log.order = order;
         log.data = data;
 
@@ -96,7 +82,7 @@ public class Database {
         ofy().delete().keys(keys).now();
     }
 
-    public String getFullReport(TaskState taskState)
+    public String getFullReport(Task task)
     {
         TreeSet<Log> logs = new TreeSet<>(new Comparator<Log>() {
             @Override
@@ -106,7 +92,7 @@ public class Database {
             }
         });
         logs.addAll(ofy().load().type(Log.class)
-                .filter("taskId", taskState.startTime)
+                .filter("taskId", task.id)
                 .list());
 
         StringBuilder res = new StringBuilder();
@@ -124,6 +110,26 @@ public class Database {
         error.n_site = news.site_code;
 
         ofy().save().entity(error).now();
+    }
+
+    public ArrayList<Error> getErrors()
+    {
+        ArrayList<Error> res = new ArrayList<>();
+        res.addAll(ofy().load().type(Error.class).list());
+        return res;
+    }
+
+    public TreeSet<Task> getTasks()
+    {
+        TreeSet<Task> res = new TreeSet<>(new Comparator<Task>() {
+            @Override
+            public int compare(Task o1, Task o2)
+            {
+                return -Long.compare(o1.startTime, o2.startTime);
+            }
+        });
+        res.addAll(ofy().load().type(Task.class).list());
+        return res;
     }
 
 }

@@ -125,6 +125,9 @@
         <item>Underhållning</item>
         <item>Fitness</item>
         <item>Musik</item>
+        <item>Ekonomi</item>
+        <item>Politik</item>
+        <item>Olika</item>
     </string-array>
     <integer-array name="site_language_weights">
         <item>5</item>

@@ -10,8 +10,8 @@ import org.jsoup.select.Elements;
 public class Sport extends com.lucevent.newsup.data.util.NewsReader {
 
     private static final String SITE_STYLE = "<style>.score{width:100%;background-color:#f4f4f4;display:table;position:relative;margin:1.5rem 0;}.score div{color:#fff;display" +
-            ":table-cell;vertical-align:middle;padding:.5rem;}.score .result{color:#282828;font-size:2rem;line-height:4.6rem;text-align:center;font-family:Antenna-Medium;marg" +
-            "in-bottom:0;}.score p img{width:3.5rem;height:3.5rem;margin:0 .5rem;vertical-align:middle;display:inline-block;}</style>";
+            ":table-cell;vertical-align:middle;padding:.5rem;}.score .result{color:#282828;font-size:2rem;line-height:4.6rem;text-align:center;margin-bottom:0;}.score p img{w" +
+            "idth:3.5rem;height:3.5rem;margin:0 .5rem;vertical-align:middle;display:inline-block;}</style>";
 
     // tags:  description, guid, item, link, pubdate, title
 

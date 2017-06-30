@@ -16,12 +16,30 @@ public class Enclosure implements Serializable {
     public Enclosure(String src, String type, String size)
     {
         this.src = src;
-        this.type = parseType(type);
+        this.type = parseType(src, type);
         this.size = size.isEmpty() ? 0 : Integer.parseInt(size);
     }
 
-    private int parseType(String type)
+    private int parseType(String src, String type)
     {
+        if (type.isEmpty()) {
+            int length = src.length();
+            if (length < 5)
+                return -1;
+
+            switch (src.substring(length - 4).toLowerCase()) {
+                case ".jpg":
+                case ".png":
+                case ".gif":
+                case "jpeg":
+                    return TYPE_IMAGE;
+                case ".avi":
+                case ".mp4":
+                    return TYPE_VIDEO;
+                default:
+                    return -1;
+            }
+        }
         if (type.contains("image"))
             return TYPE_IMAGE;
         if (type.contains("video"))
