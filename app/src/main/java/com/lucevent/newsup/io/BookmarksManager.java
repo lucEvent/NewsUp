@@ -125,31 +125,34 @@ public class BookmarksManager {
     public static Collection<News> getBookmarkedNews()
     {
         readBookmarkIds();
-        if (!bookmarksMap.isEmpty() && bookmarksMap.get(bookmarksMap.firstKey()) == null) {
 
-            File dir = new File(SDManager.getDirectory(), BOOKMARKS_DIR);
+        File dir = new File(SDManager.getDirectory(), BOOKMARKS_DIR);
 
-            for (Integer id : bookmarksMap.keySet()) {
-                try {
-                    ObjectInputStream in = new ObjectInputStream(new FileInputStream(new File(dir, "b" + id)));
+        for (Integer id : bookmarksMap.keySet()) {
+            if (bookmarksMap.get(id) != null)
+                continue;
 
-                    String title = (String) in.readObject();
-                    String link = (String) in.readObject();
-                    String description = (String) in.readObject();
-                    long date = in.readLong();
-                    String categories = (String) in.readObject();
+            try {
+                ObjectInputStream in = new ObjectInputStream(new FileInputStream(new File(dir, "b" + id)));
 
-                    News news = new News(id, title, link, description, date, new Tags(categories));
-                    news.content = (String) in.readObject();
-                    news.site_code = in.readInt();
+                String title = (String) in.readObject();
+                String link = (String) in.readObject();
+                String description = (String) in.readObject();
+                long date = in.readLong();
+                String categories = (String) in.readObject();
+                String content = (String) in.readObject();
+                int site_code = in.readInt();
 
-                    bookmarksMap.put(id, news);
-                    in.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                News news = new News(id, title, link, description, date, new Tags(categories), site_code, -1, 0);
+                news.content = content;
+
+                bookmarksMap.put(id, news);
+                in.close();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
+
         return bookmarksMap.values();
     }
 

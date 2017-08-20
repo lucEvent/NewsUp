@@ -25,7 +25,7 @@ public class HistoryManager {
             @Override
             public void run()
             {
-                NewsMap news = dbmanager.readHistoryNews();
+                NewsMap news = dbmanager.readReadNews();
                 handler.obtainMessage(AppCode.NEWS_COLLECTION, news.values()).sendToTarget();
             }
         }).start();

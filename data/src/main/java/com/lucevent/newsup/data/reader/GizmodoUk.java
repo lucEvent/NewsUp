@@ -39,6 +39,15 @@ public class GizmodoUk extends com.lucevent.newsup.data.util.NewsReader {
             e.parent().html(e.html());
 
         article.select("h1,h2").tagName("h3");
+        article.select("img + em").tagName("figcaption");
+
+        Elements more = article.select(".grid,.site-content");
+        for (Element e : more) {
+            Element precedent = e.previousElementSibling();
+            if (precedent.tagName().equals("h3"))
+                precedent.remove();
+        }
+        more.remove();
 
         news.content = NewsStylist.cleanComments(article.html());
     }

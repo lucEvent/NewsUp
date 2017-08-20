@@ -38,8 +38,15 @@ public class GizmodoEs extends com.lucevent.newsup.data.util.NewsReader {
 
         } else {
 
+            doc.select(".ad-container,.js_ad-dynamic").remove();
+
             doc.select("h1,h2").tagName("h3");
             doc.select(".pullquote").tagName("blockquote");
+
+            for (Element e : doc.select("figure.js_marquee-assetfigure:has(picture)")) {
+                e.removeAttr("style");
+                e.html(e.select("picture,figcaption").outerHtml());
+            }
 
             NewsStylist.cleanAttributes(doc.select("img"), "src");
 

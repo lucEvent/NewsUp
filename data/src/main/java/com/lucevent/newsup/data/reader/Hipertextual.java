@@ -9,11 +9,7 @@ import org.jsoup.select.Elements;
 
 public class Hipertextual extends com.lucevent.newsup.data.util.NewsReader {
 
-    /**
-     * Tags
-     * [                           dc:creator, description, guid, item, link, pubdate, title]
-     * [category, content:encoded, dc:creator, description, guid, item, link, pubdate, title]
-     */
+    // Tags: [dc:creator, description, guid, item, link, pubdate, title]
 
     public Hipertextual()
     {
@@ -21,36 +17,42 @@ public class Hipertextual extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_TITLE},
                 new int[]{TAG_LINK},
                 new int[]{TAG_DESCRIPTION},
-                new int[]{TAG_CONTENT_ENCODED},
+                new int[]{},
                 new int[]{TAG_PUBDATE},
-                new int[]{TAG_CATEGORY},
+                new int[]{},
                 new int[]{});
 
         this.style = NewsStylist.base("https://hipertextual.com/");
     }
 
     @Override
-    protected News onNewsRead(News news)
+    protected String parseDescription(Element prop)
     {
-        if (news.content.isEmpty()) {
-            news.content = news.description;
-            news.description = "";
+        return jsoupParse(prop).text();
+    }
+
+    @Override
+    protected void readNewsContent(Document doc, News news)
+    {
+        Elements article = doc.select("main");
+
+        if (article.isEmpty()) {
+            // ARTICLE EMPTY!!!!
+            return;
         }
 
-        Document doc = org.jsoup.Jsoup.parse(news.content);
+        article = article.select(".headlineSingle__lead,.articleHead,.historia");
+        article.select("script,.wrapperBanner").remove();
 
-        doc.select(".wp-caption-text,aside,q,script[src*='twitter'],script[src*='instagram'],script[src*='swipe.js']").remove();
-        doc.select("h1,h2").tagName("h3");
+        article.select("aside").tagName("blockquote");
+        article.select("h1,h2").tagName("h3");
 
-        Elements galleries = doc.select(".galleryWrapper");
-        for (Element gallery : galleries)
-            gallery.html(gallery.select("img").outerHtml());
+        for (Element e : article.select("figure:has(noscript)")) {
+            e.html(e.select("noscript").html());
+        }
 
-        if (!galleries.isEmpty())
-            doc.select("script").remove();
 
-        news.content = doc.body().html();
-        return news;
+        news.content = article.outerHtml();
     }
 
 }

@@ -20,11 +20,15 @@
         android:layout="@layout/vs_no_downloads"/>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/button_sections"
-        style="@style/floatingButton"
+        android:id="@+id/btn_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:alpha="0.6"
         android:src="@drawable/ic_add_white"
         app:backgroundTint="@color/colorPrimary"
-        app:rippleColor="@color/colorAccent"/>
+        app:rippleColor="@color/colorAccent"
+        app:useCompatPadding="true"/>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -4,10 +4,10 @@ import android.animation.Animator;
 import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
 
 import com.lucevent.newsup.R;
 
@@ -27,7 +27,7 @@ public class NewsSideToolbar extends CoordinatorLayout implements View.OnClickLi
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.v_news_side_toolbar, this, true);
 
-        trigger = (View) findViewById(R.id.button_trigger);
+        trigger = findViewById(R.id.button_trigger);
         trigger.setOnClickListener(this);
 
         closed = true;
@@ -58,14 +58,14 @@ public class NewsSideToolbar extends CoordinatorLayout implements View.OnClickLi
                 .rotationBy(-45)
                 .setListener(this)
                 .setDuration(ANIMATION_TIME)
-                .setInterpolator(new AccelerateDecelerateInterpolator())
+                .setInterpolator(new LinearOutSlowInInterpolator())
                 .start();
 
         for (int i = 0; i < actions.length; i++) {
             actions[i].animate()
-                    .translationYBy(1.5f * trigger.getHeight() * (i + 1))
+                    .translationYBy(0.75f * trigger.getHeight() * (i + 1))
                     .setDuration(ANIMATION_TIME)
-                    .setInterpolator(new AccelerateDecelerateInterpolator())
+                    .setInterpolator(new LinearOutSlowInInterpolator())
                     .start();
             actions[i].setEnabled(false);
         }
@@ -78,14 +78,14 @@ public class NewsSideToolbar extends CoordinatorLayout implements View.OnClickLi
                 .rotationBy(45)
                 .setListener(this)
                 .setDuration(ANIMATION_TIME)
-                .setInterpolator(new AccelerateDecelerateInterpolator())
+                .setInterpolator(new LinearOutSlowInInterpolator())
                 .start();
 
         for (int i = 0; i < actions.length; i++) {
             actions[i].animate()
-                    .translationYBy(-1.5f * trigger.getHeight() * (i + 1))
+                    .translationYBy(-0.75f * trigger.getHeight() * (i + 1))
                     .setDuration(ANIMATION_TIME)
-                    .setInterpolator(new AccelerateDecelerateInterpolator())
+                    .setInterpolator(new LinearOutSlowInInterpolator())
                     .start();
             actions[i].setEnabled(true);
         }

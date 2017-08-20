@@ -61,7 +61,7 @@ public abstract class NewsReader extends Reader {
     }
 
     @Override
-    public final NewsArray readRssHeader(String rss_link)
+    public final NewsArray readRssHeader(String rss_link, int site_code, int section_code)
     {
         org.jsoup.nodes.Document doc = getDocument(rss_link);
         if (doc == null) return new NewsArray();
@@ -110,7 +110,7 @@ public abstract class NewsReader extends Reader {
                 }
             }
             if (!title.isEmpty() && !link.isEmpty()) {
-                News news = new News(title, link, description, date, tags);
+                News news = new News(title, link, description, date, tags, site_code, section_code, 0);
                 news.content = content;
                 news.enclosures = enclosures;
                 news = onNewsRead(news);

@@ -86,8 +86,6 @@ public class Sites extends ArrayList<Site> {
                 com.lucevent.newsup.data.section.GoteborgsPostenSections.class, com.lucevent.newsup.data.reader.GoteborgsPosten.class));
         res.add(new Site(325, "Fria Tider", 0xffffffff, SiteCountry.SWEDEN | SiteLanguage.SWEDISH | SiteCategory.NEWS,
                 com.lucevent.newsup.data.section.FriaTiderSections.class, com.lucevent.newsup.data.reader.FriaTider.class));
-        res.add(new Site(330, "Metro", 0xff007d3c, SiteCountry.SWEDEN | SiteLanguage.SWEDISH | SiteCategory.NEWS,
-                com.lucevent.newsup.data.section.MetroSVSections.class, com.lucevent.newsup.data.reader.MetroSV.class));
 
         // Finnish news
         if (finnishSites) {
@@ -243,7 +241,7 @@ public class Sites extends ArrayList<Site> {
                 com.lucevent.newsup.data.section.VandalSections.class, com.lucevent.newsup.data.reader.Vandal.class));
         res.add(new Site(1310, "Pokemon Go", 0xff152bd5, SiteCountry.USA | SiteLanguage.VARIOUS | SiteCategory.VIDEOGAMES,
                 com.lucevent.newsup.data.section.PokemonGoSections.class, com.lucevent.newsup.data.reader.PokemonGo.class));
-        res.add(new Site(1315, "Pok\u00E9mon GO Hub", 0xff, SiteCountry.USA | SiteLanguage.ENGLISH | SiteCategory.VIDEOGAMES,
+        res.add(new Site(1315, "Pok\u00E9mon GO Hub", 0xff1cbc7c, SiteCountry.USA | SiteLanguage.ENGLISH | SiteCategory.VIDEOGAMES,
                 com.lucevent.newsup.data.section.PokemonGoHubSections.class, com.lucevent.newsup.data.reader.PokemonGoHub.class));
 
         // LifeStyle (1400)

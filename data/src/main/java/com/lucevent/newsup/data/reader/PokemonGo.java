@@ -21,7 +21,7 @@ public class PokemonGo extends com.lucevent.newsup.data.util.Reader {
     }
 
     @Override
-    public final NewsArray readRssHeader(String rss_link)
+    public final NewsArray readRssHeader(String rss_link, int site_code, int section_code)
     {
         org.jsoup.nodes.Document doc = getDocument(rss_link);
         if (doc == null)
@@ -43,7 +43,7 @@ public class PokemonGo extends com.lucevent.newsup.data.util.Reader {
             link = "http://pokemongolive.com" + eDescription.attr("href");
             date = calculateDate(eDate.text().trim(), lang);
 
-            News news = new News(title, link, "", date, new Tags());
+            News news = new News(title, link, "", date, new Tags(), site_code, section_code, 0);
             news.content = link.isEmpty() ? title : "";
             news.enclosures = new Enclosures();
             result.add(news);

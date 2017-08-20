@@ -11,7 +11,7 @@ import com.lucevent.newsup.data.util.Site;
 
 class Data {
 
-    static Sites sitesV2;
+    static Sites sites;
 
     static Statistics stats;
 
@@ -20,10 +20,12 @@ class Data {
     Data()
     {
         Date.setTitles(new String[]{"%d seconds ago", "%d minutes ago", "%d hours ago", "%d days ago", "%d months ago", "%d years ago",});
-        if (sitesV2 == null) {
-            sitesV2 = Sites.getDefault(true);
+        if (sites == null) {
+            sites = Sites.getDefault(true);
+            // to avoid errors if some old version requests this dep site
+            sites.add(new Site(330, "Metro", 0, 0, com.lucevent.newsup.data.section.MetroSVSections.class, com.lucevent.newsup.data.reader.MetroSV.class));
 
-            for (Site s : sitesV2)
+            for (Site s : sites)
                 s.news = new NewsMap();
 
             ObjectifyService.run(new VoidWork() {
@@ -36,6 +38,11 @@ class Data {
             reports = new Reports();
 
         }
+    }
+
+    static Site getSite(int code)
+    {
+        return sites.getSiteByCode(code);
     }
 
 }

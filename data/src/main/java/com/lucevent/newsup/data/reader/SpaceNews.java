@@ -37,8 +37,8 @@ public class SpaceNews extends com.lucevent.newsup.data.util.NewsReader {
         }
 
         doc.select("[style]").removeAttr("style");
+        doc.select("h1,h2").tagName("h3");
         doc.select(".pullquote,.pullquoteleft").tagName("blockquote");
-        doc.select(".wp-caption-text").tagName("figcaption");
 
         return doc.body().html();
     }

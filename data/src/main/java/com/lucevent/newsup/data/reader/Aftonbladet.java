@@ -3,6 +3,7 @@ package com.lucevent.newsup.data.reader;
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.Enclosures;
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -86,18 +87,35 @@ public class Aftonbladet extends com.lucevent.newsup.data.util.NewsReader {
 
             if (!article.isEmpty()) {
 
-                Elements articleContent = article.select("[data-test-id='image'],[data-test-id='text']");
+                String parent = "[data-test-id='main-column']";
+                String headlines = "[data-test-id='lead-text']";
+                String images = "[data-test-id='image']";
+                String text = "[data-test-id='text'],h2";
 
-                if (!articleContent.isEmpty()) {
+                article = article.select(parent + ">" + headlines + "," + parent + ">" + images + "," + parent + ">" + text + ",.shootitlive-embed");
 
-                    articleContent.select("[style]").removeAttr("style");
-                    for (Element img : articleContent.select("img"))
-                        img.removeAttr("srcset").removeAttr("sizes").removeAttr("alt").removeAttr("width").removeAttr("height");
-                    for (Element e : articleContent.select("[class]"))
-                        e.removeAttr("class").removeAttr("data-test-id").removeAttr("data-reactid");
+                article.select(headlines + " p").tagName("li");
+                article.select("h1,h2").tagName("h3");
+                article.select("[style]").removeAttr("style");
 
-                    news.content = articleContent.outerHtml();
+                for (Element e : article.select(images)) {
+                    Elements img = e.select("picture");
+                    Elements caption = e.select("[data-test-id='image-text'] div");
+                    caption.tagName("figcaption");
+                    e.html(img.outerHtml() + caption.outerHtml());
+                    e.attr("style", "margin-top:10px");
                 }
+                for (Element e : article.select(".shootitlive-embed")) {
+                    String href = e.select("a[href]").attr("href");
+                    e.html(Enclosure.iframe(href));
+                }
+
+                for (Element e : article.select("[class]"))
+                    e.removeAttr("class").removeAttr("data-test-id").removeAttr("data-reactid");
+
+                NewsStylist.cleanAttributes(article.select("img"), "src");
+
+                news.content = article.outerHtml();
             }
         }
     }

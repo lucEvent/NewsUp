@@ -44,23 +44,31 @@ public class DigitalTrends extends com.lucevent.newsup.data.util.NewsReader {
 
         article.select(".alignright,.m-related-video,script,.h-nonessential,.zoom-button,.m-image-credit").remove();
 
-        article.select("h2,.m-our-take").tagName("h3");
+        article.select("h1,h2,.m-our-take").tagName("h3");
         header.select("iframe[height]").removeAttr("height");
         article.select("iframe[height]").removeAttr("height");
 
-        for (Element e : article.select("strong")) {
-            String text = e.text();
-            if (text.startsWith("More") || text.startsWith("Related"))
-                e.parent().text("");
+        for (Element e : article.select("img[src^='data']")) {
+            e.attr("src", e.attr("data-dt-lazy-src"));
+            NewsStylist.cleanAttributes(e, "src");
         }
-        for (Element e : article.select("a img")) {
-            String src = e.attr("src");
-            if (src.endsWith("button-150x39.png") || src.endsWith("-smallest-325x325.jpg"))
-                e.parent().remove();
-        }
-        for (Element e : article.select(".m-quick-take")) {
-            e.select(".title").tagName("b");
-            e.tagName("blockquote");
+
+        try {
+            for (Element e : article.select("strong")) {
+                String text = e.text();
+                if (text.startsWith("More") || text.startsWith("Related"))
+                    e.parent().text("");
+            }
+            for (Element e : article.select("a img")) {
+                String src = e.attr("src");
+                if (src.endsWith("button-150x39.png") || src.endsWith("-smallest-325x325.jpg"))
+                    e.parent().remove();
+            }
+            for (Element e : article.select(".m-quick-take")) {
+                e.select(".title").tagName("b");
+                e.tagName("blockquote");
+            }
+        } catch (Exception ignored) {
         }
 
         news.content = NewsStylist.cleanComments(header.outerHtml() + article.outerHtml());

@@ -45,12 +45,15 @@ public class KernelManager implements StorageCallback {
         if (sdmanager == null)
             sdmanager = new SDManager(context);
 
-        if (AppData.sites == null)
-            AppData.sites = Sites.getDefault(ProSettings.checkEnabled(ProSettings.FINLAND_SITES_KEY)
-                    || Locale.getDefault().getLanguage().equals("fi"));
+        if (AppData.getSites() == null) {
+            AppData.setSites(Sites.getDefault(ProSettings.checkEnabled(ProSettings.FINLAND_SITES_KEY)
+                    || Locale.getDefault().getLanguage().equals("fi"))
+            );
+            dbmanager.readReadings(AppData.getSites());
+        }
 
         if (logoManager == null)
-            logoManager = LogoManager.getInstance(context, AppData.sites.size());
+            logoManager = LogoManager.getInstance(context, AppData.getSites().size());
 
         if (readerManager == null)
             readerManager = new NewsReaderManager(context, null, this);
@@ -112,18 +115,9 @@ public class KernelManager implements StorageCallback {
     }
 
     @Override
-    public NewsMap getSavedNews(Site site, int[] sections)
+    public NewsMap getSavedNews(Site site, int[] section_codes)
     {
-        NewsMap siteNews = getSavedNews(site);
-        ArrayList<Integer> news_ids = dbmanager.getNewsIdsOf(site, sections);
-
-        NewsMap res = new NewsMap();
-        for (Integer id : news_ids) {
-            News n = siteNews.get(id);
-            if (n != null)
-                res.put(id, n);
-        }
-        return res;
+        return dbmanager.readNews(site, section_codes);
     }
 
 
@@ -131,9 +125,9 @@ public class KernelManager implements StorageCallback {
     public void deleteOldNews(long timeBound)
     {
         AppSettings.printlog("Time bound: " + Date.getAge(timeBound));
-        NewsArray oldNews = dbmanager.deleteOldNews(timeBound);
-        for (News N : oldNews)
-            sdmanager.deleteNews(N);
+        int[] delete_news_ids = dbmanager.deleteNewsSince(timeBound);
+        for (int news_id : delete_news_ids)
+            sdmanager.deleteNews(news_id);
     }
 
     public static News readContentOf(News news)
@@ -149,19 +143,19 @@ public class KernelManager implements StorageCallback {
             readerManager.readNow(AppData.getSiteByCode(news.site_code), news);
     }
 
-    public static void addToHistory(News news)
+    public static void setNewsRead(News news)
     {
-        dbmanager.insertHistoryNews(news);
+        dbmanager.setNewsRead(news);
     }
 
-    public ArrayList<Pair<Integer, Integer>> getReadingStats()
+    public ArrayList<Pair<Integer, Integer>> getTempReadingStats()
     {
-        return dbmanager.readReadingStats();
+        return dbmanager.readSyncReadings();
     }
 
     public void clearReadingStats()
     {
-        dbmanager.deleteReadingStats();
+        dbmanager.clearSyncReadings();
     }
 
     public static long getCacheSize()
@@ -173,7 +167,7 @@ public class KernelManager implements StorageCallback {
     {
         sdmanager.wipeData();
         dbmanager.wipeData();
-        for (Site s : AppData.sites)
+        for (Site s : AppData.getSites())
             if (s.news != null)
                 s.news.clear();
     }

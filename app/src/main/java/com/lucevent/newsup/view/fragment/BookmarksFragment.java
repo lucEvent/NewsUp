@@ -22,6 +22,7 @@ import com.lucevent.newsup.io.BookmarksManager;
 import com.lucevent.newsup.kernel.KernelManager;
 import com.lucevent.newsup.permission.StoragePermissionHandler;
 import com.lucevent.newsup.view.adapter.NewsAdapter;
+import com.lucevent.newsup.view.util.NewsAdapterList;
 import com.lucevent.newsup.view.util.NewsView;
 import com.lucevent.newsup.view.util.OnBackPressedListener;
 
@@ -47,7 +48,7 @@ public class BookmarksFragment extends android.app.Fragment implements View.OnCl
 
         permissionHandler = new StoragePermissionHandler(getActivity());
 
-        adapter = new NewsAdapter(this, this, onBookmarkClick);
+        adapter = new NewsAdapter(this, this, onBookmarkClick, NewsAdapterList.SortBy.byTime);
         adapter.showSiteLogo(true);
     }
 
@@ -111,14 +112,14 @@ public class BookmarksFragment extends android.app.Fragment implements View.OnCl
         KernelManager.readContentOf(news);
 
         displayingNews = true;
-        KernelManager.addToHistory(news);
+        KernelManager.setNewsRead(news);
         newsView.displayNews(news, v);
     }
 
     @Override
     public boolean onLongClick(View v)
     {
-        //// TODO: 14/10/2016
+        // TODO: 14/10/2016
         return false;
     }
 

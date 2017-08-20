@@ -115,6 +115,8 @@
             android:drawableEnd="@drawable/ic_search"
             android:drawablePadding="12dp"
             android:hint="@string/search"
+            android:imeOptions="actionDone"
+            android:inputType="text"
             android:lines="1"
             android:maxLines="1"
             android:paddingEnd="12dp"

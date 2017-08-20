@@ -9,10 +9,4 @@ public class NewsArray extends ArrayList<News> {
         super();
     }
 
-    public void setCode(int code)
-    {
-        for (News N : this)
-            N.site_code = code;
-    }
-
 }

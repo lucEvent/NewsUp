@@ -28,7 +28,7 @@ public class BackendParser {
         res.append("</content><categories>");
         res.append(news.tags.toString());
         res.append("</categories><section>");
-        res.append(news.section);
+        res.append(news.section_code);
         res.append("</section>");
         for (Enclosure e : news.enclosures)
             res.append("<enclosure>").append(e.src).append("</enclosure>");

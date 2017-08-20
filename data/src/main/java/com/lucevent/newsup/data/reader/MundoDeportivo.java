@@ -55,7 +55,7 @@ public class MundoDeportivo extends com.lucevent.newsup.data.util.NewsReader {
 
         if (article.isEmpty()) {
             article = doc.select(".story-leaf-figure,.story-leaf-body-video,.story-leaf-body .story-leaf-txt-p,.live-scribble");
-            article.select("script,style,meta,figcaption").remove();
+            article.select("script,style,meta,.story-leaf-relatednews").remove();
 
             article.select("h1,h2").tagName("h3");
         } else {

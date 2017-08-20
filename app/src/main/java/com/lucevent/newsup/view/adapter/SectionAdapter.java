@@ -62,7 +62,6 @@ public class SectionAdapter extends RecyclerView.Adapter<SectionViewHolder> impl
         if (site != null) {
             this.dataset = site.getSections();
             this.sectionStates = AppSettings.getMainSectionsString(site);
-            //       System.out.println("Getting the new sectionStates (size:"+sectionStates.size()+") (site:"+currentSite.code+")");
             notifyDataSetChanged();
         }
     }

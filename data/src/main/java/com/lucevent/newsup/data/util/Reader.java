@@ -6,7 +6,7 @@ public abstract class Reader {
 
     public String style = "";
 
-    public abstract NewsArray readRssHeader(String rss_link);
+    public abstract NewsArray readRssHeader(String rss_link, int site_code, int section_code);
 
     public final News readContent(News news)
     {
@@ -36,12 +36,12 @@ public abstract class Reader {
                     .userAgent(USER_AGENT)
                     .get();
         } catch (Exception e) {
-            System.out.println("[" + e.getClass().getSimpleName() + "] Can't read page. Trying again");
+            System.out.println("[" + this.getClass().getSimpleName() + " | " + e.getClass().getSimpleName() + "] Can't read page. Trying again");
         }
         try {
             return org.jsoup.Jsoup.connect(pagelink).get();
         } catch (Exception e) {
-            System.out.println("[" + e.getClass().getSimpleName() + "] Couldn't read page: " + pagelink);
+            System.out.println("[" + this.getClass().getSimpleName() + " | " + e.getClass().getSimpleName() + "] Couldn't read page: " + pagelink);
         }
         return null;
     }

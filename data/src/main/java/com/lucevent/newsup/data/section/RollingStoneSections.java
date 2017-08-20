@@ -24,7 +24,6 @@ public class RollingStoneSections extends Sections {
         add(new Section("Reviews", null, -1));
         add(new Section("Movie Reviews", "http://www.rollingstone.com/reviews/rss", 1));
         add(new Section("Album Reviews", "http://www.rollingstone.com/albumreviews/rss", 1));
-        add(new Section("Song Reviews", "http://www.rollingstone.com/songreviews/rss", 1));
         add(new Section("Live Reviews", "http://www.rollingstone.com/live-reviews/rss", 1));
 
         add(new Section("Videos", "http://www.rollingstone.com/videos/rss", 0));
@@ -33,7 +32,6 @@ public class RollingStoneSections extends Sections {
         add(new Section("Interviews", "http://www.rollingstone.com/features/rss", 0));
         add(new Section("Glixel", "http://www.rollingstone.com/glixel/rss", 0));
         add(new Section("Ram Report", "http://www.rollingstone.com/country/ram-report/rss", 0));
-        add(new Section("Had to Be There", "http://www.rollingstone.com/had-to-be-there/rss", 0));
         add(new Section("Podcasts", "http://www.rollingstone.com/topic/podcast/rss", 0));
 
     }

@@ -32,7 +32,7 @@ public class UpdateMessageCreator {
                 description.append("Click for more info");
         }
 
-        News news = new News(title.toString(), applink, description.toString(), System.currentTimeMillis(), new Tags());
+        News news = new News(title.toString(), applink, description.toString(), System.currentTimeMillis(), new Tags(),-1,-1,-1);
         news.content = content;
         news.enclosures = new Enclosures();
         return news;

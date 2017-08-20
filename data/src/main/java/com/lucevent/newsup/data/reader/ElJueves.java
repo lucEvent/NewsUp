@@ -13,20 +13,20 @@ public class ElJueves extends com.lucevent.newsup.data.util.NewsReader {
 
     /**
      * tags:
-     * [        description,            guid, item, link, pubdate, title]
-     * [author, description, enclosure, guid, item, link, pubdate, title]
+     * [author, dc:abstract, dc:creator, dc:modified, description, guid, item, link,                                          pubdate, title]
+     * [author, dc:abstract, dc:creator, dc:modified, description, guid, item, link, media:content, media:credit, media:text, pubdate, title]
      */
 
     public ElJueves()
     {
         super(TAG_ITEM_ITEMS,
                 new int[]{TAG_TITLE},
-                new int[]{TAG_GUID},
+                new int[]{TAG_LINK},
                 new int[]{TAG_DESCRIPTION},
                 new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{},
-                new int[]{TAG_ENCLOSURE});
+                new int[]{TAG_MEDIA_CONTENT});
 
         this.style = NewsStylist.base("http://www.eljueves.es/");
     }
@@ -106,7 +106,15 @@ public class ElJueves extends com.lucevent.newsup.data.util.NewsReader {
                 return;
         }
 
-        NewsStylist.cleanAttributes(article.select("img"), "src");
+        Elements images = article.select("img");
+        for (Element img : images) {
+            String src = img.attr(img.hasAttr("data-src") ? "data-src" : "src");
+
+            NewsStylist.cleanAttributes(img);
+
+            img.attr("src", src);
+        }
+
         news.content = NewsStylist.cleanComments(article.outerHtml());
     }
 

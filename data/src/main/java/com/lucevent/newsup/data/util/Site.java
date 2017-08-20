@@ -11,6 +11,8 @@ public class Site {
 
     public final int info;
 
+    private int num_readings;
+
     public NewsMap news;
 
     private Class readerClass;
@@ -24,6 +26,7 @@ public class Site {
         this.code = code;
         this.name = name;
         this.info = 0x1000000 | info;
+        this.num_readings = 0;
         this.color = color;
         this.sectionsClass = sectionsClass;
         this.readerClass = readerClass;
@@ -46,6 +49,16 @@ public class Site {
         return ((info >> SiteCategory.shift) & 0xFF);
     }
 
+    public int getNumReadings()
+    {
+        return num_readings;
+    }
+
+    public void setNumReadings(int n)
+    {
+        num_readings = n;
+    }
+
     public Sections getSections()
     {
         if (sections == null)
@@ -60,15 +73,17 @@ public class Site {
         return reader;
     }
 
-    public NewsArray readNewsHeaders(int[] isections)
+    public NewsArray readNewsHeaders(int[] section_codes)
     {
         NewsArray res = new NewsArray();
 
-        for (int isection : isections) {
-            NewsArray nArray = getReader().readRssHeader(getSections().get(isection).url);
-            for (News n : nArray)
-                n.section = isection;
-            res.addAll(nArray);
+        Sections sections = getSections();
+        for (int section_code : section_codes) {
+            Section section = sections.getSectionByCode(section_code);
+            if (section == null || section.url == null)
+                continue;
+
+            res.addAll(getReader().readRssHeader(section.url, code, section.code));
         }
 
         return res;

@@ -42,16 +42,21 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/button_sections"
-        style="@style/floatingButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:alpha="0.6"
         android:src="@drawable/ic_more"
         app:backgroundTint="@color/colorPrimary"
-        app:rippleColor="@color/colorAccent"/>
+        app:rippleColor="@color/colorAccent"
+        app:useCompatPadding="true"/>
 
     <com.lucevent.newsup.view.util.NewsView
         android:id="@+id/news_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipChildren="false"
         android:visibility="gone"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 

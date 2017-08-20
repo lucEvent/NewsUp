@@ -21,9 +21,9 @@ public class SitesSettingsFragment extends android.app.Fragment implements View.
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.f_news_list, container, false);
+        View view = inflater.inflate(R.layout.f_list, container, false);
 
-        Sites sites = new Sites(AppData.sites);
+        Sites sites = new Sites(AppData.getSites());
         Collections.sort(sites, SitesMap.SITE_COMPARATOR_BY_NAME);
 
         SiteListAdapter adapter = new SiteListAdapter(sites, this);

@@ -4,6 +4,7 @@ import com.lucevent.newsup.backend.utils.BackendParser;
 import com.lucevent.newsup.backend.utils.Reports;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
+import com.lucevent.newsup.data.util.Sections;
 import com.lucevent.newsup.data.util.Site;
 
 import java.io.IOException;
@@ -38,21 +39,25 @@ public class WebServlet extends HttpServlet {
 
             String[] parts = site_request.split(",");
 
-            Site site = Data.sitesV2.getSiteByCode(Integer.parseInt(parts[0]));
+            Site site = Data.sites.getSiteByCode(Integer.parseInt(parts[0]));
             Data.stats.count(site, req.getRemoteAddr(), "web");
 
-            int[] sections = new int[parts.length - 1];
-            for (int i = 0; i < sections.length; i++)
-                sections[i] = Integer.parseInt(parts[i + 1]);
+            int[] section_codes = new int[parts.length - 1];
+            Sections sections = site.getSections();
+            for (int i = 0; i < section_codes.length; i++) {
+                int section_index = Integer.parseInt(parts[i + 1]);
+                if (section_index < sections.size())
+                    section_codes[i] = sections.get(section_index).code;
+            }
 
-            NewsArray news = site.readNewsHeaders(sections);
+            NewsArray news = site.readNewsHeaders(section_codes);
             site.news.addAll(news);
 
             resp.getWriter().println(BackendParser.toHtml(news).toString());
 
         } else if (req.getParameter("content") != null) {
 
-            Site site = Data.sitesV2.getSiteByCode(Integer.parseInt(req.getParameter("site")));
+            Site site = Data.sites.getSiteByCode(Integer.parseInt(req.getParameter("site")));
 
             News prey = site.news.get(Integer.parseInt(req.getParameter("nid")));
             if (prey != null) {
@@ -67,7 +72,7 @@ public class WebServlet extends HttpServlet {
 
             String s_site = req.getParameter("site");
 
-            Site site = Data.sitesV2.getSiteByCode(Integer.parseInt(s_site));
+            Site site = Data.sites.getSiteByCode(Integer.parseInt(s_site));
 
             resp.getWriter().println(BackendParser.toHtml(site.getSections()).toString());
 

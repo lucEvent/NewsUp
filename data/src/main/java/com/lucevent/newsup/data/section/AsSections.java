@@ -70,7 +70,6 @@ public class AsSections extends Sections {
 
         add(new Section("Autores", null, -1));
         add(new Section("Alfredo Rela\u00F1o", "http://masdeporte.as.com/autor/rss/alfredo_relano/a", 1));
-        add(new Section("Juan Mora", "http://masdeporte.as.com/autor/rss/juan_mora/a", 1));
         add(new Section("Tom\u00E1s Roncero", "http://masdeporte.as.com/autor/rss/tomas_roncero/a", 1));
         add(new Section("Manolete", "http://masdeporte.as.com/autor/rss/manolete/a", 1));
 

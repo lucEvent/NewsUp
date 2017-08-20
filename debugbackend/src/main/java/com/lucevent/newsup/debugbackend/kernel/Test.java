@@ -42,9 +42,8 @@ public class Test {
                     for (int i = 0; i < tempValues.length; i++)
                         tempValues[i] = 0;
 
-                    NewsArray news = site.readNewsHeaders(new int[]{task.currentEvaluatingSection});
+                    NewsArray news = site.readNewsHeaders(new int[]{site.getSections().get(task.currentEvaluatingSection).code});
                     for (News N : news) {
-                        N.site_code = site.code;
                         if (N.content == null || N.content.isEmpty()) {
 //                            try {
 //                                Thread.sleep(500);

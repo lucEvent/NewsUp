@@ -8,10 +8,8 @@ import com.lucevent.newsup.backend.utils.Report;
 import com.lucevent.newsup.backend.utils.SiteStats;
 import com.lucevent.newsup.backend.utils.Statistics;
 import com.lucevent.newsup.backend.utils.TimeStats;
-import com.lucevent.newsup.backend.utils.UpdateMessageCreator;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
-import com.lucevent.newsup.data.util.Sections;
 import com.lucevent.newsup.data.util.Site;
 
 import java.io.IOException;
@@ -21,7 +19,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class AppServlet extends HttpServlet {
+public class AppServlet_v2 extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
@@ -48,21 +46,18 @@ public class AppServlet extends HttpServlet {
 
             if (req.getParameter("nc") == null)
                 Data.stats.count(site, req.getRemoteAddr(), req.getParameter("v"));
-
+/*
             if (UpdateMessageCreator.needsUpdate(req.getParameter("v"))) {
                 NewsArray alert = new NewsArray();
                 alert.add(UpdateMessageCreator.generateUpdateNews(site));
                 resp.getWriter().println(BackendParser.toEntry(alert).toString());
                 return;
             }
-
+*/
             int[] section_codes = new int[parts.length - 1];
-            Sections sections = site.getSections();
-            for (int i = 0; i < section_codes.length; i++) {
-                int section_index = Integer.parseInt(parts[i + 1]);
-                if (section_index < sections.size())
-                    section_codes[i] = sections.get(section_index).code;
-            }
+
+            for (int i = 0; i < section_codes.length; i++)
+                section_codes[i] = Integer.parseInt(parts[i + 1]);
 
             NewsArray news = site.readNewsHeaders(section_codes);
             site.news.addAll(news);
@@ -73,39 +68,22 @@ public class AppServlet extends HttpServlet {
             Site site = Data.getSite(Integer.parseInt(req.getParameter("site")));
 
             String link = req.getParameter("l");
-            if (link != null) {
-                int id = link.hashCode();
+            int id = link.hashCode();
 
-                News news = site.news.get(id);
-                if (news == null) {
-                    news = new News(id, "", link, "", -1, null, -1, -1, -1);
-                    news.content = "";
-                }
-                if (news.content.isEmpty())
-                    site.readNewsContent(news);
+            News news = site.news.get(id);
+            if (news == null) {
+                news = new News(id, "", link, "", -1, null, -1, -1, -1);
+                news.content = "";
+            }
+            if (news.content.isEmpty())
+                site.readNewsContent(news);
 
-                if (!news.content.isEmpty()) {
-                    resp.getWriter().print(news.content);
+            if (!news.content.isEmpty()) {
+                resp.getWriter().print(news.content);
 
-                    site.news.put(id, news);
-                }
-                return;
+                site.news.put(id, news);
             }
 
-            String news_id = req.getParameter("nid");
-            if (news_id == null) {
-                resp.getWriter().print(UpdateMessageCreator.generateContent(site));
-                return;
-            }
-
-            News prey = site.news.get(Integer.parseInt(news_id));
-            if (prey != null) {
-
-                if (prey.content.isEmpty())
-                    site.readNewsContent(prey);
-
-                resp.getWriter().print(prey.content);
-            }
 
         } else if (req.getParameter("stats") != null) {
 

@@ -52,12 +52,12 @@ public class SDManager {
         }
     }
 
-    public void deleteNews(News news)
+    public void deleteNews(int news_id)
     {
         try {
-            context.deleteFile("n" + news.id);
+            context.deleteFile("n" + news_id);
         } catch (Exception e) {
-            AppSettings.printerror("[SDM] Error in deleteNews [news.id = " + news.id + "] ## [title: " + news.title + "]", e);
+            AppSettings.printerror("[SDM] Error in deleteNews [news.id = " + news_id + "]", e);
         }
     }
 

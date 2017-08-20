@@ -11,6 +11,16 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>AppServlet_v2</servlet-name>
+        <servlet-class>com.lucevent.newsup.backend.AppServlet_v2</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AppServlet_v2</servlet-name>
+        <url-pattern>/appv2</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>WebServlet</servlet-name>
         <servlet-class>com.lucevent.newsup.backend.WebServlet</servlet-class>
         <load-on-startup>1</load-on-startup>

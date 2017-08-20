@@ -17,7 +17,6 @@ public class ElPeriodicoEsSections extends Sections {
         add(new Section("Econom\u00EDa", "http://www.elperiodico.com/es/rss/economia/rss.xml", 0));
         add(new Section("Tecnolog\u00EDa", "http://www.elperiodico.com/es/rss/tecnologia/rss.xml", 0));
         add(new Section("Deportes", "http://www.elperiodico.com/es/rss/deportes/rss.xml", 0));
-        add(new Section("Ocio y cultura", "http://www.elperiodico.com/es/rss/ocio-y-cultura/rss.xml", 0));
         add(new Section("Ciencia", "http://www.elperiodico.com/es/rss/ciencia/rss.xml", 0));
         add(new Section("Medio ambiente", "http://www.elperiodico.com/es/rss/medio-ambiente/rss.xml", 0));
         add(new Section("Sanidad", "http://www.elperiodico.com/es/rss/sanidad/rss.xml", 0));
@@ -26,12 +25,7 @@ public class ElPeriodicoEsSections extends Sections {
 
         add(new Section("Ciudades", null, -1));
         add(new Section("Barcelona", "http://www.elperiodico.com/es/rss/barcelona/rss.xml", 1));
-        add(new Section("L'Hospitalet", "http://www.elperiodico.com/es/rss/hospitalet/rss.xml", 1));
-        add(new Section("Badalona", "http://www.elperiodico.com/es/rss/badalona/rss.xml", 1));
         add(new Section("Santa Coloma", "http://www.elperiodico.com/es/rss/santa-coloma/rss.xml", 1));
-
-        add(new Section("Canal Belleza", "http://www.elperiodico.com/es/rss/belleza/rss.xml", 0));
-        add(new Section("Motor", "http://www.elperiodico.com/es/rss/motor/rss.xml", 0));
 
         add(new Section("Blogs", null, -1));
         add(new Section("Bloglobal", "http://blogs.elperiodico.com/bloglobal/feed/?_ga=1.214333143.1954951623.1458825034", 1));

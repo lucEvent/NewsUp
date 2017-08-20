@@ -25,7 +25,7 @@ public class RollingStone extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{},
                 new int[]{TAG_MEDIA_CONTENT});
 
-        this.style = SITE_STYLE;
+        this.style = NewsStylist.base("http://www.rollingstone.com/") + SITE_STYLE;
     }
 
     @Override
@@ -59,6 +59,7 @@ public class RollingStone extends com.lucevent.newsup.data.util.NewsReader {
             }
         }
         article.select(".module-related,#module-more-news,figcaption,script").remove();
+        article.select("h1,h2").tagName("h3");
 
         NewsStylist.cleanAttributes(article.select("img"), "src");
         NewsStylist.repairLinks(article);

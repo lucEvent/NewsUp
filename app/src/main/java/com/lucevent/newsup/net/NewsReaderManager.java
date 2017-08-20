@@ -12,6 +12,7 @@ import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.NewsMap;
 import com.lucevent.newsup.data.util.NewsSet;
+import com.lucevent.newsup.data.util.Sections;
 import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.io.StorageCallback;
 import com.lucevent.newsup.kernel.AppCode;
@@ -83,6 +84,7 @@ public class NewsReaderManager {
             int server = 0;
             for (Site site : sites) {
                 try {
+
                     NewsArray news = readHeaders(site, AppSettings.getDownloadSections(site));
 
                     NewsMap history = storageCallback.getSavedNews(site);
@@ -219,34 +221,36 @@ public class NewsReaderManager {
         uiCallback.obtainMessage(AppCode.NO_INTERNET, null).sendToTarget();
         if (petition.site != null) {
 
-            NewsMap history = storageCallback.getSavedNews(petition.site, petition.sections);
+            int[] section_codes = sectionIndexesToCodes(petition.site, petition.sections);
+
+            NewsMap history = storageCallback.getSavedNews(petition.site, section_codes);
             uiCallback.obtainMessage(AppCode.NEWS_COLLECTION, history.values()).sendToTarget();
 
         } else {
 
             for (int siteCode : AppSettings.getMainSitesCodes()) {
                 Site site = AppData.getSiteByCode(siteCode);
-                NewsMap history = storageCallback.getSavedNews(site, AppSettings.getMainSections(site));
+                int[] section_codes = sectionIndexesToCodes(petition.site, AppSettings.getMainSections(site));
+
+                NewsMap history = storageCallback.getSavedNews(site, section_codes);
                 uiCallback.obtainMessage(AppCode.NEWS_COLLECTION, history.values()).sendToTarget();
             }
         }
         uiCallback.obtainMessage(AppCode.NEWS_LOADED).sendToTarget();
     }
 
-    private NewsArray readHeaders(Site site, int[] sections)
+    private NewsArray readHeaders(Site site, int[] section_indexes)
     {
-        NewsArray news = newsreader.readNewsHeaders(site.code, sections);
+        int[] section_codes = sectionIndexesToCodes(site, section_indexes);
 
+        NewsArray news = newsreader.readNewsHeaders(site.code, section_codes);
         if (news == null) {
             try {
-                news = site.readNewsHeaders(sections);
+                news = site.readNewsHeaders(section_codes);
             } catch (Exception e) {
-                AppSettings.printerror("Error reading header of " + site.name + ", sections " + Arrays.toString(sections), e);
+                AppSettings.printerror("Error reading header of " + site.name + ", sections " + Arrays.toString(section_indexes), e);
             }
         }
-
-        if (news != null)
-            news.setCode(site.code);
 
         return news;
     }
@@ -270,6 +274,20 @@ public class NewsReaderManager {
 
         if (!news.content.isEmpty())
             storageCallback.saveNews(news);
+    }
+
+    private int[] sectionIndexesToCodes(Site site, int[] indexes)
+    {
+        int[] codes = new int[indexes.length];
+
+        Sections sections = site.getSections();
+        for (int i = 0; i < indexes.length; i++)
+            if (indexes[i] < sections.size())
+                codes[i] = sections.get(indexes[i]).code;
+            else
+                codes[i] = -1;
+
+        return codes;
     }
 
 }

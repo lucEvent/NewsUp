@@ -56,7 +56,7 @@ public class ScheduleDownloadSettingsFragment extends Fragment {
         if (adapter.getItemCount() == 0)
             noDownloadsScreen.setVisibility(View.VISIBLE);
 
-        view.findViewById(R.id.button_sections).setOnClickListener(onAddAction);
+        view.findViewById(R.id.btn_add).setOnClickListener(onAddAction);
 
         return view;
     }

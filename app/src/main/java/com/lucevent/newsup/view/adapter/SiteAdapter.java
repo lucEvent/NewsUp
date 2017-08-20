@@ -50,7 +50,7 @@ public class SiteAdapter {
             case BY_NAME:
                 titles = new String[]{""};
                 shift = 24;
-                siteScatterMap = new SiteScatterMap(AppData.sites, filter) {
+                siteScatterMap = new SiteScatterMap(AppData.getSites(), filter) {
                     @Override
                     public Integer comparableValueOf(Site s)
                     {
@@ -62,7 +62,7 @@ public class SiteAdapter {
             case BY_LANGUAGE:
                 titles = titles_languages;
                 shift = SiteLanguage.shift;
-                siteScatterMap = new SiteScatterMap(AppData.sites, filter) {
+                siteScatterMap = new SiteScatterMap(AppData.getSites(), filter) {
                     @Override
                     public Integer comparableValueOf(Site s)
                     {
@@ -73,7 +73,7 @@ public class SiteAdapter {
             case BY_COUNTRY:
                 titles = titles_countries;
                 shift = SiteCountry.shift;
-                siteScatterMap = new SiteScatterMap(AppData.sites, filter) {
+                siteScatterMap = new SiteScatterMap(AppData.getSites(), filter) {
                     @Override
                     public Integer comparableValueOf(Site s)
                     {
@@ -84,7 +84,7 @@ public class SiteAdapter {
             case BY_CATEGORY:
                 titles = titles_types;
                 shift = SiteCategory.shift;
-                siteScatterMap = new SiteScatterMap(AppData.sites, filter) {
+                siteScatterMap = new SiteScatterMap(AppData.getSites(), filter) {
                     @Override
                     public Integer comparableValueOf(Site s)
                     {
@@ -99,8 +99,8 @@ public class SiteAdapter {
         TableRow row = null;
         int number = 0;
         if (viewMap == null) {
-            viewMap = new SparseArray<>(AppData.sites.size());
-            for (Site s : AppData.sites) {
+            viewMap = new SparseArray<>(AppData.getSites().size());
+            for (Site s : AppData.getSites()) {
 
                 if (number % rowSize == 0) {
                     row = new TableRow(context);

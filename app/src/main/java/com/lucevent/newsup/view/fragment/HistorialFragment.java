@@ -24,9 +24,9 @@ import com.lucevent.newsup.io.BookmarksManager;
 import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.HistoryManager;
 import com.lucevent.newsup.kernel.KernelManager;
-import com.lucevent.newsup.kernel.util.HistoryNews;
 import com.lucevent.newsup.permission.StoragePermissionHandler;
 import com.lucevent.newsup.view.adapter.NewsAdapter;
+import com.lucevent.newsup.view.util.NewsAdapterList;
 import com.lucevent.newsup.view.util.NewsView;
 import com.lucevent.newsup.view.util.OnBackPressedListener;
 
@@ -59,7 +59,7 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
     {
         View view = inflater.inflate(R.layout.f_news_list, container, false);
 
-        adapter = new NewsAdapter(this, this, onBookmarkClick);
+        adapter = new NewsAdapter(this, this, onBookmarkClick, NewsAdapterList.SortBy.byReadOn);
         adapter.showSiteLogo(true);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -111,13 +111,16 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
     @Override
     public void onClick(View v)
     {
-        HistoryNews news = (HistoryNews) v.getTag();
+        News news = (News) v.getTag();
 
         KernelManager.readContentOf(news);
 
         displayingNews = true;
-        KernelManager.addToHistory(news);
-        newsView.displayNews(news.toNews(), v);
+        newsView.displayNews(news, v);
+
+        News clone = new News(news.id,news.title,news.link,news.description,news.date,news.tags,news.site_code,news.section_code,news.readOn);
+        KernelManager.setNewsRead(clone);
+        adapter.add(clone);
     }
 
     @Override
@@ -184,13 +187,7 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
         @Override
         public void onClick(View v)
         {
-            Object o = v.getTag();
-            News news;
-            if (o instanceof HistoryNews) {
-                news = ((HistoryNews) o).toNews();
-                v.setTag(news);
-            } else
-                news = (News) o;
+            News news = (News) v.getTag();
 
             if (permissionHandler.checkAndAsk(HistorialFragment.this)) {
 

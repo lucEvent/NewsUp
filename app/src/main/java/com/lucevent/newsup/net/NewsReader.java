@@ -25,8 +25,8 @@ public final class NewsReader {
     public static final int NUM_SERVERS = 8;
     private static final String[] SERVER_IDS = {"newsup-1", "newsup-2", "newsup-3", "newsup-4", "newsup-5", "newsup-1", "newsup-2", "newsup-3"};
 
-    private static final String query_index = "http://newsup-2406.appspot.com/app?news&site=%s%s&v=%s" + (AppSettings.DEBUG ? "&nc" : "");
-    private static final String query_content = "http://%s.appspot.com/app?content&site=%d&l=%s";
+    private static final String query_index = "http://newsup-2406.appspot.com/appv2?news&site=%s%s&v=%s" + (AppSettings.DEBUG ? "&nc" : "");
+    private static final String query_content = "http://%s.appspot.com/appv2?content&site=%d&l=%s";
     private final String version;
 
     public NewsReader(String version)
@@ -34,19 +34,16 @@ public final class NewsReader {
         this.version = version;
     }
 
-    public final NewsArray readNewsHeaders(int siteCode, int[] sections)
+    public final NewsArray readNewsHeaders(int site_code, int[] sections_codes)
     {
-        StringBuilder sectArray = new StringBuilder(sections.length * 3);
-        for (int section : sections) sectArray.append(',').append(section);
+        StringBuilder sectArray = new StringBuilder(sections_codes.length * 3);
+        for (int section_code : sections_codes)
+            if (section_code != -1)
+                sectArray.append(',').append(section_code);
 
-        String query = String.format(query_index, siteCode, sectArray.toString(), version);
-        AppSettings.printlog("Query: " + query);
+        String rsslink = String.format(query_index, site_code, sectArray.toString(), version);
+        AppSettings.printlog("Query: " + rsslink);
 
-        return readRssPage(query);
-    }
-
-    private NewsArray readRssPage(String rsslink)
-    {
         org.jsoup.nodes.Document doc = getDocument(rsslink);
         if (doc == null) return new NewsArray();
 
@@ -88,10 +85,9 @@ public final class NewsReader {
                 }
             }
             if (!title.isEmpty()) {
-                News news = new News(title, link, description, date, new Tags(categories));
+                News news = new News(title, link, description, date, new Tags(categories), site_code, section, 0);
                 news.enclosures = enclosures;
                 news.content = content;
-                news.section = section;
 
                 res.add(news);
             }

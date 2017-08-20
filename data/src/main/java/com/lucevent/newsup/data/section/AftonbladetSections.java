@@ -16,7 +16,6 @@ public class AftonbladetSections extends Sections {
         add(new Section("Fotboll", "http://www.aftonbladet.se/sportbladet/fotboll/rss.xml", 1));
         add(new Section("Hockey", "http://www.aftonbladet.se/sportbladet/hockey/rss.xml", 1));
         add(new Section("N\u00F6jesbladet", "http://www.aftonbladet.se/nojesbladet/rss.xml", 0));
-        add(new Section("Klick!", "http://www.aftonbladet.se/nojesbladet/klick/rss.xml", 0));
         add(new Section("Ledare", "http://www.aftonbladet.se/ledare/rss.xml", 0));
         add(new Section("Kultur", "http://www.aftonbladet.se/kultur/rss.xml", 0));
         add(new Section("Bil", "http://www.aftonbladet.se/bil/rss.xml", 0));

@@ -169,7 +169,7 @@ public class StatisticsService extends Service {
                     Thread.sleep(60000);    // sendUpdate after 1 minute
 
                     KernelManager manager = new KernelManager(StatisticsService.this);
-                    ArrayList<Pair<Integer, Integer>> readingStats = manager.getReadingStats();
+                    ArrayList<Pair<Integer, Integer>> readingStats = manager.getTempReadingStats();
 
                     if (!readingStats.isEmpty()) {
                         StringBuilder url = new StringBuilder("http://newsup-2406.appspot.com/app?notify&values=");

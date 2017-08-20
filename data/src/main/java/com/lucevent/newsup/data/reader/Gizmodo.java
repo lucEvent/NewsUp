@@ -25,9 +25,15 @@ public class Gizmodo extends com.lucevent.newsup.data.util.NewsReader {
     protected String parseContent(Element prop)
     {
         Document doc = jsoupParse(prop);
+        doc.select(".ad-container,.js_ad-dynamic").remove();
 
         doc.select("h1,h2").tagName("h3");
         doc.select(".pullquote").tagName("blockquote");
+
+        for (Element e : doc.select("figure.js_marquee-assetfigure:has(picture)")) {
+            e.removeAttr("style");
+            e.html(e.select("picture,figcaption").outerHtml());
+        }
 
         NewsStylist.cleanAttributes(doc.select("img"), "src");
 

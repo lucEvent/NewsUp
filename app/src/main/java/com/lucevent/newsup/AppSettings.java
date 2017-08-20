@@ -32,7 +32,7 @@ public class AppSettings {
     public static String PREF_KEEP_NEWS_KEY;
     public static String PREF_LOAD_IMAGES_KEY;
     private static final String PREF_NIGHT_MODE_KEY = "night_mode";
-
+    public static final String LAST_DATA_REVISION_KEY = "last_data_rev";
 
     public static String PREF_SITE_MAIN_SECTIONS_KEY;
     public static String PREF_SITE_DOWNLOAD_SECTIONS_KEY;
@@ -74,6 +74,18 @@ public class AppSettings {
     public static boolean firstStart()
     {
         return preferences.getStringSet(PREF_MAIN_SITES_KEY, null) == null;
+    }
+
+    public static int getIntValue(String key, int default_value)
+    {
+        return preferences.getInt(key, default_value);
+    }
+
+    public static void setValue(String key, int default_value)
+    {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(key, default_value);
+        editor.apply();
     }
 
     public static Set<String> getMainSitesCodesString()

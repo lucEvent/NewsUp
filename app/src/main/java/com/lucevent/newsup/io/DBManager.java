@@ -7,17 +7,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Pair;
 
 import com.lucevent.newsup.AppSettings;
+import com.lucevent.newsup.data.Sites;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.NewsMap;
 import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.io.Database.DBDownloadSchedule;
-import com.lucevent.newsup.io.Database.DBHistoryNews;
 import com.lucevent.newsup.io.Database.DBNews;
 import com.lucevent.newsup.io.Database.DBNote;
-import com.lucevent.newsup.io.Database.DBReadingStats;
-import com.lucevent.newsup.io.Database.DBiNewsSection;
-import com.lucevent.newsup.kernel.util.HistoryNews;
+import com.lucevent.newsup.io.Database.DBReadings;
 import com.lucevent.newsup.kernel.util.Note;
 import com.lucevent.newsup.kernel.util.Notes;
 import com.lucevent.newsup.services.util.DownloadSchedule;
@@ -42,15 +39,13 @@ public class DBManager {
             SQLiteDatabase database = db.getReadableDatabase();
             Cursor cursor = database.query(DBNews.db, DBNews.cols, DBNews.site_code + "=" + site.code, null, null, null, null);
 
-            cursor.moveToFirst();
-            while (!cursor.isAfterLast()) {
+            if (cursor.moveToFirst())
+                do {
+                    News news = DBNews.parse(cursor);
+                    result.put(news.id, news);
+                }
+                while (cursor.moveToNext());
 
-                News news = DBNews.parse(cursor);
-                news.site_code = site.code;
-                result.put(news.id, news);
-
-                cursor.moveToNext();
-            }
             cursor.close();
             database.close();
         }
@@ -58,25 +53,29 @@ public class DBManager {
         return result;
     }
 
-    public ArrayList<Integer> getNewsIdsOf(Site site, int[] sections)
+    public NewsMap readNews(Site site, int[] section_codes)
     {
-        ArrayList<Integer> res = new ArrayList<>();
+        NewsMap res = new NewsMap();
 
         synchronized (this) {
             SQLiteDatabase database = db.getReadableDatabase();
 
-            for (int section : sections) {
+            StringBuilder sb_where = new StringBuilder(DBNews.site_code + "=" + site.code + " AND (");
+            sb_where.append("(" + DBNews.section_code + "=").append(section_codes[0]).append(")");
+            for (int i = 1; i < section_codes.length; i++)
+                sb_where.append(" OR (" + DBNews.section_code + "=").append(section_codes[i]).append(")");
+            sb_where.append(")");
 
-                Cursor cursor = database.query(DBiNewsSection.db, DBiNewsSection.cols,
-                        DBiNewsSection.site_code + "=" + site.code + " AND " + DBiNewsSection.section + "=" + section, null, null, null, null);
+            Cursor cursor = database.query(DBNews.db, DBNews.cols, sb_where.toString(), null, null, null, null);
+            if (cursor.moveToFirst())
+                do {
 
-                cursor.moveToFirst();
-                while (!cursor.isAfterLast()) {
-                    res.add(DBiNewsSection.newsId(cursor));
-                    cursor.moveToNext();
-                }
-                cursor.close();
-            }
+                    News news = DBNews.parse(cursor);
+                    res.put(news.id, news);
+
+                } while (cursor.moveToNext());
+
+            cursor.close();
             database.close();
         }
         AppSettings.printlog("[DB] NEWS IN " + site.name + " DATABASE (just some sections): " + res.size());
@@ -91,28 +90,27 @@ public class DBManager {
             SQLiteDatabase database = db.getReadableDatabase();
             Cursor cursor = database.query(DBNews.db, DBNews.cols, Database.id + "=" + id, null, null, null, null);
 
-            if (cursor.moveToFirst()) {
+            if (cursor.moveToFirst())
                 news = DBNews.parse(cursor);
-                news.site_code = cursor.getInt(1);
-            }
+
             cursor.close();
             database.close();
         }
         return news;
     }
 
-    public NewsMap readHistoryNews()
+    public NewsMap readReadNews()
     {
         NewsMap result = new NewsMap();
 
         synchronized (this) {
             SQLiteDatabase database = db.getReadableDatabase();
-            Cursor cursor = database.query(DBHistoryNews.db, DBHistoryNews.cols, null, null, null, null, null);
+            Cursor cursor = database.query(DBNews.db, DBNews.cols, DBNews.read_on + ">0", null, null, null, null);
 
             if (cursor.moveToFirst())
                 do {
 
-                    HistoryNews news = DBHistoryNews.parse(cursor);
+                    News news = DBNews.parse(cursor);
                     result.put(news.id, news);
 
                 } while (cursor.moveToNext());
@@ -121,7 +119,7 @@ public class DBManager {
             database.close();
         }
 
-        AppSettings.printlog("[DB] NEWS IN HISTORY DATABASE: " + result.size());
+        AppSettings.printlog("[DB] NEWS READ IN DATABASE: " + result.size());
         return result;
     }
 
@@ -147,18 +145,18 @@ public class DBManager {
         return result;
     }
 
-    public ArrayList<Pair<Integer, Integer>> readReadingStats()
+    public ArrayList<Pair<Integer, Integer>> readSyncReadings()
     {
         ArrayList<Pair<Integer, Integer>> result = new ArrayList<>();
 
         synchronized (this) {
             SQLiteDatabase database = db.getReadableDatabase();
-            Cursor cursor = database.query(DBReadingStats.db, DBReadingStats.cols, null, null, null, null, null);
+            Cursor cursor = database.query(DBReadings.db, DBReadings.cols, null, null, null, null, null);
 
             if (cursor.moveToFirst())
                 do {
 
-                    result.add(DBReadingStats.parse(cursor));
+                    result.add(DBReadings.parseSync(cursor));
 
                 } while (cursor.moveToNext());
 
@@ -166,6 +164,26 @@ public class DBManager {
             database.close();
         }
         return result;
+    }
+
+    public void readReadings(Sites sites)
+    {
+        synchronized (this) {
+            SQLiteDatabase database = db.getReadableDatabase();
+            Cursor cursor = database.query(DBReadings.db, DBReadings.cols, null, null, null, null, null);
+
+            if (cursor.moveToFirst())
+                do {
+
+                    Pair<Integer, Integer> data = DBReadings.parseAll(cursor);
+
+                    sites.getSiteByCode(data.first).setNumReadings(data.second);
+
+                } while (cursor.moveToNext());
+
+            cursor.close();
+            database.close();
+        }
     }
 
     public Notes readNotes()
@@ -200,6 +218,9 @@ public class DBManager {
         values.put(DBNews.date, news.date);
         values.put(DBNews.description, news.description);
         values.put(DBNews.tags, news.tags.toString());
+        values.put(DBNews.site_code, news.site_code);
+        values.put(DBNews.section_code, news.section_code);
+        values.put(DBNews.read_on, news.readOn);
 
         synchronized (this) {
             SQLiteDatabase database = db.getWritableDatabase();
@@ -245,53 +266,46 @@ public class DBManager {
         values.put(DBNews.date, news.date);
         values.put(DBNews.description, news.description);
         values.put(DBNews.tags, news.tags.toString());
-
-        ContentValues sectValues = new ContentValues();
-        sectValues.put(DBiNewsSection.site_code, news.site_code);
-        sectValues.put(DBiNewsSection.section, news.section);
-        sectValues.put(DBiNewsSection.news_id, news.id);
+        values.put(DBNews.section_code, news.section_code);
+        values.put(DBNews.read_on, 0);
 
         synchronized (this) {
             SQLiteDatabase database = db.getWritableDatabase();
             database.insert(DBNews.db, null, values);
-            database.insert(DBiNewsSection.db, null, sectValues);
             database.close();
         }
     }
 
-    public void insertHistoryNews(News news)
+    public void setNewsRead(News news)
     {
+        news.readOn = System.currentTimeMillis();
+
         ContentValues values = new ContentValues();
-        values.put(DBHistoryNews.news_id, news.id);
-        values.put(DBHistoryNews.site_code, news.site_code);
-        values.put(DBHistoryNews.title, news.title);
-        values.put(DBHistoryNews.link, news.link);
-        values.put(DBHistoryNews.date, news.date);
-        values.put(DBHistoryNews.description, news.description);
-        values.put(DBHistoryNews.tags, news.tags.toString());
+        values.put(DBNews.read_on, news.readOn);
 
         synchronized (this) {
             SQLiteDatabase database = db.getWritableDatabase();
-            database.delete(DBHistoryNews.db, DBHistoryNews.news_id + "=" + news.id, null);
-            database.insert(DBHistoryNews.db, null, values);
+            database.update(DBNews.db, values, Database.id + " = " + news.id, null);
             values.clear();
 
-            Cursor cursor = database.query(DBReadingStats.db, DBReadingStats.cols,
-                    DBReadingStats.site_code + "=" + news.site_code, null, null, null, null);
+            Cursor cursor = database.query(DBReadings.db, DBReadings.cols,
+                    DBReadings.site_code + "=" + news.site_code, null, null, null, null);
 
             if (cursor.moveToFirst()) {
-                Pair<Integer, Integer> readingStat = DBReadingStats.parse(cursor);
-                values.put(DBReadingStats.readings, readingStat.second + 1);
-                database.update(DBReadingStats.db, values, DBReadingStats.site_code + "=" + news.site_code, null);
+                database.execSQL(
+                        "UPDATE " + DBReadings.db +
+                                " SET " + DBReadings.readings + "=" + DBReadings.readings + "+1," +
+                                DBReadings.readings_since_last_sync + "=" + DBReadings.readings_since_last_sync + "+1" +
+                                " WHERE " + DBReadings.site_code + "=" + news.site_code);
             } else {
-                values.put(DBReadingStats.site_code, news.site_code);
-                values.put(DBReadingStats.readings, 1);
-                database.insert(DBReadingStats.db, null, values);
+                values.put(DBReadings.site_code, news.site_code);
+                values.put(DBReadings.readings, 1);
+                values.put(DBReadings.readings_since_last_sync, 1);
+                database.insert(DBReadings.db, null, values);
             }
             cursor.close();
             database.close();
         }
-
     }
 
     public DownloadSchedule insertDownloadSchedule(int hour, int minute, boolean notify,
@@ -338,36 +352,37 @@ public class DBManager {
     /**
      * ******************** DELETES *********************
      **/
-    public NewsArray deleteOldNews(long timeBound)
+    public int[] deleteNewsSince(long timeBound)
     {
-        NewsArray result = new NewsArray();
-
+        int[] ids;
         synchronized (this) {
             SQLiteDatabase database = db.getWritableDatabase();
-            Cursor cursor = database.query(DBNews.db, DBNews.cols, DBNews.date + "<" + timeBound, null, null, null, null);
+            Cursor cursor = database.query(DBNews.db, new String[]{Database.id}, DBNews.date + "<" + timeBound, null, null, null, null);
 
-            cursor.moveToFirst();
-            while (!cursor.isAfterLast()) {
-
-                News news = DBNews.parse(cursor);
-                result.add(news);
-
-                cursor.moveToNext();
+            ids = new int[cursor.getCount()];
+            for (int i = 0; i < cursor.getCount(); i++) {
+                cursor.moveToPosition(i);
+                ids[i] = cursor.getInt(0);
             }
             cursor.close();
-            database.delete(DBHistoryNews.db, DBHistoryNews.date + "<" + timeBound, null);
+
             database.delete(DBNews.db, DBNews.date + "<" + timeBound, null);
             database.close();
         }
-        AppSettings.printlog("[DB] " + result.size() + " old news deleted from DB");
-        return result;
+        AppSettings.printlog("[DB] " + ids.length + " news deleted from DB");
+        return ids;
     }
 
     public void deleteHistory()
     {
         synchronized (this) {
             SQLiteDatabase database = db.getWritableDatabase();
-            database.delete(DBHistoryNews.db, null, null);
+
+            ContentValues values = new ContentValues(1);
+            values.put(DBNews.read_on, 0);
+            database.update(DBNews.db, values, null, null);
+
+            database.close();
             database.close();
         }
     }
@@ -381,11 +396,15 @@ public class DBManager {
         }
     }
 
-    public void deleteReadingStats()
+    public void clearSyncReadings()
     {
         synchronized (this) {
             SQLiteDatabase database = db.getWritableDatabase();
-            database.delete(DBReadingStats.db, null, null);
+
+            ContentValues values = new ContentValues(1);
+            values.put(DBReadings.readings_since_last_sync, 0);
+            database.update(DBReadings.db, values, null, null);
+
             database.close();
         }
     }
@@ -404,8 +423,6 @@ public class DBManager {
         synchronized (this) {
             SQLiteDatabase database = db.getWritableDatabase();
             database.delete(DBNews.db, null, null);
-            database.delete(DBHistoryNews.db, null, null);
-            database.delete(DBiNewsSection.db, null, null);
             database.close();
         }
     }

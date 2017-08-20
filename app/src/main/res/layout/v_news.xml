@@ -13,6 +13,7 @@
     <com.lucevent.newsup.view.util.NewsSideToolbar
         android:id="@+id/side_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/floating_button_margin"/>
 
 </merge>

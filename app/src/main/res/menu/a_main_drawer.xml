@@ -11,7 +11,7 @@
     <group
         android:id="@+id/group_more_options"
         android:checkableBehavior="single"
-        android:orderInCategory="2">
+        android:orderInCategory="0xffff">
 
         <item
             android:id="@+id/nav_notes"

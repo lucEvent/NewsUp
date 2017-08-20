@@ -2,10 +2,14 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
+
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 public class Yle extends com.lucevent.newsup.data.util.NewsReader {
 
-    //Tags:[category, content:encoded, description, enclosure, guid, item, link, pubdate, title]
+    // Tags: [category, content:encoded, description, enclosure, guid, item, link, pubdate, title]
 
     public Yle()
     {
@@ -20,27 +24,42 @@ public class Yle extends com.lucevent.newsup.data.util.NewsReader {
     }
 
     @Override
+    protected Enclosure parseEnclosure(Element prop)
+    {
+        return new Enclosure(prop.attr("url").replace("/w_205,h_115,q_70", "/w_615,h_345,q_100"), prop.attr("type"), prop.attr("length"));
+    }
+
+    @Override
     protected News onNewsRead(News news)
     {
-        if (!news.content.isEmpty())
-            if (org.jsoup.Jsoup.parse(news.content).text().length() != 0) {
+        if (!news.content.isEmpty()) {
+            Document doc = jsoupParse(news.content);
+            if (doc.text().length() != 0) {
+
+                doc.select("h1,h2").tagName("h3");
+                doc.select("[class]").removeAttr("class");
+                NewsStylist.repairLinks(doc.body());
 
                 String img = "";
                 for (Enclosure e : news.enclosures)
                     img += e.html();
 
-                news.content = "<meta charset='UTF-8'>" + img + news.content;
+                news.content = "<meta charset='UTF-8'>" + img + doc.body().html();
             }
+        }
         return news;
     }
 
     @Override
-    protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+    protected void readNewsContent(Document doc, News news)
     {
-        org.jsoup.select.Elements e = doc.select(".text");
+        org.jsoup.select.Elements article = doc.select(".text");
 
-        if (!e.isEmpty())
-            news.content = e.html();
+        if (!article.isEmpty()) {
+            article.select("h1,h2").tagName("h3");
+
+            news.content = article.html();
+        }
     }
 
 }

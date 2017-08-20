@@ -14,42 +14,42 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/by_sitename"
-        style="@style/floatingButton"
-        android:layout_alignParentEnd="true"
+        style="@style/statistics_floating_button"
         android:layout_alignParentTop="true"
         android:src="@drawable/ic_sort_by_name"
         app:backgroundTint="@color/colorPrimary"
         app:fabSize="mini"
-        app:rippleColor="@color/colorAccent"/>
+        app:rippleColor="@color/colorAccent"
+        app:useCompatPadding="true"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/by_nrequests"
-        style="@style/floatingButton"
-        android:layout_alignParentEnd="true"
+        style="@style/statistics_floating_button"
         android:layout_below="@+id/by_sitename"
         android:src="@drawable/ic_sort_by_number"
         app:backgroundTint="@color/colorPrimary"
         app:fabSize="mini"
-        app:rippleColor="@color/colorAccent"/>
+        app:rippleColor="@color/colorAccent"
+        app:useCompatPadding="true"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/by_readings"
-        style="@style/floatingButton"
-        android:layout_alignParentEnd="true"
+        style="@style/statistics_floating_button"
         android:layout_below="@+id/by_nrequests"
         android:src="@drawable/ic_read_white"
         app:backgroundTint="@color/colorPrimary"
         app:fabSize="mini"
-        app:rippleColor="@color/colorAccent"/>
+        app:rippleColor="@color/colorAccent"
+        app:useCompatPadding="true"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/by_time"
-        style="@style/floatingButton"
-        android:layout_alignParentEnd="true"
+        style="@style/statistics_floating_button"
         android:layout_below="@+id/by_readings"
         android:src="@drawable/ic_access_time"
         app:backgroundTint="@color/colorPrimary"
         app:fabSize="mini"
-        app:rippleColor="@color/colorAccent"/>
+        app:rippleColor="@color/colorAccent"
+        app:useCompatPadding="true"/>
 
 </RelativeLayout>

@@ -44,6 +44,7 @@ import com.lucevent.newsup.permission.StoragePermissionHandler;
 import com.lucevent.newsup.services.StatisticsService;
 import com.lucevent.newsup.view.adapter.NewsAdapter;
 import com.lucevent.newsup.view.dialog.SectionsDialog;
+import com.lucevent.newsup.view.util.NewsAdapterList;
 import com.lucevent.newsup.view.util.NewsView;
 import com.lucevent.newsup.view.util.OnBackPressedListener;
 import com.lucevent.newsup.view.util.OnMoreSectionsClickListener;
@@ -189,7 +190,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         if (adapter == null) {
             mainView = inflater.inflate(R.layout.f_news_list, container, false);
 
-            adapter = new NewsAdapter(this, this, onBookmarkClick);
+            adapter = new NewsAdapter(this, this, onBookmarkClick, NewsAdapterList.SortBy.byTime);
             adapter.setLoadImages(AppSettings.loadImages());
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -287,7 +288,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
             newsView.displayNews(news, v);
             btn_sections.setVisibility(View.GONE);
             displayingNews = true;
-            KernelManager.addToHistory(news);
+            KernelManager.setNewsRead(news);
             return;
         }
         KernelManager.fetchContentOf(news);

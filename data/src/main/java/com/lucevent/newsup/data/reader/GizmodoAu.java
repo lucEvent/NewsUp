@@ -40,15 +40,15 @@ public class GizmodoAu extends com.lucevent.newsup.data.util.NewsReader {
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
         Elements article = doc.select(".article-content");
-        article.select(".vdb_player,script,.referenced-article").remove();
+        article.select(".vdb_player,script,.referenced-article,.aol-video-container").remove();
 
         for (Element gif : article.select("img[data-gif-image]"))
             gif.attr("src", gif.attr("data-gif-image"));
 
         article.select("h1,h2").tagName("h3");
+        article.select(".image + p > small").tagName("figcaption");
 
         news.content = NewsStylist.cleanComments(article.html());
     }
-
 
 }

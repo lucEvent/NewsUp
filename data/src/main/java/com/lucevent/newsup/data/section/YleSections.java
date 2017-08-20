@@ -9,9 +9,8 @@ public class YleSections extends Sections {
     {
         super();
 
-        add(new Section("P\u00e4\u00e4uutiset", "http://yle.fi/uutiset/rss/paauutiset.rss", 0));
+        add(new Section("P\u00e4\u00e4uutiset", "https://feeds.yle.fi/uutiset/v1/majorHeadlines/YLE_UUTISET.rss", 0));
         add(new Section("Tuoreimmat uutiset", "http://yle.fi/uutiset/rss/uutiset.rss", 0));
-        add(new Section("Luetuimmat uutiset", "http://yle.fi/uutiset/rss/luetuimmat.rss", 0));
 
         add(new Section("Kotimaa", "http://yle.fi/uutiset/rss/uutiset.rss?osasto=kotimaa", 0));
         add(new Section("Ulkomaat", "http://yle.fi/uutiset/rss/uutiset.rss?osasto=ulkomaat", 0));
@@ -27,7 +26,6 @@ public class YleSections extends Sections {
         add(new Section("Ilmi\u00f6t", "http://yle.fi/uutiset/rss/uutiset.rss?osasto=ilmiot", 0));
         add(new Section("Internet", "http://yle.fi/uutiset/rss/uutiset.rss?osasto=internet", 0));
         add(new Section("Pelit", "http://yle.fi/uutiset/rss/uutiset.rss?osasto=pelit", 0));
-        add(new Section("N\u00e4k\u00f6kulmat", "http://yle.fi/uutiset/rss/uutiset.rss?osasto=nakokulmat", 0));
         add(new Section("Blogit", "http://yle.fi/uutiset/rss/uutiset.rss?osasto=Blogi", 0));
         add(new Section("Ilmasto", "http://yle.fi/uutiset/rss/uutiset.rss?osasto=ilmasto", 0));
 
@@ -71,7 +69,6 @@ public class YleSections extends Sections {
         add(new Section("Ratsastus", "http://yle.fi/urheilu/rss/uutiset.rss?osasto=ratsastus", 1));
         add(new Section("Salibandy", "http://yle.fi/urheilu/rss/uutiset.rss?osasto=salibandy", 1));
         add(new Section("Tennis", "http://yle.fi/urheilu/rss/uutiset.rss?osasto=tennis", 1));
-        add(new Section("Yleisurheilu", "http://yle.fi/urheilu/rss/uutiset.rss?osasto=yleisurheilu", 1));
 
         add(new Section("Selkouutiset", "http://yle.fi/uutiset/rss/uutiset.rss?osasto=selkouutiset", 0));
         add(new Section("News in English", "http://yle.fi/uutiset/rss/uutiset.rss?osasto=news", 0));

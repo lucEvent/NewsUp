@@ -4,6 +4,7 @@ import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsStylist;
 
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -26,13 +27,19 @@ public class As extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_ENCLOSURE});
+
+        this.style = NewsStylist.base("https://as.com/");
     }
 
     @Override
     protected News onNewsRead(News news)
     {
         if (!news.content.isEmpty()) {
-            news.content = getEnclosures(news) + news.content;
+            Document doc = jsoupParse(news.content);
+            doc.select("h1,h2").tagName("h3");
+            NewsStylist.repairLinks(doc.body());
+
+            news.content = getEnclosures(news) + doc.body().html();
         } else if (news.link.contains("video")) {
 
             for (Enclosure enclosure : news.enclosures)
@@ -87,6 +94,8 @@ public class As extends com.lucevent.newsup.data.util.NewsReader {
             article.select("h1,h2").tagName("h3");
             article.select(".escudo-equipo img").attr("style", "width:10%");
 
+            NewsStylist.repairLinks(article);
+
             news.content = getEnclosures(news) + article.outerHtml();
 
         } else {
@@ -101,6 +110,8 @@ public class As extends com.lucevent.newsup.data.util.NewsReader {
                     img.attr("src", src);
                 }
                 article.select("[itemprop='headline']").tagName("p").select("h2,span").remove();
+
+                NewsStylist.repairLinks(article);
 
                 news.content = article.outerHtml();
             } else {

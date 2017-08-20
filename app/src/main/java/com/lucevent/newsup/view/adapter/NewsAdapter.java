@@ -30,13 +30,13 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public NewsAdapter(View.OnClickListener onClick,
                        View.OnLongClickListener onLongClick,
-                       View.OnClickListener onBookmarkClick)
+                       View.OnClickListener onBookmarkClick, NewsAdapterList.SortBy sortBy)
     {
         this.onClick = onClick;
-        //       this.onLongClick = onLongClick;
+        // this.onLongClick = onLongClick;
         this.onBookmarkClick = onBookmarkClick;
 
-        dataSet = new NewsAdapterList(this);
+        dataSet = new NewsAdapterList(this, sortBy);
     }
 
     @Override
@@ -101,15 +101,12 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             dataSet.beginBatchedUpdates();
 
             dataSet.clear();
-
-            for (News n : newDataSet)
-                dataSet.add(n);
+            dataSet.addAll(newDataSet);
 
             if (this.onMoreClick != null)
-                dataSet.add(new News(-9, "", "", "", -9, null));
+                dataSet.add(new News(-9, "", "", "", -9, null, -1, -1, -1));
 
             dataSet.endBatchedUpdates();
-
         }
     }
 
@@ -117,11 +114,10 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     {
         dataSet.beginBatchedUpdates();
 
-        for (News n : newDataSet)
-            dataSet.add(n);
+        dataSet.addAll(newDataSet);
 
         if (newDataSet.size() == dataSet.size() && this.onMoreClick != null)
-            dataSet.add(new News(-9, "", "", "", -9, null));
+            dataSet.add(new News(-9, "", "", "", -9, null, -1, -1, -1));
 
         dataSet.endBatchedUpdates();
     }

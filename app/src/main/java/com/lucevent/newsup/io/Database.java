@@ -1,5 +1,6 @@
 package com.lucevent.newsup.io;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -9,19 +10,18 @@ import android.util.Pair;
 import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.Tags;
-import com.lucevent.newsup.kernel.util.HistoryNews;
 import com.lucevent.newsup.kernel.util.Note;
 import com.lucevent.newsup.services.util.DownloadSchedule;
 
 public class Database extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "newsup.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     public static final String id = "_id";
 
     static final class DBNews {
-        static final String db = "news";
+        static final String db = "t_news";
 
         static final String site_code = "site_id";
         static final String title = "title";
@@ -29,79 +29,37 @@ public class Database extends SQLiteOpenHelper {
         static final String date = "date";
         static final String description = "descr";
         static final String tags = "tags";
+        static final String section_code = "sect_id";
+        static final String read_on = "read_on";
 
-        static final String[] cols = {id, site_code, title, link, date, description, tags};
+        static final String[] cols = {id, title, link, description, date, tags, site_code, section_code, read_on};
 
         static final String creator =
                 "CREATE TABLE " + db + " (" +
                         id + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        site_code + " INTEGER," +
                         title + " TEXT NOT NULL," +
                         link + " TEXT NOT NULL," +
-                        date + " INTEGER," +
                         description + " TEXT NOT NULL," +
-                        tags + " TEXT NOT NULL" +
+                        date + " INTEGER," +
+                        tags + " TEXT NOT NULL," +
+                        site_code + " INTEGER," +
+                        section_code + " INTEGER," +
+                        read_on + " INTEGER" +
                         ");";
 
         static News parse(Cursor c)
         {
-            return new News(c.getInt(0), c.getString(2), c.getString(3), c.getString(5),
-                    c.getLong(4), new Tags(c.getString(6)));
-        }
-    }
-
-    static final class DBiNewsSection {
-        static final String db = "isection";
-
-        static final String site_code = "site_id";
-        static final String section = "section";
-        static final String news_id = "news_id";
-
-        static final String[] cols = {site_code, section, news_id};
-
-        static final String creator =
-                "CREATE TABLE " + db + " (" +
-                        site_code + " INTEGER," +
-                        section + " INTEGER," +
-                        news_id + " INTEGER" +
-                        ");";
-
-        static int newsId(Cursor c)
-        {
-            return c.getInt(2);
-        }
-    }
-
-    static final class DBHistoryNews {
-        static final String db = "histnews";
-
-        static final String news_id = "news_id";
-        static final String site_code = "site_id";
-        static final String title = "title";
-        static final String link = "link";
-        static final String date = "date";
-        static final String description = "descr";
-        static final String tags = "tags";
-
-        static final String[] cols = {id, news_id, site_code, title, link, date, description, tags};
-
-        static final String creator =
-                "CREATE TABLE " + db + " (" +
-                        id + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                        news_id + " INTEGER," +
-                        site_code + " INTEGER," +
-                        title + " TEXT NOT NULL," +
-                        link + " TEXT NOT NULL," +
-                        date + " INTEGER," +
-                        description + " TEXT NOT NULL," +
-                        tags + " TEXT NOT NULL" +
-                        ");";
-
-        static HistoryNews parse(Cursor cursor)
-        {
-            return new HistoryNews(cursor.getInt(0), cursor.getInt(1), cursor.getString(3),
-                    cursor.getString(4), cursor.getString(6), cursor.getLong(5),
-                    new Tags(cursor.getString(7)), cursor.getInt(2));
+            return new News(
+                    c.getInt(0),    // id
+                    c.getString(1), // title
+                    c.getString(2), // link
+                    c.getString(3), // description
+                    c.getLong(4),   // data
+                    new Tags(c.getString(5)),    // tags
+                    c.getInt(6),    // site_code
+                    c.getInt(7),    // section_code
+                    c.getLong(8)     // readOn
+            );
         }
     }
 
@@ -161,23 +119,30 @@ public class Database extends SQLiteOpenHelper {
         }
     }
 
-    static final class DBReadingStats {
-        static final String db = "dl_stats_reading";
+    static class DBReadings {
+        static final String db = "t_readings";
 
         static final String site_code = "site_code";
         static final String readings = "readings";
+        static final String readings_since_last_sync = "readings_sls";
 
-        static final String[] cols = {site_code, readings};
+        static final String[] cols = {site_code, readings, readings_since_last_sync};
 
         static final String creator =
                 "CREATE TABLE " + db + " (" +
                         site_code + " INTEGER," +
-                        readings + " INTEGER" +
+                        readings + " INTEGER," +
+                        readings_since_last_sync + " INTEGER" +
                         ");";
 
-        static Pair<Integer, Integer> parse(Cursor cursor)
+        static Pair<Integer, Integer> parseAll(Cursor cursor)
         {
             return new Pair<>(cursor.getInt(0), cursor.getInt(1));
+        }
+
+        public static Pair<Integer, Integer> parseSync(Cursor cursor)
+        {
+            return new Pair<>(cursor.getInt(0), cursor.getInt(2));
         }
     }
 
@@ -211,11 +176,9 @@ public class Database extends SQLiteOpenHelper {
         AppSettings.printlog("[DB] En onCreate");
 
         db.execSQL(DBNews.creator);
-        db.execSQL(DBHistoryNews.creator);
+        db.execSQL(DBReadings.creator);
         db.execSQL(DBDownloadSchedule.creator);
-        db.execSQL(DBReadingStats.creator);
         db.execSQL(DBNote.creator);
-        db.execSQL(DBiNewsSection.creator);
     }
 
     @Override
@@ -225,17 +188,47 @@ public class Database extends SQLiteOpenHelper {
 
         switch (oldVersion) {
             case 1:
-                db.execSQL(DBReadingStats.creator);
+                db.execSQL("CREATE TABLE dl_stats_reading (v1 INTEGER,v2 INTEGER)");
                 db.execSQL(DBNote.creator);
             case 2:
-                db.execSQL(DBiNewsSection.creator);
+                db.execSQL("CREATE TABLE isection (v1 INTEGER)");
             case 3:
+                db.delete("isection", null, null);
+                db.delete("histnews", null, null);
+                db.delete("news", null, null);
+
+                db.execSQL("DROP TABLE isection");
+                db.execSQL("DROP TABLE histnews");
+                db.execSQL("DROP TABLE news");
+
+                db.execSQL(DBNews.creator);
+                db.execSQL(DBReadings.creator);
+
+                Cursor cursor = db.query("dl_stats_reading", new String[]{"site_code", "readings"}, null, null, null, null, null);
+                if (cursor.moveToFirst())
+                    do {
+                        int v1 = cursor.getInt(0);
+                        int v2 = cursor.getInt(1);
+
+                        ContentValues values = new ContentValues();
+                        values.put(DBReadings.site_code, v1);
+                        values.put(DBReadings.readings, v2);
+                        values.put(DBReadings.readings_since_last_sync, v2);
+                        db.insert(DBReadings.db, null, values);
+                    } while (cursor.moveToNext());
+
+                cursor.close();
+
+                db.delete("dl_stats_reading", null, null);
+                db.execSQL("DROP TABLE dl_stats_reading");
+
+                //  case 4:
                 // Delete all needed tables
                 // db.execSQL("DROP TABLE "+ "db_xxxxxxxxxxxx");
                 // Create all needed tables
                 // db.execSQL(CREATE_yyyyyyyyy);
         }
-
+        AppSettings.printlog("[DB] Upgrading done");
     }
 
 }

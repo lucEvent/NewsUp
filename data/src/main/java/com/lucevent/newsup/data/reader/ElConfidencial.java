@@ -1,6 +1,7 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
+import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Element;
 
@@ -35,11 +36,12 @@ public class ElConfidencial extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected String parseContent(Element prop)
     {
-        org.jsoup.nodes.Element article = org.jsoup.Jsoup.parse(prop.text()).select("body").get(0);
+        org.jsoup.nodes.Element article = jsoupParse(prop).select("body").get(0);
         article.children().last().remove();
         article.select("h1,h2").tagName("h3");
-        for (Element e : article.select("img"))
-            e.removeAttr("alt").removeAttr("class").removeAttr("data-height").removeAttr("data-width").removeAttr("longdesc");
+        article.select(".footer-video-text").tagName("figcaption");
+
+        NewsStylist.cleanAttributes(article.select("img"), "src");
 
         return article.html();
     }

@@ -210,7 +210,8 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
         Sites favorites = dataManager.getFavoriteSites();
         for (Site site : favorites) {
-            MenuItem mi = menu.add(R.id.group_favorites, site.code, 1, site.name);
+            int order = Math.max(0, 0xffff - site.getNumReadings() - 1);
+            MenuItem mi = menu.add(R.id.group_favorites, site.code, order, site.name);
             configureMenuItem(mi, site);
         }
 
@@ -395,7 +396,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     {
         if (permissionHandler.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
             navigateTo(R.id.nav_saved_news);
-            ((NavigationView) findViewById(R.id.nav_view)).setCheckedItem(R.id.nav_saved_news);
+            lastItemSelected = R.id.nav_saved_news;
         }
     }
 

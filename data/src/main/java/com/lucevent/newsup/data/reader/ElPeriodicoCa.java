@@ -1,6 +1,7 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -54,27 +55,26 @@ public class ElPeriodicoCa extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected void readNewsContent(Document doc, News news)
     {
-        doc.select("script").remove();
-
-        Elements article = doc.select(".ep-img img,.ep-galeria .slider img,.ep-video img,"
-                + ".comp iframe:not(.cuerpo-noticia iframe,.cuerpo-opinion iframe),"
-                + ".cuerpo-noticia > *:not(.complementos,.despiece,.destacado,.claves,.frase),"
-                + ".cuerpo-opinion > *:not(.complementos,.despiece,.destacado,.claves,.frase)");
+        Elements article = doc.select(".ep-detail-body");
 
         if (article.isEmpty()) {
-            article = doc.select("article .onbcn-slider,article .onbcn-detail-body");
+            article = doc.select(".slider-item,.onbcn-detail-body");
 
-            article.select(".custom-navigation,.box-left,.player-zeta-ob").remove();
-        }
+            article.select(".onbcn-themes-related").remove();
+
+        } else
+            article.select("style,script,.hidden-md,.hidden-sm,.ep-toolbar,.close,.ep-related,.ep-opinion,.bottom,.custom-navigation").remove();
+
+        if (!doc.select(".ep-galeria-v2").isEmpty())
+            doc.select(".ep-media").remove();
 
         article.select(".despiece-bottom").tagName("blockquote");
-        article.select("h2").tagName("h3");
         article.select(".subtitle").tagName("figcaption");
+        article.select("h1,h2").tagName("h3");
 
-        article.select("[width]").removeAttr("width");
-        article.select("[style]").removeAttr("style");
+        NewsStylist.cleanAttributes(article.select(".slide,.slider-item"));
 
-        news.content = article.outerHtml();
+        news.content = article.html();
     }
 
 }
