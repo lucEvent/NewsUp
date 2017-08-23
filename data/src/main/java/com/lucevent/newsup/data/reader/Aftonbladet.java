@@ -21,7 +21,9 @@ public class Aftonbladet extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{});
+                new int[]{},
+                "http://www.aftonbladet.se",
+                "");
     }
 
     @Override
@@ -72,14 +74,14 @@ public class Aftonbladet extends com.lucevent.newsup.data.util.NewsReader {
             for (Element e : article.select(".abIC noscript:first-child"))
                 e.parent().html(e.html());
 
-            Elements articleContent = article.select(".abVideoSatellite,.abRoyalSlider,.abIC:not(.abBodyText .abIC),.abAboveBodyTextBox,.abBodyText");
+            article = article.select(".abVideoSatellite,.abRoyalSlider,.abIC:not(.abBodyText .abIC),.abAboveBodyTextBox,.abBodyText");
 
-            if (!articleContent.isEmpty()) {
+            if (!article.isEmpty()) {
 
-                articleContent.select(".abBlock").remove();
-                articleContent.select("h2").tagName("h3");
+                article.select(".abBlock").remove();
+                article.select("h1,h2").tagName("h3");
 
-                news.content = articleContent.html();
+                news.content = article.html();
             }
         } else {
 
@@ -118,6 +120,7 @@ public class Aftonbladet extends com.lucevent.newsup.data.util.NewsReader {
                 news.content = article.outerHtml();
             }
         }
+        news.content = NewsStylist.cleanComments(news.content);
     }
 
 }

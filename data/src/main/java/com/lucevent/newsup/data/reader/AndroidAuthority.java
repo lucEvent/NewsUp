@@ -32,9 +32,9 @@ public class AndroidAuthority extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_CONTENT_ENCODED},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{TAG_MEDIA_CONTENT});
-
-        this.style = SITE_STYLE;
+                new int[]{TAG_MEDIA_CONTENT},
+                "http://www.androidauthority.com/",
+                SITE_STYLE);
     }
 
     @Override

@@ -16,7 +16,9 @@ public class TheConversation extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_DESCRIPTION},
                 new int[]{TAG_PUBDATE},
                 new int[]{},
-                new int[]{});
+                new int[]{},
+                "",
+                "");
     }
 
     @Override

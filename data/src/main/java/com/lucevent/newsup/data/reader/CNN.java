@@ -25,7 +25,9 @@ public class CNN extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{TAG_MEDIA_CONTENT, "media:thumbnail".hashCode()});
+                new int[]{TAG_MEDIA_CONTENT, "media:thumbnail".hashCode()},
+                "http://edition.cnn.com/",
+                "");
     }
 
     @Override

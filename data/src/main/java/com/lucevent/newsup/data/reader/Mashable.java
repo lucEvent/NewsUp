@@ -21,7 +21,9 @@ public class Mashable extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{"media:thumbnail".hashCode()});
+                new int[]{"media:thumbnail".hashCode()},
+                "http://mashable.com/",
+                "");
     }
 
     @Override

@@ -3,7 +3,6 @@ package com.lucevent.newsup.data.reader;
 import com.lucevent.newsup.data.util.Enclosures;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
-import com.lucevent.newsup.data.util.NewsStylist;
 import com.lucevent.newsup.data.util.Tags;
 
 import org.jsoup.nodes.Document;
@@ -17,7 +16,7 @@ public class PokemonGo extends com.lucevent.newsup.data.util.Reader {
 
     public PokemonGo()
     {
-        this.style = NewsStylist.base("http://pokemongolive.com/");
+        super("<base href='http://pokemongolive.com/'>");
     }
 
     @Override

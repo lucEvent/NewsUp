@@ -25,7 +25,9 @@ public class HuffingtonPostSpain extends com.lucevent.newsup.data.util.NewsReade
                 new int[]{TAG_DESCRIPTION},
                 new int[]{TAG_PUBDATE, TAG_UPDATED},
                 new int[]{TAG_CATEGORY},
-                new int[]{TAG_ENCLOSURE, TAG_LINK});
+                new int[]{TAG_ENCLOSURE, TAG_LINK},
+                "http://www.huffingtonpost.es/",
+                "");
     }
 
     @Override

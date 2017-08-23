@@ -19,7 +19,9 @@ public class ElPeriodicoExtremadura extends com.lucevent.newsup.data.util.NewsRe
                 new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{});
+                new int[]{},
+                "http://www.elperiodicoextremadura.com/",
+                "");
     }
 
     @Override

@@ -23,9 +23,9 @@ public class RollingStone extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{},
-                new int[]{TAG_MEDIA_CONTENT});
-
-        this.style = NewsStylist.base("http://www.rollingstone.com/") + SITE_STYLE;
+                new int[]{TAG_MEDIA_CONTENT},
+                "http://www.rollingstone.com/",
+                SITE_STYLE);
     }
 
     @Override

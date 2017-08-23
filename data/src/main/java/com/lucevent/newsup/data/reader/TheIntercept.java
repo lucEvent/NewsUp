@@ -23,9 +23,9 @@ public class TheIntercept extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_CONTENT_ENCODED},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{"leadimageart".hashCode(), TAG_MEDIA_CONTENT});
-
-        this.style = NewsStylist.base("https://theintercept.com");
+                new int[]{"leadimageart".hashCode(), TAG_MEDIA_CONTENT},
+                "https://theintercept.com",
+                "");
     }
 
     @Override

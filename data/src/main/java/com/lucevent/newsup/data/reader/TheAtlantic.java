@@ -27,7 +27,9 @@ public class TheAtlantic extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_CONTENT},
                 new int[]{TAG_PUBDATE, TAG_PUBLISHED},
                 new int[]{TAG_CATEGORY},
-                new int[]{TAG_MEDIA_CONTENT});
+                new int[]{TAG_MEDIA_CONTENT},
+                "https://www.theatlantic.com/",
+                "");
     }
 
     @Override

@@ -81,11 +81,6 @@ public final class NewsStylist {
         return "<img src='" + src + "'>";
     }
 
-    public static String base(String baseUrl)
-    {
-        return "<base href='" + baseUrl + "'>";
-    }
-
     /**
      * @param data      String the substring will be looked up
      * @param start     Starting of the substring

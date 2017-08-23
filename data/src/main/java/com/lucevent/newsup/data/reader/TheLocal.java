@@ -20,9 +20,9 @@ public class TheLocal extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{},
-                new int[]{TAG_ENCLOSURE});
-
-        this.style = NewsStylist.base("http://www.thelocal.com/");
+                new int[]{TAG_ENCLOSURE},
+                "http://www.thelocal.com/",
+                "");
     }
 
     @Override

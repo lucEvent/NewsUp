@@ -28,7 +28,9 @@ public class USAToday extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{},
-                new int[]{TAG_ENCLOSURE});
+                new int[]{TAG_ENCLOSURE},
+                "https://www.usatoday.com/",
+                "");
     }
 
     @Override

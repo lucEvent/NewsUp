@@ -11,9 +11,9 @@ import org.jsoup.select.Elements;
 
 public class Elle extends com.lucevent.newsup.data.util.NewsReader {
 
-//  Tags:
-//  [category,                              description, guid, item, link,                                          pubdate, title]
-//  [category, content:encoded, dc:creator, description, guid, item, link, postid, postimg, postimgapa, postimglow, pubdate, title]
+    //  Tags:
+    //  [category,                              description, guid, item, link,                                          pubdate, title]
+    //  [category, content:encoded, dc:creator, description, guid, item, link, postid, postimg, postimgapa, postimglow, pubdate, title]
 
     public Elle()
     {
@@ -24,7 +24,9 @@ public class Elle extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_CONTENT_ENCODED},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{"postimgapa".hashCode()});
+                new int[]{"postimgapa".hashCode()},
+                "http://www.elle.es/",
+                "");
     }
 
     @Override

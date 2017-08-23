@@ -2,7 +2,6 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -20,9 +19,9 @@ public class HelsinkiTimes extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{});
-
-        this.style = NewsStylist.base("http://www.helsinkitimes.fi/");
+                new int[]{},
+                "http://www.helsinkitimes.fi/",
+                "");
     }
 
     @Override

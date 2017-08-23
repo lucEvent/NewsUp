@@ -19,7 +19,9 @@ public class ElMundo extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{TAG_MEDIA_CONTENT});
+                new int[]{TAG_MEDIA_CONTENT},
+                "http://www.elmundo.es/",
+                "");
     }
 
     @Override

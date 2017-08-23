@@ -25,7 +25,9 @@ public class TechCrunch extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{TAG_ENCLOSURE, TAG_MEDIA_CONTENT});
+                new int[]{TAG_ENCLOSURE, TAG_MEDIA_CONTENT},
+                "https://techcrunch.com/",
+                "");
     }
 
     @Override

@@ -33,9 +33,9 @@ public class Xataka extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_DESCRIPTION},
                 new int[]{TAG_PUBDATE},
                 new int[]{},
-                new int[]{});
-
-        this.style = SITE_STYLE;
+                new int[]{},
+                "https://www.xataka.com/",
+                SITE_STYLE);
     }
 
     @Override

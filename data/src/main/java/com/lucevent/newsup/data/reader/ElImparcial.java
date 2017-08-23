@@ -21,9 +21,9 @@ public class ElImparcial extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{"thumbnail".hashCode()});
-
-        this.style = NewsStylist.base("http://www.elimparcial.com/");
+                new int[]{"thumbnail".hashCode()},
+                "http://www.elimparcial.com/",
+                "");
     }
 
     @Override

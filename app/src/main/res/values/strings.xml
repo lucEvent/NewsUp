@@ -1,11 +1,12 @@
 <resources>
 
     <string name="app_name" translatable="false">NewsUp</string>
-    <string name="app_version" translatable="false">2.3.2</string>
+    <string name="app_version" translatable="false">2.3.3</string>
     <string name="about_content_contact">Developed by Rafael J. Lucena\nContact: rafaa89(at)gmail.com</string>
     <string name="about_content_title_new_features">Last features and improvements:</string>
     <string name="about_content_new_features" translatable="false">
-        Version 2.3.2 2017-08-20:\nPublications list in navigation panel ordered by user\'s accesses.\nDatabase simplified.\nVisual bugs fixes on Kitkat.\nVarious readers improved.\nOther miscellaneous fixes and improvements.\n
+        Version 2.3.3 2017-XX-XX:\n
+        \nVersion 2.3.2 2017-08-20:\nPublications list in navigation panel ordered by user\'s accesses.\nDatabase simplified.\nVisual bugs fixes on Kitkat.\nVarious readers improved.\nOther miscellaneous fixes and improvements.\n
         \nVersion 2.3.1 2017-06-30:\nBug fixes (all bugs reported by users).\n
         \nVersion 2.3.0 2017-06-22:\nNew: Select your favorite sections directly from the section popup list.\nPublication icons updated and resized throughout the app.\nNotification bug fixed.\nUsability improved, more bug fixes and optimizations.\n
         \nVersion 2.2.0 2017-03-14:\nLoading of news list optimized.\nNight mode improved.\nSupport for Astronomy Now, Chicago Suntimes, Comming soon, El Imparcial (Mx), El Periódico Extremadura, Full Músculo, Göteborgs-Posten, Omicrono, The Chive and The Conversation (UK, US, Australia, Africa and France versions).\n

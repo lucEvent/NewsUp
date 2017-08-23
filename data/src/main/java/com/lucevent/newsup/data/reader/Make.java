@@ -23,7 +23,9 @@ public class Make extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{});
+                new int[]{},
+                "http://makezine.com/",
+                "");
     }
 
     @Override

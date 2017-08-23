@@ -119,7 +119,7 @@ public class Test {
         @Override
         public String description()
         {
-            return "contienen <h2>|<h1>";
+            return "contienen h1/h2";
         }
 
         @Override
@@ -165,13 +165,13 @@ public class Test {
         @Override
         public String description()
         {
-            return "con links partidos";
+            return "con links sin HTTP";
         }
 
         @Override
         public boolean evaluate(News news, Database db)
         {
-            return news.content.contains("src=\"/") || news.content.contains("href=\"/");
+            return news.content.contains("=\"//") || news.content.contains("='//");
         }
     };
 

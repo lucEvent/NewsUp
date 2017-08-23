@@ -21,9 +21,9 @@ public class TeknikensVarld extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{TAG_MEDIA_CONTENT});
-
-        this.style = NewsStylist.base("http://teknikensvarld.se/");
+                new int[]{TAG_MEDIA_CONTENT},
+                "http://teknikensvarld.se/",
+                "");
     }
 
     @Override

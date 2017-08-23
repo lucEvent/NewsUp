@@ -15,7 +15,9 @@ public class _20Minutos extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_DESCRIPTION},
                 new int[]{TAG_DC_DATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{TAG_ENCLOSURE});
+                new int[]{TAG_ENCLOSURE},
+                "http://www.20minutos.es/",
+                "");
     }
 
     @Override

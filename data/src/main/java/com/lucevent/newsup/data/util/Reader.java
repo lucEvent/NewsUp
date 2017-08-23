@@ -4,7 +4,12 @@ public abstract class Reader {
 
     protected static final String USER_AGENT = "Mozilla/5.0 (Linux; Android 6.0.1; GT-I9300 Build/MOB30Z) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.91 Mobile Safari/537.36";
 
-    public String style = "";
+    public final String style;
+
+    public Reader(String style)
+    {
+        this.style = style;
+    }
 
     public abstract NewsArray readRssHeader(String rss_link, int site_code, int section_code);
 

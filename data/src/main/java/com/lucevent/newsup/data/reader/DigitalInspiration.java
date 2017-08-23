@@ -17,7 +17,9 @@ public class DigitalInspiration extends com.lucevent.newsup.data.util.NewsReader
                 new int[]{TAG_CONTENT_ENCODED},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{TAG_ENCLOSURE});
+                new int[]{TAG_ENCLOSURE},
+                "https://www.labnol.org/",
+                "");
     }
 
     @Override
@@ -41,7 +43,7 @@ public class DigitalInspiration extends com.lucevent.newsup.data.util.NewsReader
         for (Element code : article.select("pre"))
             code.tagName("p").wrap("code");
 
-        article.select("h2").tagName("h3");
+        article.select("h1,h2").tagName("h3");
         article.select("[style]").removeAttr("style");
 
         String content = article.html();

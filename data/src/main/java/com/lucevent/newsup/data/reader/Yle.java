@@ -20,7 +20,9 @@ public class Yle extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_CONTENT_ENCODED},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{TAG_ENCLOSURE});
+                new int[]{TAG_ENCLOSURE},
+                "https://yle.fi/",
+                "");
     }
 
     @Override

@@ -26,9 +26,10 @@ public class TheChive extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_MEDIA_CONTENT},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{"dc:identifier".hashCode()});
+                new int[]{"dc:identifier".hashCode()},
+                "http://thechive.com/",
+                SITE_STYLE);
 
-        this.style = SITE_STYLE;
         items = new Enclosures();
         descriptions = new ArrayList<>();
     }

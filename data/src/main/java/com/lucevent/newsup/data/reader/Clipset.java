@@ -20,7 +20,9 @@ public class Clipset extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{});
+                new int[]{},
+                "http://clipset.20minutos.es/",
+                "");
     }
 
     @Override

@@ -53,9 +53,9 @@ public class ElAndroideLibre extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_CONTENT_ENCODED},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{});
-
-        this.style = SITE_STYLE;
+                new int[]{},
+                "https://elandroidelibre.elespanol.com/",
+                SITE_STYLE);
     }
 
     @Override

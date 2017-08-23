@@ -25,9 +25,9 @@ public class GoteborgsPosten extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_CONTENT_ENCODED},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{});
-
-        this.style = NewsStylist.base("http://www.gp.se/");
+                new int[]{},
+                "http://www.gp.se/",
+                "");
     }
 
     @Override
@@ -37,6 +37,7 @@ public class GoteborgsPosten extends com.lucevent.newsup.data.util.NewsReader {
         doc.select("figcaption").remove();
         doc.select("[style]").removeAttr("style");
         NewsStylist.cleanAttributes(doc.select("img"), "src");
+        NewsStylist.repairLinks(doc.body());
         return doc.body().html();
     }
 
@@ -48,14 +49,32 @@ public class GoteborgsPosten extends com.lucevent.newsup.data.util.NewsReader {
 
         Elements preamble = article.select(".article__preamble");
         if (!preamble.isEmpty()) {
-            preamble.html("<b>" + preamble.text() + "</b>");
+            preamble.html("<p><b>" + preamble.text() + "</b></p>");
+            preamble.tagName("p");
         }
-        article.select(".article__preamble").tagName("p");
+
+        for (Element e : article.select("strong")) {
+            String e_text = e.text();
+            System.out.print("->" + e_text);
+            switch (e.text()) {
+                case "L\u00C4S OCKS\u00C5:":
+                case "L\u00C4S MER:":
+                case "L\u00C4S \u00C4VEN:":
+                    try {
+                        System.out.print(" (AND REMOVING :)");
+                        e.parent().remove();
+                    } catch (Exception elemHasNotParent) {
+                    }
+            }
+            System.out.println("");
+        }
+
         article.select(".article__body__facts").tagName("blockquote");
         article.select("h1,h2").tagName("h3");
         article.select("[style]").removeAttr("style");
 
         NewsStylist.cleanAttributes(article.select("img"), "src");
+        NewsStylist.repairLinks(doc.body());
 
         news.content = article.outerHtml().replaceAll("&nbsp;", "");
     }

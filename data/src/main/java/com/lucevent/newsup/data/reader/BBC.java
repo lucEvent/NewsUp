@@ -21,7 +21,9 @@ public class BBC extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{},
-                new int[]{"media:thumbnail".hashCode()});
+                new int[]{"media:thumbnail".hashCode()},
+                "http://www.bbc.com/",
+                "");
     }
 
     @Override

@@ -19,9 +19,9 @@ public class LifeHacker extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_DESCRIPTION},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{});
-
-        this.style = NewsStylist.base("http://lifehacker.com/");
+                new int[]{},
+                "http://lifehacker.com/",
+                "");
     }
 
     @Override

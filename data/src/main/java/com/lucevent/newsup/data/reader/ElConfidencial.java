@@ -18,7 +18,9 @@ public class ElConfidencial extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_CONTENT},
                 new int[]{TAG_UPDATED},
                 new int[]{},
-                new int[]{TAG_MEDIA_CONTENT});
+                new int[]{TAG_MEDIA_CONTENT},
+                "https://www.elconfidencial.com/",
+                "");
     }
 
     @Override
@@ -42,6 +44,7 @@ public class ElConfidencial extends com.lucevent.newsup.data.util.NewsReader {
         article.select(".footer-video-text").tagName("figcaption");
 
         NewsStylist.cleanAttributes(article.select("img"), "src");
+        NewsStylist.repairLinks(article);
 
         return article.html();
     }

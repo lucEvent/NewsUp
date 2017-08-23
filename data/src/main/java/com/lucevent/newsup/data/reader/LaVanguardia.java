@@ -30,7 +30,9 @@ public class LaVanguardia extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{TAG_ENCLOSURE});
+                new int[]{TAG_ENCLOSURE},
+                "http://www.lavanguardia.com/",
+                "");
     }
 
     @Override

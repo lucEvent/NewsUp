@@ -25,7 +25,9 @@ public class Vandal extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_DESCRIPTION},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{});
+                new int[]{},
+                "http://www.vandal.net/",
+                "");
     }
 
     @Override

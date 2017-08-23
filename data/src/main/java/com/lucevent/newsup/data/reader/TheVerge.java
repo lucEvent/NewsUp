@@ -16,7 +16,9 @@ public class TheVerge extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_CONTENT},
                 new int[]{TAG_UPDATED},
                 new int[]{},
-                new int[]{});
+                new int[]{},
+                "https://www.theverge.com/",
+                "");
     }
 
     @Override

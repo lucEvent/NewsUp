@@ -20,9 +20,9 @@ public class Discover extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{},
-                new int[]{TAG_MEDIA_CONTENT});
-
-        this.style = NewsStylist.base("http://discovermagazine.com");
+                new int[]{TAG_MEDIA_CONTENT},
+                "http://discovermagazine.com",
+                "");
     }
 
     @Override

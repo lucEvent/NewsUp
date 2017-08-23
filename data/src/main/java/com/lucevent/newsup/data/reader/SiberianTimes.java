@@ -1,7 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -19,9 +18,9 @@ public class SiberianTimes extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{TAG_ENCLOSURE});
-
-        this.style = NewsStylist.base("http://siberiantimes.com/");
+                new int[]{TAG_ENCLOSURE},
+                "http://siberiantimes.com/",
+                "");
     }
 
     @Override

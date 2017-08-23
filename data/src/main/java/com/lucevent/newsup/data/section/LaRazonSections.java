@@ -24,7 +24,6 @@ public class LaRazonSections extends Sections {
         add(new Section("Tenis", "http://www.larazon.es/rss/deportes/tenis.xml", 1));
         add(new Section("Golf", "http://www.larazon.es/rss/deportes/golf.xml", 1));
         add(new Section("Motociclismo", "http://www.larazon.es/rss/deportes/motociclismo.xml", 1));
-        add(new Section("Formula 1", "http://www.larazon.es/rss/deportes/formula1.xml", 1));
         add(new Section("Deportes", "http://www.larazon.es/rss/deportes.xml", 1));
         add(new Section("Ciclismo", "http://www.larazon.es/rss/deportes/ciclismo.xml", 1));
 

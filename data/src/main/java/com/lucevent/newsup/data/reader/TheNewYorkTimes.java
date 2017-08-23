@@ -4,12 +4,7 @@ import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URL;
 
 public class TheNewYorkTimes extends com.lucevent.newsup.data.util.NewsReader {
 
@@ -34,14 +29,16 @@ public class TheNewYorkTimes extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{TAG_ENCLOSURE, TAG_MEDIA_CONTENT});
+                new int[]{TAG_ENCLOSURE, TAG_MEDIA_CONTENT},
+                "https://www.nytimes.com/",
+                "");
     }
 
     @Override
     protected void readNewsContent(Document doc, News news)
     {
-    //    news.content = doc.outerHtml();
-    //    if (true) return;
+        //    news.content = doc.outerHtml();
+        //    if (true) return;
 
         Elements article = doc.select("article .p-block:not(.article-interactive)");
         article.select(".lazyload,.image-caption,.image-credit").remove();

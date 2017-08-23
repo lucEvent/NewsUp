@@ -40,8 +40,11 @@ public abstract class NewsReader extends Reader {
     private HashMap<Integer, Integer> tagMap;
 
     public NewsReader(String itemTag, int[] titleTags, int[] linkTags, int[] descriptionTags,
-                      int[] contentTags, int[] dateTags, int[] categoryTags, int[] enclosureTags)
+                      int[] contentTags, int[] dateTags, int[] categoryTags, int[] enclosureTags,
+                      String baseUrl, String style)
     {
+        super("<base href='" + baseUrl + "'>" + style);
+
         this.itemTag = itemTag;
         tagMap = new HashMap<>(7);
         for (int title : titleTags)

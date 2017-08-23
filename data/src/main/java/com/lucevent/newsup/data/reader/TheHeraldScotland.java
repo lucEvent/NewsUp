@@ -1,7 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Document;
@@ -21,9 +20,9 @@ public class TheHeraldScotland extends com.lucevent.newsup.data.util.NewsReader 
                 new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{},
-                new int[]{});
-
-        this.style = NewsStylist.base("http://heraldscotland.com/");
+                new int[]{},
+                "http://heraldscotland.com/",
+                "");
     }
 
     @Override

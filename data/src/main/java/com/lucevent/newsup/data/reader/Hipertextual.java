@@ -1,7 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -20,9 +19,9 @@ public class Hipertextual extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{},
-                new int[]{});
-
-        this.style = NewsStylist.base("https://hipertextual.com/");
+                new int[]{},
+                "https://hipertextual.com/",
+                "");
     }
 
     @Override

@@ -1,8 +1,8 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
 
-import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -19,7 +19,9 @@ public class SvenskaDagbladet extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{});
+                new int[]{},
+                "https://www.svd.se/",
+                "");
     }
 
     @Override
@@ -32,25 +34,14 @@ public class SvenskaDagbladet extends com.lucevent.newsup.data.util.NewsReader {
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
         Elements e = doc.select(".Deck,.Body");
+        e.select(".Body-ad,.AdPositionData,.Body-pull,figcaption,.Quote,.ExternalLink,.Ad,script,.ThumbnailList,.paywall-loader,a[href='/premium'],.Figure-expandIcon,.scrbbl-embed").remove();
 
-        e.select(".Body-ad,.AdPositionData,.Body-pull,figcaption,.Quote,.ExternalLink,.Ad,script,.ThumbnailList,.paywall-loader").remove();
+        NewsStylist.cleanAttributes(e.select("img[srcset]"), "srcset");
 
-        for (Element img : e.select("img[srcset]")) {
-            String src = img.attr("srcset");
+        e.select("h1,h2").tagName("h3");
+        e.select("[style]:not(.instagram-media,.instagram-media *)").removeAttr("style");
 
-            for (Attribute attr : img.attributes())
-                img.removeAttr(attr.getKey());
-
-            int i = src.indexOf(" ");
-            if (i != -1)
-                src = src.substring(0, i);
-
-            img.attr("src", src).removeAttr("srcset");
-        }
-        e.select("h2").tagName("h3");
-        e.select("[alt]").removeAttr("alt");
-
-        news.content = e.html();
+        news.content = e.outerHtml();
     }
 
 }

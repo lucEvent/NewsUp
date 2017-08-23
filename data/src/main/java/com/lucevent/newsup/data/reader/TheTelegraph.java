@@ -27,9 +27,9 @@ public class TheTelegraph extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{TAG_ENCLOSURE});
-
-        this.style = NewsStylist.base("http://www.telegraph.co.uk/");
+                new int[]{TAG_ENCLOSURE},
+                "http://www.telegraph.co.uk/",
+                "");
     }
 
     @Override

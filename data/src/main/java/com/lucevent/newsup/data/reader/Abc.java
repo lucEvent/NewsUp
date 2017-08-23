@@ -3,6 +3,7 @@ package com.lucevent.newsup.data.reader;
 import com.lucevent.newsup.data.util.Date;
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -26,7 +27,9 @@ public class Abc extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_CONTENT_ENCODED},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{"imagen".hashCode()});
+                new int[]{"imagen".hashCode()},
+                "http://www.abc.es/",
+                "");
     }
 
     @Override
@@ -41,6 +44,7 @@ public class Abc extends com.lucevent.newsup.data.util.NewsReader {
         org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(prop.text());
         doc.select("script").remove();
         doc.select("h1,h2").tagName("h3");
+        NewsStylist.repairLinks(doc.body());
         return doc.body().html();
     }
 
@@ -65,8 +69,8 @@ public class Abc extends com.lucevent.newsup.data.util.NewsReader {
             Document d = Jsoup.parse(news.description);
             d.select(".remision-galeria,script").remove();
             d.select("h1,h2").tagName("h3");
-
-            news.content = d.outerHtml();
+            NewsStylist.repairLinks(d.body());
+            news.content = d.body().html();
 
             String dscr = d.text();
             news.description = dscr.substring(0, Math.min(dscr.length(), 300));

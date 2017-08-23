@@ -20,7 +20,9 @@ public class GizmodoAu extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{},
-                new int[]{"feedburner:origenclosurelink".hashCode()});
+                new int[]{"feedburner:origenclosurelink".hashCode()},
+                "https://www.gizmodo.com.au/",
+                "");
     }
 
     @Override

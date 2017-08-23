@@ -19,7 +19,9 @@ public class HuffingtonPostUK extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_DESCRIPTION},
                 new int[]{TAG_PUBDATE},
                 new int[]{},
-                new int[]{TAG_ENCLOSURE});
+                new int[]{TAG_ENCLOSURE},
+                "http://www.huffingtonpost.co.uk/",
+                "");
     }
 
     @Override

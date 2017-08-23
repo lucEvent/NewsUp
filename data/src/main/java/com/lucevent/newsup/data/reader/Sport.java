@@ -24,9 +24,9 @@ public class Sport extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{},
-                new int[]{});
-
-        this.style = SITE_STYLE;
+                new int[]{},
+                "http://www.sport.es/es/",
+                SITE_STYLE);
     }
 
     @Override

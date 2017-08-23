@@ -26,7 +26,9 @@ public class PCWorld extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY, "media:category".hashCode()},
-                new int[]{TAG_ENCLOSURE, "media:content".hashCode(), "media:thumbnail".hashCode()});
+                new int[]{TAG_ENCLOSURE, "media:content".hashCode(), "media:thumbnail".hashCode()},
+                "http://www.pcworld.com/",
+                "");
     }
 
     @Override

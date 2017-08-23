@@ -21,9 +21,9 @@ public class TheGuardian extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{TAG_MEDIA_CONTENT});
-
-        this.style = NewsStylist.base("https://www.theguardian.com/");
+                new int[]{TAG_MEDIA_CONTENT},
+                "https://www.theguardian.com/",
+                "");
     }
 
     @Override

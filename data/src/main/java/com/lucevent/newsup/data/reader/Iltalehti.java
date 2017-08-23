@@ -21,7 +21,9 @@ public class Iltalehti extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{},
-                new int[]{});
+                new int[]{},
+                "http://www.iltalehti.fi/",
+                "");
     }
 
     @Override

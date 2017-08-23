@@ -18,7 +18,9 @@ public class RacoCatala extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_DESCRIPTION},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{TAG_IMAGE});
+                new int[]{TAG_IMAGE},
+                "https://www.racocatala.cat/",
+                "");
     }
 
     @Override
