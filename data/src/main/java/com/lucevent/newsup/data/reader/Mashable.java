@@ -1,9 +1,10 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -39,7 +40,7 @@ public class Mashable extends com.lucevent.newsup.data.util.NewsReader {
         Elements article = doc.select(".article-image,.article-content");
 
         if (!article.isEmpty()) {
-            article.select("script,.see-also,.viral-next-up,figcaption,.image-credit").remove();
+            article.select(".see-also,.viral-next-up,figcaption,.image-credit").remove();
 
             for (Element e : article.select("h2")) {
                 String text = e.text();
@@ -54,9 +55,6 @@ public class Mashable extends com.lucevent.newsup.data.util.NewsReader {
             Elements mashVideos = article.select(".content-mash-video");
             if (mashVideos.size() == 1)
                 mashVideos.get(0).remove();
-            else
-                for (Element e : mashVideos)
-                    parseVideo(e);
 
             article.select("[style]").removeAttr("style");
 
@@ -64,10 +62,9 @@ public class Mashable extends com.lucevent.newsup.data.util.NewsReader {
             article = doc.select(".video-hub .content-mash-video");
 
             if (!article.isEmpty()) {
-                parseVideo(article.get(0));
 
                 Elements dscr = doc.select(".video-hub #current-video-info");
-                dscr.select("#video-title,#video-shares,script").remove();
+                dscr.select("#video-title,#video-shares").remove();
                 article.addAll(dscr);
 
             } else {
@@ -78,22 +75,22 @@ public class Mashable extends com.lucevent.newsup.data.util.NewsReader {
                 }
             }
         }
-        news.content = article.outerHtml().replace("=\"//", "=\"http://");
-    }
 
-    private void parseVideo(Element video)
-    {
-        String src = video.attr("data-sourcefile");
-        if (src.isEmpty())
-            src = video.attr("data-embedurl");
+        for (Element vid : article.select(".content-mash-video script.playerMetadata")) {
+            String info = vid.html();
 
-        for (Attribute attr : video.attributes())
-            video.removeAttr(attr.getKey());
+            String src = NewsStylist.subStringBetween(info, "\"embedUrl\":\"", "\"", false);
+            String desc = NewsStylist.subStringBetween(info, "\"description\":\"", "\"", false);
 
-        video.tagName("iframe");
-        video.attr("src", src);
-        video.attr("allowfullscreen", "");
-        video.attr("frameborder", "0");
+            Element p = vid.parent();
+            NewsStylist.cleanAttributes(p);
+
+            p.html(Enclosure.iframe(src) + "<figcaption>" + desc + "</figcaption>");
+        }
+        article.select("script").remove();
+
+        NewsStylist.repairLinks(article);
+        news.content = article.outerHtml();
     }
 
 }

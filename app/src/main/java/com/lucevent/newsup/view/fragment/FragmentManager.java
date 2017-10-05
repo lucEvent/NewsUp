@@ -14,9 +14,9 @@ import java.util.ArrayList;
 
 public class FragmentManager {
 
-    private android.app.FragmentManager fManager;
-    private NavigationView navigationView;
-    private int containerId;
+    private final android.app.FragmentManager fManager;
+    private final NavigationView navigationView;
+    private final int containerId;
 
     private int stackPointer;
     private ArrayList<Pair<Integer, Fragment>> stack;
@@ -118,7 +118,7 @@ public class FragmentManager {
         if (navigationView != null) {
             // uncheck old item (only if it belongs to the action bar)
             if (navigationView.getMenu().findItem(old_item_id) == null) {
-                View v = navigationView.findViewById(old_item_id);
+                View v = navigationView.getHeaderView(0).findViewById(old_item_id);
                 if (v != null)
                     v.setSelected(false);
             }
@@ -129,11 +129,18 @@ public class FragmentManager {
             } else {
                 navigationView.setCheckedItem(R.id.dummy);
 
-                View v = navigationView.findViewById(new_item_id);
+                View v = navigationView.getHeaderView(0).findViewById(new_item_id);
                 if (v != null)
                     v.setSelected(true);
             }
         }
+    }
+
+    public static String n(int id)
+    {
+        String r = Integer.toString(id);
+        //    return r.substring(r.length() - 3, r.length());
+        return r;
     }
 
 }

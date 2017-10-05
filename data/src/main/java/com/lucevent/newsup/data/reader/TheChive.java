@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class TheChive extends com.lucevent.newsup.data.util.NewsReader {
 
-    private static final String SITE_STYLE = "<style>body{margin:0px;padding:0}</style>";
+    private static final String SITE_STYLE = "<style>body{margin:0px;}h3,p{margin:20px}</style>";
 
     // tags: [category, dc:creator, description, enclosure, guid, item, link, media:category, media:content, media:thumbnail, media:title, pubdate, title]
 
@@ -127,6 +127,8 @@ public class TheChive extends com.lucevent.newsup.data.util.NewsReader {
             Elements items = e.select(".gallery-icon,.gallery-caption");
             e.html(items.outerHtml());
         }
+        NewsStylist.wpcomwidget(article.select("form"));
+        article.select("form").remove();
 
         news.content = NewsStylist.cleanComments(article.html());
     }

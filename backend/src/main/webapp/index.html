@@ -19,8 +19,31 @@
     function display_error(error) {
      //   $("#news_list").text(error);
     }
-    function display_sections(data) {
-        $("#nu_sections").html(data);
+    function display_sites(json) {
+        json_sites=json;
+        var html = ""
+        for (var i = 0; i < json.length; ++i) {
+            var site = json[i];
+            html += "<li class='site' id='" + site.code + "' co='"+ site.co + "' la='"+ site.la + "' ty='"+ site.ty + "'><img src='img/" + site.code + ".png'><span>"+ site.name + "</span></li>";
+        }
+
+        $("#navigation").html(html);
+    }
+    function display_sections(json) {
+        var html = ""
+        for (var i = 0; i < json.length; ++i) {
+            var s = json[i];
+            var _class = "";
+            if (s.level==-1)
+                _class = "groupsection";
+            else if (s.level==0)
+                _class="section groupsection";
+            else if (s.level==1)
+                _class="section subsection";
+            html += "<a class='"+ _class +"' index='" + i + "'><p>" + s.name + "</p></a>";
+        }
+        //
+        $("#nu_sections").html(html);
     }
     function display_news(data) {
         scrolled = $("body").scrollTop();
@@ -36,6 +59,25 @@
         $("#content").html("");
         $("#news_list")[0].style.visibility = 'visible';
         $("body").scrollTop(scrolled);
+    }
+    function display_site_news(site_code, site_name){
+        console.log("displaying news of:"+site_code);
+        current_site=site_code;
+
+        $.ajax("/web?index&site=" + site_code + ",0", {
+            success: display_list,
+            error: display_error("Error loading news from .site")
+        });
+        $.ajax("/web?sections&site=" + site_code, {
+            success: display_sections,
+            error: display_error("Error loading sections from .site")
+        });
+
+        $("#news_list").text("");
+
+        var site_info = $("#site_info");
+        site_info.find("img").eq(0).attr('src',"img/"+ site_code + ".png");
+        site_info.find("span").eq(0).text(site_name);
     }
 
     var sCountry = 0;
@@ -62,29 +104,12 @@
 
         $("#article_box")[0].style.visibility = 'hidden';
 
-        $(".site").click(function() {
-
-            var code = $(this).attr("id");
-            current_site=code;
-
-            $.ajax("/web?index&site=" + code + ",0", {
-                success: display_list,
-                error: display_error("Error loading news from .site")
-            });
-            $.ajax("/web?sections&site=" + code, {
-                success: display_sections,
-                error: display_error("Error loading sections from .site")
-            });
-
-            $("#news_list").text("");
-
-            var site_info = $("#site_info");
-            site_info.find("img").eq(0).attr('src',"img/"+ code + ".png");
-            site_info.find("span").eq(0).text($(this).text());
-
+        $.ajax("/web?sites", {
+                success: display_sites,
+                error: display_error
         });
 
-        $("#145").click();
+        display_site_news(145,"Europa Press");
 
         $(".closer").click(function() {
             closeNews();
@@ -117,6 +142,10 @@
             $(parseSelection()).show();
         });
 
+    });
+
+    $(document).on('click', '.site', function() {
+        display_site_news($(this).attr("id"),$(this).text());
     });
 
     $(document).on('click', '.section', function() {
@@ -199,110 +228,6 @@
     </div>
 
     <ul id="navigation">
-        <li class='site' id='100' co='23' la='7' ty='1'><img src='img/100.png'><span>El País</span></li>
-        <li class='site' id='105' co='23' la='7' ty='1'><img src='img/105.png'><span>20 Minutos</span></li>
-        <li class='site' id='110' co='23' la='7' ty='1'><img src='img/110.png'><span>El Mundo</span></li>
-        <li class='site' id='115' co='23' la='7' ty='2'><img src='img/115.png'><span>As</span></li>
-        <li class='site' id='120' co='23' la='7' ty='2'><img src='img/120.png'><span>Marca</span></li>
-        <li class='site' id='125' co='23' la='7' ty='1'><img src='img/125.png'><span>El Confidencial</span></li>
-        <li class='site' id='130' co='23' la='7' ty='1'><img src='img/130.png'><span>El Diario</span></li>
-        <li class='site' id='135' co='23' la='7' ty='1'><img src='img/135.png'><span>La Razón</span></li>
-        <li class='site' id='140' co='23' la='7' ty='1'><img src='img/140.png'><span>Huffington Post España</span></li>
-        <li class='site' id='145' co='23' la='7' ty='1'><img src='img/145.png'><span>Europa press</span></li>
-        <li class='site' id='150' co='23' la='7' ty='1'><img src='img/150.png'><span>Diario Córdoba</span></li>
-        <li class='site' id='155' co='23' la='7' ty='1'><img src='img/155.png'><span>Abc</span></li>
-        <li class='site' id='160' co='23' la='7' ty='1'><img src='img/160.png'><span>El Periódico Extremadura</span></li>
-        <li class='site' id='200' co='23' la='4' ty='1'><img src='img/200.png'><span>El Periódico (Cat)</span></li>
-        <li class='site' id='205' co='23' la='7' ty='1'><img src='img/205.png'><span>El Periódico (Esp)</span></li>
-        <li class='site' id='210' co='23' la='7' ty='1'><img src='img/210.png'><span>La Vanguardia</span></li>
-        <li class='site' id='215' co='23' la='7' ty='2'><img src='img/215.png'><span>Sport</span></li>
-        <li class='site' id='220' co='23' la='7' ty='2'><img src='img/220.png'><span>Mundo Deportivo</span></li>
-        <li class='site' id='225' co='23' la='4' ty='1'><img src='img/225.png'><span>Racó Català</span></li>
-        <li class='site' id='230' co='23' la='4' ty='1'><img src='img/230.png'><span>VilaWeb</span></li>
-        <li class='site' id='300' co='60' la='17' ty='1'><img src='img/300.png'><span>Aftonbladet</span></li>
-        <li class='site' id='305' co='60' la='17' ty='1'><img src='img/305.png'><span>Expressen</span></li>
-        <li class='site' id='310' co='60' la='17' ty='1'><img src='img/310.png'><span>Dagens Nyheter</span></li>
-        <li class='site' id='315' co='60' la='17' ty='1'><img src='img/315.png'><span>Svenska Dagbladet</span></li>
-        <li class='site' id='320' co='60' la='17' ty='1'><img src='img/320.png'><span>Göteborgs-Posten</span></li>
-        <li class='site' id='325' co='60' la='17' ty='1'><img src='img/325.png'><span>Fria Tider</span></li>
-        <li class='site' id='330' co='60' la='17' ty='1'><img src='img/330.png'><span>Metro</span></li>
-        <li class='site' id='400' co='28' la='12' ty='1'><img src='img/400.png'><span>Helsinki times</span></li>
-        <li class='site' id='405' co='28' la='8' ty='1'><img src='img/405.png'><span>Helsingin Sanomat</span></li>
-        <li class='site' id='410' co='28' la='8' ty='1'><img src='img/410.png'><span>Iltalehti</span></li>
-        <li class='site' id='415' co='28' la='8' ty='1'><img src='img/415.png'><span>Yle</span></li>
-        <li class='site' id='500' co='56' la='12' ty='1'><img src='img/500.png'><span>BBC</span></li>
-        <li class='site' id='505' co='56' la='12' ty='1'><img src='img/505.png'><span>The Telegraph</span></li>
-        <li class='site' id='510' co='56' la='12' ty='1'><img src='img/510.png'><span>The Huffington Post UK</span></li>
-        <li class='site' id='515' co='56' la='12' ty='1'><img src='img/515.png'><span>Metro UK</span></li>
-        <li class='site' id='520' co='56' la='12' ty='1'><img src='img/520.png'><span>The Guardian</span></li>
-        <li class='site' id='525' co='56' la='12' ty='1'><img src='img/525.png'><span>The Herald Scotland</span></li>
-        <li class='site' id='530' co='56' la='12' ty='1'><img src='img/530.png'><span>The Conversation UK</span></li>
-        <li class='site' id='600' co='24' la='12' ty='1'><img src='img/600.png'><span>CNN</span></li>
-        <li class='site' id='605' co='24' la='12' ty='1'><img src='img/605.png'><span>The Huffington Post USA</span></li>
-        <li class='site' id='610' co='24' la='12' ty='1'><img src='img/610.png'><span>USA Today</span></li>
-        <li class='site' id='615' co='24' la='12' ty='1'><img src='img/615.png'><span>The New York Times</span></li>
-        <li class='site' id='620' co='24' la='12' ty='1'><img src='img/620.png'><span>The Bolivar Commercial</span></li>
-        <li class='site' id='625' co='24' la='12' ty='1'><img src='img/625.png'><span>Chicago Sun-Times</span></li>
-        <li class='site' id='630' co='24' la='12' ty='1'><img src='img/630.png'><span>The Conversation US</span></li>
-        <li class='site' id='700' co='65' la='12' ty='1'><img src='img/700.png'><span>The Local</span></li>
-        <li class='site' id='715' co='10' la='12' ty='1'><img src='img/715.png'><span>The Huffington Post Canada</span></li>
-        <li class='site' id='720' co='58' la='12' ty='1'><img src='img/720.png'><span>The Siberian Times</span></li>
-        <li class='site' id='725' co='34' la='12' ty='1'><img src='img/725.png'><span>The Times of India</span></li>
-        <li class='site' id='730' co='64' la='7' ty='1'><img src='img/730.png'><span>La Patilla</span></li>
-        <li class='site' id='735' co='3' la='12' ty='1'><img src='img/735.png'><span>The Conversation Australia</span></li>
-        <li class='site' id='740' co='65' la='12' ty='1'><img src='img/740.png'><span>The Conversation Africa</span></li>
-        <li class='site' id='745' co='29' la='9' ty='1'><img src='img/745.png'><span>The Conversation France</span></li>
-        <li class='site' id='750' co='45' la='7' ty='1'><img src='img/750.png'><span>El Imparcial</span></li>
-        <li class='site' id='800' co='23' la='7' ty='3'><img src='img/800.png'><span>El Androide Libre</span></li>
-        <li class='site' id='805' co='24' la='12' ty='3'><img src='img/805.png'><span>Digital Trends</span></li>
-        <li class='site' id='810' co='24' la='12' ty='3'><img src='img/810.png'><span>Lifehacker</span></li>
-        <li class='site' id='815' co='23' la='7' ty='3'><img src='img/815.png'><span>Xataka</span></li>
-        <li class='site' id='820' co='24' la='12' ty='7'><img src='img/820.png'><span>TED</span></li>
-        <li class='site' id='825' co='65' la='12' ty='3'><img src='img/825.png'><span>Gizmodo</span></li>
-        <li class='site' id='830' co='24' la='12' ty='3'><img src='img/830.png'><span>Android Authority</span></li>
-        <li class='site' id='835' co='23' la='7' ty='3'><img src='img/835.png'><span>Computer Hoy</span></li>
-        <li class='site' id='840' co='60' la='17' ty='3'><img src='img/840.png'><span>Swedroid</span></li>
-        <li class='site' id='845' co='23' la='7' ty='3'><img src='img/845.png'><span>Hipertextual</span></li>
-        <li class='site' id='850' co='24' la='12' ty='3'><img src='img/850.png'><span>Mashable</span></li>
-        <li class='site' id='855' co='24' la='12' ty='3'><img src='img/855.png'><span>PC World</span></li>
-        <li class='site' id='860' co='24' la='12' ty='3'><img src='img/860.png'><span>The Verge</span></li>
-        <li class='site' id='865' co='23' la='7' ty='3'><img src='img/865.png'><span>Clipset</span></li>
-        <li class='site' id='870' co='24' la='12' ty='3'><img src='img/870.png'><span>TechCrunch</span></li>
-        <li class='site' id='875' co='23' la='7' ty='3'><img src='img/875.png'><span>Andro4all</span></li>
-        <li class='site' id='880' co='23' la='7' ty='3'><img src='img/880.png'><span>Topes de Gama</span></li>
-        <li class='site' id='885' co='23' la='7' ty='3'><img src='img/885.png'><span>The Geek Hammer</span></li>
-        <li class='site' id='890' co='23' la='7' ty='3'><img src='img/890.png'><span>Omicrono</span></li>
-        <li class='site' id='900' co='24' la='12' ty='4'><img src='img/900.png'><span>Medium</span></li>
-        <li class='site' id='905' co='23' la='7' ty='4'><img src='img/905.png'><span>Verne</span></li>
-        <li class='site' id='910' co='34' la='12' ty='3'><img src='img/910.png'><span>Digital Inspiration</span></li>
-        <li class='site' id='915' co='24' la='12' ty='4'><img src='img/915.png'><span>Google Earth Blog</span></li>
-        <li class='site' id='1010' co='24' la='12' ty='5'><img src='img/1010.png'><span>Rolling Stone</span></li>
-        <li class='site' id='1015' co='24' la='12' ty='5'><img src='img/1015.png'><span>People</span></li>
-        <li class='site' id='1020' co='24' la='12' ty='5'><img src='img/1020.png'><span>Time</span></li>
-        <li class='site' id='1025' co='24' la='12' ty='5'><img src='img/1025.png'><span>The Atlantic</span></li>
-        <li class='site' id='1000' co='24' la='12' ty='5'><img src='img/1000.png'><span>Make:</span></li>
-        <li class='site' id='1005' co='24' la='12' ty='5'><img src='img/1005.png'><span>Discover</span></li>
-        <li class='site' id='1045' co='23' la='7' ty='5'><img src='img/1045.png'><span>Digital Camera</span></li>
-        <li class='site' id='1060' co='23' la='7' ty='5'><img src='img/1060.png'><span>Elle</span></li>
-        <li class='site' id='1065' co='24' la='12' ty='5'><img src='img/1065.png'><span>The Intercept</span></li>
-        <li class='site' id='1035' co='24' la='12' ty='5'><img src='img/1035.png'><span>Dogster</span></li>
-        <li class='site' id='1040' co='23' la='7' ty='5'><img src='img/1040.png'><span>El Jueves</span></li>
-        <li class='site' id='1030' co='24' la='12' ty='6'><img src='img/1030.png'><span>Sky and Telescope</span></li>
-        <li class='site' id='1050' co='24' la='12' ty='6'><img src='img/1050.png'><span>Space News</span></li>
-        <li class='site' id='1215' co='11' la='7' ty='6'><img src='img/1215.png'><span>Cosmo Noticias</span></li>
-        <li class='site' id='1220' co='10' la='12' ty='6'><img src='img/1220.png'><span>Universe Today</span></li>
-        <li class='site' id='1225' co='56' la='12' ty='6'><img src='img/1225.png'><span>Astronomy Now</span></li>
-        <li class='site' id='1300' co='23' la='7' ty='8'><img src='img/1300.png'><span>Meristation</span></li>
-        <li class='site' id='1305' co='23' la='7' ty='8'><img src='img/1305.png'><span>Vandal</span></li>
-        <li class='site' id='1310' co='24' la='19' ty='8'><img src='img/1310.png'><span>Pokemon Go</span></li>
-        <li class='site' id='1315' co='24' la='12' ty='8'><img src='img/1315.png'><span>Pokemon Go Hub</span></li>
-        <li class='site' id='1400' co='65' la='19' ty='9'><img src='img/1400.png'><span>Vice</span></li>
-        <li class='site' id='1405' co='23' la='7' ty='9'><img src='img/1405.png'><span>Código Nuevo</span></li>
-        <li class='site' id='1500' co='60' la='17' ty='7'><img src='img/1500.png'><span>Life Science Sweden</span></li>
-        <li class='site' id='1600' co='60' la='17' ty='10'><img src='img/1600.png'><span>Teknikens Värld</span></li>
-        <li class='site' id='1700' co='24' la='12' ty='11'><img src='img/1700.png'><span>Coming Soon</span></li>
-        <li class='site' id='1705' co='24' la='12' ty='11'><img src='img/1705.png'><span>The Chive</span></li>
-        <li class='site' id='1800' co='65' la='7' ty='12'><img src='img/1800.png'><span>Full Músculo</span></li>
     </ul>
 </nav>
 

@@ -39,6 +39,7 @@ import com.lucevent.newsup.view.activity.SelectSitesActivity;
 import com.lucevent.newsup.view.fragment.AboutFragment;
 import com.lucevent.newsup.view.fragment.AppSettingsFragment;
 import com.lucevent.newsup.view.fragment.BookmarksFragment;
+import com.lucevent.newsup.view.fragment.EventsFragment;
 import com.lucevent.newsup.view.fragment.FragmentManager;
 import com.lucevent.newsup.view.fragment.HistorialFragment;
 import com.lucevent.newsup.view.fragment.NewsListFragment;
@@ -156,6 +157,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         header.findViewById(R.id.nav_my_news).setSelected(true);
 
         header.findViewById(R.id.nav_my_news).setOnLongClickListener(onDrawerActionBarButtonLongClick);
+        header.findViewById(R.id.nav_events).setOnLongClickListener(onDrawerActionBarButtonLongClick);
         header.findViewById(R.id.nav_saved_news).setOnLongClickListener(onDrawerActionBarButtonLongClick);
         header.findViewById(R.id.nav_read_news).setOnLongClickListener(onDrawerActionBarButtonLongClick);
         header.findViewById(R.id.nav_stats).setOnLongClickListener(onDrawerActionBarButtonLongClick);
@@ -176,6 +178,9 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             switch (v.getId()) {
                 case R.id.nav_my_news:
                     msg = R.string.my_news;
+                    break;
+                case R.id.nav_events:
+                    msg = R.string.happening_now;
                     break;
                 case R.id.nav_saved_news:
                     msg = R.string.bookmarks;
@@ -232,7 +237,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     public void onDrawerActionBarItemSelected(View v)
     {
         if (navigateTo(v.getId()) && v.getId() != R.id.nav_more_publications) {
-            fragmentManager.updateCheckedItem(v.getId(), lastItemSelected);
+            //  fragmentManager.updateCheckedItem(v.getId(), lastItemSelected);
 
             lastItemSelected = v.getId();
         }
@@ -256,6 +261,10 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 newsFragment.setSite(-1);
                 title = getString(R.string.my_news);
                 isNewsFragment = true;
+                break;
+            case R.id.nav_events:
+                fragment = new EventsFragment();
+                title = getString(R.string.happening_now);
                 break;
             case R.id.nav_saved_news:
                 if (permissionHandler.checkAndAsk(this)) {

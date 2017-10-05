@@ -42,12 +42,13 @@ public class Iltalehti extends com.lucevent.newsup.data.util.NewsReader {
         Elements article = doc.select("isense");
 
         if (!article.isEmpty()) {
-            article.select(".author,.important-articles-t,.kp-share-area,.kuvateksti,.fb-comments__outer-container,.recommended-toaster,#tuoreimmat,script").remove();
+            article.select(".author,.important-articles-t,.kp-share-area,.kuvateksti,.fb-comments__outer-container,.recommended-toaster,#tuoreimmat,script,.kainalo").remove();
 
             article.select("[style]").removeAttr("style");
             article.select("h1,h2").tagName("h3");
 
             NewsStylist.cleanAttributes(article.select("img"), "src");
+            NewsStylist.repairLinks(article);
 
             news.content = NewsStylist.cleanComments(article.html());
         }

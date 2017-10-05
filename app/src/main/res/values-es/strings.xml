@@ -32,6 +32,7 @@
     <string name="no_downloads_scheduled">No hay descargas programadas</string>
     <string name="expand_to_see_headlines">Expande para ver los titulares</string>
     <string name="see_something_else">Te interesa algún tema más?</string>
+    <string name="happening_now">Acontecimientos (beta)</string>
 
     <string name="mon">Lun</string>
     <string name="tue">Mar</string>
@@ -98,6 +99,7 @@
     <string name="msg_no_history">Lista vacía</string>
     <string name="msg_no_bookmarks">Aún no has marcado ninguna noticia</string>
     <string name="msg_minimum_one_checked">Una sección debe permanecer marcada</string>
+    <string name="msg_no_events">No hay acontecimientos en este momento</string>
 
     <!-- * *************** Activities and fragment's titles ********************* * -->
     <string name="title_frg_settings_of">Configuración de %1$s</string>

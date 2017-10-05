@@ -27,15 +27,16 @@ public class ElPeriodicoExtremadura extends com.lucevent.newsup.data.util.NewsRe
     @Override
     protected void readNewsContent(Document doc, News news)
     {
-        Elements article = doc.select(".bxGaleriaNoticia img,#CuerpoDeLaNoticia");
-        article.select(".Banner,script").remove();
+        Elements article = doc.select(".EntradillaDeNoticia,.FotoDeNoticia,#TextoNoticia");
+        article.select(".NoticiasRelacionadasDeNoticia,.Creatividad,.Recorte,script[src*='twitter.com'],script[src*='instagram.com']").remove();
 
-        NewsStylist.cleanAttributes(doc.select("img"), "src");
+        article.select(".EntradillaDeNoticia").tagName("h4");
+        article.select(".PieDeFoto").tagName("figcaption");
 
-        article.select("h1,h2").tagName("h3");
-        article.select("[style]").removeAttr("style");
+        NewsStylist.cleanAttributes(article.select("img"), "src");
+        NewsStylist.repairLinks(article);
 
-        news.content = article.outerHtml();
+        news.content = NewsStylist.cleanComments(article.outerHtml());
     }
 
 }

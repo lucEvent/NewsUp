@@ -27,11 +27,30 @@ public class TheGeekHammer extends com.lucevent.newsup.data.util.NewsReader {
     protected String parseContent(Element prop)
     {
         Document doc = jsoupParse(prop);
-        doc.select("script,style,.yuzo_related_post").remove();
+        doc.select("script,style,.yuzo_related_post,.code-block").remove();
+
+        for (Element iframe : doc.select("iframe"))
+            iframe.removeAttr("style")
+                    .attr("frameborder", "0");
 
         NewsStylist.cleanAttributes(doc.select("img"), "src");
+        doc.select("h1,h2").tagName("h3");
 
         return NewsStylist.cleanComments(doc.body().html());
+    }
+
+    @Override
+    protected Document getDocument(String pagelink)
+    {
+        try {
+            return org.jsoup.Jsoup.connect(pagelink)
+                    .userAgent(USER_AGENT)
+                    .timeout(10000)
+                    .validateTLSCertificates(false)
+                    .get();
+        } catch (Exception ignored) {
+        }
+        return super.getDocument(pagelink);
     }
 
 }

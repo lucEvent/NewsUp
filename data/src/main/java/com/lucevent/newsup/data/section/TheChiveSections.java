@@ -35,11 +35,9 @@ public class TheChiveSections extends Sections {
         add(new Section("Kids", "http://thechive.com/category/humanity/kids/feed", 1));
         add(new Section("Life Hacks", "http://thechive.com/category/humanity/life-hacks-random/feed", 1));
         add(new Section("Movies", "http://thechive.com/category/humanity/movies/feed", 1));
-        add(new Section("Motivational", "http://thechive.com/category/humanity/motivational-funny_hilarious_photos_pictures/feed", 1));
         add(new Section("Movies", "http://thechive.com/category/humanity/movies/feed", 1));
         add(new Section("Nature", "http://thechive.com/category/humanity/nature/feed", 1));
         add(new Section("Nostalgia", "http://thechive.com/category/humanity/nostalgia/feed", 1));
-        add(new Section("Parenting", "http://thechive.com/category/humanity/parenting/feed", 1));
         add(new Section("Photography", "http://thechive.com/category/humanity/photography/feed", 1));
         add(new Section("Science", "http://thechive.com/category/humanity/science-tech/feed", 1));
         add(new Section("Travel", "http://thechive.com/category/humanity/travel/feed", 1));
@@ -91,7 +89,6 @@ public class TheChiveSections extends Sections {
         add(new Section("Sports", "http://thechive.com/category/sports/feed", 0));
         add(new Section("Tech", "http://thechive.com/category/tech/feed", 0));
         add(new Section("Video", "http://thechive.com/category/video/feed", 0));
-        add(new Section("Blog", "http://thechive.com/category/chive-shenanigans/feed", 0));
 
     }
 

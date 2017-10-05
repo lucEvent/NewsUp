@@ -33,7 +33,7 @@ public class AstronomyNow extends com.lucevent.newsup.data.util.NewsReader {
     protected String parseContent(Element prop)
     {
         Document doc = jsoupParse(prop);
-        doc.select(".fb-comments").remove();
+        doc.select("script,.fb-comments").remove();
 
         doc.select("h1,h2").tagName("h3");
         doc.select("[style]").removeAttr("style");

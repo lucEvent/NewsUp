@@ -60,6 +60,12 @@ public class MundoDeportivo extends com.lucevent.newsup.data.util.NewsReader {
             article.select("script,style,meta,.story-leaf-relatednews").remove();
 
             article.select("h1,h2").tagName("h3");
+
+            for (Element e : article.select(".twitter-tweet > a[href*='script'")) {
+                Element p = e.parent().parent();
+                p.html(e.attr("href"));
+                p.select("script").remove();
+            }
         } else {
             article = article.select(".gallery-leaf-image,.gallery-leaf-title");
             article.select(".gallery-leaf-title").tagName("p");

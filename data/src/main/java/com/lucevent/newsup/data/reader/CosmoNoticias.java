@@ -33,6 +33,7 @@ public class CosmoNoticias extends com.lucevent.newsup.data.util.NewsReader {
     protected String parseContent(Element prop)
     {
         Document doc = jsoupParse(prop);
+        doc.select("script").remove();
 
         doc.select("h1,h2").tagName("h3");
         doc.select(".wp-caption-text").tagName("figcaption");

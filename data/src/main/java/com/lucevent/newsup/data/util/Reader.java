@@ -39,12 +39,15 @@ public abstract class Reader {
         try {
             return org.jsoup.Jsoup.connect(pagelink)
                     .userAgent(USER_AGENT)
+                    .validateTLSCertificates(false)
                     .get();
         } catch (Exception e) {
             System.out.println("[" + this.getClass().getSimpleName() + " | " + e.getClass().getSimpleName() + "] Can't read page. Trying again");
         }
         try {
-            return org.jsoup.Jsoup.connect(pagelink).get();
+            return org.jsoup.Jsoup.connect(pagelink)
+                    .validateTLSCertificates(false)
+                    .get();
         } catch (Exception e) {
             System.out.println("[" + this.getClass().getSimpleName() + " | " + e.getClass().getSimpleName() + "] Couldn't read page: " + pagelink);
         }

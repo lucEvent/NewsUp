@@ -40,6 +40,7 @@ public class FullMusculo extends com.lucevent.newsup.data.util.NewsReader {
         doc.select("h1,h2").tagName("h3");
 
         NewsStylist.cleanAttributes(doc.select("img"), "src");
+        NewsStylist.repairLinks(doc.body());
 
         return NewsStylist.cleanComments(doc.body().html());
     }

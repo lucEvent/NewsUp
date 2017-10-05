@@ -1,6 +1,7 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Date;
+import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
@@ -41,11 +42,29 @@ public class Vice extends com.lucevent.newsup.data.util.NewsReader {
         doc.select("[style]").removeAttr("style");
         doc.select("iframe").attr("frameborder", "0");
         doc.select("h1,h2").tagName("h3");
+        doc.select(".article__pull-quote").tagName("blockquote");
+        doc.select(".article__image-caption").tagName("figcaption");
+
+        for (Element iframe : doc.select("iframe[data-iframely-url]"))
+            iframe.parent().html(Enclosure.iframe(iframe.attr("data-iframely-url")));
 
         Element article = doc.body();
         NewsStylist.repairLinks(article);
 
         return article.html();
+    }
+
+    @Override
+    protected Document getDocument(String url)
+    {
+        try {
+            return org.jsoup.Jsoup.connect(url)
+                    .userAgent(USER_AGENT)
+                    .cookie("cookiewall", "yes")
+                    .get();
+        } catch (Exception ignored) {
+        }
+        return super.getDocument(url);
     }
 
 }

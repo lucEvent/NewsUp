@@ -1,15 +1,14 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Element;
-import org.jsoup.parser.Parser;
-
-import java.net.URL;
+import org.jsoup.select.Elements;
 
 public class DiarioCordoba extends com.lucevent.newsup.data.util.NewsReader {
 
-    // Tags: category, dc:creator, description, guid, item, link, pubdate, title
+    // Tags: [category, dc:creator, description, guid, item, link, pubdate, title]
 
     public DiarioCordoba()
     {
@@ -34,35 +33,26 @@ public class DiarioCordoba extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
-        org.jsoup.select.Elements e = doc.select(".bxGaleriaNoticia img:not(.PlayVideo,.ThumbNail),.PlayerVideoBOTR,#CuerpoDeLaNoticia");
+        Elements article = doc.select(".FotoDeNoticia,#TextoNoticia");
+        article.select("script,.Creatividad,.NoticiasRelacionadasDeNoticia,.Recorte").remove();
 
-        if (e.isEmpty())
-            return;
+        article.select(".PieDeFoto").tagName("figcaption");
+        NewsStylist.cleanAttributes(article.select("img"), "src");
+        NewsStylist.repairLinks(article);
 
-        e.select("script").remove();
-
-        for (Element video : e.select(".PlayerVideoBOTR")) {
+        for (Element video : article.select(".PlayerVideoBOTR")) {
             video.tagName("video");
 
             String src = video.attr("id");
             int i1 = src.indexOf("_") + 1;
             int i2 = src.indexOf("_", i1);
-            src = "http://content.jwplatform.com/videos/" + src.substring(i1, i2) + ".mp4";
-            video.attr("src", src).attr("controls", "");
+            if (i1 > 0 && i2 > 0) {
+                src = "http://content.jwplatform.com/videos/" + src.substring(i1, i2) + ".mp4";
+                video.attr("src", src).attr("controls", "");
+            }
         }
 
-        news.content = e.outerHtml();
-    }
-
-    @Override
-    protected org.jsoup.nodes.Document getDocument(String rsslink)
-    {
-        try {
-            return org.jsoup.Jsoup.parse(new URL(rsslink).openStream(), "ISO-8859-1", rsslink, Parser.xmlParser());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return super.getDocument(rsslink);
+        news.content = NewsStylist.cleanComments(article.html());
     }
 
 }

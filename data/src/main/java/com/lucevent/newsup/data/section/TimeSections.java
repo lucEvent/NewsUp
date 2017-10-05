@@ -35,9 +35,6 @@ public class TimeSections extends Sections {
         add(new Section("Nerd World", "http://feeds.feedburner.com/timeblogs/nerd_world", 1));
         add(new Section("Keepingscore", "http://feeds2.feedburner.com/timeblogs/keepingscore", 1));
 
-        add(new Section("10 Questions", "http://feeds2.feedburner.com/time/10questions", 0));
-        add(new Section("Joe Klein's Columns", "http://feeds2.feedburner.com/time/joeklein", 0));
-
     }
 
 }

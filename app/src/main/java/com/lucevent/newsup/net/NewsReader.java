@@ -26,6 +26,7 @@ public final class NewsReader {
     private static final String[] SERVER_IDS = {"newsup-1", "newsup-2", "newsup-3", "newsup-4", "newsup-5", "newsup-1", "newsup-2", "newsup-3"};
 
     private static final String query_index = "http://newsup-2406.appspot.com/appv2?news&site=%s%s&v=%s" + (AppSettings.DEBUG ? "&nc" : "");
+    private static final String query_event_index = "http://newsup-2406.appspot.com/appv2?eventnews&site=%s%s&ecode=%s&v=%s";
     private static final String query_content = "http://%s.appspot.com/appv2?content&site=%d&l=%s";
     private final String version;
 
@@ -34,17 +35,31 @@ public final class NewsReader {
         this.version = version;
     }
 
-    public final NewsArray readNewsHeaders(int site_code, int[] sections_codes)
+    public final NewsArray readNewsHeaders(int site_code, int[] section_codes)
     {
-        StringBuilder sectArray = new StringBuilder(sections_codes.length * 3);
-        for (int section_code : sections_codes)
+        return readHeaders(String.format(query_index, site_code, stringify(section_codes), version), site_code);
+    }
+
+    public NewsArray readEventHeaders(int site_code, int[] section_codes, int event_code)
+    {
+        return readHeaders(String.format(query_event_index, site_code, stringify(section_codes), event_code, version), site_code);
+    }
+
+    private String stringify(int[] section_codes)
+    {
+        StringBuilder sectArray = new StringBuilder(section_codes.length * 3);
+        for (int section_code : section_codes)
             if (section_code != -1)
                 sectArray.append(',').append(section_code);
 
-        String rsslink = String.format(query_index, site_code, sectArray.toString(), version);
-        AppSettings.printlog("Query: " + rsslink);
+        return sectArray.toString();
+    }
 
-        org.jsoup.nodes.Document doc = getDocument(rsslink);
+    private final NewsArray readHeaders(String query_link, int site_code)
+    {
+        AppSettings.printlog("Query: " + query_link);
+
+        org.jsoup.nodes.Document doc = getDocument(query_link);
         if (doc == null) return new NewsArray();
 
         NewsArray res = new NewsArray();

@@ -39,16 +39,6 @@ public class Abc extends com.lucevent.newsup.data.util.NewsReader {
     }
 
     @Override
-    protected String parseContent(Element prop)
-    {
-        org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(prop.text());
-        doc.select("script").remove();
-        doc.select("h1,h2").tagName("h3");
-        NewsStylist.repairLinks(doc.body());
-        return doc.body().html();
-    }
-
-    @Override
     protected Enclosure parseEnclosure(Element prop)
     {
         String enclosure = prop.text();
@@ -65,17 +55,50 @@ public class Abc extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected News onNewsRead(News news)
     {
+        Document doc;
+        // Parsing content (and description)
         if (news.content.isEmpty()) {
-            Document d = Jsoup.parse(news.description);
-            d.select(".remision-galeria,script").remove();
-            d.select("h1,h2").tagName("h3");
-            NewsStylist.repairLinks(d.body());
-            news.content = d.body().html();
+            doc = jsoupParse(news.description);
 
-            String dscr = d.text();
+            String dscr = doc.text();
             news.description = dscr.substring(0, Math.min(dscr.length(), 300));
+        } else
+            doc = jsoupParse(news.content);
+
+        news.content = parseContent(doc);
+        // end
+
+        // Parsing enclosures
+        if (news.enclosures.isEmpty()) {
+            Elements imgs = doc.select("img");
+            if (!imgs.isEmpty())
+                news.enclosures.add(new Enclosure(imgs.first().attr("src"), "", ""));
         }
+        // end
         return news;
+    }
+
+    private String parseContent(Document doc)
+    {
+        doc.select(".remision-galeria,script").remove();
+
+        for (Element e : doc.select("embed[src*='youtube.com']")) {
+            Element p = e.parent();
+            p.html(Enclosure.iframe(e.attr("src")));
+            p.tagName("p");
+            NewsStylist.cleanAttributes(p);
+        }
+        for (Element e : doc.select("a[data-lightbox-src]")) {
+            String href = e.attr("data-lightbox-src");
+            NewsStylist.cleanAttributes(e);
+            e.attr("href", href);
+        }
+
+        doc.select("h1,h2").tagName("h3");
+        NewsStylist.cleanAttributes(doc.select("img[src]"), "src");
+        NewsStylist.repairLinks(doc.body());
+
+        return NewsStylist.cleanComments(doc.body().html());
     }
 
 }

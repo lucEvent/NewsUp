@@ -22,7 +22,6 @@ public class TheHeraldScotlandSections extends Sections {
         add(new Section("Scottish Politics", "http://www.heraldscotland.com/politics/referendumnews/rss", 1));
         add(new Section("Other Political News", "http://www.heraldscotland.com/politics/political_news/rss", 1));
         add(new Section("Political Comment", "http://www.heraldscotland.com/politics/viewpoint/rss", 1));
-        add(new Section("The Midge", "http://www.heraldscotland.com/politics/the_midge/rss", 1));
 
         add(new Section("Sport", "http://www.heraldscotland.com/sport/rss", 0));
         add(new Section("Football", "http://www.heraldscotland.com/sport/football/rss", 1));

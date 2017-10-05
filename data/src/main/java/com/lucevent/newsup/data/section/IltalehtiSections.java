@@ -22,7 +22,6 @@ public class IltalehtiSections extends Sections {
         add(new Section("Viihde", "http://www.iltalehti.fi/rss/viihde.xml", 0));
         add(new Section("Musiikki", "http://www.iltalehti.fi/rss/musiikki.xml", 1));
         add(new Section("Kuninkaalliset", "http://www.iltalehti.fi/rss/kuninkaalliset.xml", 1));
-        add(new Section("Leffat", "http://www.iltalehti.fi/rss/leffat.xml", 1));
 
         add(new Section("Autot", "http://www.iltalehti.fi/rss/autot.xml", 0));
         add(new Section("Digi", "http://www.iltalehti.fi/rss/digi.xml", 0));

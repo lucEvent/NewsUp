@@ -76,6 +76,7 @@ public class Andro4all extends com.lucevent.newsup.data.util.NewsReader {
             }
         }
         NewsStylist.cleanAttributes(article.select("img"), "src");
+        NewsStylist.repairLinks(article);
         article.select("[style]").removeAttr("style");
 
         news.content = article.html();
@@ -88,6 +89,7 @@ public class Andro4all extends com.lucevent.newsup.data.util.NewsReader {
             return org.jsoup.Jsoup.connect(pagelink)
                     .timeout(10000)
                     .userAgent(USER_AGENT)
+                    .validateTLSCertificates(false)
                     .get();
         } catch (Exception e) {
         }

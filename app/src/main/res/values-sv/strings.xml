@@ -32,6 +32,7 @@
     <string name="no_downloads_scheduled">Det finns inga nedladdningar schemalagda</string>
     <string name="expand_to_see_headlines">Expandera att se huvudrubrikerna</string>
     <string name="see_something_else">Intresserad av något annat?</string>
+    <string name="happening_now">Inga händelser just nu</string>
 
     <string name="mon">Mån</string>
     <string name="tue">Tis</string>
@@ -97,6 +98,7 @@
     <string name="msg_no_history">Tom lista</string>
     <string name="msg_no_bookmarks">Du har inte bokmärkt någon nyhet än</string>
     <string name="msg_minimum_one_checked">En sektion måste kontrolleras</string>
+    <string name="msg_no_events">Inga händelser just nu</string>
 
     <!-- * *************** Activities and fragment's titles ********************* * -->
     <string name="title_frg_settings_of">Inställningar för %1$s</string>

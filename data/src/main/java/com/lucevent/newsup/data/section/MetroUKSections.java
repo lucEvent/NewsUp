@@ -17,7 +17,6 @@ public class MetroUKSections extends Sections {
         add(new Section("Weird News", "http://metro.co.uk/news/weird/feed/", 1));
 
         add(new Section("Sport", "http://metro.co.uk/sport/feed/", 0));
-        add(new Section("Odd Balls", "http://metro.co.uk/sport/oddballs/feed/", 1));
         add(new Section("Football", "http://metro.co.uk/sport/football/feed/", 1));
         add(new Section("Cricket", "http://metro.co.uk/sport/cricket/feed/", 1));
         add(new Section("Tennis", "http://metro.co.uk/sport/tennis/feed/", 1));

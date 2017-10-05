@@ -79,9 +79,13 @@ public class TechCrunch extends com.lucevent.newsup.data.util.NewsReader {
             NewsStylist.cleanAttributes(img, "src");
         }
 
+        NewsStylist.wpcomwidget(article);
+        article.select("form").remove();
+
         article.select("h1,h2").tagName("h3");
         article.select("[style]").removeAttr("style");
         article.select("iframe").attr("frameborder", "0");
+        NewsStylist.repairLinks(article);
 
         news.content = NewsStylist.cleanComments(article.html());
     }

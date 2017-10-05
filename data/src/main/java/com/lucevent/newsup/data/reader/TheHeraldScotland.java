@@ -1,6 +1,7 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Document;
@@ -56,6 +57,7 @@ public class TheHeraldScotland extends com.lucevent.newsup.data.util.NewsReader 
             if (text.startsWith("READ MORE") || text.startsWith("Read more"))
                 e.parent().remove();
         }
+        NewsStylist.repairLinks(content);
 
         news.content = content.outerHtml();
     }

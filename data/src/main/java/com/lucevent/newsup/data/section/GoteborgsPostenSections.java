@@ -24,8 +24,6 @@ public class GoteborgsPostenSections extends Sections {
         add(new Section("Ishockey", "http://www.gp.se/sport/ishockey?rss", 1));
         add(new Section("Handboll", "http://www.gp.se/sport/handboll?rss", 1));
         add(new Section("Balkander", "http://blogg.gp.se/balkander/feed/", 1));
-        add(new Section("Premier League", "http://blogg.gp.se/premierleague/feed/", 1));
-        add(new Section("Hilmersson", "http://blogg.gp.se/hilmersson/feed/", 1));
         add(new Section("Rylander", "http://blogg.gp.se/rylanderjohan/feed/", 1));
 
         add(new Section("N\u00F6je", "http://www.gp.se/n%C3%B6je?rss", 0));

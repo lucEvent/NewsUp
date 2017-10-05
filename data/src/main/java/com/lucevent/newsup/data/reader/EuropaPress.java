@@ -39,6 +39,8 @@ public class EuropaPress extends com.lucevent.newsup.data.util.NewsReader {
         e.select("[onclick]").removeAttr("onclick");
         e.select("[style]:not(.instagram-media,.instagram-media *)").removeAttr("style");
 
+        NewsStylist.repairLinks(e);
+
         news.content = NewsStylist.cleanComments(img.outerHtml() + e.outerHtml());
         news.content = news.content.replace("Cargando el vídeo....", "");
     }

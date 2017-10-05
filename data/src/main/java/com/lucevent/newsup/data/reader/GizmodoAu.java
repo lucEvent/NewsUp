@@ -49,6 +49,7 @@ public class GizmodoAu extends com.lucevent.newsup.data.util.NewsReader {
 
         article.select("h1,h2").tagName("h3");
         article.select(".image + p > small").tagName("figcaption");
+        NewsStylist.repairLinks(article);
 
         news.content = NewsStylist.cleanComments(article.html());
     }

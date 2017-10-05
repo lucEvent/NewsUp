@@ -61,8 +61,22 @@ public class Statistics {
 
     public void count(Site site, String ip, String version)
     {
+        count(site.code, site.name, ip, version);
+    }
+
+    public void countEvent(int event_code, String ip, String version)
+    {
+        Event event = ofy().load().type(Event.class)
+                .id(event_code)
+                .now();
+
+        count(event_code, "[E] " + event.info[0].title, ip, version);
+    }
+
+    private void count(int code, String label, String ip, String version)
+    {
         synchronized (this) {
-            SiteStats siteStats = getSiteStats(site);
+            SiteStats siteStats = getSiteStats(code, label);
             siteStats.nAccesses++;
             siteStats.lastAccess = System.currentTimeMillis();
             siteStats.lastIp = ip;
@@ -76,7 +90,7 @@ public class Statistics {
     public void read(Site site, int n)
     {
         synchronized (this) {
-            SiteStats siteStats = getSiteStats(site);
+            SiteStats siteStats = getSiteStats(site.code, site.name);
             siteStats.nNewsRead += n;
             ofy().save().entity(siteStats).now();
         }
@@ -124,16 +138,16 @@ public class Statistics {
         stats.lastStart = System.currentTimeMillis();
     }
 
-    private SiteStats getSiteStats(Site site)
+    private SiteStats getSiteStats(int code, String name)
     {
         SiteStats res = ofy().load().type(SiteStats.class)
-                .id(site.code)
+                .id(code)
                 .now();
 
         if (res == null) {
             res = new SiteStats();
-            res.siteName = site.name;
-            res.siteCode = site.code;
+            res.siteName = name;
+            res.siteCode = code;
             res.nAccesses = 0;
             res.nNewsRead = 0;
             res.lastAccess = 0;

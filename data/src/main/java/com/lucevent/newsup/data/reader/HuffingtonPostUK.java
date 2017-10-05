@@ -29,17 +29,23 @@ public class HuffingtonPostUK extends com.lucevent.newsup.data.util.NewsReader {
     {
         String text = prop.text();
         Document doc = org.jsoup.Jsoup.parse(text);
+        doc.select("script[src*='.twitter.'],script[src*='.instagram.']").remove();
         doc.select("br").tagName("p");
 
-        for (Element e : doc.select("strong")) {
+        for (Element e : doc.select("strong"))
             if (e.text().startsWith("SEE ALSO:"))
-                e.parent().remove();
-        }
+                try {
+                    e.parent().remove();
+                } catch (Exception ignored) {
+                }
+
         doc.select("[style]").removeAttr("style");
         doc.select("h1,h2").tagName("h3");
 
         Element body = doc.body();
         NewsStylist.repairLinks(body);
+        NewsStylist.repairLinks(body, "data-placeholder");
+        NewsStylist.repairLinks(body, "data-iframely-url");
 
         String content = body.html();
 
@@ -51,7 +57,7 @@ public class HuffingtonPostUK extends com.lucevent.newsup.data.util.NewsReader {
                 content = content.substring(0, i0) + content.substring(i1, content.length());
             }
         }
-        return content;
+        return NewsStylist.cleanComments(content);
     }
 
     @Override

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:clipChildren="false"
+    style="@style/listItemContainer">
+
+    <ImageView
+        android:id="@+id/picture"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_alignParentTop="true"/>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/picture"
+        android:background="#7000"
+        android:fontFamily="sans-serif-light"
+        android:paddingBottom="10dp"
+        android:paddingEnd="20dp"
+        android:paddingStart="20dp"
+        android:paddingTop="10dp"
+        android:text="Title"
+        android:textColor="#ffff"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/title"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-light"
+        android:maxLines="3"
+        android:paddingBottom="10dp"
+        android:paddingEnd="20dp"
+        android:paddingStart="20dp"
+        android:paddingTop="6dp"
+        android:text="@string/about_content_comming_soon"
+        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
+    <View
+        android:id="@+id/divisor"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@+id/description"
+        android:layout_marginEnd="24dp"
+        android:layout_marginStart="24dp"
+        android:background="#ffdddddd"/>
+
+    <LinearLayout
+        android:id="@+id/bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/divisor"
+        android:gravity="bottom"
+        android:paddingBottom="10dp"
+        android:paddingEnd="26dp"
+        android:paddingStart="26dp"
+        android:paddingTop="10dp">
+
+        <View
+            android:id="@+id/logo"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="16dp"
+            android:background="#aaa"/>
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:fontFamily="sans-serif-light"
+            android:gravity="bottom"
+            android:text="25 minutes ago"
+            android:textSize="11sp"/>
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/button_bookmark"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="14dp"
+        android:background="@drawable/ripple_round"
+        android:src="@drawable/ic_bookmark_border"/>
+
+</RelativeLayout>

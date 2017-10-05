@@ -47,7 +47,7 @@ public class ElImparcial extends com.lucevent.newsup.data.util.NewsReader {
 
         NewsStylist.cleanAttributes(article.select("img"), "src");
 
-        news.content = article.outerHtml();
+        news.content = NewsStylist.cleanComments(article.outerHtml());
     }
 
 }

@@ -10,6 +10,7 @@ import android.os.IBinder;
 import android.util.Pair;
 
 import com.lucevent.newsup.AppSettings;
+import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.AppData;
@@ -32,6 +33,7 @@ public class StatisticsService extends Service {
     public static final int REQ_GET = 0;
     public static final int REQ_RESET = 1;
     public static final int REQ_SEND = 2;
+    public static final int REQ_EVENT = 3;
 
 
     private final IBinder binder = new Binder();
@@ -68,6 +70,9 @@ public class StatisticsService extends Service {
             case REQ_SEND:
                 sendUpdate();
                 break;
+            case REQ_EVENT:
+                sendEvent(intent.getExtras().getInt("e.code"));
+                break;
         }
         return Service.START_NOT_STICKY;
     }
@@ -93,16 +98,16 @@ public class StatisticsService extends Service {
                 String url = "";
                 switch (order) {
                     case SORT_BY_NAME:
-                        url = "http://newsup-2406.appspot.com/app?stats&options=s";
+                        url = "http://newsup-2406.appspot.com/appv2?stats&options=s";
                         break;
                     case SORT_BY_NUM_REQUESTS:
-                        url = "http://newsup-2406.appspot.com/app?stats&options=n";
+                        url = "http://newsup-2406.appspot.com/appv2?stats&options=n";
                         break;
                     case SORT_BY_READINGS:
-                        url = "http://newsup-2406.appspot.com/app?stats&options=r";
+                        url = "http://newsup-2406.appspot.com/appv2?stats&options=r";
                         break;
                     case SORT_BY_TIME:
-                        url = "http://newsup-2406.appspot.com/app?stats&options=t";
+                        url = "http://newsup-2406.appspot.com/appv2?stats&options=t";
                 }
 
                 Document doc = null;
@@ -143,7 +148,7 @@ public class StatisticsService extends Service {
             {
                 Document doc = null;
                 try {
-                    doc = Jsoup.connect("http://newsup-2406.appspot.com/app?stats&reset").get();
+                    doc = Jsoup.connect("http://newsup-2406.appspot.com/appv2?stats&reset").get();
                 } catch (IOException e) {
                     AppSettings.printerror("[SR] Exception reseting Statistics", e);
                 }
@@ -172,7 +177,7 @@ public class StatisticsService extends Service {
                     ArrayList<Pair<Integer, Integer>> readingStats = manager.getTempReadingStats();
 
                     if (!readingStats.isEmpty()) {
-                        StringBuilder url = new StringBuilder("http://newsup-2406.appspot.com/app?notify&values=");
+                        StringBuilder url = new StringBuilder("http://newsup-2406.appspot.com/appv2?notify&values=");
                         for (Pair<Integer, Integer> pair : readingStats) {
                             url.append(pair.first).append(",")
                                     .append(pair.second).append(",");
@@ -183,6 +188,22 @@ public class StatisticsService extends Service {
 
                         manager.clearReadingStats();
                     }
+                } catch (Exception ignored) {
+                }
+            }
+        }).start();
+    }
+
+    private void sendEvent(final int event_code)
+    {
+        new Thread(new Runnable() {
+            @Override
+            public void run()
+            {
+                String url = "http://newsup-2406.appspot.com/appv2?notifyevent=" + event_code + "&v=" + getString(R.string.app_version);
+                try {
+                    URL request = new URL(url);
+                    request.openStream().close();
                 } catch (Exception ignored) {
                 }
             }

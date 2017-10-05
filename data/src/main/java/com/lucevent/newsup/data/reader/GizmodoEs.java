@@ -51,6 +51,7 @@ public class GizmodoEs extends com.lucevent.newsup.data.util.NewsReader {
             }
 
             NewsStylist.cleanAttributes(doc.select("img"), "src");
+            NewsStylist.repairLinks(doc.body());
 
             news.content = NewsStylist.cleanComments(doc.body().html());
         }

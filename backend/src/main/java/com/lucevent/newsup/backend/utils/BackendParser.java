@@ -1,13 +1,16 @@
 package com.lucevent.newsup.backend.utils;
 
+import com.lucevent.newsup.backend.Data;
 import com.lucevent.newsup.data.util.Date;
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.Section;
 import com.lucevent.newsup.data.util.Sections;
+import com.lucevent.newsup.data.util.Site;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class BackendParser {
 
@@ -197,34 +200,75 @@ public class BackendParser {
         return sb;
     }
 
-    public static StringBuilder toHtml(Sections sections)
+    public static String json(Sections sections)
     {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < sections.size(); i++) {
-            Section s = sections.get(i);
-            String tag_class;
-            switch (s.level) {
-                case 0:
-                    tag_class = "section groupsection";
-                    break;
-                case 1:
-                    tag_class = "section subsection";
-                    break;
-                case -1:
-                    tag_class = "groupsection";
-                    break;
-                default:
-                    tag_class = "";
-            }
-            sb.append("<a class='")
-                    .append(tag_class)
-                    .append("' index='")
-                    .append(i)
-                    .append("'><p>")
-                    .append(s.name)
-                    .append("</p></a>");
+        StringBuilder sb = new StringBuilder("[");
+        for (Section s : sections) {
+            if (sb.length() > 1) sb.append(",");
+            sb.append("{")
+                    .append("\"code\":").append(s.code)
+                    .append(",\"level\":").append(s.level)
+                    .append(",\"name\":\"").append(s.name)
+                    .append("\"}");
         }
+        sb.append("]");
+
+        return sb.toString();
+    }
+
+    public static StringBuilder toEntry(List<Event> events, String lang)
+    {
+        StringBuilder sb = new StringBuilder("<data>");
+        for (Event E : events) {
+            Event.EventInfo eventInfo = E.getInfo(lang);
+            sb.append("<event code='")
+                    .append(E.code)
+                    .append("' title='")
+                    .append(eventInfo.title)
+                    .append("' description='")
+                    .append(eventInfo.description)
+                    .append("' imgsrc='")
+                    .append(E.imgSrc)
+                    .append("' sources='");
+
+            for (int i = 0; i < E.sites.length; i++) {
+                if (i != 0) sb.append(";");
+                Event.EventSite s = E.sites[i];
+                sb.append(s.site_code);
+                for (int is : s.section_codes)
+                    sb.append(",").append(is);
+            }
+
+            sb.append("' tags='");
+            for (int i = 0; i < E.tags.length; i++) {
+                if (i != 0) sb.append(",");
+                sb.append(E.tags[i]);
+            }
+
+            sb.append("'/>");
+        }
+        sb.append("</data>");
         return sb;
+    }
+
+    public static String jsonSites()
+    {
+        StringBuilder sb = new StringBuilder("[");
+
+        for (Site s : Data.sites) {
+            if (sb.length() > 1) sb.append(",");
+            sb.append("{")
+                    .append("\"code\":").append(s.code)
+                    .append(",\"co\":").append(s.getCountry())
+                    .append(",\"la\":").append(s.getLanguage())
+                    .append(",\"ty\":").append(s.getCategory())
+                    .append(",\"name\":\"").append(s.name)
+                    .append("\"}");
+        }
+        sb.append("]");
+
+        return sb.toString();
+
     }
 
 }

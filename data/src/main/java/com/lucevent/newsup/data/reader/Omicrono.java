@@ -38,7 +38,7 @@ public class Omicrono extends com.lucevent.newsup.data.util.NewsReader {
     protected String parseContent(Element prop)
     {
         Document doc = jsoupParse(prop);
-        doc.select(".blockquoteLink,.feedflare,[width='1'],.blockquoteRelated").remove();
+        doc.select("script,.blockquoteLink,.feedflare,[width='1'],.blockquoteRelated").remove();
 
         doc.select("h1,h2").tagName("h3");
 

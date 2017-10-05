@@ -27,6 +27,7 @@ public class DigitalCamera extends com.lucevent.newsup.data.util.NewsReader {
     protected String parseContent(Element prop)
     {
         Document doc = org.jsoup.Jsoup.parse(prop.text());
+        doc.select("script").remove();
         doc.select("[style]").removeAttr("style");
         doc.select("[id]").removeAttr("id");
         doc.select("h1,h2").tagName("h3");

@@ -46,6 +46,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         switch (viewType) {
             case TYPE_NEWS:
                 View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.i_news, parent, false);
+                //View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.i_news_compact, parent, false);
                 v.setOnClickListener(onClick);
 //            v.setOnLongClickListener(onLongClick);
                 vh = new NewsViewHolder(v, onBookmarkClick);
@@ -63,9 +64,9 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     {
         if (holder instanceof NewsViewHolder) {
             News news = dataSet.get(position);
-            ((NewsViewHolder) holder).populate(news, showSiteLogo, loadImage, BookmarksManager.isBookmarked(news));
+            ((NewsViewHolder) holder).bind(news, showSiteLogo, loadImage, BookmarksManager.isBookmarked(news));
         } else
-            ((MoreSectionsViewHolder) holder).populate();
+            ((MoreSectionsViewHolder) holder).bind();
     }
 
     @Override

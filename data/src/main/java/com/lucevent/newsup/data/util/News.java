@@ -38,6 +38,18 @@ public class News implements Comparable<News>, Serializable {
         this(link.hashCode(), title, link, description, date, categories, site_code, section_code, readOn);
     }
 
+    public boolean hasKeyWords(String[] keyWords){
+        for(String keyW : keyWords){
+            for(String tag : tags){
+                if (tag.equals(keyW))
+                    return true;
+            }
+            if (title.toLowerCase().contains(keyW))
+                return true;
+        }
+        return false;
+    }
+
     @Override
     public int compareTo(News o)
     {

@@ -50,9 +50,7 @@ public class AppServlet extends HttpServlet {
                 Data.stats.count(site, req.getRemoteAddr(), req.getParameter("v"));
 
             if (UpdateMessageCreator.needsUpdate(req.getParameter("v"))) {
-                NewsArray alert = new NewsArray();
-                alert.add(UpdateMessageCreator.generateUpdateNews(site));
-                resp.getWriter().println(BackendParser.toEntry(alert).toString());
+                UpdateMessageCreator.generateUpdateNews(site, resp);
                 return;
             }
 

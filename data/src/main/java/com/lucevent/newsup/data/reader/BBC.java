@@ -90,6 +90,7 @@ public class BBC extends com.lucevent.newsup.data.util.NewsReader {
                             article.select("[data-reactid]").removeAttr("data-reactid");
                             article.select("h1,h2").tagName("h3");
 
+                            NewsStylist.repairLinks(article);
                             news.content = article.html();
                             return;
                         }
@@ -111,6 +112,7 @@ public class BBC extends com.lucevent.newsup.data.util.NewsReader {
                                     .removeAttr("class");
                         }
 
+                        NewsStylist.repairLinks(article);
                         news.content = article.html();
                         return;
                     }
@@ -151,7 +153,7 @@ public class BBC extends com.lucevent.newsup.data.util.NewsReader {
 
         article.select("h1,h2").tagName("h3");
 
+        NewsStylist.repairLinks(article);
         news.content = article.outerHtml();
     }
-
 }

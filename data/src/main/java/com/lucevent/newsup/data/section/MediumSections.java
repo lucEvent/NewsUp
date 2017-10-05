@@ -52,18 +52,6 @@ public class MediumSections extends Sections {
         add(new Section("Virtual Reality", "https://medium.com/feed/tag/virtual-reality", 0));
         add(new Section("Writing", "https://medium.com/feed/tag/writing", 0));
 
-        add(new Section("Languages", null, -1));
-        add(new Section("Deutsch", "https://medium.com/feed/deutsch", 1));
-        add(new Section("Espa\u00F1ol", "https://medium.com/feed/espanol", 1));
-        add(new Section("Fran\u00E7ais", "https://medium.com/feed/france", 1));
-        add(new Section("Italiano", "https://medium.com/feed/italia", 1));
-        add(new Section("Portugu\u00EAs (Brasil)", "https://medium.com/feed/brasil", 1));
-        add(new Section("Polski", "https://medium.com/feed/polish", 1));
-        add(new Section("\u0420\u0443cc\u043A\u0438\u0439", "https://medium.com/feed/russian", 1));
-        add(new Section("T\u00FCrk\u00E7e", "https://medium.com/feed/turkce", 1));
-        add(new Section("\u0423\u043A\u0440\u0430\u0457\u043D\u0441\u044C\u043A\u0438\u0439", "https://medium.com/feed/in-ukrainian", 1));
-        add(new Section("\u65E5\u672C\u8A9E", "https://medium.com/feed/mediumjp", 1));
-
         add(new Section("500ish Words", "https://500ish.com/feed", 0));
         add(new Section("Android & Tech", "https://medium.com/feed/android-news", 0));
         add(new Section("AnnaPoetics", "https://medium.com/feed/annapoetics", 0));
@@ -92,15 +80,11 @@ public class MediumSections extends Sections {
         add(new Section("Hacker Noon", "https://hackernoon.com/feed", 0));
         add(new Section("Hyperloop One", "https://medium.com/feed/hyperloop-one", 0));
         add(new Section("INSURGE intelligence", "https://medium.com/feed/insurge-intelligence", 0));
-        add(new Section("Journal of Labocine", "https://medium.com/feed/labocine", 0));
         add(new Section("Life Learning", "https://medium.com/feed/life-learning", 0));
         add(new Section("Love Letters", "https://medium.com/feed/word-lovers-love-letters", 0));
-        add(new Section("Matter", "https://medium.com/feed/matter", 0));
         add(new Section("MEL Magazine", "https://melmagazine.com/feed", 0));
         add(new Section("MIT MEDIA LAB", "https://medium.com/feed/mit-media-lab", 0));
-        add(new Section("MIT Scope", "https://medium.com/feed/mit-scope", 0));
         add(new Section("Mother Jones", "https://medium.com/feed/mother-jones", 0));
-        add(new Section("Mtracey", "https://medium.com/feed/mtracey", 0));
         add(new Section("Muzli - Design Inspiration", "https://medium.muz.li/feed", 0));
         add(new Section("Navigating the Sea of Singledom", "https://medium.com/feed/navigating-the-sea-of-singledom", 0));
         add(new Section("Pacific Standard", "https://psmag.com/feed", 0));
@@ -119,7 +103,6 @@ public class MediumSections extends Sections {
         add(new Section("The Coffeelicious", "https://medium.com/feed/the-coffeelicious", 0));
         add(new Section("The Development Set", "https://thedevelopmentset.com/feed", 0));
         add(new Section("The Everyday Projects", "https://medium.com/feed/the-everyday-projects", 0));
-        add(new Section("THE LOUPE", "https://theloupe.io/feed", 0));
         add(new Section("The Mission", "https://medium.com/feed/the-mission", 0));
         add(new Section("The Ringer", "https://theringer.com/feed", 0));
         add(new Section("The Startup", "https://medium.com/feed/swlh", 0));

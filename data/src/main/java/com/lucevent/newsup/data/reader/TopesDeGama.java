@@ -96,6 +96,7 @@ public class TopesDeGama extends com.lucevent.newsup.data.util.NewsReader {
             }
         }
         NewsStylist.cleanAttributes(article.select("img"), "src");
+        NewsStylist.repairLinks(article);
         article.select("[style]").removeAttr("style");
 
         news.content = article.html();

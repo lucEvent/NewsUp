@@ -38,6 +38,7 @@ public class Gizmodo extends com.lucevent.newsup.data.util.NewsReader {
         }
 
         NewsStylist.cleanAttributes(doc.select("img"), "src");
+        NewsStylist.repairLinks(doc.body());
 
         return NewsStylist.cleanComments(doc.body().html());
     }

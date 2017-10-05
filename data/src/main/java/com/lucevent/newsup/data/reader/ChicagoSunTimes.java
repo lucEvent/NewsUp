@@ -45,6 +45,9 @@ public class ChicagoSunTimes extends com.lucevent.newsup.data.util.NewsReader {
         doc.select("[style]").removeAttr("style");
         doc.select("iframe").attr("frameborder", "0");
 
+        NewsStylist.wpcomwidget(doc.body().select("form"));
+        doc.select("form").remove();
+
         for (Element e : doc.select("strong")) {
             String text = e.text();
             if (text.startsWith("RELATED STORY:")
@@ -55,8 +58,9 @@ public class ChicagoSunTimes extends com.lucevent.newsup.data.util.NewsReader {
                 }
         }
         NewsStylist.cleanAttributes(doc.select("img"), "src");
+        NewsStylist.repairLinks(doc.body());
 
-        return doc.body().html().replaceAll("&nbsp;", "");
+        return NewsStylist.cleanComments(doc.body().html().replaceAll("&nbsp;", ""));
     }
 
     @Override

@@ -14,11 +14,11 @@ public class HuffingtonPostInt extends com.lucevent.newsup.data.util.NewsReader 
     {
         super(TAG_ITEM_ITEMS,
                 new int[]{TAG_TITLE},
-                new int[]{TAG_GUID},
+                new int[]{TAG_LINK},
                 new int[]{},
                 new int[]{TAG_DESCRIPTION},
                 new int[]{TAG_PUBDATE},
-                new int[]{},
+                new int[]{TAG_CATEGORY},
                 new int[]{TAG_ENCLOSURE},
                 "http://www.huffingtonpost.com",
                 "");
@@ -28,11 +28,13 @@ public class HuffingtonPostInt extends com.lucevent.newsup.data.util.NewsReader 
     protected String parseContent(Element prop)
     {
         Document doc = jsoupParse(prop.text().replace("<br />", "<p></p>"));
-
+        doc.select("script[src*='.twitter.'],script[src*='.instagram.']").remove();
         doc.select("h1,h2").tagName("h3");
 
         Element body = doc.body();
         NewsStylist.repairLinks(body);
+        NewsStylist.repairLinks(body, "data-placeholder");
+        NewsStylist.cleanAttributes(body.select("img"), "src");
 
         String content = body.html();
 
@@ -51,7 +53,7 @@ public class HuffingtonPostInt extends com.lucevent.newsup.data.util.NewsReader 
             i1 = content.indexOf("-hh>", i1 + 4);
             content = content.replace(content.substring(i0, i1 + 4), "");
         }
-        return content;
+        return NewsStylist.cleanComments(content);
     }
 
     @Override

@@ -58,6 +58,7 @@ public class TheLocal extends com.lucevent.newsup.data.util.NewsReader {
                 }
             }
         }
+        NewsStylist.repairLinks(article);
 
         news.content = article.outerHtml();
     }

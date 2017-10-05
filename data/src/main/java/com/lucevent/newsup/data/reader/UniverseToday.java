@@ -1,7 +1,12 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosure;
+import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
+
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class UniverseToday extends com.lucevent.newsup.data.util.NewsReader {
 
@@ -28,9 +33,10 @@ public class UniverseToday extends com.lucevent.newsup.data.util.NewsReader {
     }
 
     @Override
-    protected String parseContent(Element prop)
+    protected News onNewsRead(News news)
     {
-        Document doc = jsoupParse(prop);
+        // Parsing content
+        Document doc = jsoupParse(news.content);
         doc.select("script").remove();
 
         doc.select("h1,h2").tagName("h3");
@@ -38,7 +44,15 @@ public class UniverseToday extends com.lucevent.newsup.data.util.NewsReader {
         doc.select("[style]").removeAttr("style");
         doc.select("iframe").attr("frameborder", "0");
 
-        return doc.body().html();
+        news.content = NewsStylist.cleanComments(doc.body().html());
+        // end
+
+        // Parsing enclosures
+        Elements imgs = doc.select("img");
+        if (!imgs.isEmpty())
+            news.enclosures.add(new Enclosure(imgs.first().attr("src"), "", ""));
+        // end
+        return news;
     }
 
     @Override
@@ -47,7 +61,7 @@ public class UniverseToday extends com.lucevent.newsup.data.util.NewsReader {
         try {
             return org.jsoup.Jsoup.connect(pagelink)
                     .ignoreContentType(true)
-                    .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36")
+                    .userAgent(USER_AGENT)
                     .timeout(10000)
                     .get();
         } catch (Exception ignored) {

@@ -2,6 +2,8 @@ package com.lucevent.newsup.kernel;
 
 import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.data.Sites;
+import com.lucevent.newsup.data.event.Event;
+import com.lucevent.newsup.data.event.Events;
 import com.lucevent.newsup.data.util.Sections;
 import com.lucevent.newsup.data.util.Site;
 
@@ -9,9 +11,11 @@ import java.util.Set;
 
 public class AppData {
 
-    private static final int DATA_REVISION_N = 1;
+    private static final int DATA_REVISION_N = 2;
 
     private static Sites sites;
+
+    private static Events events;
 
     public static void setSites(Sites sites)
     {
@@ -43,6 +47,15 @@ public class AppData {
         return sites.getSiteByCode(code);
     }
 
+    public static Event getEvent(int code)
+    {
+        for (Event e : events)
+            if (e.code == code)
+                return e;
+
+        return null;
+    }
+
     public static Sites getSites(int[] codes)
     {
         Sites res = new Sites();
@@ -50,6 +63,11 @@ public class AppData {
             res.add(sites.getSiteByCode(code));
 
         return res;
+    }
+
+    public static void setEvents(Events events)
+    {
+        AppData.events = events;
     }
 
     private static Set<String> correctSections(Site site, Set<String> section_indexes)

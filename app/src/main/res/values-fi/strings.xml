@@ -29,6 +29,8 @@
     <string name="no_downloads_scheduled">There are no downloads scheduled</string>
     <string name="expand_to_see_headlines">Expand to see the headlines</string>
     <string name="see_something_else">See something else?</string>
+    <string name="happening_now">Happening now (beta)</string>
+    <string name="msg_no_events">No events at the moment</string>
     <string name="mon">Mon</string>
     <string name="tue">Tue</string>
     <string name="wed">Wed</string>

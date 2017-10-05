@@ -1,9 +1,12 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosure;
+import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class Xataka extends com.lucevent.newsup.data.util.NewsReader {
 
@@ -39,9 +42,10 @@ public class Xataka extends com.lucevent.newsup.data.util.NewsReader {
     }
 
     @Override
-    protected String parseContent(Element prop)
+    protected News onNewsRead(News news)
     {
-        Document doc = org.jsoup.Jsoup.parse(prop.text());
+        // Parsing content
+        Document doc = jsoupParse(news.content);
 
         doc.select("body > h4 ~ *,body > h4,.feedflare,[width='1']").remove();
 
@@ -53,7 +57,14 @@ public class Xataka extends com.lucevent.newsup.data.util.NewsReader {
         Element article = doc.body();
         NewsStylist.repairLinks(article);
 
-        return article.html();
-    }
+        news.content = article.html();
+        // end
 
+        // Parsing enclosures
+        Elements imgs = doc.select("img");
+        if (!imgs.isEmpty())
+            news.enclosures.add(new Enclosure(imgs.first().attr("src"), "", ""));
+        // end
+        return news;
+    }
 }

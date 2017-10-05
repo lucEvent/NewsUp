@@ -67,8 +67,9 @@ public class Make extends com.lucevent.newsup.data.util.NewsReader {
         article.select("[width]").removeAttr("width");
         article.select("iframe").attr("frameborder", "0");
 
-        news.content = article.outerHtml();
+        NewsStylist.cleanAttributes(article.select("video"), "controls");
 
+        news.content = NewsStylist.cleanComments(article.outerHtml());
     }
 
     @Override

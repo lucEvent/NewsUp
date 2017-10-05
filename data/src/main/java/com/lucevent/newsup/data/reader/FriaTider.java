@@ -1,6 +1,7 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 
@@ -30,7 +31,7 @@ public class FriaTider extends com.lucevent.newsup.data.util.NewsReader {
 
         e.select("#bargraph").attr("style", "height:400px;");
         if (!e.isEmpty())
-            news.content = e.html();
+            news.content = NewsStylist.cleanComments(e.html());
     }
 
     @Override

@@ -4,6 +4,7 @@ import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.net.URLEncoder;
 import java.util.List;
 
 public final class NewsStylist {
@@ -71,6 +72,18 @@ public final class NewsStylist {
             e.attr("href", "http:" + e.attr("href"));
     }
 
+    public static void repairLinks(Elements elems, String attr)
+    {
+        for (Element e : elems.select("[" + attr + "^='//']"))
+            e.attr(attr, "http:" + e.attr(attr));
+    }
+
+    public static void repairLinks(Element elem, String attr)
+    {
+        for (Element e : elem.select("[" + attr + "^='//']"))
+            e.attr(attr, "http:" + e.attr(attr));
+    }
+
     public static String video(String src)
     {
         return "<video controls src='" + src + "'></video>";
@@ -92,12 +105,38 @@ public final class NewsStylist {
     {
         try {
             int istart = data.indexOf(start);
+            if (istart == -1)
+                return null;
             int iend = data.indexOf(end, istart + start.length()) + (inclusive ? end.length() : 0);
             return data.substring(istart + (inclusive ? 0 : start.length()), iend);
         } catch (Exception ignored) {
             ignored.printStackTrace();
         }
         return null;
+    }
+
+    public static void wpcomwidget(Elements elems)
+    {
+        for (Element vform : elems.select("form[id]")) {
+            StringBuilder sb = new StringBuilder("https://wpcomwidgets.com/?");
+
+            Elements values = vform.select("input");
+            sb.append(values.get(0).attr("name")).append("=").append(values.get(0).attr("value").replace(" ", "%20"));
+            for (int i = 1; i < values.size(); i++) {
+                try {
+                    Element v = values.get(i);
+                    sb.append("&").append(v.attr("name")).append("=").append(URLEncoder.encode(v.attr("value"), "UTF-8"));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            Element iframe = vform.nextElementSibling();
+            cleanAttributes(iframe);
+            iframe.attr("src", sb.toString())
+                    .attr("frameborder", "0")
+                    .attr("allowfullscreen", "");
+        }
     }
 
 }

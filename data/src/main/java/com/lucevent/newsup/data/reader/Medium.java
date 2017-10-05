@@ -37,6 +37,7 @@ public class Medium extends com.lucevent.newsup.data.util.NewsReader {
         Document doc = jsoupParse(prop);
         doc.select("script,[width=1],figcaption").remove();
         doc.select("h1,h2").tagName("h3");
+        NewsStylist.repairLinks(doc.body());
         return doc.body().html();
     }
 

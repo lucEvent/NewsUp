@@ -67,6 +67,7 @@ public class ElPais extends com.lucevent.newsup.data.util.NewsReader {
 
         NewsStylist.cleanAttributes(article.select("img"), "src");
         NewsStylist.repairLinks(article);
+        NewsStylist.repairLinks(article, "data-url");
 
         news.content = article.outerHtml();
     }

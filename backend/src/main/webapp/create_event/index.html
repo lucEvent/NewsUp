@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>News Up - Event creator</title>
+    <meta charset="utf-8">
+    <link rel="icon" href="../img/app.png" type="image/png"/>
+    <style>
+// general style
+html, body, div, span, iframe, p, blockquote, a, img, strong, ul, li, form, table, article, aside, footer, header, nav, section {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    vertical-align: baseline;
+}
+article, aside, footer, header, nav, section {
+    display: block;
+}
+@font-face {
+    font-family: newsupfont;
+    src: url("../fonts/customfont.woff");
+}
+body {
+    width: 90%;
+    margin: 0 auto;
+    padding: 0;
+    height: 100%;
+    line-height: 1;
+    background: #C5E1A5;
+    font-family: newsupfont;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.67;
+}
+
+    </style>
+    <script src="../js/jquery-3.1.1.min.js"></script>
+    <script>
+    var json_sites;
+    var event={};
+    var info=[];
+    var sites=[];
+
+    function display_error(error) {
+        alert("error="+error.responseText);
+    }
+    function display_sites(json) {
+        json_sites=json;
+        var html = ""
+        for (var i = 0; i < json.length; ++i) {
+            var site = json[i];
+            html += "<option value='" + site.code + "'>"+ site.name+"</option>";
+        }
+
+        $("#sites").html(html);
+    }
+    function display_sections(json) {
+        var html = ""
+        for (var i = 0; i < json.length; ++i) {
+            var s = json[i];
+            var _class = "";
+            if (s.level==-1) {
+                html += "<label class='groupsection'>"+ s.name +"</label><br>";
+                continue;
+            }
+            else if (s.level==0)
+                _class="section groupsection";
+            else if (s.level==1)
+                _class="section subsection";
+            html += "<input type='checkbox' value='"+ s.code +"'><label class='"+_class+"'>"+ s.name +"</label><br>";
+        }
+
+        $("#sections").html(html);
+    }
+    function preview(){
+        event.info=info;
+        event.sites=sites;
+
+        var content = JSON.stringify(event, null, "   ")
+
+        $("#preview_content").html("<pre>"+content+"</pre>");
+    }
+    function onAddInfo(){
+        var lang = $("#lang").val();
+        var title = $("#title").val();
+        var description = $("#description").val();
+        if(lang && title && description){
+            info.push({"lang": lang,"title": title,"description":description});
+            preview();
+            $("#lang").val("");
+            $("#title").val("");
+            $("#description").val("");
+        }
+    }
+    function onAddSite(){
+        var sections = "";
+        var selected = $("input[type='checkbox']:checked");
+        for(var i = 0; i < selected.length; ++i){
+            if(sections.length>0) sections+=",";
+            sections += selected[i].value;
+        }
+        sites.push({"code":$('#sites').find(":selected").val(),"sections":sections});
+        preview();
+    }
+    function onSearch(){
+        var search =$(this).val();
+
+        var html = ""
+        for (var i = 0, len = json_sites.length; i < len; ++i) {
+            var site = json_sites[i];
+            if (site.name.toLowerCase().indexOf(search) != -1)
+            html += "<option value='" + site.code + "'>"+ site.name+"</option>";
+        }
+        html += "";
+
+        $("#sites").html(html);
+    }
+    function onSiteSelectedChange(){
+        var code = $(this).find(":selected").val();
+        $.ajax("/web?sections&site=" + code, {
+                success: display_sections,
+                error: display_error
+        });
+    }
+    function onEventAdded(data){
+        alert("Event added successfully (web)"+ data);
+    }
+    function onSubmit(form){
+       event.code = Math.floor(Math.random()*1000000);
+       event.start = $("#start").val();
+       event.end = $("#end").val();
+       event.imgsrc = $("#imgsrc").val();
+       event.tags = $("#tags").val();
+       if(event.start && event.end && event.imgsrc && event.tags && info && sites){
+           preview();
+           $.ajax("/web?add_event", {
+                    type: "POST",
+                    dataType: "json",
+                    data: {"data":JSON.stringify(event)},
+                    success: onEventAdded,
+                    error: display_error
+           });
+       }
+    }
+
+	$(document).ready(function () {
+
+        $('#submit').click(onSubmit);
+        $('#search_site').keyup(onSearch);
+        $('#sites').change(onSiteSelectedChange);
+
+        $.ajax("/web?sites", {
+                success: display_sites,
+                error: display_error
+        });
+
+    });
+</script>
+<style>
+    form {
+        width:50%;
+        padding: 10px;
+        background: #fcc;
+        margin-top: 20px;
+        position:relative;
+        overflow: visible;
+    }
+    .tall_form {
+        height:330px;
+    }
+    form span,select{
+        width: 130px;
+        display:inline-block;
+    }
+    form .long_input {
+        width: 70%;
+    }
+    #preview{
+        width: 40%;
+        height: 95%;
+        background: #AED581;
+        display: inline;
+        margin: 0px;
+        padding: 0px 10px 10px 30px;
+        right : 10px;
+        position: absolute;
+        top: 10px;
+    }
+    #preview input{
+        width: 100px;
+        margin: 0px;
+        padding: 0px 10px 10px 30px;
+        right : 20px;
+        position: absolute;
+        top: 15px;
+        text-align: center;
+    }
+    #preview_content{
+        width: 90%;
+        padding: 10px;
+        height: 85%;
+        background-color:rgba(256, 256, 256, 0.25);
+        overflow-y:auto;
+        overflow-x:auto;
+    }
+</style>
+<style>
+    #sections_box {
+        background-color:rgba(256, 256, 256, 0.35);
+        width: 200px;
+        height: 250px;
+        display: inline;
+        margin: 0px;
+        padding: 0px 10px 10px 30px;
+        position:absolute;
+        top:60px;
+        right:10px;
+        overflow-x:auto;
+    }
+    #sections_box .section {
+        cursor: pointer;
+    }
+    #sections_box .section:hover {
+        color: #EF5350;
+        font-weight: bold;
+        text-decoration: underline;
+    }
+    #sections_box .groupsection {
+        font-weight: bold;
+         margin-left: 5px;
+    }
+    #sections_box .subsection {
+        margin-left: 20px;
+    }
+
+</style>
+</head>
+<body>
+
+<form>
+    <span>Starts at:</span><input type="datetime-local" id="start" class=""/><br>
+    <span>Ends at:</span><input type="datetime-local" id="end" class=""/><br>
+    <span>Event image link:</span><input type="text" id="imgsrc" class="long_input"/><br>
+    <span>Tags:</span><input type="text" id="tags" class="long_input"/><br>
+</form>
+
+<form action="javascript:;" onsubmit="onAddInfo()" method="post">
+    <h3>EVENT INFORMATION</h3>
+    <span>Language code:</span><input type="text" id="lang"/><br>
+    <span>Event name:</span><input type="text" id="title" class="long_input"/><br>
+    <span>Event description:</span><input type="text" id="description" class="long_input"/><br>
+    <input type="submit" value="Add"/>
+    <input type="reset" value="Reset">
+</form>
+
+<form action="javascript:;" onsubmit="onAddSite()" method="post" class="tall_form">
+    <h3>EVENT SITES</h3>
+    <input type="text" id="search_site" class=""/><br>
+    <select id="sites"></select>
+    <input type="submit" id="add_descr" value="Add"/><br>
+    <div id="sections_box">
+        <h3>Sections</h3>
+        <p id="sections"></p>
+    </div>
+</form>
+
+<div id="preview">
+    <h3>PREVIEW</h3>
+        <p id="preview_content"></p>
+    <input type="submit" value="Submit" id="submit">
+</div>
+
+</body>
+</html>

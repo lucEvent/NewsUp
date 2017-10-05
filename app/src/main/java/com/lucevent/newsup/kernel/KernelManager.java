@@ -10,6 +10,7 @@ import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.ProSettings;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.Sites;
+import com.lucevent.newsup.data.event.Event;
 import com.lucevent.newsup.data.util.Date;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
@@ -56,7 +57,7 @@ public class KernelManager implements StorageCallback {
             logoManager = LogoManager.getInstance(context, AppData.getSites().size());
 
         if (readerManager == null)
-            readerManager = new NewsReaderManager(context, null, this);
+            readerManager = new NewsReaderManager(context, this);
     }
 
     public Sites getFavoriteSites()
@@ -74,12 +75,12 @@ public class KernelManager implements StorageCallback {
         return dbmanager.readNews(id);
     }
 
-    public void getNewsOf(@NonNull final Site site, @Nullable final int[] sections, @NonNull final Handler handler)
+    public void getNewsOf(@NonNull Site site, @Nullable int[] sections, @NonNull Handler handler)
     {
         readerManager.readNewsOf(site, sections, handler);
     }
 
-    public void getMainNews(@NonNull final Handler handler)
+    public void getMainNews(@NonNull Handler handler)
     {
         readerManager.readNewsOf(AppData.getSites(AppSettings.getMainSitesCodes()), handler);
     }
@@ -87,6 +88,16 @@ public class KernelManager implements StorageCallback {
     public NewsArray getScheduledNews(@NonNull int[] siteCodes)
     {
         return readerManager.readNewsOf(AppData.getSites(siteCodes));
+    }
+
+    public void getEvent(Event event, @NonNull Handler handler)
+    {
+        readerManager.readEvent(event, handler);
+    }
+
+    public void cancelAll()
+    {
+        readerManager.cancelAll();
     }
 
     @Override
@@ -119,7 +130,6 @@ public class KernelManager implements StorageCallback {
     {
         return dbmanager.readNews(site, section_codes);
     }
-
 
     @Override
     public void deleteOldNews(long timeBound)

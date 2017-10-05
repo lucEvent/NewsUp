@@ -16,7 +16,6 @@ public class CosmoNoticiasSections extends Sections {
         add(new Section("Cosmolog\u00EDa", "http://www.cosmonoticias.org/category/cosmologia/feed/", 0));
         add(new Section("Exoplanetas y exolunas", "http://www.cosmonoticias.org/category/exoplanetas-exolunas/feed/", 0));
         add(new Section("Misiones y Sondas", "http://www.cosmonoticias.org/category/misiones-sondas/feed/", 0));
-        add(new Section("Otras ciencias", "http://www.cosmonoticias.org/category/otras-ciencias/feed/", 0));
         add(new Section("Otros", "http://www.cosmonoticias.org/category/otros/feed/", 0));
 
     }

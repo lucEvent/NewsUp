@@ -16,12 +16,7 @@ public class AndroidAuthority extends com.lucevent.newsup.data.util.NewsReader {
             "n:10px 0;overflow:hidden;padding:10px 25px;}.aa_best_app_button a{ text-decoration:none; color:#fff; font-size:14px; font-weight:bold;}" +
             "</style>";
 
-    /**
-     * Tags
-     * [category, content:encoded, dc:creator, description, guid, item, link, pubdate, title]
-     * [category, content:encoded, dc:creator, description, guid, item, link, pubdate, title, media:content]
-     * [category, content:encoded, dc:creator, description, guid, item, link, pubdate, title, media:content, enclosure]
-     */
+    // tags: [category, content:encoded, dc:creator, description, guid, item, link, pubdate, title, media:content, enclosure]
 
     public AndroidAuthority()
     {
@@ -47,13 +42,11 @@ public class AndroidAuthority extends com.lucevent.newsup.data.util.NewsReader {
     protected String parseContent(Element prop)
     {
         Document doc = org.jsoup.Jsoup.parse(prop.text());
-        doc.select("script,.aa_see_also_block,.clear,.vr_related_articles,.aa_best_app_wrapper > .aa_best_app_button").remove();
+        doc.select("script,.aa_see_also_block,.clear,.vr_related_articles,.aa_best_app_wrapper > .aa_best_app_button,.aa_newsletter_shortcode_wrapper").remove();
 
-        doc.select("img[srcset]").removeAttr("srcset");
         doc.select("[style]").removeAttr("style");
         doc.select("h1,h2").tagName("h3");
         doc.select(".wp-caption-text").tagName("figcaption");
-
         doc.select(".aa_best_app_desc").tagName("p");
 
         for (Element e : doc.select(".aa_best_app_button"))
@@ -72,7 +65,7 @@ public class AndroidAuthority extends com.lucevent.newsup.data.util.NewsReader {
         NewsStylist.cleanAttributes(doc.select("img"), "src");
         NewsStylist.repairLinks(doc.body());
 
-        return doc.body().html();
+        return NewsStylist.cleanComments(doc.body().html());
     }
 
     @Override
@@ -81,7 +74,7 @@ public class AndroidAuthority extends com.lucevent.newsup.data.util.NewsReader {
         try {
             return org.jsoup.Jsoup.connect(pagelink)
                     .timeout(10000)
-                    .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36")
+                    .userAgent(USER_AGENT)
                     .get();
         } catch (Exception ignored) {
         }

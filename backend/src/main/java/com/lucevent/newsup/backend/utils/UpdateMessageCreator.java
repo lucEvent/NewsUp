@@ -2,15 +2,20 @@ package com.lucevent.newsup.backend.utils;
 
 import com.lucevent.newsup.data.util.Enclosures;
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.data.util.SiteLanguage;
 import com.lucevent.newsup.data.util.Tags;
+
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletResponse;
 
 public class UpdateMessageCreator {
 
     private static final String applink = "https://play.google.com/store/apps/details?id=com.lucevent.newsup";
 
-    public static News generateUpdateNews(Site site)
+    public static void generateUpdateNews(Site site, HttpServletResponse resp) throws IOException
     {
         StringBuilder title = new StringBuilder();
         StringBuilder description = new StringBuilder();
@@ -32,10 +37,13 @@ public class UpdateMessageCreator {
                 description.append("Click for more info");
         }
 
-        News news = new News(title.toString(), applink, description.toString(), System.currentTimeMillis(), new Tags(),-1,-1,-1);
+        News news = new News(title.toString(), applink, description.toString(), System.currentTimeMillis(), new Tags(), -1, -1, -1);
         news.content = content;
         news.enclosures = new Enclosures();
-        return news;
+
+        NewsArray na = new NewsArray();
+        na.add(news);
+        resp.getWriter().println(BackendParser.toEntry(na).toString());
     }
 
     public static String generateContent(Site site)

@@ -30,16 +30,6 @@ public class TheTimesOfIndia extends com.lucevent.newsup.data.util.NewsReader {
     }
 
     @Override
-    protected String parseLink(Element prop)
-    {
-        String link = prop.text();
-        if (!link.startsWith("http:"))
-            link = "http://timesofindia.indiatimes.com/" + link;
-
-        return link;
-    }
-
-    @Override
     protected void readNewsContent(Document doc, News news)
     {
         doc.select(".forcehide").remove();
@@ -53,12 +43,13 @@ public class TheTimesOfIndia extends com.lucevent.newsup.data.util.NewsReader {
                 img.attr("src", img.attr("src").replace("../..", "http://blogs.timesofindia.indiatimes.com"));
 
         }
-        article.select("script,.articlehighlights h3,.ad1,.dontmiss,.readalso,.track:not(.newsincontext),.vidAdContainer").remove();
+        article.select("script,.articlehighlights h3,.ad1,.dontmiss,.readalso,.track:not(.newsincontext),.vidAdContainer,.hide,.playicon_amp").remove();
 
         for (Element img : article.select("img[data-src]"))
             img.attr("src", img.attr("data-src"));
 
         NewsStylist.cleanAttributes(article.select("img"), "src");
+        NewsStylist.repairLinks(article);
 
         article.select("h1,h2").tagName("h3");
         article.select("[style]").removeAttr("style");

@@ -70,7 +70,7 @@ public class Enclosure implements Serializable {
             case TYPE_IMAGE:
                 return "<img src='" + src + "'>";
             case TYPE_VIDEO:
-                return "<iframe frameborder='0' allowfullscreen src='" + src + "'></iframe>";
+                return "<iframe frameborder='0' allowfullscreen src='" + src + "' scrolling='no'></iframe>";
             case TYPE_AUDIO:
                 return "<audio controls><source src='" + src + "' type='audio/" + src.substring(src.length() - 3, src.length()) + "'></audio>";
         }
@@ -79,7 +79,7 @@ public class Enclosure implements Serializable {
 
     public static String iframe(String src)
     {
-        return "<iframe frameborder='0' allowfullscreen src='" + src + "'></iframe>";
+        return "<iframe frameborder='0' allowfullscreen src='" + src + "' scrolling='no'></iframe>";
     }
 
 }

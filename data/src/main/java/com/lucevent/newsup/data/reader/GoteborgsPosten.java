@@ -54,24 +54,20 @@ public class GoteborgsPosten extends com.lucevent.newsup.data.util.NewsReader {
         }
 
         for (Element e : article.select("strong")) {
-            String e_text = e.text();
-            System.out.print("->" + e_text);
-            switch (e.text()) {
-                case "L\u00C4S OCKS\u00C5:":
-                case "L\u00C4S MER:":
-                case "L\u00C4S \u00C4VEN:":
-                    try {
-                        System.out.print(" (AND REMOVING :)");
-                        e.parent().remove();
-                    } catch (Exception elemHasNotParent) {
-                    }
-            }
-            System.out.println("");
+            String text = e.text();
+            if (text.startsWith("L\u00C4S OCKS\u00C5")
+                    || text.startsWith("L\u00C4S MER:")
+                    || text.startsWith("L\u00C4S \u00C4VEN:"))
+                try {
+                    e.parent().remove();
+                } catch (Exception elemHasNotParent) {
+                }
         }
 
         article.select(".article__body__facts").tagName("blockquote");
         article.select("h1,h2").tagName("h3");
         article.select("[style]").removeAttr("style");
+        article.select("a[data-iframely-url]").removeAttr("data-iframely-url");
 
         NewsStylist.cleanAttributes(article.select("img"), "src");
         NewsStylist.repairLinks(doc.body());

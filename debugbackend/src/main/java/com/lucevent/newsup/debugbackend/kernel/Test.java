@@ -25,7 +25,7 @@ public class Test {
     public String doTest(ReportCallback urgentCallback)
     {
         Sites sites = Sites.getDefault(true);
-        Evaluation[] evals = new Evaluation[]{WITHCONTENT, TH2, SCRIPTS, LINKS, STYLES};
+        Evaluation[] evals = new Evaluation[]{NO_CONTENT, TH2, SCRIPTS, LINKS, STYLES};
 
         Task task = db.getCurrentTask(evals.length);
 
@@ -133,7 +133,7 @@ public class Test {
         }
     };
 
-    private static final Evaluation WITHCONTENT = new Evaluation() {
+    private static final Evaluation NO_CONTENT = new Evaluation() {
         @Override
         public String description()
         {
@@ -171,7 +171,11 @@ public class Test {
         @Override
         public boolean evaluate(News news, Database db)
         {
-            return news.content.contains("=\"//") || news.content.contains("='//");
+            boolean evaluation = news.content.contains("=\"//") || news.content.contains("='//");
+            if (evaluation) {
+                db.saveErrorOn(news);
+            }
+            return evaluation;
         }
     };
 

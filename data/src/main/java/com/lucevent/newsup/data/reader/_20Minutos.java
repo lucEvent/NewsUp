@@ -1,6 +1,10 @@
 package com.lucevent.newsup.data.reader;
+import com.lucevent.newsup.data.util.Enclosure;
+import com.lucevent.newsup.data.util.News;
 
-import org.jsoup.nodes.Element;
+
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 public class _20Minutos extends com.lucevent.newsup.data.util.NewsReader {
 
@@ -21,13 +25,22 @@ public class _20Minutos extends com.lucevent.newsup.data.util.NewsReader {
     }
 
     @Override
-    protected String parseContent(Element prop)
+    protected News onNewsRead(News news)
     {
-        org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(prop.text());
+        // Parsing content
+        Document doc = jsoupParse(news.content);
         doc.select("body > br, body > img, body > a").remove();
         doc.select("h1,h2").tagName("h3");
 
-        return doc.select("body").html();
+        news.content = doc.body().html();
+        // end
+
+        // Parsing enclosures
+        Elements imgs = doc.select("img");
+        if (!imgs.isEmpty())
+            news.enclosures.add(new Enclosure(imgs.first().attr("src"), "", ""));
+        // end
+        return news;
     }
 
 }

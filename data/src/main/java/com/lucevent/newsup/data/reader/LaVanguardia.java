@@ -89,6 +89,16 @@ public class LaVanguardia extends com.lucevent.newsup.data.util.NewsReader {
                     .tagName("h3")
                     .removeAttr("class");
 
+        for (Element e : article.select("blockquote.twitter-tweet > a[href^='<']")) {
+            String html = e.attr("href");
+
+            int i = html.indexOf("<script");
+            if (i > 0)
+                html = html.substring(0, i);
+
+            e.parent().parent().html(html);
+        }
+
         NewsStylist.cleanAttributes(article.select("img"), "src");
         NewsStylist.repairLinks(article);
 

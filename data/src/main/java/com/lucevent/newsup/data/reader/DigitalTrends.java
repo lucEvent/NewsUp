@@ -44,7 +44,7 @@ public class DigitalTrends extends com.lucevent.newsup.data.util.NewsReader {
             article.select(".m-linked-product,.m-comparable-products,.m-accessory-pack").remove();
         }
 
-        article.select(".alignright,.m-related-video,script,.h-nonessential,.zoom-button,.m-image-credit").remove();
+        article.select("style,.alignright,.m-related-video,script,.h-nonessential,.zoom-button,.m-image-credit,[itemprop='publisher'],.dtads-inject-hook,.m-aff-button").remove();
 
         article.select("h1,h2,.m-our-take").tagName("h3");
         header.select("iframe[height]").removeAttr("height");
@@ -72,6 +72,10 @@ public class DigitalTrends extends com.lucevent.newsup.data.util.NewsReader {
             }
         } catch (Exception ignored) {
         }
+        header.select("[style]").removeAttr("style");
+        article.select("[style]:not(.instagram-media,.instagram-media *)").removeAttr("style");
+
+        NewsStylist.repairLinks(article);
 
         news.content = NewsStylist.cleanComments(header.outerHtml() + article.outerHtml());
     }

@@ -1,6 +1,7 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -37,7 +38,10 @@ public class People extends com.lucevent.newsup.data.util.NewsReader {
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
         Elements article = doc.select(".article-single__content");
-        article.select("script,noscript,.article-footer,.article-figure__share,figcaption,.article-body__show-full,.brightcove-player").remove();
+        article.select("script,noscript,.article-footer,.article-figure__share,.article-body__show-full,.brightcove-player,.video__wrapper,form:not(form[id]").remove();
+
+        NewsStylist.wpcomwidget(article);
+        article.select("form").remove();
 
         for (Element e : article.select("strong")) {
             String text = e.text();
@@ -48,13 +52,15 @@ public class People extends com.lucevent.newsup.data.util.NewsReader {
             }
         }
         for (Element img : article.select("img[data-src]")) {
-            img.attr("src", img.attr("data-src"));
-            img.removeAttr("data-src").removeAttr("width").removeAttr("height");
+            String src = img.attr("data-src");
+            NewsStylist.cleanAttributes(img);
+            img.attr("src", src);
         }
 
         article.select("h1,h2").tagName("h3");
+        NewsStylist.repairLinks(article);
 
-        news.content = article.html().replace("<p>&nbsp;</p>", "");
+        news.content = NewsStylist.cleanComments(article.html().replace("<p>&nbsp;</p>", ""));
     }
 
 }

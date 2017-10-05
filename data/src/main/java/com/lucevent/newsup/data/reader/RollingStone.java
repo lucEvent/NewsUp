@@ -54,11 +54,10 @@ public class RollingStone extends com.lucevent.newsup.data.util.NewsReader {
 
             if (article.isEmpty()) {
                 return;
-            } else {
+            } else
                 article.select(".total,.collection-info,.collection-item-media-player").remove();
-            }
         }
-        article.select(".module-related,#module-more-news,figcaption,script").remove();
+        article.select(".module-related,#module-more-news,figcaption,script,.lazy-placeholder").remove();
         article.select("h1,h2").tagName("h3");
 
         NewsStylist.cleanAttributes(article.select("img"), "src");

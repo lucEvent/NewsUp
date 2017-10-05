@@ -37,7 +37,7 @@ public class MoreSectionsViewHolder extends RecyclerView.ViewHolder {
             b.setOnClickListener(onMoreClick);
     }
 
-    public void populate()
+    public void bind()
     {
         Set<Pair<Integer, Section>> sections = onMoreClick.sections();
         int i = 0;

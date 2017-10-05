@@ -226,3 +226,4 @@ div.news:hover {
     display: inline-block;
     cursor: pointer;
 }
+figcaption{font-size:12px;padding:2px 10px;display:block;}

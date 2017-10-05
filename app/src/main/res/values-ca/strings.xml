@@ -32,6 +32,7 @@
     <string name="no_downloads_scheduled">No hi ha descàrregues programades</string>
     <string name="expand_to_see_headlines">Expandeix per veure els titulars</string>
     <string name="see_something_else">Interessat en algun tema més?</string>
+    <string name="happening_now">Esdeveniments (beta)</string>
 
     <string name="mon">Dl</string>
     <string name="tue">Dm</string>
@@ -98,6 +99,7 @@
     <string name="msg_no_history">Llista buida</string>
     <string name="msg_no_bookmarks">Encara no has marcat cap notícia</string>
     <string name="msg_minimum_one_checked">Una secció ha de romandre marcada</string>
+    <string name="msg_no_events">No hi ha esdeveniments en aquest moment</string>
 
     <!-- * *************** Activities and fragment's titles ********************* * -->
     <string name="title_frg_settings_of">Configuració de %1$s</string>

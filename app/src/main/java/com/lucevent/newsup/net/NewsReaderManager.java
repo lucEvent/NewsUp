@@ -8,6 +8,8 @@ import android.support.annotation.Nullable;
 import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.Sites;
+import com.lucevent.newsup.data.event.Event;
+import com.lucevent.newsup.data.event.Source;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.NewsMap;
@@ -30,6 +32,10 @@ public class NewsReaderManager {
 
     }
 
+    private class EventNewsPetition extends NewsPetition {
+        public Event event;
+    }
+
     private static ConnectivityManager connectivityManager;
 
     private NewsReader newsreader;
@@ -44,9 +50,8 @@ public class NewsReaderManager {
     private final ArrayList<NewsPetition> petitionQueue;
     private final NewsSet newsQueue;
 
-    public NewsReaderManager(@NonNull Context context, @Nullable Handler uiCallback, @Nullable StorageCallback storageCallback)
+    public NewsReaderManager(@NonNull Context context, @Nullable StorageCallback storageCallback)
     {
-        this.uiCallback = uiCallback;
         this.storageCallback = storageCallback;
 
         newsreader = new NewsReader(context.getString(R.string.app_version));
@@ -63,7 +68,6 @@ public class NewsReaderManager {
         }
     }
 
-
     public void readNewsOf(@NonNull Site site, @Nullable int[] sections, Handler handler)
     {
         uiCallback = handler;
@@ -75,6 +79,13 @@ public class NewsReaderManager {
         uiCallback = handler;
         for (Site site : sites)
             addPetition(site, null);
+    }
+
+    public void readEvent(Event event, Handler handler)
+    {
+        uiCallback = handler;
+        for (Source source : event.sources)
+            addEventPetition(event, source.site, source.sections);
     }
 
     public NewsArray readNewsOf(Sites sites)
@@ -109,6 +120,17 @@ public class NewsReaderManager {
         return null;
     }
 
+    public void cancelAll()
+    {
+        uiCallback = null;
+        synchronized (petitionQueue) {
+            petitionQueue.clear();
+        }
+        synchronized (newsQueue) {
+            newsQueue.clear();
+        }
+    }
+
     private void addPetition(Site site, int[] sections)
     {
         NewsPetition petition = new NewsPetition();
@@ -118,7 +140,18 @@ public class NewsReaderManager {
             petitionQueue.add(petition);
             petitionQueue.notify();
         }
+    }
 
+    private void addEventPetition(Event event, Site site, int[] sections)
+    {
+        EventNewsPetition petition = new EventNewsPetition();
+        petition.site = site;
+        petition.sections = sections;
+        petition.event = event;
+        synchronized (petitionQueue) {
+            petitionQueue.add(petition);
+            petitionQueue.notify();
+        }
     }
 
     private Runnable masterRunnable = new Runnable() {
@@ -153,14 +186,17 @@ public class NewsReaderManager {
 
                 if (connectivityManager.isInternetAvailable()) {
 
-                    NewsArray news = readHeaders(petition.site, petition.sections);
+                    NewsArray news = petition instanceof EventNewsPetition ?
+                            readEventHeaders(((EventNewsPetition) petition).event, petition.site, petition.sections) :
+                            readHeaders(petition.site, petition.sections);
 
                     if (news != null) {
 
                         storageCallback.getSavedNews(petition.site);
 
                         // Send news to Kernel
-                        uiCallback.obtainMessage(AppCode.NEWS_COLLECTION, news).sendToTarget();
+                        if (uiCallback != null)
+                            uiCallback.obtainMessage(AppCode.NEWS_COLLECTION, news).sendToTarget();
 
                         // Add news to newsqueue
                         synchronized (newsQueue) {
@@ -218,13 +254,27 @@ public class NewsReaderManager {
 
     private void onNoConnectionAvailable(NewsPetition petition)
     {
+        if (uiCallback == null)
+            return;
+
         uiCallback.obtainMessage(AppCode.NO_INTERNET, null).sendToTarget();
         if (petition.site != null) {
 
             int[] section_codes = sectionIndexesToCodes(petition.site, petition.sections);
 
             NewsMap history = storageCallback.getSavedNews(petition.site, section_codes);
-            uiCallback.obtainMessage(AppCode.NEWS_COLLECTION, history.values()).sendToTarget();
+
+            if (petition instanceof EventNewsPetition) {
+                NewsMap eventHistory = new NewsMap();
+                for (News n : history.values())
+                    if (n.hasKeyWords(((EventNewsPetition) petition).event.keyWords))
+                        eventHistory.add(n);
+
+                history = eventHistory;
+            }
+
+            if (uiCallback != null)
+                uiCallback.obtainMessage(AppCode.NEWS_COLLECTION, history.values()).sendToTarget();
 
         } else {
 
@@ -233,10 +283,13 @@ public class NewsReaderManager {
                 int[] section_codes = sectionIndexesToCodes(petition.site, AppSettings.getMainSections(site));
 
                 NewsMap history = storageCallback.getSavedNews(site, section_codes);
-                uiCallback.obtainMessage(AppCode.NEWS_COLLECTION, history.values()).sendToTarget();
+                if (uiCallback != null)
+                    uiCallback.obtainMessage(AppCode.NEWS_COLLECTION, history.values()).sendToTarget();
             }
         }
-        uiCallback.obtainMessage(AppCode.NEWS_LOADED).sendToTarget();
+
+        if (uiCallback != null)
+            uiCallback.obtainMessage(AppCode.NEWS_LOADED).sendToTarget();
     }
 
     private NewsArray readHeaders(Site site, int[] section_indexes)
@@ -249,6 +302,25 @@ public class NewsReaderManager {
                 news = site.readNewsHeaders(section_codes);
             } catch (Exception e) {
                 AppSettings.printerror("Error reading header of " + site.name + ", sections " + Arrays.toString(section_indexes), e);
+            }
+        }
+
+        return news;
+    }
+
+    private NewsArray readEventHeaders(Event event, Site site, int[] section_codes)
+    {
+        NewsArray news = newsreader.readEventHeaders(site.code, section_codes, event.code);
+        if (news == null) {
+            try {
+                news = site.readNewsHeaders(section_codes);
+
+                for (int i = news.size() - 1; i >= 0; i--)
+                    if (!news.get(i).hasKeyWords(event.keyWords))
+                        news.remove(i);
+
+            } catch (Exception e) {
+                AppSettings.printerror("Error reading header of " + site.name, e);
             }
         }
 

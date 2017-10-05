@@ -1,0 +1,47 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/listItemContainer"
+    android:layout_margin="0dp">
+
+    <ImageView
+        android:id="@+id/picture"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_alignParentTop="true"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:background="#4000"/>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/description"
+        android:fontFamily="sans-serif-light"
+        android:paddingBottom="10dp"
+        android:paddingEnd="20dp"
+        android:paddingStart="20dp"
+        android:paddingTop="10dp"
+        android:text="Terromoto en México"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="#ffff"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/picture"
+        android:fontFamily="sans-serif-light"
+        android:paddingBottom="20dp"
+        android:paddingEnd="20dp"
+        android:paddingStart="20dp"
+        android:paddingTop="0dp"
+        android:text="EN VIVO: Suman 290 muertos en México"
+        android:textColor="#ffff"
+        android:textSize="24sp"
+        android:textStyle="bold"/>
+
+</RelativeLayout>

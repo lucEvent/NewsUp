@@ -57,12 +57,18 @@ public class MetroUK extends com.lucevent.newsup.data.util.NewsReader {
             video.attr("controls", "");
             video.parent().html(video.outerHtml());
         }
+        for (Element img : article.select("img[src^='data:image']"))
+            img.attr("src", img.attr("data-src"));
+
         NewsStylist.cleanAttributes(article.select("img"), "src");
+        NewsStylist.repairLinks(article);
+
         article.select("[style]").removeAttr("style");
         article.select("[class]:not([class^='twitter'])").removeAttr("class");
         article.select("h1,h2").tagName("h3");
 
         news.content = article.html().replace("<p></p>", "").replace("<p>&nbsp;</p>", "");
+        news.content = NewsStylist.cleanComments(news.content);
     }
 
 }

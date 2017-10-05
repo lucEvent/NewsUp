@@ -1,6 +1,7 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -83,8 +84,12 @@ public class TheNewYorkTimes extends com.lucevent.newsup.data.util.NewsReader {
             if (!g.isEmpty())
                 e.html(g.outerHtml());
         }
-        for (Element e : article.select("[style]"))
-            e.removeAttr("style");
+        for (Element e : article.select("[data-iframe]"))
+            e.parent().html("<iframe overflow='hidden' frameborder='0' scrolling='no' src='"
+                    + e.attr("data-iframe") + "'></iframe>");
+
+        article.select("[style]").removeAttr("style");
+        NewsStylist.repairLinks(article);
 
         news.content = article.outerHtml();
     }

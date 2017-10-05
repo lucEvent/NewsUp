@@ -36,6 +36,14 @@ public class Elle extends com.lucevent.newsup.data.util.NewsReader {
     }
 
     @Override
+    protected String parseContent(Element prop)
+    {
+        Document doc = jsoupParse(prop);
+        NewsStylist.repairLinks(doc.body());
+        return doc.body().html();
+    }
+
+    @Override
     protected Enclosure parseEnclosure(Element prop)
     {
         return new Enclosure(prop.text(), "image", "");
@@ -122,7 +130,7 @@ public class Elle extends com.lucevent.newsup.data.util.NewsReader {
 
         NewsStylist.repairLinks(article);
 
-        article.select("h2").tagName("h3");
+        article.select("h1,h2").tagName("h3");
 
         news.content = article.outerHtml();
     }

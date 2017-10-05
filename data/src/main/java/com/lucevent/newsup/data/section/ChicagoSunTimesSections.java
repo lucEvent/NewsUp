@@ -82,7 +82,6 @@ public class ChicagoSunTimesSections extends Sections {
         add(new Section("Gene Lyons", "http://chicago.suntimes.com/author/gene-lyons/feed/", 1));
         add(new Section("Phil Kadner", "http://chicago.suntimes.com/author/Phil-Kadner/feed/", 1));
         add(new Section("Sue Ontiveros", "http://chicago.suntimes.com/author/sontiveros/feed/", 1));
-        add(new Section("Andy Shaw", "http://chicago.suntimes.com/author/andy-shaw/feed/", 1));
         add(new Section("Roger Simon", "http://chicago.suntimes.com/author/roger-simon/feed/", 1));
         add(new Section("Laura Washington", "http://chicago.suntimes.com/author/laura-washington/feed/", 1));
         add(new Section("Other Views", "http://chicago.suntimes.com/section/other-views/feed/", 1));

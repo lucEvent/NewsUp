@@ -60,6 +60,12 @@
             android:src="@drawable/ic_app_icon"/>
 
         <ImageButton
+            android:id="@+id/nav_events"
+            style="@style/btnDrawerActionbar"
+            android:onClick="onDrawerActionBarItemSelected"
+            android:src="@drawable/ic_events"/>
+
+        <ImageButton
             android:id="@+id/nav_saved_news"
             style="@style/btnDrawerActionbar"
             android:onClick="onDrawerActionBarItemSelected"

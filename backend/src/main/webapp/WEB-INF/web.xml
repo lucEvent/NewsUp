@@ -54,33 +54,6 @@
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
 
-    <servlet>
-        <servlet-name>statistics</servlet-name>
-        <jsp-file>stats.html</jsp-file>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>statistics</servlet-name>
-        <url-pattern>/stats</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>messages</servlet-name>
-        <jsp-file>/reports.html</jsp-file>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>messages</servlet-name>
-        <url-pattern>/reports</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>load_distribution</servlet-name>
-        <jsp-file>/load_distribution.html</jsp-file>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>load_distribution</servlet-name>
-        <url-pattern>/load</url-pattern>
-    </servlet-mapping>
-
     <filter>
         <filter-name>ObjectifyFilter</filter-name>
         <filter-class>com.googlecode.objectify.ObjectifyFilter</filter-class>

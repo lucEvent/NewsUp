@@ -38,7 +38,7 @@ public class NewsViewHolder extends RecyclerView.ViewHolder {
         container = v;
     }
 
-    public void populate(News news, boolean showSiteLogo, boolean loadImage, boolean bookmarked)
+    public void bind(News news, boolean showSiteLogo, boolean loadImage, boolean bookmarked)
     {
         if (showSiteLogo) {
             logo.setVisibility(View.VISIBLE);
@@ -54,11 +54,22 @@ public class NewsViewHolder extends RecyclerView.ViewHolder {
                     .build()
                     .load(news.enclosures.get(0).src)
                     .fit()
+                    //.placeholder(R.drawable.blank_img)
                     .into(picture);
 
             picture.setVisibility(View.VISIBLE);
-        } else
+
+            //
+            //      title.setTextColor(0xffffffff);
+            //      title.setBackgroundColor(0x77000000);
+            //
+        } else {
             picture.setVisibility(View.GONE);
+            //
+            //        title.setTextColor(0xff000000);
+            //     title.setBackgroundColor(0x00fffffff);
+            //
+        }
 
         title.setText(Html.fromHtml(news.title));
         description.setText(news.description);
