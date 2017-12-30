@@ -9,7 +9,7 @@ import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.event.Events;
 import com.lucevent.newsup.view.adapter.viewholder.EventViewHolder;
 
-public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
 
     private final View.OnClickListener onClick;
 
@@ -22,7 +22,7 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    public EventViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.i_event, parent, false);
         v.setOnClickListener(onClick);
@@ -31,9 +31,9 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position)
+    public void onBindViewHolder(EventViewHolder holder, int position)
     {
-        ((EventViewHolder) holder).bind(dataSet.get(position));
+        holder.bind(dataSet.get(position));
     }
 
     @Override
@@ -41,7 +41,6 @@ public class EventsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     {
         return dataSet.size();
     }
-
 
     public void addAll(Events newDataSet)
     {

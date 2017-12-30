@@ -1,6 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class PokemonGoHub extends com.lucevent.newsup.data.util.NewsReader {
@@ -19,7 +18,6 @@ public class PokemonGoHub extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{},
-                "https://pokemongohub.net/",
                 SITE_STYLE);
     }
 
@@ -32,14 +30,13 @@ public class PokemonGoHub extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected String parseContent(Element prop)
     {
-        Document doc = jsoupParse(prop);
-        doc.select("img[src*='/user_avatar/'],script").remove();
-        doc.select("h6").tagName("h4");
-        doc.select("h1,h2").tagName("h3");
-        doc.select("pre").tagName("blockquote");
-        doc.select("figure[style],img[style],iframe[style]").removeAttr("style");
+        Element article = jsoupParse(prop);
+        article.select("img[src*='/user_avatar/'],script").remove();
+        article.select("h6").tagName("h4");
+        article.select("pre").tagName("blockquote");
+        article.select("figure[style],img[style],iframe[style]").removeAttr("style");
 
-        return doc.body().html();
+        return finalFormat(article, false);
     }
 
 }

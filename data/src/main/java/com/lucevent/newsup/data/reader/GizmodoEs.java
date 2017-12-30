@@ -2,8 +2,10 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -22,40 +24,43 @@ public class GizmodoEs extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{},
-                "http://es.gizmodo.com/",
                 "");
     }
 
     @Override
     protected News onNewsRead(News news)
     {
-        Document doc = jsoupParse(news.description);
+        Element article = jsoupParse(news.description);
         if (news.description.contains(">Read more...<")) {
 
-            news.description = doc.text();
+            news.description = article.text();
 
-            Elements imgs = doc.select("img");
+            Elements imgs = article.select("img");
             if (!imgs.isEmpty())
                 news.enclosures.add(new Enclosure(imgs.first().attr("src"), "image", ""));
 
         } else {
 
-            doc.select(".ad-container,.js_ad-dynamic").remove();
+            article.select(".ad-container,.js_ad-dynamic").remove();
+            article.select(".pullquote").tagName("blockquote");
 
-            doc.select("h1,h2").tagName("h3");
-            doc.select(".pullquote").tagName("blockquote");
-
-            for (Element e : doc.select("figure.js_marquee-assetfigure:has(picture)")) {
+            for (Element e : article.select("figure.js_marquee-assetfigure:has(picture)")) {
                 e.removeAttr("style");
                 e.html(e.select("picture,figcaption").outerHtml());
             }
 
-            NewsStylist.cleanAttributes(doc.select("img"), "src");
-            NewsStylist.repairLinks(doc.body());
+            cleanAttributes(article.select("img"), "src");
 
-            news.content = NewsStylist.cleanComments(doc.body().html());
+            news.content = finalFormat(article, false);
+
+            Elements imgs = article.select("img");
+            if (!imgs.isEmpty())
+                news.enclosures.add(new Enclosure(imgs.first().attr("src"), "image", ""));
+
+            Elements ps = article.select("p");
+            if (!ps.isEmpty())
+                news.description = ps.first().text();
         }
-
         return news;
     }
 
@@ -63,19 +68,19 @@ public class GizmodoEs extends com.lucevent.newsup.data.util.NewsReader {
     protected void readNewsContent(Document doc, News news)
     {
         Elements article = doc.select(".post-content");
-        article.select(".referenced-wide,.js_ad-dynamic,[class^='ad-'],.related-module").remove();
+        article.select(".referenced-wide,.js_ad-dynamic,[class^='ad-'],.related-module,.inset--story").remove();
 
         for (Element e : article.select("figure"))
             e.html(e.select("img,figcaption").outerHtml());
 
         for (Element img : article.select("img[data-anim-src]")) {
             String src = img.attr("data-anim-src");
-            NewsStylist.cleanAttributes(img);
+            cleanAttributes(img);
             img.attr("src", src);
         }
         for (Element img : article.select("img[data-mp4-src]")) {
             String src = img.attr("data-mp4-src");
-            NewsStylist.cleanAttributes(img);
+            cleanAttributes(img);
             img.attr("src", src);
         }
         for (Element iframe : article.select("iframe")) {
@@ -87,14 +92,41 @@ public class GizmodoEs extends com.lucevent.newsup.data.util.NewsReader {
             else
                 src = iframe.attr("data-src");
 
-            iframe.parent().html(Enclosure.iframe(src));
+            iframe.parent().html(insertIframe(src));
+        }
+        for (Element slides : doc.select(".slideshow-inset [data-slides]")) {
+            String data = slides.attr("data-slides");
+            if (data.isEmpty()) {
+                continue;
+            }
+
+            StringBuilder sb = new StringBuilder();
+            try {
+                JSONArray items = new JSONObject("{items:" + data + "}").optJSONArray("items");
+                for (int i = 0; i < items.length(); i++) {
+                    JSONObject item = items.getJSONObject(i);
+
+                    String imgsrc = "https://i.kinja-img.com/gawker-media/image/upload/" + item.getString("id") + "." + item.getString("format");
+                    sb.append("<img src='").append(imgsrc).append("'>");
+                }
+
+            } catch (JSONException e) {
+                //   System.out.println("JSON exception:" + e.getMessage());
+            }
+            slides.parent().html(sb.toString());
         }
 
         article.select("img[data-frozen-src]").remove();
-        article.select("[style]").removeAttr("style");
-        article.select("h1,h2").tagName("h3");
 
-        news.content = NewsStylist.cleanComments(article.html());
+        for (Element img : doc.select("img.lazyload[src^='data']")) {
+            String id = img.attr("data-chomp-id");
+            cleanAttributes(img);
+            img.attr("src", "https://i.kinja-img.com/gawker-media/image/upload/" + id);
+        }
+
+        article.select("[style]").removeAttr("style");
+
+        news.content = finalFormat(article, false);
     }
 
 

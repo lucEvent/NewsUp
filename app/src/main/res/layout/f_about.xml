@@ -60,7 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="6dp"
-            android:text="@string/about_content_title_comming_soon"
+            android:text="@string/about_content_title_coming_soon"
             android:textSize="14sp"
             android:textStyle="bold"/>
 
@@ -69,7 +69,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:padding="6dp"
-            android:text="@string/about_content_comming_soon"
+            android:text="@string/about_content_coming_soon"
             android:textSize="14sp"/>
 
         <TextView

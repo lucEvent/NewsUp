@@ -1,8 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Date;
-import com.lucevent.newsup.data.util.Enclosure;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -21,7 +19,6 @@ public class Vice extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_ENCLOSURE},
-                "https://www.vice.com/",
                 "");
     }
 
@@ -37,21 +34,19 @@ public class Vice extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected String parseContent(Element prop)
     {
-        Document doc = org.jsoup.Jsoup.parse(prop.text());
+        Element article = jsoupParse(prop);
+        article.select("script[src*='twitter'],script[src*='instagram']").remove();
+        article.select("[style]").removeAttr("style");
+        article.select("iframe").attr("frameborder", "0");
+        article.select(".article__pull-quote").tagName("blockquote");
+        article.select(".article__image-caption").tagName("figcaption");
 
-        doc.select("[style]").removeAttr("style");
-        doc.select("iframe").attr("frameborder", "0");
-        doc.select("h1,h2").tagName("h3");
-        doc.select(".article__pull-quote").tagName("blockquote");
-        doc.select(".article__image-caption").tagName("figcaption");
+        for (Element v : article.select("div[data-iframely-id]")) {
+            v.html(insertIframe("http://oembed.vice.com/" + v.attr("data-iframely-id")));
+            cleanAttributes(v);
+        }
 
-        for (Element iframe : doc.select("iframe[data-iframely-url]"))
-            iframe.parent().html(Enclosure.iframe(iframe.attr("data-iframely-url")));
-
-        Element article = doc.body();
-        NewsStylist.repairLinks(article);
-
-        return article.html();
+        return finalFormat(article, false);
     }
 
     @Override

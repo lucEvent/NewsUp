@@ -1,9 +1,7 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
-import com.lucevent.newsup.data.util.NewsStylist;
 
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class ChicagoSunTimes extends com.lucevent.newsup.data.util.NewsReader {
@@ -24,7 +22,6 @@ public class ChicagoSunTimes extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_MEDIA_CONTENT},
-                "http://chicago.suntimes.com/",
                 "");
     }
 
@@ -37,18 +34,17 @@ public class ChicagoSunTimes extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected String parseContent(Element prop)
     {
-        Document doc = jsoupParse(prop);
-        doc.select("script,a[rel='nofollow'],img[width='1']").remove();
+        Element article = jsoupParse(prop);
+        article.select("script,a[rel='nofollow'],img[width='1']").remove();
 
-        doc.select("h1,h2").tagName("h3");
-        doc.select(".wp-caption-text").tagName("figcaption");
-        doc.select("[style]").removeAttr("style");
-        doc.select("iframe").attr("frameborder", "0");
+        article.select(".wp-caption-text").tagName("figcaption");
+        article.select("[style]").removeAttr("style");
+        article.select("iframe").attr("frameborder", "0");
 
-        NewsStylist.wpcomwidget(doc.body().select("form"));
-        doc.select("form").remove();
+        wpcomwidget(article.select("form"));
+        article.select("form").remove();
 
-        for (Element e : doc.select("strong")) {
+        for (Element e : article.select("strong")) {
             String text = e.text();
             if (text.startsWith("RELATED STORY:")
                     || text.startsWith("READ MORE:"))
@@ -57,10 +53,9 @@ public class ChicagoSunTimes extends com.lucevent.newsup.data.util.NewsReader {
                 } catch (Exception ignored) {
                 }
         }
-        NewsStylist.cleanAttributes(doc.select("img"), "src");
-        NewsStylist.repairLinks(doc.body());
+        cleanAttributes(article.select("img"), "src");
 
-        return NewsStylist.cleanComments(doc.body().html().replaceAll("&nbsp;", ""));
+        return finalFormat(article, false).replaceAll("&nbsp;", "");
     }
 
     @Override

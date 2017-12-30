@@ -32,7 +32,7 @@
     <string name="no_downloads_scheduled">No hi ha descàrregues programades</string>
     <string name="expand_to_see_headlines">Expandeix per veure els titulars</string>
     <string name="see_something_else">Interessat en algun tema més?</string>
-    <string name="happening_now">Esdeveniments (beta)</string>
+    <string name="happening_now">Esdeveniments</string>
 
     <string name="mon">Dl</string>
     <string name="tue">Dm</string>
@@ -60,7 +60,10 @@
     <string name="thats_it">Això és tot</string>
     <string name="add">Afegeix</string>
     <string name="delete">Eliminar</string>
-    <string name="delete_caps">ELIMINAR</string>
+    <string name="yes">Sí</string>
+    <string name="no">No</string>
+    <string name="update">Actualitza</string>
+    <string name="not_now">Ara no</string>
 
 
     <!-- * ******************** Hints **************************** * -->
@@ -135,7 +138,7 @@
     <!-- ***************************** ***************** ********************************** -->
     <string name="about_content_contact">Desenvolupat per Rafael J. Lucena\nContacte: rafaa89(arrova)gmail.com</string>
     <string name="about_content_title_new_features">Darreres característiques i millores:</string>
-    <string name="about_content_title_comming_soon">En properes actualitzacions:</string>
+    <string name="about_content_title_coming_soon">En properes actualitzacions:</string>
     <string name="about_content_title_next_sites">Possible suport per:</string>
 
 </resources>

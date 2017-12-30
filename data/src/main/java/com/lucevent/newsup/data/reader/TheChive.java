@@ -3,7 +3,6 @@ package com.lucevent.newsup.data.reader;
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.Enclosures;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -27,7 +26,6 @@ public class TheChive extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{"dc:identifier".hashCode()},
-                "http://thechive.com/",
                 SITE_STYLE);
 
         items = new Enclosures();
@@ -65,7 +63,7 @@ public class TheChive extends com.lucevent.newsup.data.util.NewsReader {
             String src = "https://cdnapisec.kaltura.com/html5/html5lib/v2.52/mwEmbedFrame.php/p/1289861/uiconf_id/37489151/entry_id/"
                     + news.enclosures.get(0).src + "?wid=_1289861";
 
-            news.content = Enclosure.iframe(src);
+            news.content = insertIframe(src);
             news.enclosures.clear();
 
         } else {
@@ -120,17 +118,17 @@ public class TheChive extends com.lucevent.newsup.data.util.NewsReader {
                 String src = "https://cdnapisec.kaltura.com/html5/html5lib/v2.52/mwEmbedFrame.php/p/1289861/uiconf_id/37489151/entry_id/"
                         + id.replace("kaltura-player-", "") + "?wid=_1289861";
 
-                e.html(Enclosure.iframe(src));
+                e.html(insertIframe(src));
             }
         }
         for (Element e : article.select(".gallery")) {
             Elements items = e.select(".gallery-icon,.gallery-caption");
             e.html(items.outerHtml());
         }
-        NewsStylist.wpcomwidget(article.select("form"));
+        wpcomwidget(article.select("form"));
         article.select("form").remove();
 
-        news.content = NewsStylist.cleanComments(article.html());
+        news.content = finalFormat(article, false);
     }
 
 }

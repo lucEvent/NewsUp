@@ -1,8 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.NewsStylist;
-
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class CosmoNoticias extends com.lucevent.newsup.data.util.NewsReader {
@@ -19,7 +16,6 @@ public class CosmoNoticias extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{},
-                "http://www.cosmonoticias.org/",
                 "");
     }
 
@@ -32,17 +28,16 @@ public class CosmoNoticias extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected String parseContent(Element prop)
     {
-        Document doc = jsoupParse(prop);
-        doc.select("script").remove();
+        Element article = jsoupParse(prop);
+        article.select("script").remove();
 
-        doc.select("h1,h2").tagName("h3");
-        doc.select(".wp-caption-text").tagName("figcaption");
-        doc.select("[style]").removeAttr("style");
-        doc.select("[onclick]").removeAttr("onclick");
+        article.select(".wp-caption-text").tagName("figcaption");
+        article.select("[style]").removeAttr("style");
+        article.select("[onclick]").removeAttr("onclick");
 
-        NewsStylist.cleanAttributes(doc.select("img"), "src");
+        cleanAttributes(article.select("img"), "src");
 
-        return doc.body().html();
+        return finalFormat(article, false);
     }
 
 }

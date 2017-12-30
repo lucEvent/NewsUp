@@ -1,8 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.NewsStylist;
-
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -20,7 +17,6 @@ public class ComingSoon extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{},
-                "http://www.comingsoon.net/",
                 "");
     }
 
@@ -33,38 +29,36 @@ public class ComingSoon extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected String parseContent(Element prop)
     {
-        Document doc = jsoupParse(prop);
+        Element article = jsoupParse(prop);
 
-        for (Element slideshow : doc.select(".pbslideshow-wrapper")) {
+        for (Element slideshow : article.select(".pbslideshow-wrapper")) {
             StringBuilder res = new StringBuilder();
             for (Element img : slideshow.select("img")) {
                 res.append("<figure>")
-                        .append(NewsStylist.img(img.attr("src")))
-                        .append("<div class='caption'>").append(img.attr("alt")).append("</div>")
+                        .append(insertImg(img.attr("src")))
+                        .append("<figcaption>").append(img.attr("alt")).append("<figcaption>")
                         .append("</figure>");
 
             }
             slideshow.html(res.toString());
         }
-        for (Element rel : doc.select("a:has(strong,b),strong:has(a)")) {
+        for (Element rel : article.select("a:has(strong,b),strong:has(a)")) {
             String text = rel.text();
             if (text.startsWith("RELATED"))
                 rel.remove();
         }
-        doc.select("h2:has(img)").tagName("p");
-        doc.select(".caption").tagName("figcaption");
-        doc.select("script").remove();
+        article.select("h2:has(img)").tagName("p");
+        article.select(".caption").tagName("figcaption");
+        article.select("script").remove();
 
-        Elements titles = doc.select("h2");
+        Elements titles = article.select("h2");
         if (!titles.isEmpty()) {
             titles.first().remove();
-            titles.tagName("h3");
         }
 
-        NewsStylist.repairLinks(doc.body());
-        NewsStylist.cleanAttributes(doc.select("img"), "src");
+        cleanAttributes(article.select("img"), "src");
 
-        return doc.body().html();
+        return finalFormat(article, false);
     }
 
 }

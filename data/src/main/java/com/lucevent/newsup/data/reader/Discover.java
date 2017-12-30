@@ -2,7 +2,6 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -21,7 +20,6 @@ public class Discover extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{},
                 new int[]{TAG_MEDIA_CONTENT},
-                "http://discovermagazine.com",
                 "");
     }
 
@@ -53,10 +51,9 @@ public class Discover extends com.lucevent.newsup.data.util.NewsReader {
             Elements gallery = article.select(".display").select(".photo table img,.credit,h2,.caption");
 
             article.select("[style]").removeAttr("style");
-            article.select("h1,h2").tagName("h3");
             article.select(".caption,.credit").tagName("figcaption");
 
-            news.content = description.outerHtml() + gallery.outerHtml();
+            news.content = finalFormat(description, true) + finalFormat(gallery, true);
             return;
         }
 
@@ -67,17 +64,14 @@ public class Discover extends com.lucevent.newsup.data.util.NewsReader {
             article.select(".content").tagName("p");
         }
         article.select("script,.mobile").remove();
-
         article.select("[style]").removeAttr("style");
-        article.select("h1,h2").tagName("h3");
 
         for (Element e : article.select("span[title^='ctx_ver']"))
             e.parent().html("");
 
-        NewsStylist.cleanAttributes(article.select("img"), "src");
-        NewsStylist.repairLinks(article);
+        cleanAttributes(article.select("img"), "src");
 
-        news.content = article.outerHtml().replace("<p>&nbsp;</p>", "");
+        news.content = finalFormat(article, true).replace("<p>&nbsp;</p>", "");
     }
 
 }

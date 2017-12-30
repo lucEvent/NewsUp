@@ -2,8 +2,10 @@ package com.lucevent.newsup.debugbackend;
 
 import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
+import com.lucevent.newsup.data.util.Date;
 import com.lucevent.newsup.debugbackend.data.Log;
 import com.lucevent.newsup.debugbackend.data.Task;
+import com.lucevent.newsup.debugbackend.data.TestCounter;
 import com.lucevent.newsup.debugbackend.kernel.Test;
 import com.lucevent.newsup.debugbackend.net.Net;
 import com.lucevent.newsup.debugbackend.util.ReportCallback;
@@ -17,7 +19,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static com.googlecode.objectify.ObjectifyService.ofy;
+
 public class MainServlet extends HttpServlet implements ReportCallback {
+
+    private static final int NUM_TASKS = 2;
+
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
     {
@@ -37,21 +44,38 @@ public class MainServlet extends HttpServlet implements ReportCallback {
 
         if (req.getParameter("fulltest") != null) {
 
-            Test test = new Test();
+            TestCounter counter = ofy().load().type(TestCounter.class).first().now();
 
-            String fullReport = test.doTest(this);
-
-            if (fullReport != null) {
-                Calendar calendar = new GregorianCalendar();
-
-                int day = calendar.get(Calendar.DAY_OF_MONTH);
-                int month = calendar.get(Calendar.MONTH) + 1;
-                Net.sendReport("Test report " + day + "/" + month, fullReport);
-
-                test.clearLogs();
+            if (counter == null) {
+                counter = new TestCounter();
+                counter.counter = 0;
+                ofy().save().entity(counter).now();
             }
 
-            return;
+            switch ((int) (counter.counter % NUM_TASKS)) {
+                case 0:
+                    Test test = new Test();
+
+                    String fullReport = test.doTest(this);
+
+                    if (fullReport != null) {
+                        Calendar calendar = new GregorianCalendar();
+
+                        int day = calendar.get(Calendar.DAY_OF_MONTH);
+                        int month = calendar.get(Calendar.MONTH) + 1;
+                        Net.sendReport("Test report " + day + "/" + month, fullReport);
+
+                        test.clearLogs();
+                        break;
+                    }
+
+                    return;
+                case 1:
+                    //  new SectionsTest().doTest(this);
+                    break;
+            }
+            counter.counter++;
+            ofy().save().entity(counter).now();
         }
     }
 
@@ -60,9 +84,12 @@ public class MainServlet extends HttpServlet implements ReportCallback {
     {
         super.init();
 
+        Date.setTitles(new String[]{"%d seconds ago", "%d minutes ago", "%d hours ago", "%d days ago", "%d months ago", "%d years ago",});
+
         ObjectifyFactory oFactory = ObjectifyService.factory();
         oFactory.register(Log.class);
         oFactory.register(Task.class);
+        oFactory.register(TestCounter.class);
         oFactory.register(com.lucevent.newsup.debugbackend.data.Error.class);
         oFactory.begin();
     }

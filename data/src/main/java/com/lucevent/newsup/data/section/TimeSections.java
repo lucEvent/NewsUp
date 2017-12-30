@@ -30,10 +30,8 @@ public class TimeSections extends Sections {
         add(new Section("LIFE.com", "http://time.com/life/feed/", 1));
 
         add(new Section("Blogs", null, -1));
-        add(new Section("Global Spin", "http://feeds2.feedburner.com/timeblogs/globalspin", 1));
         add(new Section("Swampland", "http://feeds.feedburner.com/timeblogs/swampland", 1));
         add(new Section("Nerd World", "http://feeds.feedburner.com/timeblogs/nerd_world", 1));
-        add(new Section("Keepingscore", "http://feeds2.feedburner.com/timeblogs/keepingscore", 1));
 
     }
 

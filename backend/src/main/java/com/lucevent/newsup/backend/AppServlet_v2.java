@@ -1,7 +1,9 @@
 package com.lucevent.newsup.backend;
 
+import com.lucevent.newsup.backend.utils.Alerts;
 import com.lucevent.newsup.backend.utils.BackendParser;
 import com.lucevent.newsup.backend.utils.Event;
+import com.lucevent.newsup.backend.utils.Reports;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.Site;
@@ -62,14 +64,6 @@ public class AppServlet_v2 extends HttpServlet {
                     resp
             );
 
-        } else if (req.getParameter("stats") != null) {
-
-            resp_stats(
-                    req.getParameter("options"),
-                    req.getParameter("reset"),
-                    resp
-            );
-
         } else if (req.getParameter("notify") != null) {
 
             String[] values = req.getParameter("values").split(",");
@@ -88,21 +82,25 @@ public class AppServlet_v2 extends HttpServlet {
 
         } else if (req.getParameter("report") != null) {
 
-            Data.reports.addReport(
+            Reports.addReport(
                     req.getParameter("version"),
                     req.getRemoteAddr(),
                     req.getParameter("email"),
                     req.getParameter("message"));
 
         } else if (req.getParameter("events") != null) {
+
             resp_events(req.getParameter("lang"), resp);
 
-        } else if (req.getParameter("clear") != null) {
+        } else if (req.getParameter("alerts") != null) {
 
-            for (Site site : Data.sites)
-                site.news.clear();
+            resp_alerts(
+                    req.getParameter("v"),
+                    req.getParameter("lang"),
+                    resp);
 
         }
+        resp.flushBuffer();
     }
 
     private void resp_headers(String site_request, String no_count, String address, String version, HttpServletResponse resp) throws IOException
@@ -177,21 +175,30 @@ public class AppServlet_v2 extends HttpServlet {
         }
     }
 
-    private void resp_stats(String options, String reset, HttpServletResponse resp) throws IOException
-    {
-        if (reset != null)
-            Data.stats.reset();
-
-        StringBuilder sb = new StringBuilder();
-        sb.append(BackendParser.toEntry(Data.stats, options != null ? options : ""));
-
-        resp.getWriter().println(sb);
-    }
-
     private void resp_events(String lang, HttpServletResponse resp) throws IOException
     {
-        List<Event> events = ofy().load().type(Event.class).list();
+
+        long currentTime = System.currentTimeMillis();
+        List<Event> events = ofy().load().type(Event.class)
+                .filter("visible", true)
+                .filter("endTime >", currentTime)
+                .list();
         resp.getWriter().println(BackendParser.toEntry(events, lang).toString());
+    }
+
+    private void resp_alerts(String app_version, String lang, HttpServletResponse resp) throws IOException
+    {
+        Alerts alerts = new Alerts();
+
+        if (app_version == null || app_version.isEmpty() ||
+                !(app_version.startsWith("2.4.") || app_version.startsWith("2.5."))) {
+            alerts.addUpdateAlert();
+        }
+
+        alerts.addRateAlert();
+        alerts.addReportAlert();
+
+        resp.getWriter().println(BackendParser.json(alerts));
     }
 
 }

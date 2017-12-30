@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -63,6 +64,8 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
         // Views
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         adapter = new NewsAdapter(this, null, onBookmarkClick, NewsAdapterList.SortBy.byTime);
         adapter.setLoadImages(AppSettings.loadImages());
@@ -79,7 +82,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
 
         newsView = (NewsView) findViewById(R.id.news_view);
         newsView.setFragmentContext(this, null);
-        newsView.setBookmarkChangeListener(onBookmarkClick);
+        newsView.setBookmarkStateChangeListener(onBookmarkClick);
 
         progressBar = findViewById(R.id.progress_bar);
         progressBar.setVisibility(ProgressBar.VISIBLE);
@@ -142,6 +145,17 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
         }
     */
     @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+        }
+        return true;
+    }
+
+    @Override
     public void onClick(final View v)
     {
         final News news = (News) v.getTag();
@@ -150,7 +164,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
         KernelManager.readContentOf(news);
 
         if (news.content != null && !news.content.isEmpty()) {
-            newsView.displayNews(news, v);
+            newsView.displayNews(news);
             displayingNews = true;
             KernelManager.setNewsRead(news);
             return;
@@ -254,15 +268,9 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
         @Override
         public void onClick(View v)
         {
-            if (permissionHandler.checkAndAsk(EventActivity.this)) {
-                News news = (News) v.getTag();
-
-                BookmarksManager.toggleBookmark(news);
-
-                newsView.setBookmarkButtonImage(v);
-                adapter.update(news);
-
-            } else
+            if (permissionHandler.checkAndAsk(EventActivity.this))
+                bookmarkStateChanged(v);
+            else
                 tempBookmarkButton = v;
         }
     };
@@ -271,11 +279,20 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults)
     {
         if (permissionHandler.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
-            News news = (News) tempBookmarkButton.getTag();
-            BookmarksManager.toggleBookmark(news);
-            newsView.setBookmarkButtonImage(tempBookmarkButton);
-            adapter.update(news);
+            bookmarkStateChanged(tempBookmarkButton);
         }
+    }
+
+    private void bookmarkStateChanged(View btn)
+    {
+        News news = (News) btn.getTag();
+
+        btn.setSelected(
+                BookmarksManager.toggleBookmark(news)
+        );
+
+        if (btn instanceof FloatingActionButton)
+            adapter.update(news);
     }
 
 }

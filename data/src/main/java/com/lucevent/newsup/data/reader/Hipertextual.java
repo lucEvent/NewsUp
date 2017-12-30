@@ -2,7 +2,6 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -22,7 +21,6 @@ public class Hipertextual extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{},
                 new int[]{},
-                "https://hipertextual.com/",
                 "");
     }
 
@@ -30,12 +28,12 @@ public class Hipertextual extends com.lucevent.newsup.data.util.NewsReader {
     protected News onNewsRead(News news)
     {
         // Parsing Description
-        Document doc = jsoupParse(news.description);
-        news.description = doc.text();
+        Element article = jsoupParse(news.description);
+        news.description = article.text();
         // end
 
         // Parsing enclosures
-        Elements imgs = doc.select("img");
+        Elements imgs = article.select("img");
         if (!imgs.isEmpty())
             news.enclosures.add(new Enclosure(imgs.first().attr("src"), "", ""));
         // end
@@ -55,15 +53,12 @@ public class Hipertextual extends com.lucevent.newsup.data.util.NewsReader {
         article = article.select(".headlineSingle__lead,.articleHead,.historia");
         article.select("script,.wrapperBanner").remove();
 
-        article.select("aside").tagName("blockquote");
-        article.select("h1,h2").tagName("h3");
+        article.select("aside,q").tagName("blockquote");
 
         for (Element e : article.select("figure:has(noscript)"))
             e.html(e.select("noscript").html());
 
-        NewsStylist.repairLinks(article);
-
-        news.content = article.outerHtml();
+        news.content = finalFormat(article, true);
     }
 
 }

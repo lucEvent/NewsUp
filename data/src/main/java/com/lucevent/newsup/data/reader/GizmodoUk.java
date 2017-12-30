@@ -1,7 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -20,7 +19,6 @@ public class GizmodoUk extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{},
                 new int[]{TAG_ENCLOSURE},
-                "http://www.gizmodo.co.uk/",
                 "");
     }
 
@@ -34,11 +32,11 @@ public class GizmodoUk extends com.lucevent.newsup.data.util.NewsReader {
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
         Elements article = doc.select(".single-article").select(".single-article__canvas,.single-article__content");
+        doc.select("script").remove();
 
         for (Element e : article.select("noscript"))
             e.parent().html(e.html());
 
-        article.select("h1,h2").tagName("h3");
         article.select("img + em").tagName("figcaption");
 
         Elements more = article.select(".grid,.site-content");
@@ -49,7 +47,7 @@ public class GizmodoUk extends com.lucevent.newsup.data.util.NewsReader {
         }
         more.remove();
 
-        news.content = NewsStylist.cleanComments(article.html());
+        news.content = finalFormat(article, false);
     }
 
 }

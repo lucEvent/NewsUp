@@ -31,7 +31,6 @@ public class GoteborgsPostenSections extends Sections {
         add(new Section("Musik", "http://www.gp.se/n%C3%B6je/musik?rss", 1));
         add(new Section("Film", "http://www.gp.se/n%C3%B6je/film?rss", 1));
         add(new Section("Spel", "http://www.gp.se/n%C3%B6je/spel?rss", 1));
-        add(new Section("Guiden", "http://www.gp.se/n%C3%B6je/guiden?rss", 1));
 
         add(new Section("Ledare", "http://www.gp.se/ledare?rss", 0));
 

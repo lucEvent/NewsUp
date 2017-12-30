@@ -21,12 +21,12 @@ public class ElPuntAvuiSections extends Sections {
         add(new Section("Esports", "http://www.elpuntavui.cat/esports.feed?type=rss", 0));
 
         add(new Section("Local", null, -1));
-        add(new Section("Barcelona", "http://www.elpuntavui.cat/barcelona.feed?type=rss", 0));
-        add(new Section("Girona", "http://www.elpuntavui.cat/girona.feed?type=rss", 0));
-        add(new Section("Lleida", "http://www.elpuntavui.cat/lleida.feed?type=rss", 0));
-        add(new Section("Tarragona", "http://www.elpuntavui.cat/tarragona.feed?type=rss", 0));
-        add(new Section("Reus", "http://www.elpuntavui.cat/reus.feed?type=rss", 0));
-        add(new Section("Vic", "http://www.elpuntavui.cat/vic.feed?type=rss", 0));
+        add(new Section("Barcelona", "http://www.elpuntavui.cat/barcelona.feed?type=rss", 1));
+        add(new Section("Girona", "http://www.elpuntavui.cat/girona.feed?type=rss", 1));
+        add(new Section("Lleida", "http://www.elpuntavui.cat/lleida.feed?type=rss", 1));
+        add(new Section("Tarragona", "http://www.elpuntavui.cat/tarragona.feed?type=rss", 1));
+        add(new Section("Reus", "http://www.elpuntavui.cat/reus.feed?type=rss", 1));
+        add(new Section("Vic", "http://www.elpuntavui.cat/vic.feed?type=rss", 1));
 
         add(new Section("In English", "http://www.elpuntavui.cat/canals/generes/catalonia-today.feed?type=rss", 0));
 

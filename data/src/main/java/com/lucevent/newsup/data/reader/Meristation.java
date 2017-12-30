@@ -1,9 +1,7 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
 
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class Meristation extends com.lucevent.newsup.data.util.NewsReader {
@@ -20,24 +18,23 @@ public class Meristation extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{},
                 new int[]{},
-                "http://meristation.as.com/",
                 "");
     }
 
     @Override
     protected News onNewsRead(News news)
     {
-        Document doc = jsoupParse(news.description);
+        Element article = jsoupParse(news.description);
 
-        news.description = doc.select(".field-field-seo-description .field-items").text();
+        news.description = article.select(".field-field-seo-description .field-items").text();
 
-        doc.select("script,.field,.darwin-phpbb-comments-link,.galeriaContent").remove();
+        article.select("script,.field,.darwin-phpbb-comments-link,.galeriaContent").remove();
 
-        for (Element e : doc.select("#videoEmbed")) {
+        for (Element e : article.select("#videoEmbed")) {
             String src = "http://www.dailymotion.com/embed/video/" + e.parent().attr("video");
-            e.parent().html(Enclosure.iframe(src));
+            e.parent().html(insertIframe(src));
         }
-        for (Element e : doc.select(".galeriaAmpliacion")) {
+        for (Element e : article.select(".galeriaAmpliacion")) {
             StringBuilder sb = new StringBuilder();
             for (Element img : e.select(".gal_data li"))
                 sb.append("<img src='").append(img.attr("data-path")).append("'>");
@@ -45,22 +42,20 @@ public class Meristation extends com.lucevent.newsup.data.util.NewsReader {
             e.html(sb.toString());
         }
 
-        doc.select("h1,h2").tagName("h3");
-
-        news.content = doc.html();
+        news.content = finalFormat(article, false);
         return news;
     }
 
     @Override
-    protected org.jsoup.nodes.Document getDocument(String pagelink)
+    protected org.jsoup.nodes.Document getDocument(String url)
     {
         try {
-            return org.jsoup.Jsoup.connect(pagelink)
+            return org.jsoup.Jsoup.connect(url)
                     .timeout(10000)
                     .get();
         } catch (Exception ignored) {
         }
-        return super.getDocument(pagelink);
+        return super.getDocument(url);
     }
 
 }

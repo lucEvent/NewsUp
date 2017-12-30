@@ -2,7 +2,6 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -21,7 +20,6 @@ public class GizmodoAu extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{},
                 new int[]{"feedburner:origenclosurelink".hashCode()},
-                "https://www.gizmodo.com.au/",
                 "");
     }
 
@@ -47,11 +45,9 @@ public class GizmodoAu extends com.lucevent.newsup.data.util.NewsReader {
         for (Element gif : article.select("img[data-gif-image]"))
             gif.attr("src", gif.attr("data-gif-image"));
 
-        article.select("h1,h2").tagName("h3");
         article.select(".image + p > small").tagName("figcaption");
-        NewsStylist.repairLinks(article);
 
-        news.content = NewsStylist.cleanComments(article.html());
+        news.content = finalFormat(article, false);
     }
 
 }

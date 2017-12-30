@@ -1,14 +1,26 @@
 <merge
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#feee">
+    android:layout_height="match_parent">
 
-    <WebView
-        android:id="@+id/webview"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.lucevent.newsup.view.util.NewsElementsListView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:keepScreenOn="true"/>
+    </ScrollView>
+
+    <ViewStub
+        android:id="@+id/box_font_size"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:keepScreenOn="true"/>
+        android:inflatedId="@+id/box_font_size"
+        android:layout="@layout/vs_font_size_picker"/>
 
     <com.lucevent.newsup.view.util.NewsSideToolbar
         android:id="@+id/side_toolbar"

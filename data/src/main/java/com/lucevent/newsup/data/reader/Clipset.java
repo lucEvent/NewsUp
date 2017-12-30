@@ -1,7 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -21,7 +20,6 @@ public class Clipset extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{},
-                "http://clipset.20minutos.es/",
                 "");
     }
 
@@ -40,9 +38,9 @@ public class Clipset extends com.lucevent.newsup.data.util.NewsReader {
         doc.select(".wp-caption-text").tagName("figcaption");
         doc.select("[style]").removeAttr("style");
 
-        NewsStylist.cleanAttributes(doc.select("img"), "src");
+        cleanAttributes(doc.select("img"), "src");
 
-        news.content = article.outerHtml();
+        news.content = finalFormat(article, true);
     }
 
 }

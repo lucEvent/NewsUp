@@ -23,7 +23,6 @@ public class MeristationSections extends Sections {
         add(new Section("Android", "http://www.meristation.com/rss/news/40073", 0));
         add(new Section("PS2", "http://www.meristation.com/rss/news/60", 0));
         add(new Section("PSP", "http://www.meristation.com/rss/news/432", 0));
-        add(new Section("PS Vita", "http://www.meristation.com/rss/news/1366", 0));
         add(new Section("Wii", "http://www.meristation.com/rss/news/62", 0));
         add(new Section("Nintendo DS", "http://www.meristation.com/rss/news/59", 0));
         add(new Section("Nintendo 64", "http://www.meristation.com/rss/news/434", 0));

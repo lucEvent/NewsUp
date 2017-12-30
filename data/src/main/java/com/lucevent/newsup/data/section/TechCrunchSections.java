@@ -13,17 +13,15 @@ public class TechCrunchSections extends Sections {
         add(new Section("Startups", "https://techcrunch.com/startups/feed/", 0));
         add(new Section("Mobile", "https://techcrunch.com/mobile/feed/", 0));
         add(new Section("Gadgets", "https://techcrunch.com/gadgets/feed/", 0));
+        add(new Section("Apps", "https://techcrunch.com/apps/feed/", 0));
+        add(new Section("Reviews", "https://techcrunch.com/reviews/feed/", 0));
         add(new Section("Enterprise", "https://techcrunch.com/enterprise/feed/", 0));
         add(new Section("GreenTech", "https://techcrunch.com/greentech/feed/", 0));
         add(new Section("Social", "https://techcrunch.com/social/feed/", 0));
         add(new Section("Fundings and Exits", "https://techcrunch.com/fundings-exits/feed/", 0));
         add(new Section("Europe", "https://techcrunch.com/europe/feed/", 0));
         add(new Section("Asia", "https://techcrunch.com/asia/feed/", 0));
-
         add(new Section("Video", "https://techcrunch.com/category/video/feed/", 0));
-        add(new Section("Apps", "https://techcrunch.com/category/video/apps/feed/", 1));
-        add(new Section("Gadgets", "https://techcrunch.com/category/video/gadgets/feed/", 1));
-        add(new Section("Reviews", "https://techcrunch.com/category/video/reviews/feed/", 1));
 
         add(new Section("Authors", null, -1));
         add(new Section("John Biggs", "https://techcrunch.com/author/john-biggs/feed/", 1));

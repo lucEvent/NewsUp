@@ -6,7 +6,6 @@ import com.googlecode.objectify.VoidWork;
 import com.lucevent.newsup.backend.utils.Event;
 import com.lucevent.newsup.backend.utils.MonthStats;
 import com.lucevent.newsup.backend.utils.Report;
-import com.lucevent.newsup.backend.utils.Reports;
 import com.lucevent.newsup.backend.utils.SiteStats;
 import com.lucevent.newsup.backend.utils.Statistics;
 import com.lucevent.newsup.backend.utils.TimeStats;
@@ -20,8 +19,6 @@ public class Data {
     public static Sites sites;
 
     public static Statistics stats;
-
-    public static Reports reports;
 
     static {
         ObjectifyFactory oFactory = ObjectifyService.factory();
@@ -37,7 +34,7 @@ public class Data {
         if (sites == null) {
             sites = Sites.getDefault(true);
             // to avoid errors if some old version requests this dep site
-            sites.add(new Site(330, "Metro", 0, 0, com.lucevent.newsup.data.section.MetroSVSections.class, com.lucevent.newsup.data.reader.MetroSV.class));
+            sites.add(new Site(330, "Metro", 0, "", 0, com.lucevent.newsup.data.section.MetroSVSections.class, com.lucevent.newsup.data.reader.MetroSV.class));
 
             for (Site s : sites)
                 s.news = new NewsMap();
@@ -48,8 +45,6 @@ public class Data {
                     stats = Statistics.getInstance();
                 }
             });
-
-            reports = new Reports();
         }
     }
 

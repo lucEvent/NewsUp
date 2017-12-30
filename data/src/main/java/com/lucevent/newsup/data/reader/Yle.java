@@ -2,7 +2,6 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -21,7 +20,6 @@ public class Yle extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_ENCLOSURE},
-                "https://yle.fi/",
                 "");
     }
 
@@ -35,18 +33,15 @@ public class Yle extends com.lucevent.newsup.data.util.NewsReader {
     protected News onNewsRead(News news)
     {
         if (!news.content.isEmpty()) {
-            Document doc = jsoupParse(news.content);
-            if (doc.text().length() != 0) {
+            Element article = jsoupParse(news.content);
+            if (article.text().length() != 0) {
+                article.select("[class]").removeAttr("class");
 
-                doc.select("h1,h2").tagName("h3");
-                doc.select("[class]").removeAttr("class");
-                NewsStylist.repairLinks(doc.body());
-
-                String img = "";
+                StringBuilder img = new StringBuilder();
                 for (Enclosure e : news.enclosures)
-                    img += e.html();
+                    img.append(e.html());
 
-                news.content = "<meta charset='UTF-8'>" + img + doc.body().html();
+                news.content = "<meta charset='UTF-8'>" + img + finalFormat(article, false);
             }
         }
         return news;
@@ -58,9 +53,7 @@ public class Yle extends com.lucevent.newsup.data.util.NewsReader {
         org.jsoup.select.Elements article = doc.select(".text");
 
         if (!article.isEmpty()) {
-            article.select("h1,h2").tagName("h3");
-
-            news.content = article.html();
+            news.content = finalFormat(article, false);
         }
     }
 

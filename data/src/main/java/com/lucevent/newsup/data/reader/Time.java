@@ -2,12 +2,11 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class Time extends com.lucevent.newsup.data.util.NewsReader {
 
-    // Tags: 	[category, content:encoded, dc:creator, description, guid, item, link, media:content, media:thumbnail, media:title, pubdate, title]
+    // Tags: [category, content:encoded, dc:creator, description, guid, item, link, media:content, media:thumbnail, media:title, pubdate, title]
 
     public Time()
     {
@@ -19,7 +18,6 @@ public class Time extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_MEDIA_CONTENT},
-                "http://time.com/",
                 "");
     }
 
@@ -32,21 +30,22 @@ public class Time extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected String parseContent(Element prop)
     {
-        Document doc = org.jsoup.Jsoup.parse(prop.text());
-        doc.select("[width='1'],.ad_brightcove_video-wrapper,script").remove();
+        Element article = jsoupParse(prop);
+        article.select("[width='1'],.ad_brightcove_video-wrapper,script").remove();
 
-        doc.select("h2").tagName("h3");
-
-        for (Element video : doc.select("video")) {
+        for (Element video : article.select("video")) {
             String attr1 = video.attr("data-account");
             String attr2 = video.attr("data-player");
             String attr3 = video.attr("data-embed");
             String attr4 = video.attr("data-video-id");
             String src = "https://players.brightcove.net/" + attr1 + "/" + attr2 + "_" + attr3 + "/index.html?videoId=" + attr4;
-            video.parent().html(Enclosure.iframe(src));
+            video.parent().html(insertIframe(src));
         }
 
-        return doc.body().html();
+        wpcomwidget(article.select("form"));
+        article.select("form").remove();
+
+        return finalFormat(article, false);
     }
 
     @Override

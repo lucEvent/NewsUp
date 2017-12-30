@@ -1,7 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -25,7 +24,6 @@ public class TheTimesOfIndia extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_MEDIA_CONTENT},
-                "http://timesofindia.indiatimes.com/",
                 "");
     }
 
@@ -48,15 +46,13 @@ public class TheTimesOfIndia extends com.lucevent.newsup.data.util.NewsReader {
         for (Element img : article.select("img[data-src]"))
             img.attr("src", img.attr("data-src"));
 
-        NewsStylist.cleanAttributes(article.select("img"), "src");
-        NewsStylist.repairLinks(article);
-
-        article.select("h1,h2").tagName("h3");
+        cleanAttributes(article.select("img"), "src");
+        article.select("artsummary").tagName("div");
         article.select("[style]").removeAttr("style");
         article.select(".clearfix").tagName("p");
         article.select(".agencytxt,.italictext,.wp-caption-text").tagName("figcaption");
 
-        news.content = article.html().replace("<br> <br>", "</p><p>");
+        news.content = finalFormat(article, false).replace("<br> <br>", "</p><p>");
     }
 
 }

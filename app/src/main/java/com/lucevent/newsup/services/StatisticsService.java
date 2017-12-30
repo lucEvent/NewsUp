@@ -11,20 +11,18 @@ import android.util.Pair;
 
 import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.R;
-import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.kernel.AppCode;
-import com.lucevent.newsup.kernel.AppData;
 import com.lucevent.newsup.kernel.KernelManager;
 import com.lucevent.newsup.kernel.stats.SiteStat;
 import com.lucevent.newsup.kernel.stats.SiteStats;
 import com.lucevent.newsup.kernel.stats.Statistics;
 import com.lucevent.newsup.view.fragment.StatisticsFragment;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
-import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -34,7 +32,6 @@ public class StatisticsService extends Service {
     public static final int REQ_RESET = 1;
     public static final int REQ_SEND = 2;
     public static final int REQ_EVENT = 3;
-
 
     private final IBinder binder = new Binder();
 
@@ -98,44 +95,51 @@ public class StatisticsService extends Service {
                 String url = "";
                 switch (order) {
                     case SORT_BY_NAME:
-                        url = "http://newsup-2406.appspot.com/appv2?stats&options=s";
+                        url = "http://newsup-2406.appspot.com/dev?stats&options=s";
                         break;
-                    case SORT_BY_NUM_REQUESTS:
-                        url = "http://newsup-2406.appspot.com/appv2?stats&options=n";
+                    case SORT_BY_TOTAL_REQUESTS:
+                        url = "http://newsup-2406.appspot.com/dev?stats&options=n";
+                        break;
+                    case SORT_BY_MONTH_REQUESTS:
+                        url = "http://newsup-2406.appspot.com/dev?stats&options=m";
                         break;
                     case SORT_BY_READINGS:
-                        url = "http://newsup-2406.appspot.com/appv2?stats&options=r";
+                        url = "http://newsup-2406.appspot.com/dev?stats&options=r";
                         break;
                     case SORT_BY_TIME:
-                        url = "http://newsup-2406.appspot.com/appv2?stats&options=t";
+                        url = "http://newsup-2406.appspot.com/dev?stats&options=t";
                 }
 
-                Document doc = null;
                 try {
-                    doc = Jsoup.connect(url).get();
-                } catch (IOException e) {
-                    AppSettings.printerror("[SR] Problem fetching Statistics:" + url, e);
+                    JSONObject json = new JSONObject(fetch(url));
+                    json = json.getJSONObject("stats");
+
+                    long since = json.getLong("since");
+                    long lastStart = json.getLong("last");
+                    JSONArray jsonSiteStats = json.getJSONArray("sites");
+                    SiteStats siteStats = new SiteStats();
+
+                    for (int i = 0; i < jsonSiteStats.length(); i++) {
+                        JSONObject jsonStat = (JSONObject) jsonSiteStats.get(i);
+                        SiteStat stat = new SiteStat();
+
+                        stat.siteName = jsonStat.getString("n");
+                        stat.siteCode = jsonStat.getInt("c");
+                        stat.totalRequests = jsonStat.getInt("a");
+                        stat.monthRequests = jsonStat.getInt("m");
+                        stat.readings = jsonStat.getInt("r");
+                        stat.lastRequest = jsonStat.getLong("l");
+                        stat.version = jsonStat.getString("v");
+
+                        siteStats.add(stat);
+                    }
+
+                    Statistics statistics = new Statistics(since, lastStart, siteStats);
+                    handler.obtainMessage(AppCode.STATISTICS, statistics).sendToTarget();
+
+                } catch (Exception e) {
+                    AppSettings.printerror("[SS] Problem fetching Statistics:" + url, e);
                 }
-                if (doc == null) return;
-
-                Element stats = doc.select("statistics").get(0);
-                long since = Long.parseLong(stats.attr("since"));
-                long lastStart = Long.parseLong(stats.attr("laststart"));
-                SiteStats siteStats = new SiteStats();
-
-                for (Element siteData : stats.select("site")) {
-                    int siteCode = Integer.parseInt(siteData.attr("cd"));
-                    Site site = AppData.getSiteByCode(siteCode);
-                    String siteName = site == null ? "Unknown" : site.name;
-                    int nAccesses = Integer.parseInt(siteData.attr("rq"));
-                    int readings = Integer.parseInt(siteData.attr("rd"));
-                    long lastAccess = Long.parseLong(siteData.attr("lt"));
-                    String version = siteData.attr("v");
-                    siteStats.add(new SiteStat(siteName, siteCode, nAccesses, readings, lastAccess, version));
-                }
-
-                Statistics statistics = new Statistics(since, lastStart, siteStats);
-                handler.obtainMessage(AppCode.STATISTICS, statistics).sendToTarget();
             }
         }).start();
     }
@@ -146,22 +150,35 @@ public class StatisticsService extends Service {
             @Override
             public void run()
             {
-                Document doc = null;
                 try {
-                    doc = Jsoup.connect("http://newsup-2406.appspot.com/appv2?stats&reset").get();
-                } catch (IOException e) {
+                    JSONObject json = new JSONObject(fetch("http://newsup-2406.appspot.com/dev?stats&reset"));
+                    json = json.getJSONObject("stats");
+
+                    long since = json.getLong("since");
+                    long lastStart = json.getLong("last");
+
+
+                    Statistics statistics = new Statistics(since, lastStart, new SiteStats());
+                    handler.obtainMessage(AppCode.STATISTICS, statistics).sendToTarget();
+                } catch (Exception e) {
                     AppSettings.printerror("[SR] Exception reseting Statistics", e);
                 }
-                if (doc == null) return;
-
-                Element stats = doc.select("statistics").get(0);
-                long since = Long.parseLong(stats.attr("since"));
-                long lastStart = Long.parseLong(stats.attr("laststart"));
-
-                Statistics statistics = new Statistics(since, lastStart, new SiteStats());
-                handler.obtainMessage(AppCode.STATISTICS, statistics).sendToTarget();
             }
         }).start();
+    }
+
+    private String fetch(String url) throws Exception
+    {
+        URL oracle = new URL(url);
+        BufferedReader in = new BufferedReader(new InputStreamReader(oracle.openStream()));
+
+        char[] buffer = new char[4096];
+        StringBuilder sb = new StringBuilder(1000);
+        int len;
+        while ((len = in.read(buffer, 0, buffer.length)) > 0)
+            sb.append(buffer, 0, len);
+        in.close();
+        return sb.toString();
     }
 
     public void sendUpdate()

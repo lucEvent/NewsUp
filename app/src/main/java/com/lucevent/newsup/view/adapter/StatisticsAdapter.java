@@ -27,7 +27,7 @@ public class StatisticsAdapter extends RecyclerView.Adapter<StatisticsViewHolder
     @Override
     public void onBindViewHolder(StatisticsViewHolder holder, int position)
     {
-        StatisticsViewHolder.populateViewHolder(holder, dataSet.siteStats.get(position));
+        holder.bind(dataSet.siteStats.get(position));
     }
 
     @Override

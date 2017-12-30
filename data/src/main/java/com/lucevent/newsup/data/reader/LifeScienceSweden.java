@@ -1,7 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -20,7 +19,6 @@ public class LifeScienceSweden extends com.lucevent.newsup.data.util.NewsReader 
                 new int[]{TAG_PUBDATE},
                 new int[]{},
                 new int[]{},
-                "https://www.lifesciencesweden.se/",
                 "");
     }
 
@@ -28,14 +26,12 @@ public class LifeScienceSweden extends com.lucevent.newsup.data.util.NewsReader 
     protected void readNewsContent(Document doc, News news)
     {
         Elements article = doc.select("article > h3,article > .body-text");
-        article.select("script,style,.more-about").remove();
+        article.select("script,.more-about").remove();
 
         article.select("[style]").removeAttr("style");
         article.select(".popup-gallery div").tagName("figcaption");
 
-        NewsStylist.repairLinks(article);
-
-        news.content = article.outerHtml();
+        news.content = finalFormat(article, true);
     }
 
 }

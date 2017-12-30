@@ -1,7 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -28,7 +27,6 @@ public class AndroidAuthority extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_MEDIA_CONTENT},
-                "http://www.androidauthority.com/",
                 SITE_STYLE);
     }
 
@@ -41,44 +39,42 @@ public class AndroidAuthority extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected String parseContent(Element prop)
     {
-        Document doc = org.jsoup.Jsoup.parse(prop.text());
-        doc.select("script,.aa_see_also_block,.clear,.vr_related_articles,.aa_best_app_wrapper > .aa_best_app_button,.aa_newsletter_shortcode_wrapper").remove();
+        Element article = jsoupParse(prop);
+        article.select("script,.aa_see_also_block,.clear,.vr_related_articles,.aa_best_app_wrapper > .aa_best_app_button,.aa_newsletter_shortcode_wrapper").remove();
 
-        doc.select("[style]").removeAttr("style");
-        doc.select("h1,h2").tagName("h3");
-        doc.select(".wp-caption-text").tagName("figcaption");
-        doc.select(".aa_best_app_desc").tagName("p");
+        article.select("[style]").removeAttr("style");
+        article.select(".wp-caption-text").tagName("figcaption");
+        article.select(".aa_best_app_desc").tagName("p");
 
-        for (Element e : doc.select(".aa_best_app_button"))
+        for (Element e : article.select(".aa_best_app_button"))
             e.html(e.select(".overlay-link").html(e.text()).outerHtml());
 
-        for (Element e : doc.select(".youtube-player"))
-            e.parent().html(Enclosure.iframe("https://www.youtube.com/embed/" + e.attr("data-id")));
+        for (Element e : article.select(".youtube-player"))
+            e.parent().html(insertIframe("https://www.youtube.com/embed/" + e.attr("data-id")));
 
-        for (Element e : doc.select("strong")) {
+        for (Element e : article.select("strong")) {
             String text = e.text();
             if (text.startsWith("Read:")
                     || text.startsWith("Read next:"))
                 e.parent().remove();
         }
 
-        NewsStylist.cleanAttributes(doc.select("img"), "src");
-        NewsStylist.repairLinks(doc.body());
+        cleanAttributes(article.select("img"), "src");
 
-        return NewsStylist.cleanComments(doc.body().html());
+        return finalFormat(article, false);
     }
 
     @Override
-    protected Document getDocument(String pagelink)
+    protected Document getDocument(String url)
     {
         try {
-            return org.jsoup.Jsoup.connect(pagelink)
+            return org.jsoup.Jsoup.connect(url)
                     .timeout(10000)
                     .userAgent(USER_AGENT)
                     .get();
         } catch (Exception ignored) {
         }
-        return super.getDocument(pagelink);
+        return super.getDocument(url);
     }
 
 }

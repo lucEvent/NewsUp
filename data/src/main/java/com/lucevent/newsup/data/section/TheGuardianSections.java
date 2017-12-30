@@ -9,7 +9,7 @@ public class TheGuardianSections extends Sections {
     {
         super();
 
-        add(new Section("UK", "https://www.theguardian.com/uk-news/rss", 0));
+        add(new Section("UK News", "https://www.theguardian.com/uk-news/rss", 0));
         add(new Section("Education", "https://www.theguardian.com/education/rss", 1));
         add(new Section("Media", "https://www.theguardian.com/uk/media/rss", 1));
         add(new Section("Society", "https://www.theguardian.com/society/rss", 1));
@@ -48,11 +48,11 @@ public class TheGuardianSections extends Sections {
         add(new Section("Film", "https://www.theguardian.com/uk/film/rss", 1));
         add(new Section("Tv & radio", "https://www.theguardian.com/uk/tv-and-radio/rss", 1));
         add(new Section("Music", "https://www.theguardian.com/music/rss", 1));
-        add(new Section("Games", "https://www.theguardian.com/technology/games/rss", 1));
+        add(new Section("Games", "https://www.theguardian.com/games/rss", 1));
         add(new Section("Books", "https://www.theguardian.com/books/rss", 1));
         add(new Section("Art & design", "https://www.theguardian.com/artanddesign/rss", 1));
         add(new Section("Stage", "https://www.theguardian.com/stage/rss", 1));
-        add(new Section("Classical", "https://www.theguardian.com/music/classicalmusicandopera/rss", 1));
+        add(new Section("Classical", "https://www.theguardian.com/music/classical-music-and-opera/rss", 1));
 
         add(new Section("Business", "https://www.theguardian.com/uk/business/rss", 0));
         add(new Section("Economics", "https://www.theguardian.com/business/economics/rss", 1));
@@ -80,9 +80,9 @@ public class TheGuardianSections extends Sections {
         add(new Section("Tech", "https://www.theguardian.com/uk/technology/rss", 0));
 
         add(new Section("Travel", "https://www.theguardian.com/uk/travel/rss", 0));
-        add(new Section("UK", "https://www.theguardian.com/travel/uk/rss", 1));
-        add(new Section("Europe", "https://www.theguardian.com/travel/europe/rss", 1));
-        add(new Section("US", "https://www.theguardian.com/travel/usa/rss", 1));
+        add(new Section("UK holidays", "https://www.theguardian.com/travel/uk/rss", 1));
+        add(new Section("Europe holidays", "https://www.theguardian.com/travel/europe/rss", 1));
+        add(new Section("US holidays", "https://www.theguardian.com/travel/usa/rss", 1));
         add(new Section("Skiing", "https://www.theguardian.com/travel/skiing/rss", 1));
 
         add(new Section("Money", "https://www.theguardian.com/uk/money/rss", 0));

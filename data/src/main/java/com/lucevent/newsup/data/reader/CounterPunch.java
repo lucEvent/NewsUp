@@ -21,7 +21,6 @@ public class CounterPunch extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{},
-                "https://www.counterpunch.org/",
                 "");
     }
 
@@ -35,16 +34,16 @@ public class CounterPunch extends com.lucevent.newsup.data.util.NewsReader {
     protected News onNewsRead(News news)
     {
         // Parsing content
-        Document doc = jsoupParse(news.content);
-        doc.select("script").remove();
-        doc.select("[style]").removeAttr("style");
-        doc.select(".wp-caption-text").tagName("figcaption");
+        Element article = jsoupParse(news.content);
+        article.select("script").remove();
+        article.select("[style]").removeAttr("style");
+        article.select(".wp-caption-text").tagName("figcaption");
 
-        news.content = doc.body().html();
+        news.content = finalFormat(article, false);
         // end
 
         // Parsing enclosures
-        Elements imgs = doc.select("img");
+        Elements imgs = article.select("img");
         if (!imgs.isEmpty())
             news.enclosures.add(new Enclosure(imgs.first().attr("src"), "", ""));
         // end
@@ -60,7 +59,7 @@ public class CounterPunch extends com.lucevent.newsup.data.util.NewsReader {
                     .timeout(10000)
                     .validateTLSCertificates(false)
                     .get();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         return super.getDocument(url);
     }

@@ -1,7 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -26,26 +25,23 @@ public class GoteborgsPosten extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{},
-                "http://www.gp.se/",
                 "");
     }
 
     @Override
     protected String parseContent(Element prop)
     {
-        Document doc = jsoupParse(prop);
-        doc.select("figcaption").remove();
-        doc.select("[style]").removeAttr("style");
-        NewsStylist.cleanAttributes(doc.select("img"), "src");
-        NewsStylist.repairLinks(doc.body());
-        return doc.body().html();
+        Element article = jsoupParse(prop);
+        article.select("[style]").removeAttr("style");
+        cleanAttributes(article.select("img"), "src");
+        return finalFormat(article, false);
     }
 
     @Override
     protected void readNewsContent(Document doc, News news)
     {
         Elements article = doc.select(".article__head .img-container,.article__preamble,.article__body__richtext,.article__body__facts");
-        article.select(".article__category,script,.wp_rp_wrap,.partner").remove();
+        article.select("script,.article__category,.wp_rp_wrap,.partner").remove();
 
         Elements preamble = article.select(".article__preamble");
         if (!preamble.isEmpty()) {
@@ -65,27 +61,25 @@ public class GoteborgsPosten extends com.lucevent.newsup.data.util.NewsReader {
         }
 
         article.select(".article__body__facts").tagName("blockquote");
-        article.select("h1,h2").tagName("h3");
         article.select("[style]").removeAttr("style");
         article.select("a[data-iframely-url]").removeAttr("data-iframely-url");
 
-        NewsStylist.cleanAttributes(article.select("img"), "src");
-        NewsStylist.repairLinks(doc.body());
+        cleanAttributes(article.select("img"), "src");
 
-        news.content = article.outerHtml().replaceAll("&nbsp;", "");
+        news.content = finalFormat(article, true).replaceAll("&nbsp;", "");
     }
 
     @Override
-    protected Document getDocument(String pagelink)
+    protected Document getDocument(String url)
     {
         try {
-            return org.jsoup.Jsoup.connect(pagelink)
+            return org.jsoup.Jsoup.connect(url)
                     .timeout(10000)
                     .userAgent(USER_AGENT)
                     .get();
         } catch (Exception ignored) {
         }
-        return super.getDocument(pagelink);
+        return super.getDocument(url);
     }
 
 }

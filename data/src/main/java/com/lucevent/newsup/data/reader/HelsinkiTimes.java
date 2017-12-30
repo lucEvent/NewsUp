@@ -20,7 +20,6 @@ public class HelsinkiTimes extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{},
-                "http://www.helsinkitimes.fi/",
                 "");
     }
 
@@ -42,11 +41,11 @@ public class HelsinkiTimes extends com.lucevent.newsup.data.util.NewsReader {
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
         Elements article = doc.select(".article-content-main");
-        article.select("figcaption,script,.infobox").remove();
+        article.select("script,.infobox").remove();
 
         article.select("[style]").removeAttr("style");
 
-        news.content = article.outerHtml();
+        news.content = finalFormat(article, true);
     }
 
 }

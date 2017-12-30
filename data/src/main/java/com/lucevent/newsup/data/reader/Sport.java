@@ -25,7 +25,6 @@ public class Sport extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{},
                 new int[]{},
-                "http://www.sport.es/es/",
                 SITE_STYLE);
     }
 
@@ -47,16 +46,12 @@ public class Sport extends com.lucevent.newsup.data.util.NewsReader {
     {
         Elements articles = doc.select("div.middle");
 
-        if (articles.isEmpty()) {
+        if (articles.isEmpty())
             return;
-        }
 
         Element article = articles.first();
-
-        article.select("script,.sp-add,.box-left-55,.sp-socialbox,.relations,figcaption,.player-zeta,ul.options,ul.list").remove();
-
+        article.select("script,.sp-add,.box-left-55,.sp-socialbox,.relations,.player-zeta,ul.options,ul.list").remove();
         article.select("span[style]").removeAttr("style");
-        article.select("h2").tagName("h3");
 
         Elements gallery = article.select(".sp-galeria");
         if (!gallery.isEmpty()) {
@@ -69,7 +64,7 @@ public class Sport extends com.lucevent.newsup.data.util.NewsReader {
         }
         article.select("img").removeAttr("alt").removeAttr("title");
 
-        news.content = article.html().replaceAll("(?s)<!--.*?-->", "");
+        news.content = finalFormat(article, false);
     }
 
 }

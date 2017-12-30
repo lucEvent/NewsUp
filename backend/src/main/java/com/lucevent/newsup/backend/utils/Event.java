@@ -17,13 +17,13 @@ import java.util.TimeZone;
 @Entity
 public class Event {
 
-    static class EventInfo {
-        String lang, title, description;
+    public static class EventInfo {
+        public String lang, title, topic;
     }
 
-    static class EventSite {
-        int site_code;
-        int[] section_codes;
+    public static class EventSite {
+        public int site_code;
+        public int[] section_codes;
     }
 
     @Id
@@ -35,6 +35,9 @@ public class Event {
 
     @Index
     public long endTime;
+
+    @Index
+    public boolean visible;
 
     @Unindex
     public EventInfo[] info;
@@ -62,13 +65,13 @@ public class Event {
 
     public static Event parse(String json) throws Exception
     {
-        System.out.println("");
         Event res = new Event();
         try {
             JSONObject parsed = new JSONObject(json);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
             sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
 
+            res.visible = parsed.getBoolean("visible");
             res.code = parsed.getInt("code");
 
             try {
@@ -78,6 +81,7 @@ public class Event {
             }
             try {
                 res.endTime = sdf.parse(parsed.getString("end")).getTime();
+                System.out.println("endtime:" + res.endTime);
             } catch (Exception e) {
                 throw new Exception("Wrong end time");
             }
@@ -109,7 +113,7 @@ public class Event {
                 res.info[i] = new EventInfo();
                 res.info[i].lang = p.getString("lang");
                 res.info[i].title = p.getString("title");
-                res.info[i].description = p.getString("description");
+                res.info[i].topic = p.getString("topic");
             }
 
             JSONArray parsedSites = parsed.getJSONArray("sites");

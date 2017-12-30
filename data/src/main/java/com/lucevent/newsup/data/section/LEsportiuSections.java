@@ -31,15 +31,12 @@ public class LEsportiuSections extends Sections {
 
         add(new Section("B\u00E0squet", "http://www.lesportiudecatalunya.cat/basquet.feed?type=rss", 0));
         add(new Section("ACB", "http://www.lesportiudecatalunya.cat/basquet/acb.feed?type=rss", 1));
-        add(new Section("Internacional", "http://www.lesportiudecatalunya.cat/basquet/internacional.feed?type=rss", 1));
         add(new Section("FEB", "http://www.lesportiudecatalunya.cat/basquet/feb.feed?type=rss", 1));
         add(new Section("FCBQ", "http://www.lesportiudecatalunya.cat/basquet/fcbq.feed?type=rss", 1));
         add(new Section("NBA", "http://www.lesportiudecatalunya.cat/basquet/nba.feed?type=rss", 1));
         add(new Section("Eurolliga", "http://www.lesportiudecatalunya.cat/basquet/eurolliga.feed?type=rss", 1));
         add(new Section("Eurocopa", "http://www.lesportiudecatalunya.cat/basquet/eurocopa.feed?type=rss", 1));
         add(new Section("WNBA", "http://www.lesportiudecatalunya.cat/basquet/wnba.feed?type=rss", 1));
-        add(new Section("Mundial", "http://www.lesportiudecatalunya.cat/basquet/mundial.feed?type=rss", 1));
-        add(new Section("Europeu", "http://www.lesportiudecatalunya.cat/basquet/europeu.feed?type=rss", 1));
         add(new Section("M\u00E9s b\u00E0squet", "http://www.lesportiudecatalunya.cat/basquet/mes-basquet.feed?type=rss", 1));
 
         add(new Section("Hoquei", null, -1));
@@ -47,10 +44,7 @@ public class LEsportiuSections extends Sections {
         add(new Section("Lliga europea", "http://www.lesportiudecatalunya.cat/hoquei/lliga-europea.feed?type=rss", 1));
         add(new Section("Copa CERS", "http://www.lesportiudecatalunya.cat/hoquei/copa-cers.feed?type=rss", 1));
         add(new Section("Copa", "http://www.lesportiudecatalunya.cat/hoquei/copa.feed?type=rss", 1));
-        add(new Section("Mundial", "http://www.lesportiudecatalunya.cat/hoquei/mundial.feed?type=rss", 1));
-        add(new Section("Europeu", "http://www.lesportiudecatalunya.cat/hoquei/europeu.feed?type=rss", 1));
         add(new Section("Copa Europa", "http://www.lesportiudecatalunya.cat/hoquei/copa-europa.feed?type=rss", 1));
-        add(new Section("Internacional", "http://www.lesportiudecatalunya.cat/hoquei/internacional.feed?type=rss", 1));
         add(new Section("M\u00E9s hoquei", "http://www.lesportiudecatalunya.cat/hoquei/mes-hoquei.feed?type=rss", 1));
 
         add(new Section("Motor", "http://www.lesportiudecatalunya.cat/motor/motor.feed?type=rss", 0));

@@ -14,7 +14,6 @@ public class MakeSections extends Sections {
         add(new Section("Latest", null, -1));
         add(new Section("Maker pro", "http://makezine.com/tag/maker-pro/feed/", 1));
         add(new Section("Raspberry Pi 2", "http://makezine.com/tag/raspberry-pi-2/feed/", 1));
-        add(new Section("Drones", "http://makezine.com/tag/drones/feed/", 1));
         add(new Section("Skill builder", "http://makezine.com/tag/skill-builder/feed/", 1));
         add(new Section("Makerspaces", "http://makezine.com/tag/makerspaces/feed/", 1));
         add(new Section("Maker faire", "http://makezine.com/tag/maker-faire/feed/", 1));
@@ -44,7 +43,7 @@ public class MakeSections extends Sections {
         add(new Section("Photography & Video", "http://makezine.com/category/craft/photography-video/feed/", 1));
         add(new Section("Yarncraft", "http://makezine.com/category/craft/yarncraft/feed/", 1));
 
-        add(new Section("Drones & Vehicles", "http://makezine.com/category/drones-vehicles/feed/", 0));
+        add(new Section("Vehicles", "http://makezine.com/category/drones-vehicles/feed/", 0));
         add(new Section("Bikes", "http://makezine.com/category/drones-vehicles/bikes/feed/", 1));
         add(new Section("Cars", "http://makezine.com/category/drones-vehicles/cars/feed/", 1));
         add(new Section("Drones", "http://makezine.com/category/drones-vehicles/drones/feed/", 1));

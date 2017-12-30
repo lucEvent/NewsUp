@@ -33,7 +33,6 @@ public class AbcSections extends Sections {
 
         add(new Section("Opini\u00F3n", "http://www.abc.es/rss/feeds/abc_opinioncompleto.xml", 0));
         add(new Section("Blogs de actualidad", "http://www.abc.es/rss/feeds/blogs-actualidad.xml", 1));
-        add(new Section("Todo blogs ABC", "http://www.abc.es/rss/feeds/todo_blogs.xml", 1));
 
         add(new Section("Deportes", "http://www.abc.es/rss/feeds/abc_Deportes.xml", 0));
         add(new Section("Real Madrid", "http://www.abc.es/rss/feeds/abc_RealMadrid.xml", 1));

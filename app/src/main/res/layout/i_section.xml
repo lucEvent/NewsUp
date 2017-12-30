@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
-              android:background="@drawable/ripple"
+              android:background="@drawable/ripple_transparent"
               android:clickable="true"
               android:paddingBottom="10dp"
               android:paddingEnd="5dp"

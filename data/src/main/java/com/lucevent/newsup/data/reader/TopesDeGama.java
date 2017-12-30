@@ -1,8 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,7 +23,6 @@ public class TopesDeGama extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{},
-                "https://topesdegama.com/",
                 "");
     }
 
@@ -45,16 +42,14 @@ public class TopesDeGama extends com.lucevent.newsup.data.util.NewsReader {
 
                 String src = video.select("[itemprop='embedURL']").attr("content");
 
-                NewsStylist.cleanAttributes(video);
+                cleanAttributes(video);
                 video.tagName("div");
-                video.html(Enclosure.iframe(src));
+                video.html(insertIframe(src));
 
                 article.add(0, video);
             }
         }
-        article.select("script,style,.jetpack-slideshow-noscript,div:has(#div-desktop-article-filmstrip)").remove();
-
-        article.select("h1,h2").tagName("h3");
+        article.select("script,.jetpack-slideshow-noscript,div:has(#div-desktop-article-filmstrip)").remove();
 
         for (Element slides : article.select(".slideshow-window")) {
             String data = "{items:" + slides.attr("data-gallery") + "}";
@@ -77,7 +72,7 @@ public class TopesDeGama extends com.lucevent.newsup.data.util.NewsReader {
                 //System.out.println("JSON exeption:" + e.getMessage());
             }
             slides.html(sb.toString());
-            NewsStylist.cleanAttributes(slides);
+            cleanAttributes(slides);
         }
         for (Element slides : article.select(".gallery,.tiled-gallery")) {
             StringBuilder sb = new StringBuilder();
@@ -85,7 +80,7 @@ public class TopesDeGama extends com.lucevent.newsup.data.util.NewsReader {
                 sb.append("<img src='").append(img.attr("data-orig-file")).append("'>");
 
             slides.html(sb.toString());
-            NewsStylist.cleanAttributes(slides);
+            cleanAttributes(slides);
         }
         for (Element ad : article.select("strong")) {
             String text = ad.text();
@@ -95,18 +90,17 @@ public class TopesDeGama extends com.lucevent.newsup.data.util.NewsReader {
                 ad.parent().remove();
             }
         }
-        NewsStylist.cleanAttributes(article.select("img"), "src");
-        NewsStylist.repairLinks(article);
+        cleanAttributes(article.select("img"), "src");
         article.select("[style]").removeAttr("style");
 
-        news.content = article.html();
+        news.content = finalFormat(article, false);
     }
 
     @Override
-    protected Document getDocument(String pagelink)
+    protected Document getDocument(String url)
     {
         try {
-            return org.jsoup.Jsoup.connect(pagelink)
+            return org.jsoup.Jsoup.connect(url)
                     .timeout(10000)
                     .userAgent(USER_AGENT)
                     .get();

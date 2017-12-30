@@ -1,6 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class TheConversation extends com.lucevent.newsup.data.util.NewsReader {
@@ -17,18 +16,16 @@ public class TheConversation extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{},
                 new int[]{},
-                "",
                 "");
     }
 
     @Override
     protected String parseContent(Element prop)
     {
-        Document doc = jsoupParse(prop);
-        doc.select("script,[width='1'],figcaption").remove();
-        doc.select("h1,h2").tagName("h3");
-        doc.select("[style]").removeAttr("style");
-        return doc.body().html();
+        Element article = jsoupParse(prop);
+        article.select("script,[width='1']").remove();
+        article.select("[style]").removeAttr("style");
+        return finalFormat(article, false);
     }
 
 }

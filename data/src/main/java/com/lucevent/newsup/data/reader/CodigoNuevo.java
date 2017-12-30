@@ -1,9 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.Enclosure;
-import com.lucevent.newsup.data.util.NewsStylist;
-
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class CodigoNuevo extends com.lucevent.newsup.data.util.NewsReader {
@@ -20,7 +16,6 @@ public class CodigoNuevo extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{},
-                "http://www.codigonuevo.com/",
                 "");
     }
 
@@ -33,20 +28,20 @@ public class CodigoNuevo extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected String parseContent(Element prop)
     {
-        Document doc = jsoupParse(prop);
-        doc.select("script").remove();
-        doc.select("h1,h2").tagName("h3");
+        Element article = jsoupParse(prop);
+        article.select("script").remove();
 
-        for (Element e : doc.select("img")) {
+        for (Element e : article.select("img")) {
             e.attr("src", e.attr("src").replace("-300x200", ""));
-            NewsStylist.cleanAttributes(e, "src");
+            cleanAttributes(e, "src");
         }
-        for (Element e : doc.select("a[href*='youtube']:has(img)")) {
-            e.html(Enclosure.iframe(e.attr("href").replace("watch?v=", "embed/")));
+        for (Element e : article.select("a[href*='youtube']:has(img)")) {
+            e.html(insertIframe(e.attr("href").replace("watch?v=", "embed/")));
             e.removeAttr("href");
             e.tagName("div");
         }
-        return doc.body().html();
+
+        return finalFormat(article, false);
     }
 
 }

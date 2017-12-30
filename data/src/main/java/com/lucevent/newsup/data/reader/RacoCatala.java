@@ -2,7 +2,6 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class RacoCatala extends com.lucevent.newsup.data.util.NewsReader {
@@ -19,7 +18,6 @@ public class RacoCatala extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_IMAGE},
-                "https://www.racocatala.cat/",
                 "");
     }
 
@@ -32,10 +30,9 @@ public class RacoCatala extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected String parseContent(Element prop)
     {
-        Document doc = org.jsoup.Jsoup.parse(prop.text());
-        doc.select("script").remove();
-        doc.select("h1,h2").tagName("h3");
-        return doc.body().html();
+        Element article = jsoupParse(prop);
+        article.select("script").remove();
+        return finalFormat(article, false);
     }
 
 }

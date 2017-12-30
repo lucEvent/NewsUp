@@ -34,16 +34,6 @@ public class BBCSections extends Sections {
         add(new Section("Middle east", "http://feeds.bbci.co.uk/news/world/middle_east/rss.xml", 1));
         add(new Section("US & Canada", "http://feeds.bbci.co.uk/news/world/us_and_canada/rss.xml", 1));
 
-        add(new Section("Video & Audio", null, -1));
-        add(new Section("World", "http://feeds.bbci.co.uk/news/video_and_audio/world/rss.xml", 1));
-        add(new Section("UK", "http://feeds.bbci.co.uk/news/video_and_audio/uk/rss.xml", 1));
-        add(new Section("Business", "http://feeds.bbci.co.uk/news/video_and_audio/business/rss.xml", 1));
-        add(new Section("Politics", "http://feeds.bbci.co.uk/news/video_and_audio/politics/rss.xml", 1));
-        add(new Section("Health", "http://feeds.bbci.co.uk/news/video_and_audio/health/rss.xml", 1));
-        add(new Section("Science & Environment", "http://feeds.bbci.co.uk/news/video_and_audio/science_and_environment/rss.xml", 1));
-        add(new Section("Technology", "http://feeds.bbci.co.uk/news/video_and_audio/technology/rss.xml", 1));
-        add(new Section("Entertainment & Arts", "http://feeds.bbci.co.uk/news/video_and_audio/entertainment_and_arts/rss.xml", 1));
-
         add(new Section("Other News", null, -1));
         add(new Section("Magazine", "http://feeds.bbci.co.uk/news/magazine/rss.xml", 1));
         add(new Section("Also in the news", "http://feeds.bbci.co.uk/news/also_in_the_news/rss.xml", 1));
@@ -58,8 +48,6 @@ public class BBCSections extends Sections {
         add(new Section("Tennis", "http://newsrss.bbc.co.uk/rss/sportonline_uk_edition/tennis/rss.xml", 1));
         add(new Section("Golf", "http://newsrss.bbc.co.uk/rss/sportonline_uk_edition/golf/rss.xml", 1));
         add(new Section("Snooker", "http://feeds.bbci.co.uk/sport/0/snooker/rss.xml?edition=uk", 1));
-
-        add(new Section("Sports Video & Audio", "http://feeds.bbci.co.uk/sport/0/rss.xml?edition=uk", 0));
 
     }
 

@@ -3,7 +3,6 @@ package com.lucevent.newsup.data.reader;
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.Enclosures;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -22,7 +21,6 @@ public class Aftonbladet extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{},
-                "http://www.aftonbladet.se",
                 "");
     }
 
@@ -60,12 +58,12 @@ public class Aftonbladet extends com.lucevent.newsup.data.util.NewsReader {
             article.select(".abShareMenu,.abItem,.abFactBoxContainer,.abStatRelated,.abByline").remove();
 
             for (Element e : article.select(".abVideoSatellite")) {
-                e.html(Enclosure.iframe(e.attr("href")));
+                e.html(insertIframe(e.attr("href")));
                 e.removeAttr("href");
             }
             for (Element e : article.select(".abRoyalSlider")) {
                 for (Element video : e.select(".abMediaBoxVideoWrapper")) {
-                    video.html(Enclosure.iframe(video.attr("data-tv-url")));
+                    video.html(insertIframe(video.attr("data-tv-url")));
                     video.removeAttr("data-tv-url");
                 }
                 for (Element img : e.select(".lazy-load noscript"))
@@ -77,11 +75,8 @@ public class Aftonbladet extends com.lucevent.newsup.data.util.NewsReader {
             article = article.select(".abVideoSatellite,.abRoyalSlider,.abIC:not(.abBodyText .abIC),.abAboveBodyTextBox,.abBodyText");
 
             if (!article.isEmpty()) {
-
                 article.select(".abBlock").remove();
-                article.select("h1,h2").tagName("h3");
-
-                news.content = article.html();
+                news.content = finalFormat(article, false);
             }
         } else {
 
@@ -97,7 +92,6 @@ public class Aftonbladet extends com.lucevent.newsup.data.util.NewsReader {
                 article = article.select(parent + ">" + headlines + "," + parent + ">" + images + "," + parent + ">" + text + ",.shootitlive-embed");
 
                 article.select(headlines + " p").tagName("li");
-                article.select("h1,h2").tagName("h3");
                 article.select("[style]").removeAttr("style");
 
                 for (Element e : article.select(images)) {
@@ -109,18 +103,17 @@ public class Aftonbladet extends com.lucevent.newsup.data.util.NewsReader {
                 }
                 for (Element e : article.select(".shootitlive-embed")) {
                     String href = e.select("a[href]").attr("href");
-                    e.html(Enclosure.iframe(href));
+                    e.html(insertIframe(href));
                 }
 
                 for (Element e : article.select("[class]"))
                     e.removeAttr("class").removeAttr("data-test-id").removeAttr("data-reactid");
 
-                NewsStylist.cleanAttributes(article.select("img"), "src");
+                cleanAttributes(article.select("img"), "src");
 
-                news.content = article.outerHtml();
+                news.content = finalFormat(article, true);
             }
         }
-        news.content = NewsStylist.cleanComments(news.content);
     }
 
 }

@@ -2,130 +2,74 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 public class HuffingtonPostSpain extends com.lucevent.newsup.data.util.NewsReader {
 
-    /**
-     * Tags:
-     * [author, description, enclosure, guid, item, link, pubdate, title]
-     * [author, content, entry, id, link, name, published, title, updated, uri]
-     */
+    // tags: [category, dc:created, dc:creator, dc:identifier, dc:publisher, dc:rightsholder, description, guid, ingested, item, link, media:content, media:credit, media:description, media:embed, media:media_html, media:title, modified, pubdate, source_id, ss:media_html, ss:slideshow, title]
 
     public HuffingtonPostSpain()
     {
         super(TAG_ITEM_ITEMS_ENTRY,
                 new int[]{TAG_TITLE},
-                new int[]{TAG_ID, TAG_GUID},
-                new int[]{TAG_CONTENT},
+                new int[]{TAG_LINK},
+                new int[]{},
                 new int[]{TAG_DESCRIPTION},
-                new int[]{TAG_PUBDATE, TAG_UPDATED},
+                new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{TAG_ENCLOSURE, TAG_LINK},
-                "http://www.huffingtonpost.es/",
+                new int[]{TAG_MEDIA_CONTENT},
                 "");
-    }
-
-    @Override
-    protected String parseDescription(Element prop)
-    {
-        String description = org.jsoup.Jsoup.parse(prop.text()).text();
-        int index = description.indexOf("Leer m\u00e1s:");
-        if (index != -1)
-            description = description.substring(0, index);
-        return description;
     }
 
     @Override
     protected String parseContent(Element prop)
     {
-        Element body = org.jsoup.Jsoup.parse(prop.text().replace("<br />", "<p></p>")).body();
-        body.select("script").remove();
+        Element article = jsoupParse(prop);
+        article.getElementsByTag("blhttps:").remove();
+        article.select("script,.related-entries").remove();
 
-        body.select("h1,h2").tagName("h3");
+        for (Element e : article.select(".listicle")) {
+            cleanAttributes(e);
+            e.tagName("p");
 
-        Elements ee = body.children();
-        int index = ee.indexOf(ee.select("blockquote").last()) - 1;
-        if (index >= 0)
-            for (; index < ee.size(); ++index)
-                ee.get(index).remove();
-
-        cleanBlockquotes(body.select("blockquote"));
-
-        for (Element e : body.select("[src*='big.assets.h'],[src*='gen/2966946']"))
-            try {
-                e.parent().remove();
-            } catch (Exception ignored) {
+            for (Element slide : e.select(".listicle__slide")) {
+                String title = slide.select(".listicle__slide-header").text();
+                slide.html(
+                        (!title.isEmpty() ? "<h3>" + title + "</h3>" : "")
+                                + insertImg(slide.attr("data-sharingimage"))
+                                + insertCaption(slide.attr("data-credit"))
+                                + "<p>" + slide.select(".listicle__slide-caption").text() + "</p>"
+                );
+                slide.tagName("p");
+                cleanAttributes(slide);
             }
-
-        NewsStylist.repairLinks(body);
-
-        String content = body.outerHtml();
-        index = content.indexOf("<hh--");
-        if (index != -1)
-            content = content.substring(0, index);
-
-        return content;
-    }
-
-    @Override
-    protected void readNewsContent(Document doc, News news)
-    {
-        Elements article = doc.select(".entry__body > div.content-list-component,.top-media--image,.top-media--video,.twitter-tweet,.twitter-video,.pull-quote,.entry__body .listicle");
-
-        for (Element e : article.select("[src*='big.assets.h'],[src*='gen/2966946']"))
-            try {
-                e.parent().remove();
-            } catch (Exception ignored) {
-            }
-
-        for (Element script : article.select("script")) {
-            String html = script.html();
-            if (html.isEmpty())
-                script.remove();
-            else script.parent().html(html);
         }
-
-        article.select("[class]:not(blockquote)").removeAttr("class");
-        article.select("li").tagName("p");
-        article.select("h1,h2").tagName("h3");
-
-        NewsStylist.repairLinks(article);
-
-        news.content = article.outerHtml();
+        return finalFormat(article, false);
     }
 
     @Override
     protected Enclosure parseEnclosure(Element prop)
     {
-        String type = prop.attr("type");
-        if (type.startsWith("image")) {
-
-            String src;
-            if (prop.attr("rel").isEmpty()) {
-                src = prop.attr("url").replace("-mini", "-large300");
-            } else {
-                src = prop.attr("href").replace("-154x114", "-large300");
-            }
-            return new Enclosure(src, type, "");
-        }
-        return null;
+        String src = prop.attr("url");
+        if (src.contains("trans.gif"))
+            return null;
+        if (src.startsWith("//"))
+            src = "http:" + src;
+        return new Enclosure(src, prop.attr("medium"), "");
     }
 
-    private void cleanBlockquotes(Elements select)
+    @Override
+    protected News onNewsRead(News news)
     {
-        for (Element bq : select) {
-            String text = bq.text();
+        if ((news.title.contains("imágenes") || news.title.contains("fotos")) && news.enclosures.size() > 1) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 1; i < news.enclosures.size(); i++)
+                sb.append(news.enclosures.get(i).html());
 
-            if (text.contains("ADEM\u00C1S") || text.contains("TE PUEDE INTERESAR")
-                    || text.contains("AV\u00CDSANOS") || text.contains("M\u00C1S SOBRE")
-                    || text.contains("M\u00C1S PARA"))
-                bq.remove();
+            news.content += sb.toString();
         }
+        return news;
     }
 
 }

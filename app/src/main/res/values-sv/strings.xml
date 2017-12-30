@@ -32,7 +32,7 @@
     <string name="no_downloads_scheduled">Det finns inga nedladdningar schemalagda</string>
     <string name="expand_to_see_headlines">Expandera att se huvudrubrikerna</string>
     <string name="see_something_else">Intresserad av något annat?</string>
-    <string name="happening_now">Inga händelser just nu</string>
+    <string name="happening_now">Händelser</string>
 
     <string name="mon">Mån</string>
     <string name="tue">Tis</string>
@@ -59,7 +59,10 @@
     <string name="thats_it">Det är allt</string>
     <string name="add">Lägg till</string>
     <string name="delete">Radera</string>
-    <string name="delete_caps">RADERA</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nej</string>
+    <string name="update">Uppdatera</string>
+    <string name="not_now">Inte nu</string>
 
 
     <!-- * ******************** Hints **************************** * -->
@@ -135,7 +138,7 @@
     <!-- ***************************** ***************** ********************************** -->
     <string name="about_content_contact">Utvecklat av Rafael J. Lucena\nKontakt: rafaa89(snabel-a)gmail.com</string>
     <string name="about_content_title_new_features">De senaste funktionerna och förbättringarna:</string>
-    <string name="about_content_title_comming_soon">Vad kommer snart?:</string>
+    <string name="about_content_title_coming_soon">Vad kommer snart?:</string>
     <string name="about_content_title_next_sites">Möjliga stöd för:</string>
 
 

@@ -1,9 +1,9 @@
 package com.lucevent.newsup.data.reader;
+
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
 
-
-import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class _20Minutos extends com.lucevent.newsup.data.util.NewsReader {
@@ -20,7 +20,6 @@ public class _20Minutos extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_DC_DATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_ENCLOSURE},
-                "http://www.20minutos.es/",
                 "");
     }
 
@@ -28,15 +27,13 @@ public class _20Minutos extends com.lucevent.newsup.data.util.NewsReader {
     protected News onNewsRead(News news)
     {
         // Parsing content
-        Document doc = jsoupParse(news.content);
-        doc.select("body > br, body > img, body > a").remove();
-        doc.select("h1,h2").tagName("h3");
-
-        news.content = doc.body().html();
+        Element article = jsoupParse(news.content);
+        article.parent().select("body > br, body > img, body > a").remove();
+        news.content = finalFormat(article, false);
         // end
 
         // Parsing enclosures
-        Elements imgs = doc.select("img");
+        Elements imgs = article.select("img");
         if (!imgs.isEmpty())
             news.enclosures.add(new Enclosure(imgs.first().attr("src"), "", ""));
         // end

@@ -1,8 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.NewsStylist;
-
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class DigitalCamera extends com.lucevent.newsup.data.util.NewsReader {
@@ -19,20 +16,18 @@ public class DigitalCamera extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{},
-                "http://www.digitalcamera.es/",
                 "");
     }
 
     @Override
     protected String parseContent(Element prop)
     {
-        Document doc = org.jsoup.Jsoup.parse(prop.text());
-        doc.select("script").remove();
-        doc.select("[style]").removeAttr("style");
-        doc.select("[id]").removeAttr("id");
-        doc.select("h1,h2").tagName("h3");
-        doc.select(".wp-caption-text").tagName("figcaption");
-        return NewsStylist.cleanComments(doc.body().html().replace("<p>&nbsp;</p>", ""));
+        Element article = jsoupParse(prop);
+        article.select("script").remove();
+        article.select("[style]").removeAttr("style");
+        article.select("[id]").removeAttr("id");
+        article.select(".wp-caption-text").tagName("figcaption");
+        return finalFormat(article, false).replace("<p>&nbsp;</p>", "");
     }
 
 }

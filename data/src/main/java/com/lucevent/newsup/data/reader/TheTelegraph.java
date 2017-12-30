@@ -1,8 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,7 +26,6 @@ public class TheTelegraph extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_ENCLOSURE},
-                "http://www.telegraph.co.uk/",
                 "");
     }
 
@@ -66,12 +63,10 @@ public class TheTelegraph extends com.lucevent.newsup.data.util.NewsReader {
                     article.select("[style]").removeAttr("style");
                     article.select("[class]").removeAttr("class");
                     article.select("[id]").removeAttr("id");
-                    article.select("h2").tagName("h3");
 
                 } else {
                     article.select(".product-supplier,.article__footer,.social-share,[itemprop='articleBody'],.gallery-trigger").remove();
 
-                    article.select("h2").tagName("h3");
                     article.select(".departure-dates__section-header").tagName("b");
 
                     for (Element img : article.select(".product-gallery__thumbnail img"))
@@ -120,13 +115,13 @@ public class TheTelegraph extends com.lucevent.newsup.data.util.NewsReader {
         }
         for (Element img : article.select("img")) {
             img.attr("src", img.attr("src").replace("-small", "-large"));
-            NewsStylist.cleanAttributes(img, "src");
+            cleanAttributes(img, "src");
         }
         for (Element video : article.select(".videoPlayer")) {
             Elements div = video.select(".video-player");
             if (!div.isEmpty()) {
                 String video_id = div.get(0).attr("id").replace("video-", "");
-                video.html(Enclosure.iframe("https://static.telegraph.co.uk/tpp-secure/video.html?embed=" + video_id));
+                video.html(insertIframe("https://static.telegraph.co.uk/tpp-secure/video.html?embed=" + video_id + "&custom="));
             }
         }
         for (Element iframe : article.select(".htmlEmbed")) {
@@ -136,14 +131,22 @@ public class TheTelegraph extends com.lucevent.newsup.data.util.NewsReader {
                 if (iframe_src.startsWith("//"))
                     iframe_src = "http:" + iframe_src;
 
-                iframe.html(Enclosure.iframe(iframe_src));
+                iframe.html(insertIframe(iframe_src));
             }
         }
-        article.select("script").remove();
-        article.select("h1,h2").tagName("h3");
-        NewsStylist.repairLinks(article);
+        for (Element img : article.select("div.lazy-image")) {
+            String src = img.attr("data-src");
+            cleanAttributes(img);
+            img.tagName("img")
+                    .attr("src", src);
+            img.html("");
+        }
+        article.select("script,.live-stream__bar,button,opta,.tmg-particle,.component-content:has(.embed--brexit--bulletin--container)").remove();
+        article.select(".quote").tagName("blockquote");
+        article.select("q,tmg-travel-availability").tagName("div");
+        article.select("strike").tagName("s");
 
-        news.content = article.outerHtml();
+        news.content = finalFormat(article, true);
     }
 
 }

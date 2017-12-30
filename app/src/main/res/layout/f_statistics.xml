@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/nv_background_dark"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <android.support.v7.widget.RecyclerView
@@ -13,41 +14,51 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/by_sitename"
+        android:id="@+id/sort_name"
         style="@style/statistics_floating_button"
-        android:layout_alignParentTop="true"
+        android:layout_above="@+id/sort_total_requests"
         android:src="@drawable/ic_sort_by_name"
-        app:backgroundTint="@color/colorPrimary"
+        app:backgroundTint="@color/colorPrimaryDark"
         app:fabSize="mini"
         app:rippleColor="@color/colorAccent"
         app:useCompatPadding="true"/>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/by_nrequests"
+        android:id="@+id/sort_total_requests"
         style="@style/statistics_floating_button"
-        android:layout_below="@+id/by_sitename"
+        android:layout_above="@+id/sort_month_requests"
         android:src="@drawable/ic_sort_by_number"
-        app:backgroundTint="@color/colorPrimary"
+        app:backgroundTint="@color/colorPrimaryDark"
         app:fabSize="mini"
         app:rippleColor="@color/colorAccent"
         app:useCompatPadding="true"/>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/by_readings"
+        android:id="@+id/sort_month_requests"
         style="@style/statistics_floating_button"
-        android:layout_below="@+id/by_nrequests"
+        android:layout_above="@+id/sort_readings"
+        android:src="@drawable/ic_add_white"
+        app:backgroundTint="@color/colorPrimaryDark"
+        app:fabSize="mini"
+        app:rippleColor="@color/colorAccent"
+        app:useCompatPadding="true"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/sort_readings"
+        style="@style/statistics_floating_button"
+        android:layout_above="@+id/sort_time"
         android:src="@drawable/ic_read_white"
-        app:backgroundTint="@color/colorPrimary"
+        app:backgroundTint="@color/colorPrimaryDark"
         app:fabSize="mini"
         app:rippleColor="@color/colorAccent"
         app:useCompatPadding="true"/>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/by_time"
+        android:id="@+id/sort_time"
         style="@style/statistics_floating_button"
-        android:layout_below="@+id/by_readings"
+        android:layout_alignParentBottom="true"
         android:src="@drawable/ic_access_time"
-        app:backgroundTint="@color/colorPrimary"
+        app:backgroundTint="@color/colorPrimaryDark"
         app:fabSize="mini"
         app:rippleColor="@color/colorAccent"
         app:useCompatPadding="true"/>

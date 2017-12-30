@@ -9,6 +9,7 @@ import com.lucevent.newsup.data.util.Site;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.TreeSet;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
@@ -77,8 +78,9 @@ public class Statistics {
     {
         synchronized (this) {
             SiteStats siteStats = getSiteStats(code, label);
-            siteStats.nAccesses++;
-            siteStats.lastAccess = System.currentTimeMillis();
+            siteStats.monthRequests++;
+            siteStats.totalRequests++;
+            siteStats.lastRequest = System.currentTimeMillis();
             siteStats.lastIp = ip;
             siteStats.fromVersion = version;
             ofy().save().entity(siteStats).now();
@@ -87,11 +89,11 @@ public class Statistics {
         monthStats.count();
     }
 
-    public void read(Site site, int n)
+    public void read(Site site, int times)
     {
         synchronized (this) {
             SiteStats siteStats = getSiteStats(site.code, site.name);
-            siteStats.nNewsRead += n;
+            siteStats.readings += times;
             ofy().save().entity(siteStats).now();
         }
     }
@@ -116,6 +118,12 @@ public class Statistics {
     public void newMonth()
     {
         monthStats = MonthStats.getInstance();
+
+        List<SiteStats> siteStats = ofy().load().type(SiteStats.class).list();
+        for (SiteStats stats : siteStats)
+            stats.monthRequests = 0;
+
+        ofy().save().entities(siteStats).now();
     }
 
     public TreeSet<MonthStats> getMonthStats()
@@ -148,9 +156,10 @@ public class Statistics {
             res = new SiteStats();
             res.siteName = name;
             res.siteCode = code;
-            res.nAccesses = 0;
-            res.nNewsRead = 0;
-            res.lastAccess = 0;
+            res.monthRequests = 0;
+            res.totalRequests = 0;
+            res.readings = 0;
+            res.lastRequest = 0;
             res.lastIp = "";
             res.fromVersion = "";
         }
@@ -158,8 +167,9 @@ public class Statistics {
         return res;
     }
 
-    public String getDistribution()
+    public TimeStats getDistribution()
     {
-        return timeStats.toString();
+        return timeStats;
     }
+
 }

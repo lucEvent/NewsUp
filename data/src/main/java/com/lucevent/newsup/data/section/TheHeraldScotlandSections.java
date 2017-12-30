@@ -35,7 +35,7 @@ public class TheHeraldScotlandSections extends Sections {
         add(new Section("Company News", "http://www.heraldscotland.com/business/company_news/rss", 1));
         add(new Section("Markets & Economy", "http://www.heraldscotland.com/business/markets_economy/rss", 1));
         add(new Section("People", "http://www.heraldscotland.com/business/people/rss", 1));
-        add(new Section("Opinion", "http://www.heraldscotland.com/business/opinion/rss", 1));
+        add(new Section("Business Opinion", "http://www.heraldscotland.com/business/opinion/rss", 1));
         add(new Section("Personal Finance", "http://www.heraldscotland.com/business/personal_finance/rss", 1));
         add(new Section("Business Extra & Commercial Property", "http://www.heraldscotland.com/business/business_extra/rss", 1));
         add(new Section("Farming", "http://www.heraldscotland.com/business/farming/rss", 1));

@@ -2,6 +2,7 @@ package com.lucevent.newsup.debugbackend.data;
 
 import com.googlecode.objectify.Key;
 import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.Site;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -108,6 +109,15 @@ public class Database {
         error.n_link = news.link;
         error.n_content = news.content;
         error.n_site = news.site_code;
+
+        ofy().save().entity(error).now();
+    }
+
+    public void saveError(Site s, String errorContent) {
+        Error error = new Error();
+        error.n_link = "";
+        error.n_content = errorContent;
+        error.n_site = s.code;
 
         ofy().save().entity(error).now();
     }

@@ -7,10 +7,8 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
     <style type="text/css">${demo.css}</style>
     <script type="text/javascript">
-function onError(data) {
-}
-function onDataReceived(data) {
-    console.log(data);
+function onError(data) {}
+function onDataReceived(json) {
     Highcharts.chart('container', {
         title: {
             text: 'Petitions on Main Server',
@@ -50,12 +48,12 @@ function onDataReceived(data) {
         },
         series: [{
             name: 'All',
-            data: data
+            data: json.load
         }]
     });
 }
 $(document).ready(function () {
-    $.ajax("/web?stats_distribution", {
+    $.ajax("/dev?stats", {
         success: onDataReceived,
         error: onError("")
     });

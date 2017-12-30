@@ -1,7 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -25,7 +24,6 @@ public class ElPeriodicoEs extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{},
-                "http://www.elperiodico.com/es/",
                 "");
     }
 
@@ -47,11 +45,10 @@ public class ElPeriodicoEs extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected String parseContent(Element prop)
     {
-        Document doc = org.jsoup.Jsoup.parse(prop.text());
-        doc.select("[style]").removeAttr("style");
-        doc.select("h1,h2").tagName("h3");
-        doc.select(".subtitle").tagName("figcaption");
-        return doc.html().replace("<span>", "").replace("</span>", "").replace("<p>&nbsp;</p>", "");
+        Element article = jsoupParse(prop);
+        article.select("[style]").removeAttr("style");
+        article.select(".subtitle").tagName("figcaption");
+        return finalFormat(article, false).replace("<span>", "").replace("</span>", "").replace("<p>&nbsp;</p>", "");
     }
 
     @Override
@@ -65,18 +62,17 @@ public class ElPeriodicoEs extends com.lucevent.newsup.data.util.NewsReader {
             article.select(".onbcn-themes-related").remove();
 
         } else
-            article.select("style,script,.hidden-md,.hidden-sm,.ep-toolbar,.close,.ep-related,.ep-opinion,.bottom,.custom-navigation").remove();
+            article.select("script,.hidden-md,.hidden-sm,.ep-toolbar,.close,.ep-related,.ep-opinion,.bottom,.custom-navigation").remove();
 
         if (!doc.select(".ep-galeria-v2").isEmpty())
             doc.select(".ep-media").remove();
 
         article.select(".despiece-bottom").tagName("blockquote");
         article.select(".subtitle").tagName("figcaption");
-        article.select("h1,h2").tagName("h3");
 
-        NewsStylist.cleanAttributes(article.select(".slide,.slider-item"));
+        cleanAttributes(article.select(".slide,.slider-item"));
 
-        news.content = article.html();
+        news.content = finalFormat(article, false);
     }
 
 }

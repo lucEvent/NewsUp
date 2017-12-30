@@ -14,7 +14,7 @@ import com.lucevent.newsup.kernel.stats.SiteStat;
 public class StatisticsViewHolder extends RecyclerView.ViewHolder {
 
     private ImageView icon;
-    private TextView name, nAccesses, readings, last, version;
+    private TextView name, requests, readings, last, version;
 
     public StatisticsViewHolder(View v)
     {
@@ -22,21 +22,21 @@ public class StatisticsViewHolder extends RecyclerView.ViewHolder {
 
         icon = (ImageView) v.findViewById(R.id.icon);
         name = (TextView) v.findViewById(R.id.name);
-        nAccesses = (TextView) v.findViewById(R.id.nAccesses);
+        requests = (TextView) v.findViewById(R.id.requests);
         readings = (TextView) v.findViewById(R.id.readings);
         last = (TextView) v.findViewById(R.id.last);
         version = (TextView) v.findViewById(R.id.version);
     }
 
     @SuppressLint("SetTextI18n")
-    public static void populateViewHolder(StatisticsViewHolder holder, SiteStat siteStat)
+    public void bind(SiteStat siteStat)
     {
-        holder.icon.setBackground(LogoManager.getLogo(siteStat.siteCode, LogoManager.Size.I_ITEM));
-        holder.name.setText(siteStat.siteName);
-        holder.nAccesses.setText("#" + siteStat.nAccesses);
-        holder.readings.setText("[" + siteStat.readings + "]");
-        holder.last.setText(Date.getAge(siteStat.lastAccess));
-        holder.version.setText(siteStat.version);
+        icon.setBackground(LogoManager.getLogo(siteStat.siteCode, LogoManager.Size.I_ITEM));
+        name.setText(siteStat.siteName);
+        requests.setText(siteStat.totalRequests + "/" + siteStat.totalRequests);
+        readings.setText(Integer.toString(siteStat.readings));
+        last.setText(Date.getAge(siteStat.lastRequest));
+        version.setText(siteStat.version);
     }
 
 }

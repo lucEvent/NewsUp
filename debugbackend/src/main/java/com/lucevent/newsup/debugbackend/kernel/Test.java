@@ -9,6 +9,8 @@ import com.lucevent.newsup.debugbackend.data.Database;
 import com.lucevent.newsup.debugbackend.data.Task;
 import com.lucevent.newsup.debugbackend.util.ReportCallback;
 
+import org.jsoup.nodes.Document;
+
 
 public class Test {
 
@@ -25,9 +27,9 @@ public class Test {
     public String doTest(ReportCallback urgentCallback)
     {
         Sites sites = Sites.getDefault(true);
-        Evaluation[] evals = new Evaluation[]{NO_CONTENT, TH2, SCRIPTS, LINKS, STYLES};
+        Evaluator evaluator = new Evaluator();
 
-        Task task = db.getCurrentTask(evals.length);
+        Task task = db.getCurrentTask(evaluator.size());
 
         db.newRound(task);
 
@@ -51,10 +53,10 @@ public class Test {
 //                            }
                             site.readNewsContent(N);
                         }
-                        for (int t = 0; t < evals.length; t++)
-                            if (evals[t].evaluate(N, db))
-                                tempValues[t]++;
                     }
+                    int[] partialValues = evaluator.evaluate(news, db);
+                    for (int t = 0; t < tempValues.length; t++)
+                        tempValues[t] += partialValues[t];
 
                     task.siteNumNews += news.size();
                     for (int i = 0; i < tempValues.length; i++)
@@ -64,15 +66,11 @@ public class Test {
 
             // Log save
             StringBuilder sb = new StringBuilder();
-            sb.append("\tResultados para ").append(site.name).append("\n");
-            sb.append("\t\t").append(task.siteNumNews).append(" noticias\n");
+            sb.append("{").append(site.name).append(",").append(task.siteNumNews);
             for (int i = 0; i < task.siteTestResults.length; i++) {
-                int res = task.siteTestResults[i];
-                if (res > 0) {
-                    sb.append("\t\t").append(res).append(" ").append(evals[i].description()).append("\n");
-                }
+                sb.append(",").append(task.siteTestResults[i]);
             }
-            sb.append("_________________________________________________\n\n");
+            sb.append("}\n");
 
             String partialReport = sb.toString();
             db.saveLog(task.id, task.currentEvaluatingSite, partialReport);
@@ -81,7 +79,7 @@ public class Test {
                 urgentCallback.report(partialReport);
 
             task.totalNumNews += task.siteNumNews;
-            for (int t = 0; t < evals.length; t++) {
+            for (int t = 0; t < task.totalTestResults.length; t++) {
                 task.totalTestResults[t] += task.siteTestResults[t];
                 task.siteTestResults[t] = 0;
             }
@@ -100,7 +98,7 @@ public class Test {
         for (int i = 0; i < task.totalTestResults.length; i++) {
             int res = task.totalTestResults[i];
             if (res > 0) {
-                sb.append("\t").append(res).append(" ").append(evals[i].description()).append("\n");
+                sb.append("\t").append(res).append(" ").append(evaluator.getDescription(i)).append("\n");
             }
         }
         db.saveLog(task.id, task.currentEvaluatingSite, sb.toString());
@@ -115,82 +113,120 @@ public class Test {
         db.clearLogs();
     }
 
-    private static final Evaluation TH2 = new Evaluation() {
-        @Override
-        public String description()
-        {
-            return "contienen h1/h2";
-        }
+    private class Evaluator {
 
-        @Override
-        public boolean evaluate(News news, Database db)
+        private static final int D_EMPTY = 0;
+        private static final int D_HS = 1;
+        private static final int D_SCRIPTS = 2;
+        private static final int D_LINKS = 3;
+        private static final int D_STYLES_TAGS = 4;
+        private static final int D_STYLE_ATTR = 5;
+        private static final int D_A_OBJECT = 6;
+        private static final int D_COMMENTS = 7;
+
+        private final String[] descriptions = new String[]{
+                "estan vac\u00EDas",     // 52
+                "contienen h1/h2",       //*0
+                "tienen scripts",        // 0
+                "con links sin HTTP",    //*19
+                "tienen style tags",     //*52
+                "tienen style attrs",    // 313
+                "tienen <a><object></a>",//*14
+                "tienen comentarios"     //*1
+        };
+
+        public int[] evaluate(NewsArray news, Database db)
         {
-            boolean evaluation = news.content.contains("<h2>") | news.content.contains("<h1>");
-            if (evaluation) {
-                db.saveErrorOn(news);
+            int[] res = new int[descriptions.length];
+            for (int i = 0; i < res.length; i++)
+                res[i] = 0;
+
+            for (News n : news) {
+                Document doc = org.jsoup.Jsoup.parse(n.content);
+
+                if (evaluateEmpty(n.content)) {
+                    res[D_EMPTY]++;
+                }
+                if (evaluateHs(doc)) {
+                    db.saveErrorOn(n);
+                    res[D_HS]++;
+                }
+                if (evaluateScripts(doc)) {
+                    res[D_SCRIPTS]++;
+                }
+                if (evaluateLinks(n.content)) {
+                    db.saveErrorOn(n);
+                    res[D_LINKS]++;
+                }
+                if (evaluateStyleTag(doc)) {
+                    db.saveErrorOn(n);
+                    res[D_STYLES_TAGS]++;
+                }
+                if (evaluateStyleAttr(doc)) {
+                    res[D_STYLE_ATTR]++;
+                }
+                if (evaluateAWithObject(doc)) {
+                    db.saveErrorOn(n);
+                    res[D_A_OBJECT]++;
+                }
+                if (evaluateComments(n.content)) {
+                    db.saveErrorOn(n);
+                    res[D_COMMENTS]++;
+                }
             }
-            return evaluation;
-        }
-    };
-
-    private static final Evaluation NO_CONTENT = new Evaluation() {
-        @Override
-        public String description()
-        {
-            return "estan vac\u00EDas";
+            return res;
         }
 
-        @Override
-        public boolean evaluate(News news, Database db)
+        private boolean evaluateHs(Document doc)
         {
-            return news.content == null || news.content.isEmpty();
-        }
-    };
-
-    private static final Evaluation SCRIPTS = new Evaluation() {
-        @Override
-        public String description()
-        {
-            return "tienen scripts";
+            return !doc.select("h1,h2").isEmpty();
         }
 
-        @Override
-        public boolean evaluate(News news, Database db)
+        private boolean evaluateEmpty(String content)
         {
-            return news.content.contains("</script>");
-        }
-    };
-
-    private static final Evaluation LINKS = new Evaluation() {
-        @Override
-        public String description()
-        {
-            return "con links sin HTTP";
+            return content == null || content.isEmpty();
         }
 
-        @Override
-        public boolean evaluate(News news, Database db)
+        private boolean evaluateScripts(Document doc)
         {
-            boolean evaluation = news.content.contains("=\"//") || news.content.contains("='//");
-            if (evaluation) {
-                db.saveErrorOn(news);
-            }
-            return evaluation;
-        }
-    };
-
-    private static final Evaluation STYLES = new Evaluation() {
-        @Override
-        public String description()
-        {
-            return "tienen styles";
+            return !doc.select("script").isEmpty();
         }
 
-        @Override
-        public boolean evaluate(News news, Database db)
+        private boolean evaluateLinks(String content)
         {
-            return news.content.contains("</style>") || news.content.contains("style=\"");
+            return content.contains("=\"//") || content.contains("='//");
         }
-    };
+
+        private boolean evaluateStyleTag(Document doc)
+        {
+            return !doc.select("style").isEmpty();
+        }
+
+        private boolean evaluateStyleAttr(Document doc)
+        {
+            return !doc.select("[style]").isEmpty();
+        }
+
+        private boolean evaluateAWithObject(Document doc)
+        {
+            return !doc.select("a:has(img,iframe,video,figure,picture)").isEmpty();
+        }
+
+        private boolean evaluateComments(String content)
+        {
+            return content.contains("<!--");
+        }
+
+        int size()
+        {
+            return descriptions.length;
+        }
+
+        String getDescription(int position)
+        {
+            return descriptions[position];
+        }
+
+    }
 
 }

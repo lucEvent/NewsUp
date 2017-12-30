@@ -8,7 +8,7 @@ import android.view.animation.TranslateAnimation;
 
 public class AppAnimator {
 
-    private static final long animationTime = 400;
+    private static final long animationTime = 500;
 
     static void expandMoving(View view, View from, int finalHeight, Animation.AnimationListener animationListener)
     {
@@ -26,6 +26,17 @@ public class AppAnimator {
         view.startAnimation(animationSet);
     }
 
+    static void swipeUp(View view, float screen_height, Animation.AnimationListener animationListener)
+    {
+        TranslateAnimation anim = new TranslateAnimation(0, 0, screen_height, 0);
+        anim.setAnimationListener(animationListener);
+        anim.setDuration(animationTime);
+        anim.setFillAfter(false);
+        anim.setFillBefore(true);
+
+        view.startAnimation(anim);
+    }
+
     static void collapseMoving(View view, View to, int startHeight, Animation.AnimationListener animationListener)
     {
         TranslateAnimation movement = new TranslateAnimation(0, 0, 0, to.getY());
@@ -39,6 +50,17 @@ public class AppAnimator {
         animationSet.setFillBefore(true);
 
         view.startAnimation(animationSet);
+    }
+
+    static void swipeDown(View view, float startHeight, float toHeight, Animation.AnimationListener animationListener)
+    {
+        TranslateAnimation anim = new TranslateAnimation(0, 0, startHeight, toHeight);
+        anim.setAnimationListener(animationListener);
+        anim.setDuration(animationTime);
+        anim.setFillBefore(true);
+        anim.setFillAfter(false);
+
+        view.startAnimation(anim);
     }
 
     static class AppAnimatorListener implements Animation.AnimationListener {

@@ -1,7 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Element;
 
@@ -19,7 +18,6 @@ public class ElConfidencial extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_UPDATED},
                 new int[]{},
                 new int[]{TAG_MEDIA_CONTENT},
-                "https://www.elconfidencial.com/",
                 "");
     }
 
@@ -38,15 +36,13 @@ public class ElConfidencial extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected String parseContent(Element prop)
     {
-        org.jsoup.nodes.Element article = jsoupParse(prop).select("body").get(0);
+        org.jsoup.nodes.Element article = jsoupParse(prop);
         article.children().last().remove();
-        article.select("h1,h2").tagName("h3");
         article.select(".footer-video-text").tagName("figcaption");
 
-        NewsStylist.cleanAttributes(article.select("img"), "src");
-        NewsStylist.repairLinks(article);
+        cleanAttributes(article.select("img"), "src");
 
-        return article.html();
+        return finalFormat(article, false);
     }
 
 }

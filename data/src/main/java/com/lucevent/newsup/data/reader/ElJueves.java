@@ -1,7 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -27,7 +26,6 @@ public class ElJueves extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{},
                 new int[]{TAG_MEDIA_CONTENT},
-                "http://www.eljueves.es/",
                 "");
     }
 
@@ -42,10 +40,13 @@ public class ElJueves extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected News onNewsRead(News news)
     {
-        if (news.link.contains(".es/vineta-del-dia/") || news.link.contains(".es/juevflix/")) {
+        if (news.link.contains("/vineta-del-dia/") && !news.enclosures.isEmpty()) {
+            news.content = news.enclosures.get(0).html();
+        } else if (news.link.contains("/juevflix/")) {
             news.content = news.description;
             news.description = "";
-        } else {
+        }
+        if (!news.description.isEmpty()) {
             news.description = org.jsoup.Jsoup.parse(news.description).text();
         }
         return news;
@@ -58,7 +59,7 @@ public class ElJueves extends com.lucevent.newsup.data.util.NewsReader {
 
         Elements main = doc.select("#main");
 
-        String tag = NewsStylist.subStringBetween(news.link, "http://www.eljueves.es/", "/", false);
+        String tag = findSubstringBetween(news.link, "http://www.eljueves.es/", "/", false);
         Elements article;
         switch (tag) {
             case "news":
@@ -110,12 +111,12 @@ public class ElJueves extends com.lucevent.newsup.data.util.NewsReader {
         for (Element img : images) {
             String src = img.attr(img.hasAttr("data-src") ? "data-src" : "src");
 
-            NewsStylist.cleanAttributes(img);
+            cleanAttributes(img);
 
             img.attr("src", src);
         }
 
-        news.content = NewsStylist.cleanComments(article.outerHtml());
+        news.content = finalFormat(article, true);
     }
 
 }

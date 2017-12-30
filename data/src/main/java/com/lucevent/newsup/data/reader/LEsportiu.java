@@ -1,7 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -21,7 +20,6 @@ public class LEsportiu extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{},
-                "http://www.lesportiudecatalunya.cat/",
                 "");
     }
 
@@ -40,13 +38,13 @@ public class LEsportiu extends com.lucevent.newsup.data.util.NewsReader {
         for (Element subtitle : article.select(".subtitol")) {
             subtitle.tagName("p");
             subtitle.html("<li>" + subtitle.html() + "</li>");
-            NewsStylist.cleanAttributes(subtitle);
+            cleanAttributes(subtitle);
         }
         article.select(".caption").tagName("figcaption");
         article.select(".article-fitxes,.frase").tagName("blockquote");
         article.select(".formatperfil,.formatpre").tagName("h4");
 
-        news.content = article.outerHtml();
+        news.content = finalFormat(article, true);
     }
 
 }

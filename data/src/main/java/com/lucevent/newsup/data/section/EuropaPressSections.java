@@ -21,7 +21,7 @@ public class EuropaPressSections extends Sections {
         add(new Section("Motor", "http://www.europapress.es/rss/rss.aspx?ch=435", 0));
         add(new Section("Comunicados", "http://www.europapress.es/rss/rss.aspx?ch=137", 0));
 
-        add(new Section("Autonom\u00EDas", "http://www.europapress.es/rss/rss.aspx?ch=279", 0));
+        add(new Section("Autonom\u00EDas", null, -1));
         add(new Section("Andaluc\u00EDa", "http://www.europapress.es/rss/rss.aspx?ch=279", 1));
         add(new Section("Arag\u00F3n", "http://www.europapress.es/rss/rss.aspx?ch=280", 1));
         add(new Section("Asturias", "http://www.europapress.es/rss/rss.aspx?ch=294", 1));

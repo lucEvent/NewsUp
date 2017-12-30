@@ -1,7 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -10,9 +9,8 @@ public class ElPais extends com.lucevent.newsup.data.util.NewsReader {
 
     /**
      * Tags:
-     * [category, comments, content:encoded, dc:creator, description, enclosure, guid, item, link, pubdate, title]
-     * [dc:creator, description, enclosure, guid, item, link, pubdate, title]
-     * [author, description, guid, item, link, pubdate, title]
+     * All have -> [description, guid, item, link, pubdate, title]
+     * Some have -> [author] [category] [dc:creator] [enclosure]
      */
 
     public ElPais()
@@ -25,51 +23,104 @@ public class ElPais extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_ENCLOSURE},
-                "https://elpais.com/",
                 "");
     }
 
     @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
-        Elements article = doc.select("#articulo-introduccion p,[representativeofpage='true'] img,#cuerpo_noticia > p,#cuerpo_noticia > h3,#cuerpo_noticia > .sumario_foto img,.sumario_eskup .sumario__interior,.articulo-apertura .articulo-media");
+        if (news.link.contains("/album/") || news.link.contains("/fotorrelato/")) {
+            Elements article = doc.select("#contenedor_fotos li");
 
-        if (article.isEmpty()) {
-
-            article = doc.select("#contenedorfotos figure");
-            if (article.isEmpty()) {
-
-                article = doc.select("article .photo_description img:not(img[src='']),#article_container > div:not(.adv_aside,.aside_summary),#article_container > p");
-                if (article.isEmpty()) {
-                    article = doc.select(".entry-content");
-                }
-            } else {
-
-                for (Element div : article.select(".sin_enlace")) {
-                    Elements imgs = div.select("meta[itemprop='url']");
-                    if (!imgs.isEmpty()) {
-                        Element img = imgs.get(0);
-                        img.tagName("img");
-                        img.attr("src", img.attr("content"));
-                        img.removeAttr("content");
-                        div.html(img.outerHtml());
-                    }
-                }
+            for (Element img : article.select("img[data-src]")) {
+                String src = img.attr("data-src");
+                cleanAttributes(img);
+                img.attr("src", src);
             }
-        } else {
-            article.select(".sin_enlace").remove();
+            for (Element cap : article.select("figcaption")) {
+                cap.tagName("p");
+                cap.select(".foto-numero").remove();
+                cap.select(".foto-titulo").tagName("h4");
+                cap.select(".foto-texto").tagName("p");
+                cap.select(".foto-firma").tagName("figcaption");
+            }
+
+            news.content = finalFormat(article, false);
+            return;
         }
-        article.select("style,script,noscript,.copyfoto").remove();
+        if (news.link.contains("/media/"))
+            return;
+        if (news.link.contains("blogs.elpais.com")) {
+            Elements article = doc.select(".entry-body");
+            article.select("script,.txt-comentarios,.entry-footer").remove();
+            article.select("[style]").removeAttr("style");
+            article.select(".asset-img-link ~ span").tagName("figcaption");
+            cleanAttributes(article.select("img[src]"), "src");
 
-        article.select("h1,h2").tagName("h3");
-        article.select(".wp-caption-text").tagName("figcaption");
-        article.select("[style]").removeAttr("style");
+            news.content = finalFormat(article, false);
+            return;
+        }
+        if (doc.baseUri().contains("motor.elpais.com")) {
+            Elements article = doc.select(".articulo-grande picture img,.wp-caption-text__grande,.entry-content");
+            article.select(".articulos-relacionados").remove();
+            article.select("[style]").removeAttr("style");
+            article.select(".wp-caption-text").tagName("figcaption");
+            cleanAttributes(article.select("img[src]"), "src");
 
-        NewsStylist.cleanAttributes(article.select("img"), "src");
-        NewsStylist.repairLinks(article);
-        NewsStylist.repairLinks(article, "data-url");
+            news.content = finalFormat(article, true);
+            return;
+        }
 
-        news.content = article.outerHtml();
+        Elements article = doc.select("#videonoticia,.articulo-apertura>figure,#articulo_contenedor>[itemprop='image'],#cuerpo_noticia");
+        article.select("script:not(#videonoticia script),.sumario_apoyos,.boton_ampliar,noframes").remove();
+        article.select(".sumario_despiece,.texto_grande").tagName("blockquote");
+        article.select(".nota_pie").tagName("figcaption");
+
+        for (Element v : article.select("#videonoticia")) {
+            String script = v.select("script").html();
+            String vContent = findSubstringBetween(script, ".codigo = '", "'", false);
+
+            if (vContent != null) {
+                v.html(vContent.replace("\\", "") + v.select("figcaption").outerHtml());
+                continue;
+            }
+
+            Elements meta = v.select("meta[itemprop='url']");
+            if (meta.isEmpty()) {
+                v.html("");
+                continue;
+            }
+            String vidSrc = meta.get(0).attr("content")
+                    .replace("elpaistop", "elpaistop/multimedia");
+
+            vidSrc = vidSrc.substring(0, vidSrc.lastIndexOf("_")) + "_1200.mp4";
+            v.html(insertVideo(vidSrc));
+        }
+
+        for (Element e : article.select(".sumario_eskup")) {
+            Elements content = e.select("noscript");
+            content.select(".autor").remove();
+            cleanAttributes(content.select(".article"));
+            for (Element d : content.select(".contenedorbotones")) {
+                d.tagName("figcaption");
+                d.html(d.text());
+            }
+            for (Element t : content.select("[itemprop='text'] a[href*='twitter']")) {
+                t.parent().parent().html(
+                        "<blockquote class='twitter-tweet'><a href='"
+                                + t.attr("href")
+                                + "'></a></blockquote>");
+            }
+            e.html(content.html());
+        }
+        for (Element e : article.select("picture:has(source)")) {
+            Elements img = e.select("img");
+            if (!img.isEmpty())
+                e.html(img.outerHtml());
+        }
+        cleanAttributes(article.select("img[src]"), "src");
+
+        news.content = finalFormat(article, false);
     }
 
 }

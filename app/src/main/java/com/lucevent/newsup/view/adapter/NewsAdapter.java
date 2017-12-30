@@ -81,6 +81,11 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return onMoreClick == null ? TYPE_NEWS : (position < (dataSet.size() - 1) ? TYPE_NEWS : TYPE_MORE);
     }
 
+    public NewsAdapterList getDataSet()
+    {
+        return dataSet;
+    }
+
     public final void showSiteLogo(boolean showSiteLogo)
     {
         this.showSiteLogo = showSiteLogo;
@@ -137,6 +142,19 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     {
         int index = dataSet.indexOf(news);
         dataSet.updateItemAt(index, news);
+    }
+
+    public final void replaceAll(Collection<News> newDataSet)
+    {
+        dataSet.beginBatchedUpdates();
+        for (int i = dataSet.size() - 1; i >= 0; i--) {
+            final News n = dataSet.get(i);
+            if (!newDataSet.contains(n)) {
+                dataSet.remove(n);
+            }
+        }
+        dataSet.addAll(newDataSet);
+        dataSet.endBatchedUpdates();
     }
 
     public void clear()

@@ -11,7 +11,7 @@ public class TheChiveSections extends Sections {
 
         add(new Section("Homepage", "http://thechive.com/feed", 0));
 
-        add(new Section("Girls", "http://thechive.com/category/girls/feed/", 0));
+        add(new Section("Girls", "http://thechive.com/category/sexy-girls/feed/", 0));
         add(new Section("College Girls", "http://thechive.com/category/girls/college-girls/feed", 1));
 
         add(new Section("Humanity", "http://thechive.com/category/humanity/feed/", 0));
@@ -34,7 +34,6 @@ public class TheChiveSections extends Sections {
         add(new Section("Interesting", "http://thechive.com/category/humanity/interesting-random/feed", 1));
         add(new Section("Kids", "http://thechive.com/category/humanity/kids/feed", 1));
         add(new Section("Life Hacks", "http://thechive.com/category/humanity/life-hacks-random/feed", 1));
-        add(new Section("Movies", "http://thechive.com/category/humanity/movies/feed", 1));
         add(new Section("Movies", "http://thechive.com/category/humanity/movies/feed", 1));
         add(new Section("Nature", "http://thechive.com/category/humanity/nature/feed", 1));
         add(new Section("Nostalgia", "http://thechive.com/category/humanity/nostalgia/feed", 1));

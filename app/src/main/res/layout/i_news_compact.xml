@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:clipChildren="false"
-    style="@style/listItemContainer">
+    style="@style/listItemContainer"
+    android:clipChildren="false">
 
     <ImageView
         android:id="@+id/picture"
@@ -38,7 +38,7 @@
         android:paddingEnd="20dp"
         android:paddingStart="20dp"
         android:paddingTop="6dp"
-        android:text="@string/about_content_comming_soon"
+        android:text="@string/about_content_coming_soon"
         android:textAppearance="?android:attr/textAppearanceSmall"/>
 
     <View

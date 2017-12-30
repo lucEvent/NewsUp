@@ -1,8 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -25,27 +23,31 @@ public class ElNacional extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_ENCLOSURE, TAG_MEDIA_CONTENT},
-                "http://www.elnacional.cat/",
                 "");
     }
 
     @Override
     protected String parseContent(Element prop)
     {
-        Document doc = jsoupParse(prop);
-        doc.select("script[src*='twitter']").remove();
+        Element article = jsoupParse(prop);
+        article.select("script,link,.videoPC,.eb-picto").remove();
 
-        for (Element script : doc.select("script[id^='infogram']")) {
+        for (Element script : article.select("script[id^='infogram']")) {
             String src = script.attr("id").replaceFirst("infogram_0_", "https://e.infogram.com/") + "?src=embed";
 
-            NewsStylist.cleanAttributes(script);
+            cleanAttributes(script);
             script.tagName("div");
-            script.html(Enclosure.iframe(src));
+            script.html(insertIframe(src));
+        }
+        for (Element h : article.select(".cs-horoscop")) {
+            h.select("td:has(.dates)").tagName("h3");
+            Elements elems = h.select("h3,p");
+            h.html(elems.outerHtml());
         }
 
-        doc.select(".caption").tagName("figcaption");
+        article.select(".caption").tagName("figcaption");
 
-        return doc.body().html();
+        return finalFormat(article, false);
     }
 
     @Override
@@ -54,9 +56,9 @@ public class ElNacional extends com.lucevent.newsup.data.util.NewsReader {
         Elements article = doc.select(".article-img img,.article-body");
         article.select("script,[data-type='related-content']").remove();
 
-        NewsStylist.cleanAttributes(article.select("img"), "src");
+        cleanAttributes(article.select("img"), "src");
 
-        news.content = article.outerHtml();
+        news.content = finalFormat(article, true);
     }
 
 }

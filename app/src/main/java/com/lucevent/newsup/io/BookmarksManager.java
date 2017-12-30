@@ -1,5 +1,6 @@
 package com.lucevent.newsup.io;
 
+import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsMap;
 import com.lucevent.newsup.data.util.Tags;
@@ -54,12 +55,19 @@ public class BookmarksManager {
         return bookmarksMap;
     }
 
-    public static void toggleBookmark(News news)
+    /**
+     * @param news to toggle its bookmark state
+     * @return the new bookmark state of news
+     */
+    public static boolean toggleBookmark(News news)
     {
-        if (isBookmarked(news))
+        if (isBookmarked(news)) {
             unBookmark(news);
-        else
-            bookmark(news);
+            return false;
+        }
+
+        bookmark(news);
+        return true;
     }
 
     private static void bookmark(News news)
@@ -85,7 +93,7 @@ public class BookmarksManager {
 
             out.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            AppSettings.printerror("Error on BM.bookmark()", e);
         }
     }
 

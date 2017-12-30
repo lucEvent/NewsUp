@@ -57,7 +57,7 @@ public final class NewsReader {
 
     private final NewsArray readHeaders(String query_link, int site_code)
     {
-        AppSettings.printlog("Query: " + query_link);
+        AppSettings.printlog("[" + site_code + "] Query: " + query_link);
 
         org.jsoup.nodes.Document doc = getDocument(query_link);
         if (doc == null) return new NewsArray();
@@ -107,15 +107,16 @@ public final class NewsReader {
                 res.add(news);
             }
         }
+        AppSettings.printlog("[" + site_code + "] -> read " + res.size() + " news");
         return res;
     }
 
-    private org.jsoup.nodes.Document getDocument(String pagelink)
+    private org.jsoup.nodes.Document getDocument(String url)
     {
         try {
-            return org.jsoup.Jsoup.connect(pagelink).parser(org.jsoup.parser.Parser.xmlParser()).timeout(10000).get();
+            return org.jsoup.Jsoup.connect(url).parser(org.jsoup.parser.Parser.xmlParser()).timeout(10000).get();
         } catch (Exception e) {
-            AppSettings.printerror("[NR] Can't read url: " + pagelink, e);
+            AppSettings.printerror("[NR] Can't read url: " + url, e);
         }
         return null;
     }

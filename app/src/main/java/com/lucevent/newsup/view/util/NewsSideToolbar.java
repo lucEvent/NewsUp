@@ -32,15 +32,17 @@ public class NewsSideToolbar extends CoordinatorLayout implements View.OnClickLi
 
         closed = true;
 
-        actions = new FloatingActionButton[3];
+        actions = new FloatingActionButton[4];
 
         actions[0] = (FloatingActionButton) findViewById(R.id.button_bookmark);
         actions[1] = (FloatingActionButton) findViewById(R.id.button_share);
         actions[2] = (FloatingActionButton) findViewById(R.id.button_night);
+        actions[3] = (FloatingActionButton) findViewById(R.id.button_font_size);
 
         actions[0].setEnabled(false);
         actions[1].setEnabled(false);
         actions[2].setEnabled(false);
+        actions[3].setEnabled(false);
     }
 
     @Override

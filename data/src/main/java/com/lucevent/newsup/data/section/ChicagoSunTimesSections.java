@@ -12,13 +12,11 @@ public class ChicagoSunTimesSections extends Sections {
         add(new Section("Homepage", "http://chicago.suntimes.com/feed/", 0));
 
         add(new Section("News", "http://chicago.suntimes.com/section/news/feed/", 0));
+        add(new Section("Local", "http://chicago.suntimes.com/section/chicago/feed/", 1));
         add(new Section("Crime", "http://chicago.suntimes.com/section/crime/feed/", 1));
         add(new Section("Education", "http://chicago.suntimes.com/section/education/feed/", 1));
-        add(new Section("Opinion", "http://chicago.suntimes.com/section/opinion/feed/", 1));
         add(new Section("Transportation", "http://chicago.suntimes.com/section/transportation/feed/", 1));
         add(new Section("Business", "http://chicago.suntimes.com/section/business/feed/", 1));
-        add(new Section("Chicago", "http://chicago.suntimes.com/section/chicago/feed/", 1));
-        add(new Section("Sneed", "http://chicago.suntimes.com/section/sneed/feed/", 1));
         add(new Section("The Watchdogs", "http://chicago.suntimes.com/section/the-watchdogs/feed/", 1));
 
         add(new Section("Sports", "http://chicago.suntimes.com/section/sports/feed/", 0));
@@ -31,16 +29,12 @@ public class ChicagoSunTimesSections extends Sections {
         add(new Section("High School Sports", "http://www.suntimeshighschoolsports.com/feed/", 1));
         add(new Section("Colleges", "http://chicago.suntimes.com/section/colleges/feed/", 1));
         add(new Section("Fire", "http://chicago.suntimes.com/section/fire-soccer/feed/", 1));
-        add(new Section("Steve Greenberg", "http://chicago.suntimes.com/section/steve-greenberg/feed/", 1));
         add(new Section("Ladd Biro", "http://chicago.suntimes.com/section/ladd-biro/feed/", 1));
-        add(new Section("Dale Bowman", "http://chicago.suntimes.com/section/dale-bowman/feed/", 1));
-        add(new Section("Jeff Agrest", "http://chicago.suntimes.com/section/jeff-agrest/feed/", 1));
 
         add(new Section("Politics", "http://chicago.suntimes.com/section/politics/feed/", 0));
         add(new Section("Chicago", "http://chicago.suntimes.com/section/chicago-politics/feed/", 1));
         add(new Section("Springfield", "http://chicago.suntimes.com/section/springfield-politics/feed/", 1));
         add(new Section("Washington", "http://chicago.suntimes.com/section/washington-politics/feed/", 1));
-        add(new Section("Lynn Sweet", "http://chicago.suntimes.com/section/lynn-sweet-politics/feed/", 1));
 
         add(new Section("Entertainment", "http://chicago.suntimes.com/section/entertainment/feed/", 0));
         add(new Section("Architecture & Design", "http://chicago.suntimes.com/section/architecture-and-design/feed/", 1));

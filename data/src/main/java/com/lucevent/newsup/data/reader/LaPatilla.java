@@ -1,8 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.NewsStylist;
-
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class LaPatilla extends com.lucevent.newsup.data.util.NewsReader {
@@ -19,7 +16,6 @@ public class LaPatilla extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{},
-                "https://www.lapatilla.com/site/",
                 "");
     }
 
@@ -32,15 +28,14 @@ public class LaPatilla extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected String parseContent(Element prop)
     {
-        Document doc = org.jsoup.Jsoup.parse(prop.text());
-        doc.select("script,figcaption,br,.image_credits,.image_author").remove();
+        Element article = jsoupParse(prop);
+        article.select("script,br,.image_credits,.image_author").remove();
 
-        doc.select("h1,h2").tagName("h3");
-        doc.select("[style]").removeAttr("style");
+        article.select("[style]").removeAttr("style");
 
-        NewsStylist.cleanAttributes(doc.select("img"), "src");
+        cleanAttributes(article.select("img"), "src");
 
-        return doc.body().html().replace("<p>&nbsp;</p>", "");
+        return finalFormat(article, false).replace("<p>&nbsp;</p>", "");
     }
 
 }

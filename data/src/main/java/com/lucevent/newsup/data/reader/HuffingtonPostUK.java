@@ -1,9 +1,7 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
-import com.lucevent.newsup.data.util.NewsStylist;
 
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class HuffingtonPostUK extends com.lucevent.newsup.data.util.NewsReader {
@@ -20,34 +18,29 @@ public class HuffingtonPostUK extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{},
                 new int[]{TAG_ENCLOSURE},
-                "http://www.huffingtonpost.co.uk/",
                 "");
     }
 
     @Override
     protected String parseContent(Element prop)
     {
-        String text = prop.text();
-        Document doc = org.jsoup.Jsoup.parse(text);
-        doc.select("script[src*='.twitter.'],script[src*='.instagram.']").remove();
-        doc.select("br").tagName("p");
+        Element article = jsoupParse(prop);
+        article.select("script[src*='.twitter.'],script[src*='.instagram.']").remove();
+        article.select("br").tagName("p");
 
-        for (Element e : doc.select("strong"))
+        for (Element e : article.select("strong"))
             if (e.text().startsWith("SEE ALSO:"))
                 try {
                     e.parent().remove();
                 } catch (Exception ignored) {
                 }
 
-        doc.select("[style]").removeAttr("style");
-        doc.select("h1,h2").tagName("h3");
+        article.select("[style]").removeAttr("style");
 
-        Element body = doc.body();
-        NewsStylist.repairLinks(body);
-        NewsStylist.repairLinks(body, "data-placeholder");
-        NewsStylist.repairLinks(body, "data-iframely-url");
+        repairLinks(article, "data-placeholder");
+        repairLinks(article, "data-iframely-url");
 
-        String content = body.html();
+        String content = finalFormat(article, false);
 
         int i0 = content.indexOf("type=type=");
         if (i0 != -1) {
@@ -57,7 +50,7 @@ public class HuffingtonPostUK extends com.lucevent.newsup.data.util.NewsReader {
                 content = content.substring(0, i0) + content.substring(i1, content.length());
             }
         }
-        return NewsStylist.cleanComments(content);
+        return content;
     }
 
     @Override

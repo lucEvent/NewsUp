@@ -20,7 +20,6 @@ public class TeknikensVarldSections extends Sections {
         add(new Section("Motorsport", "http://teknikensvarld.se/kategori/nyheter/motorsport/feed/", 1));
         add(new Section("STCC och RallyX", "http://teknikensvarld.se/kategori/nyheter/motorsport/stcc/feed/", 1));
         add(new Section("Aktuellt", "http://teknikensvarld.se/kategori/nyheter/aktuellt/feed/", 1));
-        add(new Section("Kr\u00F6nikor", "http://teknikensvarld.se/kategori/nyheter/kronika/feed/", 1));
         add(new Section("\u00D6vrigt", "http://teknikensvarld.se/kategori/nyheter/ovrigt/feed/", 1));
 
         add(new Section("Tests", null, -1));

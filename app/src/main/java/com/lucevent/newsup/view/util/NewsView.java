@@ -1,5 +1,6 @@
 package com.lucevent.newsup.view.util;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
@@ -8,6 +9,7 @@ import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
@@ -19,22 +21,24 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.io.BookmarksManager;
-import com.lucevent.newsup.io.SDManager;
 import com.lucevent.newsup.kernel.AppData;
+import com.lucevent.newsup.parse.NTVParser;
+import com.lucevent.newsup.view.adapter.viewholder.news.NewsWebViewViewHolder;
 
 public class NewsView extends RelativeLayout {
 
@@ -43,39 +47,32 @@ public class NewsView extends RelativeLayout {
     private Activity activityContext;
     private DrawerLayout drawer;
     private ActionBar actionBar;
+    // private GestureDetectorCompat gd;
 
-    private WebView webView;
+    private NewsElementsListView listView;
     private FloatingActionButton button_bookmark;
     private NewsSideToolbar sideToolbar;
-    private boolean nightMode;
+    private boolean nightMode, displayActionBar;
 
     public NewsView(Context context, AttributeSet attrs)
     {
         super(context, attrs);
 
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.v_news, this, true);
+        nightMode = AppSettings.getNightModeStatus();
+        displayActionBar = false;
 
-        webView = (WebView) findViewById(R.id.webview);
-        webView.setOnTouchListener(onNewsContentTouch);
-        webView.setPersistentDrawingCache(WebView.PERSISTENT_NO_CACHE);
+        ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+                .inflate(R.layout.v_news, this, true);
 
-        WebSettings webSettings = webView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
-        webSettings.setBuiltInZoomControls(false);
-        webSettings.setDisplayZoomControls(false);
+        listView = (NewsElementsListView) findViewById(R.id.list);
+        ((ScrollView) listView.getParent()).setBackgroundResource(nightMode ? R.color.nv_background_dark : R.color.nv_background);
 
         sideToolbar = (NewsSideToolbar) findViewById(R.id.side_toolbar);
 
         button_bookmark = (FloatingActionButton) findViewById(R.id.button_bookmark);
         findViewById(R.id.button_share).setOnClickListener(onShareAction);
         findViewById(R.id.button_night).setOnClickListener(onNightModeSelected);
-
-        nightMode = AppSettings.getNightModeStatus();
-
-        SCRIPTS = "<script async defer>" + SDManager.readRaw(context, R.raw.instagram) + "</script>" +
-                "<script type='text/javascript'>" + SDManager.readRaw(context, R.raw.twitter) + "</script>";
+        findViewById(R.id.button_font_size).setOnClickListener(onFontSizeSelected);
 
         //     gd = new GestureDetectorCompat(context, onGestureListener);
     }
@@ -102,8 +99,6 @@ public class NewsView extends RelativeLayout {
         }
     }
 
-    //  GestureDetectorCompat gd;
-
     public void setFragmentContext(Fragment fragmentContext, @Nullable DrawerLayout drawer)
     {
         setFragmentContext(fragmentContext.getActivity(), drawer);
@@ -117,79 +112,33 @@ public class NewsView extends RelativeLayout {
         this.drawer = drawer;
     }
 
-    public void setBookmarkChangeListener(View.OnClickListener bookmarkChangeListener)
+    public void setBookmarkStateChangeListener(View.OnClickListener bookmarkStateChangeListener)
     {
-        button_bookmark.setOnClickListener(bookmarkChangeListener);
+        button_bookmark.setOnClickListener(bookmarkStateChangeListener);
     }
-
-    private static final String NEWS_STYLE_DAY = "<style>" +
-            "body{margin:20px;font-family:sans-serif-light;font-weight:300;font-size:17px;line-height:1.7;background-color:#fff;color:#000;}" +
-            "figcaption{font-size:12px;padding:2px 10px;display:block;}" +
-            "blockquote{margin:10px;padding:5px 10px 5px 10px;background-color:#eee}" +
-            "a{color:#%a_c;}" +
-            "</style>";
-
-    private static final String NEWS_STYLE_NIGHT = "<style>" +
-            "body{margin:20px;font-family:sans-serif-light;font-weight:300;font-size:17px;line-height:1.7;background-color:#000;color:#fff;}" +
-            "figcaption{font-size:12px;padding:2px 10px;display:block;}" +
-            "blockquote{margin:10px;padding:5px 10px 5px 10px;background-color:#111}" +
-            "a{color:#%a_c;}" +
-            "</style>";
-
-    private static final String GRAPHYCS_STYLE = "<style>" +
-            "iframe,video{width:100%;margin:0;padding:0;min-height:250px}" +
-            "img,figure{width:100%;height:auto;margin:0;padding:0}" +
-            "div > h2 > a > img {width:auto;}" +
-            "</style>";
-
-    private static final String GRAPHYCS_STYLE_NO_INTERNET = "<style>" +
-            "iframe,video{width:0;height:0;margin:0;padding:0}" +
-            "img,figure{width:0;height:0;margin:0;padding:0}" +
-            "div > h2 > a > img{width:0;height:0;margin:0;padding:0}" +
-            "</style>";
-
-    private String computeStyle(Site site)
-    {
-        int a_color;
-        if (nightMode) {
-            if (site.getColorDarkness() > 0.95)
-                a_color = 0x555555;
-            else if (site.getColorDarkness() > 0.7)
-                a_color = Utils.brighter(site.color, 1.2 - site.getColorDarkness()) & 0xffffff;
-            else
-                a_color = site.color & 0xffffff;
-        } else
-            a_color = (site.getColorDarkness() < 0.3 ? Utils.darker(site.color, 0.6) : site.color) & 0xffffff;
-
-
-        String news_style = nightMode ? NEWS_STYLE_NIGHT : NEWS_STYLE_DAY;
-
-        return news_style.replace("%a_c", String.format("%06x", a_color)) +
-                (isInternetAvailable() ? GRAPHYCS_STYLE : GRAPHYCS_STYLE_NO_INTERNET) +
-                SCRIPTS +
-                site.getStyle();
-    }
-
-    private static String SCRIPTS = "";
 
     private int viewWidth = -2;
     private int viewHeight = -2;
-    private View newsItemView;
 
-    public void displayNews(News news, final View from)
+    public void displayNews(News news)
     {
+        //   news.content = newsExample;
         currentNews = news;
         button_bookmark.setTag(news);
-        newsItemView = from;
+        button_bookmark.setSelected(BookmarksManager.isBookmarked(news));
 
-        updateNewsView(0);
+        Site site = AppData.getSiteByCode(currentNews.site_code);
 
-        setBookmarkButtonImage(button_bookmark);
+        listView.clear();
+        listView.set(currentNews.title, new NTVParser().parse(currentNews.content, site), site);
 
         if (drawer != null)
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
-        actionBar.hide();
+        if (actionBar.isShowing()) {
+            displayActionBar = true;
+            actionBar.hide();
+        }
 
         setVisibility(View.VISIBLE);
 
@@ -200,7 +149,7 @@ public class NewsView extends RelativeLayout {
             viewWidth = getWidth();
         }
 
-        AppAnimator.expandMoving(this, from, viewHeight, new AppAnimator.AppAnimatorListener() {
+        AppAnimator.swipeUp(this, viewHeight, new AppAnimator.AppAnimatorListener() {
             @Override
             public void onAnimationEnd(Animation animation)
             {
@@ -216,25 +165,14 @@ public class NewsView extends RelativeLayout {
         });
     }
 
-    private void updateNewsView(int scroll)
-    {
-        Site site = AppData.getSiteByCode(currentNews.site_code);
-
-        String webContent = computeStyle(site) + "<h3>" + currentNews.title + "</h3>" + currentNews.content;
-
-        webView.loadDataWithBaseURL("", webContent, "text/html", "utf-8", null);
-        if (scroll > 0)
-            webView.setScrollY(scroll);
-    }
-
     public void resume()
     {
-        webView.onResume();
+        //      listView.onResume();
     }
 
     public void pause()
     {
-        webView.onPause();
+        //     listView.onPause();
     }
 
     public void hideNews()
@@ -244,24 +182,31 @@ public class NewsView extends RelativeLayout {
         w.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         w.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
 
-        actionBar.show();
+        if (displayActionBar)
+            actionBar.show();
+        displayActionBar = false;
 
-        webView.setScrollY(0);
-        AppAnimator.collapseMoving(this, newsItemView, viewHeight, new AppAnimator.AppAnimatorListener() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run()
+            {
+                listView.clear();
+            }
+        }, 400);
+        AppAnimator.swipeDown(this, this.getY(), viewHeight, new AppAnimator.AppAnimatorListener() {
+
             @Override
             public void onAnimationEnd(Animation animation)
             {
                 if (drawer != null)
                     drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
-                webView.loadUrl("about:blank");
                 setVisibility(View.GONE);
             }
         });
 
-        if (!sideToolbar.closed) {
+        if (!sideToolbar.closed)
             sideToolbar.close();
-        }
     }
 
     private boolean isInternetAvailable()
@@ -269,16 +214,6 @@ public class NewsView extends RelativeLayout {
         NetworkInfo ni = ((ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE))
                 .getActiveNetworkInfo();
         return ni != null && ni.isConnected() && ni.isAvailable();
-    }
-
-    public void setBookmarkButtonImage(View view)
-    {
-        News news = (News) view.getTag();
-        if (BookmarksManager.isBookmarked(news))
-            ((ImageView) view).setImageResource(R.drawable.ic_bookmark);
-
-        else
-            ((ImageView) view).setImageResource(R.drawable.ic_bookmark_border);
     }
 
     private final View.OnClickListener onShareAction = new View.OnClickListener() {
@@ -298,8 +233,83 @@ public class NewsView extends RelativeLayout {
         public void onClick(View v)
         {
             nightMode = !nightMode;
-            updateNewsView(webView.getScrollY());
+            listView.setDarkStyle(nightMode);
+            ((ScrollView) listView.getParent()).setBackgroundResource(nightMode ? R.color.nv_background_dark : R.color.nv_background);
             AppSettings.setNightModeStatus(nightMode);
+        }
+    };
+
+    //
+    private View fontSizeBox;
+    private boolean fontSizeBoxShouldHide;
+    private Handler mHandler = new Handler();
+    //
+    private final View.OnClickListener onFontSizeSelected = new View.OnClickListener() {
+        @SuppressLint("SetTextI18n")
+        @Override
+        public void onClick(View v)
+        {
+            if (fontSizeBox == null) {
+                fontSizeBox = ((ViewStub) findViewById(R.id.box_font_size)).inflate();
+
+                int current_font_size = AppSettings.getFontSize(2);
+                ((TextView) fontSizeBox.findViewById(R.id.label)).setText(NewsWebViewViewHolder.FONT_SIZE_VALUES[current_font_size] + "%");
+
+                SeekBar seekBar = (SeekBar) fontSizeBox.findViewById(R.id.seekBar);
+                seekBar.setProgress(current_font_size);
+                seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
+                    {
+                        listView.setTextSize(progress);
+                        ((TextView) fontSizeBox.findViewById(R.id.label)).setText(NewsWebViewViewHolder.FONT_SIZE_VALUES[progress] + "%");
+                        AppSettings.setFontSize(progress);
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar)
+                    {
+                        synchronized (onFontSizeSelected) {
+                            fontSizeBoxShouldHide = false;
+                        }
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar)
+                    {
+                        mHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run()
+                            {
+                                fontSizeBox.setVisibility(View.GONE);
+                            }
+                        }, 1000);
+                    }
+                });
+                setHidingTimer();
+                return;
+            }
+            if (fontSizeBox.getVisibility() != VISIBLE) {
+                fontSizeBox.setVisibility(VISIBLE);
+                setHidingTimer();
+            } else
+                fontSizeBox.setVisibility(GONE);
+        }
+
+        private void setHidingTimer()
+        {
+            fontSizeBoxShouldHide = true;
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run()
+                {
+                    synchronized (onFontSizeSelected) {
+                        if (fontSizeBoxShouldHide)
+                            fontSizeBox.setVisibility(View.GONE);
+                    }
+                }
+            }, 3000);
         }
     };
 
@@ -309,7 +319,6 @@ public class NewsView extends RelativeLayout {
         public boolean onTouch(View v, MotionEvent event)
         {
             //        gd.onTouchEvent(event);
-
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
 
@@ -323,7 +332,7 @@ public class NewsView extends RelativeLayout {
                         swipeAnimation.setDuration((long) (swipedDown / 2));
                         swipeAnimation.setFillAfter(true);
 
-                        webView.setAnimation(swipeAnimation);
+                        setAnimation(swipeAnimation);
                     }
                     break;
             /*    case MotionEvent.ACTION_MOVE:
@@ -394,13 +403,13 @@ public class NewsView extends RelativeLayout {
                     swipeAnimation.setDuration(100);
                     swipeAnimation.setFillAfter(true);
 
-                    webView.startAnimation(swipeAnimation);
-                    webView.setScrollY(0);
+                    startAnimation(swipeAnimation);
+                    setScrollY(0);
                 }
                 nocount = !nocount;
             } else if (distanceY < 0) {//scrolling down
 
-                if (webView.getScrollY() == 0) {
+                if (getScrollY() == 0) {
                     //closing news
                     swipingDown = true;
                     nocount = true;
@@ -426,4 +435,15 @@ public class NewsView extends RelativeLayout {
         }
     };
 
+    private final String newsExample = "<html>" +
+            "<head></head>" +
+            "<body>" +
+            "<h1>This is an H1</h1>" +
+            "<h2>This is an H2</h2>" +
+            "<h3>This is an H3</h3>" +
+            "<h4>This is an H4</h4>" +
+            "<h5>This is an H5</h5>" +
+            "<h6>This is an H6</h6>" +
+            "</body>" +
+            "</html>";
 }

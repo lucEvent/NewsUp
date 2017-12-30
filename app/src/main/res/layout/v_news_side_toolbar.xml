@@ -5,6 +5,13 @@
        android:layout_height="wrap_content">
 
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/button_font_size"
+        style="@style/sideToolbarButton"
+        android:src="@drawable/ic_font_size"
+        app:fabSize="mini"
+        app:useCompatPadding="true"/>
+
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/button_night"
         style="@style/sideToolbarButton"
         android:src="@drawable/ic_night"
@@ -14,7 +21,7 @@
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/button_bookmark"
         style="@style/sideToolbarButton"
-        android:src="@drawable/ic_bookmark_border"
+        android:src="@drawable/sel_btn_bookmark"
         app:fabSize="mini"
         app:useCompatPadding="true"/>
 

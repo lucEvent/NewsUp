@@ -17,9 +17,9 @@ public class NoteItemViewHolder extends RecyclerView.ViewHolder {
         view = (TextView) v.findViewById(R.id.text);
     }
 
-    public static void populateViewHolder(NoteItemViewHolder holder, Note note)
+    public void bind(Note note)
     {
-        holder.view.setText(note.note);
+        view.setText(note.note);
     }
 
 }

@@ -2,9 +2,7 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -37,7 +35,6 @@ public class Xataka extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{},
                 new int[]{},
-                "https://www.xataka.com/",
                 SITE_STYLE);
     }
 
@@ -45,23 +42,18 @@ public class Xataka extends com.lucevent.newsup.data.util.NewsReader {
     protected News onNewsRead(News news)
     {
         // Parsing content
-        Document doc = jsoupParse(news.content);
+        Element article = jsoupParse(news.content);
 
-        doc.select("body > h4 ~ *,body > h4,.feedflare,[width='1']").remove();
+        article.parent().select("script,body > h4 ~ *,body > h4,.feedflare,[width='1']").remove();
 
-        doc.select("li").tagName("p");
-        doc.select("h1,h2").tagName("h3");
-        doc.select("script").remove();
-        doc.select("[style]:not(.instagram-media,.instagram-media *)").removeAttr("style");
+        article.select("li").tagName("p");
+        article.select("[style]:not(.instagram-media,.instagram-media *)").removeAttr("style");
 
-        Element article = doc.body();
-        NewsStylist.repairLinks(article);
-
-        news.content = article.html();
+        news.content = finalFormat(article, false);
         // end
 
         // Parsing enclosures
-        Elements imgs = doc.select("img");
+        Elements imgs = article.select("img");
         if (!imgs.isEmpty())
             news.enclosures.add(new Enclosure(imgs.first().attr("src"), "", ""));
         // end

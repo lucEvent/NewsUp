@@ -2,7 +2,6 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -36,7 +35,6 @@ public class ComputerHoy extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{},
                 new int[]{},
-                "http://computerhoy.com/",
                 SITE_STYLE);
     }
 
@@ -56,7 +54,7 @@ public class ComputerHoy extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected void readNewsContent(Document doc, News news)
     {
-        Elements img = doc.select("[itemprop='image']");
+        Elements img = doc.select("img[itemprop='image']");
         Elements article = doc.select("#ab_stickyid");
 
         if (article.isEmpty()) {
@@ -77,15 +75,12 @@ public class ComputerHoy extends com.lucevent.newsup.data.util.NewsReader {
         } else
             article.select(".adcuadrado,blockquote,.galeria-inline").remove();
 
-        article.select("h2").tagName("h3");
         article.select("img[style],iframe[style]").removeAttr("style");
         article.select("[onmouseover]").removeAttr("onmouseover");
         article.select("[onmouseout]").removeAttr("onmouseout");
-        article.select("meta,.valoracion").remove();
+        article.select(".valoracion").remove();
 
-        NewsStylist.repairLinks(article);
-
-        news.content = img.outerHtml() + article.outerHtml();
+        news.content = img.outerHtml() + finalFormat(article, true);
     }
 
 }

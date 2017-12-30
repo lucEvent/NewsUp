@@ -3,7 +3,7 @@ package com.lucevent.newsup.data.reader;
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
 
-import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.parser.Parser;
 import org.jsoup.select.Elements;
 
@@ -23,7 +23,6 @@ public class WwwhatsNew extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{},
-                "https://wwwhatsnew.com/",
                 "");
     }
 
@@ -31,15 +30,14 @@ public class WwwhatsNew extends com.lucevent.newsup.data.util.NewsReader {
     protected News onNewsRead(News news)
     {
         // Parsing content
-        Document doc = jsoupParse(news.content);
-        doc.select(".feedflare,[width='1']").remove();
-        doc.select("h1,h2").tagName("h3");
+        Element article = jsoupParse(news.content);
+        article.select(".feedflare,[width='1']").remove();
 
-        news.content = doc.body().html();
+        news.content = finalFormat(article, false);
         // end
 
         // Parsing enclosures
-        Elements imgs = doc.select("img");
+        Elements imgs = article.select("img");
         if (!imgs.isEmpty())
             news.enclosures.add(new Enclosure(imgs.first().attr("src"), "", ""));
         // end
@@ -47,14 +45,14 @@ public class WwwhatsNew extends com.lucevent.newsup.data.util.NewsReader {
     }
 
     @Override
-    protected org.jsoup.nodes.Document getDocument(String rsslink)
+    protected org.jsoup.nodes.Document getDocument(String url)
     {
         try {
-            return org.jsoup.Jsoup.parse(new URL(rsslink).openStream(), "utf-8", rsslink, Parser.xmlParser());
+            return org.jsoup.Jsoup.parse(new URL(url).openStream(), "utf-8", url, Parser.xmlParser());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return super.getDocument(rsslink);
+        return super.getDocument(url);
     }
 
 

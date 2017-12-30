@@ -2,7 +2,6 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -28,7 +27,6 @@ public class TheAtlantic extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE, TAG_PUBLISHED},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_MEDIA_CONTENT},
-                "https://www.theatlantic.com/",
                 "");
     }
 
@@ -65,12 +63,10 @@ public class TheAtlantic extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected String parseContent(Element prop)
     {
-        Document doc = jsoupParse(prop);
-        doc.select(".callout,.partner-box,script,img[width='1']").remove();
+        Element article = jsoupParse(prop);
+        article.select("script,.callout,.partner-box,img[width='1']").remove();
 
-        doc.select("h1,h2").tagName("h3");
-
-        return NewsStylist.cleanComments(doc.body().html());
+        return finalFormat(article, false);
     }
 
     @Override
@@ -80,11 +76,11 @@ public class TheAtlantic extends com.lucevent.newsup.data.util.NewsReader {
 
         for (Element img : article.select("img")) {
             String src = img.attr("data-src");
-            NewsStylist.cleanAttributes(img);
+            cleanAttributes(img);
             img.attr("src", src);
         }
 
-        news.content = article.outerHtml();
+        news.content = finalFormat(article, true);
     }
 
 }

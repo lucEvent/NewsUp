@@ -51,7 +51,7 @@ public class MarcaSections extends Sections {
         add(new Section("Albacete", "http://estaticos.marca.com/rss/futbol/albacete.xml", 1));
         add(new Section("Alcorc\u00F3n", "http://estaticos.marca.com/rss/futbol/alcorcon.xml", 1));
         add(new Section("Almeria", "http://estaticos.marca.com/rss/futbol/almeria.xml", 1));
-        add(new Section("Barcelona", "http://estaticos.marca.com/rss/futbol/barcelona-b.xml", 1));
+        add(new Section("Barcelona B", "http://estaticos.marca.com/rss/futbol/barcelona-b.xml", 1));
         add(new Section("C\u00E1diz", "http://estaticos.marca.com/rss/futbol/cadiz.xml", 1));
         add(new Section("C\u00F3rdoba", "http://estaticos.marca.com/rss/futbol/cordoba.xml", 1));
         add(new Section("Cultural Leonesa", "http://estaticos.marca.com/rss/futbol/cultural-leonesa.xml", 1));
@@ -73,7 +73,7 @@ public class MarcaSections extends Sections {
         add(new Section("Baloncesto", null, -1));
         add(new Section("Liga Endesa", "http://estaticos.marca.com/rss/baloncesto/acb.xml", 1));
         add(new Section("Basket FEB", "http://estaticos.marca.com/rss/baloncesto/basketfeb.xml", 1));
-        add(new Section("Copa del Rey", "http://estaticos.marca.com/rss/baloncesto/copa-rey.xml", 1));
+        add(new Section("Copa del rey", "http://estaticos.marca.com/rss/baloncesto/copa-rey.xml", 1));
         add(new Section("Selecci\u00F3n", "http://estaticos.marca.com/rss/baloncesto/seleccion.xml", 1));
         add(new Section("Euroliga", "http://estaticos.marca.com/rss/baloncesto/euroliga.xml", 1));
         add(new Section("Eurocup", "http://estaticos.marca.com/rss/baloncesto/eurocup.xml", 1));

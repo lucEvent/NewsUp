@@ -1,9 +1,8 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.NewsStylist;
-
-import org.jsoup.nodes.Attribute;
-import org.jsoup.nodes.Document;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.jsoup.nodes.Element;
 
 public class LifeHacker extends com.lucevent.newsup.data.util.NewsReader {
@@ -20,29 +19,44 @@ public class LifeHacker extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{},
-                "http://lifehacker.com/",
                 "");
     }
 
     @Override
     protected String parseContent(Element prop)
     {
-        Document doc = org.jsoup.Jsoup.parse(prop.text());
+        Element article = jsoupParse(prop);
 
-        doc.select("figcaption,.has-video .jwplayer").remove();
-        doc.select("h2").tagName("h3");
+        article.select(".has-video .jwplayer,.ad-container,.js_ad-dynamic,.show-for-small-only,.animationContainer").remove();
 
-        for (Element e : doc.select("a")) {
-            String href = e.attr("href");
-            for (Attribute attr : e.attributes())
-                e.removeAttr(attr.getKey());
-            e.attr("href", href);
+        for (Element slides : article.select(".slideshow-inset [data-slides]")) {
+            String data = slides.attr("data-slides");
+            if (data.isEmpty()) {
+                continue;
+            }
+
+            StringBuilder sb = new StringBuilder();
+            try {
+                JSONArray items = new JSONObject("{items:" + data + "}").optJSONArray("items");
+                for (int i = 0; i < items.length(); i++) {
+                    JSONObject item = items.getJSONObject(i);
+
+                    String imgsrc = "https://i.kinja-img.com/gawker-media/image/upload/" + item.getString("id") + "." + item.getString("format");
+                    String caption = item.getJSONArray("caption").getJSONObject(0).getString("value");
+
+                    sb.append("<img src='").append(imgsrc).append("'>");
+                    sb.append("<figcaption>").append(caption).append("</figcaption>");
+                }
+
+            } catch (JSONException e) {
+                //   System.out.println("JSON exception:" + e.getMessage());
+            }
+            slides.parent().html(sb.toString());
         }
 
-        Element body = doc.body();
-        NewsStylist.repairLinks(body);
+        cleanAttributes(article.select("a"), "href");
 
-        return doc.body().html();
+        return finalFormat(article, false);
     }
 
 }

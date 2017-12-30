@@ -2,7 +2,6 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -27,7 +26,6 @@ public class CNN extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_MEDIA_CONTENT, "media:thumbnail".hashCode()},
-                "http://edition.cnn.com/",
                 "");
     }
 
@@ -41,7 +39,7 @@ public class CNN extends com.lucevent.newsup.data.util.NewsReader {
     protected News onNewsRead(News news)
     {
         if (news.link.contains("/podcasting/")) {
-            news.content = Enclosure.iframe(news.link) + "<p>" + news.description + "</p>";
+            news.content = insertIframe(news.link) + "<p>" + news.description + "</p>";
             news.enclosures.clear();
         }
         if (news.enclosures.size() > 1) {
@@ -59,13 +57,13 @@ public class CNN extends com.lucevent.newsup.data.util.NewsReader {
     }
 
     @Override
-    protected Document getDocument(String pagelink)
+    protected Document getDocument(String url)
     {
         try {
-            return org.jsoup.Jsoup.connect(pagelink).get();
+            return org.jsoup.Jsoup.connect(url).get();
         } catch (Exception ignored) {
         }
-        return super.getDocument(pagelink);
+        return super.getDocument(url);
     }
 
     @Override
@@ -76,17 +74,16 @@ public class CNN extends com.lucevent.newsup.data.util.NewsReader {
         String url = doc.baseUri();
         if (url.contains("/videos/")) {
             article = doc.select(".media__video--thumbnail,.el__video-collection__main-wrapper .media__video-description");
-            article.select("script,style").remove();
+            article.select("script").remove();
             article.select("img").wrap("<p>").removeAttr("alt");
         } else if (url.contains("/gallery/")) {
             article = doc.select(".el-carousel__wrapper noscript,.el-carousel__wrapper .el__gallery_image-title");
-            article.select("script,style").remove();
+            article.select("script").remove();
             article.select("img").wrap("<p>").removeAttr("alt");
         } else if (url.contains("/money.cnn")) {
             article = doc.select("#storytext");
-            article.select(".video-play,.cnnVidFooter,figcaption,#storyFooter,.clearfix,.storytimestamp,script,style").remove();
+            article.select("script,.video-play,.cnnVidFooter,#storyFooter,.clearfix,.storytimestamp").remove();
 
-            article.select("h1,h2").tagName("h3");
             for (Element link : article.select("a")) {
                 String text = link.text();
                 if (text.startsWith("Related:"))
@@ -97,7 +94,7 @@ public class CNN extends com.lucevent.newsup.data.util.NewsReader {
             article = doc.select("#body-text > .l-container");
 
             article.select(".el__leafmedia--storyhighlights,.ad,.zn-body__read-more,.el__article--embed,.el__leafmedia--factbox,.js__video--standard,.el-editorial-source,.el__leafmedia--featured-video-collection").remove();
-            article.select(".el-editorial-note,.el__gallery--standard,.el__gallery--expandable,.el__video--expandable,.cnn-mapbox,style").remove();
+            article.select(".el-editorial-note,.el__gallery--standard,.el__gallery--expandable,.el__video--expandable,.cnn-mapbox").remove();
 
             for (Element e : article.select(".zn-body__paragraph")) {
                 e.tagName("p").removeAttr("class");
@@ -106,10 +103,10 @@ public class CNN extends com.lucevent.newsup.data.util.NewsReader {
             for (Element js : article.select(".js__image--standard:has(script)")) {
                 String script = js.select("script").html();
 
-                String caption = NewsStylist.subStringBetween(script, "\"description\": \"", "\"", false);
-                String src = NewsStylist.subStringBetween(script, "\"url\": \"", "\"", false);
+                String caption = findSubstringBetween(script, "\"description\": \"", "\"", false);
+                String src = findSubstringBetween(script, "\"url\": \"", "\"", false);
                 if (src == null) {
-                    src = NewsStylist.subStringBetween(script, "url: '", "'", false);
+                    src = findSubstringBetween(script, "url: '", "'", false);
                 }
 
                 js.parent().html(new Enclosure(src, "", "").html() + (caption != null ? "<figcaption>" + caption + "</figcaption>" : ""));
@@ -137,22 +134,21 @@ public class CNN extends com.lucevent.newsup.data.util.NewsReader {
                 String src = video.attr("src");
                 if (!src.isEmpty()) {
                     String poster = video.attr("poster");
-                    NewsStylist.cleanAttributes(video);
+                    cleanAttributes(video);
                     video.attr("src", src).attr("poster", poster).attr("controls", "");
                 }
             }
-            article.select("script,.el__embedded--standard:not(.el__embedded--standard:has(a,img,iframe)),.el__special--teaseimage").remove();
-            article.select("h1,h2").tagName("h3");
+            article.select("script,.el__embedded--standard:not(.el__embedded--standard:has(a,img,iframe)),.el__special--teaseimage,.cn-zoneAdContainer").remove();
 
             for (Element e : article.select(".media__image--responsive")) {
                 String img = e.parent().select("noscript").html();
                 e.parent().parent().html(img);
             }
         }
-        NewsStylist.repairLinks(article);
-        NewsStylist.repairLinks(article, "poster");
+        repairLinks(article, "poster");
+        cleanAttributes(article.select("img[src]"), "src");
 
-        news.content = NewsStylist.cleanComments(article.html());
+        news.content = finalFormat(article, false);
     }
 
 }

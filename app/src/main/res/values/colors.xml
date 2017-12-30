@@ -6,6 +6,11 @@
     <color name="colorAccent">#EF5350</color>
     <color name="colorAccentDark">#D32F2F</color>
 
+    <color name="colorPrimaryTranslucent">#ee8BC34A</color>
+    <color name="colorPrimaryDarkTranslucent">#ee558B2F</color>
+    <color name="colorAccentTranslucent">#eeEF5350</color>
+    <color name="colorAccentDarkTranslucent">#eeD32F2F</color>
+
     <color name="default_background">#feee</color>
 
     <color name="black_overlay">#66000000</color>
@@ -15,5 +20,14 @@
     <color name="drawer_btn_pressed">#ffebebeb</color>
     <color name="drawer_btn_checked">#ffdcdcdc</color>
     <color name="drawer_icon_default_tint">#737373</color>
+
+    <!-- NewsViews light -->
+    <color name="nv_text">#ff14171a</color>
+    <color name="nv_background">#ffffffff</color>
+    <color name="nv_blockquote_background">#ffeeeeee</color>
+    <!-- NewsViews dark -->
+    <color name="nv_background_dark">#ff1b2836</color>
+    <color name="nv_text_dark">#ffff</color>
+    <color name="nv_blockquote_background_dark">#ff222222</color>
 
 </resources>

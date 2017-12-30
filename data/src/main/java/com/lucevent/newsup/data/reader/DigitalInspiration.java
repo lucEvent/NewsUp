@@ -18,7 +18,6 @@ public class DigitalInspiration extends com.lucevent.newsup.data.util.NewsReader
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_ENCLOSURE},
-                "https://www.labnol.org/",
                 "");
     }
 
@@ -33,20 +32,19 @@ public class DigitalInspiration extends com.lucevent.newsup.data.util.NewsReader
     @Override
     protected String parseContent(Element prop)
     {
-        org.jsoup.nodes.Document article = org.jsoup.Jsoup.parse(prop.text());
+        org.jsoup.nodes.Element article = jsoupParse(prop);
         article.select("script").remove();
 
         for (Element ytv : article.select(".youtube-player,.youtube"))
-            ytv.html(Enclosure.iframe("https://www.youtube.com/embed/" + ytv.attr("data-id")));
+            ytv.html(insertIframe("https://www.youtube.com/embed/" + ytv.attr("data-id")));
 
 
         for (Element code : article.select("pre"))
             code.tagName("p").wrap("code");
 
-        article.select("h1,h2").tagName("h3");
         article.select("[style]").removeAttr("style");
 
-        String content = article.html();
+        String content = finalFormat(article, false);
 
         int index = content.lastIndexOf("<hr>");
         if (index != -1)

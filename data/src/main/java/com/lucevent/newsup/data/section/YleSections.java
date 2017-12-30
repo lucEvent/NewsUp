@@ -49,9 +49,8 @@ public class YleSections extends Sections {
         add(new Section("Tampere", "http://yle.fi/uutiset/rss/uutiset.rss?osasto=tampere", 1));
         add(new Section("Turku", "http://yle.fi/uutiset/rss/uutiset.rss?osasto=turku", 1));
 
-        add(new Section("Urheilu", null, -1));
-        add(new Section("P\u00e4\u00e4uutiset", "http://yle.fi/urheilu/rss/paauutiset.rss", 1));
-        add(new Section("Tuoreimmat uutiset", "http://yle.fi/urheilu/rss/uutiset.rss", 1));
+        add(new Section("Urheilu", "http://yle.fi/urheilu/rss/paauutiset.rss", 0));
+        add(new Section("Tuoreimmat urheilu-uutiset", "http://yle.fi/urheilu/rss/uutiset.rss", 1));
         add(new Section("Alppihiihto", "http://yle.fi/urheilu/rss/uutiset.rss?osasto=alppihiihto", 1));
         add(new Section("Ampumahiihto", "http://yle.fi/urheilu/rss/uutiset.rss?osasto=ampumahiihto", 1));
         add(new Section("Formula 1", "http://yle.fi/urheilu/rss/uutiset.rss?osasto=f1", 1));

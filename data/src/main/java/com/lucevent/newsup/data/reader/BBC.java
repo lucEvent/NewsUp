@@ -2,7 +2,6 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -10,7 +9,7 @@ import org.jsoup.select.Elements;
 
 public class BBC extends com.lucevent.newsup.data.util.NewsReader {
 
-    // tags: 	[description, guid, item, link, media:thumbnail, pubdate, title]
+    // tags: [description, guid, item, link, media:thumbnail, pubdate, title]
 
     public BBC()
     {
@@ -22,7 +21,6 @@ public class BBC extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{},
                 new int[]{"media:thumbnail".hashCode()},
-                "http://www.bbc.com/",
                 "");
     }
 
@@ -64,7 +62,7 @@ public class BBC extends com.lucevent.newsup.data.util.NewsReader {
                                 intro.get(0).tagName("b").wrap("<p>").removeAttr("class");
                             }
                             article.select(".sp-story-body__table").wrap("<blockquote>");
-                            article.select(".bbccom_slot,.tab-selector__tab-list,.lx-stream-show-more,.visually-hidden,style,script,ul:has(a)").remove();
+                            article.select(".bbccom_slot,.tab-selector__tab-list,.lx-stream-show-more,.visually-hidden,style,script,ul:has(a),button").remove();
 
                             for (Element figure : article.select("figure")) {
                                 Elements img = figure.select("img");
@@ -84,14 +82,17 @@ public class BBC extends com.lucevent.newsup.data.util.NewsReader {
                             }
                             for (Element e : article.select("a"))
                                 if (e.text().startsWith("Read more"))
-                                    NewsStylist.cleanAttributes(e.html(""));
+                                    cleanAttributes(e.html(""));
+
+                            for (Element e : article.select("div[data-url]")) {
+                                e.html(insertIframe(e.attr("data-url")));
+                                cleanAttributes(e);
+                            }
 
                             article.select("[class]").removeAttr("class");
                             article.select("[data-reactid]").removeAttr("data-reactid");
-                            article.select("h1,h2").tagName("h3");
 
-                            NewsStylist.repairLinks(article);
-                            news.content = article.html();
+                            news.content = finalFormat(article, false);
                             return;
                         }
                     } else {
@@ -112,14 +113,19 @@ public class BBC extends com.lucevent.newsup.data.util.NewsReader {
                                     .removeAttr("class");
                         }
 
-                        NewsStylist.repairLinks(article);
-                        news.content = article.html();
+                        news.content = finalFormat(article, false);
                         return;
                     }
                 } else {
                     article.select(".related_stories,.related_topics,.pullOut").remove();
                 }
             }
+        }
+        article.select("noscript,link,#js-lookup-container,.news-vj-js-required,[style='display: none']").remove();
+
+        for (Element js : article.select(".bbc-news-vj-iframe-wrapper")) {
+            Elements ns = js.select("noscript");
+            js.html(ns.isEmpty() ? "" : ns.html());
         }
 
         Elements intro = article.select(".story-body__introduction");
@@ -147,13 +153,10 @@ public class BBC extends com.lucevent.newsup.data.util.NewsReader {
         }
         for (Element e : article.select("a"))
             if (e.text().startsWith("Read more"))
-                NewsStylist.cleanAttributes(e.html(""));
+                cleanAttributes(e.html(""));
 
-        article.select(".mpu-ad,.media-with-caption,.media-player-wrapper,figcaption,style,script,ul:has(a)").remove();
+        article.select("script,.mpu-ad,.media-with-caption,.media-player-wrapper,ul:has(a)").remove();
 
-        article.select("h1,h2").tagName("h3");
-
-        NewsStylist.repairLinks(article);
-        news.content = article.outerHtml();
+        news.content = finalFormat(article, true);
     }
 }

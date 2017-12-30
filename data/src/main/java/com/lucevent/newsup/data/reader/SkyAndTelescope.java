@@ -1,16 +1,17 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.NewsStylist;
+import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class SkyAndTelescope extends com.lucevent.newsup.data.util.NewsReader {
 
     /**
      * tags:
-     * [category, content:encoded, dc:creator, description,            guid, item, link, pubdate, title]
-     * [category, content:encoded, dc:creator, description, enclosure, guid, item, link, pubdate, title]
+     * [category, dc:creator, description,            guid, item, link, pubdate, title]
+     * [category, dc:creator, description, enclosure, guid, item, link, pubdate, title]
      */
 
     public SkyAndTelescope()
@@ -19,11 +20,10 @@ public class SkyAndTelescope extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_TITLE},
                 new int[]{TAG_LINK},
                 new int[]{TAG_DESCRIPTION},
-                new int[]{TAG_CONTENT_ENCODED},
+                new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_ENCLOSURE},
-                "http://www.skyandtelescope.com/",
                 "");
     }
 
@@ -35,20 +35,21 @@ public class SkyAndTelescope extends com.lucevent.newsup.data.util.NewsReader {
     }
 
     @Override
-    protected String parseContent(Element prop)
+    protected void readNewsContent(Document doc, News news)
     {
-        Document doc = jsoupParse(prop);
-        doc.select("script").remove();
-        doc.select("[style]").removeAttr("style");
-        doc.select("h1,h2").tagName("h3");
+        Elements article;
+        if (news.link.contains("/astronomy-events/"))
+            article = doc.select(".tribe-events-schedule,.tribe_events");
+        else
+            article = doc.select(".entry-content");
 
-        for (Element e : doc.select(".wp-caption-text"))
-            e.tagName("figcaption")
-                    .removeAttr("class");
+        article.select(".addthis_tool,.sharethis").remove();
 
-        Element article = doc.body();
-        NewsStylist.repairLinks(article);
-        return article.html();
+        cleanAttributes(article.select("div.wp-caption"));
+        cleanAttributes(article.select("img[src]"), "src");
+        article.select(".wp-caption-text").tagName("figcaption");
+
+        news.content = finalFormat(article, false);
     }
 
 }

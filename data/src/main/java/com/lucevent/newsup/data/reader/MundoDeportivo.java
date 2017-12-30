@@ -2,7 +2,6 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -25,7 +24,6 @@ public class MundoDeportivo extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_ENCLOSURE},
-                "http://www.mundodeportivo.com",
                 "");
     }
 
@@ -57,9 +55,7 @@ public class MundoDeportivo extends com.lucevent.newsup.data.util.NewsReader {
 
         if (article.isEmpty()) {
             article = doc.select(".story-leaf-figure,.story-leaf-body-video,.story-leaf-body .story-leaf-txt-p,.live-scribble");
-            article.select("script,style,meta,.story-leaf-relatednews").remove();
-
-            article.select("h1,h2").tagName("h3");
+            article.select("script,.story-leaf-relatednews").remove();
 
             for (Element e : article.select(".twitter-tweet > a[href*='script'")) {
                 Element p = e.parent().parent();
@@ -70,12 +66,13 @@ public class MundoDeportivo extends com.lucevent.newsup.data.util.NewsReader {
             article = article.select(".gallery-leaf-image,.gallery-leaf-title");
             article.select(".gallery-leaf-title").tagName("p");
         }
+        article.select(".adv,.hidden-md,.poll-leaf,.related-news-story,.story-leaf-social-btns,.publi-box,.hidden-xs,.story-leaf-block-comments,[data-name='modulo-outbrain'],ins").remove();
+        article.select(".story-leaf-box").tagName("blockquote");
 
-        NewsStylist.cleanAttributes(article.select("figure"));
-        NewsStylist.cleanAttributes(article.select("img"), "src");
-        NewsStylist.repairLinks(article);
+        cleanAttributes(article.select("figure"));
+        cleanAttributes(article.select("img"), "src");
 
-        news.content = article.outerHtml();
+        news.content = finalFormat(article, true);
     }
 
 }

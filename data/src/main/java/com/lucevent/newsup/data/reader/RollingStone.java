@@ -2,7 +2,6 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -24,7 +23,6 @@ public class RollingStone extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{},
                 new int[]{TAG_MEDIA_CONTENT},
-                "http://www.rollingstone.com/",
                 SITE_STYLE);
     }
 
@@ -47,6 +45,9 @@ public class RollingStone extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
+        doc.getElementsByTag("st1:place").tagName("span");
+        doc.getElementsByTag("st1:city").tagName("span");
+        doc.getElementsByTag("st1:time").tagName("span");
         Elements article = doc.select(".lead-container img,.lead-container iframe,.article-content");
 
         if (article.isEmpty()) {
@@ -57,13 +58,11 @@ public class RollingStone extends com.lucevent.newsup.data.util.NewsReader {
             } else
                 article.select(".total,.collection-info,.collection-item-media-player").remove();
         }
-        article.select(".module-related,#module-more-news,figcaption,script,.lazy-placeholder").remove();
-        article.select("h1,h2").tagName("h3");
+        article.select("script,.module-related,#module-more-news,.lazy-placeholder,.ad-container").remove();
 
-        NewsStylist.cleanAttributes(article.select("img"), "src");
-        NewsStylist.repairLinks(article);
+        cleanAttributes(article.select("img"), "src");
 
-        news.content = article.outerHtml();
+        news.content = finalFormat(article, true);
     }
 
 }

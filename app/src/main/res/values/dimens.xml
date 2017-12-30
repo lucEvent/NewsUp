@@ -13,4 +13,27 @@
     <dimen name="i_item_elevation">1dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
+    <!-- News elements dimensions -->
+    <dimen name="side_padding">20dp</dimen>
+
+    <dimen name="title_top_padding">20dp</dimen>
+    <dimen name="title_bottom_padding">10dp</dimen>
+
+    <dimen name="paragraph_top_padding">10dp</dimen>
+    <dimen name="paragraph_bottom_padding">10dp</dimen>
+
+    <dimen name="blockquote_side_margin">22dp</dimen>
+    <dimen name="blockquote_top_bottom_margin">10dp</dimen>
+    <dimen name="blockquote_side_padding">16dp</dimen>
+    <dimen name="blockquote_top_bottom_padding">16dp</dimen>
+
+    <dimen name="caption_side_padding">25dp</dimen>
+    <dimen name="caption_top_padding">0dp</dimen>
+    <dimen name="caption_bottom_padding">10dp</dimen>
+
+    <dimen name="text_title_size">22sp</dimen>
+    <dimen name="text_large_size">20sp</dimen>
+    <dimen name="text_normal_size">18sp</dimen>
+    <dimen name="text_small_size">15sp</dimen>
+
 </resources>

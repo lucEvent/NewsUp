@@ -38,12 +38,8 @@ public class TheTimesOfIndiaSections extends Sections {
         add(new Section("Coimbatore", "http://timesofindia.indiatimes.com/rssfeeds/7503091.cms", 1));
         add(new Section("Gurgaon", "http://timesofindia.indiatimes.com/rssfeeds/6547154.cms", 1));
         add(new Section("Guwahati", "http://timesofindia.indiatimes.com/rssfeeds/4118215.cms", 1));
-        add(new Section("Hubli", "http://timesofindia.indiatimes.com/rssfeeds/3942695.cms", 1));
         add(new Section("Kanpur", "http://timesofindia.indiatimes.com/rssfeeds/3947067.cms", 1));
         add(new Section("Kolkata", "http://timesofindia.indiatimes.com/rssfeeds/-2128830821.cms", 1));
-        add(new Section("Ludhiana", "http://timesofindia.indiatimes.com/rssfeeds/3947051.cms", 1));
-        add(new Section("Mangalore", "http://timesofindia.indiatimes.com/rssfeeds/3942690.cms", 1));
-        add(new Section("Mysore", "http://timesofindia.indiatimes.com/rssfeeds/3942693.cms", 1));
         add(new Section("Noida", "http://timesofindia.indiatimes.com/rssfeeds/8021716.cms", 1));
         add(new Section("Goa", "http://timesofindia.indiatimes.com/rssfeeds/3012535.cms", 1));
         add(new Section("Chandigarh", "http://timesofindia.indiatimes.com/rssfeeds/-2128816762.cms", 1));
@@ -55,7 +51,6 @@ public class TheTimesOfIndiaSections extends Sections {
         add(new Section("Ranchi", "http://timesofindia.indiatimes.com/rssfeeds/4118245.cms", 1));
         add(new Section("Surat", "http://timesofindia.indiatimes.com/rssfeeds/3942660.cms", 1));
         add(new Section("Vadodara", "http://timesofindia.indiatimes.com/rssfeeds/3942666.cms", 1));
-        add(new Section("Varanasi", "http://timesofindia.indiatimes.com/rssfeeds/3947071.cms", 1));
         add(new Section("Thane", "http://timesofindia.indiatimes.com/rssfeeds/3831863.cms", 1));
 
         add(new Section("All Blogs", "http://blogs.timesofindia.indiatimes.com/feed/defaultrss", 0));

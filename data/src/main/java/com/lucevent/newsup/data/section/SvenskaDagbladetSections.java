@@ -79,7 +79,6 @@ public class SvenskaDagbladetSections extends Sections {
         add(new Section("Harrisons historia", "http://www.svd.se/feed/articles/story/harrisons-historia.rss", 1));
         add(new Section("Hotet mot Sverige", "http://www.svd.se/feed/articles/story/hotet-mot-sverige.rss", 1));
         add(new Section("Id-kontrollerna", "http://www.svd.se/feed/articles/story/id-kontrollerna.rss", 1));
-        add(new Section("Larsson l\u00E4ser", "http://www.svd.se/feed/articles/story/larsson-laser.rss", 1));
         add(new Section("Panama-dokumenten", "http://www.svd.se/feed/articles/story/panamadokumenten.rss", 1));
         add(new Section("Saab-konkursen", "http://www.svd.se/feed/articles/story/saab-konkursen.rss", 1));
         add(new Section("S\u00E4kerhetsr\u00E5det", "http://www.svd.se/feed/articles/story/sakerhetsradet.rss", 1));

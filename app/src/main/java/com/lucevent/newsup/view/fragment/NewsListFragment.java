@@ -204,7 +204,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
 
             newsView = (NewsView) mainView.findViewById(R.id.news_view);
             newsView.setFragmentContext(this, getActivity() instanceof Main ? ((Main) getActivity()).drawer : null);
-            newsView.setBookmarkChangeListener(onBookmarkClick);
+            newsView.setBookmarkStateChangeListener(onBookmarkClick);
 
             btn_sections = (FloatingActionButton) mainView.findViewById(R.id.button_sections);
             btn_sections.setOnClickListener(onSectionsAction);
@@ -285,7 +285,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         KernelManager.readContentOf(news);
 
         if (news.content != null && !news.content.isEmpty()) {
-            newsView.displayNews(news, v);
+            newsView.displayNews(news);
             btn_sections.setVisibility(View.GONE);
             displayingNews = true;
             KernelManager.setNewsRead(news);
@@ -483,15 +483,9 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         @Override
         public void onClick(View v)
         {
-            if (permissionHandler.checkAndAsk(NewsListFragment.this)) {
-                News news = (News) v.getTag();
-
-                BookmarksManager.toggleBookmark(news);
-
-                newsView.setBookmarkButtonImage(v);
-                adapter.update(news);
-
-            } else
+            if (permissionHandler.checkAndAsk(NewsListFragment.this))
+                bookmarkStateChanged(v);
+            else
                 tempBookmarkButton = v;
         }
     };
@@ -538,11 +532,20 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults)
     {
         if (permissionHandler.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
-            News news = (News) tempBookmarkButton.getTag();
-            BookmarksManager.toggleBookmark(news);
-            newsView.setBookmarkButtonImage(tempBookmarkButton);
-            adapter.update(news);
+            bookmarkStateChanged(tempBookmarkButton);
         }
+    }
+
+    private void bookmarkStateChanged(View btn)
+    {
+        News news = (News) btn.getTag();
+
+        btn.setSelected(
+                BookmarksManager.toggleBookmark(news)
+        );
+
+        if (btn instanceof FloatingActionButton)
+            adapter.update(news);
     }
 
 }

@@ -2,9 +2,7 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class TED extends com.lucevent.newsup.data.util.NewsReader {
@@ -25,7 +23,6 @@ public class TED extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_ENCLOSURE, "media:thumbnail".hashCode()},
-                "https://www.ted.com/",
                 "");
     }
 
@@ -38,19 +35,18 @@ public class TED extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected String parseContent(Element prop)
     {
-        Document doc = org.jsoup.Jsoup.parse(prop.text());
-        doc.select("[rel='nofollow'] ~ *,[rel='nofollow'],.wp-caption-text,img[src^='http://pixel.wp.com']").remove();
+        Element article = jsoupParse(prop);
+        article.select("[rel='nofollow'] ~ *,[rel='nofollow'],img[src^='http://pixel.wp.com']").remove();
 
-        doc.select(".wp-caption").tagName("p");
-        doc.select("[style]").removeAttr("style");
-        doc.select("h1,h2").tagName("h3");
-        doc.select("iframe").attr("frameborder", "0");
+        article.select(".wp-caption").tagName("p");
+        article.select("[style]").removeAttr("style");
+        article.select("iframe").attr("frameborder", "0");
 
-        NewsStylist.wpcomwidget(doc.select("form[id]"));
-        doc.select("form,script").remove();
+        wpcomwidget(article.select("form[id]"));
+        article.select("form,script").remove();
 
-        NewsStylist.cleanAttributes(doc.select("img"), "src");
-        return doc.body().html();
+        cleanAttributes(article.select("img"), "src");
+        return finalFormat(article, false);
     }
 
     @Override

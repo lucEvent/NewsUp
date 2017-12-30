@@ -10,28 +10,19 @@ public class ElDiarioSections extends Sections {
         super();
 
         add(new Section("Titulares", "http://www.eldiario.es/rss/", 0));
-        add(new Section("Desalambre (Derechos Humanos)", "http://www.eldiario.es/rss/desalambre/", 1));
-        add(new Section("Cultura", "http://www.eldiario.es/rss/cultura/", 1));
-        add(new Section("Opini\u00F3n", "http://www.eldiario.es/rss/opinion/", 1));
-        add(new Section("Andaluc\u00EDa", "http://www.eldiario.es/rss/andalucia/", 1));
-        add(new Section("Euskadi", "http://www.eldiario.es/rss/norte/", 1));
-        add(new Section("Catalunya", "http://www.eldiario.es/rss/catalunya/", 1));
-        add(new Section("Catalunya Plural", "http://www.eldiario.es/rss/catalunyaplural/", 1));
-        add(new Section("Galicia", "http://www.eldiario.es/rss/galicia/", 1));
-        add(new Section("Canarias", "http://www.eldiario.es/rss/canariasahora/", 1));
-
         add(new Section("Pol\u00EDtica", "http://www.eldiario.es/rss/section/1000/", 0));
         add(new Section("Econom\u00EDa", "http://www.eldiario.es/rss/section/3000/", 0));
         add(new Section("Sociedad", "http://www.eldiario.es/rss/section/2000/", 0));
         add(new Section("Internacional", "http://www.eldiario.es/rss/section/4000/", 0));
         add(new Section("Cultura", "http://www.eldiario.es/rss/section/10838/", 0));
         add(new Section("Desalambre (Derechos Humanos)", "http://www.eldiario.es/rss/section/10593/", 0));
+        add(new Section("Opini\u00F3n", "http://www.eldiario.es/rss/opinion/", 0));
 
         add(new Section("Regiones", null, -1));
         add(new Section("Andaluc\u00EDa", "http://www.eldiario.es/rss/section/10279/", 1));
         add(new Section("Euskadi", "http://www.eldiario.es/rss/section/10418/", 1));
         add(new Section("Catalunya", "http://www.eldiario.es/rss/section/10098/", 1));
-        add(new Section("Catalunya Plural", "http://www.eldiario.es/rss/section/10553/", 1));
+        add(new Section("Catalunya Plural", "http://www.eldiario.es/rss/catalunyaplural/", 1));
         add(new Section("Galicia", "http://www.eldiario.es/rss/section/10048/", 1));
         add(new Section("Canarias", "http://www.eldiario.es/rss/section/10624/", 1));
 
@@ -42,7 +33,7 @@ public class ElDiarioSections extends Sections {
         add(new Section("Bel\u00E9n Carre\u00F1o", "http://www.eldiario.es/rss/section/20032/", 1));
         add(new Section("Ana Requena", "http://www.eldiario.es/rss/section/20006/", 1));
         add(new Section("Natalia Chientaroli", "http://www.eldiario.es/rss/section/20033/", 1));
-        add(new Section("Marta Peirano", "http://www.eldiario.es/rss/section/20033/", 1));
+        add(new Section("Marta Peirano", "http://www.eldiario.es/rss/section/10222/", 1));
         add(new Section("Aitor Riveiro", "http://www.eldiario.es/rss/section/10362/", 1));
         add(new Section("Gonzalo Cortizo", "http://www.eldiario.es/rss/section/20007/", 1));
         add(new Section("Irene Castro", "http://www.eldiario.es/rss/section/10173/", 1));

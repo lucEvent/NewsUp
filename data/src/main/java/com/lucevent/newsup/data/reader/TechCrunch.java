@@ -1,8 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -26,7 +24,6 @@ public class TechCrunch extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_ENCLOSURE, TAG_MEDIA_CONTENT},
-                "https://techcrunch.com/",
                 "");
     }
 
@@ -55,7 +52,7 @@ public class TechCrunch extends com.lucevent.newsup.data.util.NewsReader {
             if (script.isEmpty())
                 continue;
 
-            String video_id = NewsStylist.subStringBetween(script.first().attr("src"), "vid=", "/", false);
+            String video_id = findSubstringBetween(script.first().attr("src"), "vid=", "/", false);
 
             String url = doc.baseUri();
             int i1 = url.indexOf(".com/");
@@ -64,8 +61,8 @@ public class TechCrunch extends com.lucevent.newsup.data.util.NewsReader {
 
             String date = url.substring(i1 + 5, i1 + 16).replaceFirst("/", "-");
 
-            e.html(Enclosure.iframe("https://cdn.vidible.tv/prod/" + date + video_id + "_v2.orig.mp4"));
-            NewsStylist.cleanAttributes(e);
+            e.html(insertIframe("https://cdn.vidible.tv/prod/" + date + video_id + "_v2.orig.mp4"));
+            cleanAttributes(e);
         }
 
         article.select("script,.aside-related-articles,.controls,.slideshow .enter-wrapper,.inset-section,.social-share,.inset-ad,.contributor-byline").remove();
@@ -76,18 +73,16 @@ public class TechCrunch extends com.lucevent.newsup.data.util.NewsReader {
             if (!src.isEmpty())
                 img.attr("src", src);
 
-            NewsStylist.cleanAttributes(img, "src");
+            cleanAttributes(img, "src");
         }
 
-        NewsStylist.wpcomwidget(article);
+        wpcomwidget(article);
         article.select("form").remove();
 
-        article.select("h1,h2").tagName("h3");
         article.select("[style]").removeAttr("style");
         article.select("iframe").attr("frameborder", "0");
-        NewsStylist.repairLinks(article);
 
-        news.content = NewsStylist.cleanComments(article.html());
+        news.content = finalFormat(article, false);
     }
 
 }

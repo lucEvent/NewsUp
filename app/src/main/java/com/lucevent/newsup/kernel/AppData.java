@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class AppData {
 
-    private static final int DATA_REVISION_N = 2;
+    private static final int DATA_REVISION_N = 3;
 
     private static Sites sites;
 

@@ -8,8 +8,7 @@ public interface AppCode {
     int ERROR = -9;
 
     int NEWS_COLLECTION = 8;
-    int NEWS_SET = 9;
-    int NEWS_MAP = 10;
+
     int NEWS_LOADED = 11;
     int NO_INTERNET = 12;
     int REPORT_SEND_OK = 13;

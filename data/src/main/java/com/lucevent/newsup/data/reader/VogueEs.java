@@ -1,7 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,7 +23,6 @@ public class VogueEs extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_UPDATED},
                 new int[]{},
                 new int[]{},
-                "http://www.vogue.es/",
                 "");
     }
 
@@ -76,31 +74,29 @@ public class VogueEs extends com.lucevent.newsup.data.util.NewsReader {
                 //     System.out.println("JSON exception:" + e.getMessage());
             }
 
-            doc = jsoupParse(sb.toString());
-            doc.select("h1,h2").tagName("h3");
-            doc.select("[style]").removeAttr("style");
+            Element article = jsoupParse(sb.toString());
+            article.getElementsByTag("o:p").remove();
+            article.select("[style]").removeAttr("style");
 
-            news.content = doc.body().html();
+            news.content = finalFormat(article, false);
             return;
         }
-
+        doc.getElementsByTag("o:p").remove();
         Elements article = doc.select(".article_subtitle,.article_content");
-        article.select(".interior_articulo_ad,[id^='div-gpt-ad-'],script,.BrightcoveExperience").remove();
+        article.select("script,.interior_articulo_ad,[id^='div-gpt-ad-'],.BrightcoveExperience,.read_more,.quick_nav_and_social,#videos_more_viewed").remove();
 
         for (Element subtitle : article.select(".article_subtitle"))
             subtitle.tagName("p").html("<strong>" + subtitle.text() + "</strong>");
 
         for (Element lazy_img : article.select("img.lazy")) {
             String src = lazy_img.attr("data-src");
-            NewsStylist.cleanAttributes(lazy_img);
+            cleanAttributes(lazy_img);
             lazy_img.attr("src", src);
         }
 
-        article.select("h1,h2").tagName("h3");
         article.select(".full_image_block .info").tagName("figcaption");
-        NewsStylist.repairLinks(article);
 
-        news.content = NewsStylist.cleanComments(article.outerHtml());
+        news.content = finalFormat(article, true);
     }
 
 }

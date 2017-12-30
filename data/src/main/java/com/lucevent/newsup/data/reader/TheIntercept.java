@@ -1,9 +1,7 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
-import com.lucevent.newsup.data.util.NewsStylist;
 
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class TheIntercept extends com.lucevent.newsup.data.util.NewsReader {
@@ -24,7 +22,6 @@ public class TheIntercept extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{"leadimageart".hashCode(), TAG_MEDIA_CONTENT},
-                "https://theintercept.com",
                 "");
     }
 
@@ -37,17 +34,13 @@ public class TheIntercept extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected String parseContent(Element prop)
     {
-        Document doc = jsoupParse(prop);
-        doc.select("script,.document-cloud-container").remove();
+        Element article = jsoupParse(prop);
+        article.select("script,.document-cloud-container").remove();
 
-        doc.select("[style]").removeAttr("style");
-        doc.select("h1,h2").tagName("h3");
-        doc.select(".caption").tagName("figcaption");
+        article.select("[style]").removeAttr("style");
+        article.select(".caption").tagName("figcaption");
 
-        Element article = doc.body();
-        NewsStylist.repairLinks(article);
-
-        return NewsStylist.cleanComments(article.html());
+        return finalFormat(article, false);
     }
 
     @Override

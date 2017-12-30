@@ -1,14 +1,13 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class Expressen extends com.lucevent.newsup.data.util.NewsReader {
 
-    // tags:  author, description, guid, item, link, pubdate, title]
+    // tags: [author, description, guid, item, link, pubdate, title]
 
     public Expressen()
     {
@@ -20,7 +19,6 @@ public class Expressen extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{},
                 new int[]{},
-                "http://www.expressen.se/",
                 "");
     }
 
@@ -53,7 +51,6 @@ public class Expressen extends com.lucevent.newsup.data.util.NewsReader {
         cleanSources(widgets);
         cleanSources(article);
 
-        article.select("h2").tagName("h3");
         for (Element mer : article.select("strong,a")) {
             String text = mer.text();
             if (text.startsWith("L\u00C4S MER") || text.startsWith("L\u00E4s mer")
@@ -74,9 +71,9 @@ public class Expressen extends com.lucevent.newsup.data.util.NewsReader {
         widgets.select("[style]").removeAttr("style");
         article.select("[style]").removeAttr("style");
 
-        NewsStylist.repairLinks(article);
-
-        news.content = widgets.outerHtml() + "<b>" + preamble.html() + "</b><br>" + article.html().replace("<p>&nbsp;</p>", "");
+        news.content = finalFormat(widgets, true)
+                + "<b>" + finalFormat(preamble, false) + "</b><br>"
+                + finalFormat(article, false).replace("<p>&nbsp;</p>", "");
     }
 
     private void cleanSources(Elements elems)
@@ -98,13 +95,11 @@ public class Expressen extends com.lucevent.newsup.data.util.NewsReader {
                 srcValue = img.attr("src");
             }
 
-            NewsStylist.cleanAttributes(img);
+            cleanAttributes(img);
             img.attr(srcTag, srcValue);
         }
         for (Element iframe : elems.select("iframe[data-src]"))
             iframe.attr("src", iframe.attr("data-src")).removeAttr("data-src");
-
-        NewsStylist.repairLinks(elems);
     }
 
 }

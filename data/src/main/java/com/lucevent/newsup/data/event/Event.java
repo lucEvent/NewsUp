@@ -6,7 +6,7 @@ public class Event {
 
     public int code;
 
-    public String title, description;
+    public String title, topic;
 
     public String imgSrc;
 

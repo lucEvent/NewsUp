@@ -9,10 +9,9 @@ public class AstronomyNowSections extends Sections {
     {
         super();
 
-        //  add(new Section("Homepage", "https://astronomynow.com/feed/", 0));
+        add(new Section("Homepage", "https://astronomynow.com/feed/", 0));
         add(new Section("News", "https://astronomynow.com/category/news/feed/", 0));
         add(new Section("Observing", "https://astronomynow.com/category/observing/feed/", 0));
-        add(new Section("Reviews", "https://astronomynow.com/category/reviews/feed/", 0));
         add(new Section("Equipment", "https://astronomynow.com/category/equipment/feed/", 0));
 
     }

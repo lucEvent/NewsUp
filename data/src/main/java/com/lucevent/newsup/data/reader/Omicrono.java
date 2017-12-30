@@ -1,8 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.NewsStylist;
-
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -20,31 +17,26 @@ public class Omicrono extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{},
-                "http://omicrono.elespanol.com/",
                 "");
     }
 
     @Override
     protected String parseDescription(Element prop)
     {
-        Document doc = jsoupParse(prop);
-        Elements e = doc.select("p");
+        Element article = jsoupParse(prop);
+        Elements e = article.select("p");
         if (!e.isEmpty())
             return e.first().text();
-        return doc.text();
+        return article.text();
     }
 
     @Override
     protected String parseContent(Element prop)
     {
-        Document doc = jsoupParse(prop);
-        doc.select("script,.blockquoteLink,.feedflare,[width='1'],.blockquoteRelated").remove();
-
-        doc.select("h1,h2").tagName("h3");
-
-        NewsStylist.cleanAttributes(doc.select("img"), "src");
-
-        return doc.body().html();
+        Element article = jsoupParse(prop);
+        article.select("script,.blockquoteLink,.feedflare,[width='1'],.blockquoteRelated").remove();
+        cleanAttributes(article.select("img"), "src");
+        return finalFormat(article, false);
     }
 
 }

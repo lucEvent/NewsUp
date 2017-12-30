@@ -32,6 +32,7 @@ public class AppSettings {
     public static String PREF_KEEP_NEWS_KEY;
     public static String PREF_LOAD_IMAGES_KEY;
     private static final String PREF_NIGHT_MODE_KEY = "night_mode";
+    private static final String PREF_FONT_SIZE_KEY = "font_size";
     public static final String LAST_DATA_REVISION_KEY = "last_data_rev";
 
     public static String PREF_SITE_MAIN_SECTIONS_KEY;
@@ -232,10 +233,36 @@ public class AppSettings {
         return preferences.getBoolean(PREF_NIGHT_MODE_KEY, DEFAULT_NIGHT_MODE);
     }
 
+    public static int getFontSize(int default_size)
+    {
+        return preferences.getInt(PREF_FONT_SIZE_KEY, default_size);
+    }
+
     public static void setNightModeStatus(boolean status)
     {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(PREF_NIGHT_MODE_KEY, status);
+        editor.apply();
+    }
+
+    public static void setFontSize(int font_size)
+    {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(PREF_FONT_SIZE_KEY, font_size);
+        editor.apply();
+    }
+
+    private static final String PREF_ALERT_KEY = "alert_";
+
+    public static boolean wasAlertShown(int id)
+    {
+        return preferences.getBoolean(PREF_ALERT_KEY + id, false);
+    }
+
+    public static void setAlertAsShown(int id)
+    {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(PREF_ALERT_KEY + id, true);
         editor.apply();
     }
 

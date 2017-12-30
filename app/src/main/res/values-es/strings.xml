@@ -32,7 +32,7 @@
     <string name="no_downloads_scheduled">No hay descargas programadas</string>
     <string name="expand_to_see_headlines">Expande para ver los titulares</string>
     <string name="see_something_else">Te interesa algún tema más?</string>
-    <string name="happening_now">Acontecimientos (beta)</string>
+    <string name="happening_now">Acontecimientos</string>
 
     <string name="mon">Lun</string>
     <string name="tue">Mar</string>
@@ -60,7 +60,10 @@
     <string name="thats_it">Eso es todo</string>
     <string name="add">Añade</string>
     <string name="delete">Eliminar</string>
-    <string name="delete_caps">ELIMINAR</string>
+    <string name="yes">Sí</string>
+    <string name="no">No</string>
+    <string name="update">Actualiza</string>
+    <string name="not_now">Ahora no</string>
 
 
     <!-- * ******************** Hints **************************** * -->
@@ -135,7 +138,7 @@
     <!-- ***************************** ***************** ********************************** -->
     <string name="about_content_contact">Desarrollado por Rafael J. Lucena\nContacto: rafaa89(arroba)gmail.com</string>
     <string name="about_content_title_new_features">Últimas características y mejoras:</string>
-    <string name="about_content_title_comming_soon">En próximas actualizaciones:</string>
+    <string name="about_content_title_coming_soon">En próximas actualizaciones:</string>
     <string name="about_content_title_next_sites">Posible soporte para:</string>
 
 </resources>

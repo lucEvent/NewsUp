@@ -3,7 +3,6 @@ package com.lucevent.newsup.data.reader;
 import com.lucevent.newsup.data.util.Date;
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -28,7 +27,6 @@ public class Abc extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{"imagen".hashCode()},
-                "http://www.abc.es/",
                 "");
     }
 
@@ -55,22 +53,22 @@ public class Abc extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected News onNewsRead(News news)
     {
-        Document doc;
+        Element article;
         // Parsing content (and description)
         if (news.content.isEmpty()) {
-            doc = jsoupParse(news.description);
+            article = jsoupParse(news.description);
 
-            String dscr = doc.text();
+            String dscr = article.text();
             news.description = dscr.substring(0, Math.min(dscr.length(), 300));
         } else
-            doc = jsoupParse(news.content);
+            article = jsoupParse(news.content);
 
-        news.content = parseContent(doc);
+        news.content = mParseContent(article);
         // end
 
         // Parsing enclosures
         if (news.enclosures.isEmpty()) {
-            Elements imgs = doc.select("img");
+            Elements imgs = article.select("img");
             if (!imgs.isEmpty())
                 news.enclosures.add(new Enclosure(imgs.first().attr("src"), "", ""));
         }
@@ -78,27 +76,25 @@ public class Abc extends com.lucevent.newsup.data.util.NewsReader {
         return news;
     }
 
-    private String parseContent(Document doc)
+    private String mParseContent(Element article)
     {
-        doc.select(".remision-galeria,script").remove();
+        article.select(".remision-galeria,script").remove();
 
-        for (Element e : doc.select("embed[src*='youtube.com']")) {
+        for (Element e : article.select("embed[src*='youtube.com']")) {
             Element p = e.parent();
-            p.html(Enclosure.iframe(e.attr("src")));
+            p.html(insertIframe(e.attr("src")));
             p.tagName("p");
-            NewsStylist.cleanAttributes(p);
+            cleanAttributes(p);
         }
-        for (Element e : doc.select("a[data-lightbox-src]")) {
+        for (Element e : article.select("a[data-lightbox-src]")) {
             String href = e.attr("data-lightbox-src");
-            NewsStylist.cleanAttributes(e);
+            cleanAttributes(e);
             e.attr("href", href);
         }
 
-        doc.select("h1,h2").tagName("h3");
-        NewsStylist.cleanAttributes(doc.select("img[src]"), "src");
-        NewsStylist.repairLinks(doc.body());
+        cleanAttributes(article.select("img[src]"), "src");
 
-        return NewsStylist.cleanComments(doc.body().html());
+        return finalFormat(article, false);
     }
 
 }

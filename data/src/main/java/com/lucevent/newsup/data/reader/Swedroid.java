@@ -2,9 +2,7 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -24,34 +22,32 @@ public class Swedroid extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{},
-                "http://www.swedroid.se/",
                 SITE_STYLE);
     }
 
     @Override
     protected String parseContent(Element prop)
     {
-        Document doc = jsoupParse(prop);
-        doc.select("script,#review-statistics").remove();
+        Element article = jsoupParse(prop);
+        article.select("script,#review-statistics").remove();
 
-        doc.select("h1,h2").tagName("h3");
-        doc.select("[style]").removeAttr("style");
-        doc.select(".wp-caption-text").tagName("figcaption");
+        article.select("[style]").removeAttr("style");
+        article.select(".wp-caption-text").tagName("figcaption");
 
-        for (Element img : doc.select("img")) {
+        for (Element img : article.select("img")) {
             String remove = "-" + img.attr("width") + "x" + img.attr("height");
             String src = img.attr("src").replace(remove, "");
-            NewsStylist.cleanAttributes(img);
+            cleanAttributes(img);
             img.attr("src", src);
         }
 
-        return doc.body().html();
+        return finalFormat(article, false);
     }
 
     @Override
     protected News onNewsRead(News news)
     {
-        Document description = jsoupParse(news.description);
+        Element description = jsoupParse(news.description);
         Elements imgs = description.select("img");
         if (!imgs.isEmpty()) {
             Element img = imgs.first();

@@ -2,7 +2,6 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -22,7 +21,6 @@ public class ElImparcial extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{"thumbnail".hashCode()},
-                "http://www.elimparcial.com/",
                 "");
     }
 
@@ -45,9 +43,9 @@ public class ElImparcial extends com.lucevent.newsup.data.util.NewsReader {
         article.select(".nota-procedencia").wrap("<b><em>").unwrap();
         article.select(".notecontent").unwrap();
 
-        NewsStylist.cleanAttributes(article.select("img"), "src");
+        cleanAttributes(article.select("img"), "src");
 
-        news.content = NewsStylist.cleanComments(article.outerHtml());
+        news.content = finalFormat(article, true);
     }
 
 }

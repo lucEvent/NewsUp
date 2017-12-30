@@ -37,14 +37,14 @@ public class TheVergeSections extends Sections {
         add(new Section("Comics", "http://www.theverge.com/rss/group/comics/index.xml", 1));
         add(new Section("Music", "http://www.theverge.com/rss/group/music/index.xml", 1));
 
-        add(new Section("Cars", "http://www.theverge.com/transportation/rss/full.xml", 0));
+        add(new Section("Transportation", "http://www.theverge.com/transportation/rss/full.xml", 0));
         add(new Section("Ride-Sharing", "http://www.theverge.com/ride-sharing/rss/full.xml", 1));
         add(new Section("Cars", "http://www.theverge.com/rss/group/cars/index.xml", 1));
         add(new Section("Mass Transit", "http://www.theverge.com/rss/group/trains/index.xml", 1));
         add(new Section("Aviation", "http://www.theverge.com/rss/group/planes/index.xml", 1));
         add(new Section("Rideables", "http://www.theverge.com/rss/group/bikes/index.xml", 1));
 
-        add(new Section("Reviews", "http://www.theverge.com/rss/group/review/index.xml", 0));
+        add(new Section("Reviews", "http://www.theverge.com/rss/group/reviews/index.xml", 0));
         add(new Section("Headphones", "http://www.theverge.com/headphone-review/rss/full.xml", 1));
         add(new Section("Book Review", "http://www.theverge.com/rss/group/book-review/index.xml", 1));
 

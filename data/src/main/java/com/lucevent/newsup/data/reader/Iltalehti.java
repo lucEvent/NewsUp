@@ -1,7 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -22,18 +21,17 @@ public class Iltalehti extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{},
                 new int[]{},
-                "http://www.iltalehti.fi/",
                 "");
     }
 
     @Override
-    protected Document getDocument(String rsslink)
+    protected Document getDocument(String url)
     {
         try {
-            return org.jsoup.Jsoup.parse(new URL(rsslink).openStream(), "ISO-8859-1", rsslink);
+            return org.jsoup.Jsoup.parse(new URL(url).openStream(), "ISO-8859-1", url);
         } catch (Exception ignored) {
         }
-        return super.getDocument(rsslink);
+        return super.getDocument(url);
     }
 
     @Override
@@ -45,12 +43,9 @@ public class Iltalehti extends com.lucevent.newsup.data.util.NewsReader {
             article.select(".author,.important-articles-t,.kp-share-area,.kuvateksti,.fb-comments__outer-container,.recommended-toaster,#tuoreimmat,script,.kainalo").remove();
 
             article.select("[style]").removeAttr("style");
-            article.select("h1,h2").tagName("h3");
+            cleanAttributes(article.select("img"), "src");
 
-            NewsStylist.cleanAttributes(article.select("img"), "src");
-            NewsStylist.repairLinks(article);
-
-            news.content = NewsStylist.cleanComments(article.html());
+            news.content = finalFormat(article, false);
         }
     }
 

@@ -24,7 +24,6 @@ public class LaRazonSections extends Sections {
         add(new Section("Tenis", "http://www.larazon.es/rss/deportes/tenis.xml", 1));
         add(new Section("Golf", "http://www.larazon.es/rss/deportes/golf.xml", 1));
         add(new Section("Motociclismo", "http://www.larazon.es/rss/deportes/motociclismo.xml", 1));
-        add(new Section("Deportes", "http://www.larazon.es/rss/deportes.xml", 1));
         add(new Section("Ciclismo", "http://www.larazon.es/rss/deportes/ciclismo.xml", 1));
 
         add(new Section("Internacional", "http://www.larazon.es/rss/internacional.xml", 0));
@@ -32,11 +31,9 @@ public class LaRazonSections extends Sections {
         add(new Section("Lifestyle", "http://www.larazon.es/rss/lifestyle.xml", 0));
         add(new Section("Religi\u00F3n", "http://www.larazon.es/rss/religion.xml", 0));
         add(new Section("Viajes", "http://www.larazon.es/rss/viajes.xml", 0));
-        add(new Section("Verde", "http://www.larazon.es/rss/verde.xml", 0));
 
         add(new Section("Sociedad", "http://www.larazon.es/rss/sociedad.xml", 0));
         add(new Section("Ciencia", "http://www.larazon.es/rss/sociedad/ciencia.xml", 1));
-        add(new Section("Comunicaci\u00F3n", "http://www.larazon.es/rss/sociedad/comunicacion.xml", 1));
         add(new Section("Educaci\u00F3n", "http://www.larazon.es/rss/sociedad/educacion.xml", 1));
         add(new Section("Medio Ambiente", "http://www.larazon.es/rss/sociedad/medio-ambiente.xml", 1));
 

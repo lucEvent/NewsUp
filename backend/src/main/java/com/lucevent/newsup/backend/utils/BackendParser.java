@@ -1,6 +1,8 @@
 package com.lucevent.newsup.backend.utils;
 
 import com.lucevent.newsup.backend.Data;
+import com.lucevent.newsup.data.alert.Alert;
+import com.lucevent.newsup.data.alert.AlertCode;
 import com.lucevent.newsup.data.util.Date;
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
@@ -11,6 +13,7 @@ import com.lucevent.newsup.data.util.Site;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 
 public class BackendParser {
 
@@ -81,12 +84,8 @@ public class BackendParser {
         return sb;
     }
 
-    public static StringBuilder toHtml(Statistics stats, String options, String[] filters)
+    public static StringBuilder json(Statistics stats, String options, String[] filters)
     {
-        StringBuilder sb = new StringBuilder();
-        sb.append("<span class='starts'>Since ").append(Date.getAge(stats.since));
-        sb.append(" / Last start ").append(Date.getAge(stats.lastStart)).append("</span>");
-
         ArrayList<SiteStats> allStats = stats.getSiteStats();
         ArrayList<SiteStats> siteStats;
         if (filters == null)
@@ -96,107 +95,84 @@ public class BackendParser {
                 filters[i] = filters[i].trim().toLowerCase();
 
             siteStats = new ArrayList<>(filters.length);
-            for (SiteStats ss : allStats) {
-                for (String filter : filters) {
+            for (SiteStats ss : allStats)
+                for (String filter : filters)
                     if (ss.siteName.toLowerCase().contains(filter)) {
                         siteStats.add(ss);
                         break;
                     }
-                }
-            }
         }
         StatisticsSet statisticsSet;
-
-        if (options.contains("s")) {
-            sb.append("<span class='order'>site name</span>");
-            statisticsSet = new StatisticsSet(siteStats, StatisticsSet.CMP_SITE_NAME);
-            appendHtml(sb, statisticsSet);
-        }
-        if (options.contains("n")) {
-            sb.append("<span class='order'>number of requests</span>");
-            statisticsSet = new StatisticsSet(siteStats, StatisticsSet.CMP_N_ACCESSES);
-            appendHtml(sb, statisticsSet);
-        }
-        if (options.contains("t")) {
-            sb.append("<span class='order'>last access time</span>");
-            statisticsSet = new StatisticsSet(siteStats, StatisticsSet.CMP_LAST_ACCESS);
-            appendHtml(sb, statisticsSet);
-        }
-        if (options.contains("r")) {
-            sb.append("<span class='order'>readings</span>");
-            statisticsSet = new StatisticsSet(siteStats, StatisticsSet.CMP_READINGS);
-            appendHtml(sb, statisticsSet);
+        switch (options) {
+            case "s":
+                statisticsSet = new StatisticsSet(siteStats, StatisticsSet.CMP_SITE_NAME);
+                break;
+            case "n":
+                statisticsSet = new StatisticsSet(siteStats, StatisticsSet.CMP_TOTAL_REQUESTS);
+                break;
+            case "m":
+                statisticsSet = new StatisticsSet(siteStats, StatisticsSet.CMP_MONTH_REQUESTS);
+                break;
+            case "r":
+                statisticsSet = new StatisticsSet(siteStats, StatisticsSet.CMP_READINGS);
+                break;
+            case "t":
+            default:
+                statisticsSet = new StatisticsSet(siteStats, StatisticsSet.CMP_LAST_REQUEST);
         }
 
-        if (options.isEmpty()) {
-            for (SiteStats ss : stats.getSiteStats())
-                if (ss.nAccesses != 0)
-                    sb.append("\t").append(ss.siteName).append(": ").append(ss.nAccesses).append(" requests\n");
+        StringBuilder sb = new StringBuilder(1000);
+        sb.append("\"stats\":{\"since\":")
+                .append(stats.since)
+                .append(",\"last\":")
+                .append(stats.lastStart)
+                .append(",\"sites\":[");
+
+        boolean needsComma = false;
+        for (SiteStats ss : statisticsSet) {
+            if (needsComma)
+                sb.append(",");
+            else needsComma = true;
+
+            sb.append("{\"c\":").append(ss.siteCode)
+                    .append(",\"n\":\"").append(ss.siteName)
+                    .append("\",\"a\":").append(ss.totalRequests)
+                    .append(",\"m\":").append(ss.monthRequests)
+                    .append(",\"r\":").append(ss.readings)
+                    .append(",\"l\":").append(ss.lastRequest)
+                    .append(",\"i\":\"").append(ss.lastIp)
+                    .append("\",\"v\":\"").append(ss.fromVersion)
+                    .append("\"}");
         }
+
+        sb.append("]}");
         return sb;
     }
 
-    private static String[] paddings = {"\t\t\t\t", "\t\t\t", "\t\t", "\t", ""};
-
-    private static void appendHtml(StringBuilder sb, StatisticsSet statisticsSet)
+    public static StringBuilder json(TreeSet<MonthStats> monthStats)
     {
-        sb.append("<table><tr>" +
-                "<th>#</th>" +
-                "<th>Site</th>" +
-                "<th># Accesses</th>" +
-                "<th># Readings</th>" +
-                "<th>Last access</th>" +
-                "<th>Last ip</th>" +
-                "<th>From version</th>" +
-                "</tr>");
+        StringBuilder sb = new StringBuilder(200);
+        sb.append("\"months\":[");
 
-        int i = 1;
-        for (SiteStats ss : statisticsSet)
-            if (ss.nAccesses > 0)
-                sb.append("<tr><td>").append(i++)
-                        .append("</td><td>").append(ss.siteName)
-                        .append("</td><td>").append(ss.nAccesses)
-                        .append("</td><td>").append(ss.nNewsRead)
-                        .append("</td><td>").append(Date.getAge(ss.lastAccess))
-                        .append("</td><td>").append(ss.lastIp)
-                        .append("</td><td>").append(ss.fromVersion)
-                        .append("</td></tr>");
+        boolean needsComma = false;
+        for (MonthStats ms : monthStats) {
+            if (needsComma)
+                sb.append(",");
+            else needsComma = true;
 
-        sb.append("</table>");
+            sb.append("{\"na\":\"").append(ms.id)
+                    .append("\", \"va\":").append(ms.counter)
+                    .append("}");
+        }
+        sb.append("]");
+        return sb;
     }
 
-    private static void appendEntries(StringBuilder sb, StatisticsSet statisticsSet)
+    public static StringBuilder json(TimeStats timeStats)
     {
-        for (SiteStats ss : statisticsSet)
-            if (ss.nAccesses > 0)
-                sb.append("<site cd='").append(ss.siteCode)
-                        .append("' rq='").append(ss.nAccesses)
-                        .append("' rd='").append(ss.nNewsRead)
-                        .append("' lt='").append(ss.lastAccess)
-                        .append("' v='").append(ss.fromVersion)
-                        .append("'/>");
-    }
-
-    public static StringBuilder toEntry(Statistics stats, String options)
-    {
-        StringBuilder sb = new StringBuilder();
-        sb.append("<statistics since='").append(stats.since)
-                .append("' laststart='").append(stats.lastStart).append("'>");
-
-        StatisticsSet statisticsSet = null;
-        if (options.contains("s"))
-            statisticsSet = new StatisticsSet(stats.getSiteStats(), StatisticsSet.CMP_SITE_NAME);
-        else if (options.contains("n"))
-            statisticsSet = new StatisticsSet(stats.getSiteStats(), StatisticsSet.CMP_N_ACCESSES);
-        else if (options.contains("t"))
-            statisticsSet = new StatisticsSet(stats.getSiteStats(), StatisticsSet.CMP_LAST_ACCESS);
-        else if (options.contains("r"))
-            statisticsSet = new StatisticsSet(stats.getSiteStats(), StatisticsSet.CMP_READINGS);
-
-        if (statisticsSet != null)
-            appendEntries(sb, statisticsSet);
-
-        sb.append("</statistics>");
+        StringBuilder sb = new StringBuilder(100);
+        sb.append("\"load\":")
+                .append(timeStats.toString());
         return sb;
     }
 
@@ -225,8 +201,8 @@ public class BackendParser {
                     .append(E.code)
                     .append("' title='")
                     .append(eventInfo.title)
-                    .append("' description='")
-                    .append(eventInfo.description)
+                    .append("' topic='")
+                    .append(eventInfo.topic)
                     .append("' imgsrc='")
                     .append(E.imgSrc)
                     .append("' sources='");
@@ -268,7 +244,31 @@ public class BackendParser {
         sb.append("]");
 
         return sb.toString();
+    }
 
+    public static String json(Alerts alerts)
+    {
+        StringBuilder sb = new StringBuilder("[");
+        for (Alert a : alerts) {
+            if (sb.length() > 1) sb.append(",");
+            sb.append("{")
+                    .append("\"" + AlertCode.JSON_ID + "\":").append(a.id)
+                    .append(",\"" + AlertCode.JSON_PROBABILITY + "\":").append(a.probability)
+                    .append(",\"" + AlertCode.JSON_MESSAGE_CODE + "\":").append(a.message_code)
+                    .append(",\"" + AlertCode.JSON_MESSAGE + "\":\"").append(a.message)
+                    .append("\",\"" + AlertCode.JSON_BTN_START_ACTION + "\":").append(a.btn_start_action)
+                    .append(",\"" + AlertCode.JSON_BTN_START_CODE + "\":").append(a.btn_start_code)
+                    .append(",\"" + AlertCode.JSON_BTN_START_TEXT + "\":\"").append(a.btn_start_text)
+                    .append("\",\"" + AlertCode.JSON_BTN_CENTER_ACTION + "\":").append(a.btn_center_action)
+                    .append(",\"" + AlertCode.JSON_BTN_CENTER_CODE + "\":").append(a.btn_center_code)
+                    .append(",\"" + AlertCode.JSON_BTN_CENTER_TEXT + "\":\"").append(a.btn_center_text)
+                    .append("\",\"" + AlertCode.JSON_BTN_END_ACTION + "\":").append(a.btn_end_action)
+                    .append(",\"" + AlertCode.JSON_BTN_END_CODE + "\":").append(a.btn_end_code)
+                    .append(",\"" + AlertCode.JSON_BTN_END_TEXT + "\":\"").append(a.btn_end_text)
+                    .append("\"}");
+        }
+        sb.append("]");
+        return sb.toString();
     }
 
 }

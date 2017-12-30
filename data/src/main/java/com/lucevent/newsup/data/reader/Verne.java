@@ -1,8 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -22,7 +20,6 @@ public class Verne extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_ENCLOSURE},
-                "https://verne.elpais.com/",
                 "");
     }
 
@@ -30,7 +27,7 @@ public class Verne extends com.lucevent.newsup.data.util.NewsReader {
     protected void readNewsContent(Document doc, News news)
     {
         Elements article = doc.select("[itemprop='articleBody']");
-        article.select("meta,.pie_video,.nota_pie,figcaption,script[src*='twitter'],script[src*='instagram'],.cont-art-tags,.buscador-contenedor").remove();
+        article.select(".pie_video,.nota_pie,script[src*='twitter'],script[src*='instagram'],.cont-art-tags,.buscador-contenedor").remove();
 
         for (Element e : article.select(".embed iframe"))
             e.attr("src", e.attr("data-src"));
@@ -48,18 +45,16 @@ public class Verne extends com.lucevent.newsup.data.util.NewsReader {
 
                 i1 += 26;
                 int i2 = script.indexOf("';", i1);
-                video.html(Enclosure.iframe("http://ep02.epimg.net/" + script.substring(i1, i2)));
+                video.html(insertIframe("http://ep02.epimg.net/" + script.substring(i1, i2)));
             } else {
                 i1 += 11;
                 int i2 = script.indexOf("')", i1);
-                video.html(Enclosure.iframe(script.substring(i1, i2).replace("watch?v=", "embed/")));
+                video.html(insertIframe(script.substring(i1, i2).replace("watch?v=", "embed/")));
             }
         }
-        NewsStylist.repairLinks(article);
+        cleanAttributes(article.select("img[src]"), "src");
 
-        article.select("h1,h2").tagName("h3");
-
-        news.content = article.html();
+        news.content = finalFormat(article, false);
     }
 
 }

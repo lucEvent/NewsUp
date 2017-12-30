@@ -2,7 +2,6 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -24,7 +23,6 @@ public class Make extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{},
-                "http://makezine.com/",
                 "");
     }
 
@@ -48,8 +46,7 @@ public class Make extends com.lucevent.newsup.data.util.NewsReader {
     protected void readNewsContent(Document doc, News news)
     {
         Elements article = doc.select("noscript .story-hero-image,.article-body");
-
-        article.select("style,noscript,script,.ctx-clearfix,.ctx-article-root,.ctx-sidebar-container").remove();
+        article.select("noscript,script,.ctx-clearfix,.ctx-article-root,.ctx-sidebar-container").remove();
 
         for (Element img : article.select("img")) {
             String src = img.attr("src");
@@ -58,31 +55,30 @@ public class Make extends com.lucevent.newsup.data.util.NewsReader {
                         .removeAttr("data-lazy-src");
             }
 
-            NewsStylist.cleanAttributes(img, "src");
+            cleanAttributes(img, "src");
         }
 
-        article.select("h1,h2").tagName("h3");
         doc.select(".wp-caption-text").tagName("figcaption");
         article.select("[style]").removeAttr("style");
         article.select("[width]").removeAttr("width");
         article.select("iframe").attr("frameborder", "0");
 
-        NewsStylist.cleanAttributes(article.select("video"), "controls");
+        cleanAttributes(article.select("video"), "controls");
 
-        news.content = NewsStylist.cleanComments(article.outerHtml());
+        news.content = finalFormat(article, true);
     }
 
     @Override
-    protected Document getDocument(String pagelink)
+    protected Document getDocument(String url)
     {
         try {
-            return org.jsoup.Jsoup.connect(pagelink)
+            return org.jsoup.Jsoup.connect(url)
                     .timeout(10000)
                     .userAgent(USER_AGENT)
                     .get();
         } catch (IOException ignore) {
         }
-        return super.getDocument(pagelink);
+        return super.getDocument(url);
     }
 
 }

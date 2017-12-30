@@ -2,7 +2,6 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -22,7 +21,6 @@ public class UniverseToday extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{},
-                "https://www.universetoday.com/",
                 "");
     }
 
@@ -36,19 +34,18 @@ public class UniverseToday extends com.lucevent.newsup.data.util.NewsReader {
     protected News onNewsRead(News news)
     {
         // Parsing content
-        Document doc = jsoupParse(news.content);
-        doc.select("script").remove();
+        Element article = jsoupParse(news.content);
+        article.select("script").remove();
 
-        doc.select("h1,h2").tagName("h3");
-        doc.select(".wp-caption-text").tagName("figcaption");
-        doc.select("[style]").removeAttr("style");
-        doc.select("iframe").attr("frameborder", "0");
+        article.select(".wp-caption-text").tagName("figcaption");
+        article.select("[style]").removeAttr("style");
+        article.select("iframe").attr("frameborder", "0");
 
-        news.content = NewsStylist.cleanComments(doc.body().html());
+        news.content = finalFormat(article, false);
         // end
 
         // Parsing enclosures
-        Elements imgs = doc.select("img");
+        Elements imgs = article.select("img");
         if (!imgs.isEmpty())
             news.enclosures.add(new Enclosure(imgs.first().attr("src"), "", ""));
         // end
@@ -56,10 +53,10 @@ public class UniverseToday extends com.lucevent.newsup.data.util.NewsReader {
     }
 
     @Override
-    protected Document getDocument(String pagelink)
+    protected Document getDocument(String url)
     {
         try {
-            return org.jsoup.Jsoup.connect(pagelink)
+            return org.jsoup.Jsoup.connect(url)
                     .ignoreContentType(true)
                     .userAgent(USER_AGENT)
                     .timeout(10000)

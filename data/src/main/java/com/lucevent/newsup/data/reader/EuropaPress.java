@@ -1,7 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 public class EuropaPress extends com.lucevent.newsup.data.util.NewsReader {
 
@@ -21,7 +20,6 @@ public class EuropaPress extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_ENCLOSURE},
-                "http://www.europapress.es/",
                 "");
     }
 
@@ -34,15 +32,12 @@ public class EuropaPress extends com.lucevent.newsup.data.util.NewsReader {
         if (e.isEmpty())
             return;
 
-        e.select(".FechaPublicacionNoticia,.captionv2,script,.related-content-no-image,.related-content").remove();
-        e.select("h1,h2").tagName("h3");
+        e.select(".FechaPublicacionNoticia,.captionv2,script,.related-content-no-image,.related-content,button").remove();
         e.select("[onclick]").removeAttr("onclick");
         e.select("[style]:not(.instagram-media,.instagram-media *)").removeAttr("style");
 
-        NewsStylist.repairLinks(e);
-
-        news.content = NewsStylist.cleanComments(img.outerHtml() + e.outerHtml());
-        news.content = news.content.replace("Cargando el vídeo....", "");
+        news.content = (finalFormat(img, true) + finalFormat(e, true))
+                .replace("Cargando el vídeo....", "");
     }
 
     protected org.jsoup.nodes.Document getDocument(String link)

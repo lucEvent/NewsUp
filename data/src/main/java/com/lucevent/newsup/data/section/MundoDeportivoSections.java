@@ -34,7 +34,7 @@ public class MundoDeportivoSections extends Sections {
         add(new Section("Villarreal", "http://www.mundodeportivo.com/feed/rss/futbol/villarreal", 1));
 
         add(new Section("Baloncesto", "http://www.mundodeportivo.com/feed/rss/baloncesto", 0));
-        add(new Section("ACB", "http://www.mundodeportivo.com/mvc/feed/rss/home", 1));
+        add(new Section("ACB", "http://www.mundodeportivo.com/feed/rss/baloncesto/acb", 1));
         add(new Section("Euroliga", "http://www.mundodeportivo.com/feed/rss/baloncesto/euroliga", 1));
         add(new Section("NBA", "http://www.mundodeportivo.com/feed/rss/baloncesto/nba", 1));
 
@@ -43,7 +43,6 @@ public class MundoDeportivoSections extends Sections {
         add(new Section("Motociclismo", "http://www.mundodeportivo.com/feed/rss/motor/motociclismo", 1));
         add(new Section("Rallies", "http://www.mundodeportivo.com/feed/rss/motor/rallies", 1));
         add(new Section("Dakar", "http://www.mundodeportivo.com/feed/rss/motor/rally-dakar", 1));
-        add(new Section("M\u00E1s motor", "http://www.mundodeportivo.com/feed/rss/motor/mas-motor", 1));
 
         add(new Section("Tenis", "http://www.mundodeportivo.com/feed/rss/tenis", 0));
         add(new Section("M\u00E1s deporte", "http://www.mundodeportivo.com/feed/rss/mas-deporte", 0));

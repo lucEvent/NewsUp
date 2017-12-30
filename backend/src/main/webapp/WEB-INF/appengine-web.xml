@@ -10,12 +10,8 @@
            <application>newsup-4</application>
            <application>newsup-5</application>
     -->
-    <version>2-2-0</version>
+    <version>2-5-0</version>
     <threadsafe>true</threadsafe>
-
-    <static-files>
-        <include path="stats.html"/>
-    </static-files>
 
     <system-properties>
         <property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>

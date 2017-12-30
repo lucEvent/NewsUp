@@ -31,7 +31,7 @@ public class SiteListAdapter extends RecyclerView.Adapter<SiteListViewHolder> {
     @Override
     public void onBindViewHolder(SiteListViewHolder holder, int position)
     {
-        SiteListViewHolder.populateViewHolder(holder, sites.get(position));
+        holder.bind(sites.get(position));
     }
 
     @Override

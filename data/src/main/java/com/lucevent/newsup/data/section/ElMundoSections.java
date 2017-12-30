@@ -14,7 +14,6 @@ public class ElMundoSections extends Sections {
         add(new Section("Internacional", "http://estaticos.elmundo.es/elmundo/rss/internacional.xml", 0));
         add(new Section("Econom\u00EDa", "http://estaticos.elmundo.es/elmundo/rss/economia.xml", 0));
         add(new Section("Cultura", "http://estaticos.elmundo.es/elmundo/rss/cultura.xml", 0));
-        add(new Section("Ciencia", "http://estaticos.elmundo.es/elmundo/rss/ciencia.xml", 0));
 
         add(new Section("Ciudades", null, -1));
         add(new Section("Alicante", "http://estaticos.elmundo.es/elmundo/rss/alicante.xml", 1));
@@ -37,13 +36,11 @@ public class ElMundoSections extends Sections {
         add(new Section("Comunicaci\u00F3n", "http://estaticos.elmundo.es/elmundo/rss/comunicacion.xml", 0));
         add(new Section("Televisi\u00F3n", "http://estaticos.elmundo.es/elmundo/rss/television.xml", 0));
         add(new Section("Su Vivienda", "http://estaticos.elmundo.es/elmundo/rss/suvivienda.xml", 0));
-        add(new Section("Salud", "http://estaticos.elmundo.es/elmundosalud/rss/portada.xml", 0));
         add(new Section("Motor", "http://estaticos.elmundo.es/elmundomotor/rss/portada.xml", 0));
         add(new Section("Yo Dona", "http://estaticos.elmundo.es/yodona/rss/portada.xml", 0));
 
         add(new Section("El Navegante", "http://estaticos.elmundo.es/elmundo/rss/navegante.xml", 0));
         add(new Section("Gadgetoblog", "http://estaticos.elmundo.es/blogs/elmundo/el-gadgetoblog/index.xml", 1));
-        add(new Section("El mundo Player", "http://estaticos.elmundo.es/blogs/elmundo/mundoplayer/index.xml", 1));
 
         add(new Section("Blogs", null, -1));
         add(new Section("Dragolandia", "http://estaticos.elmundo.es/blogs/elmundo/dragolandia/index.xml", 1));
@@ -52,7 +49,6 @@ public class ElMundoSections extends Sections {
         add(new Section("Asesino en serie", "http://estaticos.elmundo.es/blogs/elmundo/asesinoenserie/index.xml", 1));
         add(new Section("Coraz\u00F3n de mel\u00F3n", "http://estaticos.elmundo.es/blogs/elmundo/corazondemelon/index.xml", 1));
         add(new Section("Sin noticias de Dior", "http://estaticos.elmundo.es/blogs/elmundo/sinnoticiasdedior/index.xml", 1));
-        add(new Section("Clima", "http://estaticos.elmundo.es/blogs/elmundo/clima/index.xml", 1));
         add(new Section("Tierra", "http://estaticos.elmundo.es/blogs/elmundo/tierra/index.xml", 1));
 
     }

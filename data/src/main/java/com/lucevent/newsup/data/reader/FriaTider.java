@@ -1,9 +1,9 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 public class FriaTider extends com.lucevent.newsup.data.util.NewsReader {
 
@@ -19,30 +19,31 @@ public class FriaTider extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{},
                 new int[]{},
-                "http://www.friatider.se/",
                 "");
     }
 
     @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
-        org.jsoup.select.Elements e = doc.select(".field-items,.standfirst");
-        e.select(".image-credit,script").remove();
+        Elements article = doc.select(".field-items,.standfirst");
+        article.select("script,.bargraph").remove();
 
-        e.select("#bargraph").attr("style", "height:400px;");
-        if (!e.isEmpty())
-            news.content = NewsStylist.cleanComments(e.html());
+        article.select(".field-slideshow-credit,.field-slideshow-caption,.image-credit").tagName("figcaption");
+
+        article.select("#bargraph").attr("style", "height:400px;");
+        if (!article.isEmpty())
+            news.content = finalFormat(article, false);
     }
 
     @Override
-    protected Document getDocument(String pagelink)
+    protected Document getDocument(String url)
     {
         try {
-            return org.jsoup.Jsoup.connect(pagelink).timeout(10000).userAgent(USER_AGENT).get();
+            return org.jsoup.Jsoup.connect(url).timeout(10000).userAgent(USER_AGENT).get();
         } catch (Exception ignored) {
         }
         try {
-            return org.jsoup.Jsoup.connect(pagelink).timeout(10000).get();
+            return org.jsoup.Jsoup.connect(url).timeout(10000).get();
         } catch (Exception ignored) {
         }
         return null;

@@ -15,7 +15,7 @@ public class AsSections extends Sections {
         add(new Section("F\u00FAtbol", "http://futbol.as.com/rss/futbol/portada.xml", 0));
         add(new Section("LaLiga Santander", "http://futbol.as.com/rss/futbol/primera.xml", 1));
         add(new Section("LaLiga 1|2|3", "http://futbol.as.com/rss/futbol/segunda.xml", 1));
-        add(new Section("Copa del rey", "http://futbol.as.com/rss/futbol/copa_del_rey.xml", 1));
+        add(new Section("Copa del Rey", "http://futbol.as.com/rss/futbol/copa_del_rey.xml", 1));
         add(new Section("Champions league", "http://futbol.as.com/rss/futbol/champions.xml", 1));
         add(new Section("Europa league", "http://futbol.as.com/rss/futbol/uefa.xml", 1));
         add(new Section("Segunda B", "http://masdeporte.as.com/tag/rss/segunda_division_b/a", 1));

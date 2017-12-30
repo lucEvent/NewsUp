@@ -37,6 +37,7 @@ public class KernelManager implements StorageCallback {
     public KernelManager(@NonNull Context context)
     {
         this.context = context;
+        AppSettings.initialize(context);
 
         Date.setTitles(context.getResources().getStringArray(R.array.date_messages));
 

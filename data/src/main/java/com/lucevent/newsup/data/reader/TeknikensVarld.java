@@ -2,7 +2,6 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -22,7 +21,6 @@ public class TeknikensVarld extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_MEDIA_CONTENT},
-                "http://teknikensvarld.se/",
                 "");
     }
 
@@ -36,14 +34,14 @@ public class TeknikensVarld extends com.lucevent.newsup.data.util.NewsReader {
     protected void readNewsContent(Document doc, News news)
     {
         Elements article = doc.select(".article-content");
-        doc.select("script,.lureToFB,.related-gallery,.figcaption,.wp-caption-text,.btdm-factbox").remove();
+        doc.select("script,.lureToFB,.related-gallery,.btdm-factbox,.pdf-shop").remove();
 
-        doc.select("h1,h2").tagName("h3");
+        doc.select(".wp-caption-text").tagName("figcaption");
         doc.select("[style]").removeAttr("style");
 
-        NewsStylist.cleanAttributes(doc.select("img"), "src");
+        cleanAttributes(doc.select("img"), "src");
 
-        news.content = article.html();
+        news.content = finalFormat(article, false);
     }
 
 }

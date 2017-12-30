@@ -1,7 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -31,16 +30,12 @@ public class TheNewYorkTimes extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_ENCLOSURE, TAG_MEDIA_CONTENT},
-                "https://www.nytimes.com/",
                 "");
     }
 
     @Override
     protected void readNewsContent(Document doc, News news)
     {
-        //    news.content = doc.outerHtml();
-        //    if (true) return;
-
         Elements article = doc.select("article .p-block:not(.article-interactive)");
         article.select(".lazyload,.image-caption,.image-credit").remove();
 
@@ -89,40 +84,8 @@ public class TheNewYorkTimes extends com.lucevent.newsup.data.util.NewsReader {
                     + e.attr("data-iframe") + "'></iframe>");
 
         article.select("[style]").removeAttr("style");
-        NewsStylist.repairLinks(article);
 
-        news.content = article.outerHtml();
+        news.content = finalFormat(article, true);
     }
-/*
-    protected org.jsoup.nodes.Document getDocument(String pagelink)
-    {
-        try {
 
-            URL oracle = new URL(pagelink);
-            BufferedReader in = new BufferedReader(new InputStreamReader(oracle.openStream()));
-
-            StringBuilder sb = new StringBuilder();
-            String inputLine;
-            while ((inputLine = in.readLine()) != null)
-                sb.append(inputLine);
-            in.close();
-
-            System.out.println("Link:"+pagelink);
-            System.out.println("Size:"+sb.length());
-            System.out.println(sb);
-            return org.jsoup.Jsoup.parse(sb.toString(), "", new org.jsoup.parser.Parser(new org.jsoup.parser.XmlTreeBuilder()));
-
-      //  System.out.println("Asereje:"+pagelink);
-      //      return org.jsoup.Jsoup.connect(pagelink)
-       //             .referrer("https://www.google.com/")
-       //             .userAgent("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html")
-       ///             .timeout(10000)
-       //             .get();
-        } catch (Exception e) {
-            System.out.println("[NYTimes] Couldn't read page: " + pagelink);
-            e.printStackTrace();
-        }
-        return null;
-    }
-*/
 }

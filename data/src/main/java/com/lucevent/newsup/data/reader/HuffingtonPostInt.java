@@ -1,9 +1,7 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
-import com.lucevent.newsup.data.util.NewsStylist;
 
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class HuffingtonPostInt extends com.lucevent.newsup.data.util.NewsReader {
@@ -20,23 +18,20 @@ public class HuffingtonPostInt extends com.lucevent.newsup.data.util.NewsReader 
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_ENCLOSURE},
-                "http://www.huffingtonpost.com",
                 "");
     }
 
     @Override
     protected String parseContent(Element prop)
     {
-        Document doc = jsoupParse(prop.text().replace("<br />", "<p></p>"));
-        doc.select("script[src*='.twitter.'],script[src*='.instagram.']").remove();
-        doc.select("h1,h2").tagName("h3");
+        Element article = jsoupParse(prop.text().replace("<br />", "<p></p>"));
+        article.select("script[src*='.twitter.'],script[src*='.instagram.']").remove();
 
-        Element body = doc.body();
-        NewsStylist.repairLinks(body);
-        NewsStylist.repairLinks(body, "data-placeholder");
-        NewsStylist.cleanAttributes(body.select("img"), "src");
+        repairLinks(article, "data-placeholder");
+        repairLinks(article, "data-config");
+        cleanAttributes(article.select("img"), "src");
 
-        String content = body.html();
+        String content = finalFormat(article, false);
 
         int i0 = content.indexOf("type=type=");
         if (i0 != -1) {
@@ -53,7 +48,7 @@ public class HuffingtonPostInt extends com.lucevent.newsup.data.util.NewsReader 
             i1 = content.indexOf("-hh>", i1 + 4);
             content = content.replace(content.substring(i0, i1 + 4), "");
         }
-        return NewsStylist.cleanComments(content);
+        return content;
     }
 
     @Override

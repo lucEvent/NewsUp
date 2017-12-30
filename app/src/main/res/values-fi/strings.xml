@@ -1,4 +1,8 @@
 <resources>
+    <string name="about_content_contact">Developed by Rafael J. Lucena\nContact: rafaa89(at)gmail.com</string>
+    <string name="about_content_title_new_features">Last features and improvements:</string>
+    <string name="about_content_title_coming_soon">Features that might come in next releases:</string>
+    <string name="about_content_title_next_sites">Possible support for:</string>
     <string name="version">version</string>
     <string name="my_news">My news</string>
     <string name="bookmarks">Bookmarks</string>
@@ -29,8 +33,7 @@
     <string name="no_downloads_scheduled">There are no downloads scheduled</string>
     <string name="expand_to_see_headlines">Expand to see the headlines</string>
     <string name="see_something_else">See something else?</string>
-    <string name="happening_now">Happening now (beta)</string>
-    <string name="msg_no_events">No events at the moment</string>
+    <string name="happening_now">Happening now</string>
     <string name="mon">Mon</string>
     <string name="tue">Tue</string>
     <string name="wed">Wed</string>
@@ -54,7 +57,10 @@
     <string name="thats_it">That\'s it</string>
     <string name="add">Add</string>
     <string name="delete">Delete</string>
-    <string name="delete_caps">DELETE</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="update">Update</string>
+    <string name="not_now">Not now</string>
     <string name="hint_pref_pro_mode">Enter PRO code</string>
     <string name="search">Search</string>
     <string name="hint_create_note">Enter one annotation</string>
@@ -86,7 +92,8 @@
     <string name="msg_error_occurred">An error has occurred :(</string>
     <string name="msg_no_history">No records</string>
     <string name="msg_no_bookmarks">You haven\'t bookmarked any news yet</string>
-    <string name="msg_minimum_one_checked">At least one section must be checked</string>
+    <string name="msg_minimum_one_checked">One section must be checked</string>
+    <string name="msg_no_events">No events at the moment</string>
     <string name="title_frg_settings_of">Settings of %1$s</string>
     <string name="menu_favorite">Favorite</string>
     <string name="menu_settings">Publication settings</string>
@@ -110,8 +117,4 @@
     <string name="pref_favorite_sites">Favorite publications</string>
     <string name="pref_load_images">Load images</string>
     <string name="pref_load_images_summary">Set to ON consumes more battery and network data</string>
-    <string name="about_content_contact">Developed by Rafael J. Lucena\nContact: rafaa89(at)gmail.com</string>
-    <string name="about_content_title_new_features">Last features and improvements:</string>
-    <string name="about_content_title_comming_soon">What\'s coming soon?:</string>
-    <string name="about_content_title_next_sites">Possible support for:</string>
 </resources>

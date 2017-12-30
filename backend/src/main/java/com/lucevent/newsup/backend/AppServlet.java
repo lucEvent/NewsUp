@@ -5,6 +5,7 @@ import com.googlecode.objectify.ObjectifyService;
 import com.lucevent.newsup.backend.utils.BackendParser;
 import com.lucevent.newsup.backend.utils.MonthStats;
 import com.lucevent.newsup.backend.utils.Report;
+import com.lucevent.newsup.backend.utils.Reports;
 import com.lucevent.newsup.backend.utils.SiteStats;
 import com.lucevent.newsup.backend.utils.Statistics;
 import com.lucevent.newsup.backend.utils.TimeStats;
@@ -105,17 +106,6 @@ public class AppServlet extends HttpServlet {
                 resp.getWriter().print(prey.content);
             }
 
-        } else if (req.getParameter("stats") != null) {
-
-            if (req.getParameter("reset") != null)
-                Data.stats.reset();
-
-            String options = req.getParameter("options");
-            StringBuilder sb = new StringBuilder();
-            sb.append(BackendParser.toEntry(Data.stats, options != null ? options : ""));
-
-            resp.getWriter().println(sb);
-
         } else if (req.getParameter("notify") != null) {
 
             String[] values = req.getParameter("values").split(",");
@@ -126,16 +116,11 @@ public class AppServlet extends HttpServlet {
 
         } else if (req.getParameter("report") != null) {
 
-            Data.reports.addReport(
+            Reports.addReport(
                     req.getParameter("version"),
                     req.getRemoteAddr(),
                     req.getParameter("email"),
                     req.getParameter("message"));
-
-        } else if (req.getParameter("clear") != null) {
-
-            for (Site site : Data.sites)
-                site.news.clear();
 
         }
     }

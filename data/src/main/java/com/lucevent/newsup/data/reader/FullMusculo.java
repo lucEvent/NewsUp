@@ -1,7 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.NewsStylist;
-
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
@@ -19,7 +17,6 @@ public class FullMusculo extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_ENCLOSURE},
-                "http://fullmusculo.com/home/",
                 "");
     }
 
@@ -32,30 +29,28 @@ public class FullMusculo extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected String parseContent(Element prop)
     {
-        Document doc = jsoupParse(prop);
-        doc.select(".wp-embedded-content,iframe[src*='adsystem'],.aalb-pg-ad-unit,script").remove();
+        Element article = jsoupParse(prop);
+        article.select(".wp-embedded-content,iframe[src*='adsystem'],.aalb-pg-ad-unit,script").remove();
 
-        doc.select("[style]").removeAttr("style");
-        doc.select("[align]").removeAttr("align");
-        doc.select("h1,h2").tagName("h3");
+        article.select("[style]").removeAttr("style");
+        article.select("[align]").removeAttr("align");
 
-        NewsStylist.cleanAttributes(doc.select("img"), "src");
-        NewsStylist.repairLinks(doc.body());
+        cleanAttributes(article.select("img"), "src");
 
-        return NewsStylist.cleanComments(doc.body().html());
+        return finalFormat(article, false);
     }
 
     @Override
-    protected Document getDocument(String pagelink)
+    protected Document getDocument(String url)
     {
         try {
-            return org.jsoup.Jsoup.connect(pagelink)
+            return org.jsoup.Jsoup.connect(url)
                     .timeout(10000)
                     .userAgent(USER_AGENT)
                     .get();
         } catch (Exception ignored) {
         }
-        return super.getDocument(pagelink);
+        return super.getDocument(url);
     }
 
 }

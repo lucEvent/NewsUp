@@ -2,7 +2,6 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -27,31 +26,28 @@ public class Medium extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{},
-                "https://medium.com/",
                 "");
     }
 
     @Override
     protected String parseContent(Element prop)
     {
-        Document doc = jsoupParse(prop);
-        doc.select("script,[width=1],figcaption").remove();
-        doc.select("h1,h2").tagName("h3");
-        NewsStylist.repairLinks(doc.body());
-        return doc.body().html();
+        Element article = jsoupParse(prop);
+        article.select("script,[width=1]").remove();
+        return finalFormat(article, false);
     }
 
     @Override
     protected News onNewsRead(News news)
     {
         if (news.description != null) {
-            Document doc = jsoupParse(news.description);
+            Element article = jsoupParse(news.description);
 
-            Elements img = doc.select("img");
+            Elements img = article.select("img");
             if (!img.isEmpty())
                 news.enclosures.add(new Enclosure(img.first().attr("src"), "image", ""));
 
-            news.description = doc.select(".medium-feed-snippet").text();
+            news.description = article.select(".medium-feed-snippet").text();
         }
         return news;
     }
@@ -64,20 +60,19 @@ public class Medium extends com.lucevent.newsup.data.util.NewsReader {
 
         for (Element fig : e.select("figure:has(noscript)")) {
             fig.html(fig.select("noscript").html());
-            NewsStylist.cleanAttributes(fig);
+            cleanAttributes(fig);
         }
 
-        e.select("h1,h2").tagName("h3");
         e.select(".section-inner,.graf,.progressiveMedia-noscript").removeAttr("class");
 
-        news.content = e.html();
+        news.content = finalFormat(e, false);
     }
 
     @Override
-    protected Document getDocument(String pagelink)
+    protected Document getDocument(String url)
     {
         try {
-            return org.jsoup.Jsoup.connect(pagelink)
+            return org.jsoup.Jsoup.connect(url)
                     .timeout(10000)
                     .userAgent(USER_AGENT)
                     .get();

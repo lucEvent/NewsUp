@@ -1,7 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.NewsStylist;
-
 import org.jsoup.nodes.Element;
 
 public class LaRazon extends com.lucevent.newsup.data.util.NewsReader {
@@ -23,18 +21,16 @@ public class LaRazon extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{},
                 new int[]{TAG_MEDIA_CONTENT},
-                "http://www.larazon.es/",
                 "");
     }
 
     @Override
     protected String parseContent(Element prop)
     {
-        org.jsoup.nodes.Document doc = org.jsoup.Jsoup.parse(prop.text().replace("\u201D", "'"));
-        doc.select("script").remove();
-        doc.select("[style]").removeAttr("style");
-        NewsStylist.repairLinks(doc.body());
-        return doc.body().html();
+        Element article = jsoupParse(prop.text().replace("\u201D", "'"));
+        article.select("script").remove();
+        article.select("[style]").removeAttr("style");
+        return finalFormat(article, false);
     }
 
 }

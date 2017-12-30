@@ -28,7 +28,6 @@ public class SkyAndTelescopeSections extends Sections {
         add(new Section("Observing", "http://www.skyandtelescope.com/observing/feed/", 0));
         add(new Section("This Week's Sky at a Glance", "http://www.skyandtelescope.com/observing/sky-at-a-glance/feed/", 1));
         add(new Section("Stargazer's Corner", "http://www.skyandtelescope.com/observing/stargazers-corner/feed/", 1));
-        add(new Section("Observing Projects", "http://www.skyandtelescope.com/observing/astronomy-stargazing-projects/feed/", 1));
         add(new Section("Astronomy Podcasts", "http://www.skyandtelescope.com/observing/astronomy-podcasts/feed/", 1));
 
         add(new Section("Resources & Education", "http://www.skyandtelescope.com/astronomy-resources/feed/", 0));
@@ -40,7 +39,7 @@ public class SkyAndTelescopeSections extends Sections {
         add(new Section("Astrophotography - Jerry Lodriguss", "http://www.skyandtelescope.com/astronomy-blogs/astrophotography-jerry-lodriguss/feed/", 1));
         add(new Section("Astronomy in Space - David Dickinson", "http://www.skyandtelescope.com/astronomy-blogs/astronomy-space-david-dickinson/feed/", 1));
 
-        add(new Section("Events events", "http://www.skyandtelescope.com/astronomy-events/feed/", 0));
+        add(new Section("Events", "http://www.skyandtelescope.com/astronomy-events/feed/", 0));
         add(new Section("Get Involved", "http://www.skyandtelescope.com/get-involved/feed/", 0));
         add(new Section("Editor's Choice Archive", "http://www.skyandtelescope.com/online-gallery/editors-choice-photos/feed/", 0));
         add(new Section("Videos", "http://www.skyandtelescope.com/astronomy-videos/feed/", 0));

@@ -26,7 +26,6 @@ public class TheNewYorkTimesSections extends Sections {
 
         add(new Section("Business", "http://rss.nytimes.com/services/xml/rss/nyt/Business.xml", 0));
         add(new Section("Energy & Environment", "http://rss.nytimes.com/services/xml/rss/nyt/EnergyEnvironment.xml", 1));
-        add(new Section("Small Business", "http://rss.nytimes.com/services/xml/rss/nyt/SmallBusiness.xml", 1));
         add(new Section("Economy", "http://rss.nytimes.com/services/xml/rss/nyt/Economy.xml", 1));
         add(new Section("DealBook", "http://www.nytimes.com/services/xml/rss/nyt/Dealbook.xml", 1));
         add(new Section("Media & Advertising", "http://rss.nytimes.com/services/xml/rss/nyt/MediaandAdvertising.xml", 1));
@@ -44,8 +43,7 @@ public class TheNewYorkTimesSections extends Sections {
         add(new Section("Pro-Basketball", "http://rss.nytimes.com/services/xml/rss/nyt/ProBasketball.xml", 1));
         add(new Section("Pro-Football", "http://rss.nytimes.com/services/xml/rss/nyt/ProFootball.xml", 1));
         add(new Section("Soccer", "http://rss.nytimes.com/services/xml/rss/nyt/Soccer.xml", 1));
-        add(new Section("Tennis", "http://rss.nytimes.com/services/xml/rss/nyt/Tennis.xml", 1));
-
+  
         add(new Section("Science", "http://rss.nytimes.com/services/xml/rss/nyt/Science.xml", 0));
         add(new Section("Environment", "http://rss.nytimes.com/services/xml/rss/nyt/Environment.xml", 1));
         add(new Section("Space & Cosmos", "http://rss.nytimes.com/services/xml/rss/nyt/Space.xml", 1));
@@ -54,7 +52,6 @@ public class TheNewYorkTimesSections extends Sections {
         add(new Section("Well Blog", "http://www.nytimes.com/svc/collections/v1/publish/www.nytimes.com/section/well/rss.xml", 1));
 
         add(new Section("Arts", "http://rss.nytimes.com/services/xml/rss/nyt/Arts.xml", 0));
-        add(new Section("International Arts", "http://www.nytimes.com/services/xml/rss/nyt/InternationalArts.xml", 1));
         add(new Section("Art & Design", "http://rss.nytimes.com/services/xml/rss/nyt/ArtandDesign.xml", 1));
         add(new Section("Books", "http://rss.nytimes.com/services/xml/rss/nyt/Books.xml", 1));
         add(new Section("Sunday Book Review", "http://rss.nytimes.com/services/xml/rss/nyt/SundayBookReview.xml", 1));
@@ -96,7 +93,6 @@ public class TheNewYorkTimesSections extends Sections {
         add(new Section("Thomas L. Friedman", "http://www.nytimes.com/svc/collections/v1/publish/www.nytimes.com/column/thomas-l-friedman/rss.xml", 1));
         add(new Section("Nicholas D. Kristof", "http://www.nytimes.com/svc/collections/v1/publish/www.nytimes.com/column/nicholas-kristof/rss.xml", 1));
         add(new Section("Paul Krugman", "http://www.nytimes.com/svc/collections/v1/publish/www.nytimes.com/column/paul-krugman/rss.xml", 1));
-        add(new Section("The Conscience of a Liberal Blog", "http://krugman.blogs.nytimes.com/feed/", 1));
 
         add(new Section("Opinionator", null, -1));
         add(new Section("Fixes", "http://www.nytimes.com/svc/collections/v1/publish/www.nytimes.com/column/fixes/rss.xml", 1));

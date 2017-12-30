@@ -11,7 +11,6 @@ public class _20MinutosSections extends Sections {
 
         add(new Section("Titulares", "http://www.20minutos.es/rss/", 0));
         add(new Section("Artes", "http://www.20minutos.es/rss/artes/", 0));
-        add(new Section("Artrend", "http://www.20minutos.es/rss/artrend/", 0));
         add(new Section("Ciencia", "http://www.20minutos.es/rss/ciencia/", 0));
         add(new Section("Cine", "http://www.20minutos.es/rss/cine", 0));
         add(new Section("Cultura", "http://www.20minutos.es/rss/cultura/", 0));
@@ -50,7 +49,7 @@ public class _20MinutosSections extends Sections {
         add(new Section("La Rioja", "http://www.20minutos.es/rss/larioja", 1));
         add(new Section("Madrid", "http://www.20minutos.es/rss/madrid", 1));
         add(new Section("Melilla", "http://www.20minutos.es/rss/melilla", 1));
-        add(new Section("Murcia", "http://www.20minutos.es/rss/region-de-murcia", 1));
+        add(new Section("Murcia", "http://www.20minutos.es/rss/murcia", 1));
         add(new Section("Navarra", "http://www.20minutos.es/rss/navarra", 1));
         add(new Section("Pa\u00EDs vasco", "http://www.20minutos.es/rss/pais-vasco", 1));
 
@@ -70,7 +69,6 @@ public class _20MinutosSections extends Sections {
         add(new Section("C\u00E1diz", "http://www.20minutos.es/rss/cadiz", 1));
         add(new Section("Castell\u00F3n", "http://www.20minutos.es/rss/castellon", 1));
         add(new Section("Castell\u00F3", "http://www.20minutos.es/rss/castello", 1));
-        add(new Section("Ceuta", "http://www.20minutos.es/rss/ceuta", 1));
         add(new Section("Ciudad real", "http://www.20minutos.es/rss/ciudadreal", 1));
         add(new Section("C\u00F3rdoba", "http://www.20minutos.es/rss/cordoba", 1));
         add(new Section("Cuenca", "http://www.20minutos.es/rss/cuenca", 1));
@@ -84,19 +82,13 @@ public class _20MinutosSections extends Sections {
         add(new Section("Las palmas", "http://www.20minutos.es/rss/laspalmas", 1));
         add(new Section("Le\u00F3n", "http://www.20minutos.es/rss/leon", 1));
         add(new Section("Lleida", "http://www.20minutos.es/rss/lleida", 1));
-        add(new Section("Logro\u00F1o", "http://www.20minutos.es/rss/logrono", 1));
         add(new Section("Lugo", "http://www.20minutos.es/rss/lugo", 1));
-        add(new Section("Madrid", "http://www.20minutos.es/rss/madrid", 1));
         add(new Section("M\u00E1laga", "http://www.20minutos.es/rss/malaga", 1));
-        add(new Section("Melilla", "http://www.20minutos.es/rss/melilla", 1));
-        add(new Section("Murcia", "http://www.20minutos.es/rss/murcia", 1));
         add(new Section("Ourense", "http://www.20minutos.es/rss/ourense", 1));
         add(new Section("Palencia", "http://www.20minutos.es/rss/palencia", 1));
-        add(new Section("Pamplona", "http://www.20minutos.es/rss/pamplona", 1));
         add(new Section("Pontevedra", "http://www.20minutos.es/rss/pontevedra", 1));
         add(new Section("Salamanca", "http://www.20minutos.es/rss/salamanca", 1));
         add(new Section("Santa cruz de Tenerife", "http://www.20minutos.es/rss/tenerife", 1));
-        add(new Section("Santander", "http://www.20minutos.es/rss/santander", 1));
         add(new Section("Segovia", "http://www.20minutos.es/rss/segovia", 1));
         add(new Section("Sevilla", "http://www.20minutos.es/rss/sevilla", 1));
         add(new Section("Soria", "http://www.20minutos.es/rss/soria", 1));
@@ -106,8 +98,6 @@ public class _20MinutosSections extends Sections {
         add(new Section("Valencia", "http://www.20minutos.es/rss/valencia", 1));
         add(new Section("Val\u00E8ncia", "http://www.20minutos.es/rss/valencia-noticies", 1));
         add(new Section("Valladolid", "http://www.20minutos.es/rss/valladolid", 1));
-        add(new Section("Vitoria", "http://www.20minutos.es/rss/vitoria", 1));
-        add(new Section("Vizcaya", "http://www.20minutos.es/rss/vizcaya", 1));
         add(new Section("Zamora", "http://www.20minutos.es/rss/zamora", 1));
         add(new Section("Zaragoza", "http://www.20minutos.es/rss/zaragoza", 1));
 

@@ -1,18 +1,13 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class People extends com.lucevent.newsup.data.util.NewsReader {
 
-    /**
-     * Tags
-     * [category, dc:creator, description, guid, item, link, media:content, pubdate, title]
-     * [category, dc:creator, description, guid, item, link,                pubdate, title]
-     */
+    // Tags: [category, dc:creator, description, guid, item, link, media:content, media:credit, media:text, media:title, pubdate, title]
 
     public People()
     {
@@ -24,43 +19,57 @@ public class People extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_MEDIA_CONTENT},
-                "http://people.com/",
                 "");
     }
 
     @Override
     protected String parseDescription(Element prop)
     {
-        return org.jsoup.Jsoup.parse(prop.text()).text();
+        String dscr = org.jsoup.Jsoup.parse(prop.text()).text();
+        return dscr.substring(0, Math.min(300, dscr.length()));
     }
 
     @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
-        Elements article = doc.select(".article-single__content");
-        article.select("script,noscript,.article-footer,.article-figure__share,.article-body__show-full,.brightcove-player,.video__wrapper,form:not(form[id]").remove();
+        Elements article = doc.select(".article-content .sticky-video,.lead-image,#article-body");
+        article.select("script,.ad").remove();
 
-        NewsStylist.wpcomwidget(article);
-        article.select("form").remove();
+        for (Element vdiv : article.select(".video:has(video)")) {
+            Element v = vdiv.select("video").first();
 
+            String src = "https://players.brightcove.net/"
+                    + v.attr("data-account") + "/" + v.attr("data-player") + "_" + v.attr("data-embed") + "/index.html?videoId=" + v.attr("data-video-id");
+
+            vdiv.html(insertIframe(src));
+        }
+
+        for (Element top : article.select(".oembed")) {
+            Element e = top;
+            Elements e_children = e.children();
+            Element first = e_children.first();
+            while (e_children.size() == 1 && (first.tagName().equals("div") || first.tagName().equals("span"))) {
+                e = first;
+                e_children = e.children();
+                first = e_children.first();
+            }
+            cleanAttributes(top);
+            top.html(e.html());
+        }
+        for (Element img : article.select(".image-wrapper .lazy-image,.image-and-burst .lazy-image")) {
+            String src = img.attr("data-src");
+            String cap = img.select(".credit").html();
+            img.parent().html(insertImg(src) + insertCaption(cap));
+        }
         for (Element e : article.select("strong")) {
             String text = e.text();
-            if (text.startsWith("RELATED VIDEO")
-                    || text.startsWith("VIDEO")
-                    || text.startsWith("RELATED")) {
+            if (text.startsWith("RELATED")
+                    || text.startsWith("VIDEO"))
                 e.parent().remove();
-            }
-        }
-        for (Element img : article.select("img[data-src]")) {
-            String src = img.attr("data-src");
-            NewsStylist.cleanAttributes(img);
-            img.attr("src", src);
         }
 
-        article.select("h1,h2").tagName("h3");
-        NewsStylist.repairLinks(article);
-
-        news.content = NewsStylist.cleanComments(article.html().replace("<p>&nbsp;</p>", ""));
+        news.content = finalFormat(article, false);
     }
+
 
 }

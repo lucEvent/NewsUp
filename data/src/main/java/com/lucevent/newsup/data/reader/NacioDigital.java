@@ -2,7 +2,6 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -22,7 +21,6 @@ public class NacioDigital extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{},
-                "http://www.naciodigital.cat/",
                 "");
     }
 
@@ -30,12 +28,12 @@ public class NacioDigital extends com.lucevent.newsup.data.util.NewsReader {
     protected News onNewsRead(News news)
     {
         // Parsing description
-        Document doc = jsoupParse(news.description);
-        news.description = doc.text();
+        Element article = jsoupParse(news.description);
+        news.description = article.text();
         // end
 
         // Parsing enclosures
-        Elements imgs = doc.select("img");
+        Elements imgs = article.select("img");
         if (!imgs.isEmpty())
             news.enclosures.add(new Enclosure(imgs.first().attr("src"), "", ""));
         // end
@@ -47,21 +45,20 @@ public class NacioDigital extends com.lucevent.newsup.data.util.NewsReader {
     {
         doc.select(".h3itemrelnoticia").remove();
         Elements article = doc.select(".h3noticia,.fotoportadaampliacio,#_markupCos");
-        article.select("script").remove();
+        article.select("script,.fa-fw").remove();
 
-        for (Element img : article.select(".divimatgeeditor,.fotoportadaampliacio")) {
-            NewsStylist.cleanAttributes(img);
+        for (Element img : article.select(".divimatgeeditor:has(noscript),.fotoportadaampliacio:has(noscript)")) {
+            cleanAttributes(img);
 
             Elements ns = img.select("noscript");
-            img.html(ns.isEmpty() ? img.select("img").outerHtml() : ns.html()
-                    + "<figcaption>" + img.text() + "</figcaption>");
+            String cap = img.text();
+            img.html(ns.html() + "<figcaption>" + cap + "</figcaption>");
         }
 
-        article.select(".h3noticia").tagName("h4");
-        NewsStylist.cleanAttributes(article.select("img"), "src");
-        NewsStylist.repairLinks(article);
+        article.select(".peufotografia,.divimatgeeditor p").tagName("figcaption");
+        article.select("[style]").removeAttr("style");
 
-        news.content = article.outerHtml();
+        news.content = finalFormat(article, true);
     }
 
 }

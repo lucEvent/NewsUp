@@ -1,7 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -20,7 +19,6 @@ public class ElMundo extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_MEDIA_CONTENT},
-                "http://www.elmundo.es/",
                 "");
     }
 
@@ -36,16 +34,13 @@ public class ElMundo extends com.lucevent.newsup.data.util.NewsReader {
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
         Elements article = doc.select("div[itemprop='articleBody']:not(#tamano div[itemprop='articleBody']),#tamano");
-        article.select("aside,footer,meta,time,script,.summary-lead,br,.pie-foto,figcaption").remove();
+        article.select("script,aside,footer,link,time,.summary-lead,br,.pie-foto,.publicidad").remove();
 
-        article.select("h1,h2").tagName("h3");
         article.select("noscript").tagName("div");
         article.select("[style]").removeAttr("style");
 
-        NewsStylist.repairLinks(article);
-
         if (!article.isEmpty())
-            news.content = article.html();
+            news.content = finalFormat(article, false);
     }
 
 }

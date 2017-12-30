@@ -1,7 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -20,7 +19,6 @@ public class SvenskaDagbladet extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{},
-                "https://www.svd.se/",
                 "");
     }
 
@@ -34,14 +32,12 @@ public class SvenskaDagbladet extends com.lucevent.newsup.data.util.NewsReader {
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
         Elements e = doc.select(".Deck,.Body");
-        e.select(".Body-ad,.AdPositionData,.Body-pull,figcaption,.Quote,.ExternalLink,.Ad,script,.ThumbnailList,.paywall-loader,a[href='/premium'],.Figure-expandIcon,.scrbbl-embed,[data-loader-url]").remove();
-
-        NewsStylist.cleanAttributes(e.select("img[srcset]"), "srcset");
-
-        e.select("h1,h2").tagName("h3");
+        e.select("script,.Body-ad,.AdPositionData,.Body-pull,.Quote,.ExternalLink,.Ad,.ThumbnailList,.paywall-loader,a[href='/premium'],.Figure-expandIcon,.scrbbl-embed,[data-loader-url]").remove();
         e.select("[style]:not(.instagram-media,.instagram-media *)").removeAttr("style");
 
-        news.content = e.outerHtml();
+        cleanAttributes(e.select("img[srcset]"), "srcset");
+
+        news.content = finalFormat(e, true);
     }
 
 }

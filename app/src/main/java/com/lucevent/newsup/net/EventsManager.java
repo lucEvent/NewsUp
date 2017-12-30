@@ -69,7 +69,7 @@ public final class EventsManager {
             Event e = new Event();
             e.code = Integer.parseInt(jEvent.attr("code"));
             e.title = jEvent.attr("title");
-            e.description = jEvent.attr("description");
+            e.topic = jEvent.attr("topic");
             e.imgSrc = jEvent.attr("imgsrc");
             e.keyWords = jEvent.attr("tags").split(",");
             e.sources = new ArrayList<>();

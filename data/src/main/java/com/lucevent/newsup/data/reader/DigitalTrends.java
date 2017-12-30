@@ -1,7 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -20,7 +19,6 @@ public class DigitalTrends extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_ENCLOSURE},
-                "https://www.digitaltrends.com/",
                 "");
     }
 
@@ -44,16 +42,19 @@ public class DigitalTrends extends com.lucevent.newsup.data.util.NewsReader {
             article.select(".m-linked-product,.m-comparable-products,.m-accessory-pack").remove();
         }
 
-        article.select("style,.alignright,.m-related-video,script,.h-nonessential,.zoom-button,.m-image-credit,[itemprop='publisher'],.dtads-inject-hook,.m-aff-button").remove();
+        article.select("script,.alignright,.m-related-video,.h-nonessential,.zoom-button,.m-image-credit,[itemprop='publisher'],.dtads-inject-hook,.m-aff-button").remove();
 
-        article.select("h1,h2,.m-our-take").tagName("h3");
+        article.select(".m-our-take").tagName("h3");
         header.select("iframe[height]").removeAttr("height");
         article.select("iframe[height]").removeAttr("height");
 
         for (Element e : article.select("img[src^='data']")) {
             e.attr("src", e.attr("data-dt-lazy-src"));
-            NewsStylist.cleanAttributes(e, "src");
+            cleanAttributes(e, "src");
         }
+
+        for (Element i : article.select("meta[itemprop='embedUrl']"))
+            i.parent().html(insertIframe(i.attr("content")));
 
         try {
             for (Element e : article.select("strong")) {
@@ -75,9 +76,7 @@ public class DigitalTrends extends com.lucevent.newsup.data.util.NewsReader {
         header.select("[style]").removeAttr("style");
         article.select("[style]:not(.instagram-media,.instagram-media *)").removeAttr("style");
 
-        NewsStylist.repairLinks(article);
-
-        news.content = NewsStylist.cleanComments(header.outerHtml() + article.outerHtml());
+        news.content = finalFormat(header, true) + finalFormat(article, true);
     }
 
 }

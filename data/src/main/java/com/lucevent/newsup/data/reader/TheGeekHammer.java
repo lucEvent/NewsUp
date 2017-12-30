@@ -1,7 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.NewsStylist;
-
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
@@ -19,38 +17,36 @@ public class TheGeekHammer extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{},
-                "https://thegeekhammer.com/",
                 "");
     }
 
     @Override
     protected String parseContent(Element prop)
     {
-        Document doc = jsoupParse(prop);
-        doc.select("script,style,.yuzo_related_post,.code-block").remove();
+        Element article = jsoupParse(prop);
+        article.select("script,.yuzo_related_post,.code-block").remove();
 
-        for (Element iframe : doc.select("iframe"))
+        for (Element iframe : article.select("iframe"))
             iframe.removeAttr("style")
                     .attr("frameborder", "0");
 
-        NewsStylist.cleanAttributes(doc.select("img"), "src");
-        doc.select("h1,h2").tagName("h3");
+        cleanAttributes(article.select("img"), "src");
 
-        return NewsStylist.cleanComments(doc.body().html());
+        return finalFormat(article, false);
     }
 
     @Override
-    protected Document getDocument(String pagelink)
+    protected Document getDocument(String url)
     {
         try {
-            return org.jsoup.Jsoup.connect(pagelink)
+            return org.jsoup.Jsoup.connect(url)
                     .userAgent(USER_AGENT)
                     .timeout(10000)
                     .validateTLSCertificates(false)
                     .get();
         } catch (Exception ignored) {
         }
-        return super.getDocument(pagelink);
+        return super.getDocument(url);
     }
 
 }

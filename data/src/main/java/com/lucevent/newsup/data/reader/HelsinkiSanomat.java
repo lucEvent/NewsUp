@@ -1,7 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -20,7 +19,6 @@ public class HelsinkiSanomat extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_ENCLOSURE},
-                "http://www.hs.fi/",
                 "");
     }
 
@@ -43,13 +41,10 @@ public class HelsinkiSanomat extends com.lucevent.newsup.data.util.NewsReader {
                 figure.html(img.outerHtml());
         }
 
-        article.select("h2").tagName("h3");
         article.select(".votsikko").tagName("h4");
 
-        NewsStylist.repairLinks(image);
-        NewsStylist.repairLinks(article);
-
-        news.content = image.outerHtml() + "<p>" + article.outerHtml().replace("<br>", "</p><p>") + "</p>";
+        news.content = finalFormat(image, true) +
+                "<p>" + finalFormat(article, true).replace("<br>", "</p><p>") + "</p>";
     }
 
 }

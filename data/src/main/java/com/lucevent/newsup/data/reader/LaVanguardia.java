@@ -2,7 +2,6 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -31,8 +30,7 @@ public class LaVanguardia extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_ENCLOSURE},
-                "http://www.lavanguardia.com/",
-                "");
+                BOOKS_STYLE);
     }
 
     @Override
@@ -65,48 +63,57 @@ public class LaVanguardia extends com.lucevent.newsup.data.util.NewsReader {
             for (int i = 0; i < imgs.size(); i++) {
                 Element img = imgs.get(i);
                 String src = img.attr("data-src");
-                NewsStylist.cleanAttributes(img);
+                cleanAttributes(img);
                 img.attr("src", src);
 
                 gallery.add(imgs.get(i));
                 gallery.add(txts.get(i));
             }
-            news.content = gallery.outerHtml();
+            news.content = finalFormat(gallery, true);
             return;
         }
-        article.select(".tpl-related-inside-story,.hidden,.button-login-premium,ins,.html-books-header,.wp-caption-text,script").remove();
+        article.select("script,.tpl-related-inside-story,.hidden,.button-login-premium,ins,.html-books-header,.poll-leaf-body-header,.poll-leaf-body").remove();
 
-        article.select("h1,h2").tagName("h3");
+        article.select("question").tagName("h4");
+        article.select("answer").tagName("p");
+        article.select("ntrans").tagName("div");
+        article.select(".wp-caption-text").tagName("figcaption");
         article.select("[style]").removeAttr("style");
         article.select("iframe").attr("frameborder", "0");
+        article.select(".html-books").tagName("nuwidget");
 
-        for (Element e : article.select("[data-mediaset-src]"))
-            e.attr("src", e.attr("data-mediaset-src"))
-                    .removeAttr("data-mediaset-src");
+        for (Element e : article.select(".story-leaf-despiece-quotes"))
+            e.tagName("blockquote")
+                    .removeAttr("class");
+
+        for (Element e : article.select("[data-mediaset-src]")) {
+            String src = e.attr("data-mediaset-src");
+            cleanAttributes(e);
+            e.attr("src", src);
+        }
 
         for (Element e : article.select(".story-leaf-despiece"))
             e.html(e.text())
                     .tagName("h3")
                     .removeAttr("class");
 
-        for (Element e : article.select("blockquote.twitter-tweet > a[href^='<']")) {
+        for (Element e : article.select("blockquote.twitter-tweet > a[href^='<'],blockquote.instagram-media a[href^='<']")) {
             String html = e.attr("href");
 
             int i = html.indexOf("<script");
             if (i > 0)
                 html = html.substring(0, i);
 
-            e.parent().parent().html(html);
+            Element parent = e.parent();
+            while (!parent.tagName().equals("blockquote"))
+                parent = parent.parent();
+
+            parent.parent().html(html);
         }
 
-        NewsStylist.cleanAttributes(article.select("img"), "src");
-        NewsStylist.repairLinks(article);
+        cleanAttributes(article.select("img"), "src");
 
-        news.content = article.outerHtml();
-
-        if (!article.select(".html-books").isEmpty())
-            news.content = BOOKS_STYLE + news.content;
-
+        news.content = finalFormat(article, true);
     }
 
 }

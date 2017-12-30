@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -26,6 +28,7 @@ import com.lucevent.newsup.kernel.HistoryManager;
 import com.lucevent.newsup.kernel.KernelManager;
 import com.lucevent.newsup.permission.StoragePermissionHandler;
 import com.lucevent.newsup.view.adapter.NewsAdapter;
+import com.lucevent.newsup.view.util.NUSearchBar;
 import com.lucevent.newsup.view.util.NewsAdapterList;
 import com.lucevent.newsup.view.util.NewsView;
 import com.lucevent.newsup.view.util.OnBackPressedListener;
@@ -34,12 +37,13 @@ import java.lang.ref.WeakReference;
 import java.util.Collection;
 
 public class HistorialFragment extends android.app.Fragment implements View.OnClickListener,
-        View.OnLongClickListener, OnBackPressedListener {
+        View.OnLongClickListener, OnBackPressedListener, NUSearchBar.SearchBarListener {
 
     private HistoryManager dataManager;
     private StoragePermissionHandler permissionHandler;
     private NewsAdapter adapter;
     private NewsView newsView;
+    private NUSearchBar searchView;
 
     private View noContentMessage;
 
@@ -57,7 +61,7 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.f_news_list, container, false);
+        View view = inflater.inflate(R.layout.f_news_list_with_search, container, false);
 
         adapter = new NewsAdapter(this, this, onBookmarkClick, NewsAdapterList.SortBy.byReadOn);
         adapter.showSiteLogo(true);
@@ -73,11 +77,10 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
 
         newsView = (NewsView) view.findViewById(R.id.news_view);
         newsView.setFragmentContext(this, ((Main) getActivity()).drawer);
-        newsView.setBookmarkChangeListener(onBookmarkClick);
-
-        view.findViewById(R.id.button_sections).setVisibility(View.GONE);
+        newsView.setBookmarkStateChangeListener(onBookmarkClick);
 
         noContentMessage = view.findViewById(R.id.no_content);
+        searchView = (NUSearchBar) view.findViewById(R.id.searchView);
 
         dataManager.getReadNews();
 
@@ -87,6 +90,11 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
     {
+        menu.add(R.string.search)
+                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
+                .setIcon(R.drawable.ic_search_white)
+                .setOnMenuItemClickListener(onSearchAction);
+
         menu.add(R.string.menu_delete_all)
                 .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
                 .setIcon(R.drawable.ic_remove_all)
@@ -116,11 +124,11 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
         KernelManager.readContentOf(news);
 
         displayingNews = true;
-        newsView.displayNews(news, v);
+        newsView.displayNews(news);
+        searchView.hideKeyBoard();
 
-        News clone = new News(news.id,news.title,news.link,news.description,news.date,news.tags,news.site_code,news.section_code,news.readOn);
+        News clone = new News(news.id, news.title, news.link, news.description, news.date, news.tags, news.site_code, news.section_code, news.readOn);
         KernelManager.setNewsRead(clone);
-        adapter.add(clone);
     }
 
     @Override
@@ -128,6 +136,12 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
     {
         //// TODO: 14/10/2016
         return false;
+    }
+
+    @Override
+    public void onEnd()
+    {
+        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
     }
 
     static class Handler extends android.os.Handler {
@@ -159,6 +173,16 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
         }
     }
 
+    private MenuItem.OnMenuItemClickListener onSearchAction = new MenuItem.OnMenuItemClickListener() {
+        @Override
+        public boolean onMenuItemClick(MenuItem item)
+        {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+            searchView.start(adapter, HistorialFragment.this);
+            return true;
+        }
+    };
+
     private MenuItem.OnMenuItemClickListener onDeleteAllAction = new MenuItem.OnMenuItemClickListener() {
         @Override
         public boolean onMenuItemClick(MenuItem item)
@@ -172,6 +196,7 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
                             {
                                 dataManager.clearHistory();
                                 adapter.clear();
+                                searchView.restart();
                                 displayNoRecordsMessage();
                             }
                         })
@@ -187,15 +212,9 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
         @Override
         public void onClick(View v)
         {
-            News news = (News) v.getTag();
-
-            if (permissionHandler.checkAndAsk(HistorialFragment.this)) {
-
-                BookmarksManager.toggleBookmark(news);
-                newsView.setBookmarkButtonImage(v);
-                adapter.update(news);
-
-            } else
+            if (permissionHandler.checkAndAsk(HistorialFragment.this))
+                bookmarkStateChanged(v);
+            else
                 tempBookmarkButton = v;
         }
     };
@@ -204,11 +223,20 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults)
     {
         if (permissionHandler.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
-            News news = (News) tempBookmarkButton.getTag();
-            BookmarksManager.toggleBookmark(news);
-            newsView.setBookmarkButtonImage(tempBookmarkButton);
-            adapter.update(news);
+            bookmarkStateChanged(tempBookmarkButton);
         }
+    }
+
+    private void bookmarkStateChanged(View btn)
+    {
+        News news = (News) btn.getTag();
+
+        btn.setSelected(
+                BookmarksManager.toggleBookmark(news)
+        );
+
+        if (btn instanceof FloatingActionButton)
+            adapter.update(news);
     }
 
     private void displayNoRecordsMessage()

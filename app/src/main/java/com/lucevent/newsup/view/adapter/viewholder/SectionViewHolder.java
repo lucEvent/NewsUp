@@ -1,5 +1,6 @@
 package com.lucevent.newsup.view.adapter.viewholder;
 
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -11,38 +12,37 @@ import com.lucevent.newsup.data.util.Section;
 
 public class SectionViewHolder extends RecyclerView.ViewHolder {
 
-    private View view;
-    private ToggleButton homeButton;
-    private TextView label;
+    private ToggleButton mHomeButton;
+    private TextView mLabel;
 
     public SectionViewHolder(View v, CompoundButton.OnCheckedChangeListener sectionStateChangeListener)
     {
         super(v);
-        view = v;
-        label = (TextView) v.findViewById(R.id.label);
-        homeButton = (ToggleButton) v.findViewById(R.id.home);
-        homeButton.setOnCheckedChangeListener(sectionStateChangeListener);
+        mLabel = (TextView) v.findViewById(R.id.label);
+        mHomeButton = (ToggleButton) v.findViewById(R.id.home);
+        mHomeButton.setOnCheckedChangeListener(sectionStateChangeListener);
     }
 
-    public static void populateViewHolder(SectionViewHolder holder, Section section, Object tag,
-                                          boolean homeEnabled, CompoundButton.OnCheckedChangeListener sectionStateChangeListener)
+    public void bind(Section section, Object tag, boolean homeEnabled, Drawable homeBg,
+                     CompoundButton.OnCheckedChangeListener sectionStateChangeListener)
     {
         if (section.level >= 0) {
-            holder.view.setEnabled(true);
-            holder.label.setEnabled(true);
-            holder.homeButton.setVisibility(View.VISIBLE);
-            holder.homeButton.setOnCheckedChangeListener(null);
-            holder.homeButton.setChecked(homeEnabled);
-            holder.homeButton.setOnCheckedChangeListener(sectionStateChangeListener);
+            itemView.setEnabled(true);
+            mLabel.setEnabled(true);
+            mHomeButton.setVisibility(View.VISIBLE);
+            mHomeButton.setBackground(homeBg);
+            mHomeButton.setOnCheckedChangeListener(null);
+            mHomeButton.setChecked(homeEnabled);
+            mHomeButton.setOnCheckedChangeListener(sectionStateChangeListener);
         } else {
-            holder.view.setEnabled(false);
-            holder.label.setEnabled(false);
-            holder.homeButton.setVisibility(View.INVISIBLE);
+            itemView.setEnabled(false);
+            mLabel.setEnabled(false);
+            mHomeButton.setVisibility(View.INVISIBLE);
         }
 
-        holder.label.setText(section.name);
-        holder.view.setTag(tag);
-        holder.homeButton.setTag(tag);
+        mLabel.setText(section.name);
+        itemView.setTag(tag);
+        mHomeButton.setTag(tag);
     }
 
 }

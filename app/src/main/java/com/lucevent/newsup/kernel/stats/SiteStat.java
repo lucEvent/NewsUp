@@ -2,26 +2,15 @@ package com.lucevent.newsup.kernel.stats;
 
 public class SiteStat {
 
-    public final String siteName;
+    public int siteCode, totalRequests, monthRequests, readings;
 
-    public final int siteCode;
+    public long lastRequest;
 
-    public final int nAccesses;
+    public String siteName, version;
 
-    public final int readings;
 
-    public final long lastAccess;
-
-    public final String version;
-
-    public SiteStat(String siteName, int siteCode, int nAccesses, int readings, long lastAccess, String version)
+    public SiteStat()
     {
-        this.siteName = siteName;
-        this.siteCode = siteCode;
-        this.nAccesses = nAccesses;
-        this.readings = readings;
-        this.lastAccess = lastAccess;
-        this.version = version;
     }
 
 }

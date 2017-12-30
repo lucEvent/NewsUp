@@ -49,7 +49,6 @@
 
     <PreferenceCategory android:title="@string/pref_title_data">
 
-
         <com.lucevent.newsup.view.preference.CleanCachePreference
             android:key="@string/pref_clean_cache_key"
             android:title="@string/pref_clean_cache"/>

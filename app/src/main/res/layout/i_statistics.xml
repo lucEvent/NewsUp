@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/nv_background_dark"
     android:orientation="vertical"
     android:paddingBottom="8dp"
     android:paddingLeft="16dp"
@@ -19,16 +20,26 @@
             android:id="@+id/icon"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:background="@mipmap/ic_app"/>
+            android:background="@mipmap/ic_launcher"/>
 
         <TextView
             android:id="@+id/name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_weight="1"
             android:paddingEnd="10dp"
             android:paddingStart="10dp"
-            android:text="Newspaper name"/>
+            android:text="Site name"
+            android:textColor="@color/nv_text_dark"/>
+
+        <TextView
+            android:id="@+id/version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="version"
+            android:textAlignment="textEnd"
+            android:textColor="@color/nv_text_dark"/>
 
     </LinearLayout>
 
@@ -36,43 +47,48 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:background="@drawable/ic_add_white"/>
+
         <TextView
-            android:id="@+id/nAccesses"
-            android:layout_width="wrap_content"
+            android:id="@+id/requests"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:paddingStart="10dp"
-            android:text="#Accesses"/>
+            android:paddingStart="5dp"
+            android:text="5/100"
+            android:textColor="@color/nv_text_dark"/>
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:background="@drawable/ic_read_white"/>
 
         <TextView
             android:id="@+id/readings"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:paddingStart="10dp"
-            android:text="#Readings"/>
+            android:paddingStart="5dp"
+            android:text="45"
+            android:textColor="@color/nv_text_dark"/>
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:background="@drawable/ic_access_time"/>
 
         <TextView
             android:id="@+id/last"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:paddingStart="10dp"
-            android:text="last time"/>
-
-        <TextView
-            android:id="@+id/version"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:paddingStart="10dp"
-            android:text="version"/>
+            android:paddingStart="5dp"
+            android:text="5 minutes ago"
+            android:textAlignment="textEnd"
+            android:textColor="@color/nv_text_dark"/>
 
     </LinearLayout>
 

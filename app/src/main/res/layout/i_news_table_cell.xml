@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.lucevent.newsup.view.util.AppTextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:maxWidth="250dp"
+    android:paddingBottom="3dp"
+    android:paddingLeft="4dp"
+    android:paddingRight="8dp"
+    android:paddingTop="3dp"/>

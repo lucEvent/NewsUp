@@ -36,7 +36,7 @@ public class DownloadScheduleAdapter extends RecyclerView.Adapter<DownloadSchedu
     @Override
     public void onBindViewHolder(DownloadScheduleViewHolder holder, int position)
     {
-        DownloadScheduleViewHolder.populateViewHolder(holder, dataset.get(position), deleteListener);
+        holder.bind(dataset.get(position), deleteListener);
     }
 
     @Override

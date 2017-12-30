@@ -2,7 +2,6 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Document;
@@ -25,7 +24,6 @@ public class Elle extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{"postimgapa".hashCode()},
-                "http://www.elle.es/",
                 "");
     }
 
@@ -38,9 +36,9 @@ public class Elle extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected String parseContent(Element prop)
     {
-        Document doc = jsoupParse(prop);
-        NewsStylist.repairLinks(doc.body());
-        return doc.body().html();
+        Element article = jsoupParse(prop);
+        article.select("script[src*='instagram']").remove();
+        return finalFormat(article, false);
     }
 
     @Override
@@ -52,6 +50,7 @@ public class Elle extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected void readNewsContent(Document doc, News news)
     {
+        doc.getElementsByTag("u5:p").remove();
         Elements articleBody = doc.select("[itemprop='articleBody']");
 
         Elements article = articleBody.select(".standard-article-body--content");
@@ -95,6 +94,7 @@ public class Elle extends com.lucevent.newsup.data.util.NewsReader {
                 }
             }
         }
+        article.select(".breaker-ad").remove();
 
         for (Element e : article.select("img")) {
             String src = e.attr("data-src");
@@ -115,7 +115,7 @@ public class Elle extends com.lucevent.newsup.data.util.NewsReader {
                 int i1 = src.indexOf("videos/");
                 if (i1 > 0) {
                     int i2 = src.indexOf("/", i1 + 7);
-                    e.parent().html(Enclosure.iframe("https://m.facebook.com/video/video.php?v=" + src.substring(i1 + 7, i2)));
+                    e.parent().html(insertIframe("https://m.facebook.com/video/video.php?v=" + src.substring(i1 + 7, i2)));
                 }
             }
         }
@@ -128,11 +128,7 @@ public class Elle extends com.lucevent.newsup.data.util.NewsReader {
             e.removeAttr("class");
         }
 
-        NewsStylist.repairLinks(article);
-
-        article.select("h1,h2").tagName("h3");
-
-        news.content = article.outerHtml();
+        news.content = finalFormat(article, true);
     }
 
 }

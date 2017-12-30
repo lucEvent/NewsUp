@@ -30,7 +30,6 @@ public class TheAtlanticSections extends Sections {
         add(new Section("Notes", "https://www.theatlantic.com/feed/notes/", 0));
 
         add(new Section("Writers", null, -1));
-        add(new Section("Nadine Ajaka", "https://www.theatlantic.com/feed/author/nadine-ajaka/", 1));
         add(new Section("Priscilla Alvarez", "https://www.theatlantic.com/feed/author/priscilla-alvarez/", 1));
         add(new Section("Ross Andersen", "https://www.theatlantic.com/feed/author/ross-andersen/", 1));
         add(new Section("Yoni Appelbaum", "https://www.theatlantic.com/feed/author/yoni-appelbaum/", 1));
@@ -38,7 +37,6 @@ public class TheAtlanticSections extends Sections {
         add(new Section("Julie Beck", "https://www.theatlantic.com/feed/author/julie-beck/", 1));
         add(new Section("Peter Beinart", "https://www.theatlantic.com/feed/author/peter-beinart/", 1));
         add(new Section("Russell Berman", "https://www.theatlantic.com/feed/author/russell-berman/", 1));
-        add(new Section("Chris Bodenner", "https://www.theatlantic.com/feed/author/chris-bodenner/", 1));
         add(new Section("Ronald Brownstein", "https://www.theatlantic.com/feed/author/ronald-brownstein/", 1));
         add(new Section("Caitlin Cadieux", "https://www.theatlantic.com/feed/author/caitlin-cadieux/", 1));
         add(new Section("Krishnadev Calamur", "https://www.theatlantic.com/feed/author/krishnadev-calamur/", 1));
@@ -47,10 +45,7 @@ public class TheAtlanticSections extends Sections {
         add(new Section("Ta-Nehisi Coates", "https://www.theatlantic.com/feed/author/ta-nehisi-coates/", 1));
         add(new Section("Michelle Cottle", "https://www.theatlantic.com/feed/author/michelle-cottle/", 1));
         add(new Section("Lenika Cruz", "https://www.theatlantic.com/feed/author/lenika-cruz/", 1));
-        add(new Section("Emily DeRuy", "https://www.theatlantic.com/feed/author/emily-deruy/", 1));
-        add(new Section("Emily Anne Epstein", "https://www.theatlantic.com/feed/author/emily-anne-epstein/", 1));
         add(new Section("James Fallows", "https://www.theatlantic.com/feed/author/james-fallows/", 1));
-        add(new Section("Alexia Fern\u00E1ndez Campbell", "https://www.theatlantic.com/feed/author/alexia-fernandez-campbell/", 1));
         add(new Section("Clare Foran", "https://www.theatlantic.com/feed/author/clare-foran/", 1));
         add(new Section("Matt Ford", "https://www.theatlantic.com/feed/author/matt-ford/", 1));
         add(new Section("Conor Friedersdorf", "https://www.theatlantic.com/feed/author/conor-friedersdorf/", 1));

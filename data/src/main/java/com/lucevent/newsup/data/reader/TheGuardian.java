@@ -2,7 +2,6 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -22,16 +21,15 @@ public class TheGuardian extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_MEDIA_CONTENT},
-                "https://www.theguardian.com/",
                 "");
     }
 
     @Override
     protected String parseDescription(Element prop)
     {
-        Document doc = jsoupParse(prop);
-        doc.select("a").remove();
-        return doc.text();
+        Element article = jsoupParse(prop);
+        article.select("a").remove();
+        return article.text();
     }
 
     @Override
@@ -58,7 +56,7 @@ public class TheGuardian extends com.lucevent.newsup.data.util.NewsReader {
             article.select("br").remove();
 
             for (Element imgBox : article.select(".gallery__img-container")) {
-                NewsStylist.cleanAttributes(imgBox);
+                cleanAttributes(imgBox);
                 imgBox.tagName("p");
                 imgBox.html(imgBox.select("picture").outerHtml());
             }
@@ -69,7 +67,7 @@ public class TheGuardian extends com.lucevent.newsup.data.util.NewsReader {
 
             article.select(".block-title").tagName("h4");
 
-            NewsStylist.cleanAttributes(article.select(".block-elements,.block--content"));
+            cleanAttributes(article.select(".block-elements,.block--content"));
         } else {
 
             article = article.select(".media-primary picture,.media-primary video,.media-primary iframe,.media-primary figcaption,.content__article-body");
@@ -84,20 +82,18 @@ public class TheGuardian extends com.lucevent.newsup.data.util.NewsReader {
             Element picContent = pic.select("source,img").first();
 
             String src = picContent.attr("srcset");
-            NewsStylist.cleanAttributes(picContent);
+            cleanAttributes(picContent);
             picContent.tagName("img").attr("src", src);
             pic.html(picContent.outerHtml());
         }
         for (Element fig : article.select("figure")) {
-            NewsStylist.cleanAttributes(fig);
+            cleanAttributes(fig);
 
             Elements figContent = fig.select("blockquote,img:not(blockquote img),video,figcaption");
             fig.html(figContent.outerHtml());
         }
 
-        article.select("h1,h2").tagName("h3");
-
-        news.content = article.outerHtml();
+        news.content = finalFormat(article, true);
     }
 
 }

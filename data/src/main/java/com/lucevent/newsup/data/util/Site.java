@@ -4,7 +4,7 @@ public class Site {
 
     public final int code;
 
-    public final String name;
+    public final String name, url;
 
     public final int color;
     private final double colorDarkness;
@@ -21,10 +21,11 @@ public class Site {
     private Class sectionsClass;
     private Sections sections;
 
-    public Site(int code, String name, int color, int info, Class sectionsClass, Class readerClass)
+    public Site(int code, String name, int color, String url, int info, Class sectionsClass, Class readerClass)
     {
         this.code = code;
         this.name = name;
+        this.url = url;
         this.info = 0x1000000 | info;
         this.num_readings = 0;
         this.color = color;

@@ -1,7 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -20,7 +19,6 @@ public class DiarioCordoba extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{},
-                "http://www.diariocordoba.com/",
                 "");
     }
 
@@ -37,8 +35,7 @@ public class DiarioCordoba extends com.lucevent.newsup.data.util.NewsReader {
         article.select("script,.Creatividad,.NoticiasRelacionadasDeNoticia,.Recorte").remove();
 
         article.select(".PieDeFoto").tagName("figcaption");
-        NewsStylist.cleanAttributes(article.select("img"), "src");
-        NewsStylist.repairLinks(article);
+        cleanAttributes(article.select("img"), "src");
 
         for (Element video : article.select(".PlayerVideoBOTR")) {
             video.tagName("video");
@@ -52,7 +49,7 @@ public class DiarioCordoba extends com.lucevent.newsup.data.util.NewsReader {
             }
         }
 
-        news.content = NewsStylist.cleanComments(article.html());
+        news.content = finalFormat(article, false);
     }
 
 }

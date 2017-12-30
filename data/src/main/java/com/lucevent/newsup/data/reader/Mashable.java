@@ -1,8 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -23,7 +21,6 @@ public class Mashable extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{"media:thumbnail".hashCode()},
-                "http://mashable.com/",
                 "");
     }
 
@@ -40,7 +37,7 @@ public class Mashable extends com.lucevent.newsup.data.util.NewsReader {
         Elements article = doc.select(".article-image,.article-content");
 
         if (!article.isEmpty()) {
-            article.select(".see-also,.viral-next-up,figcaption,.image-credit").remove();
+            article.select(".see-also,.viral-next-up,.image-credit").remove();
 
             for (Element e : article.select("h2")) {
                 String text = e.text();
@@ -49,7 +46,6 @@ public class Mashable extends com.lucevent.newsup.data.util.NewsReader {
                     e.remove();
             }
 
-            article.select("h1,h2").tagName("h3");
             article.select("ol,li").tagName("p");
 
             Elements mashVideos = article.select(".content-mash-video");
@@ -79,18 +75,17 @@ public class Mashable extends com.lucevent.newsup.data.util.NewsReader {
         for (Element vid : article.select(".content-mash-video script.playerMetadata")) {
             String info = vid.html();
 
-            String src = NewsStylist.subStringBetween(info, "\"embedUrl\":\"", "\"", false);
-            String desc = NewsStylist.subStringBetween(info, "\"description\":\"", "\"", false);
+            String src = findSubstringBetween(info, "\"embedUrl\":\"", "\"", false);
+            String desc = findSubstringBetween(info, "\"description\":\"", "\"", false);
 
             Element p = vid.parent();
-            NewsStylist.cleanAttributes(p);
+            cleanAttributes(p);
 
-            p.html(Enclosure.iframe(src) + "<figcaption>" + desc + "</figcaption>");
+            p.html(insertIframe(src) + "<figcaption>" + desc + "</figcaption>");
         }
         article.select("script").remove();
 
-        NewsStylist.repairLinks(article);
-        news.content = article.outerHtml();
+        news.content = finalFormat(article, true);
     }
 
 }

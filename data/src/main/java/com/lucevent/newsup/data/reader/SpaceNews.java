@@ -2,9 +2,7 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -22,40 +20,38 @@ public class SpaceNews extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{},
-                "http://spacenews.com/",
                 "");
     }
 
     @Override
     protected String parseContent(Element prop)
     {
-        Document doc = jsoupParse(prop);
-        doc.select(".ctx-clearfix,.ctx-article-root,script").remove();
+        Element article = jsoupParse(prop);
+        article.select(".ctx-clearfix,.ctx-article-root,script").remove();
 
-        for (Element e : doc.select("img")) {
+        for (Element e : article.select("img")) {
             String src = clearImgSrc(e);
-            NewsStylist.cleanAttributes(e);
+            cleanAttributes(e);
             e.attr("src", src);
         }
 
-        doc.select("[style]").removeAttr("style");
-        doc.select("h1,h2").tagName("h3");
-        doc.select(".pullquote,.pullquoteleft").tagName("blockquote");
+        article.select("[style]").removeAttr("style");
+        article.select(".pullquote,.pullquoteleft").tagName("blockquote");
 
-        return doc.body().html();
+        return finalFormat(article, false);
     }
 
     @Override
     protected News onNewsRead(News news)
     {
         if (!news.description.isEmpty()) {
-            Document doc = jsoupParse(news.description);
+            Element e = jsoupParse(news.description);
 
-            Elements imgs = doc.select("img");
+            Elements imgs = e.select("img");
             if (!imgs.isEmpty())
                 news.enclosures.add(new Enclosure(clearImgSrc(imgs.first()), "image", ""));
 
-            news.description = doc.text().replace("SpaceNews.com", "");
+            news.description = e.text().replace("SpaceNews.com", "");
         }
         return news;
     }

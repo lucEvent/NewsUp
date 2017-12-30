@@ -1,7 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -20,7 +19,6 @@ public class ElPeriodicoExtremadura extends com.lucevent.newsup.data.util.NewsRe
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{},
-                "http://www.elperiodicoextremadura.com/",
                 "");
     }
 
@@ -33,10 +31,9 @@ public class ElPeriodicoExtremadura extends com.lucevent.newsup.data.util.NewsRe
         article.select(".EntradillaDeNoticia").tagName("h4");
         article.select(".PieDeFoto").tagName("figcaption");
 
-        NewsStylist.cleanAttributes(article.select("img"), "src");
-        NewsStylist.repairLinks(article);
+        cleanAttributes(article.select("img"), "src");
 
-        news.content = NewsStylist.cleanComments(article.outerHtml());
+        news.content = finalFormat(article, true);
     }
 
 }

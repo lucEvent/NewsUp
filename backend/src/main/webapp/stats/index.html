@@ -58,17 +58,56 @@ table th {
     font-weight: bold;
 }
 
+
     </style>
     <script src="../js/jquery-3.1.1.min.js"></script>
     <script src="../js/materialize.min.js"></script>
     <script>
-function onStatisticsReceived(data) {
-        $("#content").html(data);
+var title_order="Last requests";
+var SECOND_TIME = 1000;
+var MINUTE_TIME = 60*SECOND_TIME;
+var HOUR_TIME = 60*MINUTE_TIME;
+var DAY_TIME = 24*HOUR_TIME;
+var MONTH_TIME = 30*DAY_TIME;
+
+function getAge(now,date){
+    var age = now - date;
+    if (age < MINUTE_TIME)
+        return Math.floor(age / SECOND_TIME) + " seconds ago";
+    if (age < HOUR_TIME)
+        return Math.floor(age / MINUTE_TIME) + " minutes ago";
+    if (age < DAY_TIME)
+        return Math.floor(age / HOUR_TIME) + " hours ago";
+    if (age < MONTH_TIME)
+        return Math.floor(age / DAY_TIME) + " days ago";
+
+    return Math.floor(age / MONTH_TIME) + " months ago";
 }
-function onError(data) {
+
+function onStatisticsReceived(json) {
+    var now = new Date().getTime();
+
+    var html = "<span class='starts'>Since " + getAge(now,json.stats.since) + " / Last start " + getAge(now,json.stats.last) + "</span>"
+             + "<span class='order'>"+title_order+"</span>"
+             + "<table><tr><th>#</th><th>Site</th><th>Total reqs</th><th>Month reqs</th><th>Readings</th><th>Last access</th><th>From version</th></tr>";
+
+    for(var i = 0; i < json.stats.sites.length; i++){
+        html += "<tr><td>" + (i+1)
+            +"</td><td>"+ json.stats.sites[i].n
+            +"</td><td>"+ json.stats.sites[i].a
+            +"</td><td>"+ json.stats.sites[i].m
+            +"</td><td>"+ json.stats.sites[i].r
+            +"</td><td>"+ getAge(now,json.stats.sites[i].l)
+            +"</td><td>"+ json.stats.sites[i].v
+            +"</td></tr>";
+    }
+    html += "</table>";
+
+    $("#content").html(html);
 }
+function onError(data) {}
 function fetchStatistics(option,filter){
-    $.ajax("/web?stats&options="+option+"&only="+filter, {
+    $.ajax("/dev?stats&options="+option+"&only="+filter, {
         success: onStatisticsReceived,
         error: onError("")
     });
@@ -76,6 +115,7 @@ function fetchStatistics(option,filter){
 $(document).ready(function () {
     fetchStatistics("t","");
     $("a").click(function () {
+        title_order = $(this).text();
         var type = $(this).attr("value");
         var filters = $('#filters').val();
         console.log(filters);
@@ -87,10 +127,11 @@ $(document).ready(function () {
 </head>
 
 <header id="header">
-    <a class="waves-effect green btn" value="t">By time</a>
-    <a class="waves-effect green btn" value="r">By readings</a>
-    <a class="waves-effect green btn" value="n">By num. accesses</a>
-    <a class="waves-effect green btn" value="s">By site name</a>
+    <a class="waves-effect green btn" value="t">Last requests</a>
+    <a class="waves-effect green btn" value="r">Readings</a>
+    <a class="waves-effect green btn" value="n">Total requests</a>
+    <a class="waves-effect green btn" value="m">Month requests</a>
+    <a class="waves-effect green btn" value="s">Site name</a>
 </header>
 
 <div class="row">

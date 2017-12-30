@@ -1,7 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,7 +23,6 @@ public class Andro4all extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_MEDIA_CONTENT},
-                "https://andro4all.com/",
                 "");
     }
 
@@ -32,9 +30,7 @@ public class Andro4all extends com.lucevent.newsup.data.util.NewsReader {
     protected void readNewsContent(Document doc, News news)
     {
         Elements article = doc.select(".content,.post_content");
-        article.select("script,style,.jetpack-slideshow-noscript,div:has(#div-desktop-article-filmstrip)").remove();
-
-        article.select("h1,h2").tagName("h3");
+        article.select("script,.jetpack-slideshow-noscript,div:has(#div-desktop-article-filmstrip)").remove();
 
         for (Element slides : article.select(".slideshow-window")) {
             String data = "{items:" + slides.attr("data-gallery") + "}";
@@ -57,7 +53,7 @@ public class Andro4all extends com.lucevent.newsup.data.util.NewsReader {
                 //System.out.println("JSON exeption:" + e.getMessage());
             }
             slides.html(sb.toString());
-            NewsStylist.cleanAttributes(slides);
+            cleanAttributes(slides);
         }
         for (Element slides : article.select(".gallery")) {
             StringBuilder sb = new StringBuilder();
@@ -65,7 +61,7 @@ public class Andro4all extends com.lucevent.newsup.data.util.NewsReader {
                 sb.append("<img src='").append(img.attr("data-orig-file")).append("'>");
             }
             slides.html(sb.toString());
-            NewsStylist.cleanAttributes(slides);
+            cleanAttributes(slides);
         }
         for (Element ad : article.select("strong")) {
             String text = ad.text();
@@ -75,23 +71,23 @@ public class Andro4all extends com.lucevent.newsup.data.util.NewsReader {
                 ad.parent().remove();
             }
         }
-        NewsStylist.cleanAttributes(article.select("img"), "src");
-        NewsStylist.repairLinks(article);
+        cleanAttributes(article.select("img"), "src");
         article.select("[style]").removeAttr("style");
+        article.select(".wp-caption-text").tagName("figcaption");
 
-        news.content = article.html();
+        news.content = finalFormat(article, false);
     }
 
     @Override
-    protected Document getDocument(String pagelink)
+    protected Document getDocument(String url)
     {
         try {
-            return org.jsoup.Jsoup.connect(pagelink)
+            return org.jsoup.Jsoup.connect(url)
                     .timeout(10000)
                     .userAgent(USER_AGENT)
                     .validateTLSCertificates(false)
                     .get();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         return null;
     }

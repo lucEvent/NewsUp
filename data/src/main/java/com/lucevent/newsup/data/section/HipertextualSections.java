@@ -28,7 +28,6 @@ public class HipertextualSections extends Sections {
         add(new Section("Legal", "https://hipertextual.com/legal/feed", 0));
         add(new Section("Libertad de expresi\u00F3n", "https://hipertextual.com/libertad-de-expresion/feed", 0));
         add(new Section("Libros", "https://hipertextual.com/libros/feed", 0));
-        add(new Section("Medios", "https://hipertextual.com/medios/feed", 0));
         add(new Section("M\u00E9xico", "https://hipertextual.com/mexico/feed", 0));
         add(new Section("Mobile", "https://hipertextual.com/mobile/feed", 0));
         add(new Section("Motor", "https://hipertextual.com/motor/feed", 0));

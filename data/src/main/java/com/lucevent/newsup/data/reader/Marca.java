@@ -1,7 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsStylist;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -25,7 +24,6 @@ public class Marca extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_MEDIA_CONTENT},
-                "http://www.marca.com/",
                 SITE_STYLE);
     }
 
@@ -53,9 +51,8 @@ public class Marca extends com.lucevent.newsup.data.util.NewsReader {
         }
 
         article.select("[style]:not(.instagram-media,.instagram-media *)").removeAttr("style");
-        NewsStylist.repairLinks(article);
 
-        news.content = article.outerHtml();
+        news.content = finalFormat(article, true);
     }
 
 }

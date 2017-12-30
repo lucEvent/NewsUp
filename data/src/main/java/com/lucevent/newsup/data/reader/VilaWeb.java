@@ -1,9 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.NewsStylist;
-
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class VilaWeb extends com.lucevent.newsup.data.util.NewsReader {
@@ -18,7 +15,6 @@ public class VilaWeb extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
                 new int[]{TAG_ENCLOSURE},
-                "http://www.vilaweb.cat/",
                 "");
     }
 
@@ -32,17 +28,13 @@ public class VilaWeb extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected String parseContent(Element prop)
     {
-        Document doc = org.jsoup.Jsoup.parse(prop.text());
-        doc.select("script[src~=twitter],script[src~=instagram],noscript,#tlTagContainer").remove();
+        Element article = jsoupParse(prop);
+        article.select("script[src~=twitter],script[src~=instagram],noscript,#tlTagContainer").remove();
 
-        doc.select("[style]").removeAttr("style");
-        doc.select("[width]").removeAttr("width");
-        doc.select("h1,h2").tagName("h3");
+        article.select("[style]").removeAttr("style");
+        article.select("[width]").removeAttr("width");
 
-        Element article = doc.body();
-        NewsStylist.repairLinks(article);
-
-        return article.html();
+        return finalFormat(article, false);
     }
 
 }
