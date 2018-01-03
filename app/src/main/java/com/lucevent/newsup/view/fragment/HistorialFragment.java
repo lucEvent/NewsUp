@@ -27,7 +27,8 @@ import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.HistoryManager;
 import com.lucevent.newsup.kernel.KernelManager;
 import com.lucevent.newsup.permission.StoragePermissionHandler;
-import com.lucevent.newsup.view.adapter.NewsAdapter;
+import com.lucevent.newsup.view.adapter.NewsFilterAdapter;
+import com.lucevent.newsup.view.util.FilterDialog;
 import com.lucevent.newsup.view.util.NUSearchBar;
 import com.lucevent.newsup.view.util.NewsAdapterList;
 import com.lucevent.newsup.view.util.NewsView;
@@ -35,13 +36,14 @@ import com.lucevent.newsup.view.util.OnBackPressedListener;
 
 import java.lang.ref.WeakReference;
 import java.util.Collection;
+import java.util.TreeSet;
 
 public class HistorialFragment extends android.app.Fragment implements View.OnClickListener,
-        View.OnLongClickListener, OnBackPressedListener, NUSearchBar.SearchBarListener {
+        View.OnLongClickListener, OnBackPressedListener, NUSearchBar.CallBack, FilterDialog.Callback {
 
     private HistoryManager dataManager;
     private StoragePermissionHandler permissionHandler;
-    private NewsAdapter adapter;
+    private NewsFilterAdapter adapter;
     private NewsView newsView;
     private NUSearchBar searchView;
 
@@ -61,9 +63,9 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.f_news_list_with_search, container, false);
+        View view = inflater.inflate(R.layout.f_historial, container, false);
 
-        adapter = new NewsAdapter(this, this, onBookmarkClick, NewsAdapterList.SortBy.byReadOn);
+        adapter = new NewsFilterAdapter(this, this, onBookmarkClick, NewsAdapterList.SortBy.byReadOn);
         adapter.showSiteLogo(true);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -81,6 +83,7 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
 
         noContentMessage = view.findViewById(R.id.no_content);
         searchView = (NUSearchBar) view.findViewById(R.id.searchView);
+        view.findViewById(R.id.filter).setOnClickListener(onFilterClick);
 
         dataManager.getReadNews();
 
@@ -139,6 +142,12 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
     }
 
     @Override
+    public void onFilter(String filter)
+    {
+        adapter.filter(filter);
+    }
+
+    @Override
     public void onEnd()
     {
         ((AppCompatActivity) getActivity()).getSupportActionBar().show();
@@ -178,7 +187,7 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
         public boolean onMenuItemClick(MenuItem item)
         {
             ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
-            searchView.start(adapter, HistorialFragment.this);
+            searchView.start(HistorialFragment.this);
             return true;
         }
     };
@@ -196,7 +205,6 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
                             {
                                 dataManager.clearHistory();
                                 adapter.clear();
-                                searchView.restart();
                                 displayNoRecordsMessage();
                             }
                         })
@@ -245,6 +253,27 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
             noContentMessage = ((ViewStub) noContentMessage).inflate();
 
         ((TextView) noContentMessage.findViewById(R.id.message)).setText(R.string.msg_no_history);
+    }
+
+    private FilterDialog filterDialog;
+
+    private View.OnClickListener onFilterClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v)
+        {
+            if (filterDialog == null)
+                filterDialog = new FilterDialog(getActivity())
+                        .news(adapter.getDataSet())
+                        .listener(HistorialFragment.this);
+
+            filterDialog.show();
+        }
+    };
+
+    @Override
+    public void onFilter(TreeSet<Integer> f)
+    {
+        adapter.filter(f);
     }
 
 }

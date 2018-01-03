@@ -1,7 +1,6 @@
 package com.lucevent.newsup.view.util;
 
 import android.content.Context;
-import android.support.v7.util.SortedList;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -12,23 +11,18 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.lucevent.newsup.R;
-import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.view.adapter.NewsAdapter;
-
-import java.util.ArrayList;
 
 public class NUSearchBar extends LinearLayout implements TextWatcher {
 
-    public interface SearchBarListener {
+    public interface CallBack {
+        void onFilter(String filter);
+
         void onEnd();
     }
 
     private EditText mInput;
 
-    private NewsAdapter mAdapter;
-    private ArrayList<News> originalValues, lastQueryValues;
-    private String lastQuery = "";
-    private SearchBarListener mCallback;
+    private CallBack mCallback;
 
     public NUSearchBar(Context context, AttributeSet attrs)
     {
@@ -45,19 +39,9 @@ public class NUSearchBar extends LinearLayout implements TextWatcher {
         mInput.addTextChangedListener(this);
     }
 
-    public final void start(NewsAdapter adapter, SearchBarListener callback)
+    public final void start(CallBack callback)
     {
         mCallback = callback;
-
-        if (mAdapter == null) {
-            mAdapter = adapter;
-
-            SortedList<News> sortedList = adapter.getDataSet();
-            originalValues = new ArrayList<>(sortedList.size());
-            lastQueryValues = new ArrayList<>(sortedList.size());
-            for (int i = 0; i < sortedList.size(); i++)
-                originalValues.add(sortedList.get(i));
-        }
 
         setVisibility(View.VISIBLE);
 
@@ -74,20 +58,7 @@ public class NUSearchBar extends LinearLayout implements TextWatcher {
     @Override
     public void onTextChanged(CharSequence cs, int start, int before, int count)
     {
-        String query = cs.toString().toLowerCase();
-
-        ArrayList<News> searchableValues = query.startsWith(lastQuery) && !lastQuery.isEmpty() ? lastQueryValues : originalValues;
-
-        lastQuery = query;
-
-        ArrayList<News> queryValues = new ArrayList<>();
-        for (News n : searchableValues)
-            if (n.title.toLowerCase().contains(query))
-                queryValues.add(n);
-
-        mAdapter.replaceAll(queryValues);
-
-        lastQueryValues = queryValues;
+        mCallback.onFilter(cs.toString().toLowerCase());
     }
 
     @Override
@@ -112,14 +83,6 @@ public class NUSearchBar extends LinearLayout implements TextWatcher {
             setVisibility(View.GONE);
         }
     };
-
-    public void restart()
-    {
-        if (mAdapter != null) {
-            originalValues.clear();
-            lastQueryValues.clear();
-        }
-    }
 
     public void hideKeyBoard()
     {

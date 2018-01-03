@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:custom="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <com.lucevent.newsup.view.util.FilterCheckBox
+            android:id="@+id/cb_languages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            custom:checked="true"
+            custom:text="@string/languages"
+            custom:textStyle="bold"/>
+
+        <LinearLayout
+            android:id="@+id/languages"
+            style="@style/dialogFilterCBList"/>
+
+        <com.lucevent.newsup.view.util.FilterCheckBox
+            android:id="@+id/cb_countries"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            custom:checked="true"
+            custom:text="@string/countries"
+            custom:textStyle="bold"/>
+
+        <LinearLayout
+            android:id="@+id/countries"
+            style="@style/dialogFilterCBList"/>
+
+        <com.lucevent.newsup.view.util.FilterCheckBox
+            android:id="@+id/cb_publications"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            custom:checked="true"
+            custom:text="@string/Publications"
+            custom:textStyle="bold"/>
+
+        <LinearLayout
+            android:id="@+id/publications"
+            style="@style/dialogFilterCBList"/>
+
+    </LinearLayout>
+</ScrollView>

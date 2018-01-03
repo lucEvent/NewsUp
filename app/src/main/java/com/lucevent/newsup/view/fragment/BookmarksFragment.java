@@ -22,7 +22,7 @@ import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.io.BookmarksManager;
 import com.lucevent.newsup.kernel.KernelManager;
 import com.lucevent.newsup.permission.StoragePermissionHandler;
-import com.lucevent.newsup.view.adapter.NewsAdapter;
+import com.lucevent.newsup.view.adapter.NewsFilterAdapter;
 import com.lucevent.newsup.view.util.NUSearchBar;
 import com.lucevent.newsup.view.util.NewsAdapterList;
 import com.lucevent.newsup.view.util.NewsView;
@@ -31,9 +31,9 @@ import com.lucevent.newsup.view.util.OnBackPressedListener;
 import java.util.Collection;
 
 public class BookmarksFragment extends android.app.Fragment implements View.OnClickListener,
-        View.OnLongClickListener, OnBackPressedListener, NUSearchBar.SearchBarListener {
+        View.OnLongClickListener, OnBackPressedListener, NUSearchBar.CallBack {
 
-    private NewsAdapter adapter;
+    private NewsFilterAdapter adapter;
 
     private NewsView newsView;
     private NUSearchBar searchView;
@@ -51,7 +51,7 @@ public class BookmarksFragment extends android.app.Fragment implements View.OnCl
 
         permissionHandler = new StoragePermissionHandler(getActivity());
 
-        adapter = new NewsAdapter(this, this, onBookmarkClick, NewsAdapterList.SortBy.byTime);
+        adapter = new NewsFilterAdapter(this, this, onBookmarkClick, NewsAdapterList.SortBy.byTime);
         adapter.showSiteLogo(true);
     }
 
@@ -132,6 +132,12 @@ public class BookmarksFragment extends android.app.Fragment implements View.OnCl
     }
 
     @Override
+    public void onFilter(String filter)
+    {
+        adapter.filter(filter);
+    }
+
+    @Override
     public void onEnd()
     {
         ((AppCompatActivity) getActivity()).getSupportActionBar().show();
@@ -142,7 +148,7 @@ public class BookmarksFragment extends android.app.Fragment implements View.OnCl
         public boolean onMenuItemClick(MenuItem item)
         {
             ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
-            searchView.start(adapter, BookmarksFragment.this);
+            searchView.start(BookmarksFragment.this);
             return true;
         }
     };
@@ -160,7 +166,6 @@ public class BookmarksFragment extends android.app.Fragment implements View.OnCl
                             {
                                 BookmarksManager.removeAllEntries();
                                 adapter.clear();
-                                searchView.restart();
                                 displayNoBookmarksMessage();
                             }
                         })

@@ -26,7 +26,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private boolean showSiteLogo, loadImage;
 
-    private final NewsAdapterList dataSet;
+    protected final NewsAdapterList dataSet;
 
     public NewsAdapter(View.OnClickListener onClick,
                        View.OnLongClickListener onLongClick,
@@ -79,11 +79,6 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public int getItemViewType(int position)
     {
         return onMoreClick == null ? TYPE_NEWS : (position < (dataSet.size() - 1) ? TYPE_NEWS : TYPE_MORE);
-    }
-
-    public NewsAdapterList getDataSet()
-    {
-        return dataSet;
     }
 
     public final void showSiteLogo(boolean showSiteLogo)

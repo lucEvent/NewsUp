@@ -12,7 +12,7 @@ public abstract class SiteScatterMap extends TreeMap<Integer, SitesMap> {
     {
         super();
 
-        if (filter.isEmpty()) {
+        if (filter == null || filter.isEmpty()) {
             for (Site s : sites)
                 add(s);
         } else {
