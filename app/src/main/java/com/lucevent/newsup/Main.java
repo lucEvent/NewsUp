@@ -34,6 +34,7 @@ import com.lucevent.newsup.kernel.ScheduleManager;
 import com.lucevent.newsup.net.MainChangeListener;
 import com.lucevent.newsup.permission.StoragePermissionHandler;
 import com.lucevent.newsup.services.ScheduledDownloadReceiver;
+import com.lucevent.newsup.services.util.DownloadResponse;
 import com.lucevent.newsup.view.activity.ContactActivity;
 import com.lucevent.newsup.view.activity.SelectSitesActivity;
 import com.lucevent.newsup.view.fragment.AboutFragment;
@@ -46,6 +47,8 @@ import com.lucevent.newsup.view.fragment.NewsListFragment;
 import com.lucevent.newsup.view.fragment.NotesFragment;
 import com.lucevent.newsup.view.fragment.StatisticsFragment;
 import com.lucevent.newsup.view.util.OnBackPressedListener;
+
+import java.util.ArrayList;
 
 public class Main extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         MainChangeListener {
@@ -69,7 +72,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
         if (AppSettings.firstStart()) {
             Intent intent = new Intent(this, SelectSitesActivity.class);
-            intent.putExtra(AppCode.SEND_PURPOSE, SelectSitesActivity.For.APP_FIRST_START);
+            intent.putExtra(AppCode.PURPOSE, SelectSitesActivity.For.APP_FIRST_START);
             startActivity(intent);
             finish();
             return;
@@ -94,15 +97,14 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         updateFavorites();
 
         Bundle extras = getIntent().getExtras();
-        if (extras != null && extras.containsKey(AppCode.SEND_NEWS_IDS)) {
-            int[] news_codes = extras.getIntArray(AppCode.SEND_NEWS_IDS);
-            newsFragment = NewsListFragment.instanceForNotification(news_codes);
+        if (extras != null && extras.containsKey(AppCode.SOURCES)) {
+            newsFragment = NewsListFragment.instanceFor(extras);
         } else
             newsFragment = NewsListFragment.instanceFor(-1);
 
         if (extras != null && extras.containsKey(AppCode.RESTART)) {
             ScheduledDownloadReceiver.scheduleDownloads(this,
-                    new ScheduleManager(this).getDownloadSchedules());
+                    new ScheduleManager(this).getSchedule());
         }
 
         newsFragment.setRetainInstance(true);
@@ -286,7 +288,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 break;
             case R.id.nav_more_publications:
                 Intent intent = new Intent(this, SelectSitesActivity.class);
-                intent.putExtra(AppCode.SEND_PURPOSE, SelectSitesActivity.For.SELECT_ONE);
+                intent.putExtra(AppCode.PURPOSE, SelectSitesActivity.For.SELECT_ONE);
                 startActivityForResult(intent, AppCode.REQUEST_ADD_CONTENT);
                 return true;
             case R.id.nav_notes:

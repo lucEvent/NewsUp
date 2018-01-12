@@ -153,10 +153,6 @@ public class FilterDialog implements DialogInterface.OnClickListener {
         public void onCheckedChanged(FilterCheckBox groupCB, boolean isChecked)
         {
             ArrayList<FilterCheckBox> sub;
-            System.out.println("ON onGroupFilterChangeState ID:" + groupCB.getId());
-            System.out.println("==cb_languages? " + (groupCB.getId() == R.id.cb_languages));
-            System.out.println("==cb_countries? " + (groupCB.getId() == R.id.cb_countries));
-            System.out.println("==cb_publications? " + (groupCB.getId() == R.id.cb_publications));
             switch (groupCB.getId()) {
                 case R.id.cb_languages:
                     sub = mLanguageCBs;

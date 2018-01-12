@@ -43,7 +43,7 @@ public class NUSearchBar extends LinearLayout implements TextWatcher {
     {
         mCallback = callback;
 
-        setVisibility(View.VISIBLE);
+        setVisibility(VISIBLE);
 
         mInput.requestFocus();
         ((InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE))
@@ -78,11 +78,21 @@ public class NUSearchBar extends LinearLayout implements TextWatcher {
         @Override
         public void onClick(View v)
         {
-            mCallback.onEnd();
             hideKeyBoard();
-            setVisibility(View.GONE);
+            hide();
         }
     };
+
+    public boolean isShown()
+    {
+        return getVisibility() == VISIBLE;
+    }
+
+    public void hide()
+    {
+        mCallback.onEnd();
+        setVisibility(GONE);
+    }
 
     public void hideKeyBoard()
     {

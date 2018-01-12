@@ -58,7 +58,7 @@ public class StatisticsService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)
     {
-        switch (intent.getExtras().getInt(AppCode.SEND_REQUEST_CODE)) {
+        switch (intent.getExtras().getInt(AppCode.REQUEST_CODE)) {
             case REQ_GET:
                 getStatistics(null, StatisticsFragment.SortOrder.SORT_BY_NAME);
             case REQ_RESET:
@@ -68,7 +68,7 @@ public class StatisticsService extends Service {
                 sendUpdate();
                 break;
             case REQ_EVENT:
-                sendEvent(intent.getExtras().getInt("e.code"));
+                sendEvent(intent.getExtras().getInt(AppCode.EVENT_CODE));
                 break;
         }
         return Service.START_NOT_STICKY;

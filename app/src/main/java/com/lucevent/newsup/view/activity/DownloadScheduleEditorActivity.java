@@ -18,10 +18,12 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.lucevent.newsup.R;
+import com.lucevent.newsup.data.event.Event;
+import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.AppData;
 import com.lucevent.newsup.kernel.ScheduleManager;
-import com.lucevent.newsup.services.util.DownloadSchedule;
+import com.lucevent.newsup.services.util.Download;
 
 import java.util.Arrays;
 
@@ -30,9 +32,12 @@ public class DownloadScheduleEditorActivity extends AppCompatActivity {
     public static final int ACTION_CREATE = 0;
     public static final int ACTION_MODIFY = 1;
     public static final int ACTION_CREATE_ONE = 2;
+    public static final int ACTION_MODIFY_ONE = 3;
+    public static final int ACTION_CREATE_EVENT = 4;
+    public static final int ACTION_MODIFY_EVENT = 5;
 
     private int action;
-    private DownloadSchedule originalSchedule;
+    private Download originalSchedule;
 
     private TextView text_time;
     private ToggleButton[] btn_days;
@@ -61,30 +66,31 @@ public class DownloadScheduleEditorActivity extends AppCompatActivity {
         notify = (CheckBox) findViewById(R.id.checkbox_notify);
         findViewById(R.id.layout_notify).setTag(notify);
 
-        action = getIntent().getExtras().getInt(AppCode.ACTION);
-        if (action == ACTION_MODIFY) {
-            originalSchedule = (DownloadSchedule) getIntent().getExtras().get(AppCode.SEND_DOWNLOAD_SCHEDULE);
+        Bundle extras = getIntent().getExtras();
+        action = extras.getInt(AppCode.ACTION);
+        switch (action) {
+            case ACTION_MODIFY:
+                setOriginalSchedule((Download) extras.get(AppCode.DOWNLOAD_SCHEDULE));
 
-            hour = originalSchedule.hour;
-            minute = originalSchedule.minute;
-            text_time.setText(originalSchedule.timeString());
-            for (int i = 0; i < btn_days.length; i++)
-                if (!originalSchedule.days[i]) {
-                    btn_days[i].setChecked(false);
-                    onDayStateChange(btn_days[i]);
+                if (originalSchedule.id < 0) {
+                    Site s = AppData.getSiteByCode(-originalSchedule.id);
+                    disableSectionsButton(s != null ? s.name : getString(R.string.event));
                 }
-
-            repeat.setChecked(originalSchedule.repeat);
-            notify.setChecked(originalSchedule.notify);
-
-            selected_sites = Arrays.copyOfRange(originalSchedule.sites_codes, 0, originalSchedule.sites_codes.length);
-        } else if (action == ACTION_CREATE_ONE) {
-            int site_code = (int) getIntent().getExtras().get(AppCode.SEND_SITE_CODE);
-            selected_sites = new int[]{site_code};
-
-            Button ss = (Button) findViewById(R.id.select_sites);
-            ss.setText(AppData.getSiteByCode(site_code).name);
-            ss.setEnabled(false);
+                break;
+            case ACTION_MODIFY_ONE:
+                setOriginalSchedule((Download) extras.get(AppCode.DOWNLOAD_SCHEDULE));
+            case ACTION_CREATE_ONE:
+                int site_code = (int) extras.get(AppCode.SITE_CODE);
+                selected_sites = new int[]{site_code};
+                disableSectionsButton(AppData.getSiteByCode(site_code).name);
+                break;
+            case ACTION_MODIFY_EVENT:
+                setOriginalSchedule((Download) extras.get(AppCode.DOWNLOAD_SCHEDULE));
+            case ACTION_CREATE_EVENT:
+                Event event = AppData.getEvent(extras.getInt(AppCode.EVENT_CODE));
+                selected_sites = new int[]{event.code};
+                disableSectionsButton(event.title);
+                break;
         }
     }
 
@@ -92,6 +98,32 @@ public class DownloadScheduleEditorActivity extends AppCompatActivity {
     public void onBackPressed()
     {
         actionCancel(null);
+    }
+
+    private void disableSectionsButton(String title)
+    {
+        Button ss = (Button) findViewById(R.id.select_sites);
+        ss.setText(title);
+        ss.setEnabled(false);
+    }
+
+    private void setOriginalSchedule(Download schedule)
+    {
+        originalSchedule = schedule;
+
+        hour = originalSchedule.hour;
+        minute = originalSchedule.minute;
+        text_time.setText(originalSchedule.timeString());
+        for (int i = 0; i < btn_days.length; i++)
+            if (!originalSchedule.days[i]) {
+                btn_days[i].setChecked(false);
+                onDayStateChange(btn_days[i]);
+            }
+
+        repeat.setChecked(originalSchedule.repeat);
+        notify.setChecked(originalSchedule.notify);
+
+        selected_sites = Arrays.copyOfRange(originalSchedule.sites_codes, 0, originalSchedule.sites_codes.length);
     }
 
     public void onTimePickerAction(View v)
@@ -131,8 +163,8 @@ public class DownloadScheduleEditorActivity extends AppCompatActivity {
     public void onSelectSitesAction(View v)
     {
         Intent intent = new Intent(this, SelectSitesActivity.class);
-        intent.putExtra(AppCode.SEND_PURPOSE, SelectSitesActivity.For.SELECT_DOWNLOAD);
-        intent.putExtra(AppCode.SEND_SELECTED, selected_sites);
+        intent.putExtra(AppCode.PURPOSE, SelectSitesActivity.For.SELECT_DOWNLOAD);
+        intent.putExtra(AppCode.SELECTED, selected_sites);
         startActivityForResult(intent, 0);
     }
 
@@ -142,7 +174,7 @@ public class DownloadScheduleEditorActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
-            selected_sites = (int[]) data.getExtras().get(AppCode.SEND_SELECTED);
+            selected_sites = (int[]) data.getExtras().get(AppCode.SELECTED);
         }
     }
 
@@ -167,17 +199,28 @@ public class DownloadScheduleEditorActivity extends AppCompatActivity {
         boolean repeat = this.repeat.isChecked();
 
         ScheduleManager dataManager = new ScheduleManager(this);
-        if (action == ACTION_MODIFY) {
-            originalSchedule.hour = hour;
-            originalSchedule.minute = minute;
-            originalSchedule.notify = notify;
-            originalSchedule.repeat = repeat;
-            originalSchedule.days = days;
-            originalSchedule.sites_codes = selected_sites;
+        switch (action) {
+            case ACTION_MODIFY:
+            case ACTION_MODIFY_ONE:
+            case ACTION_MODIFY_EVENT:
+                originalSchedule.hour = hour;
+                originalSchedule.minute = minute;
+                originalSchedule.notify = notify;
+                originalSchedule.repeat = repeat;
+                originalSchedule.days = days;
+                originalSchedule.sites_codes = selected_sites;
 
-            dataManager.updateDownloadSchedule(originalSchedule);
-        } else
-            dataManager.createDownloadSchedule(hour, minute, notify, repeat, days, selected_sites);
+                dataManager.updateSchedule(originalSchedule);
+                break;
+            case ACTION_CREATE_ONE:
+                dataManager.createSpecialSchedule(getIntent().getExtras().getInt(AppCode.SITE_CODE), hour, minute, notify, repeat, days, selected_sites);
+                break;
+            case ACTION_CREATE_EVENT:
+                dataManager.createSpecialSchedule(getIntent().getExtras().getInt(AppCode.EVENT_CODE), hour, minute, notify, repeat, days, selected_sites);
+                break;
+            default:
+                dataManager.createSchedule(hour, minute, notify, repeat, days, selected_sites);
+        }
 
         Toast.makeText(this, R.string.msg_download_set_successfully, Toast.LENGTH_SHORT).show();
         setResult(RESULT_OK);

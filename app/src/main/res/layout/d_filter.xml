@@ -39,7 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             custom:checked="true"
-            custom:text="@string/Publications"
+            custom:text="@string/publications"
             custom:textStyle="bold"/>
 
         <LinearLayout

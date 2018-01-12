@@ -6,18 +6,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lucevent.newsup.R;
-import com.lucevent.newsup.services.util.DownloadSchedule;
+import com.lucevent.newsup.services.util.Download;
 import com.lucevent.newsup.view.adapter.viewholder.DownloadScheduleViewHolder;
 
 import java.util.ArrayList;
 
 public class DownloadScheduleAdapter extends RecyclerView.Adapter<DownloadScheduleViewHolder> {
 
-    private ArrayList<DownloadSchedule> dataset;
+    private ArrayList<Download> dataset;
     private View.OnClickListener itemListener;
     private View.OnClickListener deleteListener;
 
-    public DownloadScheduleAdapter(ArrayList<DownloadSchedule> dataset, View.OnClickListener itemListener,
+    public DownloadScheduleAdapter(ArrayList<Download> dataset, View.OnClickListener itemListener,
                                    View.OnClickListener deleteListener)
     {
         this.dataset = dataset;
@@ -45,7 +45,7 @@ public class DownloadScheduleAdapter extends RecyclerView.Adapter<DownloadSchedu
         return dataset.size();
     }
 
-    public void remove(DownloadSchedule schedule)
+    public void remove(Download schedule)
     {
         notifyItemRemoved(dataset.indexOf(schedule));
     }

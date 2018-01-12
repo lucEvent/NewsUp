@@ -131,9 +131,9 @@ public class Event {
             }
 
         } catch (JSONException e) {
-            System.out.println("JSON exception:" + e.getMessage());
-            e.printStackTrace();
-            throw new Exception("Json error");
+            //System.out.println("JSON exception:" + e.getMessage());
+            //e.printStackTrace();
+            throw new Exception("Json error" + e.getMessage());
         }
         return res;
     }

@@ -61,7 +61,6 @@ public class FilterCheckBox extends LinearLayout implements View.OnClickListener
     public void onClick(View v)
     {
         mCheckBox.toggle();
-        System.out.println("on click :) null? "+(mOnCheckedChangeListener == null));
         if (mOnCheckedChangeListener != null)
             mOnCheckedChangeListener.onCheckedChanged(this, mCheckBox.isChecked());
     }

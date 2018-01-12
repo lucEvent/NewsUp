@@ -13,7 +13,6 @@ import com.lucevent.newsup.data.Sites;
 import com.lucevent.newsup.data.event.Event;
 import com.lucevent.newsup.data.util.Date;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.NewsMap;
 import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.io.DBManager;
@@ -21,8 +20,11 @@ import com.lucevent.newsup.io.LogoManager;
 import com.lucevent.newsup.io.SDManager;
 import com.lucevent.newsup.io.StorageCallback;
 import com.lucevent.newsup.net.NewsReaderManager;
+import com.lucevent.newsup.services.util.Download;
+import com.lucevent.newsup.services.util.DownloadResponse;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Locale;
 
 public class KernelManager implements StorageCallback {
@@ -86,14 +88,24 @@ public class KernelManager implements StorageCallback {
         readerManager.readNewsOf(AppData.getSites(AppSettings.getMainSitesCodes()), handler);
     }
 
-    public NewsArray getScheduledNews(@NonNull int[] siteCodes)
+    public DownloadResponse getNews(@NonNull Download downloadScheduled)
     {
-        return readerManager.readNewsOf(AppData.getSites(siteCodes));
+        return readerManager.readNews(downloadScheduled);
+    }
+
+    public DownloadResponse getEventNews(@NonNull int eventCode)
+    {
+        return readerManager.readEventNews(context, eventCode);
     }
 
     public void getEvent(Event event, @NonNull Handler handler)
     {
         readerManager.readEvent(event, handler);
+    }
+
+    public Collection<News> getSavedNewsOf(DownloadResponse.Source s)
+    {
+        return dbmanager.readNews(s.siteCode, s.sections).values();
     }
 
     public void cancelAll()
@@ -102,7 +114,7 @@ public class KernelManager implements StorageCallback {
     }
 
     @Override
-    public void saveNews(News news)
+    public void save(News news)
     {
         try {
             dbmanager.insertNews(news);
@@ -113,21 +125,27 @@ public class KernelManager implements StorageCallback {
     }
 
     @Override
-    public NewsMap getSavedNews(Site site)
+    public boolean contains(News news)
+    {
+        return dbmanager.contains(news);
+    }
+
+    @Override
+    public NewsMap getNewsOf(Site site)
     {
         if (site.news == null) {
             try {
                 site.news = dbmanager.readNews(site);
             } catch (Exception e) {
                 dbmanager = new DBManager(context);
-                return getSavedNews(site);
+                return getNewsOf(site);
             }
         }
         return site.news;
     }
 
     @Override
-    public NewsMap getSavedNews(Site site, int[] section_codes)
+    public NewsMap getNewsOf(Site site, int[] section_codes)
     {
         return dbmanager.readNews(site, section_codes);
     }

@@ -15,8 +15,12 @@ import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.io.LogoManager;
 import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.AppData;
+import com.lucevent.newsup.kernel.ScheduleManager;
+import com.lucevent.newsup.services.util.Download;
 import com.lucevent.newsup.view.activity.DownloadScheduleEditorActivity;
 import com.lucevent.newsup.view.preference.SectionsMultiSelectPreference;
+
+import java.util.Set;
 
 public class SiteSettingsFragment extends android.preference.PreferenceFragment
         implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -24,7 +28,7 @@ public class SiteSettingsFragment extends android.preference.PreferenceFragment
     public static SiteSettingsFragment instanceFor(int site_code)
     {
         Bundle bundle = new Bundle();
-        bundle.putInt(AppCode.SEND_SITE_CODE, site_code);
+        bundle.putInt(AppCode.SITE_CODE, site_code);
 
         SiteSettingsFragment fragment = new SiteSettingsFragment();
         fragment.setArguments(bundle);
@@ -37,6 +41,7 @@ public class SiteSettingsFragment extends android.preference.PreferenceFragment
     private String PREF_DOWNLOAD_SECTIONS_KEY;
 
     private Site currentSite;
+    private ScheduleManager scheduleManager;
 
     @Override
     public void onCreate(final Bundle savedInstanceState)
@@ -49,7 +54,8 @@ public class SiteSettingsFragment extends android.preference.PreferenceFragment
         PREF_MAIN_SECTIONS_KEY = getString(R.string.pref_main_sections_key);
         PREF_DOWNLOAD_SECTIONS_KEY = getString(R.string.pref_download_sections_key);
 
-        currentSite = AppData.getSiteByCode(getArguments().getInt(AppCode.SEND_SITE_CODE));
+        currentSite = AppData.getSiteByCode(getArguments().getInt(AppCode.SITE_CODE));
+        scheduleManager = new ScheduleManager(getActivity());
         getActivity().setTitle(getString(R.string.title_frg_settings_of, currentSite.name));
 
         boolean inMain = AppSettings.isShownInMain(currentSite);
@@ -60,6 +66,10 @@ public class SiteSettingsFragment extends android.preference.PreferenceFragment
 
         ((SectionsMultiSelectPreference) findPreference(PREF_MAIN_SECTIONS_KEY)).setSite(currentSite);
         ((SectionsMultiSelectPreference) findPreference(PREF_DOWNLOAD_SECTIONS_KEY)).setSite(currentSite);
+
+        setSectionsSummary(AppSettings.getMainSectionsString(currentSite), PREF_MAIN_SECTIONS_KEY);
+        setSectionsSummary(AppSettings.getDownloadSectionsString(currentSite), PREF_DOWNLOAD_SECTIONS_KEY);
+        setDownloadScheduleSummary();
 
         findPreference(getString(R.string.pref_shortcut_key)).setOnPreferenceClickListener(onCreateShortcut);
         findPreference(getString(R.string.pref_schedule_one_download_key)).setOnPreferenceClickListener(onScheduleDownload);
@@ -88,13 +98,41 @@ public class SiteSettingsFragment extends android.preference.PreferenceFragment
         else if (key.equals(PREF_FAVORITE_KEY))
             AppSettings.toggleFavorite(currentSite);
 
-        else if (key.equals(PREF_MAIN_SECTIONS_KEY))
+        else if (key.equals(PREF_MAIN_SECTIONS_KEY)) {
             AppSettings.setMainSections(currentSite,
                     preferences.getStringSet(PREF_MAIN_SECTIONS_KEY, null));
-
-        else if (key.equals(PREF_DOWNLOAD_SECTIONS_KEY))
+            setSectionsSummary(AppSettings.getMainSectionsString(currentSite), PREF_MAIN_SECTIONS_KEY);
+        } else if (key.equals(PREF_DOWNLOAD_SECTIONS_KEY)) {
             AppSettings.setDownloadSections(currentSite,
                     preferences.getStringSet(PREF_DOWNLOAD_SECTIONS_KEY, null));
+            setSectionsSummary(AppSettings.getDownloadSectionsString(currentSite), PREF_DOWNLOAD_SECTIONS_KEY);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        setDownloadScheduleSummary();
+    }
+
+    private void setSectionsSummary(Set<String> s, String key)
+    {
+        boolean _default = s.size() == 1 && s.iterator().next().equals("0");
+
+        findPreference(key).setSummary(
+                _default ? getString(R.string.by_default) : getString(R.string.x_section_selected, s.size())
+        );
+    }
+
+    private void setDownloadScheduleSummary()
+    {
+        Download s = scheduleManager.getSpecialSchedule(currentSite.code);
+
+        findPreference(getString(R.string.pref_schedule_one_download_key))
+                .setSummary(
+                        s == null ? "" : s.toShortString()
+                );
     }
 
     private Preference.OnPreferenceClickListener onCreateShortcut = new Preference.OnPreferenceClickListener() {
@@ -108,7 +146,7 @@ public class SiteSettingsFragment extends android.preference.PreferenceFragment
             shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
             shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             shortcutIntent.setAction(Intent.ACTION_MAIN);
-            shortcutIntent.putExtra(AppCode.SEND_SITE_CODE, currentSite.code);
+            shortcutIntent.putExtra(AppCode.SITE_CODE, currentSite.code);
 
             Intent addIntent = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
             addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
@@ -127,11 +165,18 @@ public class SiteSettingsFragment extends android.preference.PreferenceFragment
         @Override
         public boolean onPreferenceClick(Preference preference)
         {
+            Download s = scheduleManager.getSpecialSchedule(currentSite.code);
+
             Intent intent = new Intent(getActivity(), DownloadScheduleEditorActivity.class);
-            intent.putExtra(AppCode.ACTION, DownloadScheduleEditorActivity.ACTION_CREATE_ONE);
-            intent.putExtra(AppCode.SEND_SITE_CODE, currentSite.code);
-//            startActivityForResult(intent, 0);
-            startActivity(intent);
+
+            if (s == null)
+                intent.putExtra(AppCode.ACTION, DownloadScheduleEditorActivity.ACTION_CREATE_ONE);
+            else {
+                intent.putExtra(AppCode.ACTION, DownloadScheduleEditorActivity.ACTION_MODIFY_ONE);
+                intent.putExtra(AppCode.DOWNLOAD_SCHEDULE, s);
+            }
+            intent.putExtra(AppCode.SITE_CODE, currentSite.code);
+            startActivityForResult(intent, 0);
             return true;
         }
     };

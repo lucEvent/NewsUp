@@ -38,7 +38,7 @@ public class SiteMain extends AppCompatActivity implements MainChangeListener {
 
         fragmentManager = new FragmentManager(this, null, R.id.main_content);
 
-        int code = (int) getIntent().getExtras().get(AppCode.SEND_SITE_CODE);
+        int code = (int) getIntent().getExtras().get(AppCode.SITE_CODE);
         Site site = AppData.getSiteByCode(code);
 
         NewsListFragment newsFragment = NewsListFragment.instanceFor(code);

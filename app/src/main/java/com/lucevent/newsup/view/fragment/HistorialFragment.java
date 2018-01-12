@@ -39,7 +39,7 @@ import java.util.Collection;
 import java.util.TreeSet;
 
 public class HistorialFragment extends android.app.Fragment implements View.OnClickListener,
-        View.OnLongClickListener, OnBackPressedListener, NUSearchBar.CallBack, FilterDialog.Callback {
+        View.OnLongClickListener, OnBackPressedListener, NUSearchBar.CallBack {
 
     private HistoryManager dataManager;
     private StoragePermissionHandler permissionHandler;
@@ -114,6 +114,9 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
         if (displayingNews) {
             newsView.hideNews();
             displayingNews = false;
+            return true;
+        } else if (searchView.isShown()) {
+            searchView.hide();
             return true;
         }
         return false;
@@ -264,17 +267,19 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
             if (filterDialog == null)
                 filterDialog = new FilterDialog(getActivity())
                         .news(adapter.getDataSet())
-                        .listener(HistorialFragment.this);
+                        .listener(onFilterListener);
 
             filterDialog.show();
         }
-    };
 
-    @Override
-    public void onFilter(TreeSet<Integer> f)
-    {
-        adapter.filter(f);
-    }
+        FilterDialog.Callback onFilterListener = new FilterDialog.Callback() {
+            @Override
+            public void onFilter(TreeSet<Integer> f)
+            {
+                adapter.filter(f);
+            }
+        };
+    };
 
 }
 

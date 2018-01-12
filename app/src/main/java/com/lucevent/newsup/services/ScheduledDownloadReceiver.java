@@ -8,7 +8,7 @@ import android.content.Intent;
 
 import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.kernel.AppCode;
-import com.lucevent.newsup.services.util.DownloadSchedule;
+import com.lucevent.newsup.services.util.Download;
 import com.lucevent.newsup.services.util.Schedule;
 
 import java.util.ArrayList;
@@ -20,15 +20,15 @@ public class ScheduledDownloadReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent)
     {
-        DownloadSchedule schedule = (DownloadSchedule) intent.getExtras().getSerializable(AppCode.SEND_DOWNLOAD_SCHEDULE);
+        Download schedule = (Download) intent.getExtras().getSerializable(AppCode.DOWNLOAD_SCHEDULE);
 
-        Intent service = new Intent(context, ScheduledDownloadService.class);
-        service.putExtra(AppCode.SEND_DOWNLOAD_SCHEDULE, schedule);
+        Intent service = new Intent(context, DownloadService.class);
+        service.putExtra(AppCode.DOWNLOAD_SCHEDULE, schedule);
 
         context.startService(service);
     }
 
-    public static void scheduleDownloads(Context context, ArrayList<DownloadSchedule> schedules)
+    public static void scheduleDownloads(Context context, ArrayList<Download> schedules)
     {
         AppSettings.printlog("[SDR] Scheduling");
 
@@ -42,7 +42,7 @@ public class ScheduledDownloadReceiver extends BroadcastReceiver {
 
         Calendar calendar = Calendar.getInstance();
         TreeSet<Schedule> list = new TreeSet<>();
-        for (DownloadSchedule schedule : schedules) {
+        for (Download schedule : schedules) {
             AppSettings.printlog("[SDR] candidate:" + schedule.toShortString());
 
             calendar.setTimeInMillis(System.currentTimeMillis());
@@ -70,10 +70,10 @@ public class ScheduledDownloadReceiver extends BroadcastReceiver {
             calendar.clear();
         }
 
-        DownloadSchedule next_schedule = (DownloadSchedule) list.first();
+        Download next_schedule = (Download) list.first();
 
         Intent intent = new Intent(context, ScheduledDownloadReceiver.class);
-        intent.putExtra(AppCode.SEND_DOWNLOAD_SCHEDULE, next_schedule);
+        intent.putExtra(AppCode.DOWNLOAD_SCHEDULE, next_schedule);
         PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         alarmMgr.set(AlarmManager.RTC_WAKEUP, list.first().time, alarmIntent);

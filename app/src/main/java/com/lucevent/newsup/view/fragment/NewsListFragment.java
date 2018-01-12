@@ -30,8 +30,8 @@ import android.widget.ProgressBar;
 import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.Main;
 import com.lucevent.newsup.R;
+import com.lucevent.newsup.data.event.Event;
 import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.Section;
 import com.lucevent.newsup.data.util.Sections;
 import com.lucevent.newsup.data.util.Site;
@@ -42,6 +42,7 @@ import com.lucevent.newsup.kernel.KernelManager;
 import com.lucevent.newsup.net.MainChangeListener;
 import com.lucevent.newsup.permission.StoragePermissionHandler;
 import com.lucevent.newsup.services.StatisticsService;
+import com.lucevent.newsup.services.util.DownloadResponse;
 import com.lucevent.newsup.view.adapter.NewsAdapter;
 import com.lucevent.newsup.view.dialog.SectionsDialog;
 import com.lucevent.newsup.view.util.NewsAdapterList;
@@ -50,6 +51,7 @@ import com.lucevent.newsup.view.util.OnBackPressedListener;
 import com.lucevent.newsup.view.util.OnMoreSectionsClickListener;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -63,21 +65,19 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
     public static NewsListFragment instanceFor(int site_code)
     {
         Bundle bundle = new Bundle();
-        bundle.putInt(AppCode.SEND_SITE_CODE, site_code);
+        bundle.putInt(AppCode.SITE_CODE, site_code);
 
         NewsListFragment fragment = new NewsListFragment();
         fragment.setArguments(bundle);
         return fragment;
     }
 
-    public static NewsListFragment instanceForNotification(int[] news_ids)
+    public static NewsListFragment instanceFor(Bundle extras)
     {
-        Bundle bundle = new Bundle();
-        bundle.putInt(AppCode.SEND_SITE_CODE, -2);
-        bundle.putIntArray(AppCode.SEND_NEWS_IDS, news_ids);
+        extras.putInt(AppCode.SITE_CODE, -2);
 
         NewsListFragment fragment = new NewsListFragment();
-        fragment.setArguments(bundle);
+        fragment.setArguments(extras);
         return fragment;
     }
 
@@ -112,20 +112,26 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         progressBar.setVisibility(ProgressBar.VISIBLE);
         switch (currentSiteCode) {
             case -2:    // Load from notification
+                getActivity().setTitle(R.string.app_name);
                 adapter.setOnMoreSectionsClick(null);
                 showSectionsButton = false;
 
-                int[] news_ids = getArguments().getIntArray(AppCode.SEND_NEWS_IDS);
-                assert news_ids != null : "Arguments can't be recovered";
+                Event event = null;
+                if (getArguments().containsKey(AppCode.STRING_FILTERS)) {
+                    event = new Event();
+                    event.keyWords = getArguments().getStringArray(AppCode.STRING_FILTERS);
+                }
+                ArrayList<DownloadResponse.Source> sources = (ArrayList<DownloadResponse.Source>) getArguments().getSerializable(AppCode.SOURCES);
+                assert sources != null : "Arguments can't be recovered";
 
-                NewsArray newsMap = new NewsArray();
+                for (DownloadResponse.Source s : sources) {
+                    Collection<News> c = dataManager.getSavedNewsOf(s);
+                    if (event != null)
+                        c = event.filter(c);
 
-                for (int news_id : news_ids)
-                    if (news_id > 0)
-                        newsMap.add(dataManager.getNewsById(news_id));
+                    handler.obtainMessage(AppCode.NEWS_COLLECTION, c).sendToTarget();
+                }
 
-                getActivity().setTitle(R.string.app_name);
-                handler.obtainMessage(AppCode.NEWS_COLLECTION, newsMap).sendToTarget();
                 handler.obtainMessage(AppCode.NEWS_LOADED).sendToTarget();
                 break;
 
@@ -175,12 +181,12 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         permissionHandler = new StoragePermissionHandler(context);
 
         lastLoadedSiteCode = -9;
-        setSite(getArguments().getInt(AppCode.SEND_SITE_CODE));
+        setSite(getArguments().getInt(AppCode.SITE_CODE));
 
         if (!AppSettings.DEBUG)
             context.startService(
                     new Intent(context, StatisticsService.class)
-                            .putExtra(AppCode.SEND_REQUEST_CODE, StatisticsService.REQ_SEND)
+                            .putExtra(AppCode.REQUEST_CODE, StatisticsService.REQ_SEND)
             );
     }
 
@@ -335,7 +341,6 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         //// TODO: 14/10/2016  
         return false;
     }
-
 
     private static class Handler extends android.os.Handler {
 

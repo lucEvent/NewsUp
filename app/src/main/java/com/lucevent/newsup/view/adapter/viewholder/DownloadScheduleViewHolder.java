@@ -6,7 +6,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.lucevent.newsup.R;
-import com.lucevent.newsup.services.util.DownloadSchedule;
+import com.lucevent.newsup.services.util.Download;
 
 public class DownloadScheduleViewHolder extends RecyclerView.ViewHolder {
 
@@ -27,7 +27,7 @@ public class DownloadScheduleViewHolder extends RecyclerView.ViewHolder {
         button_delete = (ImageButton) v.findViewById(R.id.action_delete);
     }
 
-    public void bind(DownloadSchedule schedule, View.OnClickListener deleteListener)
+    public void bind(Download schedule, View.OnClickListener deleteListener)
     {
         view_time.setText(schedule.timeString());
         view_days.setText(schedule.daysString());

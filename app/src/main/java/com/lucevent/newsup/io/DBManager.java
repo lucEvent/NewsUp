@@ -17,10 +17,11 @@ import com.lucevent.newsup.io.Database.DBNote;
 import com.lucevent.newsup.io.Database.DBReadings;
 import com.lucevent.newsup.kernel.util.Note;
 import com.lucevent.newsup.kernel.util.Notes;
-import com.lucevent.newsup.services.util.DownloadSchedule;
+import com.lucevent.newsup.services.util.Download;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 public class DBManager {
 
@@ -55,12 +56,17 @@ public class DBManager {
 
     public NewsMap readNews(Site site, int[] section_codes)
     {
+        return readNews(site.code, section_codes);
+    }
+
+    public NewsMap readNews(int site_code, int[] section_codes)
+    {
         NewsMap res = new NewsMap();
 
         synchronized (this) {
             SQLiteDatabase database = db.getReadableDatabase();
 
-            StringBuilder sb_where = new StringBuilder(DBNews.site_code + "=" + site.code + " AND (");
+            StringBuilder sb_where = new StringBuilder(DBNews.site_code + "=" + site_code + " AND (");
             sb_where.append("(" + DBNews.section_code + "=").append(section_codes[0]).append(")");
             for (int i = 1; i < section_codes.length; i++)
                 sb_where.append(" OR (" + DBNews.section_code + "=").append(section_codes[i]).append(")");
@@ -78,7 +84,7 @@ public class DBManager {
             cursor.close();
             database.close();
         }
-        AppSettings.printlog("[DB] NEWS IN " + site.name + " DATABASE (just some sections): " + res.size());
+        AppSettings.printlog("[DB] NEWS IN [" + site_code + "] DATABASE (just some sections): " + res.size());
         return res;
     }
 
@@ -123,9 +129,9 @@ public class DBManager {
         return result;
     }
 
-    public ArrayList<DownloadSchedule> readDownloadSchedules()
+    public ArrayList<Download> readDownloadSchedules()
     {
-        ArrayList<DownloadSchedule> result = new ArrayList<>();
+        ArrayList<Download> result = new ArrayList<>();
 
         synchronized (this) {
             SQLiteDatabase database = db.getReadableDatabase();
@@ -207,6 +213,21 @@ public class DBManager {
         return result;
     }
 
+    public boolean contains(News news)
+    {
+        boolean r;
+        synchronized (this) {
+            SQLiteDatabase database = db.getReadableDatabase();
+            Cursor cursor = database.query(DBNews.db, DBNews.cols, Database.id + "=" + news.id, null, null, null, null);
+
+            r = cursor.moveToFirst();
+
+            cursor.close();
+            database.close();
+        }
+        return r;
+    }
+
     /**
      * ******** UPDATES *************
      **/
@@ -229,7 +250,7 @@ public class DBManager {
         }
     }
 
-    public void updateDownloadSchedule(DownloadSchedule schedule)
+    public void updateDownloadSchedule(Download schedule)
     {
         ContentValues values = new ContentValues();
         values.put(DBDownloadSchedule.hour, schedule.hour);
@@ -308,10 +329,19 @@ public class DBManager {
         }
     }
 
-    public DownloadSchedule insertDownloadSchedule(int hour, int minute, boolean notify,
-                                                   boolean repeat, boolean[] days, int[] sites_codes)
+    public Download insertDownloadSchedule(int hour, int minute, boolean notify,
+                                           boolean repeat, boolean[] days, int[] sites_codes)
+    {
+        int id = new Random().nextInt();
+        id = id < 0 ? -id : id;
+        return insertDownloadScheduleSpec(id, hour, minute, notify, repeat, days, sites_codes);
+    }
+
+    public Download insertDownloadScheduleSpec(int id, int hour, int minute, boolean notify,
+                                               boolean repeat, boolean[] days, int[] sites_codes)
     {
         ContentValues values = new ContentValues();
+        values.put(Database.id, id);
         values.put(DBDownloadSchedule.hour, hour);
         values.put(DBDownloadSchedule.minute, minute);
         values.put(DBDownloadSchedule.notify, notify);
@@ -326,13 +356,12 @@ public class DBManager {
         String sitesCodesString = Arrays.toString(sites_codes);
         values.put(DBDownloadSchedule.sites_codes, sitesCodesString.substring(1, sitesCodesString.length() - 1));
 
-        int id;
         synchronized (this) {
             SQLiteDatabase database = db.getWritableDatabase();
-            id = (int) database.insert(DBDownloadSchedule.db, null, values);
+            database.insert(DBDownloadSchedule.db, null, values);
             database.close();
         }
-        return new DownloadSchedule(id, hour, minute, notify, repeat, days, sites_codes);
+        return new Download(id, hour, minute, notify, repeat, days, sites_codes);
     }
 
     public Note insertNote(String note)
@@ -387,7 +416,7 @@ public class DBManager {
         }
     }
 
-    public void deleteDownloadSchedule(DownloadSchedule schedule)
+    public void deleteDownloadSchedule(Download schedule)
     {
         synchronized (this) {
             SQLiteDatabase database = db.getWritableDatabase();

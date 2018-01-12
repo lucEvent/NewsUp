@@ -19,9 +19,10 @@ import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.io.StorageCallback;
 import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.AppData;
+import com.lucevent.newsup.services.util.Download;
+import com.lucevent.newsup.services.util.DownloadResponse;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class NewsReaderManager {
 
@@ -40,7 +41,7 @@ public class NewsReaderManager {
 
     private NewsReader newsreader;
     private Handler uiCallback;
-    private StorageCallback storageCallback;
+    private StorageCallback mDB;
 
     /* Threads */
     private static final int NUM_SLAVE_THREADS = NewsReader.NUM_SERVERS;
@@ -52,7 +53,7 @@ public class NewsReaderManager {
 
     public NewsReaderManager(@NonNull Context context, @Nullable StorageCallback storageCallback)
     {
-        this.storageCallback = storageCallback;
+        mDB = storageCallback;
 
         newsreader = new NewsReader(context.getString(R.string.app_version));
         connectivityManager = new ConnectivityManager(context);
@@ -88,41 +89,75 @@ public class NewsReaderManager {
             addEventPetition(event, source.site, source.sections);
     }
 
-    public NewsArray readNewsOf(Sites sites)
+    public DownloadResponse readNews(Download downloadScheduled)
     {
-        if (connectivityManager.isInternetAvailable()) {
-            NewsArray res = new NewsArray();
-            int server = 0;
-            for (Site site : sites) {
-                try {
+        if (!connectivityManager.isInternetAvailable())
+            return null;
 
-                    NewsArray news = readHeaders(site, AppSettings.getDownloadSections(site));
+        DownloadResponse res = new DownloadResponse(downloadScheduled.sites_codes.length);
+        int server = 0;
+        for (int sCode : downloadScheduled.sites_codes) {
+            try {
+                Site site = AppData.getSiteByCode(sCode);
+                int[] section_codes = sectionIndexesToCodes(site, AppSettings.getDownloadSections(site));
 
-                    NewsMap history = storageCallback.getSavedNews(site);
-
+                NewsArray news = readHeaders(site, section_codes);
+                if (news != null && !news.isEmpty()) {
                     for (News n : news) {
-                        if (!history.containsKey(n.id)) {
-                            readContent(server % NewsReader.NUM_SERVERS, site, n);
+                        if (!mDB.contains(n)) {
+                            if (n.content == null || n.content.isEmpty())
+                                readContent(server++ % NewsReader.NUM_SERVERS, site, n);
 
                             if (!n.content.isEmpty())
-                                storageCallback.saveNews(n);
-
+                                mDB.save(n);
                         }
                     }
-                    res.addAll(news);
-
-                } catch (Exception e) {
-                    AppSettings.printerror("[NM] FATAL ERROR DURING SERVICE :(", e);
+                    res.add(site.code, section_codes, news.get(0));
                 }
+            } catch (Exception e) {
+                AppSettings.printerror("[NM] FATAL ERROR DURING SERVICE :(", e);
             }
-            return res;
         }
-        return null;
+        return res;
+    }
+
+    public DownloadResponse readEventNews(Context context, int eventCode)
+    {
+        if (!connectivityManager.isInternetAvailable())
+            return null;
+
+        Event event = new EventsManager(context).fetchEvent(eventCode);
+        if (event == null)
+            return null;
+
+        DownloadResponse res = new DownloadResponse(event.sources.size());
+        res.filters = event.keyWords;
+        int server = 0;
+        for (Source source : event.sources) {
+            try {
+                NewsArray news = readEventHeaders(event, source.site, source.sections);
+                if (news != null) {
+                    for (News n : news) {
+                        if (!mDB.contains(n)) {
+                            if (n.content == null || n.content.isEmpty())
+                                readContent(server++ % NewsReader.NUM_SERVERS, source.site, n);
+
+                            if (!n.content.isEmpty())
+                                mDB.save(n);
+                        }
+                    }
+                    res.add(source.site.code, source.sections, news.get(0));
+                }
+            } catch (Exception ignored) {
+            }
+        }
+        return res;
     }
 
     public void cancelAll()
     {
         uiCallback = null;
+        masterThread.interrupt();
         synchronized (petitionQueue) {
             petitionQueue.clear();
         }
@@ -173,7 +208,7 @@ public class NewsReaderManager {
 
                         // Delete news already in db whose date<timeBound
                         long timeBound = System.currentTimeMillis() - AppSettings.getKeepTime() * 1000;
-                        storageCallback.deleteOldNews(timeBound);
+                        mDB.deleteOldNews(timeBound);
                     }
                     try {
                         synchronized (petitionQueue) {
@@ -188,11 +223,11 @@ public class NewsReaderManager {
 
                     NewsArray news = petition instanceof EventNewsPetition ?
                             readEventHeaders(((EventNewsPetition) petition).event, petition.site, petition.sections) :
-                            readHeaders(petition.site, petition.sections);
+                            readHeaders(petition.site, sectionIndexesToCodes(petition.site, petition.sections));
 
                     if (news != null) {
 
-                        storageCallback.getSavedNews(petition.site);
+                        mDB.getNewsOf(petition.site);
 
                         // Send news to Kernel
                         if (uiCallback != null)
@@ -235,14 +270,14 @@ public class NewsReaderManager {
 
                 Site site = AppData.getSiteByCode(news.site_code);
 
-                NewsMap history = storageCallback.getSavedNews(site);
+                NewsMap history = mDB.getNewsOf(site);
                 if (!history.containsKey(news.id)) {
 
                     if (news.content.isEmpty())
                         readContent((int) (Thread.currentThread().getId()) % NewsReader.NUM_SERVERS, site, news);
 
                     if (!news.content.isEmpty())
-                        storageCallback.saveNews(news);
+                        mDB.save(news);
 
                     synchronized (site.news) {
                         site.news.add(news);
@@ -262,7 +297,7 @@ public class NewsReaderManager {
 
             int[] section_codes = sectionIndexesToCodes(petition.site, petition.sections);
 
-            NewsMap history = storageCallback.getSavedNews(petition.site, section_codes);
+            NewsMap history = mDB.getNewsOf(petition.site, section_codes);
 
             if (petition instanceof EventNewsPetition) {
                 NewsMap eventHistory = new NewsMap();
@@ -282,7 +317,7 @@ public class NewsReaderManager {
                 Site site = AppData.getSiteByCode(siteCode);
                 int[] section_codes = sectionIndexesToCodes(petition.site, AppSettings.getMainSections(site));
 
-                NewsMap history = storageCallback.getSavedNews(site, section_codes);
+                NewsMap history = mDB.getNewsOf(site, section_codes);
                 if (uiCallback != null)
                     uiCallback.obtainMessage(AppCode.NEWS_COLLECTION, history.values()).sendToTarget();
             }
@@ -292,19 +327,16 @@ public class NewsReaderManager {
             uiCallback.obtainMessage(AppCode.NEWS_LOADED).sendToTarget();
     }
 
-    private NewsArray readHeaders(Site site, int[] section_indexes)
+    private NewsArray readHeaders(Site site, int[] section_codes)
     {
-        int[] section_codes = sectionIndexesToCodes(site, section_indexes);
-
         NewsArray news = newsreader.readNewsHeaders(site.code, section_codes);
         if (news == null) {
             try {
                 news = site.readNewsHeaders(section_codes);
             } catch (Exception e) {
-                AppSettings.printerror("Error reading header of " + site.name + ", sections " + Arrays.toString(section_indexes), e);
+                AppSettings.printerror("Error reading header of " + site.name + ", " + section_codes.length + " sections", e);
             }
         }
-
         return news;
     }
 
@@ -313,11 +345,10 @@ public class NewsReaderManager {
         NewsArray news = newsreader.readEventHeaders(site.code, section_codes, event.code);
         if (news == null) {
             try {
-                news = site.readNewsHeaders(section_codes);
 
-                for (int i = news.size() - 1; i >= 0; i--)
-                    if (!news.get(i).hasKeyWords(event.keyWords))
-                        news.remove(i);
+                news = event.filter(
+                        site.readNewsHeaders(section_codes)
+                );
 
             } catch (Exception e) {
                 AppSettings.printerror("Error reading header of " + site.name, e);
@@ -345,7 +376,7 @@ public class NewsReaderManager {
         site.readNewsContent(news);
 
         if (!news.content.isEmpty())
-            storageCallback.saveNews(news);
+            mDB.save(news);
     }
 
     private int[] sectionIndexesToCodes(Site site, int[] indexes)

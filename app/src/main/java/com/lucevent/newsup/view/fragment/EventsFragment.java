@@ -37,7 +37,7 @@ public class EventsFragment extends android.app.Fragment implements View.OnClick
 
         adapter = new EventsAdapter(this);
 
-        eventsManager = new EventsManager(getActivity(), getString(R.string.app_version));
+        eventsManager = new EventsManager(getActivity());
         eventsManager.readEvents(getActivity(), this);
     }
 /*
@@ -97,13 +97,13 @@ public class EventsFragment extends android.app.Fragment implements View.OnClick
             Context c = getActivity();
             c.startService(
                     new Intent(c, StatisticsService.class)
-                            .putExtra(AppCode.SEND_REQUEST_CODE, StatisticsService.REQ_EVENT)
-                            .putExtra("e.code", e.code)
+                            .putExtra(AppCode.REQUEST_CODE, StatisticsService.REQ_EVENT)
+                            .putExtra(AppCode.EVENT_CODE, e.code)
             );
         }
 
         Intent intent = new Intent(getActivity(), EventActivity.class);
-        intent.putExtra("e.code", e.code);
+        intent.putExtra(AppCode.EVENT_CODE, e.code);
         startActivity(intent);
     }
 

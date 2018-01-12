@@ -16,7 +16,7 @@ import com.lucevent.newsup.R;
 import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.ScheduleManager;
 import com.lucevent.newsup.services.ScheduledDownloadReceiver;
-import com.lucevent.newsup.services.util.DownloadSchedule;
+import com.lucevent.newsup.services.util.Download;
 import com.lucevent.newsup.view.activity.DownloadScheduleEditorActivity;
 import com.lucevent.newsup.view.adapter.DownloadScheduleAdapter;
 
@@ -31,7 +31,7 @@ public class ScheduleDownloadSettingsFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         dataManager = new ScheduleManager(getActivity());
-        adapter = new DownloadScheduleAdapter(dataManager.getDownloadSchedules(), onModifyAction, onDeleteAction);
+        adapter = new DownloadScheduleAdapter(dataManager.getSchedule(), onModifyAction, onDeleteAction);
 
     }
 
@@ -76,7 +76,7 @@ public class ScheduleDownloadSettingsFragment extends Fragment {
             adapter.notifyDataSetChanged();
 
             ScheduledDownloadReceiver.scheduleDownloads(getActivity(),
-                    dataManager.getDownloadSchedules());
+                    dataManager.getSchedule());
 
             if (noDownloadsScreen.getVisibility() == View.VISIBLE)
                 noDownloadsScreen.setVisibility(View.GONE);
@@ -98,7 +98,7 @@ public class ScheduleDownloadSettingsFragment extends Fragment {
         public void onClick(View v)
         {
             Intent intent = new Intent(getActivity(), DownloadScheduleEditorActivity.class);
-            intent.putExtra(AppCode.SEND_DOWNLOAD_SCHEDULE, (DownloadSchedule) v.getTag());
+            intent.putExtra(AppCode.DOWNLOAD_SCHEDULE, (Download) v.getTag());
             intent.putExtra(AppCode.ACTION, DownloadScheduleEditorActivity.ACTION_MODIFY);
             startActivityForResult(intent, 0);
         }
@@ -115,10 +115,10 @@ public class ScheduleDownloadSettingsFragment extends Fragment {
                         public void onClick(DialogInterface dialog, int which)
                         {
 
-                            DownloadSchedule schedule = (DownloadSchedule) v.getTag();
+                            Download schedule = (Download) v.getTag();
                             adapter.remove(schedule);
-                            dataManager.deleteDownloadSchedule(schedule);
-                            ScheduledDownloadReceiver.scheduleDownloads(getActivity(), dataManager.getDownloadSchedules());
+                            dataManager.deleteSchedule(schedule);
+                            ScheduledDownloadReceiver.scheduleDownloads(getActivity(), dataManager.getSchedule());
 
                             if (adapter.getItemCount() == 0)
                                 noDownloadsScreen.setVisibility(View.VISIBLE);

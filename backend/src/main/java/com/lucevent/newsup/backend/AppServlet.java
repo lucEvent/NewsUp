@@ -48,7 +48,7 @@ public class AppServlet extends HttpServlet {
             Site site = Data.getSite(Integer.parseInt(parts[0]));
 
             if (req.getParameter("nc") == null)
-                Data.stats.count(site, req.getRemoteAddr(), req.getParameter("v"));
+                Data.stats.count(site, req.getRemoteAddr(), "[v1] " + req.getParameter("v"));
 
             if (UpdateMessageCreator.needsUpdate(req.getParameter("v"))) {
                 UpdateMessageCreator.generateUpdateNews(site, resp);

@@ -11,7 +11,7 @@ import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.Tags;
 import com.lucevent.newsup.kernel.util.Note;
-import com.lucevent.newsup.services.util.DownloadSchedule;
+import com.lucevent.newsup.services.util.Download;
 
 public class Database extends SQLiteOpenHelper {
 
@@ -84,7 +84,7 @@ public class Database extends SQLiteOpenHelper {
 
         static final String creator =
                 "CREATE TABLE " + db + " (" +
-                        id + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        id + " INTEGER PRIMARY KEY," +
                         notify + " INTEGER," +
                         repeat + " INTEGER," +
                         hour + " INTEGER," +
@@ -99,9 +99,9 @@ public class Database extends SQLiteOpenHelper {
                         sites_codes + " TEXT NOT NULL" +
                         ");";
 
-        static DownloadSchedule parse(Cursor cursor)
+        static Download parse(Cursor cursor)
         {
-            DownloadSchedule schedule = new DownloadSchedule(cursor.getInt(0));
+            Download schedule = new Download(cursor.getInt(0));
             schedule.hour = cursor.getInt(1);
             schedule.minute = cursor.getInt(2);
             schedule.notify = cursor.getInt(3) == 1;

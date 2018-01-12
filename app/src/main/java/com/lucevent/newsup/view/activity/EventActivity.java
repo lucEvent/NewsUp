@@ -28,12 +28,14 @@ import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.AppData;
 import com.lucevent.newsup.kernel.KernelManager;
 import com.lucevent.newsup.permission.StoragePermissionHandler;
-import com.lucevent.newsup.view.adapter.NewsAdapter;
+import com.lucevent.newsup.view.adapter.NewsFilterAdapter;
+import com.lucevent.newsup.view.util.EventConfigDialog;
 import com.lucevent.newsup.view.util.NewsAdapterList;
 import com.lucevent.newsup.view.util.NewsView;
 
 import java.lang.ref.WeakReference;
 import java.util.Collection;
+import java.util.TreeSet;
 
 public class EventActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -44,7 +46,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
     private Handler handler;
     private StoragePermissionHandler permissionHandler;
 
-    private NewsAdapter adapter;
+    private NewsFilterAdapter mAdapter;
     private NewsView newsView;
     private RecyclerView recyclerView;
     private View progressBar;
@@ -67,9 +69,9 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        adapter = new NewsAdapter(this, null, onBookmarkClick, NewsAdapterList.SortBy.byTime);
-        adapter.setLoadImages(AppSettings.loadImages());
-        adapter.showSiteLogo(true);
+        mAdapter = new NewsFilterAdapter(this, null, onBookmarkClick, NewsAdapterList.SortBy.byTime);
+        mAdapter.setLoadImages(AppSettings.loadImages());
+        mAdapter.showSiteLogo(true);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setAutoMeasureEnabled(true);
@@ -78,7 +80,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(false);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(mAdapter);
 
         newsView = (NewsView) findViewById(R.id.news_view);
         newsView.setFragmentContext(this, null);
@@ -89,7 +91,11 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
 
         // setup
         Bundle bundle = getIntent().getExtras();
-        mEvent = AppData.getEvent(bundle.getInt("e.code"));
+        mEvent = AppData.getEvent(bundle.getInt(AppCode.EVENT_CODE));
+
+        TreeSet<Integer> filterCodes = AppSettings.getEventFilter(mEvent.code);
+        if (filterCodes != null)
+            mAdapter.filter(filterCodes);
 
         manager.getEvent(mEvent, handler);
         setTitle(mEvent.title);
@@ -112,13 +118,6 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
     }
 
     @Override
-    public void onDestroy()
-    {
-        super.onDestroy();
-        appmenu = null;
-    }
-
-    @Override
     public void onBackPressed()
     {
         if (displayingNews) {
@@ -130,20 +129,16 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    private Menu appmenu;
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        menu.add(R.string.menu_settings)
+                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
+                .setIcon(R.drawable.ic_configuration)
+                .setOnMenuItemClickListener(onConfiguration);
+        return true;
+    }
 
-    /*
-        @Override
-        public boolean onCreateOptionsMenu(Menu menu)
-        {
-            appmenu = menu;
-            appmenu.add(R.string.menu_settings)
-                    .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
-                    .setIcon(R.drawable.ic_configuration)
-                    .setOnMenuItemClickListener(onSiteConfigurationAction);
-            return true;
-        }
-    */
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
@@ -222,44 +217,57 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
             EventActivity service = context.get();
             switch (msg.what) {
                 case AppCode.NEWS_COLLECTION:
+                    if (service.mAdapter == null)
+                        return;
+
                     Collection<News> news = (Collection<News>) msg.obj;
 
                     if (news.isEmpty())
                         return;
 
-                    service.adapter.addAll(news);
-                    if (service.adapter.getItemCount() == 0 || service.recyclerView.computeVerticalScrollOffset() == 0)
+                    service.mAdapter.addAll(news);
+                    if (service.mAdapter.getItemCount() == 0 || service.recyclerView.computeVerticalScrollOffset() == 0)
                         service.recyclerView.smoothScrollToPosition(0);
                     break;
                 case AppCode.NEWS_LOADED:
                     service.progressBar.setVisibility(ProgressBar.GONE);
                     break;
                 case AppCode.NO_INTERNET:
-                    Snackbar snackbar = Snackbar.make(service.recyclerView, R.string.msg_no_internet_connection, Snackbar.LENGTH_LONG);
-           /*         if (service.currentSite != null) {
-                        int color = service.currentSite.color == 0xffffffff ? 0xffcccccc : service.currentSite.color;
-                        snackbar.getView().setBackgroundColor(color);
-                    }
-            */
-                    snackbar.show();
+                    Snackbar.make(service.recyclerView, R.string.msg_no_internet_connection, Snackbar.LENGTH_LONG).show();
                     break;
                 case AppCode.ERROR:
-                    AppSettings.printerror("[NLF] Error received by the Handler", null);
+                    AppSettings.printerror("[EA] Error received by the Handler", null);
                     break;
                 default:
-                    AppSettings.printerror("[NLF] OPTION UNKNOWN: " + msg.what, null);
+                    AppSettings.printerror("[EA] OPTION UNKNOWN: " + msg.what, null);
             }
         }
 
     }
 
-    private MenuItem.OnMenuItemClickListener onSiteConfigurationAction = new MenuItem.OnMenuItemClickListener() {
+    private EventConfigDialog configDialog;
+
+    private MenuItem.OnMenuItemClickListener onConfiguration = new MenuItem.OnMenuItemClickListener() {
         @Override
         public boolean onMenuItemClick(MenuItem item)
         {
-            //// TODO: 26/09/2017
+            if (configDialog == null)
+                configDialog = new EventConfigDialog(EventActivity.this)
+                        .event(mEvent)
+                        .listener(onFilterListener);
+
+            configDialog.show();
             return true;
         }
+
+        EventConfigDialog.Callback onFilterListener = new EventConfigDialog.Callback() {
+            @Override
+            public void onFilter(TreeSet<Integer> f)
+            {
+                mAdapter.filter(f);
+            }
+        };
+
     };
 
     private View tempBookmarkButton;
@@ -292,7 +300,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
         );
 
         if (btn instanceof FloatingActionButton)
-            adapter.update(news);
+            mAdapter.update(news);
     }
 
 }

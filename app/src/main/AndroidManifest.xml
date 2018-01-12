@@ -73,7 +73,7 @@
 
         <receiver android:name=".services.ScheduledDownloadReceiver"/>
 
-        <service android:name=".services.ScheduledDownloadService"/>
+        <service android:name=".services.DownloadService"/>
         <service android:name=".services.StatisticsService"/>
         <service android:name=".services.ContactService"/>
 

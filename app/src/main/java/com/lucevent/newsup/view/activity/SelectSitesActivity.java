@@ -78,7 +78,7 @@ public class SelectSitesActivity extends AppCompatActivity implements
 
         siteAdapter = new SiteAdapter(this);
 
-        purpose = (For) getIntent().getExtras().get(AppCode.SEND_PURPOSE);
+        purpose = (For) getIntent().getExtras().get(AppCode.PURPOSE);
 
 
         if (purpose != For.APP_FIRST_START) {
@@ -157,7 +157,7 @@ public class SelectSitesActivity extends AppCompatActivity implements
                     setSelected(AppSettings.getFavoriteSitesCodes());
                     break;
                 case SELECT_DOWNLOAD:
-                    setSelected((int[]) getIntent().getExtras().get(AppCode.SEND_SELECTED));
+                    setSelected((int[]) getIntent().getExtras().get(AppCode.SELECTED));
             }
         }
     }
@@ -201,7 +201,7 @@ public class SelectSitesActivity extends AppCompatActivity implements
                     selected[index++] = Integer.parseInt(s);
 
                 Intent intent = new Intent();
-                intent.putExtra(AppCode.SEND_SELECTED, selected);
+                intent.putExtra(AppCode.SELECTED, selected);
                 setResult(RESULT_OK, intent);
                 break;
         }

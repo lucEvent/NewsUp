@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 
 import com.lucevent.newsup.AppSettings;
+import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.event.Event;
 import com.lucevent.newsup.data.event.Events;
 import com.lucevent.newsup.data.event.Source;
@@ -26,9 +27,9 @@ public final class EventsManager {
 
     private static ConnectivityManager connectivityManager;
 
-    public EventsManager(Context context, String version)
+    public EventsManager(Context context)
     {
-        this.version = version;
+        this.version = context.getString(R.string.app_version);
         this.device_language = Locale.getDefault().getLanguage();
         connectivityManager = new ConnectivityManager(context);
     }
@@ -101,6 +102,58 @@ public final class EventsManager {
                 onResult.onEventsRead(res);
             }
         });
+    }
+
+    /**
+     * This call must be called in a thread different from the Master/UI thread
+     *
+     * @param eventCode
+     * @return the Event with code given, if any exists
+     */
+    public Event fetchEvent(int eventCode)
+    {
+        if (!connectivityManager.isInternetAvailable())
+            return null;
+
+        String eventsQuery = String.format(query_all_events, device_language);
+        AppSettings.printlog("Query: " + eventsQuery);
+
+        org.jsoup.nodes.Document doc = getDocument(eventsQuery);
+        if (doc == null) return null;
+
+        for (org.jsoup.nodes.Element jEvent : doc.select("event")) {
+            int code = Integer.parseInt(jEvent.attr("code"));
+            if (code != eventCode)
+                continue;
+
+            Event e = new Event();
+            e.code = code;
+            e.title = jEvent.attr("title");
+            e.topic = jEvent.attr("topic");
+            e.imgSrc = jEvent.attr("imgsrc");
+            e.keyWords = jEvent.attr("tags").split(",");
+            e.sources = new ArrayList<>();
+
+            String[] sources = jEvent.attr("sources").split(";");
+            for (String s : sources) {
+                String[] parts = s.split(",");
+                Source source = new Source();
+                source.site = AppData.getSiteByCode(Integer.parseInt(parts[0]));
+
+                if (source.site == null)
+                    continue;
+
+                source.sections = new int[parts.length - 1];
+                for (int i = 0; i < source.sections.length; i++)
+                    source.sections[i] = Integer.parseInt(parts[i + 1]);
+
+                e.sources.add(source);
+            }
+
+            return e;
+        }
+
+        return null;
     }
 
     private org.jsoup.nodes.Document getDocument(String url)

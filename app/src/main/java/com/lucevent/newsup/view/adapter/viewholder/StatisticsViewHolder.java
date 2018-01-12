@@ -33,7 +33,7 @@ public class StatisticsViewHolder extends RecyclerView.ViewHolder {
     {
         icon.setBackground(LogoManager.getLogo(siteStat.siteCode, LogoManager.Size.I_ITEM));
         name.setText(siteStat.siteName);
-        requests.setText(siteStat.totalRequests + "/" + siteStat.totalRequests);
+        requests.setText(siteStat.monthRequests + "/" + siteStat.totalRequests);
         readings.setText(Integer.toString(siteStat.readings));
         last.setText(Date.getAge(siteStat.lastRequest));
         version.setText(siteStat.version);

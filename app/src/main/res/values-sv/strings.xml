@@ -33,6 +33,13 @@
     <string name="expand_to_see_headlines">Expandera att se huvudrubrikerna</string>
     <string name="see_something_else">Intresserad av något annat?</string>
     <string name="happening_now">Händelser</string>
+    <string name="languages">Språk</string>
+    <string name="countries">Länder</string>
+    <string name="publications">Publikationer</string>
+    <string name="filters">Filter</string>
+    <string name="by_default">Som standard</string>
+    <string name="x_section_selected">%d sektioner valda</string>
+    <string name="event">Händelse</string>
 
     <string name="mon">Mån</string>
     <string name="tue">Tis</string>

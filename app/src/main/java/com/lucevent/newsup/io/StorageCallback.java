@@ -1,14 +1,18 @@
 package com.lucevent.newsup.io;
 
+import com.lucevent.newsup.data.util.News;
+import com.lucevent.newsup.data.util.NewsMap;
 import com.lucevent.newsup.data.util.Site;
 
 public interface StorageCallback {
 
-    void saveNews(com.lucevent.newsup.data.util.News news);
+    void save(News news);
 
-    com.lucevent.newsup.data.util.NewsMap getSavedNews(Site site);
+    boolean contains(News news);
 
-    com.lucevent.newsup.data.util.NewsMap getSavedNews(Site site, int[] sections);
+    NewsMap getNewsOf(Site site);
+
+    NewsMap getNewsOf(Site site, int[] sections);
 
     void deleteOldNews(long timeBound);
 

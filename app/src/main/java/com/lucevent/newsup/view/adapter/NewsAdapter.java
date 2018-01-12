@@ -96,7 +96,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.loadImage = loadImages;
     }
 
-    public final void setNewDataSet(Collection<News> newDataSet)
+    public void setNewDataSet(Collection<News> newDataSet)
     {
         synchronized (this.dataSet) {
             dataSet.beginBatchedUpdates();
@@ -139,7 +139,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         dataSet.updateItemAt(index, news);
     }
 
-    public final void replaceAll(Collection<News> newDataSet)
+    public void replaceAll(Collection<News> newDataSet)
     {
         dataSet.beginBatchedUpdates();
         for (int i = dataSet.size() - 1; i >= 0; i--) {

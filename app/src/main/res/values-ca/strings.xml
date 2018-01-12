@@ -33,6 +33,13 @@
     <string name="expand_to_see_headlines">Expandeix per veure els titulars</string>
     <string name="see_something_else">Interessat en algun tema més?</string>
     <string name="happening_now">Esdeveniments</string>
+    <string name="languages">Idiomes</string>
+    <string name="countries">Països</string>
+    <string name="publications">Publicacions</string>
+    <string name="filters">Filtres</string>
+    <string name="by_default">Per defecte</string>
+    <string name="x_section_selected">%d seccions seleccionades</string>
+    <string name="event">Esdeveniment</string>
 
     <string name="mon">Dl</string>
     <string name="tue">Dm</string>

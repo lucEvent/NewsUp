@@ -14,7 +14,7 @@ public class onConcerningEventReceiver extends BroadcastReceiver {
     {
         AppSettings.initialize(context);
         ScheduledDownloadReceiver.scheduleDownloads(context,
-                new ScheduleManager(context).getDownloadSchedules());
+                new ScheduleManager(context).getSchedule());
     }
 
 }

@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.net.MainChangeListener;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -263,6 +264,29 @@ public class AppSettings {
     {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(PREF_ALERT_KEY + id, true);
+        editor.apply();
+    }
+
+    private static final String PREF_EVENT_CONF_KEY = "evf_";
+
+    public static TreeSet<Integer> getEventFilter(int event_code)
+    {
+        String filter = preferences.getString(PREF_EVENT_CONF_KEY + event_code, null);
+        if (filter != null) {
+            String[] codes = filter.substring(1, filter.length() - 1).split(", ");
+            TreeSet<Integer> filterCodes = new TreeSet<>();
+            for (String c : codes)
+                filterCodes.add(Integer.parseInt(c));
+
+            return filterCodes;
+        }
+        return null;
+    }
+
+    public static void setEventFilter(int event_code, TreeSet<Integer> filter)
+    {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(PREF_EVENT_CONF_KEY + event_code, filter == null ? null : Arrays.toString(filter.toArray()));
         editor.apply();
     }
 

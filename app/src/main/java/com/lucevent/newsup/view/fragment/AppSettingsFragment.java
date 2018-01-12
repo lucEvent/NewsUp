@@ -22,7 +22,7 @@ import com.lucevent.newsup.kernel.AppData;
 import com.lucevent.newsup.kernel.KernelManager;
 import com.lucevent.newsup.kernel.ScheduleManager;
 import com.lucevent.newsup.net.MainChangeListener;
-import com.lucevent.newsup.services.util.DownloadSchedule;
+import com.lucevent.newsup.services.util.Download;
 import com.lucevent.newsup.view.activity.SelectSitesActivity;
 
 import java.text.DecimalFormat;
@@ -131,7 +131,7 @@ public class AppSettingsFragment extends PreferenceFragment
             ScheduleManager scheduleManager = new ScheduleManager(getActivity());
 
             StringBuilder sb = new StringBuilder();
-            for (DownloadSchedule schedule : scheduleManager.getDownloadSchedules()) {
+            for (Download schedule : scheduleManager.getSchedule()) {
                 if (sb.length() != 0)
                     sb.append("\n");
                 sb.append(schedule.toShortString());
@@ -176,7 +176,7 @@ public class AppSettingsFragment extends PreferenceFragment
         public boolean onPreferenceClick(Preference preference)
         {
             Intent intent = new Intent(getActivity(), SelectSitesActivity.class);
-            intent.putExtra(AppCode.SEND_PURPOSE, SelectSitesActivity.For.SELECT_MAIN);
+            intent.putExtra(AppCode.PURPOSE, SelectSitesActivity.For.SELECT_MAIN);
             startActivityForResult(intent, REQUEST_SELECT_MAIN);
             return true;
         }
@@ -187,7 +187,7 @@ public class AppSettingsFragment extends PreferenceFragment
         public boolean onPreferenceClick(Preference preference)
         {
             Intent intent = new Intent(getActivity(), SelectSitesActivity.class);
-            intent.putExtra(AppCode.SEND_PURPOSE, SelectSitesActivity.For.SELECT_FAVORITES);
+            intent.putExtra(AppCode.PURPOSE, SelectSitesActivity.For.SELECT_FAVORITES);
             startActivityForResult(intent, REQUEST_SELECT_FAVORITE);
             return true;
         }

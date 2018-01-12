@@ -36,4 +36,7 @@
     <dimen name="text_normal_size">18sp</dimen>
     <dimen name="text_small_size">15sp</dimen>
 
+    <dimen name="setting_summary">14sp</dimen>
+    <dimen name="setting_row">16sp</dimen>
+
 </resources>

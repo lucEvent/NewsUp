@@ -9,4 +9,9 @@ public class NewsArray extends ArrayList<News> {
         super();
     }
 
+    public NewsArray(int capacity)
+    {
+        super(capacity);
+    }
+
 }

@@ -17,13 +17,14 @@ public interface AppCode {
 
     int STATISTICS = 50;
 
-    String SEND_SITE_CODE = "site_code";
-    String SEND_NEWS = "news";
-    String SEND_NEWS_IDS = "news_ids";
-    String SEND_DOWNLOAD_SCHEDULE = "download_schedule";
-    String SEND_PURPOSE = "purpose";
-    String SEND_REQUEST_CODE = "req_code";
-    String SEND_SELECTED = "selected";
+    String SITE_CODE = "site_code";
+    String SOURCES = "sources";
+    String DOWNLOAD_SCHEDULE = "d.schedule";
+    String PURPOSE = "purpose";
+    String REQUEST_CODE = "r.code";
+    String SELECTED = "selected";
+    String EVENT_CODE = "e.code";
+    String STRING_FILTERS = "fts";
 
     String ACTION = "action";
     String RESTART = "restart";

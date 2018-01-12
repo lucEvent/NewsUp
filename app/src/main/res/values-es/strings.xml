@@ -33,6 +33,13 @@
     <string name="expand_to_see_headlines">Expande para ver los titulares</string>
     <string name="see_something_else">Te interesa algún tema más?</string>
     <string name="happening_now">Acontecimientos</string>
+    <string name="languages">Idiomas</string>
+    <string name="countries">Paises</string>
+    <string name="publications">Publicaciones</string>
+    <string name="filters">Filtros</string>
+    <string name="by_default">Por defecto</string>
+    <string name="x_section_selected">%d secciones seleccionadas</string>
+    <string name="event">Evento</string>
 
     <string name="mon">Lun</string>
     <string name="tue">Mar</string>

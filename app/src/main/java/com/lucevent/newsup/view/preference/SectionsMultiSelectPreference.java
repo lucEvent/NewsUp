@@ -3,6 +3,7 @@ package com.lucevent.newsup.view.preference;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
@@ -62,10 +63,12 @@ public class SectionsMultiSelectPreference extends DialogPreference {
 
                         if (selected_preferences.size() > 0) {
 
+                            SharedPreferences.Editor editor = getSharedPreferences().edit();
                             if (getKey().equals(AppSettings.PREF_SITE_MAIN_SECTIONS_KEY))
-                                AppSettings.setMainSections(site, selected_preferences);
+                                editor.putStringSet(AppSettings.PREF_SITE_MAIN_SECTIONS_KEY, selected_preferences);
                             else if (getKey().equals(AppSettings.PREF_SITE_DOWNLOAD_SECTIONS_KEY))
-                                AppSettings.setDownloadSections(site, selected_preferences);
+                                editor.putStringSet(AppSettings.PREF_SITE_DOWNLOAD_SECTIONS_KEY, selected_preferences);
+                            editor.apply();
 
                         } else {
                             new AlertDialog.Builder(getContext())

@@ -108,6 +108,9 @@ public class BookmarksFragment extends android.app.Fragment implements View.OnCl
             newsView.hideNews();
             displayingNews = false;
             return true;
+        } else if (searchView.isShown()) {
+            searchView.hide();
+            return true;
         }
         return false;
     }

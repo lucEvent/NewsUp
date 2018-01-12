@@ -2,7 +2,7 @@ package com.lucevent.newsup.services.util;
 
 import java.io.Serializable;
 
-public class DownloadSchedule extends Schedule implements Serializable {
+public class Download extends Schedule implements Serializable {
 
     public static String[] s_days;
 
@@ -19,13 +19,13 @@ public class DownloadSchedule extends Schedule implements Serializable {
 
     public int[] sites_codes;
 
-    public DownloadSchedule(int id)
+    public Download(int id)
     {
         this.id = id;
     }
 
-    public DownloadSchedule(int id, int hour, int minute, boolean notify, boolean repeat,
-                            boolean[] days, int[] sites_codes)
+    public Download(int id, int hour, int minute, boolean notify, boolean repeat,
+                    boolean[] days, int[] sites_codes)
     {
         this.id = id;
         this.hour = hour;
@@ -55,6 +55,11 @@ public class DownloadSchedule extends Schedule implements Serializable {
                 sb.append(s_days[i]);
             }
         return sb.toString();
+    }
+
+    public boolean isEvent()
+    {
+        return id <= -10000;
     }
 
 }
