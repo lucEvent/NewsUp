@@ -52,7 +52,7 @@ public class BookmarksFragment extends android.app.Fragment implements View.OnCl
         permissionHandler = new StoragePermissionHandler(getActivity());
 
         adapter = new NewsFilterAdapter(this, this, onBookmarkClick, NewsAdapterList.SortBy.byTime);
-        adapter.showSiteLogo(true);
+        adapter.showSiteIcon(true);
     }
 
     @Override

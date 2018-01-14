@@ -45,6 +45,12 @@
             android:summary="@string/pref_load_images_summary"
             android:title="@string/pref_load_images"/>
 
+        <SwitchPreference
+            android:defaultValue="false"
+            android:dependency="@string/pref_load_images_key"
+            android:key="@string/pref_load_images_compact_key"
+            android:title="@string/pref_load_images_compact"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_title_data">

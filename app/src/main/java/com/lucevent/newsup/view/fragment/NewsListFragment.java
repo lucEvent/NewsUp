@@ -107,7 +107,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
             return;
         }
 
-        adapter.showSiteLogo(currentSite == null);
+        adapter.showSiteIcon(currentSite == null);
         adapter.clear();
         progressBar.setVisibility(ProgressBar.VISIBLE);
         switch (currentSiteCode) {
@@ -154,7 +154,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
 
     public void onLoadImagesPreferenceChanged()
     {
-        adapter.setLoadImages(AppSettings.loadImages());
+        adapter.setUserPreferences();
     }
 
     private KernelManager dataManager;
@@ -197,7 +197,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
             mainView = inflater.inflate(R.layout.f_news_list, container, false);
 
             adapter = new NewsAdapter(this, this, onBookmarkClick, NewsAdapterList.SortBy.byTime);
-            adapter.setLoadImages(AppSettings.loadImages());
+            adapter.setUserPreferences();
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             layoutManager.setAutoMeasureEnabled(true);

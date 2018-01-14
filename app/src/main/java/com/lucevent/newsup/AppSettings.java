@@ -2,6 +2,7 @@ package com.lucevent.newsup;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.preference.PreferenceManager;
 
 import com.lucevent.newsup.data.util.Site;
@@ -23,15 +24,12 @@ public class AppSettings {
     private static Set<String> DEFAULT_DOWNLOAD_SECTIONS;
     private static final String DEFAULT_KEEP_TIME = "2592000";
     private static final boolean DEFAULT_LOAD_IMAGES = true;
+    private static final boolean DEFAULT_COMPACTED_IMAGES = false;
     private static final boolean DEFAULT_NIGHT_MODE = false;
 
-    public static String PREF_MAIN_SITES_KEY;
-    public static String PREF_FAVORITE_SITES_KEY;
-    public static String PREF_SCHEDULE_DOWNLOADS_KEY;
-    public static String PREF_CLEAN_CACHE_KEY;
-    public static String PREF_PRO_CODE_KEY;
-    public static String PREF_KEEP_NEWS_KEY;
-    public static String PREF_LOAD_IMAGES_KEY;
+    public static String PREF_MAIN_SITES_KEY, PREF_FAVORITE_SITES_KEY, PREF_SCHEDULE_DOWNLOADS_KEY,
+            PREF_CLEAN_CACHE_KEY, PREF_PRO_CODE_KEY, PREF_KEEP_NEWS_KEY, PREF_LOAD_IMAGES_KEY,
+            PREF_COMPACTED_IMAGES_KEY;
     private static final String PREF_NIGHT_MODE_KEY = "night_mode";
     private static final String PREF_FONT_SIZE_KEY = "font_size";
     public static final String LAST_DATA_REVISION_KEY = "last_data_rev";
@@ -44,17 +42,19 @@ public class AppSettings {
     public static void initialize(Context context)
     {
         if (preferences == null) {
+            Resources r = context.getResources();
             preferences = PreferenceManager.getDefaultSharedPreferences(context);
-            PREF_MAIN_SITES_KEY = context.getString(R.string.pref_main_sites_key);
-            PREF_FAVORITE_SITES_KEY = context.getString(R.string.pref_favorite_sites_key);
-            PREF_SCHEDULE_DOWNLOADS_KEY = context.getString(R.string.pref_schedule_downloads_key);
-            PREF_CLEAN_CACHE_KEY = context.getString(R.string.pref_clean_cache_key);
-            PREF_PRO_CODE_KEY = context.getString(R.string.pref_pro_code_key);
-            PREF_KEEP_NEWS_KEY = context.getString(R.string.pref_keep_news_key);
-            PREF_LOAD_IMAGES_KEY = context.getString(R.string.pref_load_images_key);
+            PREF_MAIN_SITES_KEY = r.getString(R.string.pref_main_sites_key);
+            PREF_FAVORITE_SITES_KEY = r.getString(R.string.pref_favorite_sites_key);
+            PREF_SCHEDULE_DOWNLOADS_KEY = r.getString(R.string.pref_schedule_downloads_key);
+            PREF_CLEAN_CACHE_KEY = r.getString(R.string.pref_clean_cache_key);
+            PREF_PRO_CODE_KEY = r.getString(R.string.pref_pro_code_key);
+            PREF_KEEP_NEWS_KEY = r.getString(R.string.pref_keep_news_key);
+            PREF_LOAD_IMAGES_KEY = r.getString(R.string.pref_load_images_key);
+            PREF_COMPACTED_IMAGES_KEY = r.getString(R.string.pref_load_images_compact_key);
 
-            PREF_SITE_MAIN_SECTIONS_KEY = context.getString(R.string.pref_main_sections_key);
-            PREF_SITE_DOWNLOAD_SECTIONS_KEY = context.getString(R.string.pref_download_sections_key);
+            PREF_SITE_MAIN_SECTIONS_KEY = r.getString(R.string.pref_main_sections_key);
+            PREF_SITE_DOWNLOAD_SECTIONS_KEY = r.getString(R.string.pref_download_sections_key);
 
             DEFAULT_MAIN_SECTIONS = new TreeSet<>();
             DEFAULT_MAIN_SECTIONS.add("0");
@@ -204,6 +204,11 @@ public class AppSettings {
     public static boolean loadImages()
     {
         return preferences.getBoolean(PREF_LOAD_IMAGES_KEY, DEFAULT_LOAD_IMAGES);
+    }
+
+    public static boolean loadCompactedImages()
+    {
+        return preferences.getBoolean(PREF_COMPACTED_IMAGES_KEY, DEFAULT_COMPACTED_IMAGES);
     }
 
     private static int[] getIntArray(Set<String> set)

@@ -66,7 +66,7 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
         View view = inflater.inflate(R.layout.f_historial, container, false);
 
         adapter = new NewsFilterAdapter(this, this, onBookmarkClick, NewsAdapterList.SortBy.byReadOn);
-        adapter.showSiteLogo(true);
+        adapter.showSiteIcon(true);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setAutoMeasureEnabled(true);

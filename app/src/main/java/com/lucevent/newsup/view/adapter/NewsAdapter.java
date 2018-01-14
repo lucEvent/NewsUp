@@ -5,10 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.io.BookmarksManager;
 import com.lucevent.newsup.view.adapter.viewholder.MoreSectionsViewHolder;
+import com.lucevent.newsup.view.adapter.viewholder.NewsCompactViewHolder;
 import com.lucevent.newsup.view.adapter.viewholder.NewsViewHolder;
 import com.lucevent.newsup.view.util.NewsAdapterList;
 import com.lucevent.newsup.view.util.OnMoreSectionsClickListener;
@@ -18,13 +20,14 @@ import java.util.Collection;
 public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int TYPE_NEWS = 0;
-    private static final int TYPE_MORE = 1;
+    private static final int TYPE_NEWS_WITH_IMG = 1;
+    private static final int TYPE_MORE = 2;
 
     private final View.OnClickListener onClick, onBookmarkClick;
     //   private final View.OnLongClickListener onLongClick;
     private OnMoreSectionsClickListener onMoreClick;
 
-    private boolean showSiteLogo, loadImage;
+    private boolean mSiteIcon, mImages, mCompactedImages;
 
     protected final NewsAdapterList dataSet;
 
@@ -46,10 +49,13 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         switch (viewType) {
             case TYPE_NEWS:
                 View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.i_news, parent, false);
-                //View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.i_news_compact, parent, false);
                 v.setOnClickListener(onClick);
-//            v.setOnLongClickListener(onLongClick);
                 vh = new NewsViewHolder(v, onBookmarkClick);
+                break;
+            case TYPE_NEWS_WITH_IMG:
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.i_news_compact, parent, false);
+                v.setOnClickListener(onClick);
+                vh = new NewsCompactViewHolder(v, onBookmarkClick);
                 break;
             case TYPE_MORE:
                 v = LayoutInflater.from(parent.getContext()).inflate(R.layout.i_more_sections, parent, false);
@@ -64,7 +70,10 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     {
         if (holder instanceof NewsViewHolder) {
             News news = dataSet.get(position);
-            ((NewsViewHolder) holder).bind(news, showSiteLogo, loadImage, BookmarksManager.isBookmarked(news));
+            ((NewsViewHolder) holder).bind(news, mSiteIcon, mImages, BookmarksManager.isBookmarked(news));
+        } else if (holder instanceof NewsCompactViewHolder) {
+            News news = dataSet.get(position);
+            ((NewsCompactViewHolder) holder).bind(news, mSiteIcon, BookmarksManager.isBookmarked(news));
         } else
             ((MoreSectionsViewHolder) holder).bind();
     }
@@ -78,12 +87,20 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public int getItemViewType(int position)
     {
-        return onMoreClick == null ? TYPE_NEWS : (position < (dataSet.size() - 1) ? TYPE_NEWS : TYPE_MORE);
+        if (onMoreClick != null && position == (dataSet.size() - 1))
+            return TYPE_MORE;
+
+        if (mCompactedImages && mImages) {
+            News n = dataSet.get(position);
+            if (n.enclosures != null && !n.enclosures.isEmpty() && !n.enclosures.get(0).src.isEmpty())
+                return TYPE_NEWS_WITH_IMG;
+        }
+        return TYPE_NEWS;
     }
 
-    public final void showSiteLogo(boolean showSiteLogo)
+    public final void showSiteIcon(boolean showSiteIcon)
     {
-        this.showSiteLogo = showSiteLogo;
+        this.mSiteIcon = showSiteIcon;
     }
 
     public final void setOnMoreSectionsClick(OnMoreSectionsClickListener onMoreClickListener)
@@ -91,9 +108,18 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.onMoreClick = onMoreClickListener;
     }
 
-    public void setLoadImages(boolean loadImages)
+    public void setUserPreferences()
     {
-        this.loadImage = loadImages;
+        setLoadImages(
+                AppSettings.loadImages(),
+                AppSettings.loadCompactedImages()
+        );
+    }
+
+    public void setLoadImages(boolean loadImages, boolean compactedImages)
+    {
+        this.mImages = loadImages;
+        this.mCompactedImages = compactedImages;
     }
 
     public void setNewDataSet(Collection<News> newDataSet)

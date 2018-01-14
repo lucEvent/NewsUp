@@ -49,7 +49,6 @@
     <string name="sat">Sab</string>
     <string name="sun">Dom</string>
 
-
     <!-- * ******************** Buttons **************************** * -->
     <string name="cancel">Cancelar</string>
     <string name="save">Guardar</string>
@@ -72,14 +71,12 @@
     <string name="update">Actualiza</string>
     <string name="not_now">Ahora no</string>
 
-
     <!-- * ******************** Hints **************************** * -->
     <string name="hint_pref_pro_mode">Inserta código PRO</string>
     <string name="search">Busca</string>
     <string name="hint_create_note">Inserta anotación</string>
     <string name="hint_email">Tu email (opcional)</string>
     <string name="hint_message_suggestion_report">Tu mensaje, sugerencia o informe de error</string>
-
 
     <!-- * ******************** Messages **************************** * -->
     <string name="msg_confirm_to_remove_all_saved_news">Confirma para eliminar todo</string>
@@ -110,6 +107,7 @@
     <string name="msg_no_bookmarks">Aún no has marcado ninguna noticia</string>
     <string name="msg_minimum_one_checked">Una sección debe permanecer marcada</string>
     <string name="msg_no_events">No hay acontecimientos en este momento</string>
+    <string name="msg_cant_apply_filter">No se puede aplicar el filtro</string>
 
     <!-- * *************** Activities and fragment's titles ********************* * -->
     <string name="title_frg_settings_of">Configuración de %1$s</string>
@@ -118,7 +116,6 @@
     <string name="menu_favorite">Favorito</string>
     <string name="menu_settings">Configuración de la publicación</string>
     <string name="menu_delete_all">Elimina todo</string>
-
 
     <!-- ***************************** Settings strings ********************************** -->
     <string name="pref_title_general">General</string>
@@ -141,6 +138,7 @@
     <string name="pref_favorite_sites">Publicaciones favoritas</string>
     <string name="pref_load_images">Cargar imágenes</string>
     <string name="pref_load_images_summary">Activado consume más batería y datos</string>
+    <string name="pref_load_images_compact">Vista compacta</string>
 
     <!-- ***************************** ***************** ********************************** -->
     <string name="about_content_contact">Desarrollado por Rafael J. Lucena\nContacto: rafaa89(arroba)gmail.com</string>

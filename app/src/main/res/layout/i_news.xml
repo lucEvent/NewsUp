@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/listItemContainer">
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/listItemContainer"
+    tools:ignore="HardcodedText">
 
     <ImageView
         android:id="@+id/picture"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"/>
+        android:layout_alignParentTop="true"
+        android:contentDescription="news image"/>
 
     <LinearLayout
         android:id="@+id/news_description"
@@ -20,7 +23,7 @@
         android:paddingStart="20dp"
         android:paddingTop="10dp">
 
-        <TextView
+        <com.lucevent.newsup.view.util.AppBoldTextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,7 +32,7 @@
             android:textSize="20sp"
             android:textStyle="bold"/>
 
-        <TextView
+        <com.lucevent.newsup.view.util.AppTextView
             android:id="@+id/description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -66,17 +69,17 @@
             android:id="@+id/logo"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_marginEnd="12dp"
+            android:layout_marginEnd="8dp"
             android:background="#aaa"/>
 
-        <TextView
+        <com.lucevent.newsup.view.util.AppTextView
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
             android:fontFamily="sans-serif-light"
             android:gravity="bottom"
-            android:text="Hace 2 meses"
-            android:textSize="9sp"/>
+            android:text="2 minutes ago"
+            android:textSize="@dimen/i_date_text_size"/>
 
     </LinearLayout>
 
@@ -88,6 +91,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="14dp"
         android:background="@drawable/ripple_round"
+        android:contentDescription="bookmark"
         android:src="@drawable/sel_btn_bookmark"/>
 
 </RelativeLayout>

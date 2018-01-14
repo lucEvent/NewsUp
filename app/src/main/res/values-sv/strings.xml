@@ -71,14 +71,12 @@
     <string name="update">Uppdatera</string>
     <string name="not_now">Inte nu</string>
 
-
     <!-- * ******************** Hints **************************** * -->
     <string name="hint_pref_pro_mode">Skriva in PRO kod</string>
     <string name="search">Sök efter</string>
     <string name="hint_create_note">Skriva in en anteckning</string>
     <string name="hint_email">Din email (valfri)</string>
     <string name="hint_message_suggestion_report">Ditt meddelande, förslag eller rapport</string>
-
 
     <!-- * ******************** Messages **************************** * -->
     <string name="msg_confirm_to_remove_all_saved_news">Bekräfta att radera alla bokmärkta nyheter</string>
@@ -109,6 +107,7 @@
     <string name="msg_no_bookmarks">Du har inte bokmärkt någon nyhet än</string>
     <string name="msg_minimum_one_checked">En sektion måste kontrolleras</string>
     <string name="msg_no_events">Inga händelser just nu</string>
+    <string name="msg_cant_apply_filter">Kan inte applicera filter</string>
 
     <!-- * *************** Activities and fragment's titles ********************* * -->
     <string name="title_frg_settings_of">Inställningar för %1$s</string>
@@ -117,7 +116,6 @@
     <string name="menu_favorite">Favorit</string>
     <string name="menu_settings">Publikation inställningar</string>
     <string name="menu_delete_all">Radera allt</string>
-
 
     <!-- ***************************** Settings strings ********************************** -->
     <string name="pref_title_general">Allmän</string>
@@ -140,7 +138,7 @@
     <string name="pref_favorite_sites">Favorit publikationer</string>
     <string name="pref_load_images">Ladda bilder</string>
     <string name="pref_load_images_summary">Ställ in på ON konsumerar mer batteri och nätverksdata</string>
-
+    <string name="pref_load_images_compact">Kompakt vy</string>
 
     <!-- ***************************** ***************** ********************************** -->
     <string name="about_content_contact">Utvecklat av Rafael J. Lucena\nKontakt: rafaa89(snabel-a)gmail.com</string>

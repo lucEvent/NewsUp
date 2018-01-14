@@ -14,21 +14,20 @@ import com.lucevent.newsup.data.util.Date;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.io.LogoManager;
 
-public class NewsViewHolder extends RecyclerView.ViewHolder {
+public class NewsCompactViewHolder extends RecyclerView.ViewHolder {
 
-    private static final RequestOptions OPTIONS = new RequestOptions().fitCenter();
+    private static final RequestOptions OPTIONS = new RequestOptions().centerCrop();
 
     private View logo;
-    private TextView title, description, date;
+    private TextView title, date;
     private ImageButton bookmarkButton;
     private ImageView picture;
 
-    public NewsViewHolder(View v, View.OnClickListener onBookmark)
+    public NewsCompactViewHolder(View v, View.OnClickListener onBookmark)
     {
         super(v);
 
         title = (TextView) v.findViewById(R.id.title);
-        description = (TextView) v.findViewById(R.id.description);
         date = (TextView) v.findViewById(R.id.date);
         logo = v.findViewById(R.id.logo);
         bookmarkButton = (ImageButton) v.findViewById(R.id.button_bookmark);
@@ -36,7 +35,7 @@ public class NewsViewHolder extends RecyclerView.ViewHolder {
         picture = (ImageView) v.findViewById(R.id.picture);
     }
 
-    public void bind(News news, boolean showSiteLogo, boolean loadImage, boolean bookmarked)
+    public void bind(News news, boolean showSiteLogo, boolean bookmarked)
     {
         if (showSiteLogo) {
             logo.setVisibility(View.VISIBLE);
@@ -44,20 +43,17 @@ public class NewsViewHolder extends RecyclerView.ViewHolder {
         } else
             logo.setVisibility(View.GONE);
 
-        if (loadImage && news.enclosures != null && !news.enclosures.isEmpty() && !news.enclosures.get(0).src.isEmpty()) {
+        // img
+        picture.setVisibility(View.VISIBLE);
+        picture.setImageDrawable(null);
 
-            picture.setImageDrawable(null);
-
-            Glide.with(picture.getContext())
-                    .applyDefaultRequestOptions(OPTIONS)
-                    .load(news.enclosures.get(0).src)
-                    .into(picture);
-        } else {
-            picture.setImageDrawable(null);
-        }
+        Glide.with(picture.getContext())
+                .applyDefaultRequestOptions(OPTIONS)
+                .load(news.enclosures.get(0).src)
+                .into(picture);
+        // end img
 
         title.setText(Html.fromHtml(news.title));
-        description.setText(news.description);
         date.setText(Date.getAge(news.date));
         bookmarkButton.setSelected(bookmarked);
 

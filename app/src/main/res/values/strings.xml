@@ -1,11 +1,11 @@
 <resources>
 
     <string name="app_name" translatable="false">NewsUp</string>
-    <string name="app_version" translatable="false">2.5.1.git</string>
+    <string name="app_version" translatable="false">2.5.1.3.git</string>
     <string name="about_content_contact">Developed by Rafael J. Lucena\nContact: rafaa89(at)gmail.com</string>
     <string name="about_content_title_new_features">Last features and improvements:</string>
     <string name="about_content_new_features" translatable="false">
-        Version 2.5.1 2018-xx-xx:\nFilters added in Historial.\nAdded filters and scheduled downloads for Events.\nScheduled downloads improves.\n
+        Version 2.5.1 2018-xx-xx:\nFilters added in Historial.\nAdded filters and scheduled downloads for Events.\nScheduled downloads improves.\nCompact view for news (can be activated from settings).\nFont changes.\n
         \nVersion 2.5.0 2017-12-30:\nNew NewsView improving the user experience.\nSearch feature added on bookmarks and history screens.\nSupport added for The Independent, Daily Mail, The Sun, Metro UK, Evening Standard, Daily Mirror, The National Scotland, Daily Express, Sports Illustrated and WIRED.\nSection dialog improved.\nChange font size option in NewsView.\nAll sections revised.\nTwitter videos are now supported too.\nSmall bug fixes.\n
         \nVersion 2.4.0 2017-10-05:\nNew: Events (Happening now).\nAdded support for El Punt Avui, Catalonia Today, L\'esportiu, Nació Digital, El Nacional, WWWhat\'s new?, Vogue España, CounterPunch, Lucky Puppy Mag and The Berry.\nReaders improves.\nBug fixes.\n
         \nVersion 2.3.2 2017-08-20:\nPublications list in navigation panel ordered by user\'s accesses.\nDatabase simplified.\nVisual bugs fixes on Kitkat.\nVarious readers improved.\nOther miscellaneous fixes and improvements.\n
@@ -55,9 +55,7 @@
 - Idg (Sweden)\n
 - Veckans Affärer\n
 - Tech Times\n
-- Magazine Fashion &amp; arts\n
 - Astrophysical journal\n
-- FIFA\n
 - BuzzFeed News\n
 - BackChannel\n
 - The Wall Street Journal (USA)\n
@@ -135,14 +133,12 @@
     <string name="update">Update</string>
     <string name="not_now">Not now</string>
 
-
     <!-- * ******************** Hints **************************** * -->
     <string name="hint_pref_pro_mode">Enter PRO code</string>
     <string name="search">Search</string>
     <string name="hint_create_note">Enter one annotation</string>
     <string name="hint_email">Your email (optional)</string>
     <string name="hint_message_suggestion_report">Your message, suggestion or report</string>
-
 
     <!-- * ******************** Messages **************************** * -->
     <string name="msg_confirm_to_remove_all_saved_news">Confirm to remove all saved news</string>
@@ -173,7 +169,7 @@
     <string name="msg_no_bookmarks">You haven\'t bookmarked any news yet</string>
     <string name="msg_minimum_one_checked">One section must be checked</string>
     <string name="msg_no_events">No events at the moment</string>
-
+    <string name="msg_cant_apply_filter">Can\'t apply filter</string>
 
     <!-- * *************** Activities and fragment's titles ********************* * -->
     <string name="title_frg_settings_of">Settings of %1$s</string>
@@ -182,7 +178,6 @@
     <string name="menu_favorite">Favorite</string>
     <string name="menu_settings">Publication settings</string>
     <string name="menu_delete_all">Delete all</string>
-
 
     <!-- ***************************** Settings strings ********************************** -->
     <string name="pref_title_general">General</string>
@@ -205,6 +200,7 @@
     <string name="pref_favorite_sites">Favorite publications</string>
     <string name="pref_load_images">Load images</string>
     <string name="pref_load_images_summary">Set to ON consumes more battery and network data</string>
+    <string name="pref_load_images_compact">Compact view</string>
 
     <string name="pref_main_sites_key" translatable="false">app_pref1</string>
     <string name="pref_favorite_sites_key" translatable="false">app_pref2</string>
@@ -214,6 +210,7 @@
     <string name="pref_pro_code_key" translatable="false">app_pref7</string>
     <string name="pref_keep_news_key" translatable="false">app_pref8</string>
     <string name="pref_load_images_key" translatable="false">app_pref9</string>
+    <string name="pref_load_images_compact_key" translatable="false">app_pref10</string>
 
     <string name="pref_show_in_my_feed_key" translatable="false">site_pref1</string>
     <string name="pref_favorite_key" translatable="false">site_pref2</string>
@@ -229,6 +226,5 @@
     <string name="msg_needs_update" translatable="false">There is a new version of NewsUp available</string>
     <string name="msg_rate" translatable="false">Are you enjoying this app so far?\nWould you kindly rate it on the Google Play?</string>
     <string name="msg_report" translatable="false">What\'s your opinion about this app? Let\'s us know any problem, suggestion, complaint</string>
-    <string name="msg_cant_apply_filter">Can\'t apply filter</string>
 
 </resources>

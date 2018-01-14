@@ -49,7 +49,6 @@
     <string name="sat">Ds</string>
     <string name="sun">Dg</string>
 
-
     <!-- * ******************** Buttons **************************** * -->
     <string name="cancel">Cancel·lar</string>
     <string name="save">Guardar</string>
@@ -72,14 +71,12 @@
     <string name="update">Actualitza</string>
     <string name="not_now">Ara no</string>
 
-
     <!-- * ******************** Hints **************************** * -->
     <string name="hint_pref_pro_mode">Entra codi PRO</string>
     <string name="search">Busca</string>
     <string name="hint_create_note">Inserta anotació</string>
     <string name="hint_email">El teu email (opcional)</string>
     <string name="hint_message_suggestion_report">El teu missatge, suggeriment o informe d\'error</string>
-
 
     <!-- * ******************** Messages **************************** * -->
     <string name="msg_confirm_to_remove_all_saved_news">Confirma per eliminar tot</string>
@@ -110,6 +107,7 @@
     <string name="msg_no_bookmarks">Encara no has marcat cap notícia</string>
     <string name="msg_minimum_one_checked">Una secció ha de romandre marcada</string>
     <string name="msg_no_events">No hi ha esdeveniments en aquest moment</string>
+    <string name="msg_cant_apply_filter">No es pot aplicar el filtre</string>
 
     <!-- * *************** Activities and fragment's titles ********************* * -->
     <string name="title_frg_settings_of">Configuració de %1$s</string>
@@ -118,7 +116,6 @@
     <string name="menu_favorite">Favorit</string>
     <string name="menu_settings">Configuració de la publicació</string>
     <string name="menu_delete_all">Elimina tot</string>
-
 
     <!-- ***************************** Settings strings ********************************** -->
     <string name="pref_title_general">General</string>
@@ -141,6 +138,7 @@
     <string name="pref_favorite_sites">Publicacions favorites</string>
     <string name="pref_load_images">Carregar imatges</string>
     <string name="pref_load_images_summary">Activat consumeix més bateria i dades</string>
+    <string name="pref_load_images_compact">Vista compacta</string>
 
     <!-- ***************************** ***************** ********************************** -->
     <string name="about_content_contact">Desenvolupat per Rafael J. Lucena\nContacte: rafaa89(arrova)gmail.com</string>

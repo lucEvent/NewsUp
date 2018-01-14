@@ -70,8 +70,8 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
         getSupportActionBar().setHomeButtonEnabled(true);
 
         mAdapter = new NewsFilterAdapter(this, null, onBookmarkClick, NewsAdapterList.SortBy.byTime);
-        mAdapter.setLoadImages(AppSettings.loadImages());
-        mAdapter.showSiteLogo(true);
+        mAdapter.setUserPreferences();
+        mAdapter.showSiteIcon(true);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setAutoMeasureEnabled(true);

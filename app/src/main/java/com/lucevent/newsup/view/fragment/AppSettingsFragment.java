@@ -109,7 +109,7 @@ public class AppSettingsFragment extends PreferenceFragment
 
         } else if (key.equals(AppSettings.PREF_KEEP_NEWS_KEY))
             setUpPreferenceSummaries(PREF_KEEP_NEWS_MASK);
-        else if (key.equals(AppSettings.PREF_LOAD_IMAGES_KEY))
+        else if (key.equals(AppSettings.PREF_LOAD_IMAGES_KEY) || key.equals(AppSettings.PREF_COMPACTED_IMAGES_KEY))
             ((MainChangeListener) getActivity()).onLoadImagesPreferenceChanged();
     }
 
