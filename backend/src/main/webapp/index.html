@@ -7,14 +7,99 @@
     <link rel="stylesheet" href="css/main.css"/>
     <script type="text/javascript" src="https://platform.twitter.com/widgets.js"></script>
     <script async defer src='http://platform.instagram.com/es_ES/embeds.js'></script>
-    <script src="js/jquery-3.1.1.min.js"></script>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <style>
+#nav_sites{
+display: none;
+z-index: 98 !important;
+}
+
+    </style>
     <script>
     var v_title, v_author, v_age;
     var current_site =-1;
     var scrolled;
 
-    function display_list(data) {
-        $("#news_list").html(data);
+    function display_list(json) {
+        var html = "";
+
+        var i = 0;
+        var remaining = json.length-i;
+        var lastType=0;
+        while(remaining >0){
+
+            if (remaining%3==0){
+                if (lastType==0){
+                    html+="<div class='news_row'>"
+                        + cnv_big(json[i++]) + "<div class='col'>"
+                        + cnv_small_col(json[i++])
+                        + cnv_small_col(json[i++])
+                        + "</div></div>";
+                    lastType=1;
+                }
+                else if(lastType==1){
+                    html+="<div class='news_row'>"
+                        + cnv_small_row(json[i++])
+                        + cnv_small_row(json[i++])
+                        + cnv_small_row(json[i++])
+                        + "</div>";
+                    lastType=2;
+                }
+                else {
+                    html+="<div class='news_row'><div class='col'>"
+                        + cnv_small_col(json[i++])
+                        + cnv_small_col(json[i++]) + "</div>"
+                        + cnv_big(json[i++])
+                        + "</div>";
+                    lastType=0;
+                }
+            } else {
+                if (remaining>=5){
+                    html+="<div class='news_row'>"
+                        + cnv_big(json[i++]) + "<div class='col'>"
+                        + cnv_small_col(json[i++])
+                        + cnv_small_col(json[i++])
+                        + "</div></div><div class='news_row'>"
+                        + cnv_medium(json[i++])
+                        + cnv_medium(json[i++])
+                        + "</div>";
+                    lastType=2;
+                }
+                else if (remaining%2==0){
+                    html+="<div class='news_row'>"
+                        + cnv_medium(json[i++])
+                        + cnv_medium(json[i++])
+                        + "</div>";
+                }
+                else
+                    html+="<div class='news_row'>" + cnv_big(json[i++]) + "</div>";
+            }
+            remaining = json.length-i;
+        }
+
+        $("#news_list").html(html);
+    }
+
+    function cnv_big(n){return cnv("n_big",n,true);}
+    function cnv_small_col(n){return cnv("n_small_col",n,false);}
+    function cnv_small_row(n){return cnv("n_small_row",n,true);}
+    function cnv_medium(n){return cnv("n_medium",n,true);}
+    function cnv(n_class, n, tag){
+        var html = "<div class='news "+ n_class + "' sitecode='" + n.sc + "' title='" + n.title + "' age='" + n.age + "' nid='" + n.nid + "' style='background";
+
+        if (n.imgsrc.length>0)
+            html += "-image:url(" + n.imgsrc + ");'>";
+        else
+            html += "-color:#558B2F'>";
+
+        html+="<div class='text'>";
+
+        if (tag && n.tags.length>0)
+            html+="<div class='tag'>" + n.tags[0] + "</div>";
+
+        html += "<div class='title'>" + n.title+ "</div></div></div>";
+        return html;
     }
     function display_error(error) {
      //   $("#news_list").text(error);
@@ -24,12 +109,13 @@
         var html = ""
         for (var i = 0; i < json.length; ++i) {
             var site = json[i];
-            html += "<li class='site' id='" + site.code + "' co='"+ site.co + "' la='"+ site.la + "' ty='"+ site.ty + "'><img src='img/" + site.code + ".png'><span>"+ site.name + "</span></li>";
+            html += "<span class='site' id='" + site.code + "' co='"+ site.co + "' la='"+ site.la + "' ty='"+ site.ty + "'><img src='img/" + site.code + ".png'>" + site.name + "</span>";
         }
 
-        $("#navigation").html(html);
+        $("#sites").html(html);
     }
     function display_sections(json) {
+        $("#current_section").text(json[0].name);
         var html = ""
         for (var i = 0; i < json.length; ++i) {
             var s = json[i];
@@ -40,28 +126,28 @@
                 _class="section groupsection";
             else if (s.level==1)
                 _class="section subsection";
-            html += "<a class='"+ _class +"' index='" + i + "'><p>" + s.name + "</p></a>";
+            html += "<p class='"+ _class +"' index='" + i + "'><a>" + s.name + "</a></p>";
         }
-        //
-        $("#nu_sections").html(html);
+        $("#sections-content").html(html);
     }
     function display_news(data) {
-        scrolled = $("body").scrollTop();
-        $("body").scrollTop(0);
-        $("#article_box")[0].style.visibility = 'visible';
-        $("#news_list")[0].style.visibility = 'hidden';
+        scrolled = $(window).scrollTop();
+        $(window).scrollTop(0);
+
         $("#title").text(v_title);
         $("#date").text(v_age);
         $("#content").html(data);
+
+        $("#article_box")[0].style.visibility = 'visible';
+        $("#news_list")[0].style.visibility = 'hidden';
     }
     function closeNews(data) {
         $("#article_box")[0].style.visibility = 'hidden';
-        $("#content").html("");
         $("#news_list")[0].style.visibility = 'visible';
-        $("body").scrollTop(scrolled);
+        $(window).scrollTop(scrolled);
+        $("#content").html("");
     }
     function display_site_news(site_code, site_name){
-        console.log("displaying news of:"+site_code);
         current_site=site_code;
 
         $.ajax("/web?index&site=" + site_code + ",0", {
@@ -75,9 +161,8 @@
 
         $("#news_list").text("");
 
-        var site_info = $("#site_info");
-        site_info.find("img").eq(0).attr('src',"img/"+ site_code + ".png");
-        site_info.find("span").eq(0).text(site_name);
+        $("#current_pubicon").attr('src',"img/"+ site_code + ".png");
+        $("#current_pubname").text(site_name);
     }
 
     var sCountry = 0;
@@ -96,20 +181,28 @@
         if (sCategory!="0") {
             result += "[ty="+sCategory+"]"
         }
-   //     console.log("query: "+ result);
         return result;
     }
 
-	$(document).ready(function () {
+    function display_site_selection(){
+         $("#nav_sites").show(400);
+         $("#cur_pub").hide(0);
+         $("#news_list").hide(0);
+    }
+    function hide_site_selection(){
+        $("#cur_pub").show(0);
+        $("#news_list").show(0);
+        $("#nav_sites").hide(400);
+    }
 
-        $("#article_box")[0].style.visibility = 'hidden';
+	$(document).ready(function () {
 
         $.ajax("/web?sites", {
                 success: display_sites,
                 error: display_error
         });
 
-        display_site_news(145,"Europa Press");
+        display_site_news(100,"El País");
 
         $(".closer").click(function() {
             closeNews();
@@ -141,11 +234,27 @@
             $('.site').hide();
             $(parseSelection()).show();
         });
+        $("#current_pub").click(display_site_selection);
+
+        $("#nav_closer").click(hide_site_selection);
+
+        $("#current_pub").mouseenter(function() {
+            $(this).find("img").eq(0).attr('src',"img/swap_hover.svg");
+        }).mouseleave(function() {
+            $(this).find("img").eq(0).attr('src',"img/swap.svg");
+        });
+
+        $("#sections_header").mouseenter(function() {
+            $(this).find("img").eq(0).attr('src',"img/dropdown_hover.svg");
+        }).mouseleave(function() {
+            $(this).find("img").eq(0).attr('src',"img/dropdown.svg");
+        });
 
     });
 
     $(document).on('click', '.site', function() {
         display_site_news($(this).attr("id"),$(this).text());
+        hide_site_selection();
     });
 
     $(document).on('click', '.section', function() {
@@ -155,6 +264,7 @@
             success: display_list,
             error: display_error("Error loading news from .section")
         });
+        $("#current_section").text($(this).text());
     });
 
     $(document).on('click', '.news', function () {
@@ -174,74 +284,94 @@
 <body>
 
 <nav id="nav_sites">
-    <div>
-        <span>Country:</span>
-        <select id="sel_country">
-            <option value="0">All</option>
-            <option value="23">Spain</option>
-            <option value="56">UK</option>
-            <option value="24">USA</option>
-            <option value="29">France</option>
-            <option value="60">Sweden</option>
-            <option value="10">Canada</option>
-            <option value="34">India</option>
-            <option value="28">Finland</option>
-            <option value="58">Russia</option>
-            <option value="45">Mexico</option>
-            <option value="11">Chile</option>
-            <option value="64">Venezuela</option>
-            <option value="3">Australia</option>
-            <option value="65">Various</option>
-        </select>
-    </div>
-    <div>
-        <span>Language:</span>
-        <select id="sel_language">
-            <option value="0">All</option>
-            <option value="7">Spanish</option>
-            <option value="12">English</option>
-            <option value="9">French</option>
-            <option value="17">Swedish</option>
-            <option value="4">Catalan</option>
-            <option value="8">Finnish</option>
-            <option value="19">Various</option>
-        </select>
-    </div>
-    <div>
-        <span>Category:</span>
-        <select id="sel_category">
-            <option value="0">All</option>
-            <option value="1">News</option>
-            <option value="2">Sport news</option>
-            <option value="3">Technology</option>
-            <option value="4">Blogs</option>
-            <option value="5">Magazines</option>
-            <option value="6">Astronomy</option>
-            <option value="7">Science</option>
-            <option value="8">Videogames</option>
-            <option value="9">Lifestyle</option>
-            <option value="10">Motor</option>
-            <option value="11">Entertainment</option>
-            <option value="12">Fitness</option>
-            <option value="13">Music</option>
-        </select>
-    </div>
+    <img id="nav_closer" src="img/close.svg">
+    <table id="filters">
+        <tr>
+            <th>Country</th>
+            <th>Language</th>
+            <th>Category</th>
+        </tr>
+        <tr>
+            <td>
+                <select id="sel_country">
+                    <option value="0">All</option>
+                    <option value="23">Spain</option>
+                    <option value="56">UK</option>
+                    <option value="24">USA</option>
+                    <option value="29">France</option>
+                    <option value="60">Sweden</option>
+                    <option value="10">Canada</option>
+                    <option value="34">India</option>
+                    <option value="28">Finland</option>
+                    <option value="58">Russia</option>
+                    <option value="45">Mexico</option>
+                    <option value="11">Chile</option>
+                    <option value="64">Venezuela</option>
+                    <option value="3">Australia</option>
+                    <option value="65">Various</option>
+                </select>
+            </td>
+            <td>
+                <select id="sel_language">
+                    <option value="0">All</option>
+                    <option value="7">Spanish</option>
+                    <option value="12">English</option>
+                    <option value="9">French</option>
+                    <option value="17">Swedish</option>
+                    <option value="4">Catalan</option>
+                    <option value="8">Finnish</option>
+                    <option value="19">Various</option>
+                </select>
+            </td>
+            <td>
+                <select id="sel_category">
+                    <option value="0">All</option>
+                    <option value="1">News</option>
+                    <option value="2">Sport news</option>
+                    <option value="3">Technology</option>
+                    <option value="4">Blogs</option>
+                    <option value="5">Magazines</option>
+                    <option value="6">Astronomy</option>
+                    <option value="7">Science</option>
+                    <option value="8">Videogames</option>
+                    <option value="9">Lifestyle</option>
+                    <option value="10">Motor</option>
+                    <option value="11">Entertainment</option>
+                    <option value="12">Fitness</option>
+                    <option value="13">Music</option>
+                </select>
+            </td>
+        </tr>
+    </table>
 
-    <ul id="navigation">
-    </ul>
+    <div class="divisor"></div>
+
+    <div id="sites">
+    </div>
 </nav>
 
-<div id="site_info">
-    <img src="img/1400.png"><span>Vice</span>
-</div>
+<nav id="top_bar">
+
+    <img id="favicon" src="img/app.png">
+
+    <div id="current_pub">
+        <img id="swapper" src="img/swap.svg">
+
+        <img id="current_pubicon" src="img/145.png">
+        <span id="current_pubname">Europa Press</span>
+    </div>
+    <div id="sections">
+        <span id="sections_header">
+            <img id="dropdown_icon" src="img/dropdown.svg">
+            <span id="current_section">Portada</span>
+        </span>
+        <div id="sections-content">
+        </div>
+    </div>
+</nav>
 
 <article id="news_list">
 </article>
-
-<aside id="nav_sections">
-    <h3>Sections</h3>
-    <p id="nu_sections"></p>
-</aside>
 
 <footer id="nu_footer">
 </footer>

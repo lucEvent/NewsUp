@@ -11,6 +11,9 @@ import com.lucevent.newsup.data.util.Section;
 import com.lucevent.newsup.data.util.Sections;
 import com.lucevent.newsup.data.util.Site;
 
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
@@ -42,25 +45,27 @@ public class BackendParser {
         return res;
     }
 
-    public static StringBuilder toHtml(News news)
+    public static StringBuilder json(StringBuilder builder, News news) throws UnsupportedEncodingException
     {
-        StringBuilder res = new StringBuilder("<div class='news' sitecode='")
-                .append(news.site_code)
-                .append("' title=\"")
-                .append(news.title.replace("\"", "'"))
-                .append("\" age='")
-                .append(Date.getAge(news.date))
-                .append("' nid='")
-                .append(news.id)
-                .append("'><h3>")
-                .append(news.title)
-                .append("</h3><p>")
-                .append(news.description)
-                .append("</p><br><p><small><em>");
-        for (String tag : news.tags)
-            res.append("<span class='tag'> ").append(tag).append(" </span>");
-        res.append("</em></small></p></div>");
-        return res;
+        String imgsrc = news.enclosures.isEmpty() ? "" : news.enclosures.get(0).src;
+
+        builder.append("{\"title\":").append(JSONObject.quote(news.title))
+                .append(", \"sc\":").append(news.site_code)
+                .append(", \"age\":\"").append(Date.getAge(news.date))
+                .append("\", \"imgsrc\":\"").append(imgsrc)
+                .append("\", \"nid\":").append(news.id)
+                .append(", \"dscr\":").append(JSONObject.quote(news.description))
+                .append(", \"tags\":[");
+
+        int i = 0;
+        for (String tag : news.tags) {
+            if (i++ != 0)
+                builder.append(",");
+            builder.append("\"").append(tag).append("\"");
+        }
+        builder.append("]}");
+
+        return builder;
     }
 
     public static StringBuilder toEntry(NewsArray news)
@@ -74,14 +79,21 @@ public class BackendParser {
         return sb;
     }
 
-    public static StringBuilder toHtml(NewsArray news)
+    public static String json(NewsArray news)
     {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder builder = new StringBuilder(1000);
+        builder.append("[");
 
+        int i = 0;
         for (News N : news)
-            sb.append(BackendParser.toHtml(N));
+            try {
+                if (i++ != 0)
+                    builder.append(",");
+                json(builder, N);
+            } catch (Exception ignored) {
+            }
 
-        return sb;
+        return builder.append("]").toString();
     }
 
     public static StringBuilder json(Statistics stats, String options, String[] filters)

@@ -86,7 +86,8 @@ public class WebServlet extends HttpServlet {
         NewsArray news = site.readNewsHeaders(section_codes);
         site.news.addAll(news);
 
-        resp.getWriter().println(BackendParser.toHtml(news).toString());
+        resp.setContentType("json");
+        resp.getWriter().println(BackendParser.json(news));
     }
 
     private void resp_content(Site site, int news_id, HttpServletResponse resp) throws IOException
