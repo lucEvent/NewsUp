@@ -1,5 +1,7 @@
 package com.lucevent.newsup.view.adapter;
 
+import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +11,7 @@ import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.io.BookmarksManager;
+import com.lucevent.newsup.net.ConnectivityManager;
 import com.lucevent.newsup.view.adapter.viewholder.MoreSectionsViewHolder;
 import com.lucevent.newsup.view.adapter.viewholder.NewsCompactViewHolder;
 import com.lucevent.newsup.view.adapter.viewholder.NewsViewHolder;
@@ -108,18 +111,27 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.onMoreClick = onMoreClickListener;
     }
 
-    public void setUserPreferences()
+    public void setUserPreferences(@NonNull Context context)
     {
         setLoadImages(
+                new ConnectivityManager(context),
                 AppSettings.loadImages(),
-                AppSettings.loadCompactedImages()
+                AppSettings.loadCompactedImages(),
+                AppSettings.loadImagesOnlyOnWifi()
         );
     }
 
-    public void setLoadImages(boolean loadImages, boolean compactedImages)
+    public void setLoadImages(ConnectivityManager cm, boolean loadImages, boolean compactedImages, boolean onlyOnWiFi)
     {
-        this.mImages = loadImages;
-        this.mCompactedImages = compactedImages;
+        if (loadImages && cm.isInternetAvailable()) {
+            if (!onlyOnWiFi || cm.isOnWifi()) {
+                mImages = true;
+                mCompactedImages = compactedImages;
+                return;
+            }
+        }
+        mImages = false;
+        mCompactedImages = false;
     }
 
     public void setNewDataSet(Collection<News> newDataSet)

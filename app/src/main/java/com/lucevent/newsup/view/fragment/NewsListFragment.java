@@ -154,7 +154,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
 
     public void onLoadImagesPreferenceChanged()
     {
-        adapter.setUserPreferences();
+        adapter.setUserPreferences(getActivity());
     }
 
     private KernelManager dataManager;
@@ -197,7 +197,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
             mainView = inflater.inflate(R.layout.f_news_list, container, false);
 
             adapter = new NewsAdapter(this, this, onBookmarkClick, NewsAdapterList.SortBy.byTime);
-            adapter.setUserPreferences();
+            onLoadImagesPreferenceChanged();
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             layoutManager.setAutoMeasureEnabled(true);

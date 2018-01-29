@@ -139,6 +139,7 @@
     <string name="pref_load_images">Carregar imatges</string>
     <string name="pref_load_images_summary">Activat consumeix més bateria i dades</string>
     <string name="pref_load_images_compact">Vista compacta</string>
+    <string name="pref_load_images_wifi_only">Només amb Wi-Fi</string>
 
     <!-- ***************************** ***************** ********************************** -->
     <string name="about_content_contact">Desenvolupat per Rafael J. Lucena\nContacte: rafaa89(arrova)gmail.com</string>

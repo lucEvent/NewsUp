@@ -6,17 +6,31 @@ import android.support.annotation.NonNull;
 
 public class ConnectivityManager {
 
-    private android.net.ConnectivityManager connectivityManager;
+    private android.net.ConnectivityManager mConnectivityManager;
 
     public ConnectivityManager(@NonNull Context context)
     {
-        connectivityManager = (android.net.ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        mConnectivityManager = (android.net.ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
     public boolean isInternetAvailable()
     {
-        NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+        NetworkInfo activeNetwork = mConnectivityManager.getActiveNetworkInfo();
         return activeNetwork != null && activeNetwork.isConnected();
+    }
+
+    public boolean isOnWifi()
+    {
+        return mConnectivityManager
+                .getNetworkInfo(android.net.ConnectivityManager.TYPE_WIFI)
+                .isConnectedOrConnecting();
+    }
+
+    public boolean isOnMobileData()
+    {
+        return mConnectivityManager
+                .getNetworkInfo(android.net.ConnectivityManager.TYPE_MOBILE)
+                .isConnectedOrConnecting();
     }
 
 }

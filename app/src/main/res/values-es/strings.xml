@@ -139,6 +139,7 @@
     <string name="pref_load_images">Cargar imágenes</string>
     <string name="pref_load_images_summary">Activado consume más batería y datos</string>
     <string name="pref_load_images_compact">Vista compacta</string>
+    <string name="pref_load_images_wifi_only">Solo con Wi-Fi</string>
 
     <!-- ***************************** ***************** ********************************** -->
     <string name="about_content_contact">Desarrollado por Rafael J. Lucena\nContacto: rafaa89(arroba)gmail.com</string>

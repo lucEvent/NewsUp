@@ -24,12 +24,13 @@ public class AppSettings {
     private static Set<String> DEFAULT_DOWNLOAD_SECTIONS;
     private static final String DEFAULT_KEEP_TIME = "2592000";
     private static final boolean DEFAULT_LOAD_IMAGES = true;
+    private static final boolean DEFAULT_LOAD_IMAGES_ONLY_ON_WIFI = true;
     private static final boolean DEFAULT_COMPACTED_IMAGES = false;
     private static final boolean DEFAULT_NIGHT_MODE = false;
 
     public static String PREF_MAIN_SITES_KEY, PREF_FAVORITE_SITES_KEY, PREF_SCHEDULE_DOWNLOADS_KEY,
             PREF_CLEAN_CACHE_KEY, PREF_PRO_CODE_KEY, PREF_KEEP_NEWS_KEY, PREF_LOAD_IMAGES_KEY,
-            PREF_COMPACTED_IMAGES_KEY;
+            PREF_COMPACTED_IMAGES_KEY, PREF_LOAD_IMAGES_ONLY_ON_WIFI_KEY;
     private static final String PREF_NIGHT_MODE_KEY = "night_mode";
     private static final String PREF_FONT_SIZE_KEY = "font_size";
     public static final String LAST_DATA_REVISION_KEY = "last_data_rev";
@@ -52,6 +53,7 @@ public class AppSettings {
             PREF_KEEP_NEWS_KEY = r.getString(R.string.pref_keep_news_key);
             PREF_LOAD_IMAGES_KEY = r.getString(R.string.pref_load_images_key);
             PREF_COMPACTED_IMAGES_KEY = r.getString(R.string.pref_load_images_compact_key);
+            PREF_LOAD_IMAGES_ONLY_ON_WIFI_KEY = r.getString(R.string.pref_load_images_wifi_only_key);
 
             PREF_SITE_MAIN_SECTIONS_KEY = r.getString(R.string.pref_main_sections_key);
             PREF_SITE_DOWNLOAD_SECTIONS_KEY = r.getString(R.string.pref_download_sections_key);
@@ -209,6 +211,11 @@ public class AppSettings {
     public static boolean loadCompactedImages()
     {
         return preferences.getBoolean(PREF_COMPACTED_IMAGES_KEY, DEFAULT_COMPACTED_IMAGES);
+    }
+
+    public static boolean loadImagesOnlyOnWifi()
+    {
+        return preferences.getBoolean(PREF_LOAD_IMAGES_ONLY_ON_WIFI_KEY, DEFAULT_LOAD_IMAGES_ONLY_ON_WIFI);
     }
 
     private static int[] getIntArray(Set<String> set)

@@ -51,6 +51,12 @@
             android:key="@string/pref_load_images_compact_key"
             android:title="@string/pref_load_images_compact"/>
 
+        <SwitchPreference
+            android:defaultValue="true"
+            android:dependency="@string/pref_load_images_key"
+            android:key="@string/pref_load_images_wifi_only_key"
+            android:title="@string/pref_load_images_wifi_only"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_title_data">
