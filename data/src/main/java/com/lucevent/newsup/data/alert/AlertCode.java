@@ -37,5 +37,6 @@ public interface AlertCode {
     int BTN_CANCEL = 2;
     int BTN_UPDATE = 3;
     int BTN_NOT_NOW = 4;
+    int BTN_RATE = 5;
 
 }

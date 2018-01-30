@@ -26,18 +26,15 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/pref_title_content">
+    <PreferenceCategory android:title="@string/pref_title_downloads">
 
         <Preference
             android:key="@string/pref_schedule_downloads_key"
             android:title="@string/pref_schedule_downloads"/>
 
-        <ListPreference
-            android:defaultValue="2592000"
-            android:entries="@array/keep_time_titles"
-            android:entryValues="@array/keep_time_values"
-            android:key="@string/pref_keep_news_key"
-            android:title="@string/pref_keep_news"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_title_images">
 
         <SwitchPreference
             android:defaultValue="true"
@@ -59,7 +56,14 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/pref_title_data">
+    <PreferenceCategory android:title="@string/pref_title_storage">
+
+        <ListPreference
+            android:defaultValue="2592000"
+            android:entries="@array/keep_time_titles"
+            android:entryValues="@array/keep_time_values"
+            android:key="@string/pref_keep_news_key"
+            android:title="@string/pref_keep_news"/>
 
         <com.lucevent.newsup.view.preference.CleanCachePreference
             android:key="@string/pref_clean_cache_key"

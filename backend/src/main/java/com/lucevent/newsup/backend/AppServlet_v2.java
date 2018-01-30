@@ -190,13 +190,12 @@ public class AppServlet_v2 extends HttpServlet {
     {
         Alerts alerts = new Alerts();
 
-        if (app_version == null || app_version.isEmpty() ||
-                !(app_version.startsWith("2.4.") || app_version.startsWith("2.5."))) {
+        if (app_version == null || app_version.isEmpty() || !app_version.startsWith("2.5.")) {
             alerts.addUpdateAlert();
+        } else {
+            alerts.addRateAlert();
+            alerts.addReportAlert();
         }
-
-        alerts.addRateAlert();
-        alerts.addReportAlert();
 
         resp.getWriter().println(BackendParser.json(alerts));
     }

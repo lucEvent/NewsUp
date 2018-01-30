@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.Sites;
+import com.lucevent.newsup.data.alert.Alert;
 import com.lucevent.newsup.data.event.Event;
 import com.lucevent.newsup.data.event.Source;
 import com.lucevent.newsup.data.util.News;
@@ -39,7 +40,8 @@ public class NewsReaderManager {
 
     private static ConnectivityManager connectivityManager;
 
-    private NewsReader newsreader;
+    private NewsReader newsReader;
+    private AlertReader alertReader;
     private Handler uiCallback;
     private StorageCallback mDB;
 
@@ -47,6 +49,7 @@ public class NewsReaderManager {
     private static final int NUM_SLAVE_THREADS = NewsReader.NUM_SERVERS;
     private final Thread masterThread;
     private final Thread slaveThreads[];
+    private static boolean checkAlerts = true;
 
     private final ArrayList<NewsPetition> petitionQueue;
     private final NewsSet newsQueue;
@@ -55,7 +58,9 @@ public class NewsReaderManager {
     {
         mDB = storageCallback;
 
-        newsreader = new NewsReader(context.getString(R.string.app_version));
+        String appVersion = context.getString(R.string.app_version);
+        newsReader = new NewsReader(appVersion);
+        alertReader = new AlertReader(appVersion);
         connectivityManager = new ConnectivityManager(context);
 
         petitionQueue = new ArrayList<>();
@@ -194,6 +199,14 @@ public class NewsReaderManager {
         public void run()
         {
             while (true) {
+                if (checkAlerts && uiCallback != null) {
+                    checkAlerts = false;
+
+                    Alert alert = alertReader.fetch();
+                    if (uiCallback != null && alert != null)
+                        uiCallback.obtainMessage(AppCode.ALERT, alert).sendToTarget();
+                }
+
                 NewsPetition petition = null;
                 synchronized (petitionQueue) {
                     if (!petitionQueue.isEmpty()) {
@@ -233,7 +246,7 @@ public class NewsReaderManager {
                         if (uiCallback != null)
                             uiCallback.obtainMessage(AppCode.NEWS_COLLECTION, news).sendToTarget();
 
-                        // Add news to newsqueue
+                        // Add news to newsQueue
                         synchronized (newsQueue) {
                             newsQueue.addAll(news);
                             newsQueue.notifyAll();
@@ -329,7 +342,7 @@ public class NewsReaderManager {
 
     private NewsArray readHeaders(Site site, int[] section_codes)
     {
-        NewsArray news = newsreader.readNewsHeaders(site.code, section_codes);
+        NewsArray news = newsReader.readNewsHeaders(site.code, section_codes);
         if (news == null) {
             try {
                 news = site.readNewsHeaders(section_codes);
@@ -342,7 +355,7 @@ public class NewsReaderManager {
 
     private NewsArray readEventHeaders(Event event, Site site, int[] section_codes)
     {
-        NewsArray news = newsreader.readEventHeaders(site.code, section_codes, event.code);
+        NewsArray news = newsReader.readEventHeaders(site.code, section_codes, event.code);
         if (news == null) {
             try {
 
@@ -360,7 +373,7 @@ public class NewsReaderManager {
 
     private void readContent(int server, Site site, News news)
     {
-        newsreader.readNewsContent(server, news);
+        newsReader.readNewsContent(server, news);
 
         if (news.content.isEmpty()) {
             try {

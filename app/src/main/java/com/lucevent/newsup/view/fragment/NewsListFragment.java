@@ -30,6 +30,7 @@ import android.widget.ProgressBar;
 import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.Main;
 import com.lucevent.newsup.R;
+import com.lucevent.newsup.data.alert.Alert;
 import com.lucevent.newsup.data.event.Event;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.Section;
@@ -45,6 +46,7 @@ import com.lucevent.newsup.services.StatisticsService;
 import com.lucevent.newsup.services.util.DownloadResponse;
 import com.lucevent.newsup.view.adapter.NewsAdapter;
 import com.lucevent.newsup.view.dialog.SectionsDialog;
+import com.lucevent.newsup.view.util.AppAlertDialog;
 import com.lucevent.newsup.view.util.NewsAdapterList;
 import com.lucevent.newsup.view.util.NewsView;
 import com.lucevent.newsup.view.util.OnBackPressedListener;
@@ -380,6 +382,11 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
                         snackbar.getView().setBackgroundColor(color);
                     }
                     snackbar.show();
+                    break;
+                case AppCode.ALERT:
+                    new AppAlertDialog(service.getActivity())
+                            .prepare((Alert) msg.obj)
+                            .start();
                     break;
                 case AppCode.ERROR:
                     AppSettings.printerror("[NLF] Error received by the Handler", null);

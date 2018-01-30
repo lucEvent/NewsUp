@@ -34,7 +34,6 @@ import com.lucevent.newsup.kernel.ScheduleManager;
 import com.lucevent.newsup.net.MainChangeListener;
 import com.lucevent.newsup.permission.StoragePermissionHandler;
 import com.lucevent.newsup.services.ScheduledDownloadReceiver;
-import com.lucevent.newsup.services.util.DownloadResponse;
 import com.lucevent.newsup.view.activity.ContactActivity;
 import com.lucevent.newsup.view.activity.SelectSitesActivity;
 import com.lucevent.newsup.view.fragment.AboutFragment;
@@ -47,8 +46,6 @@ import com.lucevent.newsup.view.fragment.NewsListFragment;
 import com.lucevent.newsup.view.fragment.NotesFragment;
 import com.lucevent.newsup.view.fragment.StatisticsFragment;
 import com.lucevent.newsup.view.util.OnBackPressedListener;
-
-import java.util.ArrayList;
 
 public class Main extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         MainChangeListener {
@@ -111,8 +108,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
         fragmentManager.addFragment(newsFragment, R.id.nav_my_news);
 
-        //  new AlertService(this, null)
-        //          .fetch(getString(R.string.app_version));
     }
 
     @Override

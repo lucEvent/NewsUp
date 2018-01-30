@@ -1,15 +1,19 @@
 package com.lucevent.newsup.view.util;
 
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.widget.Toast;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
+import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.alert.Alert;
 import com.lucevent.newsup.data.alert.AlertCode;
+import com.lucevent.newsup.view.activity.ContactActivity;
 
 public class AppAlertDialog implements AlertCode {
 
@@ -26,15 +30,17 @@ public class AppAlertDialog implements AlertCode {
         return -1;
     }
 
-    private DialogInterface.OnClickListener parseAction(int action)
+    private View.OnClickListener parseAction(int action)
     {
         switch (action) {
             case ACTION_GOOGLE_PLAY:
                 return onGooglePlayAction;
             case ACTION_REPORT:
                 return onReportAction;
+            case ACTION_DO_NOT_ASK_AGAIN:
+                return onDoNotAskAgainAction;
             default:
-                return null;
+                return onDismissAction;
         }
     }
 
@@ -51,55 +57,67 @@ public class AppAlertDialog implements AlertCode {
                 return R.string.update;
             case BTN_NOT_NOW:
                 return R.string.not_now;
+            case BTN_RATE:
+                return R.string.rate;
         }
         return R.string.ok;
     }
 
-    private Context mContext;
+    private Activity mContext;
     private AlertDialog.Builder mBuilder;
     private AlertDialog mDialog;
+    private Alert mAlert;
+    private View mView;
 
-    public AppAlertDialog(Context context)
+    public AppAlertDialog(Activity context)
     {
         mContext = context;
         mBuilder = new AlertDialog.Builder(context);
+        mView = LayoutInflater.from(context).inflate(R.layout.d_alert, null, false);
     }
 
     public AppAlertDialog prepare(Alert alert)
     {
-        if (alert.message_code == MESSAGE_CUSTOM)
-            mBuilder.setMessage(alert.message);
-        else
-            mBuilder.setMessage(parseMessage(alert.message_code));
+        mAlert = alert;
 
-        DialogInterface.OnClickListener action;
+        TextView msg = (TextView) mView.findViewById(R.id.msg);
+        if (alert.message_code == MESSAGE_CUSTOM)
+            msg.setText(alert.message);
+        else
+            msg.setText(parseMessage(alert.message_code));
+
+        Button btn = (Button) mView.findViewById(R.id.btn_1);
         if (alert.btn_start_code != BTN_HIDDEN) {
-            action = parseAction(alert.btn_start_action);
+            btn.setOnClickListener(parseAction(alert.btn_start_action));
             if (alert.btn_start_code == BTN_CUSTOM)
-                mBuilder.setNegativeButton(alert.btn_start_text, action);
+                btn.setText(alert.btn_start_text);
             else
-                mBuilder.setNegativeButton(
-                        parseButtonText(alert.btn_start_code),
-                        action);
-        }
+                btn.setText(parseButtonText(alert.btn_start_code));
+        } else
+            btn.setVisibility(View.GONE);
+
+        btn = (Button) mView.findViewById(R.id.btn_2);
         if (alert.btn_center_code != BTN_HIDDEN) {
-            action = parseAction(alert.btn_center_action);
+            btn.setOnClickListener(parseAction(alert.btn_center_action));
             if (alert.btn_center_code == BTN_CUSTOM)
-                mBuilder.setNeutralButton(alert.btn_center_text, action);
+                btn.setText(alert.btn_center_text);
             else
-                mBuilder.setNeutralButton(
-                        parseButtonText(alert.btn_center_code),
-                        action);
-        }
+                btn.setText(parseButtonText(alert.btn_center_code));
+        } else
+            btn.setVisibility(View.GONE);
+
+        btn = (Button) mView.findViewById(R.id.btn_3);
         if (alert.btn_end_code != BTN_HIDDEN) {
-            action = parseAction(alert.btn_end_action);
+            btn.setOnClickListener(parseAction(alert.btn_end_action));
             if (alert.btn_end_code == BTN_CUSTOM)
-                mBuilder.setPositiveButton(alert.btn_end_text, action);
+                btn.setText(alert.btn_end_text);
             else
-                mBuilder.setPositiveButton(
-                        parseButtonText(alert.btn_end_code),
-                        action);
-        }
+                btn.setText(parseButtonText(alert.btn_end_code));
+        } else
+            btn.setVisibility(View.GONE);
+
+        mBuilder.setView(mView)
+                .setCancelable(false);
         return this;
     }
 
@@ -116,22 +134,40 @@ public class AppAlertDialog implements AlertCode {
             mDialog.dismiss();
     }
 
-
     /* ***************** Actions ***************** */
-    private DialogInterface.OnClickListener onGooglePlayAction = new DialogInterface.OnClickListener() {
+    private View.OnClickListener onGooglePlayAction = new View.OnClickListener() {
         @Override
-        public void onClick(DialogInterface dialog, int which)
+        public void onClick(View v)
         {
+            dismiss();
             mContext.startActivity(new Intent(Intent.ACTION_VIEW,
                     Uri.parse("market://details?id=" + mContext.getPackageName())));
         }
     };
 
-    private DialogInterface.OnClickListener onReportAction = new DialogInterface.OnClickListener() {
+    private View.OnClickListener onReportAction = new View.OnClickListener() {
         @Override
-        public void onClick(DialogInterface dialog, int which)
+        public void onClick(View v)
         {
-            Toast.makeText(mContext, "onReportAction", Toast.LENGTH_LONG).show();
+            dismiss();
+            mContext.startActivity(new Intent(mContext, ContactActivity.class));
+        }
+    };
+
+    private View.OnClickListener onDoNotAskAgainAction = new View.OnClickListener() {
+        @Override
+        public void onClick(View v)
+        {
+            dismiss();
+            AppSettings.setAlertAsShown(mAlert.id);
+        }
+    };
+
+    private View.OnClickListener onDismissAction = new View.OnClickListener() {
+        @Override
+        public void onClick(View v)
+        {
+            dismiss();
         }
     };
 

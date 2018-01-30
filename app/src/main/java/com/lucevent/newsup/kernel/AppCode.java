@@ -12,6 +12,7 @@ public interface AppCode {
     int NEWS_LOADED = 11;
     int NO_INTERNET = 12;
     int REPORT_SEND_OK = 13;
+    int ALERT = 14;
 
     int REQUEST_ADD_CONTENT = 30;
 

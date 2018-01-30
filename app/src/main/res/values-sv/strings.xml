@@ -70,6 +70,7 @@
     <string name="no">Nej</string>
     <string name="update">Uppdatera</string>
     <string name="not_now">Inte nu</string>
+    <string name="rate">Betygsätta</string>
 
     <!-- * ******************** Hints **************************** * -->
     <string name="hint_pref_pro_mode">Skriva in PRO kod</string>
@@ -108,6 +109,9 @@
     <string name="msg_minimum_one_checked">En sektion måste kontrolleras</string>
     <string name="msg_no_events">Inga händelser just nu</string>
     <string name="msg_cant_apply_filter">Kan inte applicera filter</string>
+    <string name="msg_needs_update">Det finns en ny version av NewsUp tillgänglig</string>
+    <string name="msg_rate">Tycker du om den här appen hittills? Skulle du betygsätta det på Google Play?</string>
+    <string name="msg_report">Har du något problem, förslag eller klagomål om den här appen? Berätta för oss</string>
 
     <!-- * *************** Activities and fragment's titles ********************* * -->
     <string name="title_frg_settings_of">Inställningar för %1$s</string>
@@ -119,8 +123,9 @@
 
     <!-- ***************************** Settings strings ********************************** -->
     <string name="pref_title_general">Allmän</string>
-    <string name="pref_title_data">Data</string>
-    <string name="pref_title_content">Innehåll</string>
+    <string name="pref_title_downloads">Nedladdningar</string>
+    <string name="pref_title_images">Bilder</string>
+    <string name="pref_title_storage">Lagring</string>
 
     <string name="pref_clean_cache">Städa cache</string>
     <string name="pref_main_sites">Huvudpublikationer</string>

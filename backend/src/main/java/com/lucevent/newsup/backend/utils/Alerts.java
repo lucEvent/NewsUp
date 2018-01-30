@@ -31,7 +31,7 @@ public class Alerts extends java.util.ArrayList<Alert>
     {
         Alert updateAlert = new Alert();
         updateAlert.id = 1;
-        updateAlert.probability = 5;
+        updateAlert.probability = 10;
         updateAlert.message_code = MESSAGE_REPORT;
 
         updateAlert.btn_start_code = BTN_NO;
@@ -49,7 +49,7 @@ public class Alerts extends java.util.ArrayList<Alert>
     {
         Alert updateAlert = new Alert();
         updateAlert.id = 2;
-        updateAlert.probability = 5;
+        updateAlert.probability = 10;
         updateAlert.message_code = MESSAGE_RATE_NOW;
 
         updateAlert.btn_start_code = BTN_NO;
@@ -58,7 +58,7 @@ public class Alerts extends java.util.ArrayList<Alert>
         updateAlert.btn_center_code = BTN_NOT_NOW;
         updateAlert.btn_center_action = ACTION_DISMISS;
 
-        updateAlert.btn_end_code = BTN_UPDATE;
+        updateAlert.btn_end_code = BTN_RATE;
         updateAlert.btn_end_action = ACTION_GOOGLE_PLAY;
         add(updateAlert);
     }

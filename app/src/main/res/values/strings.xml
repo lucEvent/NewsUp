@@ -1,7 +1,7 @@
 <resources>
 
     <string name="app_name" translatable="false">NewsUp</string>
-    <string name="app_version" translatable="false">2.5.1.4.git</string>
+    <string name="app_version" translatable="false">2.5.1.5.git</string>
     <string name="about_content_contact">Developed by Rafael J. Lucena\nContact: rafaa89(at)gmail.com</string>
     <string name="about_content_title_new_features">Last features and improvements:</string>
     <string name="about_content_new_features" translatable="false">
@@ -132,6 +132,7 @@
     <string name="no">No</string>
     <string name="update">Update</string>
     <string name="not_now">Not now</string>
+    <string name="rate">Rate</string>
 
     <!-- * ******************** Hints **************************** * -->
     <string name="hint_pref_pro_mode">Enter PRO code</string>
@@ -170,6 +171,9 @@
     <string name="msg_minimum_one_checked">One section must be checked</string>
     <string name="msg_no_events">No events at the moment</string>
     <string name="msg_cant_apply_filter">Can\'t apply filter</string>
+    <string name="msg_needs_update">There is a new version of NewsUp available</string>
+    <string name="msg_rate">Are you enjoying this app so far? Would you rate it on the Google Play?</string>
+    <string name="msg_report">Do you have any problem, suggestion or complaint about this app? Tell us</string>
 
     <!-- * *************** Activities and fragment's titles ********************* * -->
     <string name="title_frg_settings_of">Settings of %1$s</string>
@@ -181,8 +185,9 @@
 
     <!-- ***************************** Settings strings ********************************** -->
     <string name="pref_title_general">General</string>
-    <string name="pref_title_data">Data</string>
-    <string name="pref_title_content">Content</string>
+    <string name="pref_title_downloads">Downloads</string>
+    <string name="pref_title_images">Images</string>
+    <string name="pref_title_storage">Storage</string>
 
     <string name="pref_clean_cache">Clean cache</string>
     <string name="pref_main_sites">Main publications</string>
@@ -225,8 +230,5 @@
     <string name="navigation_drawer_open" translatable="false">Open drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close drawer</string>
 
-    <string name="msg_needs_update" translatable="false">There is a new version of NewsUp available</string>
-    <string name="msg_rate" translatable="false">Are you enjoying this app so far?\nWould you kindly rate it on the Google Play?</string>
-    <string name="msg_report" translatable="false">What\'s your opinion about this app? Let\'s us know any problem, suggestion, complaint</string>
 
 </resources>

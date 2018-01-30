@@ -68,8 +68,9 @@
     <string name="delete">Eliminar</string>
     <string name="yes">Sí</string>
     <string name="no">No</string>
-    <string name="update">Actualiza</string>
+    <string name="update">Actualizar</string>
     <string name="not_now">Ahora no</string>
+    <string name="rate">Valorar</string>
 
     <!-- * ******************** Hints **************************** * -->
     <string name="hint_pref_pro_mode">Inserta código PRO</string>
@@ -108,6 +109,9 @@
     <string name="msg_minimum_one_checked">Una sección debe permanecer marcada</string>
     <string name="msg_no_events">No hay acontecimientos en este momento</string>
     <string name="msg_cant_apply_filter">No se puede aplicar el filtro</string>
+    <string name="msg_needs_update">Hay una nueva versión de NewsUp disponible</string>
+    <string name="msg_rate">¿Qué te parece la app? ¿Podrías darnos tu valoración en la Google Play?</string>
+    <string name="msg_report">¿Tienes algún problema, sugerencia o queja? Cuéntanos</string>
 
     <!-- * *************** Activities and fragment's titles ********************* * -->
     <string name="title_frg_settings_of">Configuración de %1$s</string>
@@ -119,8 +123,9 @@
 
     <!-- ***************************** Settings strings ********************************** -->
     <string name="pref_title_general">General</string>
-    <string name="pref_title_data">Datos</string>
-    <string name="pref_title_content">Contenido</string>
+    <string name="pref_title_downloads">Descargas</string>
+    <string name="pref_title_images">Imágenes</string>
+    <string name="pref_title_storage">Almacenamiento</string>
 
     <string name="pref_clean_cache">Limpia la caché</string>
     <string name="pref_main_sites">Publicaciones principales</string>
