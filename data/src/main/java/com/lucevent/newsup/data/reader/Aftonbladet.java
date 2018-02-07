@@ -46,74 +46,68 @@ public class Aftonbladet extends com.lucevent.newsup.data.util.NewsReader {
             news.enclosures = new Enclosures();
             news.enclosures.add(new Enclosure(imgs.get(0).attr("src"), "image/jpg", "0"));
         }
+
+        if (news.link.contains("/abtv/")) {
+            String[] p = news.link.split("/");
+            String vidId = p[p.length - 1];
+            news.content = insertIframe("https://tv.aftonbladet.se/abtv/articles/" + vidId + "?service=embedded&autoplay=false");
+        }
+
         return news;
     }
 
     @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
-        Elements article = doc.select(".abArticle");
+        Elements article = doc.select("._10OUE");
+        article.select("._11S-G,[id^='abAdArea'],._1pdIt,._7gDWL,._3DeZc,._2XS3K,.abThemeBorder,._1V3Dg,[data-test-id='inline-teaser']").remove();
+        article.select("[data-reactid]").removeAttr("data-reactid");
 
-        if (!article.isEmpty()) {
-            article.select(".abShareMenu,.abItem,.abFactBoxContainer,.abStatRelated,.abByline").remove();
+        //
+        article.select("._3oEVrB,._12nap,._3oEVr").tagName("h3");
+        article.select("._1hqNA").tagName("figcaption");
+        article.select("._3tWGC").tagName("blockquote");
+        //
+        for (Element e : article.select(".c-Cz1")) {
+            cleanAttributes(e);
+            e.html("<strong>" + e.html() + "</strong>");
+        }
 
-            for (Element e : article.select(".abVideoSatellite")) {
-                e.html(insertIframe(e.attr("href")));
-                e.removeAttr("href");
-            }
-            for (Element e : article.select(".abRoyalSlider")) {
-                for (Element video : e.select(".abMediaBoxVideoWrapper")) {
-                    video.html(insertIframe(video.attr("data-tv-url")));
-                    video.removeAttr("data-tv-url");
-                }
-                for (Element img : e.select(".lazy-load noscript"))
-                    img.parent().html(img.html());
-            }
-            for (Element e : article.select(".abIC noscript:first-child"))
-                e.parent().html(e.html());
+        // Gallery
+        for (Element e : article.select("._1nGyY"))
+            e.html(e.select("._2XM84,picture").outerHtml());
+        // end gallery
 
-            article = article.select(".abVideoSatellite,.abRoyalSlider,.abIC:not(.abBodyText .abIC),.abAboveBodyTextBox,.abBodyText");
-
-            if (!article.isEmpty()) {
-                article.select(".abBlock").remove();
-                news.content = finalFormat(article, false);
-            }
-        } else {
-
-            article = doc.select("main");
-
-            if (!article.isEmpty()) {
-
-                String parent = "[data-test-id='main-column']";
-                String headlines = "[data-test-id='lead-text']";
-                String images = "[data-test-id='image']";
-                String text = "[data-test-id='text'],h2";
-
-                article = article.select(parent + ">" + headlines + "," + parent + ">" + images + "," + parent + ">" + text + ",.shootitlive-embed");
-
-                article.select(headlines + " p").tagName("li");
-                article.select("[style]").removeAttr("style");
-
-                for (Element e : article.select(images)) {
-                    Elements img = e.select("picture");
-                    Elements caption = e.select("[data-test-id='image-text'] div");
-                    caption.tagName("figcaption");
-                    e.html(img.outerHtml() + caption.outerHtml());
-                    e.attr("style", "margin-top:10px");
-                }
-                for (Element e : article.select(".shootitlive-embed")) {
-                    String href = e.select("a[href]").attr("href");
-                    e.html(insertIframe(href));
-                }
-
-                for (Element e : article.select("[class]"))
-                    e.removeAttr("class").removeAttr("data-test-id").removeAttr("data-reactid");
-
-                cleanAttributes(article.select("img"), "src");
-
-                news.content = finalFormat(article, true);
+        // Videos
+        String vidScript = null;
+        for (Element candidate : doc.select("script")) {
+            String script = candidate.html();
+            if (script.startsWith("window.FLUX_STATE")) {
+                vidScript = script;
+                break;
             }
         }
+        if (vidScript != null) {
+            for (Element e : article.select("._1W-u7,._2XM84")) {
+                String vidId = e.select("[id^='meetricsId-']").get(0).id().replace("meetricsId-", "");
+                if (!vidId.isEmpty()) {
+                    int i = vidScript.indexOf("\"id\":\"" + vidId);
+                    if (i > 0) {
+                        String src = findSubstringBetween(vidScript.substring(i), "\"mp4\":\"", "\"", false);
+                        if (src != null && !src.isEmpty()) {
+                            src = src.replace("\\u002F", "/");
+                            e.html(insertIframe(src));
+                            continue;
+                        }
+                    }
+                }
+                e.html("");
+            }
+        } else
+            article.select("._1W-u7").remove();
+        // end videos
+
+        news.content = finalFormat(article, false);
     }
 
 }

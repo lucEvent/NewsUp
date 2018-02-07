@@ -22,7 +22,7 @@ public class NewsListItemViewHolder extends NewsElementViewHolder {
     }
 
     @Override
-    public void bind()
+    public void bind(boolean darkStyle)
     {
         content.setText(Html.fromHtml(((NewsListItem) elem).getContent()));
     }

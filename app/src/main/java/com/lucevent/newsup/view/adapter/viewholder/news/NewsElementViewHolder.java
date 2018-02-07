@@ -28,7 +28,7 @@ public abstract class NewsElementViewHolder {
         itemView = v;
     }
 
-    public abstract void bind();
+    public abstract void bind(boolean darkStyle);
 
     public void unbind()
     {

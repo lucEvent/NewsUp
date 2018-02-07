@@ -27,7 +27,7 @@ public class NewsInstagramViewHolder extends NewsWebViewViewHolder {
     }
 
     @Override
-    public void bind()
+    public void bind(boolean darkStyle)
     {
         WebView webView = ((WebView) itemView);
         webView.loadData(((NewsInstagram) elem).getContent() + "<script async defer src='https://platform.instagram.com/en_US/embeds.js'></script>", "text/html", "utf-8");

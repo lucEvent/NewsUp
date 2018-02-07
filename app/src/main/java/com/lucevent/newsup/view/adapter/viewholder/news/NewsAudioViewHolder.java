@@ -19,7 +19,7 @@ public class NewsAudioViewHolder extends NewsWebViewViewHolder {
     }
 
     @Override
-    public void bind()
+    public void bind(boolean darkStyle)
     {
         String html = "<style>body{margin:0}audio{width:100%}</style>" + elem.getContent();
 

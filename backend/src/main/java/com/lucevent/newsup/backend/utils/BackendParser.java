@@ -211,11 +211,11 @@ public class BackendParser {
             Event.EventInfo eventInfo = E.getInfo(lang);
             sb.append("<event code='")
                     .append(E.code)
-                    .append("' title='")
+                    .append("' title=\"")
                     .append(eventInfo.title)
-                    .append("' topic='")
+                    .append("\" topic=\"")
                     .append(eventInfo.topic)
-                    .append("' imgsrc='")
+                    .append("\" imgsrc='")
                     .append(E.imgSrc)
                     .append("' sources='");
 

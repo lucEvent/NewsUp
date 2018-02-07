@@ -6,26 +6,28 @@ import org.jsoup.nodes.Element;
 
 public class HuffingtonPostUK extends com.lucevent.newsup.data.util.NewsReader {
 
+    private static final String PLAYBUZZ_WIDGETS = "<script type='text/javascript' src='http://cdn.playbuzz.com/widget/feed.js'>";
+
     // Tags: [author, description, enclosure, guid, item, link, pubdate, title]
 
     public HuffingtonPostUK()
     {
         super(TAG_ITEM_ITEMS,
                 new int[]{TAG_TITLE},
-                new int[]{TAG_GUID},
+                new int[]{TAG_LINK},
                 new int[]{},
                 new int[]{TAG_DESCRIPTION},
                 new int[]{TAG_PUBDATE},
                 new int[]{},
                 new int[]{TAG_ENCLOSURE},
-                "");
+                PLAYBUZZ_WIDGETS);
     }
 
     @Override
     protected String parseContent(Element prop)
     {
         Element article = jsoupParse(prop);
-        article.select("script[src*='.twitter.'],script[src*='.instagram.']").remove();
+        article.select("script").remove();
         article.select("br").tagName("p");
 
         for (Element e : article.select("strong"))
@@ -34,6 +36,12 @@ public class HuffingtonPostUK extends com.lucevent.newsup.data.util.NewsReader {
                     e.parent().remove();
                 } catch (Exception ignored) {
                 }
+
+        for (Element e : article.select(".pb_feed,.playbuzz")) {
+            e.html(e.outerHtml());
+            cleanAttributes(e);
+            e.tagName("nuwidget");
+        }
 
         article.select("[style]").removeAttr("style");
 

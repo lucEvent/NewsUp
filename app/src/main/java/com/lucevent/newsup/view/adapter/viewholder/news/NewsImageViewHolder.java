@@ -17,7 +17,7 @@ public class NewsImageViewHolder extends NewsElementViewHolder {
     }
 
     @Override
-    public void bind()
+    public void bind(boolean darkStyle)
     {
         Glide.with(itemView.getContext())
                 .load(((NewsImage) elem).getContent())

@@ -127,7 +127,7 @@
     <string name="pref_title_images">Imatges</string>
     <string name="pref_title_storage">Emmagatzematge</string>
 
-    <string name="pref_clean_cache">Neteja la caché</string>
+    <string name="pref_clean_cache">Esborra la memòria cau</string>
     <string name="pref_main_sites">Publicacions principals</string>
     <string name="pref_schedule_downloads">Programa descàrregues</string>
     <string name="pref_sites_settings">Configuració de les publicacions</string>
@@ -145,6 +145,7 @@
     <string name="pref_load_images_summary">Activat consumeix més bateria i dades</string>
     <string name="pref_load_images_compact">Vista compacta</string>
     <string name="pref_load_images_wifi_only">Només amb Wi-Fi</string>
+    <string name="pref_night_mode">Mode nocturn</string>
 
     <!-- ***************************** ***************** ********************************** -->
     <string name="about_content_contact">Desenvolupat per Rafael J. Lucena\nContacte: rafaa89(arrova)gmail.com</string>

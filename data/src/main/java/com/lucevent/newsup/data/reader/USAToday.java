@@ -87,6 +87,10 @@ public class USAToday extends com.lucevent.newsup.data.util.NewsReader {
             readContent10best(doc, news);
             return;
         }
+        if (news.link.contains(".cincinnati.com")) {
+            readContentCincinnati(doc, news);
+            return;
+        }
         if (news.link.contains("/interactives/") || news.link.startsWith("https://itunes.apple.com") || news.link.startsWith("https://www.facebook.com"))
             return;
 
@@ -165,6 +169,17 @@ public class USAToday extends com.lucevent.newsup.data.util.NewsReader {
         article.select("script,.ad,.story-tools,.byline-container,.timestamp-footnote,#story-share-").remove();
 
         article.select(".caption-text").tagName("figcaption");
+        article.select("[class='body-text']").removeAttr("class");
+
+        news.content = finalFormat(article, true);
+    }
+
+    private void readContentCincinnati(Document doc, News news)
+    {
+        Elements article = doc.select("article .story-body");
+        article.select("script,.ad,.gallery-nav,.story-tools,.byline-container,.short-caption,.exclude-from-newsgate,.carousel,.share,.story-share").remove();
+
+        article.select(".caption-text,.caption-credit").tagName("figcaption");
         article.select("[class='body-text']").removeAttr("class");
 
         news.content = finalFormat(article, true);

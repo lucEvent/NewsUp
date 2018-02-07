@@ -34,8 +34,8 @@ public class Data {
         if (sites == null) {
             sites = Sites.getDefault(true);
             // to avoid errors if some old version requests this dep site
-            sites.add(new Site(330, "Metro", 0, "", 0, com.lucevent.newsup.data.section.MetroSVSections.class, com.lucevent.newsup.data.reader.MetroSV.class));
-
+            sites.add(new Site(330, "Metro", 0, "", 0, com.lucevent.newsup.data.util.Sections.class, com.lucevent.newsup.data.reader.MetroSV.class));
+            sites.add(new Site(1710, "The Berry", 0, "", 0, com.lucevent.newsup.data.util.Sections.class, com.lucevent.newsup.data.reader.MetroSV.class));
             for (Site s : sites)
                 s.news = new NewsMap();
 

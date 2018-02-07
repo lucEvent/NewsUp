@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               style="@style/listItemContainer"
               android:layout_marginBottom="1dp"
               android:orientation="horizontal">
@@ -12,17 +13,15 @@
         android:paddingEnd="10dp"
         android:paddingStart="20dp"
         android:paddingTop="10dp"
-        android:src="@drawable/ic_add"/>
+        app:srcCompat="@drawable/ic_add"/>
 
     <TextView
         android:id="@+id/name"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_weight="1"
-        android:paddingStart="20dp"
-        android:text="hola"
-        android:textColor="#f000"
+        android:layout_marginStart="20dp"
+        android:text="Publication name"
         android:textSize="16sp"/>
 
 </LinearLayout>

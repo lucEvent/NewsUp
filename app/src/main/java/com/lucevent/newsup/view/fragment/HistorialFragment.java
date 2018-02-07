@@ -123,6 +123,14 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
     }
 
     @Override
+    public void onDestroyView()
+    {
+        super.onDestroyView();
+        if (searchView.isShown())
+            searchView.hide();
+    }
+
+    @Override
     public void onClick(View v)
     {
         News news = (News) v.getTag();

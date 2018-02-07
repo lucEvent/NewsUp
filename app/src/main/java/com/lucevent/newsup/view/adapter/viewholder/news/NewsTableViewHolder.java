@@ -29,7 +29,7 @@ public class NewsTableViewHolder extends NewsElementViewHolder {
     }
 
     @Override
-    public void bind()
+    public void bind(boolean darkStyle)
     {
         TableLayout tableView = (TableLayout) itemView.findViewById(R.id.table);
         tableView.removeAllViews();

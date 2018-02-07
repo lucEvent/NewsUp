@@ -27,18 +27,20 @@ public class NewsTweetViewHolder extends NewsWebViewViewHolder {
     }
 
     @Override
-    public void bind()
+    public void bind(boolean darkStyle)
     {
+        String style = "<style>blockquote{background-color:" + (darkStyle ? "#333" : "#eee") + ";color:" + (darkStyle ? "#eee" : "#111") + ";}</style>";
+
         WebView webView = ((WebView) itemView);
-        webView.loadDataWithBaseURL("https://twitter.com", script + ((NewsTweet) elem).getContent(), "text/html", "utf-8", "");
+        webView.loadDataWithBaseURL("https://twitter.com", script + style + ((NewsTweet) elem).getContent(), "text/html", "utf-8", "");
         webView.onResume();
     }
 
     @Override
     public void setStyle(boolean darkStyle)
     {
-        String bgColor = darkStyle ? "#444" : "#eee";
-        String textColor = darkStyle ? "#fff" : "#112";
+        String bgColor = darkStyle ? "#333" : "#eee";
+        String textColor = darkStyle ? "#eee" : "#111";
         WebView webView = ((WebView) itemView);
         webView.evaluateJavascript(
                 "e=document.getElementsByTagName('blockquote');" +

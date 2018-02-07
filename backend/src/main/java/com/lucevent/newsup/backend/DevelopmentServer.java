@@ -155,11 +155,11 @@ public class DevelopmentServer extends HttpServlet {
                 Event.EventInfo eventInfo = E.info[i];
                 sb.append("<description lang='")
                         .append(eventInfo.lang)
-                        .append("' title='")
+                        .append("' title=\"")
                         .append(eventInfo.title)
-                        .append("' topic='")
+                        .append("\" topic=\"")
                         .append(eventInfo.topic)
-                        .append("'/>");
+                        .append("\"/>");
             }
             sb.append("</event>");
         }

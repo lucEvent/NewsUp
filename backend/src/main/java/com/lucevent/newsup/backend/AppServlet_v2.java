@@ -9,7 +9,7 @@ import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.Site;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -179,10 +179,15 @@ public class AppServlet_v2 extends HttpServlet {
     {
 
         long currentTime = System.currentTimeMillis();
-        List<Event> events = ofy().load().type(Event.class)
+        ArrayList<Event> events = new ArrayList<>(ofy().load().type(Event.class)
                 .filter("visible", true)
                 .filter("endTime >", currentTime)
-                .list();
+                .list());
+
+        for (int i = events.size() - 1; i >= 0; i--)
+            if (events.get(i).startTime > currentTime)
+                events.remove(i);
+
         resp.getWriter().println(BackendParser.toEntry(events, lang).toString());
     }
 
@@ -190,7 +195,8 @@ public class AppServlet_v2 extends HttpServlet {
     {
         Alerts alerts = new Alerts();
 
-        if (app_version == null || app_version.isEmpty() || !app_version.startsWith("2.5.")) {
+        if (app_version == null || app_version.isEmpty() ||
+                !(app_version.startsWith("2.5.") || app_version.startsWith("2.6."))) {
             alerts.addUpdateAlert();
         } else {
             alerts.addRateAlert();

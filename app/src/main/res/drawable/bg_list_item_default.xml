@@ -3,11 +3,7 @@
 
     <item>
         <shape android:shape="rectangle">
-            <gradient
-                android:endColor="#666"
-                android:gradientRadius="700"
-                android:startColor="#fff"
-                android:type="radial"/>
+            <solid android:color="@color/default_text"/>
         </shape>
     </item>
 
@@ -17,10 +13,7 @@
         android:right="1dp"
         android:top="1dp">
         <shape android:shape="rectangle">
-            <size
-                android:width="1dp"
-                android:height="1dp"/>
-            <solid android:color="#fff"/>
+            <solid android:color="@color/dark_ripple"/>
         </shape>
     </item>
 

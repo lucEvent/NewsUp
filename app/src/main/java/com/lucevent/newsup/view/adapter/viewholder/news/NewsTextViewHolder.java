@@ -39,7 +39,7 @@ public class NewsTextViewHolder extends NewsElementViewHolder {
     }
 
     @Override
-    public void bind()
+    public void bind(boolean darkStyle)
     {
         String content = ((NewsElement<String>) elem).getContent();
         ((TextView) itemView).setText(Html.fromHtml(content));

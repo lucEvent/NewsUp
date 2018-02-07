@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -25,7 +26,7 @@
                 android:background="@drawable/ripple_round"
                 android:contentDescription="@string/cancel"
                 android:onClick="actionCancel"
-                android:src="@drawable/ic_clear"/>
+                app:srcCompat="@drawable/ic_clear"/>
 
             <Button
                 style="?android:attr/buttonBarButtonStyle"
@@ -40,13 +41,14 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
-            android:gravity="bottom"
-            android:paddingBottom="10dp"
-            android:paddingEnd="10dp"
+            android:paddingBottom="6dp"
+            android:paddingEnd="20dp"
             android:paddingStart="20dp"
+            android:paddingTop="6dp"
             android:text="@string/schedule_download"
+            android:textAlignment="viewStart"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textStyle="bold"/>
 
@@ -137,7 +139,7 @@
 
                     <CheckBox
                         android:id="@+id/checkbox_repeat"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:background="@null"
@@ -162,7 +164,7 @@
 
                     <CheckBox
                         android:id="@+id/checkbox_notify"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:background="@null"

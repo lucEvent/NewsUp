@@ -18,6 +18,11 @@
             android:key="@string/pref_sites_settings_key"
             android:title="@string/pref_sites_settings"/>
 
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="@string/pref_night_mode_key"
+            android:title="@string/pref_night_mode"/>
+
         <EditTextPreference
             android:defaultValue=""
             android:hint="@string/hint_pref_pro_mode"

@@ -71,31 +71,10 @@ public class ElPais extends com.lucevent.newsup.data.util.NewsReader {
             return;
         }
 
-        Elements article = doc.select("#videonoticia,.articulo-apertura>figure,#articulo_contenedor>[itemprop='image'],#cuerpo_noticia");
-        article.select("script:not(#videonoticia script),.sumario_apoyos,.boton_ampliar,noframes").remove();
+        Elements article = doc.select(".articulo-apertura>figure,#articulo_contenedor>[itemprop='image'],#cuerpo_noticia");
+        article.select("script,.sumario_apoyos,.boton_ampliar,noframes").remove();
         article.select(".sumario_despiece,.texto_grande").tagName("blockquote");
         article.select(".nota_pie").tagName("figcaption");
-
-        for (Element v : article.select("#videonoticia")) {
-            String script = v.select("script").html();
-            String vContent = findSubstringBetween(script, ".codigo = '", "'", false);
-
-            if (vContent != null) {
-                v.html(vContent.replace("\\", "") + v.select("figcaption").outerHtml());
-                continue;
-            }
-
-            Elements meta = v.select("meta[itemprop='url']");
-            if (meta.isEmpty()) {
-                v.html("");
-                continue;
-            }
-            String vidSrc = meta.get(0).attr("content")
-                    .replace("elpaistop", "elpaistop/multimedia");
-
-            vidSrc = vidSrc.substring(0, vidSrc.lastIndexOf("_")) + "_1200.mp4";
-            v.html(insertVideo(vidSrc));
-        }
 
         for (Element e : article.select(".sumario_eskup")) {
             Elements content = e.select("noscript");

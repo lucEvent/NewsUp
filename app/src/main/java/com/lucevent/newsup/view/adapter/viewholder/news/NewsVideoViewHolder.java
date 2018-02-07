@@ -21,7 +21,7 @@ public class NewsVideoViewHolder extends NewsWebViewViewHolder {
     }
 
     @Override
-    public void bind()
+    public void bind(boolean darkStyle)
     {
         String html = "<style>body{margin:0}video{width:100%;min-height:300px;}</style>" + ((NewsVideo) elem).getContent();
 

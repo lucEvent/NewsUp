@@ -34,6 +34,13 @@
     <string name="expand_to_see_headlines">Expand to see the headlines</string>
     <string name="see_something_else">See something else?</string>
     <string name="happening_now">Happening now</string>
+    <string name="languages">Languages</string>
+    <string name="countries">Countries</string>
+    <string name="publications">Publications</string>
+    <string name="filters">Filters</string>
+    <string name="by_default">By default</string>
+    <string name="x_section_selected">%d sections selected</string>
+    <string name="event">Event</string>
     <string name="mon">Mon</string>
     <string name="tue">Tue</string>
     <string name="wed">Wed</string>
@@ -61,6 +68,7 @@
     <string name="no">No</string>
     <string name="update">Update</string>
     <string name="not_now">Not now</string>
+    <string name="rate">Rate</string>
     <string name="hint_pref_pro_mode">Enter PRO code</string>
     <string name="search">Search</string>
     <string name="hint_create_note">Enter one annotation</string>
@@ -94,13 +102,18 @@
     <string name="msg_no_bookmarks">You haven\'t bookmarked any news yet</string>
     <string name="msg_minimum_one_checked">One section must be checked</string>
     <string name="msg_no_events">No events at the moment</string>
+    <string name="msg_cant_apply_filter">Can\'t apply filter</string>
+    <string name="msg_needs_update">There is a new version of NewsUp available</string>
+    <string name="msg_rate">Are you enjoying this app so far? Would you rate it on the Google Play?</string>
+    <string name="msg_report">Do you have any problem, suggestion or complaint about this app? Tell us</string>
     <string name="title_frg_settings_of">Settings of %1$s</string>
     <string name="menu_favorite">Favorite</string>
     <string name="menu_settings">Publication settings</string>
     <string name="menu_delete_all">Delete all</string>
     <string name="pref_title_general">General</string>
-    <string name="pref_title_data">Data</string>
-    <string name="pref_title_content">Content</string>
+    <string name="pref_title_downloads">Downloads</string>
+    <string name="pref_title_images">Images</string>
+    <string name="pref_title_storage">Storage</string>
     <string name="pref_clean_cache">Clean cache</string>
     <string name="pref_main_sites">Main publications</string>
     <string name="pref_schedule_downloads">Schedule downloads</string>
@@ -117,4 +130,6 @@
     <string name="pref_favorite_sites">Favorite publications</string>
     <string name="pref_load_images">Load images</string>
     <string name="pref_load_images_summary">Set to ON consumes more battery and network data</string>
+    <string name="pref_load_images_compact">Compact view</string>
+    <string name="pref_load_images_wifi_only">Wi-Fi only</string>
 </resources>

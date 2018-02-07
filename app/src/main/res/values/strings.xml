@@ -1,11 +1,11 @@
 <resources>
 
     <string name="app_name" translatable="false">NewsUp</string>
-    <string name="app_version" translatable="false">2.5.1.5.git</string>
+    <string name="app_version" translatable="false">2.6.0.git</string>
     <string name="about_content_contact">Developed by Rafael J. Lucena\nContact: rafaa89(at)gmail.com</string>
     <string name="about_content_title_new_features">Last features and improvements:</string>
     <string name="about_content_new_features" translatable="false">
-        Version 2.5.1 2018-xx-xx:\nFilters added in Historial.\nFilters and scheduled downloads for Events.\nScheduled downloads improves.\nCompact view for news (check settings).\nImages load Wi-Fi only option (check settings).\nFont changes.\n
+        Version 2.6.0 2018-02-xx:\nNew: Night mode!\nFilters added in Historial.\nFilters and scheduled downloads for Events.\nScheduled downloads improves.\nCompact view for news (check settings).\nImages load Wi-Fi only option (check settings).\nFont changes.\nRTL fixes.\nSome readers updated.\nBug fixes.\n
         \nVersion 2.5.0 2017-12-30:\nNew NewsView improving the user experience.\nSearch feature added on bookmarks and history screens.\nSupport added for The Independent, Daily Mail, The Sun, Metro UK, Evening Standard, Daily Mirror, The National Scotland, Daily Express, Sports Illustrated and WIRED.\nSection dialog improved.\nChange font size option in NewsView.\nAll sections revised.\nTwitter videos are now supported too.\nSmall bug fixes.\n
         \nVersion 2.4.0 2017-10-05:\nNew: Events (Happening now).\nAdded support for El Punt Avui, Catalonia Today, L\'esportiu, Nació Digital, El Nacional, WWWhat\'s new?, Vogue España, CounterPunch, Lucky Puppy Mag and The Berry.\nReaders improves.\nBug fixes.\n
         \nVersion 2.3.2 2017-08-20:\nPublications list in navigation panel ordered by user\'s accesses.\nDatabase simplified.\nVisual bugs fixes on Kitkat.\nVarious readers improved.\nOther miscellaneous fixes and improvements.\n
@@ -29,8 +29,6 @@
     <string name="about_content_title_coming_soon">Features that might come in next releases:</string>
     <string name="about_content_coming_soon" translatable="false">
 - Preview on tap like in Instagram (maybe)\n
-- Bug fixes and improvements\n
-- Night mode
 - New logo\n
 - Support for:\n
 \t- National geographic\n
@@ -189,7 +187,7 @@
     <string name="pref_title_images">Images</string>
     <string name="pref_title_storage">Storage</string>
 
-    <string name="pref_clean_cache">Clean cache</string>
+    <string name="pref_clean_cache">Clear cache</string>
     <string name="pref_main_sites">Main publications</string>
     <string name="pref_schedule_downloads">Schedule downloads</string>
     <string name="pref_sites_settings">Publications settings</string>
@@ -207,6 +205,7 @@
     <string name="pref_load_images_summary">Set to ON consumes more battery and network data</string>
     <string name="pref_load_images_compact">Compact view</string>
     <string name="pref_load_images_wifi_only">Wi-Fi only</string>
+    <string name="pref_night_mode">Night mode</string>
 
     <string name="pref_main_sites_key" translatable="false">app_pref1</string>
     <string name="pref_favorite_sites_key" translatable="false">app_pref2</string>
@@ -218,6 +217,7 @@
     <string name="pref_load_images_key" translatable="false">app_pref9</string>
     <string name="pref_load_images_compact_key" translatable="false">app_pref10</string>
     <string name="pref_load_images_wifi_only_key" translatable="false">app_pref11</string>
+    <string name="pref_night_mode_key" translatable="false">app_pref12</string>
 
     <string name="pref_show_in_my_feed_key" translatable="false">site_pref1</string>
     <string name="pref_favorite_key" translatable="false">site_pref2</string>

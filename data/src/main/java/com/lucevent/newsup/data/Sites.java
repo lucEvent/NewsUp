@@ -423,9 +423,6 @@ public class Sites extends ArrayList<Site> {
         res.add(new Site(1705, "The Chive", 0xff000000, "http://thechive.com",
                 SiteCountry.USA | SiteLanguage.ENGLISH | SiteCategory.ENTERTAINMENT,
                 com.lucevent.newsup.data.section.TheChiveSections.class, com.lucevent.newsup.data.reader.TheChive.class));
-        res.add(new Site(1710, "The Berry", 0xff8a00e4, "http://theberry.com",
-                SiteCountry.USA | SiteLanguage.ENGLISH | SiteCategory.ENTERTAINMENT,
-                com.lucevent.newsup.data.section.TheBerrySections.class, com.lucevent.newsup.data.reader.TheBerry.class));
 
         // Fitness (1800)
         res.add(new Site(1800, "Full M\u00FAsculo", 0xff000000, "http://fullmusculo.com/home",

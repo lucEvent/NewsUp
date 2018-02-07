@@ -21,7 +21,7 @@ public class NewsBlockquoteViewHolder extends NewsElementViewHolder {
     }
 
     @Override
-    public void bind()
+    public void bind(boolean darkStyle)
     {
         content.setText(Html.fromHtml(((NewsBlockquote) elem).getContent()));
     }

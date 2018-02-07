@@ -4,7 +4,9 @@ import android.app.Fragment;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Window;
@@ -27,6 +29,11 @@ public class SiteMain extends AppCompatActivity implements MainChangeListener {
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        AppCompatDelegate.setDefaultNightMode(
+                PreferenceManager.getDefaultSharedPreferences(this).getBoolean(getString(R.string.pref_night_mode_key), false) ?
+                        AppCompatDelegate.MODE_NIGHT_YES :
+                        AppCompatDelegate.MODE_NIGHT_NO
+        );
         super.onCreate(savedInstanceState);
 
         AppSettings.initialize(this, this);

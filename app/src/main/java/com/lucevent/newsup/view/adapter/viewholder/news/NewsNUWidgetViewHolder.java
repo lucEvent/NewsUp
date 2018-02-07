@@ -21,7 +21,7 @@ public class NewsNUWidgetViewHolder extends NewsWebViewViewHolder {
     }
 
     @Override
-    public void bind()
+    public void bind(boolean darkStyle)
     {
         WebView webView = ((WebView) itemView);
         webView.loadData("<style>body{margin:20px}</style>" + elem.getContent(), "text/html", "utf-8");

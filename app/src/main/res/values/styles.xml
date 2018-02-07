@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -21,7 +21,14 @@
     <style name="listItemContainer">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+        <item name="android:background">@drawable/sel_list_item</item>
+    </style>
+
+    <style name="newsItem">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">8dp</item>
         <item name="android:background">@drawable/sel_list_item</item>
     </style>
 
@@ -45,7 +52,7 @@
         <item name="android:paddingBottom">10dp</item>
         <item name="android:paddingLeft">15dp</item>
         <item name="android:paddingRight">15dp</item>
-        <item name="android:background">#afefefef</item>
+        <item name="android:background">@color/input_background</item>
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
         <item name="android:maxLines">1</item>
         <item name="android:lines">1</item>
@@ -101,18 +108,16 @@
         <item name="android:paddingTop">16dp</item>
         <item name="android:paddingStart">16dp</item>
         <item name="android:paddingEnd">16dp</item>
-        <item name="android:background">#fff</item>
     </style>
 
-    <style name="settingTitle" parent="settingRow">
+    <style name="settingTitle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:paddingBottom">2dp</item>
         <item name="android:paddingTop">16dp</item>
         <item name="android:paddingStart">16dp</item>
         <item name="android:paddingEnd">16dp</item>
         <item name="android:textColor">@color/colorAccent</item>
     </style>
-
-
-
 
 </resources>

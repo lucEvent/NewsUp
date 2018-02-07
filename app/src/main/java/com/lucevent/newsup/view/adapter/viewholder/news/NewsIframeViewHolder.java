@@ -23,7 +23,7 @@ public class NewsIframeViewHolder extends NewsWebViewViewHolder {
     }
 
     @Override
-    public void bind()
+    public void bind(boolean darkStyle)
     {
         String html = "<style>body{margin:0}</style><iframe style='width:100%;min-height:300px;' frameborder='0' allowfullscreen src='" + ((NewsIframe) elem).getContent() + "' scrolling='no'></iframe>";
         WebView webView = ((WebView) itemView);

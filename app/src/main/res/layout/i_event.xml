@@ -37,6 +37,7 @@
         android:fontFamily="sans-serif-light"
         android:padding="20dp"
         android:text="Title of the Event"
+        android:textAlignment="viewStart"
         android:textColor="@color/nv_text_dark"
         android:textSize="24sp"
         android:textStyle="bold"/>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorPrimary">#558B2F</color>
+    <color name="colorPrimaryDark">#386914</color>
+    <color name="colorAccent">#D32F2F</color>
+    <color name="colorAccentDark">#AC1616</color>
+
+    <color name="colorPrimaryTranslucent">#ee558B2F</color>
+    <color name="colorPrimaryDarkTranslucent">#ee386914</color>
+    <color name="colorAccentTranslucent">#eeD32F2F</color>
+    <color name="colorAccentDarkTranslucent">#eeAC1616</color>
+
+    <color name="default_background">#ff1b2836</color>
+    <color name="clear_background">#f444</color>
+    <color name="default_text">#ffc1c1c1</color>
+    <color name="default_icon">#ffeeeeee</color>
+    <color name="default_drawer_icon_tint">#c1c1c1</color>
+
+    <color name="default_ripple">#ff303030</color>
+    <color name="ripple_pressed">#22ffffff</color>
+    <color name="ripple_checked">#ff444444</color>
+    <color name="dark_ripple">#ff353535</color>
+
+    <color name="input_background">#af101010</color>
+    <color name="divisor">#ff494949</color>
+
+</resources>

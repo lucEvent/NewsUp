@@ -197,7 +197,7 @@ public class NewsElementsListView extends LinearLayout {
             mViews.add(holder);
             addView(holder.get());
 
-            holder.bind();
+            holder.bind(mDarkStyle);
             holder.setTextSize(mTextSize);
             holder.setStyle(mDarkStyle);
             holder.setLinkColor(mLinkColor);

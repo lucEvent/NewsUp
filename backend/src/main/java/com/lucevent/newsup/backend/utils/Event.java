@@ -60,7 +60,7 @@ public class Event {
         for (EventInfo ei : info)
             if (lang.equals(ei.lang))
                 return ei;
-        return info[0];
+        return getInfo("en");
     }
 
     public static Event parse(String json) throws Exception

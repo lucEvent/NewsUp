@@ -1,5 +1,6 @@
 package com.lucevent.newsup.view.fragment;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
@@ -12,6 +13,7 @@ import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.support.v7.app.AppCompatDelegate;
 
 import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.Main;
@@ -49,6 +51,7 @@ public class AppSettingsFragment extends PreferenceFragment
         findPreference(AppSettings.PREF_MAIN_SITES_KEY).setOnPreferenceClickListener(onSelectMainSites);
         findPreference(AppSettings.PREF_FAVORITE_SITES_KEY).setOnPreferenceClickListener(onSelectFavoriteSites);
         findPreference(getString(R.string.pref_sites_settings_key)).setOnPreferenceClickListener(onSiteSettingsAction);
+        findPreference(getString(R.string.pref_night_mode_key)).setOnPreferenceChangeListener(onNightModeChange);
         findPreference(AppSettings.PREF_SCHEDULE_DOWNLOADS_KEY).setOnPreferenceClickListener(onScheduleDownloadSettingsAction);
     }
 
@@ -207,6 +210,21 @@ public class AppSettingsFragment extends PreferenceFragment
         public boolean onPreferenceClick(Preference preference)
         {
             ((MainChangeListener) getActivity()).onReplaceFragment(new ScheduleDownloadSettingsFragment(), R.id.nav_settings, true);
+            return true;
+        }
+    };
+
+    private Preference.OnPreferenceChangeListener onNightModeChange = new Preference.OnPreferenceChangeListener() {
+        @Override
+        public boolean onPreferenceChange(Preference preference, Object newValue)
+        {
+            AppCompatDelegate.setDefaultNightMode(
+                    (Boolean) newValue ?
+                            AppCompatDelegate.MODE_NIGHT_YES :
+                            AppCompatDelegate.MODE_NIGHT_NO);
+            Activity a = getActivity();
+            a.startActivity(new Intent(getActivity(), Main.class));
+            a.finish();
             return true;
         }
     };

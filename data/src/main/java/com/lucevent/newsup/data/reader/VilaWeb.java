@@ -34,6 +34,18 @@ public class VilaWeb extends com.lucevent.newsup.data.util.NewsReader {
         article.select("[style]").removeAttr("style");
         article.select("[width]").removeAttr("width");
 
+        for (Element e : article.select("a:has(script)"))
+            if (e.text().startsWith("Watch video")) {
+                String script = e.html();
+                int i = script.indexOf(".mp4");
+                if (i > 0) {
+                    int j = script.lastIndexOf("\"", i);
+                    String src = script.substring(j + 1, i + 4);
+                    e.html(insertIframe(src));
+                    e.tagName("p");
+                }
+            }
+
         return finalFormat(article, false);
     }
 

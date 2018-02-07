@@ -127,7 +127,7 @@
     <string name="pref_title_images">Bilder</string>
     <string name="pref_title_storage">Lagring</string>
 
-    <string name="pref_clean_cache">Städa cache</string>
+    <string name="pref_clean_cache">Rensa cacheminne</string>
     <string name="pref_main_sites">Huvudpublikationer</string>
     <string name="pref_schedule_downloads">Schemalägga nedladdningar</string>
     <string name="pref_sites_settings">Publikationer inställningar</string>
@@ -145,6 +145,7 @@
     <string name="pref_load_images_summary">Ställ in på ON konsumerar mer batteri och nätverksdata</string>
     <string name="pref_load_images_compact">Kompakt vy</string>
     <string name="pref_load_images_wifi_only">Endast Wi-Fi</string>
+    <string name="pref_night_mode">Nattläge</string>
 
     <!-- ***************************** ***************** ********************************** -->
     <string name="about_content_contact">Utvecklat av Rafael J. Lucena\nKontakt: rafaa89(snabel-a)gmail.com</string>
