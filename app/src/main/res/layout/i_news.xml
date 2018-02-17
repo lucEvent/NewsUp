@@ -40,7 +40,7 @@
             android:fontFamily="sans-serif-light"
             android:maxLines="3"
             android:paddingTop="6dp"
-            android:text="@string/about_content_coming_soon"
+            android:text="Description\nUp to 3 lines\nYeah"
             android:textAppearance="?android:attr/textAppearanceSmall"/>
 
     </LinearLayout>

@@ -49,4 +49,5 @@ public class NewsTweetViewHolder extends NewsWebViewViewHolder {
                         "e[i].style.color='" + textColor + "'" +
                         "}", null);
     }
+
 }

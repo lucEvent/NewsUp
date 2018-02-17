@@ -192,9 +192,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public void clear()
     {
-        dataSet.beginBatchedUpdates();
         dataSet.clear();
-        dataSet.endBatchedUpdates();
     }
 
 }

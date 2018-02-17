@@ -49,14 +49,14 @@ public abstract class Reader {
                     .validateTLSCertificates(false)
                     .get();
         } catch (Exception e) {
-            System.out.println("[" + this.getClass().getSimpleName() + " | " + e.getClass().getSimpleName() + "] Can't read page. Trying again");
+            //    System.out.println("[" + this.getClass().getSimpleName() + " | " + e.getClass().getSimpleName() + "] Can't read page. Trying again");
         }
         try {
             return org.jsoup.Jsoup.connect(url)
                     .validateTLSCertificates(false)
                     .get();
         } catch (Exception e) {
-            System.out.println("[" + this.getClass().getSimpleName() + " | " + e.getClass().getSimpleName() + "] Couldn't read page: " + url);
+            //   System.out.println("[" + this.getClass().getSimpleName() + " | " + e.getClass().getSimpleName() + "] Couldn't read page: " + url);
         }
         return null;
     }

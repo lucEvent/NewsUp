@@ -24,7 +24,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".Main"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="keyboardHidden|orientation|screenSize|uiMode"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -36,7 +36,7 @@
         </activity>
         <activity
             android:name=".SiteMain"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="keyboardHidden|orientation|screenSize|uiMode"
             android:taskAffinity=".SiteMain"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -45,7 +45,7 @@
         </activity>
         <activity
             android:name=".view.activity.DownloadScheduleEditorActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="keyboardHidden|orientation|screenSize|uiMode"
             android:parentActivityName=".Main"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -54,7 +54,7 @@
         </activity>
         <activity
             android:name=".view.activity.SelectSitesActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="keyboardHidden|orientation|screenSize|uiMode"
             android:parentActivityName=".Main"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -63,7 +63,7 @@
         </activity>
         <activity
             android:name=".view.activity.EventActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="keyboardHidden|orientation|screenSize|uiMode"
             android:parentActivityName=".Main"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

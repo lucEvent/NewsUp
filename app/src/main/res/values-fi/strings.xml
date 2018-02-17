@@ -1,7 +1,6 @@
 <resources>
     <string name="about_content_contact">Developed by Rafael J. Lucena\nContact: rafaa89(at)gmail.com</string>
     <string name="about_content_title_new_features">Last features and improvements:</string>
-    <string name="about_content_title_coming_soon">Features that might come in next releases:</string>
     <string name="about_content_title_next_sites">Possible support for:</string>
     <string name="version">version</string>
     <string name="my_news">My news</string>
@@ -41,6 +40,7 @@
     <string name="by_default">By default</string>
     <string name="x_section_selected">%d sections selected</string>
     <string name="event">Event</string>
+    <string name="no_internet_no_media">Element not available without connection</string>
     <string name="mon">Mon</string>
     <string name="tue">Tue</string>
     <string name="wed">Wed</string>
@@ -114,7 +114,7 @@
     <string name="pref_title_downloads">Downloads</string>
     <string name="pref_title_images">Images</string>
     <string name="pref_title_storage">Storage</string>
-    <string name="pref_clean_cache">Clean cache</string>
+    <string name="pref_clean_cache">Clear cache</string>
     <string name="pref_main_sites">Main publications</string>
     <string name="pref_schedule_downloads">Schedule downloads</string>
     <string name="pref_sites_settings">Publications settings</string>
@@ -132,4 +132,5 @@
     <string name="pref_load_images_summary">Set to ON consumes more battery and network data</string>
     <string name="pref_load_images_compact">Compact view</string>
     <string name="pref_load_images_wifi_only">Wi-Fi only</string>
+    <string name="pref_night_mode">Night mode</string>
 </resources>

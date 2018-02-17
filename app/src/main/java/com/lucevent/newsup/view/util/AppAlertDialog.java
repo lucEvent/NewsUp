@@ -139,7 +139,7 @@ public class AppAlertDialog implements AlertCode {
         @Override
         public void onClick(View v)
         {
-            dismiss();
+            onDoNotAskAgainAction.onClick(v);
             mContext.startActivity(new Intent(Intent.ACTION_VIEW,
                     Uri.parse("market://details?id=" + mContext.getPackageName())));
         }
@@ -149,7 +149,7 @@ public class AppAlertDialog implements AlertCode {
         @Override
         public void onClick(View v)
         {
-            dismiss();
+            onDoNotAskAgainAction.onClick(v);
             mContext.startActivity(new Intent(mContext, ContactActivity.class));
         }
     };

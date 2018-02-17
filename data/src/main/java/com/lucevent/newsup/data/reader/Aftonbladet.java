@@ -59,10 +59,9 @@ public class Aftonbladet extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
-        Elements article = doc.select("._10OUE");
-        article.select("._11S-G,[id^='abAdArea'],._1pdIt,._7gDWL,._3DeZc,._2XS3K,.abThemeBorder,._1V3Dg,[data-test-id='inline-teaser']").remove();
-        article.select("[data-reactid]").removeAttr("data-reactid");
-
+        Elements article = doc.select("main > div");
+        article.select("[data-component-key='streamer'],[data-test-id='headline'],[data-test-id='label'],[id^='abAdArea']").remove();
+        article.select("._3u81U,._11S-G,._1pdIt,._7gDWL,._2XS3K,.abThemeBorder,._1V3Dg,[data-test-id='inline-teaser'],button").remove();
         //
         article.select("._3oEVrB,._12nap,._3oEVr").tagName("h3");
         article.select("._1hqNA").tagName("figcaption");
@@ -72,10 +71,28 @@ public class Aftonbladet extends com.lucevent.newsup.data.util.NewsReader {
             cleanAttributes(e);
             e.html("<strong>" + e.html() + "</strong>");
         }
+        for (Element e : article.select("svg:has(text)")) {
+            e.tagName("strong");
+            e.html(e.text());
+            cleanAttributes(e);
+        }
+        // Pictures
+        for (Element e : article.select("picture source")) {
+            String src = e.attr("srcset");
+            src = src.substring(0, src.indexOf(" "));
 
+            e = e.parent();
+            e.tagName("img");
+            e.attr("src", src);
+            e.html("");
+        }
+        for (Element e : article.select("[data-test-id='image']")) {
+            e.html(e.select("img,figcaption").outerHtml());
+        }
         // Gallery
-        for (Element e : article.select("._1nGyY"))
-            e.html(e.select("._2XM84,picture").outerHtml());
+        for (Element e : article.select("._1nGyY")) {
+            e.html(e.select("._2XM84,img").outerHtml());
+        }
         // end gallery
 
         // Videos

@@ -209,13 +209,6 @@ public class NewsView extends RelativeLayout {
             sideToolbar.close();
     }
 
-    private boolean isInternetAvailable()
-    {
-        NetworkInfo ni = ((ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE))
-                .getActiveNetworkInfo();
-        return ni != null && ni.isConnected() && ni.isAvailable();
-    }
-
     private final View.OnClickListener onShareAction = new View.OnClickListener() {
         @Override
         public void onClick(View v)

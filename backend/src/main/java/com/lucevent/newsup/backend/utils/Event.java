@@ -81,7 +81,6 @@ public class Event {
             }
             try {
                 res.endTime = sdf.parse(parsed.getString("end")).getTime();
-                System.out.println("endtime:" + res.endTime);
             } catch (Exception e) {
                 throw new Exception("Wrong end time");
             }

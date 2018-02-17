@@ -182,8 +182,9 @@ public class DBManager {
                 do {
 
                     Pair<Integer, Integer> data = DBReadings.parseAll(cursor);
-
-                    sites.getSiteByCode(data.first).setNumReadings(data.second);
+                    Site s = sites.getSiteByCode(data.first);
+                    if (s != null)    // needed in case a Site is removed
+                        s.setNumReadings(data.second);
 
                 } while (cursor.moveToNext());
 

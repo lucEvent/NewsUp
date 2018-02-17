@@ -77,14 +77,14 @@ public class NewsReaderManager {
     public void readNewsOf(@NonNull Site site, @Nullable int[] sections, Handler handler)
     {
         uiCallback = handler;
-        addPetition(site, sections);
+        addPetition(site, sections, true);
     }
 
     public void readNewsOf(@NonNull Sites sites, Handler handler)
     {
         uiCallback = handler;
         for (Site site : sites)
-            addPetition(site, null);
+            addPetition(site, null, false);
     }
 
     public void readEvent(Event event, Handler handler)
@@ -171,13 +171,16 @@ public class NewsReaderManager {
         }
     }
 
-    private void addPetition(Site site, int[] sections)
+    private void addPetition(Site site, int[] sections, boolean urgent)
     {
         NewsPetition petition = new NewsPetition();
         petition.site = site;
         petition.sections = sections == null ? AppSettings.getMainSections(site) : sections;
         synchronized (petitionQueue) {
-            petitionQueue.add(petition);
+            if (urgent)
+                petitionQueue.add(0, petition);
+            else
+                petitionQueue.add(petition);
             petitionQueue.notify();
         }
     }

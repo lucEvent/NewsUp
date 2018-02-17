@@ -60,22 +60,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="6dp"
-            android:text="@string/about_content_title_coming_soon"
-            android:textSize="14sp"
-            android:textStyle="bold"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:padding="6dp"
-            android:text="@string/about_content_coming_soon"
-            android:textSize="14sp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="6dp"
             android:text="@string/about_content_title_next_sites"
             android:textSize="14sp"
             android:textStyle="bold"/>

@@ -40,6 +40,7 @@
     <string name="by_default">Som standard</string>
     <string name="x_section_selected">%d sektioner valda</string>
     <string name="event">Händelse</string>
+    <string name="no_internet_no_media">Elementet är inte tillgängligt utan anslutning</string>
 
     <string name="mon">Mån</string>
     <string name="tue">Tis</string>
@@ -150,8 +151,7 @@
     <!-- ***************************** ***************** ********************************** -->
     <string name="about_content_contact">Utvecklat av Rafael J. Lucena\nKontakt: rafaa89(snabel-a)gmail.com</string>
     <string name="about_content_title_new_features">De senaste funktionerna och förbättringarna:</string>
-    <string name="about_content_title_coming_soon">Vad kommer snart?:</string>
-    <string name="about_content_title_next_sites">Möjliga stöd för:</string>
+    <string name="about_content_title_next_sites">Publikationer som kan läggas till i följande utgåvor:</string>
 
 
 </resources>

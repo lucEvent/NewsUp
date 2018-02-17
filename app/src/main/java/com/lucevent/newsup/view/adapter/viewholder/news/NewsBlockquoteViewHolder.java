@@ -11,7 +11,7 @@ import com.lucevent.newsup.parse.NewsBlockquote;
 
 public class NewsBlockquoteViewHolder extends NewsElementViewHolder {
 
-    private TextView content;
+    protected TextView content;
 
     public NewsBlockquoteViewHolder(View v)
     {

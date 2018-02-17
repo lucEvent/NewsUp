@@ -98,6 +98,7 @@ public class ElPais extends com.lucevent.newsup.data.util.NewsReader {
                 e.html(img.outerHtml());
         }
         cleanAttributes(article.select("img[src]"), "src");
+        article.select("[data-mce-href]").removeAttr("data-mce-href");
 
         news.content = finalFormat(article, false);
     }

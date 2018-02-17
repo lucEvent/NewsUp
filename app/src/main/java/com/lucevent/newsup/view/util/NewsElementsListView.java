@@ -11,6 +11,7 @@ import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.io.SDManager;
+import com.lucevent.newsup.net.ConnectivityManager;
 import com.lucevent.newsup.parse.NewsElement;
 import com.lucevent.newsup.parse.NewsElements;
 import com.lucevent.newsup.parse.NewsTitle;
@@ -30,6 +31,7 @@ public class NewsElementsListView extends LinearLayout {
     private final String TWITTER_SCRIPT, INSTAGRAM_SCRIPT;
 
     private LayoutInflater mInflater;
+    private ConnectivityManager mConnectivityManager;
 
     private ContentLoader contentLoader;
 
@@ -39,12 +41,13 @@ public class NewsElementsListView extends LinearLayout {
         setOrientation(LinearLayout.VERTICAL);
 
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mConnectivityManager = new ConnectivityManager(context);
 
         mViews = new ArrayList<>(16);
         contentLoader = new ContentLoader(mViews);
 
         TWITTER_SCRIPT = "<script async defer>" + SDManager.readRaw(context, R.raw.twitter) + "</script>";
-        INSTAGRAM_SCRIPT = "<script async defer>" + SDManager.readRaw(context, R.raw.instagram) + "</script>";
+        INSTAGRAM_SCRIPT = "<script>" + SDManager.readRaw(context, R.raw.instagram) + "</script>";
 
         mTextSize = AppSettings.getFontSize(2);
         mDarkStyle = AppSettings.getNightModeStatus();
@@ -86,7 +89,6 @@ public class NewsElementsListView extends LinearLayout {
     {
         NewsElementViewHolder h;
         switch (elem.getType()) {
-            default:
             case NewsElement.TYPE_TITLE:
                 h = new com.lucevent.newsup.view.adapter.viewholder.news.NewsTextViewHolder(mInflater.inflate(R.layout.i_news_title, this, false), NewsTextViewHolder.TEXT_SIZE_TITLE);
                 break;
@@ -114,9 +116,6 @@ public class NewsElementsListView extends LinearLayout {
             case NewsElement.TYPE_INSTAGRAM:
                 h = new com.lucevent.newsup.view.adapter.viewholder.news.NewsInstagramViewHolder(mInflater.inflate(R.layout.i_news_webview, this, false), INSTAGRAM_SCRIPT);
                 break;
-            case NewsElement.TYPE_IFRAME:
-                h = new com.lucevent.newsup.view.adapter.viewholder.news.NewsIframeViewHolder(mInflater.inflate(R.layout.i_news_webview, this, false));
-                break;
             case NewsElement.TYPE_DL_TITLE:
                 h = new com.lucevent.newsup.view.adapter.viewholder.news.NewsTextViewHolder(mInflater.inflate(R.layout.i_news_dl_title, this, false), NewsTextViewHolder.TEXT_SIZE_NORMAL);
                 break;
@@ -126,14 +125,24 @@ public class NewsElementsListView extends LinearLayout {
             case NewsElement.TYPE_TABLE:
                 h = new com.lucevent.newsup.view.adapter.viewholder.news.NewsTableViewHolder(mInflater.inflate(R.layout.i_news_table, this, false));
                 break;
-            case NewsElement.TYPE_VIDEO:
-                h = new com.lucevent.newsup.view.adapter.viewholder.news.NewsVideoViewHolder(mInflater.inflate(R.layout.i_news_webview, this, false));
-                break;
-            case NewsElement.TYPE_AUDIO:
-                h = new com.lucevent.newsup.view.adapter.viewholder.news.NewsAudioViewHolder(mInflater.inflate(R.layout.i_news_webview, this, false));
-                break;
-            case NewsElement.TYPE_WIDGET:
-                h = new com.lucevent.newsup.view.adapter.viewholder.news.NewsNUWidgetViewHolder(mInflater.inflate(R.layout.i_news_webview, this, false));
+            default:
+                if (mConnectivityManager.isInternetAvailable())
+                    switch (elem.getType()) {
+                        default:
+                        case NewsElement.TYPE_IFRAME:
+                            h = new com.lucevent.newsup.view.adapter.viewholder.news.NewsIframeViewHolder(mInflater.inflate(R.layout.i_news_webview, this, false));
+                            break;
+                        case NewsElement.TYPE_VIDEO:
+                            h = new com.lucevent.newsup.view.adapter.viewholder.news.NewsVideoViewHolder(mInflater.inflate(R.layout.i_news_webview, this, false));
+                            break;
+                        case NewsElement.TYPE_AUDIO:
+                            h = new com.lucevent.newsup.view.adapter.viewholder.news.NewsAudioViewHolder(mInflater.inflate(R.layout.i_news_webview, this, false));
+                            break;
+                        case NewsElement.TYPE_WIDGET:
+                            h = new com.lucevent.newsup.view.adapter.viewholder.news.NewsNUWidgetViewHolder(mInflater.inflate(R.layout.i_news_webview, this, false));
+                    }
+                else
+                    h = new com.lucevent.newsup.view.adapter.viewholder.news.NewsNIMediaViewHolder(mInflater.inflate(R.layout.i_news_blockquote, this, false));
         }
         h.setNewsElement(elem);
         return h;

@@ -80,10 +80,9 @@ public class FragmentManager {
         return currentFragment;
     }
 
-    public Fragment popToFirst()
+    public void popToFirst()
     {
         fManager.popBackStack(null, android.app.FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
         fManager
                 .beginTransaction()
                 .remove(stack.get(stackPointer).second)
@@ -99,7 +98,6 @@ public class FragmentManager {
         updateCheckedItem(tmp.first, old_id);
 
         currentFragment = tmp.second;
-        return currentFragment;
     }
 
     public int getBackStackEntryCount()
@@ -134,13 +132,6 @@ public class FragmentManager {
                     v.setSelected(true);
             }
         }
-    }
-
-    public static String n(int id)
-    {
-        String r = Integer.toString(id);
-        //    return r.substring(r.length() - 3, r.length());
-        return r;
     }
 
 }

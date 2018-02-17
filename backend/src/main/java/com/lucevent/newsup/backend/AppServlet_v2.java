@@ -10,6 +10,8 @@ import com.lucevent.newsup.data.util.Site;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -179,14 +181,24 @@ public class AppServlet_v2 extends HttpServlet {
     {
 
         long currentTime = System.currentTimeMillis();
-        ArrayList<Event> events = new ArrayList<>(ofy().load().type(Event.class)
+        TreeSet<Event> events = new TreeSet<>(new Comparator<Event>() {
+            @Override
+            public int compare(Event o1, Event o2)
+            {
+                long currentTime = System.currentTimeMillis();
+                return Long.compare(o1.endTime - currentTime, o2.endTime - currentTime);
+            }
+        });
+        ArrayList<Event> aux = new ArrayList<>(ofy().load().type(Event.class)
                 .filter("visible", true)
                 .filter("endTime >", currentTime)
                 .list());
 
-        for (int i = events.size() - 1; i >= 0; i--)
-            if (events.get(i).startTime > currentTime)
-                events.remove(i);
+        for (int i = aux.size() - 1; i >= 0; i--)
+            if (aux.get(i).startTime > currentTime)
+                aux.remove(i);
+
+        events.addAll(aux);
 
         resp.getWriter().println(BackendParser.toEntry(events, lang).toString());
     }

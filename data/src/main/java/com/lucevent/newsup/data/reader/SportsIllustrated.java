@@ -26,7 +26,7 @@ public class SportsIllustrated extends com.lucevent.newsup.data.util.NewsReader 
     protected void readNewsContent(Document doc, News news)
     {
         Elements article = doc.select(".lead-image .lazy-image,.article-content .media-video,#article-body");
-        article.select("script,link,.js-inner-container,.image-wrap-container,.ad-container,.ad-sticky-container,.inline-article,.video,wbr").remove();
+        article.select("script,link,.js-inner-container,.image-wrap-container,.ad-container,.ad-sticky-container,.inline-article,.video,wbr,.riddle-container").remove();
 
         article.select("noscript").tagName("p");
         article.select("[data-saferedirecturl]").removeAttr("data-saferedirecturl");

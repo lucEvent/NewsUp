@@ -60,6 +60,7 @@ public class Verne extends com.lucevent.newsup.data.util.NewsReader {
             e.tagName("nuwidget");
         }
         cleanAttributes(article.select("img[src]"), "src");
+        article.select("script").remove();
 
         news.content = finalFormat(article, false);
     }

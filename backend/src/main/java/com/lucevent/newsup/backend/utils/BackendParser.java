@@ -16,6 +16,7 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeSet;
 
 public class BackendParser {
@@ -204,7 +205,7 @@ public class BackendParser {
         return sb.toString();
     }
 
-    public static StringBuilder toEntry(List<Event> events, String lang)
+    public static StringBuilder toEntry(Set<Event> events, String lang)
     {
         StringBuilder sb = new StringBuilder("<data>");
         for (Event E : events) {
