@@ -10,13 +10,11 @@ public class PeopleSections extends Sections {
         super();
 
         add(new Section("Home", "http://people.com/feed/", 0));
-        add(new Section("News", "http://people.com/news/feed/", 0));
         add(new Section("Celebrity", "http://people.com/celebrity/feed/", 0));
         add(new Section("Photos", "http://people.com/photos/feed/", 0));
         add(new Section("Style", "http://people.com/style/feed/", 0));
         add(new Section("Fashion", "http://people.com/fashion/feed/", 0));
         add(new Section("Beauty", "http://people.com/beauty/feed/", 0));
-        add(new Section("Stuff we love", "http://people.com/stuff-we-love/feed/", 0));
         add(new Section("Food", "http://people.com/food/feed/", 0));
         add(new Section("Bodies", "http://people.com/bodies/feed/", 0));
         add(new Section("Babies", "http://people.com/babies/feed/", 0));

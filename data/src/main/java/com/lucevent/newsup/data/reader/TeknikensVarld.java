@@ -33,11 +33,16 @@ public class TeknikensVarld extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected void readNewsContent(Document doc, News news)
     {
-        Elements article = doc.select(".article-content");
-        doc.select("script,.lureToFB,.related-gallery,.btdm-factbox,.pdf-shop").remove();
+        Elements article = doc.select(".entry-content");
+        doc.select("script,.-teaser-as-list,.desktop-ad,.mobile-ad").remove();
 
-        doc.select(".wp-caption-text").tagName("figcaption");
-        doc.select("[style]").removeAttr("style");
+        doc.select(".wp-caption-text,.caption,.photographer").tagName("figcaption");
+        doc.select(".btdm-factbox").tagName("blockquote");
+
+        for (Element fig : article.select("figure:has(noscript)")) {
+            cleanAttributes(fig);
+            fig.html(fig.select("noscript,.wp-caption-body").html());
+        }
 
         cleanAttributes(doc.select("img"), "src");
 

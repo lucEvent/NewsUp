@@ -1,9 +1,13 @@
 package com.lucevent.newsup.io;
 
+import android.app.DownloadManager;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Environment;
+import android.widget.Toast;
 
 import com.lucevent.newsup.AppSettings;
+import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.kernel.util.Compressor;
 
@@ -92,6 +96,24 @@ public class SDManager {
             e.printStackTrace();
         }
         return "";
+    }
+
+    public static void downloadFile(Context c, String url)
+    {
+        String imgFileName = url.substring(url.lastIndexOf("/") + 1, url.length());
+
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
+
+        request.setTitle(imgFileName)
+                .setAllowedOverRoaming(false)
+                .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, imgFileName);
+
+        DownloadManager downloadManager = (DownloadManager) c.getSystemService(android.content.Context.DOWNLOAD_SERVICE);
+        if (downloadManager != null) {
+            downloadManager.enqueue(request);
+            Toast.makeText(c, R.string.msg_downloading_image, Toast.LENGTH_SHORT).show();
+        }
     }
 
     public long getCacheSize()

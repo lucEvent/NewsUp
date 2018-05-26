@@ -4,6 +4,7 @@ import com.lucevent.newsup.backend.utils.Alerts;
 import com.lucevent.newsup.backend.utils.BackendParser;
 import com.lucevent.newsup.backend.utils.Event;
 import com.lucevent.newsup.backend.utils.Reports;
+import com.lucevent.newsup.backend.utils.SiteSearchEngine;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.Site;
@@ -44,7 +45,6 @@ public class AppServlet_v2 extends HttpServlet {
                     Data.getSite(Integer.parseInt(req.getParameter("site"))),
                     req.getParameter("l"),
                     resp
-
             );
 
         } else if (req.getParameter("news") != null) {
@@ -100,6 +100,10 @@ public class AppServlet_v2 extends HttpServlet {
                     req.getParameter("v"),
                     req.getParameter("lang"),
                     resp);
+
+        } else if (req.getParameter("request_site") != null) {
+
+            resp_request_site(req.getParameter("request_site"), resp);
 
         }
         resp.flushBuffer();
@@ -208,7 +212,7 @@ public class AppServlet_v2 extends HttpServlet {
         Alerts alerts = new Alerts();
 
         if (app_version == null || app_version.isEmpty() ||
-                !(app_version.startsWith("2.5.") || app_version.startsWith("2.6."))) {
+                !(app_version.startsWith("2.6.") || app_version.startsWith("2.7."))) {
             alerts.addUpdateAlert();
         } else {
             alerts.addRateAlert();
@@ -216,6 +220,17 @@ public class AppServlet_v2 extends HttpServlet {
         }
 
         resp.getWriter().println(BackendParser.json(alerts));
+    }
+
+    private void resp_request_site(String request_site, HttpServletResponse resp) throws IOException
+    {
+        try {
+            String json = SiteSearchEngine.search(request_site);
+            resp.getWriter().println(json);
+        } catch (Exception e) {
+            String json = "{\"error\":\"" + e.getMessage() + "\"}";
+            resp.getWriter().println(json);
+        }
     }
 
 }

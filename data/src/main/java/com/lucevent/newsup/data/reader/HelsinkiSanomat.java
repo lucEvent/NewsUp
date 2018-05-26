@@ -31,17 +31,18 @@ public class HelsinkiSanomat extends com.lucevent.newsup.data.util.NewsReader {
         if (article.isEmpty()) {
             return;
         }
-        article.select(".hidden,script,[itemprop='video']").remove();
+        article.select(".hidden,script,[itemprop='video'],.article-ad-block").remove();
 
-        for (Element figure : article.select("figure.image")) {
-            figure.removeAttr("class");
+        for (Element f : article.select("figure:has(img)")) {
+            cleanAttributes(f);
 
-            Elements img = figure.select("img");
-            if (!img.isEmpty())
-                figure.html(img.outerHtml());
+            Element img = f.select("img").first();
+            f.html(insertImg(
+                    img.hasAttr("src") ? img.attr("src") : img.attr("data-srcset")
+            ));
         }
-
         article.select(".votsikko").tagName("h4");
+        article.select("[style]").removeAttr("style");
 
         news.content = finalFormat(image, true) +
                 "<p>" + finalFormat(article, true).replace("<br>", "</p><p>") + "</p>";

@@ -10,7 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
-import android.support.annotation.NonNull;
+import android.support.customtabs.CustomTabsIntent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -36,17 +36,17 @@ import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.Section;
 import com.lucevent.newsup.data.util.Sections;
 import com.lucevent.newsup.data.util.Site;
+import com.lucevent.newsup.data.util.UserSite;
 import com.lucevent.newsup.io.BookmarksManager;
 import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.AppData;
 import com.lucevent.newsup.kernel.KernelManager;
 import com.lucevent.newsup.net.MainChangeListener;
-import com.lucevent.newsup.permission.StoragePermissionHandler;
 import com.lucevent.newsup.services.StatisticsService;
 import com.lucevent.newsup.services.util.DownloadResponse;
 import com.lucevent.newsup.view.adapter.NewsAdapter;
+import com.lucevent.newsup.view.dialog.AppAlertDialog;
 import com.lucevent.newsup.view.dialog.SectionsDialog;
-import com.lucevent.newsup.view.util.AppAlertDialog;
 import com.lucevent.newsup.view.util.NewsAdapterList;
 import com.lucevent.newsup.view.util.NewsView;
 import com.lucevent.newsup.view.util.OnBackPressedListener;
@@ -61,8 +61,8 @@ import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class NewsListFragment extends android.app.Fragment implements View.OnClickListener,
-        View.OnLongClickListener, OnBackPressedListener {
+public class NewsListFragment extends StoragePermissionFragment implements View.OnClickListener,
+        OnBackPressedListener {
 
     public static NewsListFragment instanceFor(int site_code)
     {
@@ -162,7 +162,6 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
     private KernelManager dataManager;
     private NewsAdapter adapter;
     private Handler handler;
-    private StoragePermissionHandler permissionHandler;
 
     private View mainView;
     private NewsView newsView;
@@ -180,7 +179,6 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
 
         handler = new Handler(this);
         dataManager = new KernelManager(context);
-        permissionHandler = new StoragePermissionHandler(context);
 
         lastLoadedSiteCode = -9;
         setSite(getArguments().getInt(AppCode.SITE_CODE));
@@ -198,7 +196,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         if (adapter == null) {
             mainView = inflater.inflate(R.layout.f_news_list, container, false);
 
-            adapter = new NewsAdapter(this, this, onBookmarkClick, NewsAdapterList.SortBy.byTime);
+            adapter = new NewsAdapter(this, onBookmarkClick, NewsAdapterList.SortBy.byTime);
             onLoadImagesPreferenceChanged();
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -213,6 +211,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
             newsView = (NewsView) mainView.findViewById(R.id.news_view);
             newsView.setFragmentContext(this, getActivity() instanceof Main ? ((Main) getActivity()).drawer : null);
             newsView.setBookmarkStateChangeListener(onBookmarkClick);
+            newsView.setImageLongClickListener(onImageLongClick);
 
             btn_sections = (FloatingActionButton) mainView.findViewById(R.id.button_sections);
             btn_sections.setOnClickListener(onSectionsAction);
@@ -290,6 +289,11 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         final News news = (News) v.getTag();
         final Context context = getActivity();
 
+        if (currentSite instanceof UserSite) {
+            openCustomTab(news);
+            return;
+        }
+
         KernelManager.readContentOf(news);
 
         if (news.content != null && !news.content.isEmpty()) {
@@ -321,8 +325,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
             @Override
             public void onClick(View v2)
             {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(news.link));
-                context.startActivity(browserIntent);
+                openCustomTab(news);
                 dialog.dismiss();
             }
         });
@@ -337,11 +340,14 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         dialog.show();
     }
 
-    @Override
-    public boolean onLongClick(View v)
+    private void openCustomTab(News n)
     {
-        //// TODO: 14/10/2016  
-        return false;
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        builder.setToolbarColor(getResources().getColor(R.color.colorPrimary));
+        builder.setShowTitle(true);
+
+        CustomTabsIntent customTabsIntent = builder.build();
+        customTabsIntent.launchUrl(getActivity(), Uri.parse(n.link));
     }
 
     private static class Handler extends android.os.Handler {
@@ -462,7 +468,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
         @Override
         public boolean onMenuItemClick(MenuItem item)
         {
-            AppSettings.toggleFavorite(currentSite);
+            AppSettings.toggleFavorite(currentSite, true);
             setFavoriteIcon();
             return true;
         }
@@ -486,19 +492,6 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
             int iSection = (int) v.getTag();
             dataManager.getNewsOf(currentSite, new int[]{iSection}, handler);
             sectionsDialog.dismiss();
-        }
-    };
-
-    private View tempBookmarkButton;
-
-    private View.OnClickListener onBookmarkClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View v)
-        {
-            if (permissionHandler.checkAndAsk(NewsListFragment.this))
-                bookmarkStateChanged(v);
-            else
-                tempBookmarkButton = v;
         }
     };
 
@@ -541,14 +534,7 @@ public class NewsListFragment extends android.app.Fragment implements View.OnCli
     };
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults)
-    {
-        if (permissionHandler.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
-            bookmarkStateChanged(tempBookmarkButton);
-        }
-    }
-
-    private void bookmarkStateChanged(View btn)
+    protected void onBookmarkStateChanged(View btn)
     {
         News news = (News) btn.getTag();
 

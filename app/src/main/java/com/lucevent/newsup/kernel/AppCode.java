@@ -2,8 +2,8 @@ package com.lucevent.newsup.kernel;
 
 public interface AppCode {
 
-    int REQUEST_PERMISSION_WRITE_IN_STORAGE = 200;
-    int REQUEST_PERMISSION_READ_PHONE_STATE = 201;
+    int REQUEST_PERMISSION_BOOKMARK = 200;
+    int REQUEST_PERMISSION_SAVE_IMAGE = 201;
 
     int ERROR = -9;
 
@@ -15,8 +15,10 @@ public interface AppCode {
     int ALERT = 14;
 
     int REQUEST_ADD_CONTENT = 30;
+    int REQUEST_SITE = 31;
 
     int STATISTICS = 50;
+    int TAG_IMAGE = 0xff13a6ef;
 
     String SITE_CODE = "site_code";
     String SOURCES = "sources";

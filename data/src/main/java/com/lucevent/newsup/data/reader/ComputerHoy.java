@@ -4,6 +4,7 @@ import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class ComputerHoy extends com.lucevent.newsup.data.util.NewsReader {
@@ -54,33 +55,12 @@ public class ComputerHoy extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected void readNewsContent(Document doc, News news)
     {
-        Elements img = doc.select("img[itemprop='image']");
-        Elements article = doc.select("#ab_stickyid");
+        Elements article = doc.select(".main-element img,.article-body");
 
-        if (article.isEmpty()) {
-            article = doc.select("article > p,.link-paso");
+        for (Element divimg : article.select(".container-img:has(img)"))
+            divimg.html(divimg.select("img").outerHtml());
 
-            if (article.isEmpty()) {
-
-                article = doc.select(".even article");
-
-                if (article.isEmpty()) {
-                    // TODO: 15/12/2016
-                    return;
-                } else {
-                    img.clear();
-                    article.select("header,.galerias,.submitted,.galeria-inline").remove();
-                }
-            }
-        } else
-            article.select(".adcuadrado,blockquote,.galeria-inline").remove();
-
-        article.select("img[style],iframe[style]").removeAttr("style");
-        article.select("[onmouseover]").removeAttr("onmouseover");
-        article.select("[onmouseout]").removeAttr("onmouseout");
-        article.select(".valoracion").remove();
-
-        news.content = img.outerHtml() + finalFormat(article, true);
+        news.content = finalFormat(article, true);
     }
 
 }

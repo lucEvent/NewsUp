@@ -35,6 +35,7 @@ public class GoogleEarthBlog extends com.lucevent.newsup.data.util.NewsReader {
         return description;
     }
 
+    @Override
     protected String parseContent(Element prop)
     {
         Element article = jsoupParse(prop);

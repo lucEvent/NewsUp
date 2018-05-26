@@ -22,10 +22,8 @@ public class DiscoverSections extends Sections {
         add(new Section("Blogs", "http://feeds.feedburner.com/DiscoverBlogs", 0));
         add(new Section("D-brief", "http://feeds.feedburner.com/d_brief", 1));
         add(new Section("The Crux", "http://feeds.feedburner.com/discovercrux", 1));
-        add(new Section("Astrobeat", "http://feeds.feedburner.com/astrobeat", 1));
         add(new Section("Citizen science salon", "http://feeds.feedburner.com/citizen-science-salon", 1));
         add(new Section("Dead things", "http://feeds.feedburner.com/dead-things/", 1));
-        add(new Section("The extremo files", "http://feeds.feedburner.com/the-extremo-files", 1));
         add(new Section("ImaGeo", "http://feeds.feedburner.com/imageo", 1));
         add(new Section("Inkfish", "http://feeds.feedburner.com/ink-fish", 1));
         add(new Section("Lovesick cyborg", "http://feeds.feedburner.com/lovesick-cyborg", 1));

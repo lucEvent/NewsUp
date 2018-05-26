@@ -16,7 +16,6 @@ public class TheInterceptSections extends Sections {
 
         add(new Section("Staff", null, -1));
         add(new Section("Ryan Devereaux", "https://theintercept.com/staff/ryan-devereaux/feed/?rss", 1));
-        add(new Section("Dan Froomkin", "https://theintercept.com/staff/dan-froomkin/feed/?rss", 1));
         add(new Section("Ryan Gallagher", "https://theintercept.com/staff/ryan-gallagher/feed/?rss", 1));
         add(new Section("Glenn Greenwald", "https://theintercept.com/staff/glenn-greenwald/feed/?rss", 1));
         add(new Section("Murtaza Hussain", "https://theintercept.com/staff/murtaza-hussain/feed/?rss", 1));

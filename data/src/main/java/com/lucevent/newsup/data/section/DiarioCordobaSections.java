@@ -41,7 +41,6 @@ public class DiarioCordobaSections extends Sections {
 
         add(new Section("Tema del d\u00EDa", "http://zetaestaticos.com/cordoba/rss/106_es.xml", 0));
         add(new Section("Opini\u00F3n", "http://zetaestaticos.com/cordoba/rss/100_es.xml", 0));
-        add(new Section("Tu Informas", "http://zetaestaticos.com/cordoba/rss/221_es.xml", 0));
 
         add(new Section("UCOniversitas", "http://zetaestaticos.com/cordoba/rss/261_es.xml", 0));
 

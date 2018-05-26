@@ -3,7 +3,6 @@ package com.lucevent.newsup.data.reader;
 import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.News;
 
-import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -11,7 +10,7 @@ import org.jsoup.select.Elements;
 public class Elle extends com.lucevent.newsup.data.util.NewsReader {
 
     //  Tags:
-    //  [category,                              description, guid, item, link,                                          pubdate, title]
+    //  [category,                              description, guid, item, link, media:content,                           pubdate, title]
     //  [category, content:encoded, dc:creator, description, guid, item, link, postid, postimg, postimgapa, postimglow, pubdate, title]
 
     public Elle()
@@ -23,7 +22,7 @@ public class Elle extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_CONTENT_ENCODED},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{"postimgapa".hashCode()},
+                new int[]{TAG_MEDIA_CONTENT, "postimgapa".hashCode()},
                 "");
     }
 
@@ -44,70 +43,64 @@ public class Elle extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected Enclosure parseEnclosure(Element prop)
     {
-        return new Enclosure(prop.text(), "image", "");
+        if (prop.tagName().startsWith("post"))
+            return new Enclosure(prop.text(), "image", "");
+        return new Enclosure(prop.attr("url"), "image", "");
     }
 
     @Override
     protected void readNewsContent(Document doc, News news)
     {
-        doc.getElementsByTag("u5:p").remove();
-        Elements articleBody = doc.select("[itemprop='articleBody']");
+        if (news.link.contains("/pasarelas/")) {
+            Elements slides = doc.select(".slide-container");
+            slides = slides.select(".slide-media img,.image-credit,.slideshow-slide-hed");
+            slides.select(".slideshow-slide-hed").tagName("p");
+            slides.select(".image-credit").tagName("figcaption");
+            for (Element img : slides.select("img[data-src]")) {
+                String src = img.attr("data-src");
+                cleanAttributes(img);
+                img.attr("src", src);
+            }
+            news.content = finalFormat(slides, true);
+            return;
+        }
 
-        Elements article = articleBody.select(".standard-article-body--content");
+        Elements article = doc.select(".standard-body");
 
-        if (!article.isEmpty()) {
-
-            article.select(".ad-gpt-breaker-container,.social-byline,.zoomable-expand,.embedded-image--lead-image-share,.image-share,.image-copyright,.module,.animated-image--overlay,.pullquote-share").remove();
-
-        } else {
-
-            article = articleBody.select(".longform-article-body--text");
-
-            if (!article.isEmpty()) {
-
-                article.select(".longform-article--header-info,.embedded-image--info,.zoomable-expand,.image-share,.pullquote-share,.animated-image--overlay").remove();
-
-            } else {
-
-                article = articleBody.select(".listicle--section-inner");
-
-                if (!article.isEmpty()) {
-
-                    article.select(".listicle--share,.listicle--ad-rail,.listicle--ad-mobile,.zoomable-expand,.image-share,.related--galleries-container,.listicle--ad-leaderboard,.embedded-image--lead-copyright,.listicle--item-copyright").remove();
-
-                } else {
-
-                    article = doc.select(".gallery-main-view,.listicle--section-inner");
-
-                    if (!article.isEmpty()) {
-
-                        article.select(".gallery-prev-arrow,.view-gallery,.gallery-description--more-btn,.view-gallery--scroll,.related--galleries-container,.image-share,.listicle--ad-leaderboard,.listicle--item-copyright,.listicle-slide--tools").remove();
-
-                        Elements description = article.select("h2");
-                        if (!description.isEmpty())
-                            description.get(0).tagName("p");
-
-                    } else {
-                        //todo
+        if (article.isEmpty()) {
+            article = doc.select(".listicle-body");
+            if (article.isEmpty()) {
+                article = doc.select(".longform-body");
+                if (article.isEmpty()) {
+                    article = doc.select(".slideshow-desktop-dek,.slide-container");
+                    if (article.isEmpty()) {
+                        // No content found
                         return;
+                    } else {
+                        article = article.select(".slideshow-desktop-dek,.slide-media img,.image-credit,.slideshow-slide-dek");
+                        article.select(".image-credit").tagName("figcaption");
                     }
                 }
+            } else {    // listicle-body
+                article = article.select(".listicle-intro,.listicle-slide-hed,.slide-media img,.slide-media iframe,.slide-media .image-credit,.listicle-slide-dek");
+                article.select(".listicle-slide-hed").tagName("h4");
             }
         }
-        article.select(".breaker-ad").remove();
+        article.select(".standard-info,.breaker-ad,.longform-info").remove();
+        article.select(".image-credit").tagName("figcaption");
 
-        for (Element e : article.select("img")) {
-            String src = e.attr("data-src");
-            for (Attribute attr : e.attributes())
-                e.removeAttr(attr.getKey());
-            e.attr("src", src);
+        for (Element img : article.select("img[data-src]")) {
+            String src = img.attr("data-src");
+            cleanAttributes(img);
+            img.attr("src", src);
         }
-        for (Element e : article.select("iframe")) {
+        for (Element e : article.select("iframe[data-src]")) {
             String src = e.attr("data-src");
-            if (!src.isEmpty()) {
-                e.attr("src", src);
-                e.removeAttr("data-src");
-            }
+            e.attr("src", src);
+            e.removeAttr("data-src");
+        }
+        for (Element e : article.select(".hearstPlayer[data-player-id]")) {
+            e.parent().html(insertIframe("https://player.elle.com/?id=" + e.attr("data-player-id")));
         }
         for (Element e : article.select(".fb-video")) {
             String src = e.attr("data-href");

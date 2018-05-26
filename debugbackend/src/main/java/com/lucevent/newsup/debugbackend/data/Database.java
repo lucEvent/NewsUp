@@ -67,40 +67,22 @@ public class Database {
             ofy().save().entity(data).now();
     }
 
-    public void saveLog(long task_id, int order, String data)
+    public void savePartialResult(PartialTestResult ptr)
     {
-        Log log = new Log();
-        log.taskId = task_id;
-        log.order = order;
-        log.data = data;
-
-        ofy().save().entity(log).now();
+        ofy().save().entity(ptr).now();
     }
 
-    public void clearLogs()
+    public void clearTestCache()
     {
-        List<Key<Log>> keys = ofy().load().type(Log.class).keys().list();
+        List<Key<PartialTestResult>> keys = ofy().load().type(PartialTestResult.class).keys().list();
         ofy().delete().keys(keys).now();
     }
 
-    public String getFullReport(Task task)
+    public List<PartialTestResult> getPartialTestResults(Long task_id)
     {
-        TreeSet<Log> logs = new TreeSet<>(new Comparator<Log>() {
-            @Override
-            public int compare(Log o1, Log o2)
-            {
-                return (o1.order < o2.order) ? -1 : ((o1.order == o2.order) ? 0 : 1);
-            }
-        });
-        logs.addAll(ofy().load().type(Log.class)
-                .filter("taskId", task.id)
-                .list());
-
-        StringBuilder res = new StringBuilder();
-        for (Log log : logs)
-            res.append(log.data);
-
-        return res.toString();
+        return ofy().load().type(PartialTestResult.class)
+                .filter("taskId", task_id)
+                .list();
     }
 
     public void saveErrorOn(News news)
@@ -113,7 +95,8 @@ public class Database {
         ofy().save().entity(error).now();
     }
 
-    public void saveError(Site s, String errorContent) {
+    public void saveError(Site s, String errorContent)
+    {
         Error error = new Error();
         error.n_link = "";
         error.n_content = errorContent;

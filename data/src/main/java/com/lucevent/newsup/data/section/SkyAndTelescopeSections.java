@@ -36,13 +36,10 @@ public class SkyAndTelescopeSections extends Sections {
 
         add(new Section("Astronomy Blogs", "http://www.skyandtelescope.com/astronomy-blogs/feed/", 0));
         add(new Section("Explore the Night - Bob King", "http://www.skyandtelescope.com/astronomy-blogs/explore-night-bob-king/feed/", 1));
-        add(new Section("Astrophotography - Jerry Lodriguss", "http://www.skyandtelescope.com/astronomy-blogs/astrophotography-jerry-lodriguss/feed/", 1));
         add(new Section("Astronomy in Space - David Dickinson", "http://www.skyandtelescope.com/astronomy-blogs/astronomy-space-david-dickinson/feed/", 1));
 
         add(new Section("Events", "http://www.skyandtelescope.com/astronomy-events/feed/", 0));
-        add(new Section("Get Involved", "http://www.skyandtelescope.com/get-involved/feed/", 0));
         add(new Section("Editor's Choice Archive", "http://www.skyandtelescope.com/online-gallery/editors-choice-photos/feed/", 0));
-        add(new Section("Videos", "http://www.skyandtelescope.com/astronomy-videos/feed/", 0));
         add(new Section("Magazine", "http://www.skyandtelescope.com/sky-and-telescope-magazine/feed/", 0));
 
     }

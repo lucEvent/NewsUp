@@ -5,6 +5,8 @@ import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.parser.Parser;
+import org.jsoup.parser.XmlTreeBuilder;
 import org.jsoup.select.Elements;
 
 public class Hipertextual extends com.lucevent.newsup.data.util.NewsReader {
@@ -58,7 +60,29 @@ public class Hipertextual extends com.lucevent.newsup.data.util.NewsReader {
         for (Element e : article.select("figure:has(noscript)"))
             e.html(e.select("noscript").html());
 
+        cleanAttributes(article.select("img[src]"),"src");
+        for(Element e : article.select("img[data-cfsrc]")){
+            String src = e.attr("data-cfsrc");
+            cleanAttributes(e);
+            e.attr("src",src);
+        }
+
         news.content = finalFormat(article, true);
+    }
+
+    @Override
+    protected Document getDocument(String url)
+    {
+        try {
+            return org.jsoup.Jsoup.connect(url)
+                    .userAgent(USER_AGENT)
+                    .timeout(10000)
+                    .validateTLSCertificates(false)
+                    .parser(new Parser(new XmlTreeBuilder()))
+                    .get();
+        } catch (Exception ignored) {
+        }
+        return null;
     }
 
 }

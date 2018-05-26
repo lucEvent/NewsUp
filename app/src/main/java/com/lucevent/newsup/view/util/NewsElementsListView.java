@@ -3,6 +3,7 @@ package com.lucevent.newsup.view.util;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -12,9 +13,11 @@ import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.io.SDManager;
 import com.lucevent.newsup.net.ConnectivityManager;
+import com.lucevent.newsup.parse.NewsBlockquote;
 import com.lucevent.newsup.parse.NewsElement;
 import com.lucevent.newsup.parse.NewsElements;
 import com.lucevent.newsup.parse.NewsTitle;
+import com.lucevent.newsup.view.adapter.viewholder.news.NewsBlockquoteViewHolder;
 import com.lucevent.newsup.view.adapter.viewholder.news.NewsElementViewHolder;
 import com.lucevent.newsup.view.adapter.viewholder.news.NewsTextViewHolder;
 
@@ -32,6 +35,7 @@ public class NewsElementsListView extends LinearLayout {
 
     private LayoutInflater mInflater;
     private ConnectivityManager mConnectivityManager;
+    private View.OnLongClickListener mOnImageLongClick;
 
     private ContentLoader contentLoader;
 
@@ -85,6 +89,11 @@ public class NewsElementsListView extends LinearLayout {
         }
     }
 
+    public void setImageLongClickListener(OnLongClickListener listener)
+    {
+        mOnImageLongClick = listener;
+    }
+
     private NewsElementViewHolder createViewHolder(NewsElement elem)
     {
         NewsElementViewHolder h;
@@ -99,13 +108,17 @@ public class NewsElementsListView extends LinearLayout {
                 h = new com.lucevent.newsup.view.adapter.viewholder.news.NewsTextViewHolder(mInflater.inflate(R.layout.i_news_paragraph, this, false), NewsTextViewHolder.TEXT_SIZE_NORMAL);
                 break;
             case NewsElement.TYPE_IMAGE:
-                h = new com.lucevent.newsup.view.adapter.viewholder.news.NewsImageViewHolder(mInflater.inflate(R.layout.i_news_image, this, false));
+                h = new com.lucevent.newsup.view.adapter.viewholder.news.NewsImageViewHolder(mInflater.inflate(R.layout.i_news_image, this, false), mOnImageLongClick);
                 break;
             case NewsElement.TYPE_CAPTION:
                 h = new com.lucevent.newsup.view.adapter.viewholder.news.NewsTextViewHolder(mInflater.inflate(R.layout.i_news_caption, this, false), NewsTextViewHolder.TEXT_SIZE_SMALL);
                 break;
             case NewsElement.TYPE_BLOCKQUOTE:
-                h = new com.lucevent.newsup.view.adapter.viewholder.news.NewsBlockquoteViewHolder(mInflater.inflate(R.layout.i_news_blockquote, this, false));
+                NewsBlockquote nbq = (NewsBlockquote) elem;
+                NewsBlockquoteViewHolder bqvh = new NewsBlockquoteViewHolder(mInflater.inflate(R.layout.i_news_blockquote, this, false), nbq.size());
+                for (NewsElement ne : nbq)
+                    bqvh.addElement(createViewHolder(ne));
+                h = bqvh;
                 break;
             case NewsElement.TYPE_LIST_ITEM:
                 h = new com.lucevent.newsup.view.adapter.viewholder.news.NewsListItemViewHolder(mInflater.inflate(R.layout.i_news_list_item, this, false));
@@ -142,7 +155,7 @@ public class NewsElementsListView extends LinearLayout {
                             h = new com.lucevent.newsup.view.adapter.viewholder.news.NewsNUWidgetViewHolder(mInflater.inflate(R.layout.i_news_webview, this, false));
                     }
                 else
-                    h = new com.lucevent.newsup.view.adapter.viewholder.news.NewsNIMediaViewHolder(mInflater.inflate(R.layout.i_news_blockquote, this, false));
+                    h = new com.lucevent.newsup.view.adapter.viewholder.news.NewsNIMediaViewHolder(mInflater.inflate(R.layout.i_news_blockquote, this, false), mInflater);
         }
         h.setNewsElement(elem);
         return h;

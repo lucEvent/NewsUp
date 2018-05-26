@@ -6,11 +6,7 @@ import org.jsoup.select.Elements;
 
 public class DagensNyheter extends com.lucevent.newsup.data.util.NewsReader {
 
-    /**
-     * Tags
-     * [dc:date, description, guid, item, link, pubdate, title]
-     * [dc:creator, description, guid, item, link, pubdate, title, ]
-     */
+    // tags: [dc:creator, dc:date, description, guid, item, link, media:content, media:credit, media:description, media:thumbnail, pubdate, title]
 
     public DagensNyheter()
     {
@@ -21,7 +17,7 @@ public class DagensNyheter extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{},
-                new int[]{},
+                new int[]{TAG_MEDIA_CONTENT},
                 "");
     }
 

@@ -16,7 +16,7 @@ public class ViceSections extends Sections {
         add(new Section("Canada", "https://www.vice.com/en_ca/rss", 0));
         add(new Section("Colombia", "https://www.vice.com/es_co/rss", 0));
         add(new Section("\u010Cesk\u00E1 republika / Slova\u0161ka", "https://www.vice.com/cs/rss", 0));
-        add(new Section("Danmark", "https://www.vice.com/en_dk/rss", 0));
+        add(new Section("Danmark", "https://www.vice.com/da/rss", 0));
         add(new Section("Espa\u00F1a", "https://www.vice.com/es/rss", 0));
         add(new Section("France", "https://www.vice.com/fr/rss", 0));
         add(new Section("Deutschland", "https://www.vice.com/de/rss", 0));

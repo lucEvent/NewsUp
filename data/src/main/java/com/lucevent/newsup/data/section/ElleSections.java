@@ -9,12 +9,12 @@ public class ElleSections extends Sections {
     {
         super();
 
-        add(new Section("Todo", "http://www.elle.es/rss/all.xml", 0));
-        add(new Section("Moda", "http://www.elle.es/rss/moda.xml", 0));
-        add(new Section("Belleza", "http://www.elle.es/rss/belleza.xml", 0));
-        add(new Section("Star Style", "http://www.elle.es/rss/star-style.xml", 0));
-        add(new Section("Living", "http://www.elle.es/rss/living.xml", 0));
-        add(new Section("Extra Elle", "http://www.elle.es/rss/extra-elle.xml", 0));
+        add(new Section("Todo", "https://www.elle.com/es/rss/all.xml/", 0));
+        add(new Section("Moda", "https://www.elle.com/es/rss/moda.xml/", 0));
+        add(new Section("Belleza", "https://www.elle.com/es/rss/belleza.xml/", 0));
+        add(new Section("Star Style", "https://www.elle.com/es/rss/star-style.xml/", 0));
+        add(new Section("Living", "https://www.elle.com/es/rss/living.xml/", 0));
+        add(new Section("Extra Elle", "https://www.elle.com/es/rss/extra-elle.xml/", 0));
 
         add(new Section("Blogs", null, -1));
         add(new Section("Ana Albadalejo", "http://anaalbadalejo.blogs.elle.es/feed/", 1));

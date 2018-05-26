@@ -40,8 +40,6 @@ public class TheAtlanticSections extends Sections {
         add(new Section("Ronald Brownstein", "https://www.theatlantic.com/feed/author/ronald-brownstein/", 1));
         add(new Section("Caitlin Cadieux", "https://www.theatlantic.com/feed/author/caitlin-cadieux/", 1));
         add(new Section("Krishnadev Calamur", "https://www.theatlantic.com/feed/author/krishnadev-calamur/", 1));
-        add(new Section("Adam Chandler", "https://www.theatlantic.com/feed/author/adam-chandler/", 1));
-        add(new Section("Kasia Cieplak-Mayr von Baldegg", "https://www.theatlantic.com/feed/author/kasia-cieplak-mayr-von-baldegg/", 1));
         add(new Section("Ta-Nehisi Coates", "https://www.theatlantic.com/feed/author/ta-nehisi-coates/", 1));
         add(new Section("Michelle Cottle", "https://www.theatlantic.com/feed/author/michelle-cottle/", 1));
         add(new Section("Lenika Cruz", "https://www.theatlantic.com/feed/author/lenika-cruz/", 1));
@@ -57,15 +55,11 @@ public class TheAtlanticSections extends Sections {
         add(new Section("Jeffrey Goldberg", "https://www.theatlantic.com/feed/author/jeffrey-goldberg/", 1));
         add(new Section("David A. Graham", "https://www.theatlantic.com/feed/author/david-a-graham/", 1));
         add(new Section("Emma Green", "https://www.theatlantic.com/feed/author/emma-green/", 1));
-        add(new Section("Catherine Green", "https://www.theatlantic.com/feed/author/catherine-green/", 1));
         add(new Section("James Hamblin", "https://www.theatlantic.com/feed/author/james-hamblin/", 1));
-        add(new Section("Nora Kelly", "https://www.theatlantic.com/feed/author/nora-kelly/", 1));
         add(new Section("Olga Khazan", "https://www.theatlantic.com/feed/author/olga-khazan/", 1));
         add(new Section("Marina Koren", "https://www.theatlantic.com/feed/author/marina-koren/", 1));
         add(new Section("Spencer Kornhaber", "https://www.theatlantic.com/feed/author/spencer-kornhaber/", 1));
         add(new Section("Adrienne LaFrance", "https://www.theatlantic.com/feed/author/adrienne-lafrance/", 1));
-        add(new Section("Bourree Lam", "https://www.theatlantic.com/feed/author/bourree-lam/", 1));
-        add(new Section("Andrew McGill", "https://www.theatlantic.com/feed/author/andrew-mcgill/", 1));
         add(new Section("Robinson Meyer", "https://www.theatlantic.com/feed/author/robinson-meyer/", 1));
         add(new Section("Vann R. Newkirk II", "https://www.theatlantic.com/feed/author/vann-newkirk/", 1));
         add(new Section("Christopher Orr", "https://www.theatlantic.com/feed/author/christopher-orr/", 1));

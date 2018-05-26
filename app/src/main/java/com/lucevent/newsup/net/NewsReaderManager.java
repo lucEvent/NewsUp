@@ -17,6 +17,7 @@ import com.lucevent.newsup.data.util.NewsMap;
 import com.lucevent.newsup.data.util.NewsSet;
 import com.lucevent.newsup.data.util.Sections;
 import com.lucevent.newsup.data.util.Site;
+import com.lucevent.newsup.data.util.UserSite;
 import com.lucevent.newsup.io.StorageCallback;
 import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.AppData;
@@ -212,10 +213,8 @@ public class NewsReaderManager {
 
                 NewsPetition petition = null;
                 synchronized (petitionQueue) {
-                    if (!petitionQueue.isEmpty()) {
-                        petition = petitionQueue.get(0);
-                        petitionQueue.remove(0);
-                    }
+                    if (!petitionQueue.isEmpty())
+                        petition = petitionQueue.remove(0);
                 }
                 if (petition == null) {
                     if (uiCallback != null) {
@@ -248,6 +247,9 @@ public class NewsReaderManager {
                         // Send news to Kernel
                         if (uiCallback != null)
                             uiCallback.obtainMessage(AppCode.NEWS_COLLECTION, news).sendToTarget();
+
+                        if (petition.site instanceof UserSite)
+                            continue;
 
                         // Add news to newsQueue
                         synchronized (newsQueue) {

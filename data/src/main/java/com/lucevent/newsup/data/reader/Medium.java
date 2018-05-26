@@ -55,8 +55,8 @@ public class Medium extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
     {
-        Elements e = doc.select("main section .section-content");
-        e.select("script,.graf--title").remove();
+        Elements e = doc.select("main section .section-content,.story-view__body");
+        e.select("script,.graf--title,.story-view__tags,.story-view__data").remove();
 
         for (Element fig : e.select("figure:has(noscript)")) {
             fig.html(fig.select("noscript").html());
@@ -74,6 +74,7 @@ public class Medium extends com.lucevent.newsup.data.util.NewsReader {
         try {
             return org.jsoup.Jsoup.connect(url)
                     .timeout(10000)
+                    .validateTLSCertificates(false)
                     .userAgent(USER_AGENT)
                     .get();
         } catch (Exception ignored) {

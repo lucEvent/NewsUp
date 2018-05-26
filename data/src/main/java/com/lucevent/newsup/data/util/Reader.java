@@ -9,7 +9,7 @@ import java.util.List;
 
 public abstract class Reader {
 
-    protected static final String USER_AGENT = "Mozilla/5.0 (Linux; Android 6.0.1; GT-I9300 Build/MOB30Z) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.91 Mobile Safari/537.36";
+    public static final String USER_AGENT = "Mozilla/5.0 (Linux; Android 6.0.1; GT-I9300 Build/MOB30Z) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.91 Mobile Safari/537.36";
 
     public final String style;
 
@@ -45,6 +45,7 @@ public abstract class Reader {
     {
         try {
             return org.jsoup.Jsoup.connect(url)
+                    .timeout(10000)
                     .userAgent(USER_AGENT)
                     .validateTLSCertificates(false)
                     .get();
@@ -53,6 +54,7 @@ public abstract class Reader {
         }
         try {
             return org.jsoup.Jsoup.connect(url)
+                    .timeout(10000)
                     .validateTLSCertificates(false)
                     .get();
         } catch (Exception e) {
@@ -215,7 +217,7 @@ public abstract class Reader {
         elems.select("h1,h2").tagName("h3");
         repairLinks(elems);
         elems.select("a:has(img,iframe,video,figure,picture)").tagName("div");
-        elems.select("style,meta").remove();
+        elems.select("style,meta,link").remove();
         return cleanComments(outerHtml ? elems.outerHtml() : elems.html());
     }
 

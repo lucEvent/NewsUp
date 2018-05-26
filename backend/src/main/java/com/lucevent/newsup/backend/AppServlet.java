@@ -2,7 +2,6 @@ package com.lucevent.newsup.backend;
 
 import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
-import com.lucevent.newsup.backend.utils.BackendParser;
 import com.lucevent.newsup.backend.utils.MonthStats;
 import com.lucevent.newsup.backend.utils.Report;
 import com.lucevent.newsup.backend.utils.Reports;
@@ -10,9 +9,6 @@ import com.lucevent.newsup.backend.utils.SiteStats;
 import com.lucevent.newsup.backend.utils.Statistics;
 import com.lucevent.newsup.backend.utils.TimeStats;
 import com.lucevent.newsup.backend.utils.UpdateMessageCreator;
-import com.lucevent.newsup.data.util.News;
-import com.lucevent.newsup.data.util.NewsArray;
-import com.lucevent.newsup.data.util.Sections;
 import com.lucevent.newsup.data.util.Site;
 
 import java.io.IOException;
@@ -47,64 +43,9 @@ public class AppServlet extends HttpServlet {
             String[] parts = site_request.split(",");
             Site site = Data.getSite(Integer.parseInt(parts[0]));
 
-            if (req.getParameter("nc") == null)
-                Data.stats.count(site, req.getRemoteAddr(), "[v1] " + req.getParameter("v"));
-
-            if (UpdateMessageCreator.needsUpdate(req.getParameter("v"))) {
-                UpdateMessageCreator.generateUpdateNews(site, resp);
-                return;
-            }
-
-            int[] section_codes = new int[parts.length - 1];
-            Sections sections = site.getSections();
-            for (int i = 0; i < section_codes.length; i++) {
-                int section_index = Integer.parseInt(parts[i + 1]);
-                if (section_index < sections.size())
-                    section_codes[i] = sections.get(section_index).code;
-            }
-
-            NewsArray news = site.readNewsHeaders(section_codes);
-            site.news.addAll(news);
-
-            resp.getWriter().println(BackendParser.toEntry(news).toString());
-
-        } else if (req.getParameter("content") != null) {
-            Site site = Data.getSite(Integer.parseInt(req.getParameter("site")));
-
-            String link = req.getParameter("l");
-            if (link != null) {
-                int id = link.hashCode();
-
-                News news = site.news.get(id);
-                if (news == null) {
-                    news = new News(id, "", link, "", -1, null, -1, -1, -1);
-                    news.content = "";
-                }
-                if (news.content.isEmpty())
-                    site.readNewsContent(news);
-
-                if (!news.content.isEmpty()) {
-                    resp.getWriter().print(news.content);
-
-                    site.news.put(id, news);
-                }
-                return;
-            }
-
-            String news_id = req.getParameter("nid");
-            if (news_id == null) {
-                resp.getWriter().print(UpdateMessageCreator.generateContent(site));
-                return;
-            }
-
-            News prey = site.news.get(Integer.parseInt(news_id));
-            if (prey != null) {
-
-                if (prey.content.isEmpty())
-                    site.readNewsContent(prey);
-
-                resp.getWriter().print(prey.content);
-            }
+            Data.stats.count(site, req.getRemoteAddr(), "[v1] " + req.getParameter("v"));
+            // this is a force the update if they want to continue using it
+            UpdateMessageCreator.generateUpdateNews(site, resp);
 
         } else if (req.getParameter("notify") != null) {
 

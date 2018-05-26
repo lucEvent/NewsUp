@@ -16,10 +16,10 @@ public class Site {
     public NewsMap news;
 
     private Class readerClass;
-    private Reader reader;
+    protected Reader reader;
 
     private Class sectionsClass;
-    private Sections sections;
+    protected Sections sections;
 
     public Site(int code, String name, int color, String url, int info, Class sectionsClass, Class readerClass)
     {

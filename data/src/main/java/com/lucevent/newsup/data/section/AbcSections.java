@@ -27,8 +27,6 @@ public class AbcSections extends Sections {
         add(new Section("Toledo", "http://www.abc.es/rss/feeds/abc_Toledo.xml", 1));
 
         add(new Section("Internacional", "http://www.abc.es/rss/feeds/abc_Internacional.xml", 0));
-        add(new Section("Elecciones Estados Unidos", "http://www.abc.es/rss/feeds/abc_EleccionesEstadosUnidos.xml", 1));
-
         add(new Section("Econom\u00EDa", "http://www.abc.es/rss/feeds/abc_Economia.xml", 0));
 
         add(new Section("Opini\u00F3n", "http://www.abc.es/rss/feeds/abc_opinioncompleto.xml", 0));

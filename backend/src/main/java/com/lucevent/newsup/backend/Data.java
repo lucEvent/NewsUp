@@ -6,6 +6,9 @@ import com.googlecode.objectify.VoidWork;
 import com.lucevent.newsup.backend.utils.Event;
 import com.lucevent.newsup.backend.utils.MonthStats;
 import com.lucevent.newsup.backend.utils.Report;
+import com.lucevent.newsup.backend.utils.RequestedSite;
+import com.lucevent.newsup.backend.utils.RequestedSiteNotFound;
+import com.lucevent.newsup.backend.utils.RequestedSites;
 import com.lucevent.newsup.backend.utils.SiteStats;
 import com.lucevent.newsup.backend.utils.Statistics;
 import com.lucevent.newsup.backend.utils.TimeStats;
@@ -13,10 +16,13 @@ import com.lucevent.newsup.data.Sites;
 import com.lucevent.newsup.data.util.Date;
 import com.lucevent.newsup.data.util.NewsMap;
 import com.lucevent.newsup.data.util.Site;
+import com.lucevent.newsup.data.util.UserSite;
 
 public class Data {
 
     public static Sites sites;
+
+    public static RequestedSites requestedSites;
 
     public static Statistics stats;
 
@@ -28,6 +34,8 @@ public class Data {
         oFactory.register(Statistics.class);
         oFactory.register(Report.class);
         oFactory.register(Event.class);
+        oFactory.register(RequestedSite.class);
+        oFactory.register(RequestedSiteNotFound.class);
         oFactory.begin();
 
         Date.setTitles(new String[]{"%d seconds ago", "%d minutes ago", "%d hours ago", "%d days ago", "%d months ago", "%d years ago",});
@@ -43,6 +51,7 @@ public class Data {
                 public void vrun()
                 {
                     stats = Statistics.getInstance();
+                    requestedSites = RequestedSites.getInstance();
                 }
             });
         }
@@ -50,7 +59,28 @@ public class Data {
 
     static Site getSite(int code)
     {
-        return sites.getSiteByCode(code);
+        Site r = sites.getSiteByCode(code);
+        if (r != null)
+            return r;
+
+        RequestedSite rs = getRequestedSite(code);
+        if (rs != null) {
+            Site s = new UserSite((int) rs.code, rs.name, rs.color, rs.url, 0, rs.rss_url, rs.icon_url);
+            s.news = new NewsMap();
+            sites.add(s);
+            return s;
+        }
+        return null;
+    }
+
+    public static RequestedSite getRequestedSite(int code)
+    {
+        return requestedSites.getSiteByCode(code);
+    }
+
+    public static RequestedSite getRequestedSite(String request)
+    {
+        return requestedSites.getSiteByRequest(request);
     }
 
 }

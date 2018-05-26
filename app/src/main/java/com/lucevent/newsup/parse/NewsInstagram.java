@@ -1,12 +1,11 @@
 package com.lucevent.newsup.parse;
 
-public class NewsInstagram extends NewsElement<String> {
+public class NewsInstagram implements NewsElement<String> {
 
     private String mContent;
 
     public NewsInstagram()
     {
-        super(false);
     }
 
     @Override
@@ -31,6 +30,17 @@ public class NewsInstagram extends NewsElement<String> {
     public NewsElement getNewElement()
     {
         return new NewsInstagram();
+    }
+
+    @Override
+    public boolean isAppendable()
+    {
+        return false;
+    }
+
+    @Override
+    public void setNotAppendable()
+    {
     }
 
 }

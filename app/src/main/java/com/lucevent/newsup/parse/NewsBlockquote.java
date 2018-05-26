@@ -1,12 +1,11 @@
 package com.lucevent.newsup.parse;
 
-public class NewsBlockquote extends NewsElement<String> {
+import java.util.ArrayList;
 
-    private String mContent;
+public class NewsBlockquote extends ArrayList<NewsElement> implements NewsElement<Object> {
 
     public NewsBlockquote()
     {
-        super(true);
     }
 
     @Override
@@ -18,19 +17,29 @@ public class NewsBlockquote extends NewsElement<String> {
     @Override
     public void setContent(String content)
     {
-        this.mContent = content;
     }
 
     @Override
-    public String getContent()
+    public Object getContent()
     {
-        return mContent;
+        return null;
     }
 
     @Override
     public NewsElement getNewElement()
     {
         return new NewsBlockquote();
+    }
+
+    @Override
+    public boolean isAppendable()
+    {
+        return false;
+    }
+
+    @Override
+    public void setNotAppendable()
+    {
     }
 
 }

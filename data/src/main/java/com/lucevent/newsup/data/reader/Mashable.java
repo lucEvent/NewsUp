@@ -84,6 +84,7 @@ public class Mashable extends com.lucevent.newsup.data.util.NewsReader {
             p.html(insertIframe(src) + "<figcaption>" + desc + "</figcaption>");
         }
         article.select("script").remove();
+        article.select("[data-channel]").removeAttr("data-channel");
 
         news.content = finalFormat(article, true);
     }

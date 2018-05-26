@@ -2,13 +2,12 @@ package com.lucevent.newsup.parse;
 
 import java.util.ArrayList;
 
-public class NewsTable extends NewsElement<Object> {
+public class NewsTable implements NewsElement<Object> {
 
     public ArrayList<ArrayList<String>> rows;
 
     public NewsTable()
     {
-        super(false);
         rows = new ArrayList<>();
     }
 
@@ -38,6 +37,17 @@ public class NewsTable extends NewsElement<Object> {
     public void addRow(ArrayList<String> row)
     {
         rows.add(row);
+    }
+
+    @Override
+    public boolean isAppendable()
+    {
+        return false;
+    }
+
+    @Override
+    public void setNotAppendable()
+    {
     }
 
 }

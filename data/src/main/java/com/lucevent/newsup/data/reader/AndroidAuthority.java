@@ -4,6 +4,8 @@ import com.lucevent.newsup.data.util.Enclosure;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.parser.Parser;
+import org.jsoup.parser.XmlTreeBuilder;
 
 public class AndroidAuthority extends com.lucevent.newsup.data.util.NewsReader {
 
@@ -70,6 +72,7 @@ public class AndroidAuthority extends com.lucevent.newsup.data.util.NewsReader {
         try {
             return org.jsoup.Jsoup.connect(url)
                     .timeout(10000)
+                    .parser(new Parser(new XmlTreeBuilder()))
                     .userAgent(USER_AGENT)
                     .get();
         } catch (Exception ignored) {

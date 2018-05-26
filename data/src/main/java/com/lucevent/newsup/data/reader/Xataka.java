@@ -43,11 +43,12 @@ public class Xataka extends com.lucevent.newsup.data.util.NewsReader {
     {
         // Parsing content
         Element article = jsoupParse(news.content);
-
-        article.parent().select("script,body > h4 ~ *,body > h4,.feedflare,[width='1']").remove();
+        article.select("script,body > h4 ~ *,body > h4,.feedflare,[width='1']").remove();
 
         article.select("li").tagName("p");
         article.select("[style]:not(.instagram-media,.instagram-media *)").removeAttr("style");
+        cleanAttributes(article.select("img"), "src");
+        article.select(".caption-img span").tagName("figcaption");
 
         news.content = finalFormat(article, false);
         // end

@@ -9,7 +9,7 @@ public class OmicronoSections extends Sections {
     {
         super();
 
-        add(new Section("Principal", "http://omicrono.elespanol.com/feed/", 0));
+        add(new Section("Principal", "http://feeds.feedburner.com/omicrono", 0));
 
     }
 

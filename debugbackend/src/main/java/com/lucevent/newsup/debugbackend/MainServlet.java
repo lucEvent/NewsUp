@@ -3,7 +3,7 @@ package com.lucevent.newsup.debugbackend;
 import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
 import com.lucevent.newsup.data.util.Date;
-import com.lucevent.newsup.debugbackend.data.Log;
+import com.lucevent.newsup.debugbackend.data.PartialTestResult;
 import com.lucevent.newsup.debugbackend.data.Task;
 import com.lucevent.newsup.debugbackend.data.TestCounter;
 import com.lucevent.newsup.debugbackend.kernel.Test;
@@ -65,7 +65,7 @@ public class MainServlet extends HttpServlet implements ReportCallback {
                         int month = calendar.get(Calendar.MONTH) + 1;
                         Net.sendReport("Test report " + day + "/" + month, fullReport);
 
-                        test.clearLogs();
+                        test.clearTestCache();
                         break;
                     }
 
@@ -87,7 +87,7 @@ public class MainServlet extends HttpServlet implements ReportCallback {
         Date.setTitles(new String[]{"%d seconds ago", "%d minutes ago", "%d hours ago", "%d days ago", "%d months ago", "%d years ago",});
 
         ObjectifyFactory oFactory = ObjectifyService.factory();
-        oFactory.register(Log.class);
+        oFactory.register(PartialTestResult.class);
         oFactory.register(Task.class);
         oFactory.register(TestCounter.class);
         oFactory.register(com.lucevent.newsup.debugbackend.data.Error.class);

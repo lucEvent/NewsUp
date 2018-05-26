@@ -9,7 +9,7 @@ public class VandalSections extends Sections {
     {
         super();
 
-        add(new Section("Principal", "http://vandal.net/xml.cgi", 0));
+        add(new Section("Principal", "https://vandal.elespanol.com/xml.cgi", 0));
         add(new Section("Videos", "http://feeds.feedburner.com/VideosVandalOnline", 0));
         add(new Section("Blogs", "http://feeds.feedburner.com/BlogsVandalOnline", 0));
 

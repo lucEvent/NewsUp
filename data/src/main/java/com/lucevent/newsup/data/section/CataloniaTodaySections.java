@@ -11,7 +11,6 @@ public class CataloniaTodaySections extends Sections {
 
         add(new Section("News", "http://www.cataloniatoday.cat/sections/news.feed?type=rss", 0));
         add(new Section("Features", "http://www.cataloniatoday.cat/sections/features.feed?type=rss", 0));
-        add(new Section("The Net", "http://www.cataloniatoday.cat/sections/the-net.feed?type=rss", 0));
         add(new Section("Catalans abroad", "http://www.cataloniatoday.cat/sections/catalans-abroad.feed?type=rss", 0));
         add(new Section("Food & Wine", "http://www.cataloniatoday.cat/sections/food-wine.feed?type=rss", 0));
         add(new Section("My space", "http://www.cataloniatoday.cat/sections/my-space.feed?type=rss", 0));

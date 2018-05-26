@@ -7,8 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Rect;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -16,16 +14,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
@@ -47,7 +42,6 @@ public class NewsView extends RelativeLayout {
     private Activity activityContext;
     private DrawerLayout drawer;
     private ActionBar actionBar;
-    // private GestureDetectorCompat gd;
 
     private NewsElementsListView listView;
     private FloatingActionButton button_bookmark;
@@ -117,12 +111,16 @@ public class NewsView extends RelativeLayout {
         button_bookmark.setOnClickListener(bookmarkStateChangeListener);
     }
 
+    public void setImageLongClickListener(OnLongClickListener listener)
+    {
+        listView.setImageLongClickListener(listener);
+    }
+
     private int viewWidth = -2;
     private int viewHeight = -2;
 
     public void displayNews(News news)
     {
-        //   news.content = newsExample;
         currentNews = news;
         button_bookmark.setTag(news);
         button_bookmark.setSelected(BookmarksManager.isBookmarked(news));
@@ -306,137 +304,4 @@ public class NewsView extends RelativeLayout {
         }
     };
 
-    private final View.OnTouchListener onNewsContentTouch = new View.OnTouchListener() {
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event)
-        {
-            //        gd.onTouchEvent(event);
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-
-                    break;
-                case MotionEvent.ACTION_UP:
-
-                    if (swipingDown) {
-                        swipingDown = false;
-
-                        TranslateAnimation swipeAnimation = new TranslateAnimation(0, 0, swipedDown, 0);
-                        swipeAnimation.setDuration((long) (swipedDown / 2));
-                        swipeAnimation.setFillAfter(true);
-
-                        setAnimation(swipeAnimation);
-                    }
-                    break;
-            /*    case MotionEvent.ACTION_MOVE:
-                    if (swipingDown) {
-                  //      webView.setTranslationY(previousY-event.getY());
-                    }
-                    if (webView.getScrollY() == 0) {
-                        if (start){
-                            start=false;
-                        }
-                        else{
-                            swipingDown = true;
-                            previousY = event.getY();
-                        }
-                    }
-                    break;
-                default:
-                    System.out.println("Other... " + event.getAction());*/
-            }
-            return false;
-        }
-
-    };
-
-    private boolean swipingDown = false;
-    private float swipedDown = 0;
-    private GestureDetector.OnGestureListener onGestureListener = new GestureDetector.OnGestureListener() {
-        @Override
-        public boolean onDown(MotionEvent e)
-        {
-            System.out.println("onDown");
-            return false;
-        }
-
-        @Override
-        public void onShowPress(MotionEvent e)
-        {
-            System.out.println("onShowPress");
-        }
-
-        @Override
-        public boolean onSingleTapUp(MotionEvent e)
-        {
-            System.out.println("onSingleTapUp");
-            return false;
-        }
-
-        private boolean nocount = false;
-
-        @Override
-        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
-        {
-            System.out.println("onScroll");
-            if (swipingDown) {
-
-                if (nocount) {
-
-                    float from = swipedDown;
-                    float to = swipedDown - (3 * distanceY);
-                    swipedDown = to;
-
-                    if (swipedDown < 0) {
-                        to = 0;
-                        swipingDown = false;
-                    }
-
-                    TranslateAnimation swipeAnimation = new TranslateAnimation(0, 0, from, to);
-                    swipeAnimation.setDuration(100);
-                    swipeAnimation.setFillAfter(true);
-
-                    startAnimation(swipeAnimation);
-                    setScrollY(0);
-                }
-                nocount = !nocount;
-            } else if (distanceY < 0) {//scrolling down
-
-                if (getScrollY() == 0) {
-                    //closing news
-                    swipingDown = true;
-                    nocount = true;
-                    swipedDown = 0;
-                    return true;
-                }
-
-            }
-            return false;
-        }
-
-        @Override
-        public void onLongPress(MotionEvent e)
-        {
-            System.out.println("onLongPress");
-        }
-
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY)
-        {
-            System.out.println("onFling");
-            return false;
-        }
-    };
-
-    private final String newsExample = "<html>" +
-            "<head></head>" +
-            "<body>" +
-            "<h1>This is an H1</h1>" +
-            "<h2>This is an H2</h2>" +
-            "<h3>This is an H3</h3>" +
-            "<h4>This is an H4</h4>" +
-            "<h5>This is an H5</h5>" +
-            "<h6>This is an H6</h6>" +
-            "</body>" +
-            "</html>";
 }

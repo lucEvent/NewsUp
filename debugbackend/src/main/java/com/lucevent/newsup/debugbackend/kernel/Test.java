@@ -6,11 +6,14 @@ import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.Section;
 import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.debugbackend.data.Database;
+import com.lucevent.newsup.debugbackend.data.PartialTestResult;
 import com.lucevent.newsup.debugbackend.data.Task;
 import com.lucevent.newsup.debugbackend.util.ReportCallback;
 
 import org.jsoup.nodes.Document;
 
+import java.util.Comparator;
+import java.util.TreeSet;
 
 public class Test {
 
@@ -64,19 +67,16 @@ public class Test {
                 }
             }
 
-            // Log save
-            StringBuilder sb = new StringBuilder();
-            sb.append("{").append(site.name).append(",").append(task.siteNumNews);
-            for (int i = 0; i < task.siteTestResults.length; i++) {
-                sb.append(",").append(task.siteTestResults[i]);
-            }
-            sb.append("}\n");
-
-            String partialReport = sb.toString();
-            db.saveLog(task.id, task.currentEvaluatingSite, partialReport);
+            // Saving results for current Site
+            PartialTestResult ptr = new PartialTestResult();
+            ptr.taskId = task.id;
+            ptr.siteCode = site.code;
+            ptr.numNews = task.siteNumNews;
+            ptr.testResults = task.siteTestResults;
+            db.savePartialResult(ptr);
 
             if (task.siteNumNews == 0 || (task.siteNumNews / 2) < task.siteTestResults[0])
-                urgentCallback.report(partialReport);
+                urgentCallback.report(site.name + " | " + task.siteNumNews + " news read / " + task.siteTestResults[0] + " without content");
 
             task.totalNumNews += task.siteNumNews;
             for (int t = 0; t < task.totalTestResults.length; t++) {
@@ -91,9 +91,28 @@ public class Test {
             return null;
         }
 
-        // Total results log save
+        db.finish(task);
+
+
+        TreeSet<PartialTestResult> partials = new TreeSet<>(new Comparator<PartialTestResult>() {
+            @Override
+            public int compare(PartialTestResult o1, PartialTestResult o2)
+            {
+                return Integer.compare(o1.siteCode, o2.siteCode);
+            }
+        });
+        partials.addAll(db.getPartialTestResults(task.id));
+
+        // Creating report
         StringBuilder sb = new StringBuilder();
-        sb.append("** Resultados totales **\n");
+        for (int i = 0; i < evaluator.size(); ++i) {
+            sb.append("** ").append(evaluator.getDescription(i)).append(" **\n");
+            for (PartialTestResult ptr : partials) {
+                if (i < ptr.testResults.length && ptr.testResults[i] > 0)
+                    sb.append("\t *").append(sites.getSiteByCode(ptr.siteCode).name).append(" (").append(ptr.testResults[i]).append(")\n");
+            }
+        }
+        sb.append("\n** Resultados totales **\n");
         sb.append("\t").append(task.totalNumNews).append(" noticias\n");
         for (int i = 0; i < task.totalTestResults.length; i++) {
             int res = task.totalTestResults[i];
@@ -101,16 +120,13 @@ public class Test {
                 sb.append("\t").append(res).append(" ").append(evaluator.getDescription(i)).append("\n");
             }
         }
-        db.saveLog(task.id, task.currentEvaluatingSite, sb.toString());
 
-        db.finish(task);
-
-        return db.getFullReport(task);
+        return sb.toString();
     }
 
-    public void clearLogs()
+    public void clearTestCache()
     {
-        db.clearLogs();
+        db.clearTestCache();
     }
 
     private class Evaluator {
@@ -123,16 +139,18 @@ public class Test {
         private static final int D_STYLE_ATTR = 5;
         private static final int D_A_OBJECT = 6;
         private static final int D_COMMENTS = 7;
+        private static final int D_EMPTY_SECTION = 8;
 
         private final String[] descriptions = new String[]{
-                "estan vac\u00EDas",     // 52
-                "contienen h1/h2",       //*0
-                "tienen scripts",        // 0
-                "con links sin HTTP",    //*19
-                "tienen style tags",     //*52
-                "tienen style attrs",    // 313
-                "tienen <a><object></a>",//*14
-                "tienen comentarios"     //*1
+                "estan vac\u00EDas",     //
+                "contienen h1/h2",       //
+                "tienen scripts",        //
+                "con links sin HTTP",    //
+                "tienen style tags",     //
+                "tienen style attrs",    //
+                "tienen <a><object></a>",//
+                "tienen comentarios",    //
+                "secciones vacias"
         };
 
         public int[] evaluate(NewsArray news, Database db)
@@ -174,6 +192,10 @@ public class Test {
                     res[D_COMMENTS]++;
                 }
             }
+
+            if (news.isEmpty())
+                res[D_EMPTY_SECTION]++;
+
             return res;
         }
 

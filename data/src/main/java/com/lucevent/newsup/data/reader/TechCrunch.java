@@ -1,18 +1,10 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
-
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 public class TechCrunch extends com.lucevent.newsup.data.util.NewsReader {
 
-    /**
-     * tags:
-     * [category, dc:creator, description, guid, item, link, media:content, media:thumbnail, media:title, pubdate, title]
-     * [category, dc:creator, description, enclosure, guid, item, link, media:content, media:thumbnail, media:title, pubdate, title]
-     */
+    // tags: [category, content:encoded, dc:creator, description, guid, item, link, post-id, pubdate, title]
 
     public TechCrunch()
     {
@@ -20,69 +12,21 @@ public class TechCrunch extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{TAG_TITLE},
                 new int[]{TAG_LINK},
                 new int[]{TAG_DESCRIPTION},
-                new int[]{},
+                new int[]{TAG_CONTENT_ENCODED},
                 new int[]{TAG_PUBDATE},
                 new int[]{TAG_CATEGORY},
-                new int[]{TAG_ENCLOSURE, TAG_MEDIA_CONTENT},
+                new int[]{TAG_MEDIA_CONTENT},
                 "");
     }
 
     @Override
-    protected String parseDescription(Element prop)
+    protected String parseContent(Element prop)
     {
-        return org.jsoup.Jsoup.parse(prop.text()).text();
-    }
-
-    @Override
-    protected void readNewsContent(Document doc, News news)
-    {
-        Elements article = doc.select("article .article-entry");
-
-        if (article.isEmpty()) {
-            article = doc.select(".textwidget");
-
-            if (article.isEmpty()) {
-                article = doc.select(".slide");
-                article.select(".slide-last").html("");
-            }
-
-        }
-        for (Element e : article.select(".vdb_player")) {
-            Elements script = e.select("script");
-            if (script.isEmpty())
-                continue;
-
-            String video_id = findSubstringBetween(script.first().attr("src"), "vid=", "/", false);
-
-            String url = doc.baseUri();
-            int i1 = url.indexOf(".com/");
-            if (i1 == -1)
-                continue;
-
-            String date = url.substring(i1 + 5, i1 + 16).replaceFirst("/", "-");
-
-            e.html(insertIframe("https://cdn.vidible.tv/prod/" + date + video_id + "_v2.orig.mp4"));
-            cleanAttributes(e);
-        }
-
-        article.select("script,.aside-related-articles,.controls,.slideshow .enter-wrapper,.inset-section,.social-share,.inset-ad,.contributor-byline").remove();
-        article.select("div").tagName("p");
-
-        for (Element img : article.select("img")) {
-            String src = img.attr("data-full-size-image");
-            if (!src.isEmpty())
-                img.attr("src", src);
-
-            cleanAttributes(img, "src");
-        }
-
-        wpcomwidget(article);
-        article.select("form").remove();
-
+        Element article = jsoupParse(prop);
+        article.select("script").remove();
+        article.select(".wp-caption-text").tagName("figcaption");
         article.select("[style]").removeAttr("style");
-        article.select("iframe").attr("frameborder", "0");
-
-        news.content = finalFormat(article, false);
+        return finalFormat(article, false);
     }
 
 }

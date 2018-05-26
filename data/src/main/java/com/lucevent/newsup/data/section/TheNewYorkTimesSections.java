@@ -25,9 +25,8 @@ public class TheNewYorkTimesSections extends Sections {
         add(new Section("The Upshot", "http://rss.nytimes.com/services/xml/rss/nyt/Upshot.xml", 1));
 
         add(new Section("Business", "http://rss.nytimes.com/services/xml/rss/nyt/Business.xml", 0));
-        add(new Section("Energy & Environment", "http://rss.nytimes.com/services/xml/rss/nyt/EnergyEnvironment.xml", 1));
         add(new Section("Economy", "http://rss.nytimes.com/services/xml/rss/nyt/Economy.xml", 1));
-        add(new Section("DealBook", "http://www.nytimes.com/services/xml/rss/nyt/Dealbook.xml", 1));
+        add(new Section("DealBook", "https://rss.nytimes.com/services/xml/rss/nyt/Dealbook.xml", 1));
         add(new Section("Media & Advertising", "http://rss.nytimes.com/services/xml/rss/nyt/MediaandAdvertising.xml", 1));
         add(new Section("Your Money", "http://rss.nytimes.com/services/xml/rss/nyt/YourMoney.xml", 1));
 
@@ -37,15 +36,14 @@ public class TheNewYorkTimesSections extends Sections {
         add(new Section("Sports", "http://rss.nytimes.com/services/xml/rss/nyt/Sports.xml", 0));
         add(new Section("Baseball", "http://rss.nytimes.com/services/xml/rss/nyt/Baseball.xml", 1));
         add(new Section("College Basketball", "http://rss.nytimes.com/services/xml/rss/nyt/CollegeBasketball.xml", 1));
-        add(new Section("College Football", "http://rss.nytimes.com/services/xml/rss/nyt/CollegeFootball.xml", 1));
+        add(new Section("College Football", "https://www.nytimes.com/svc/collections/v1/publish/https://www.nytimes.com/section/sports/ncaafootball/rss.xml", 1));
         add(new Section("Golf", "http://rss.nytimes.com/services/xml/rss/nyt/Golf.xml", 1));
         add(new Section("Hockey", "http://rss.nytimes.com/services/xml/rss/nyt/Hockey.xml", 1));
         add(new Section("Pro-Basketball", "http://rss.nytimes.com/services/xml/rss/nyt/ProBasketball.xml", 1));
         add(new Section("Pro-Football", "http://rss.nytimes.com/services/xml/rss/nyt/ProFootball.xml", 1));
         add(new Section("Soccer", "http://rss.nytimes.com/services/xml/rss/nyt/Soccer.xml", 1));
-  
+
         add(new Section("Science", "http://rss.nytimes.com/services/xml/rss/nyt/Science.xml", 0));
-        add(new Section("Environment", "http://rss.nytimes.com/services/xml/rss/nyt/Environment.xml", 1));
         add(new Section("Space & Cosmos", "http://rss.nytimes.com/services/xml/rss/nyt/Space.xml", 1));
 
         add(new Section("Health", "http://rss.nytimes.com/services/xml/rss/nyt/Health.xml", 0));
@@ -67,18 +65,13 @@ public class TheNewYorkTimesSections extends Sections {
         add(new Section("T Magazine", "http://rss.nytimes.com/services/xml/rss/nyt/tmagazine.xml", 1));
 
         add(new Section("Travel", "http://rss.nytimes.com/services/xml/rss/nyt/Travel.xml", 0));
-
         add(new Section("Real Estate", "http://rss.nytimes.com/services/xml/rss/nyt/RealEstate.xml", 0));
-        add(new Section("Commercial", "http://rss.nytimes.com/services/xml/rss/nyt/Commercial.xml", 1));
-
         add(new Section("Autos", "http://rss.nytimes.com/services/xml/rss/nyt/Automobiles.xml", 0));
-
-        add(new Section("Lens Blog", "http://lens.blogs.nytimes.com/feed/", 0));
+        add(new Section("Lens Blog", "https://lens.blogs.nytimes.com/feed/", 0));
 
         add(new Section("Other Blog", null, -1));
         add(new Section("Obituaries", "http://rss.nytimes.com/services/xml/rss/nyt/Obituaries.xml", 1));
         add(new Section("Times Wire", "http://www.nytimes.com/timeswire/feeds/", 1));
-        add(new Section("Most E-Mailed", "http://www.nytimes.com/services/xml/rss/nyt/pop_top.xml", 1));
         add(new Section("Most Shared", "http://rss.nytimes.com/services/xml/rss/nyt/MostShared.xml", 1));
         add(new Section("Most Viewed", "http://rss.nytimes.com/services/xml/rss/nyt/MostViewed.xml", 1));
 

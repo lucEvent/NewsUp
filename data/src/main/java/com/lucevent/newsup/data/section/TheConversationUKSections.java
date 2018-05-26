@@ -17,7 +17,6 @@ public class TheConversationUKSections extends Sections {
         add(new Section("Health + Medicine", "http://theconversation.com/uk/health/articles.rss", 0));
         add(new Section("Politics + Society", "http://theconversation.com/uk/politics/articles.rss", 0));
         add(new Section("Science + Technology", "http://theconversation.com/uk/technology/articles.rss", 0));
-        add(new Section("Brexit", "http://theconversation.com/uk/eu-referendum-2016/articles.rss", 0));
 
     }
 

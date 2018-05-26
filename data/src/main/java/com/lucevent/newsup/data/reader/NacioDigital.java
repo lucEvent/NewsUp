@@ -43,20 +43,28 @@ public class NacioDigital extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected void readNewsContent(Document doc, News news)
     {
-        doc.select(".h3itemrelnoticia").remove();
-        Elements article = doc.select(".h3noticia,.fotoportadaampliacio,#_markupCos");
-        article.select("script,.fa-fw").remove();
+        Elements article = doc.select(".amp_subtitol,.amp_fotografia_peu,.amp_textnoticia");
+        article.select("script,.intext-publi,.infolandingsocnacio_noticies").remove();
 
-        for (Element img : article.select(".divimatgeeditor:has(noscript),.fotoportadaampliacio:has(noscript)")) {
-            cleanAttributes(img);
-
-            Elements ns = img.select("noscript");
-            String cap = img.text();
-            img.html(ns.html() + "<figcaption>" + cap + "</figcaption>");
+        for (Element img : article.select(".amp_fotografia noscript")) {
+            img.parent().html(img.html());
+        }
+        for (Element div : article.select(".divimatgeeditor:has(noscript)")) {
+            Elements img = div.select("noscript");
+            Elements caption = div.select("em").tagName("figcaption");
+            div.html(img.html()+caption.outerHtml());
+        }
+        for (Element e :article.select("img[src]")) {
+            String src = e.attr("src").replace("..//../", "");
+            cleanAttributes(e);
+            e.attr("src", src);
         }
 
-        article.select(".peufotografia,.divimatgeeditor p").tagName("figcaption");
+        cleanAttributes(article.select(".divimatgeeditor"));
+        article.select(".amp_subtitol h2").tagName("b");
+        article.select(".amp_peu_fotografia").tagName("figcaption");
         article.select("[style]").removeAttr("style");
+        article.select("noscript").remove();
 
         news.content = finalFormat(article, true);
     }

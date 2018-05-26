@@ -55,7 +55,6 @@ public class NewsTextViewHolder extends NewsElementViewHolder {
     public void setStyle(boolean darkStyle)
     {
         ((TextView) itemView).setTextColor(darkStyle ? DARK_TEXT_COLOR : LIGHT_TEXT_COLOR);
-        itemView.setBackgroundColor(darkStyle ? DARK_BACKGROUND_COLOR : LIGHT_BACKGROUND_COLOR);
     }
 
     @Override

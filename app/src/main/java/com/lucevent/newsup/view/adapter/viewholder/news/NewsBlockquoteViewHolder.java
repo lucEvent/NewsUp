@@ -1,48 +1,53 @@
 package com.lucevent.newsup.view.adapter.viewholder.news;
 
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
-import android.util.TypedValue;
 import android.view.View;
-import android.widget.TextView;
+import android.view.ViewGroup;
 
-import com.lucevent.newsup.R;
-import com.lucevent.newsup.parse.NewsBlockquote;
+import java.util.ArrayList;
 
 public class NewsBlockquoteViewHolder extends NewsElementViewHolder {
 
-    protected TextView content;
+    private ArrayList<NewsElementViewHolder> elems;
 
-    public NewsBlockquoteViewHolder(View v)
+    public NewsBlockquoteViewHolder(View v, int capacity)
     {
         super(v);
-        content = (TextView) v.findViewById(R.id.content);
-        content.setMovementMethod(LinkMovementMethod.getInstance());
+        elems = new ArrayList<>(capacity);
+    }
+
+    public void addElement(NewsElementViewHolder viewHolder)
+    {
+        elems.add(viewHolder);
+        ((ViewGroup) itemView).addView(viewHolder.itemView);
     }
 
     @Override
     public void bind(boolean darkStyle)
     {
-        content.setText(Html.fromHtml(((NewsBlockquote) elem).getContent()));
+        for (NewsElementViewHolder e : elems)
+            e.bind(darkStyle);
     }
 
     @Override
     public void setTextSize(int font_size)
     {
-        content.setTextSize(TypedValue.COMPLEX_UNIT_SP, FONT_SIZE_NORMAL_VALUES[font_size]);
+        for (NewsElementViewHolder e : elems)
+            e.setTextSize(font_size);
     }
 
     @Override
     public void setStyle(boolean darkStyle)
     {
-        content.setTextColor(darkStyle ? DARK_TEXT_COLOR : LIGHT_TEXT_COLOR);
-        content.setBackgroundColor(darkStyle ? DARK_BLOCKQUOTE_BACKGROUND_COLOR : LIGHT_BLOCKQUOTE_BACKGROUND_COLOR);
+        for (NewsElementViewHolder e : elems)
+            e.setStyle(darkStyle);
+        itemView.setBackgroundColor(darkStyle ? DARK_BLOCKQUOTE_BACKGROUND_COLOR : LIGHT_BLOCKQUOTE_BACKGROUND_COLOR);
     }
 
     @Override
     public void setLinkColor(int linkColor)
     {
-        content.setLinkTextColor(linkColor);
+        for (NewsElementViewHolder e : elems)
+            e.setLinkColor(linkColor);
     }
 
 }

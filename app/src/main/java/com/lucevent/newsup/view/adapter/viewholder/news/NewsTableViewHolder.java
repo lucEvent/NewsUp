@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.parse.NewsTable;
+import com.lucevent.newsup.view.util.NewsImageTableCell;
 
 import java.util.ArrayList;
 
@@ -18,7 +19,6 @@ public class NewsTableViewHolder extends NewsElementViewHolder {
     private ArrayList<TableRow> rows;
     private int mCurrentMaxRow;
     private LayoutInflater inflater;
-    private int mFontSize = 2;
 
     public NewsTableViewHolder(View v)
     {
@@ -41,8 +41,13 @@ public class NewsTableViewHolder extends NewsElementViewHolder {
             rowView.removeAllViews();
 
             for (String cellData : rowData) {
-                TextView cellView = (TextView) inflater.inflate(R.layout.i_news_table_cell, rowView, false);
-                cellView.setText(Html.fromHtml(cellData));
+                View cellView;
+                if (cellData.contains("<img "))
+                    cellView = new NewsImageTableCell(itemView.getContext(), cellData);
+                else {
+                    cellView = inflater.inflate(R.layout.i_news_table_cell, rowView, false);
+                    ((TextView) cellView).setText(Html.fromHtml(cellData));
+                }
                 rowView.addView(cellView);
             }
             tableView.addView(rowView);
@@ -61,12 +66,15 @@ public class NewsTableViewHolder extends NewsElementViewHolder {
     @Override
     public void setTextSize(int font_size)
     {
-        mFontSize = font_size;
-
         for (int i = 0; i <= mCurrentMaxRow; i++) {
             TableRow row = rows.get(i);
-            for (int j = 0; j < row.getChildCount(); j++)
-                ((TextView) row.getChildAt(j)).setTextSize(TypedValue.COMPLEX_UNIT_SP, FONT_SIZE_NORMAL_VALUES[font_size]);
+            for (int j = 0; j < row.getChildCount(); j++) {
+                View v = row.getChildAt(j);
+                if (v instanceof TextView)
+                    ((TextView) v).setTextSize(TypedValue.COMPLEX_UNIT_SP, FONT_SIZE_NORMAL_VALUES[font_size]);
+                else
+                    ((NewsImageTableCell) v).setTextSize(FONT_SIZE_NORMAL_VALUES[font_size]);
+            }
         }
     }
 
@@ -77,8 +85,13 @@ public class NewsTableViewHolder extends NewsElementViewHolder {
 
         for (int i = 0; i <= mCurrentMaxRow; i++) {
             TableRow row = rows.get(i);
-            for (int j = 0; j < row.getChildCount(); j++)
-                ((TextView) row.getChildAt(j)).setTextColor(textColor);
+            for (int j = 0; j < row.getChildCount(); j++) {
+                View v = row.getChildAt(j);
+                if (v instanceof TextView)
+                    ((TextView) v).setTextColor(textColor);
+                else
+                    ((NewsImageTableCell) v).setTextColor(textColor);
+            }
         }
         itemView.setBackgroundColor(darkStyle ? DARK_BACKGROUND_COLOR : LIGHT_BACKGROUND_COLOR);
     }
@@ -88,8 +101,13 @@ public class NewsTableViewHolder extends NewsElementViewHolder {
     {
         for (int i = 0; i <= mCurrentMaxRow; i++) {
             TableRow row = rows.get(i);
-            for (int j = 0; j < row.getChildCount(); j++)
-                ((TextView) row.getChildAt(j)).setLinkTextColor(linkColor);
+            for (int j = 0; j < row.getChildCount(); j++) {
+                View v = row.getChildAt(j);
+                if (v instanceof TextView)
+                    ((TextView) v).setLinkTextColor(linkColor);
+                else
+                    ((NewsImageTableCell) v).setLinkTextColor(linkColor);
+            }
         }
     }
 

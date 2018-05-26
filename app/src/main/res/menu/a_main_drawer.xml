@@ -14,6 +14,11 @@
         android:orderInCategory="0xffff">
 
         <item
+            android:id="@+id/nav_new_site_request"
+            android:icon="@drawable/ic_new_request"
+            android:title="@string/site_request"/>
+
+        <item
             android:id="@+id/nav_notes"
             android:icon="@drawable/ic_note"
             android:title="@string/notes"/>

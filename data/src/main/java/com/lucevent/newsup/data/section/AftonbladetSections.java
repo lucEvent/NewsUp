@@ -9,17 +9,17 @@ public class AftonbladetSections extends Sections {
     {
         super();
 
-        add(new Section("Startsidan", "http://www.aftonbladet.se/rss.xml", 0));
-        add(new Section("Senaste Nytt", "http://www.aftonbladet.se/senastenytt/rss.xml", 0));
-        add(new Section("Nyheter", "http://www.aftonbladet.se/nyheter/rss.xml", 0));
-        add(new Section("Sportbladet", "http://www.aftonbladet.se/sportbladet/rss.xml", 0));
-        add(new Section("Fotboll", "http://www.aftonbladet.se/sportbladet/fotboll/rss.xml", 1));
-        add(new Section("Hockey", "http://www.aftonbladet.se/sportbladet/hockey/rss.xml", 1));
-        add(new Section("N\u00F6jesbladet", "http://www.aftonbladet.se/nojesbladet/rss.xml", 0));
-        add(new Section("Ledare", "http://www.aftonbladet.se/ledare/rss.xml", 0));
-        add(new Section("Kultur", "http://www.aftonbladet.se/kultur/rss.xml", 0));
-        add(new Section("Bil", "http://www.aftonbladet.se/bil/rss.xml", 0));
-        add(new Section("Kolumnister", "http://www.aftonbladet.se/nyheter/kolumnister/rss.xml", 0));
+        add(new Section("Startsidan", "https://www.aftonbladet.se/rss.xml", 0));
+        add(new Section("Senaste Nytt", "https://www.aftonbladet.se/senastenytt/rss.xml", 0));
+        add(new Section("Nyheter", "https://www.aftonbladet.se/nyheter/rss.xml", 0));
+        add(new Section("Sportbladet", "https://www.aftonbladet.se/sportbladet/rss.xml", 0));
+        add(new Section("Fotboll", "https://www.aftonbladet.se/sportbladet/fotboll/rss.xml", 1));
+        add(new Section("Hockey", "https://www.aftonbladet.se/sportbladet/hockey/rss.xml", 1));
+        add(new Section("N\u00F6jesbladet", "https://www.aftonbladet.se/nojesbladet/rss.xml", 0));
+        add(new Section("Ledare", "https://www.aftonbladet.se/ledare/rss.xml", 0));
+        add(new Section("Kultur", "https://www.aftonbladet.se/kultur/rss.xml", 0));
+        add(new Section("Bil", "https://www.aftonbladet.se/bil/rss.xml", 0));
+        add(new Section("Kolumnister", "https://www.aftonbladet.se/nyheter/kolumnister/rss.xml", 0));
 
     }
 

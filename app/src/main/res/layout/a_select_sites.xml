@@ -89,7 +89,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="6dp"
         android:layout_marginRight="6dp"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/rounded_rect"
         android:orientation="horizontal"
         app:layout_anchor="@+id/scrollView"
         app:layout_anchorGravity="top">

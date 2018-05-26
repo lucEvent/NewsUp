@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Message;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,9 +25,8 @@ import com.lucevent.newsup.io.BookmarksManager;
 import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.HistoryManager;
 import com.lucevent.newsup.kernel.KernelManager;
-import com.lucevent.newsup.permission.StoragePermissionHandler;
 import com.lucevent.newsup.view.adapter.NewsFilterAdapter;
-import com.lucevent.newsup.view.util.FilterDialog;
+import com.lucevent.newsup.view.dialog.FilterDialog;
 import com.lucevent.newsup.view.util.NUSearchBar;
 import com.lucevent.newsup.view.util.NewsAdapterList;
 import com.lucevent.newsup.view.util.NewsView;
@@ -38,11 +36,10 @@ import java.lang.ref.WeakReference;
 import java.util.Collection;
 import java.util.TreeSet;
 
-public class HistorialFragment extends android.app.Fragment implements View.OnClickListener,
-        View.OnLongClickListener, OnBackPressedListener, NUSearchBar.CallBack {
+public class HistorialFragment extends StoragePermissionFragment implements View.OnClickListener,
+        OnBackPressedListener, NUSearchBar.CallBack {
 
     private HistoryManager dataManager;
-    private StoragePermissionHandler permissionHandler;
     private NewsFilterAdapter adapter;
     private NewsView newsView;
     private NUSearchBar searchView;
@@ -57,7 +54,6 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
 
         Handler handler = new Handler(this);
         dataManager = new HistoryManager(getActivity(), handler);
-        permissionHandler = new StoragePermissionHandler(getActivity());
     }
 
     @Override
@@ -65,7 +61,7 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
     {
         View view = inflater.inflate(R.layout.f_historial, container, false);
 
-        adapter = new NewsFilterAdapter(this, this, onBookmarkClick, NewsAdapterList.SortBy.byReadOn);
+        adapter = new NewsFilterAdapter(this, onBookmarkClick, NewsAdapterList.SortBy.byReadOn);
         adapter.showSiteIcon(true);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -80,6 +76,7 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
         newsView = (NewsView) view.findViewById(R.id.news_view);
         newsView.setFragmentContext(this, ((Main) getActivity()).drawer);
         newsView.setBookmarkStateChangeListener(onBookmarkClick);
+        newsView.setImageLongClickListener(onImageLongClick);
 
         noContentMessage = view.findViewById(R.id.no_content);
         searchView = (NUSearchBar) view.findViewById(R.id.searchView);
@@ -143,13 +140,6 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
 
         News clone = new News(news.id, news.title, news.link, news.description, news.date, news.tags, news.site_code, news.section_code, news.readOn);
         KernelManager.setNewsRead(clone);
-    }
-
-    @Override
-    public boolean onLongClick(View v)
-    {
-        //// TODO: 14/10/2016
-        return false;
     }
 
     @Override
@@ -225,28 +215,8 @@ public class HistorialFragment extends android.app.Fragment implements View.OnCl
         }
     };
 
-    private View tempBookmarkButton;
-
-    private View.OnClickListener onBookmarkClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View v)
-        {
-            if (permissionHandler.checkAndAsk(HistorialFragment.this))
-                bookmarkStateChanged(v);
-            else
-                tempBookmarkButton = v;
-        }
-    };
-
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults)
-    {
-        if (permissionHandler.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
-            bookmarkStateChanged(tempBookmarkButton);
-        }
-    }
-
-    private void bookmarkStateChanged(View btn)
+    protected void onBookmarkStateChanged(View btn)
     {
         News news = (News) btn.getTag();
 

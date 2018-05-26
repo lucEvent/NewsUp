@@ -72,19 +72,18 @@ public class PokemonGo extends com.lucevent.newsup.data.util.Reader {
             case "es":
             case "fr":
             case "it":
+            case "pt-BR":
                 parts = date.split("/");
                 day = parts[0];
                 month = parts[1];
                 year = parts[2];
                 break;
             case "ja":
-                parts = date.replace("\u5e74", ".").replace("\u6708", ".").replace("\u65e5", "").split("\\.");
-                day = parts[2];
-                month = parts[1];
-                year = parts[0];
-                break;
+                date = date.replace("\u5e74", "/").replace("\u6708", "/").replace("\u65e5", "");
             case "ko":
-                parts = date.replace("\uB144 ", ".").replace("\uC6D4 ", ".").replace("\uC77C", "").split("\\.");
+                date = date.replace("\uB144 ", "/").replace("\uC6D4 ", "/").replace("\uC77C", "");
+            case "zh-Hant":
+                parts = date.split("/");
                 day = parts[2];
                 month = parts[1];
                 year = parts[0];

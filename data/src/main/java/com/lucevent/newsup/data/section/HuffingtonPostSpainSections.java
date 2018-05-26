@@ -9,7 +9,7 @@ public class HuffingtonPostSpainSections extends Sections {
     {
         super();
 
-        add(new Section("Espa\u00F1a", "http://www.huffingtonpost.es/feeds/index.xml", 0));
+        add(new Section("Espa\u00F1a", "https://m.huffingtonpost.es/feeds/index.xml", 0));
 
     }
 

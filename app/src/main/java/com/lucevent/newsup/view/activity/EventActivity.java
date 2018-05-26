@@ -6,10 +6,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -27,9 +25,8 @@ import com.lucevent.newsup.io.BookmarksManager;
 import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.AppData;
 import com.lucevent.newsup.kernel.KernelManager;
-import com.lucevent.newsup.permission.StoragePermissionHandler;
 import com.lucevent.newsup.view.adapter.NewsFilterAdapter;
-import com.lucevent.newsup.view.util.EventConfigDialog;
+import com.lucevent.newsup.view.dialog.EventConfigDialog;
 import com.lucevent.newsup.view.util.NewsAdapterList;
 import com.lucevent.newsup.view.util.NewsView;
 
@@ -37,14 +34,13 @@ import java.lang.ref.WeakReference;
 import java.util.Collection;
 import java.util.TreeSet;
 
-public class EventActivity extends AppCompatActivity implements View.OnClickListener {
+public class EventActivity extends StoragePermissionActivity implements View.OnClickListener {
 
     private Event mEvent;
 
     private KernelManager manager;
 
     private Handler handler;
-    private StoragePermissionHandler permissionHandler;
 
     private NewsFilterAdapter mAdapter;
     private NewsView newsView;
@@ -61,7 +57,6 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
 
         handler = new Handler(this);
         manager = new KernelManager(this);
-        permissionHandler = new StoragePermissionHandler(this);
 
         // Views
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -69,7 +64,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        mAdapter = new NewsFilterAdapter(this, null, onBookmarkClick, NewsAdapterList.SortBy.byTime);
+        mAdapter = new NewsFilterAdapter(this, onBookmarkClick, NewsAdapterList.SortBy.byTime);
         mAdapter.setUserPreferences(this);
         mAdapter.showSiteIcon(true);
 
@@ -85,6 +80,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
         newsView = (NewsView) findViewById(R.id.news_view);
         newsView.setFragmentContext(this, null);
         newsView.setBookmarkStateChangeListener(onBookmarkClick);
+        newsView.setImageLongClickListener(onImageLongClick);
 
         progressBar = findViewById(R.id.progress_bar);
         progressBar.setVisibility(ProgressBar.VISIBLE);
@@ -270,28 +266,8 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
 
     };
 
-    private View tempBookmarkButton;
-
-    private View.OnClickListener onBookmarkClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View v)
-        {
-            if (permissionHandler.checkAndAsk(EventActivity.this))
-                bookmarkStateChanged(v);
-            else
-                tempBookmarkButton = v;
-        }
-    };
-
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults)
-    {
-        if (permissionHandler.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
-            bookmarkStateChanged(tempBookmarkButton);
-        }
-    }
-
-    private void bookmarkStateChanged(View btn)
+    protected void onBookmarkStateChanged(View btn)
     {
         News news = (News) btn.getTag();
 

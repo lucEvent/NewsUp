@@ -141,7 +141,7 @@ public class TheTelegraph extends com.lucevent.newsup.data.util.NewsReader {
                     .attr("src", src);
             img.html("");
         }
-        article.select("script,.live-stream__bar,button,opta,.tmg-particle,.component-content:has(.embed--brexit--bulletin--container)").remove();
+        article.select("script,input,.live-stream__bar,button,opta,.tmg-particle,.component-content:has(.embed--brexit--bulletin--container)").remove();
         article.select(".quote").tagName("blockquote");
         article.select("q,tmg-travel-availability").tagName("div");
         article.select("strike").tagName("s");

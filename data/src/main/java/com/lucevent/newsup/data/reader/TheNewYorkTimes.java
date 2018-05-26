@@ -20,6 +20,7 @@ public class TheNewYorkTimes extends com.lucevent.newsup.data.util.NewsReader {
      * [author, description, guid, item, link, pubdate, title]
      * [author, description, item, link, pubdate, title]
      **/
+
     public TheNewYorkTimes()
     {
         super(TAG_ITEM_ITEMS,
@@ -36,54 +37,13 @@ public class TheNewYorkTimes extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected void readNewsContent(Document doc, News news)
     {
-        Elements article = doc.select("article .p-block:not(.article-interactive)");
-        article.select(".lazyload,.image-caption,.image-credit").remove();
+        doc.select("[class^='RelatedCoverage']").remove();
+        for (Element fig : doc.select("figure[itemid]:has(div[class^='LazyImage']"))
+            fig.select("div[class^='LazyImage']").first().attr("src", fig.attr("itemid")).tagName("img");
 
-        if (article.isEmpty()) {
+        Elements article = doc.select("article").select("header img[class^='Image-i'],header figcaption,.StoryBodyCompanionColumn > div,[class^='styles-youtubeIframe'],figcaption[class^='media-caption'],[itemprop='associatedMedia'] img,[itemprop='associatedMedia'] figcaption");
 
-            article = doc.select("#promo-info");
-
-            if (article.isEmpty()) {
-
-                article = doc.select("article figure img,article .summary");
-
-                if (article.size() < 2) {
-
-                    article = doc.select("[data-view=\"slideshow-slide\"]");
-
-                    if (article.isEmpty()) {
-                        ///System.out.println("Returning");
-                        return;
-                    } else {
-                        for (Element e : article) {
-                            String text = e.select(".slide-text p").text();
-                            String img = e.attr("data-view-src");
-
-                            e.tagName("p");
-                            e.removeAttr("data-view-src");
-                            e.html("<img src='" + img + "'/>" + text);
-                        }
-                    }
-                } else {
-                    Element img = article.get(0);
-                    Element content = article.get(1);
-                    article = new Elements();
-                    article.add(img);
-                    article.add(content);
-                }
-            } else
-                article.select("li").tagName("p");
-        }
-        for (Element e : article.select(".span-image")) {
-            Elements g = e.select("img,video,picture");
-            if (!g.isEmpty())
-                e.html(g.outerHtml());
-        }
-        for (Element e : article.select("[data-iframe]"))
-            e.parent().html("<iframe overflow='hidden' frameborder='0' scrolling='no' src='"
-                    + e.attr("data-iframe") + "'></iframe>");
-
-        article.select("[style]").removeAttr("style");
+        cleanAttributes(article.select("img[src]"), "src");
 
         news.content = finalFormat(article, true);
     }

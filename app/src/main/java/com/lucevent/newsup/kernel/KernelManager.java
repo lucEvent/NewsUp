@@ -15,6 +15,7 @@ import com.lucevent.newsup.data.util.Date;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsMap;
 import com.lucevent.newsup.data.util.Site;
+import com.lucevent.newsup.data.util.UserSite;
 import com.lucevent.newsup.io.DBManager;
 import com.lucevent.newsup.io.LogoManager;
 import com.lucevent.newsup.io.SDManager;
@@ -50,9 +51,11 @@ public class KernelManager implements StorageCallback {
             sdmanager = new SDManager(context);
 
         if (AppData.getSites() == null) {
-            AppData.setSites(Sites.getDefault(ProSettings.checkEnabled(ProSettings.FINLAND_SITES_KEY)
-                    || Locale.getDefault().getLanguage().equals("fi"))
-            );
+            Sites sites = Sites.getDefault(ProSettings.checkEnabled(ProSettings.FINLAND_SITES_KEY)
+                    || Locale.getDefault().getLanguage().equals("fi"));
+            sites.addAll(dbmanager.readUserSites());
+
+            AppData.setSites(sites);
             dbmanager.readReadings(AppData.getSites());
         }
 
@@ -68,9 +71,22 @@ public class KernelManager implements StorageCallback {
         int[] favorite_codes = AppSettings.getFavoriteSitesCodes();
         Sites res = new Sites(favorite_codes.length);
         for (int code : favorite_codes) {
-            res.add(AppData.getSiteByCode(code));
+            Site s = AppData.getSiteByCode(code);
+            if (s == null)
+                AppSettings.toggleFavorite(new Site(code, "", 0, "", 0, null, null), false);
+            else res.add(s);
         }
         return res;
+    }
+
+    public void addSite(UserSite site)
+    {
+        if (dbmanager.insertUserSite(site)) {
+            AppData.getSites().add(site);
+
+            if (site.icon != null)
+                logoManager.downloadLogo(site);
+        }
     }
 
     public News getNewsById(int id)

@@ -1,12 +1,11 @@
 package com.lucevent.newsup.parse;
 
-public class NewsIframe extends NewsElement<String> {
+public class NewsIframe implements NewsElement<String> {
 
     private String src;
 
     public NewsIframe()
     {
-        super(false);
     }
 
     @Override
@@ -31,6 +30,17 @@ public class NewsIframe extends NewsElement<String> {
     public NewsElement getNewElement()
     {
         return new NewsIframe();
+    }
+
+    @Override
+    public boolean isAppendable()
+    {
+        return false;
+    }
+
+    @Override
+    public void setNotAppendable()
+    {
     }
 
 }

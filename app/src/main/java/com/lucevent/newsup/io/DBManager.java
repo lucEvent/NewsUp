@@ -11,10 +11,12 @@ import com.lucevent.newsup.data.Sites;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsMap;
 import com.lucevent.newsup.data.util.Site;
+import com.lucevent.newsup.data.util.UserSite;
 import com.lucevent.newsup.io.Database.DBDownloadSchedule;
 import com.lucevent.newsup.io.Database.DBNews;
 import com.lucevent.newsup.io.Database.DBNote;
 import com.lucevent.newsup.io.Database.DBReadings;
+import com.lucevent.newsup.io.Database.DBUserSite;
 import com.lucevent.newsup.kernel.util.Note;
 import com.lucevent.newsup.kernel.util.Notes;
 import com.lucevent.newsup.services.util.Download;
@@ -30,6 +32,12 @@ public class DBManager {
     public DBManager(Context context)
     {
         db = new Database(context);
+/*
+        synchronized (this) {
+            SQLiteDatabase database = db.getWritableDatabase();
+            database.delete(DBUserSite.db, null, null);
+            database.close();
+        }*/
     }
 
     public NewsMap readNews(Site site)
@@ -214,6 +222,27 @@ public class DBManager {
         return result;
     }
 
+    public ArrayList<UserSite> readUserSites()
+    {
+        ArrayList<UserSite> result = new ArrayList<>();
+
+        synchronized (this) {
+            SQLiteDatabase database = db.getReadableDatabase();
+            Cursor cursor = database.query(DBUserSite.db, DBUserSite.cols, null, null, null, null, null);
+
+            if (cursor.moveToFirst())
+                do {
+
+                    result.add(DBUserSite.parse(cursor));
+
+                } while (cursor.moveToNext());
+
+            cursor.close();
+            database.close();
+        }
+        return result;
+    }
+
     public boolean contains(News news)
     {
         boolean r;
@@ -247,6 +276,23 @@ public class DBManager {
         synchronized (this) {
             SQLiteDatabase database = db.getWritableDatabase();
             database.update(DBNews.db, values, Database.id + " = " + news.id, null);
+            database.close();
+        }
+    }
+
+    public void updateUserSite(UserSite site)
+    {
+        ContentValues values = new ContentValues();
+        values.put(DBUserSite.name, site.name);
+        values.put(DBUserSite.color, site.color);
+        values.put(DBUserSite.url, site.url);
+        values.put(DBUserSite.info, site.info);
+        values.put(DBUserSite.rssUrl, site.rssUrl);
+        values.put(DBUserSite.iconUrl, site.icon);
+
+        synchronized (this) {
+            SQLiteDatabase database = db.getWritableDatabase();
+            database.update(DBUserSite.db, values, DBUserSite.code + " = " + site.code, null);
             database.close();
         }
     }
@@ -377,6 +423,25 @@ public class DBManager {
             database.close();
         }
         return new Note(id, note);
+    }
+
+    public boolean insertUserSite(UserSite site)
+    {
+        ContentValues values = new ContentValues();
+        values.put(DBUserSite.code, site.code);
+        values.put(DBUserSite.name, site.name);
+        values.put(DBUserSite.color, site.color);
+        values.put(DBUserSite.url, site.url);
+        values.put(DBUserSite.info, site.info);
+        values.put(DBUserSite.rssUrl, site.rssUrl);
+        values.put(DBUserSite.iconUrl, site.icon);
+
+        synchronized (this) {
+            SQLiteDatabase database = db.getWritableDatabase();
+            database.insert(DBUserSite.db, null, values);
+            database.close();
+        }
+        return true;
     }
 
     /**

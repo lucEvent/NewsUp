@@ -9,31 +9,30 @@ public class DagensNyheterSections extends Sections {
     {
         super();
 
-        add(new Section("Senaste nytt", "http://www.dn.se/rss/senaste-nytt/", 0));
-        add(new Section("Nyheter", "http://www.dn.se/nyheter/rss/", 0));
-        add(new Section("Goda Nyheter", "http://www.dn.se/goda-nyheter/rss", 0));
+        add(new Section("Senaste nytt", "https://www.dn.se/rss/senaste-nytt/", 0));
+        add(new Section("Goda Nyheter", "https://www.dn.se/rss/goda-nyheter/", 0));
 
-        add(new Section("Stockholm", "http://www.dn.se/sthlm/rss/", 0));
-        add(new Section("Sverige", "http://www.dn.se/nyheter/sverige/rss", 0));
-        add(new Section("V\u00E4rlden", "http://www.dn.se/nyheter/varlden/rss/", 0));
+        add(new Section("Stockholm", "https://www.dn.se/rss/sthlm/", 0));
+        add(new Section("Sverige", "https://www.dn.se/rss/nyheter/sverige/", 0));
+        add(new Section("V\u00E4rlden", "https://www.dn.se/rss/nyheter/varlden/", 0));
 
-        add(new Section("Ekonomi", "http://www.dn.se/ekonomi/rss/", 0));
-        add(new Section("Politik", "http://www.dn.se/nyheter/politik/rss", 0));
-        add(new Section("Vetenskap", "http://www.dn.se/nyheter/vetenskap/rss", 0));
-        add(new Section("Motor", "http://www.dn.se/ekonomi/motor/rss", 0));
+        add(new Section("Ekonomi", "https://www.dn.se/rss/ekonomi/", 0));
+        add(new Section("Politik", "https://www.dn.se/rss/nyheter/politik/", 0));
+        add(new Section("Vetenskap", "https://www.dn.se/rss/nyheter/vetenskap/", 0));
+        add(new Section("Motor", "https://www.dn.se/rss/ekonomi/motor/", 0));
 
-        add(new Section("Sport", "http://www.dn.se/sport/rss/", 0));
-        add(new Section("Ishockey", "http://www.dn.se/sport/ishockey/rss", 1));
-        add(new Section("Fotboll", "http://www.dn.se/sport/fotboll/rss", 1));
+        add(new Section("Sport", "https://www.dn.se/rss/sport/", 0));
+        add(new Section("Ishockey", "https://www.dn.se/rss/sport/ishockey/", 1));
+        add(new Section("Fotboll", "https://www.dn.se/rss/sport/fotboll/", 1));
 
-        add(new Section("Kultur", "http://www.dn.se/kultur-noje/rss/", 0));
-        add(new Section("Bok", "http://www.dn.se/dnbok/rss", 1));
-        add(new Section("Kulturdebatt", "http://www.dn.se/kultur-noje/kulturdebatt/rss", 1));
-        add(new Section("Film - TV", "http://www.dn.se/kultur-noje/film-tv/rss", 1));
-        add(new Section("Musik", "http://www.dn.se/kultur-noje/musik/rss", 1));
-        add(new Section("Scen", "http://www.dn.se/kultur-noje/scen/rss", 1));
+        add(new Section("Kultur", "https://www.dn.se/rss/kultur-noje/", 0));
+        add(new Section("Bok", "https://www.dn.se/rss/dnbok/", 1));
+        add(new Section("Kulturdebatt", "https://www.dn.se/rss/kultur-noje/kulturdebatt/", 1));
+        add(new Section("Film - TV", "https://www.dn.se/rss/kultur-noje/film-tv/", 1));
+        add(new Section("Musik", "https://www.dn.se/rss/kultur-noje/musik/", 1));
+        add(new Section("Scen", "https://www.dn.se/rss/kultur-noje/scen/", 1));
 
-        add(new Section("\u00C5sikt", "http://asikt.dn.se/feed/", 0));
+        add(new Section("\u00C5sikt", "https://asikt.dn.se/feed/", 0));
 
     }
 

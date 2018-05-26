@@ -1,4 +1,4 @@
-package com.lucevent.newsup.view.util;
+package com.lucevent.newsup.view.dialog;
 
 import android.app.Activity;
 import android.app.AlertDialog;

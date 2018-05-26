@@ -2,11 +2,13 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
 
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class Meristation extends com.lucevent.newsup.data.util.NewsReader {
 
-    // tags: [dc:creator, description, guid, item, link, pubdate, title]
+    // tags: [description, enclosure, guid, item, link, pubdate, source, title]
 
     public Meristation()
     {
@@ -17,19 +19,20 @@ public class Meristation extends com.lucevent.newsup.data.util.NewsReader {
                 new int[]{},
                 new int[]{TAG_PUBDATE},
                 new int[]{},
-                new int[]{},
+                new int[]{TAG_ENCLOSURE},
                 "");
     }
 
     @Override
-    protected News onNewsRead(News news)
+    protected void readNewsContent(Document doc, News news)
     {
-        Element article = jsoupParse(news.description);
+        Elements article = doc.select("[class='clear-block']:not(.clear-block .clear-block)");
+        article.select("script[src*='.twitter.'],script[src*='.facebook.'],.fb-post,.views-exposed-widget,.galeriaContent").remove();
 
-        news.description = article.select(".field-field-seo-description .field-items").text();
-
-        article.select("script,.field,.darwin-phpbb-comments-link,.galeriaContent").remove();
-
+        for (Element v : article.select("[video]:has([id^='ytplayer'])")) {
+            String vid = v.attr("video");
+            v.html(insertIframe("https://www.youtube.com/embed/" + vid));
+        }
         for (Element e : article.select("#videoEmbed")) {
             String src = "http://www.dailymotion.com/embed/video/" + e.parent().attr("video");
             e.parent().html(insertIframe(src));
@@ -41,9 +44,9 @@ public class Meristation extends com.lucevent.newsup.data.util.NewsReader {
 
             e.html(sb.toString());
         }
+        cleanAttributes(article.select("img[src]"), "src");
 
         news.content = finalFormat(article, false);
-        return news;
     }
 
     @Override

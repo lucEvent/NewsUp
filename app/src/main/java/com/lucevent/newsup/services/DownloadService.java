@@ -65,11 +65,19 @@ public class DownloadService extends IntentService {
                 dataManager.getNews(job);
 
         if (job.notify && resp != null && !resp.isEmpty()) {
+            String title;
             String[] headlines = new String[resp.headlines.size()];
-            for (int i = 0; i < resp.headlines.size(); i++) {
-                Site s = AppData.getSiteByCode(resp.sources.get(i).siteCode);
-                String siteName = s == null ? "" : s.name;
-                headlines[i] = siteName + ": " + resp.headlines.get(i);
+            if (resp.sources.size() == 1) {
+                Site s = AppData.getSiteByCode(resp.sources.get(0).siteCode);
+                title = (s == null ? "" : s.name) + " [via News Up]";
+                headlines[0] = resp.headlines.get(0);
+            } else {
+                title = "News Up";
+                for (int i = 0; i < resp.headlines.size(); i++) {
+                    Site s = AppData.getSiteByCode(resp.sources.get(i).siteCode);
+                    String siteName = s == null ? "" : s.name;
+                    headlines[i] = siteName + ": " + resp.headlines.get(i);
+                }
             }
 
             // build notification
@@ -79,7 +87,7 @@ public class DownloadService extends IntentService {
                 notificationIntent.putExtra(AppCode.STRING_FILTERS, resp.filters);
 
             NotificationBuilder.notifyUser(this,
-                    NotificationBuilder.build(this, notificationIntent, headlines));
+                    NotificationBuilder.build(this, notificationIntent, title, headlines));
 
         }
         if (resp == null) {

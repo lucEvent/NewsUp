@@ -28,7 +28,7 @@ public class _20Minutos extends com.lucevent.newsup.data.util.NewsReader {
     {
         // Parsing content
         Element article = jsoupParse(news.content);
-        article.parent().select("body > br, body > img, body > a").remove();
+        article.select("body > br, body > img, body > a").remove();
         news.content = finalFormat(article, false);
         // end
 

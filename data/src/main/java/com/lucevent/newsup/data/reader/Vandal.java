@@ -31,7 +31,7 @@ public class Vandal extends com.lucevent.newsup.data.util.NewsReader {
     protected News onNewsRead(News news)
     {
         Element article = jsoupParse(news.content);
-        if (news.content.length() > 1000) {
+        if (!news.link.contains("feedproxy")) {
             article.select("script").remove();
 
             for (Element video : article.select("a[href^='http://www.vandal.net/video']")) {
@@ -63,8 +63,9 @@ public class Vandal extends com.lucevent.newsup.data.util.NewsReader {
     @Override
     protected void readNewsContent(Document doc, News news)
     {
-        Elements video = doc.select("meta[property='og:video']");
-        if (!video.isEmpty()) {
+        if (news.link.contains("VideosVandalOnline")) {
+            Elements video = doc.select("meta[property='og:video']");
+
             String link = video.first().attr("content");
 
             news.content = insertIframe(link);
@@ -73,7 +74,7 @@ public class Vandal extends com.lucevent.newsup.data.util.NewsReader {
             if (!dscr.isEmpty())
                 news.content += "<p>" + dscr.first().attr("content") + "</p>";
 
-        } else {
+        } else if (news.link.contains("BlogsVandalOnline")) {
             Elements e = doc.select(".contenidoprincipal [class='tn mt10']");
             doc.select("[style]").removeAttr("style");
             doc.select("[onclick]").removeAttr("onclick");

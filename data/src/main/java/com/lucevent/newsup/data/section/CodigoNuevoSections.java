@@ -9,17 +9,17 @@ public class CodigoNuevoSections extends Sections {
     {
         super();
 
-        add(new Section("Principal", "http://www.codigonuevo.com/feed/", 0));
-        add(new Section("Actualidad", "http://www.codigonuevo.com/noticias/feed/", 0));
-        add(new Section("Vida", "http://www.codigonuevo.com/vida/feed/", 0));
-        add(new Section("Dinero", "http://www.codigonuevo.com/dinero/feed/", 0));
-        add(new Section("Entretenimiento", "http://www.codigonuevo.com/entretenimiento/feed/", 0));
-        add(new Section("Deportes", "http://www.codigonuevo.com/deportes/feed/", 0));
-        add(new Section("M\u00FAsica", "http://www.codigonuevo.com/musica/feed/", 0));
-        add(new Section("Humor", "http://www.codigonuevo.com/humor/feed/", 0));
-        add(new Section("Agenda", "http://www.codigonuevo.com/agenda/feed/", 0));
-        add(new Section("Salud", "http://www.codigonuevo.com/salud/feed/", 0));
-        ;
+        add(new Section("Principal", "http://www.codigonuevo.com/rss.php", 0));
+        add(new Section("Mileniales", "http://www.codigonuevo.com/rss.php?section=133", 0));
+        add(new Section("Reportajes", "http://www.codigonuevo.com/rss.php?section=134", 0));
+        add(new Section("Psicolog\u00EDa", "http://www.codigonuevo.com/rss.php?section=135", 0));
+        add(new Section("Sociedad", "http://www.codigonuevo.com/rss.php?section=136", 0));
+        add(new Section("Conciencia Social", "http://www.codigonuevo.com/rss.php?section=137", 0));
+        add(new Section("Relaciones", "http://www.codigonuevo.com/rss.php?section=138", 0));
+        add(new Section("Feminismo", "http://www.codigonuevo.com/rss.php?section=139", 0));
+        add(new Section("Entretenimiento", "http://www.codigonuevo.com/rss.php?section=140", 0));
+        add(new Section("Viajes", "http://www.codigonuevo.com/rss.php?section=141", 0));
+        add(new Section("Salud", "http://www.codigonuevo.com/rss.php?section=142", 0));
 
     }
 

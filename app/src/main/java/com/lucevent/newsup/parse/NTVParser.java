@@ -37,7 +37,7 @@ public class NTVParser {
         return res;
     }
 
-    private void roll(NewsElements res, List<Node> elements, NewsElement currentElement)
+    private void roll(List<NewsElement> res, List<Node> elements, NewsElement currentElement)
     {
         NewsElement ne;
 
@@ -69,8 +69,10 @@ public class NTVParser {
                             break;
                         default:
                             endBlock(res);
-                            roll(res, e.childNodes(), new NewsBlockquote());
-                            endBlock(res);
+                            NewsBlockquote bq = new NewsBlockquote();
+                            roll(bq, e.childNodes(), new NewsParagraph());
+                            endBlock(bq);
+                            res.add(bq);
                             break;
                     }
                     continue;
@@ -197,7 +199,7 @@ public class NTVParser {
                 case "abbr":
                 case "svg":
                 case "r":
-                    if (!res.isEmpty() && res.get(res.size() - 1).isAppendable) {
+                    if (!res.isEmpty() && res.get(res.size() - 1).isAppendable()) {
                         ne = res.get(res.size() - 1);
                         String c = ((NewsElement<String>) ne).getContent();
                         ((NewsElement<String>) ne).setContent(c + e.outerHtml());
@@ -222,7 +224,7 @@ public class NTVParser {
                         continue;
                     }
 
-                    if (!res.isEmpty() && res.get(res.size() - 1).isAppendable) {
+                    if (!res.isEmpty() && res.get(res.size() - 1).isAppendable()) {
                         ne = res.get(res.size() - 1);
                         String c = ((NewsElement<String>) ne).getContent();
                         ((NewsElement<String>) ne).setContent(c + e.outerHtml());
@@ -264,10 +266,10 @@ public class NTVParser {
         }
     }
 
-    private static void endBlock(NewsElements res)
+    private static void endBlock(List<NewsElement> res)
     {
         if (!res.isEmpty())
-            res.get(res.size() - 1).isAppendable = false;
+            res.get(res.size() - 1).setNotAppendable();
     }
 
 }

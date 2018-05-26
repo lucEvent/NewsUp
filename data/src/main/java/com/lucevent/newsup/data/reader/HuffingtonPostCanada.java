@@ -2,13 +2,14 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
 
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-public class HuffingtonPostInt extends com.lucevent.newsup.data.util.NewsReader {
+public class HuffingtonPostCanada extends com.lucevent.newsup.data.util.NewsReader {
 
     // Tags: [author, description, enclosure, guid, item, link, pubdate, title]
 
-    public HuffingtonPostInt()
+    public HuffingtonPostCanada()
     {
         super(TAG_ITEM_ITEMS,
                 new int[]{TAG_TITLE},
@@ -63,6 +64,21 @@ public class HuffingtonPostInt extends com.lucevent.newsup.data.util.NewsReader 
                 url = url.replace("-mini", "-large300");
             }
             return new Enclosure(url, type, "");
+        }
+        return null;
+    }
+
+    @Override
+    protected Document getDocument(String url)
+    {
+        try {
+            return org.jsoup.Jsoup.connect(url)
+                    .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36")
+                    .timeout(10000)
+                    .validateTLSCertificates(false)
+                    .get();
+        } catch (Exception e) {
+            System.out.println("[" + e.getClass().getSimpleName() + "] Can't read page. Trying again");
         }
         return null;
     }

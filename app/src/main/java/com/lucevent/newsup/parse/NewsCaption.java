@@ -1,12 +1,11 @@
 package com.lucevent.newsup.parse;
 
-public class NewsCaption extends NewsElement<String> {
+public class NewsCaption implements NewsElement<String> {
 
     private String mContent;
 
     public NewsCaption()
     {
-        super(false);
     }
 
     @Override
@@ -31,6 +30,17 @@ public class NewsCaption extends NewsElement<String> {
     public NewsElement getNewElement()
     {
         return new NewsCaption();
+    }
+
+    @Override
+    public boolean isAppendable()
+    {
+        return false;
+    }
+
+    @Override
+    public void setNotAppendable()
+    {
     }
 
 }

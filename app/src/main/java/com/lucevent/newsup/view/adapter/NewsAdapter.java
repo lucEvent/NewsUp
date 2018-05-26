@@ -26,23 +26,19 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_NEWS_WITH_IMG = 1;
     private static final int TYPE_MORE = 2;
 
-    private final View.OnClickListener onClick, onBookmarkClick;
-    //   private final View.OnLongClickListener onLongClick;
-    private OnMoreSectionsClickListener onMoreClick;
+    private final View.OnClickListener mOnClick, mOnBookmarkClick;
+    private OnMoreSectionsClickListener mOnMoreClick;
 
     private boolean mSiteIcon, mImages, mCompactedImages;
 
-    protected final NewsAdapterList dataSet;
+    protected final NewsAdapterList mDataSet;
 
-    public NewsAdapter(View.OnClickListener onClick,
-                       View.OnLongClickListener onLongClick,
-                       View.OnClickListener onBookmarkClick, NewsAdapterList.SortBy sortBy)
+    public NewsAdapter(View.OnClickListener onClick, View.OnClickListener onBookmarkClick, NewsAdapterList.SortBy sortBy)
     {
-        this.onClick = onClick;
-        // this.onLongClick = onLongClick;
-        this.onBookmarkClick = onBookmarkClick;
+        mOnClick = onClick;
+        mOnBookmarkClick = onBookmarkClick;
 
-        dataSet = new NewsAdapterList(this, sortBy);
+        mDataSet = new NewsAdapterList(this, sortBy);
     }
 
     @Override
@@ -52,17 +48,17 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         switch (viewType) {
             case TYPE_NEWS:
                 View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.i_news, parent, false);
-                v.setOnClickListener(onClick);
-                vh = new NewsViewHolder(v, onBookmarkClick);
+                v.setOnClickListener(mOnClick);
+                vh = new NewsViewHolder(v, mOnBookmarkClick);
                 break;
             case TYPE_NEWS_WITH_IMG:
                 v = LayoutInflater.from(parent.getContext()).inflate(R.layout.i_news_compact, parent, false);
-                v.setOnClickListener(onClick);
-                vh = new NewsCompactViewHolder(v, onBookmarkClick);
+                v.setOnClickListener(mOnClick);
+                vh = new NewsCompactViewHolder(v, mOnBookmarkClick);
                 break;
             case TYPE_MORE:
                 v = LayoutInflater.from(parent.getContext()).inflate(R.layout.i_more_sections, parent, false);
-                vh = new MoreSectionsViewHolder(v, onMoreClick);
+                vh = new MoreSectionsViewHolder(v, mOnMoreClick);
                 break;
         }
         return vh;
@@ -72,10 +68,10 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position)
     {
         if (holder instanceof NewsViewHolder) {
-            News news = dataSet.get(position);
+            News news = mDataSet.get(position);
             ((NewsViewHolder) holder).bind(news, mSiteIcon, mImages, BookmarksManager.isBookmarked(news));
         } else if (holder instanceof NewsCompactViewHolder) {
-            News news = dataSet.get(position);
+            News news = mDataSet.get(position);
             ((NewsCompactViewHolder) holder).bind(news, mSiteIcon, BookmarksManager.isBookmarked(news));
         } else
             ((MoreSectionsViewHolder) holder).bind();
@@ -84,17 +80,17 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public int getItemCount()
     {
-        return dataSet.size();
+        return mDataSet.size();
     }
 
     @Override
     public int getItemViewType(int position)
     {
-        if (onMoreClick != null && position == (dataSet.size() - 1))
+        if (mOnMoreClick != null && position == (mDataSet.size() - 1))
             return TYPE_MORE;
 
         if (mCompactedImages && mImages) {
-            News n = dataSet.get(position);
+            News n = mDataSet.get(position);
             if (n.enclosures != null && !n.enclosures.isEmpty() && !n.enclosures.get(0).src.isEmpty())
                 return TYPE_NEWS_WITH_IMG;
         }
@@ -103,12 +99,12 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public final void showSiteIcon(boolean showSiteIcon)
     {
-        this.mSiteIcon = showSiteIcon;
+        mSiteIcon = showSiteIcon;
     }
 
     public final void setOnMoreSectionsClick(OnMoreSectionsClickListener onMoreClickListener)
     {
-        this.onMoreClick = onMoreClickListener;
+        mOnMoreClick = onMoreClickListener;
     }
 
     public void setUserPreferences(@NonNull Context context)
@@ -136,63 +132,63 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public void setNewDataSet(Collection<News> newDataSet)
     {
-        synchronized (this.dataSet) {
-            dataSet.beginBatchedUpdates();
+        synchronized (mDataSet) {
+            mDataSet.beginBatchedUpdates();
 
-            dataSet.clear();
-            dataSet.addAll(newDataSet);
+            mDataSet.clear();
+            mDataSet.addAll(newDataSet);
 
-            if (this.onMoreClick != null)
-                dataSet.add(new News(-9, "", "", "", -9, null, -1, -1, -1));
+            if (mOnMoreClick != null)
+                mDataSet.add(new News(-9, "", "", "", -9, null, -1, -1, -1));
 
-            dataSet.endBatchedUpdates();
+            mDataSet.endBatchedUpdates();
         }
     }
 
     public void addAll(Collection<News> newDataSet)
     {
-        dataSet.beginBatchedUpdates();
+        mDataSet.beginBatchedUpdates();
 
-        dataSet.addAll(newDataSet);
+        mDataSet.addAll(newDataSet);
 
-        if (newDataSet.size() == dataSet.size() && this.onMoreClick != null)
-            dataSet.add(new News(-9, "", "", "", -9, null, -1, -1, -1));
+        if (newDataSet.size() == mDataSet.size() && mOnMoreClick != null)
+            mDataSet.add(new News(-9, "", "", "", -9, null, -1, -1, -1));
 
-        dataSet.endBatchedUpdates();
+        mDataSet.endBatchedUpdates();
     }
 
     public void add(News item)
     {
-        dataSet.add(item);
+        mDataSet.add(item);
     }
 
     public boolean remove(News item)
     {
-        return dataSet.remove(item);
+        return mDataSet.remove(item);
     }
 
     public final void update(News news)
     {
-        int index = dataSet.indexOf(news);
-        dataSet.updateItemAt(index, news);
+        int index = mDataSet.indexOf(news);
+        mDataSet.updateItemAt(index, news);
     }
 
     public void replaceAll(Collection<News> newDataSet)
     {
-        dataSet.beginBatchedUpdates();
-        for (int i = dataSet.size() - 1; i >= 0; i--) {
-            final News n = dataSet.get(i);
+        mDataSet.beginBatchedUpdates();
+        for (int i = mDataSet.size() - 1; i >= 0; i--) {
+            final News n = mDataSet.get(i);
             if (!newDataSet.contains(n)) {
-                dataSet.remove(n);
+                mDataSet.remove(n);
             }
         }
-        dataSet.addAll(newDataSet);
-        dataSet.endBatchedUpdates();
+        mDataSet.addAll(newDataSet);
+        mDataSet.endBatchedUpdates();
     }
 
     public void clear()
     {
-        dataSet.clear();
+        mDataSet.clear();
     }
 
 }

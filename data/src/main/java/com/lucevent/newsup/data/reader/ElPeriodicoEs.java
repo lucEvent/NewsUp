@@ -59,7 +59,7 @@ public class ElPeriodicoEs extends com.lucevent.newsup.data.util.NewsReader {
         if (article.isEmpty()) {
             article = doc.select(".slider-item,.onbcn-detail-body");
 
-            article.select(".onbcn-themes-related").remove();
+            article.select("script,.onbcn-themes-related").remove();
 
         } else
             article.select("script,.hidden-md,.hidden-sm,.ep-toolbar,.close,.ep-related,.ep-opinion,.bottom,.custom-navigation").remove();

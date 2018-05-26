@@ -28,7 +28,7 @@ public class EuropaPressSections extends Sections {
         add(new Section("Cantabria", "http://www.europapress.es/rss/rss.aspx?ch=281", 1));
         add(new Section("Castilla-La Mancha", "http://www.europapress.es/rss/rss.aspx?ch=282", 1));
         add(new Section("Castilla y Le\u00F3n", "http://www.europapress.es/rss/rss.aspx?ch=283", 1));
-        add(new Section("Catalu\u00F1a", "http://www.europapress.es/rss/rss.aspx?ch=284 ", 1));
+        add(new Section("Catalu\u00F1a", "http://www.europapress.es/rss/rss.aspx?ch=284", 1));
         add(new Section("Ceuta y Melilla", "http://www.europapress.es/rss/rss.aspx?ch=310", 1));
         add(new Section("Extremadura", "http://www.europapress.es/rss/rss.aspx?ch=285", 1));
         add(new Section("Galicia", "http://www.europapress.es/rss/rss.aspx?ch=286", 1));

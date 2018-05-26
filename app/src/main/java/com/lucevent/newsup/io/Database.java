@@ -10,13 +10,14 @@ import android.util.Pair;
 import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.Tags;
+import com.lucevent.newsup.data.util.UserSite;
 import com.lucevent.newsup.kernel.util.Note;
 import com.lucevent.newsup.services.util.Download;
 
 public class Database extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "newsup.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     public static final String id = "_id";
 
@@ -165,6 +166,44 @@ public class Database extends SQLiteOpenHelper {
         }
     }
 
+    static final class DBUserSite {
+        static final String db = "t_user_site";
+
+        static final String code = "code";
+        static final String name = "name";
+        static final String color = "color";
+        static final String url = "url";
+        static final String info = "info";
+        static final String rssUrl = "rssUrl";
+        static final String iconUrl = "iconUrl";
+
+        static final String[] cols = {code, name, color, url, info, rssUrl, iconUrl};
+
+        static final String creator =
+                "CREATE TABLE " + db + " (" +
+                        code + " INTEGER PRIMARY KEY," +
+                        name + " TEXT NOT NULL," +
+                        color + " INTEGER," +
+                        url + " TEXT NOT NULL," +
+                        info + " INTEGER," +
+                        rssUrl + " TEXT NOT NULL," +
+                        iconUrl + " TEXT NOT NULL" +
+                        ");";
+
+        static UserSite parse(Cursor c)
+        {
+            return new UserSite(
+                    c.getInt(0),    // code
+                    c.getString(1), // name
+                    c.getInt(2),    // color
+                    c.getString(3), // url
+                    c.getInt(4),    // info
+                    c.getString(5), // rssUrl
+                    c.getString(6)  // iconUrl
+            );
+        }
+    }
+
     public Database(Context context)
     {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -179,6 +218,7 @@ public class Database extends SQLiteOpenHelper {
         db.execSQL(DBReadings.creator);
         db.execSQL(DBDownloadSchedule.creator);
         db.execSQL(DBNote.creator);
+        db.execSQL(DBUserSite.creator);
     }
 
     @Override
@@ -221,12 +261,8 @@ public class Database extends SQLiteOpenHelper {
 
                 db.delete("dl_stats_reading", null, null);
                 db.execSQL("DROP TABLE dl_stats_reading");
-
-                //  case 4:
-                // Delete all needed tables
-                // db.execSQL("DROP TABLE "+ "db_xxxxxxxxxxxx");
-                // Create all needed tables
-                // db.execSQL(CREATE_yyyyyyyyy);
+            case 4:
+                db.execSQL(DBUserSite.creator);
         }
         AppSettings.printlog("[DB] Upgrading done");
     }

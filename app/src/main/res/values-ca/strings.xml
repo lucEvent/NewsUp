@@ -97,7 +97,7 @@
     <string name="msg_unlocked_notes">Notes desbloquejades</string>
     <string name="msg_invalid_code">Codi invàlid</string>
     <string name="msg_app_must_restart_to_apply_changes">Has de reinicialitzar l\'app per aplicar canvis</string>
-    <string name="msg_disk_permission_denied">NO podràs marcar notícies fins que no concedeixis aquest permís</string>
+    <string name="msg_permission_bookmark_denied">NO podràs marcar notícies fins que no concedeixis aquest permís</string>
     <string name="msg_confirm_to_reset_statistics">Confirma per restaurar les estadístiques</string>
     <string name="msg_empty_input">Anotació buida</string>
     <string name="msg_shortcut_created">S\'ha creat un accés directe per %s a la teva finestra d\'inici</string>

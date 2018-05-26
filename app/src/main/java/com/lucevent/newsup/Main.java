@@ -34,9 +34,10 @@ import com.lucevent.newsup.kernel.AppData;
 import com.lucevent.newsup.kernel.KernelManager;
 import com.lucevent.newsup.kernel.ScheduleManager;
 import com.lucevent.newsup.net.MainChangeListener;
-import com.lucevent.newsup.permission.StoragePermissionHandler;
+import com.lucevent.newsup.permission.PermissionHandler;
 import com.lucevent.newsup.services.ScheduledDownloadReceiver;
 import com.lucevent.newsup.view.activity.ContactActivity;
+import com.lucevent.newsup.view.activity.NewSiteRequestActivity;
 import com.lucevent.newsup.view.activity.SelectSitesActivity;
 import com.lucevent.newsup.view.fragment.AboutFragment;
 import com.lucevent.newsup.view.fragment.AppSettingsFragment;
@@ -56,7 +57,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
     private FragmentManager fragmentManager;
     private KernelManager dataManager;
-    private StoragePermissionHandler permissionHandler;
+    private PermissionHandler permissionHandler;
 
     public DrawerLayout drawer;
 
@@ -72,7 +73,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
         AppSettings.initialize(this, this);
         dataManager = new KernelManager(this);
-        permissionHandler = new StoragePermissionHandler(this);
+        permissionHandler = new PermissionHandler(this, AppData.STORAGE_PERMISSIONS);
 
         if (AppSettings.firstStart()) {
             Intent intent = new Intent(this, SelectSitesActivity.class);
@@ -141,6 +142,8 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == AppCode.REQUEST_ADD_CONTENT && resultCode > 0) {
+            navigateTo(resultCode);
+        } else if (requestCode == AppCode.REQUEST_SITE && resultCode != RESULT_CANCELED) {
             navigateTo(resultCode);
         }
     }
@@ -223,7 +226,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         Sites favorites = dataManager.getFavoriteSites();
         for (Site site : favorites) {
             int order = Math.max(0, 0xffff - site.getNumReadings() - 1);
-            MenuItem mi = menu.add(R.id.group_favorites, site.code, order, site.name);
+            MenuItem mi = menu.add(R.id.group_favorites, site.code, order, site.name + " (" + site.getNumReadings() + ")");
             configureMenuItem(mi, site);
         }
 
@@ -232,11 +235,13 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
     private void configureMenuItem(MenuItem mi, Site site)
     {
+        mi.setCheckable(true);
+
         Drawable icon = LogoManager.getLogo(site.code, LogoManager.Size.DRAWER);
-        assert icon != null : "Icon not found for code " + site.code;
+        if (icon == null)
+            return;
         icon.setColorFilter(0x000000, android.graphics.PorterDuff.Mode.ADD);
         mi.setIcon(icon);
-        mi.setCheckable(true);
     }
 
     private int lastItemSelected;
@@ -244,8 +249,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     public void onDrawerActionBarItemSelected(View v)
     {
         if (navigateTo(v.getId()) && v.getId() != R.id.nav_more_publications) {
-            //  fragmentManager.updateCheckedItem(v.getId(), lastItemSelected);
-
             lastItemSelected = v.getId();
         }
     }
@@ -274,7 +277,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 title = getString(R.string.happening_now);
                 break;
             case R.id.nav_saved_news:
-                if (permissionHandler.checkAndAsk(this)) {
+                if (permissionHandler.checkAndAsk(this, AppCode.REQUEST_PERMISSION_BOOKMARK)) {
                     fragment = new BookmarksFragment();
                     title = getString(R.string.bookmarks);
                     break;
@@ -292,6 +295,9 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 Intent intent = new Intent(this, SelectSitesActivity.class);
                 intent.putExtra(AppCode.PURPOSE, SelectSitesActivity.For.SELECT_ONE);
                 startActivityForResult(intent, AppCode.REQUEST_ADD_CONTENT);
+                return true;
+            case R.id.nav_new_site_request:
+                startActivityForResult(new Intent(this, NewSiteRequestActivity.class), AppCode.REQUEST_SITE);
                 return true;
             case R.id.nav_notes:
                 fragment = new NotesFragment();
@@ -408,12 +414,15 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults)
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
+                                           @NonNull int[] grantResults)
     {
-        if (permissionHandler.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
-            navigateTo(R.id.nav_saved_news);
-            lastItemSelected = R.id.nav_saved_news;
-        }
+        if (requestCode == AppCode.REQUEST_PERMISSION_BOOKMARK)
+            if (permissionHandler.isPermissionGranted(permissions, grantResults)) {
+                navigateTo(R.id.nav_saved_news);
+                lastItemSelected = R.id.nav_saved_news;
+            } else
+                Toast.makeText(this, R.string.msg_permission_bookmark_denied, Toast.LENGTH_LONG).show();
     }
 
 }

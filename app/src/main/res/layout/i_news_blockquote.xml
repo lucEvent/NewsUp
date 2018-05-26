@@ -1,24 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:background="@android:color/transparent">
-
-    <com.lucevent.newsup.view.util.AppTextView
-        android:id="@+id/content"
-        style="@style/newsTextStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/blockquote_top_bottom_margin"
-        android:layout_marginLeft="@dimen/blockquote_side_margin"
-        android:layout_marginRight="@dimen/blockquote_side_margin"
-        android:layout_marginTop="@dimen/blockquote_top_bottom_margin"
-        android:background="#feee"
-        android:paddingBottom="@dimen/blockquote_top_bottom_padding"
-        android:paddingLeft="@dimen/blockquote_side_padding"
-        android:paddingRight="@dimen/blockquote_side_padding"
-        android:paddingTop="@dimen/blockquote_top_bottom_padding"
-        android:text="Blockquote"
-        android:textSize="@dimen/text_normal_size"/>
-
-</FrameLayout>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_marginBottom="@dimen/blockquote_top_bottom_margin"
+              android:layout_marginLeft="@dimen/blockquote_side_margin"
+              android:layout_marginRight="@dimen/blockquote_side_margin"
+              android:layout_marginTop="@dimen/blockquote_top_bottom_margin"
+              android:background="#feee"
+              android:orientation="vertical"
+              android:paddingBottom="@dimen/blockquote_top_bottom_padding"/>

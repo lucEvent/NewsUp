@@ -24,8 +24,6 @@ public class DailyMailSections extends Sections {
         add(new Section("Video", "http://www.dailymail.co.uk/video/videos.rss", 0));
 
         // Home
-        add(new Section("You mag", "http://www.dailymail.co.uk/home/you/index.rss", 0));
-        add(new Section("Event", "http://www.dailymail.co.uk/home/event/index.rss", 0));
         add(new Section("Property", "http://www.dailymail.co.uk/property/index.rss", 0));
 
         add(new Section("News latest stories", "http://www.dailymail.co.uk/news/articles.rss", 0));
@@ -99,7 +97,6 @@ public class DailyMailSections extends Sections {
         add(new Section("Other Sports", "http://www.dailymail.co.uk/sport/othersports/index.rss", 1));
 
         add(new Section("AFL", "http://www.dailymail.co.uk/sport/afl/index.rss", 1));
-        add(new Section("Afcon", "http://www.dailymail.co.uk/sport/afcon/index.rss", 1));
         add(new Section("Ashes", "http://www.dailymail.co.uk/sport/ashes/index.rss", 1));
         add(new Section("Australian Open", "http://www.dailymail.co.uk/sport/australian_open/index.rss", 1));
         add(new Section("Austria Football", "http://www.dailymail.co.uk/sport/austria_football/index.rss", 1));
@@ -208,7 +205,6 @@ public class DailyMailSections extends Sections {
         add(new Section("America's Got Talent", "http://www.dailymail.co.uk/tvshowbiz/americas_got_talent/index.rss", 1));
         add(new Section("American Idol", "http://www.dailymail.co.uk/tvshowbiz/american_idol/index.rss", 1));
         add(new Section("BAFTAS", "http://www.dailymail.co.uk/tvshowbiz/baftas/index.rss", 1));
-        add(new Section("Bet Awards", "http://www.dailymail.co.uk/tvshowbiz/bet_awards/index.rss", 1));
         add(new Section("Big Brother Australia", "http://www.dailymail.co.uk/tvshowbiz/big_brother_australia/index.rss", 1));
         add(new Section("Big Brother Topic", "http://www.dailymail.co.uk/tvshowbiz/big_brother/index.rss", 1));
         add(new Section("Brit Awards", "http://www.dailymail.co.uk/tvshowbiz/brit_awards/index.rss", 1));
@@ -242,7 +238,6 @@ public class DailyMailSections extends Sections {
         add(new Section("London Fashion Week", "http://www.dailymail.co.uk/tvshowbiz/london-fashion-week/index.rss", 1));
         add(new Section("Love Island", "http://www.dailymail.co.uk/tvshowbiz/love-island/index.rss", 1));
         add(new Section("MTV EMA", "http://www.dailymail.co.uk/tvshowbiz/mtv-ema/index.rss", 1));
-        add(new Section("MTV VMA", "http://www.dailymail.co.uk/tvshowbiz/mtv_vma/index.rss", 1));
         add(new Section("Made In Chelsea", "http://www.dailymail.co.uk/tvshowbiz/made_in_chelsea/index.rss", 1));
         add(new Section("Married At First Sight Australia", "http://www.dailymail.co.uk/tvshowbiz/married-at-first-sight-australia/index.rss", 1));
         add(new Section("Masterchef Australia", "http://www.dailymail.co.uk/tvshowbiz/masterchef_australia/index.rss", 1));
@@ -272,7 +267,6 @@ public class DailyMailSections extends Sections {
         // Femail
         add(new Section("Femail latest stories", "http://www.dailymail.co.uk/femail/articles.rss", 0));
         add(new Section("Food", "http://www.dailymail.co.uk/femail/food/index.rss", 1));
-        add(new Section("Gardening", "http://www.dailymail.co.uk/home/gardening/index.rss", 1));
 
         // Health
         add(new Section("Health latest stories", "http://www.dailymail.co.uk/health/articles.rss", 0));
@@ -296,7 +290,6 @@ public class DailyMailSections extends Sections {
 
         add(new Section("Money latest stories", "http://www.dailymail.co.uk/money/articles.rss", 0));
         add(new Section("Markets", "http://www.dailymail.co.uk/money/markets/index.rss", 1));
-        add(new Section("Saving & banking", "http://www.dailymail.co.uk/money/saving/index.rss", 1));
         add(new Section("Investing", "http://www.dailymail.co.uk/money/investing/index.rss", 1));
         add(new Section("Cars", "http://www.dailymail.co.uk/money/cars/index.rss", 1));
         add(new Section("Mortgages & home", "http://www.dailymail.co.uk/money/mortgageshome/index.rss", 1));
@@ -308,11 +301,9 @@ public class DailyMailSections extends Sections {
         add(new Section("City Breaks", "http://www.dailymail.co.uk/travel/holidaytypeshub/city-breaks.rss", 1));
         add(new Section("Family Travel", "http://www.dailymail.co.uk/travel/holidaytypeshub/family.rss", 1));
         add(new Section("Hotel Reviews", "http://www.dailymail.co.uk/travel/travelreviewshub/an-inspector-calls.rss", 1));
-        add(new Section("Celebrity Travel", "http://www.dailymail.co.uk/travel/travelreviewshub/celebrity-travel.rss", 1));
 
         // India
         add(new Section("India top stories", "http://www.dailymail.co.uk/indiahome/index.rss", 0));
-        add(new Section("India latest stories", "http://www.dailymail.co.uk/indiahome/articles.rss", 1));
 
         // Columnists
         add(new Section("Columnists", null, -1));
@@ -321,7 +312,6 @@ public class DailyMailSections extends Sections {
         add(new Section("Amanda Platell", "http://www.dailymail.co.uk/news/columnist-463/Amanda-Platell-The-Daily-Mail.rss", 1));
         add(new Section("Andrew Pierce", "http://www.dailymail.co.uk/news/columnist-1097498/Andrew-Pierce-Daily-Mail.rss", 1));
         add(new Section("Jane Fryer", "http://www.dailymail.co.uk/news/columnist-1065729/Jane-Fryer-Daily-Mail.rss", 1));
-        add(new Section("Katie Hopkins", "http://www.dailymail.co.uk/news/columnist-1104101/Katie-Hopkins-MailOnline.rss", 1));
         add(new Section("Mail on Sunday Comment", "http://www.dailymail.co.uk/news/columnist-1012802/Mail-Sunday-Comment-Daily-Mail.rss", 1));
         add(new Section("Max Hastings", "http://www.dailymail.co.uk/news/columnist-464/Max-Hastings-Daily-Mail.rss", 1));
         add(new Section("Piers Morgan", "http://www.dailymail.co.uk/news/columnist-1096452/Piers-Morgan-MailOnline.rss", 1));
@@ -369,7 +359,7 @@ public class DailyMailSections extends Sections {
 
         // Femail
         add(new Section("Bel Mooney", "http://www.dailymail.co.uk/femail/columnist-465/Bel-Mooney-Daily-Mail.rss", 1));
-        add(new Section("Jan Moir", "http://www.dailymail.co.uk/femail/columnist-1012602/Jan-Moir-Daily-Mail.rss", 1));
+        add(new Section("Jan Moir", "http://www.dailymail.co.uk/debate/columnist-1012602/Jan-Moir-Daily-Mail.rss", 1));
         add(new Section("Janet Street-Porter", "http://www.dailymail.co.uk/femail/columnist-1032350/Janet-Street-Porter-For-Mailonline.rss", 1));
         add(new Section("Liz Jones", "http://www.dailymail.co.uk/femail/columnist-502/Liz-Jones-The-Mail-Sunday.rss", 1));
         add(new Section("William Hanson", "http://www.dailymail.co.uk/femail/columnist-1108478/William-Hanson-MailOnline.rss", 1));
@@ -381,14 +371,11 @@ public class DailyMailSections extends Sections {
         // Money
         add(new Section("Dan Hyde", "http://www.dailymail.co.uk/money/columnist-1071473/Dan-Hyde-Daily-Mail.rss", 1));
         add(new Section("Jeff Prestridge", "http://www.dailymail.co.uk/money/columnist-1066269/Jeff-Prestridge-The-Mail-Sunday.rss", 1));
-        add(new Section("Jon Rees", "http://www.dailymail.co.uk/money/columnist-1101885/Jon-Rees-Financial-Mail-Sunday.rss", 1));
         add(new Section("Lee Boyce", "http://www.dailymail.co.uk/money/columnist-1075642/Lee-Boyce-Thisismoney-co-uk.rss", 1));
-        add(new Section("Money morals", "http://www.dailymail.co.uk/money/columnist-1084556/Money-morals-thisismoney-co-uk.rss", 1));
         add(new Section("Rachel Rickard Straus", "http://www.dailymail.co.uk/money/columnist-1076512/Rachel-Rickard-Straus-Thisismoney-co-uk.rss", 1));
         add(new Section("Richard Browning", "http://www.dailymail.co.uk/money/columnist-1075643/Richard-Browning-Daily-Mail.rss", 1));
         add(new Section("Sally Hamilton", "http://www.dailymail.co.uk/money/columnist-1101884/Sally-Hamilton-Financial-Mail-Sunday.rss", 1));
         add(new Section("Simon Lambert", "http://www.dailymail.co.uk/money/columnist-1071474/Simon-Lambert-Thisismoney-co-uk.rss", 1));
-        add(new Section("Simon Watkins", "http://www.dailymail.co.uk/money/columnist-1076514/Simon-Watkins-Financial-Mail-Sunday.rss", 1));
         add(new Section("Steve Webb", "http://www.dailymail.co.uk/money/columnist-1106441/Steve-Webb-This-Is-Money.rss", 1));
         add(new Section("The dastardly Mr Deedes", "http://www.dailymail.co.uk/money/columnist-1132923/The-dastardly-Mr-Deedes.rss", 1));
         add(new Section("Tony Hazell", "http://www.dailymail.co.uk/money/columnist-1066277/Tony-Hazell-Daily-Mail.rss", 1));
@@ -404,10 +391,8 @@ public class DailyMailSections extends Sections {
         // Columnists
         add(new Section("Dominic Lawson", "http://www.dailymail.co.uk/columnists/columnist-1083636/Dominic-Lawson-Daily-Mail.rss", 1));
         add(new Section("Dominic Sandbrook", "http://www.dailymail.co.uk/columnists/columnist-1057369/Dominic-Sandbrook-Daily-Mail.rss", 1));
-        add(new Section("Esther Rantzen", "http://www.dailymail.co.uk/columnists/columnist-1002981/Esther-Rantzen-Daily-Mail.rss", 1));
         add(new Section("Jim Shelley", "http://www.dailymail.co.uk/columnists/columnist-1077278/Jim-Shelley-MailOnline.rss", 1));
-        add(new Section("Ruth Sunderland", "http://www.dailymail.co.uk/columnists/columnist-1072434/Ruth-Sunderland-Daily-Mail.rss", 1));
-        add(new Section("Sarah Vine", "http://www.dailymail.co.uk/columnists/columnist-1082216/Sarah-Vine-Daily-Mail.rss", 1));
+        add(new Section("Sarah Vine", "http://www.dailymail.co.uk/debate/columnist-1082216/Sarah-Vine-Daily-Mail.rss", 1));
 
         // Event
         add(new Section("Chris Evans", "http://www.dailymail.co.uk/home/event/columnist-1077518/Chris-Evans-Event-The-Mail-Sunday.rss", 1));

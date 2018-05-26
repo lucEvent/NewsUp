@@ -1,5 +1,7 @@
 package com.lucevent.newsup.kernel;
 
+import android.Manifest;
+
 import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.data.Sites;
 import com.lucevent.newsup.data.event.Event;
@@ -11,7 +13,10 @@ import java.util.Set;
 
 public class AppData {
 
-    private static final int DATA_REVISION_N = 3;
+    private static final int DATA_REVISION_N = 4;
+
+    public static final String[] STORAGE_PERMISSIONS = new String[]{
+            Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
 
     private static Sites sites;
 

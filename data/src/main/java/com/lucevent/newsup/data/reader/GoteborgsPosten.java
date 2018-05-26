@@ -10,9 +10,8 @@ public class GoteborgsPosten extends com.lucevent.newsup.data.util.NewsReader {
 
     /**
      * Tags
-     * [                                       description, guid, item, link, pubdate, title]
-     * [category,                  dc:creator, description, guid, item, link, pubdate, title]
-     * [category, content:encoded, dc:creator, description, guid, item, link, pubdate, title]
+     * [category, dc:creator, description, guid, item, link, pubdate, title]
+     * [category, contentid, description, guid, item, link, pubdate, source, tag, title]
      */
 
     public GoteborgsPosten()

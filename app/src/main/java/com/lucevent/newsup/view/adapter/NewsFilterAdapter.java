@@ -18,10 +18,9 @@ public class NewsFilterAdapter extends NewsAdapter {
     private TreeSet<Integer> mLastFilterCodes = new TreeSet<>();
     private String mLastFilter = "";
 
-    public NewsFilterAdapter(View.OnClickListener onClick, View.OnLongClickListener onLongClick,
-                             View.OnClickListener onBookmarkClick, NewsAdapterList.SortBy sortBy)
+    public NewsFilterAdapter(View.OnClickListener onClick, View.OnClickListener onBookmarkClick, NewsAdapterList.SortBy sortBy)
     {
-        super(onClick, onLongClick, onBookmarkClick, sortBy);
+        super(onClick, onBookmarkClick, sortBy);
     }
 
     public ArrayList<News> getDataSet()
@@ -33,7 +32,7 @@ public class NewsFilterAdapter extends NewsAdapter {
     private void init()
     {
         if (mOriginalValues == null) {
-            SortedList<News> sortedList = dataSet;
+            SortedList<News> sortedList = mDataSet;
             mOriginalValues = new ArrayList<>(sortedList.size());
             mLastQueryValues = new ArrayList<>(sortedList.size());
             for (int i = 0; i < sortedList.size(); i++)

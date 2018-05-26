@@ -96,7 +96,7 @@ public class SiteSettingsFragment extends android.preference.PreferenceFragment
             AppSettings.toggleShownInMain(currentSite);
 
         else if (key.equals(PREF_FAVORITE_KEY))
-            AppSettings.toggleFavorite(currentSite);
+            AppSettings.toggleFavorite(currentSite, true);
 
         else if (key.equals(PREF_MAIN_SECTIONS_KEY)) {
             AppSettings.setMainSections(currentSite,

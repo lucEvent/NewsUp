@@ -87,7 +87,7 @@
             android:id="@+id/nav_more_publications"
             style="@style/btnDrawerActionbar"
             android:onClick="onDrawerActionBarItemSelected"
-            android:src="@drawable/ic_add"/>
+            android:src="@drawable/ic_more_sites"/>
 
     </LinearLayout>
 

@@ -3,7 +3,6 @@ package com.lucevent.newsup.view.fragment;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,7 +20,6 @@ import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.io.BookmarksManager;
 import com.lucevent.newsup.kernel.KernelManager;
-import com.lucevent.newsup.permission.StoragePermissionHandler;
 import com.lucevent.newsup.view.adapter.NewsFilterAdapter;
 import com.lucevent.newsup.view.util.NUSearchBar;
 import com.lucevent.newsup.view.util.NewsAdapterList;
@@ -30,15 +28,14 @@ import com.lucevent.newsup.view.util.OnBackPressedListener;
 
 import java.util.Collection;
 
-public class BookmarksFragment extends android.app.Fragment implements View.OnClickListener,
-        View.OnLongClickListener, OnBackPressedListener, NUSearchBar.CallBack {
+public class BookmarksFragment extends StoragePermissionFragment implements View.OnClickListener,
+        OnBackPressedListener, NUSearchBar.CallBack {
 
     private NewsFilterAdapter adapter;
 
     private NewsView newsView;
     private NUSearchBar searchView;
 
-    private StoragePermissionHandler permissionHandler;
     private boolean displayingNews = false;
 
     private View noContentMessage;
@@ -49,9 +46,7 @@ public class BookmarksFragment extends android.app.Fragment implements View.OnCl
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        permissionHandler = new StoragePermissionHandler(getActivity());
-
-        adapter = new NewsFilterAdapter(this, this, onBookmarkClick, NewsAdapterList.SortBy.byTime);
+        adapter = new NewsFilterAdapter(this, onBookmarkClick, NewsAdapterList.SortBy.byTime);
         adapter.showSiteIcon(true);
     }
 
@@ -88,6 +83,7 @@ public class BookmarksFragment extends android.app.Fragment implements View.OnCl
         newsView = (NewsView) view.findViewById(R.id.news_view);
         newsView.setFragmentContext(this, ((Main) getActivity()).drawer);
         newsView.setBookmarkStateChangeListener(onBookmarkClick);
+        newsView.setImageLongClickListener(onImageLongClick);
 
         noContentMessage = view.findViewById(R.id.no_content);
         searchView = (NUSearchBar) view.findViewById(R.id.searchView);
@@ -136,13 +132,6 @@ public class BookmarksFragment extends android.app.Fragment implements View.OnCl
     }
 
     @Override
-    public boolean onLongClick(View v)
-    {
-        // TODO: 14/10/2016
-        return false;
-    }
-
-    @Override
     public void onFilter(String filter)
     {
         adapter.filter(filter);
@@ -186,28 +175,8 @@ public class BookmarksFragment extends android.app.Fragment implements View.OnCl
         }
     };
 
-    private View tempBookmarkButton;
-
-    private View.OnClickListener onBookmarkClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View v)
-        {
-            if (permissionHandler.checkAndAsk(BookmarksFragment.this))
-                bookmarkStateChanged(v);
-            else
-                tempBookmarkButton = v;
-        }
-    };
-
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults)
-    {
-        if (permissionHandler.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
-            bookmarkStateChanged(tempBookmarkButton);
-        }
-    }
-
-    private void bookmarkStateChanged(View btn)
+    protected void onBookmarkStateChanged(View btn)
     {
         News news = (News) btn.getTag();
 

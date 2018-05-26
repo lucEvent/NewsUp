@@ -5,22 +5,27 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.parse.NewsImage;
 
 public class NewsImageViewHolder extends NewsElementViewHolder {
 
     private static RequestOptions glideOptions = new RequestOptions().fitCenter();
 
-    public NewsImageViewHolder(View v)
+    public NewsImageViewHolder(View v, View.OnLongClickListener longClickListener)
     {
         super(v);
+        v.setOnLongClickListener(longClickListener);
     }
 
     @Override
     public void bind(boolean darkStyle)
     {
+        String imgSrc = ((NewsImage) elem).getContent();
+        itemView.setTag(AppCode.TAG_IMAGE, imgSrc);
+
         Glide.with(itemView.getContext())
-                .load(((NewsImage) elem).getContent())
+                .load(imgSrc)
                 .apply(glideOptions)
                 .into((ImageView) itemView);
     }

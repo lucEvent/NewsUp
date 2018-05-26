@@ -151,7 +151,10 @@ public class USAToday extends com.lucevent.newsup.data.util.NewsReader {
 
         for (Element e : article.select("strong"))
             if (e.text().startsWith("More"))
-                e.parent().remove();
+                try {
+                    e.parent().remove();
+                } catch (Exception ignored) {
+                }
 
         Elements forms = article.select("form");
         wpcomwidget(forms);

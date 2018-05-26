@@ -33,23 +33,18 @@ public class XatakaSections extends Sections {
         add(new Section("Beb\u00E9s y m\u00E1s", "http://feeds.weblogssl.com/bebesymas", 1));
         add(new Section("Vit\u00F3nica", "http://feeds.weblogssl.com/vitonica", 1));
         add(new Section("Decoesfera", "http://feeds.weblogssl.com/decoesfera", 1));
-        add(new Section("Poprosa", "http://feeds.weblogssl.com/poprosa", 1));
 
         add(new Section("Motor", null, -1));
         add(new Section("Motorpasi\u00F3n", "http://feeds.weblogssl.com/motorpasion", 1));
         add(new Section("Motorpasi\u00F3n Moto", "http://feeds.weblogssl.com/motorpasionmoto", 1));
-        add(new Section("Motorpasi\u00F3n Futuro", "http://feeds.weblogssl.com/motorpasionfuturo", 1));
 
         add(new Section("Econom\u00EDa", null, -1));
         add(new Section("El Blog Salm\u00F3n", "http://feeds.weblogssl.com/elblogsalmon2", 1));
         add(new Section("Pymes y Aut\u00F3nomos", "http://feeds.weblogssl.com/pymesyautonomos", 1));
 
         add(new Section("Ocio", null, -1));
-        add(new Section("Blog de Cine", "http://feeds.weblogssl.com/blogdecine", 1));
-        add(new Section("\u00A1Vaya Tele!", "http://feeds.weblogssl.com/vayatele2", 1));
+        add(new Section("Espinof", "http://feeds.weblogssl.com/espinof", 1));
         add(new Section("Diario del Viajero", "http://feeds.weblogssl.com/diariodelviajero", 1));
-        add(new Section("Papel en Blanco", "http://feeds.weblogssl.com/papelenblanco", 1));
-
 
     }
 

@@ -1,4 +1,4 @@
-package com.lucevent.newsup.view.util;
+package com.lucevent.newsup.view.dialog;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -13,6 +13,7 @@ import com.lucevent.newsup.data.Sites;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.kernel.AppData;
+import com.lucevent.newsup.view.util.FilterCheckBox;
 
 import java.util.ArrayList;
 import java.util.TreeMap;

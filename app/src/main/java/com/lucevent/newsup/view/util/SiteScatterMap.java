@@ -4,6 +4,7 @@ import com.lucevent.newsup.data.Sites;
 import com.lucevent.newsup.data.SitesMap;
 import com.lucevent.newsup.data.util.Site;
 
+import java.text.Normalizer;
 import java.util.TreeMap;
 
 public abstract class SiteScatterMap extends TreeMap<Integer, SitesMap> {
@@ -16,11 +17,16 @@ public abstract class SiteScatterMap extends TreeMap<Integer, SitesMap> {
             for (Site s : sites)
                 add(s);
         } else {
-            String lcfilter = filter.toLowerCase();
+            String normFilter = normalize(filter);
             for (Site s : sites)
-                if (s.name.toLowerCase().contains(lcfilter))
+                if (normalize(s.name).contains(normFilter))
                     add(s);
         }
+    }
+
+    private String normalize(String s)
+    {
+        return Normalizer.normalize(s.toLowerCase(), Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
     }
 
     public void add(Site s)

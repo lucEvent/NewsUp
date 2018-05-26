@@ -30,6 +30,7 @@ public class ElDiario extends com.lucevent.newsup.data.util.NewsReader {
         org.jsoup.nodes.Element article = jsoupParse(prop.text());
         article.select("script,a,img[width='1'],br").remove();
         article.select("[style]").removeAttr("style");
+        article.select("[data-mce-src]").removeAttr("data-mce-src");
 
         return finalFormat(article, false);
     }

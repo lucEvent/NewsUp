@@ -9,7 +9,7 @@ public class GizmodoAuSections extends Sections {
     {
         super();
 
-        add(new Section("Homepage", "http://feeds.gizmodo.com.au/gizmodoaustralia", 0));
+        add(new Section("Homepage", "https://feeds.gizmodo.com.au/gizmodoaustralia", 0));
 
     }
 

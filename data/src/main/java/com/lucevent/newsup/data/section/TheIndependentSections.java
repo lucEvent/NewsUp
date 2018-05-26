@@ -24,7 +24,7 @@ public class TheIndependentSections extends Sections {
 
         add(new Section("Sport", "http://www.independent.co.uk/sport/rss", 0));
         add(new Section("Football", "http://www.independent.co.uk/sport/football/rss", 1));
-        add(new Section("US sport", "http://www.independent.co.uk/sport/us-sport/rss", 1));
+        add(new Section("Rugby", "http://www.independent.co.uk/sport/rugby/rss", 1));
 
         add(new Section("Tech", "http://www.independent.co.uk/life-style/gadgets-and-tech/rss", 0));
         add(new Section("Tech news", "http://www.independent.co.uk/life-style/gadgets-and-tech/news/rss", 1));

@@ -1,37 +1,34 @@
 package com.lucevent.newsup.parse;
 
-public abstract class NewsElement<T> {
+public interface NewsElement<T> {
 
-    public static final int TYPE_TITLE = 0;
-    public static final int TYPE_SUBTITLE = 1;
-    public static final int TYPE_PARAGRAPH = 2;
-    public static final int TYPE_IMAGE = 3;
-    public static final int TYPE_CAPTION = 4;
-    public static final int TYPE_BLOCKQUOTE = 5;
-    public static final int TYPE_LIST_ITEM = 6;
-    public static final int TYPE_TWEET = 7;
-    public static final int TYPE_INSTAGRAM = 8;
-    public static final int TYPE_IFRAME = 9;
-    public static final int TYPE_DL_TITLE = 10;
-    public static final int TYPE_DL_DESCRIPTION = 11;
-    public static final int TYPE_TABLE = 12;
-    public static final int TYPE_VIDEO = 13;
-    public static final int TYPE_AUDIO = 14;
-    public static final int TYPE_WIDGET = 15;
+    int TYPE_TITLE = 0;
+    int TYPE_SUBTITLE = 1;
+    int TYPE_PARAGRAPH = 2;
+    int TYPE_IMAGE = 3;
+    int TYPE_CAPTION = 4;
+    int TYPE_BLOCKQUOTE = 5;
+    int TYPE_LIST_ITEM = 6;
+    int TYPE_TWEET = 7;
+    int TYPE_INSTAGRAM = 8;
+    int TYPE_IFRAME = 9;
+    int TYPE_DL_TITLE = 10;
+    int TYPE_DL_DESCRIPTION = 11;
+    int TYPE_TABLE = 12;
+    int TYPE_VIDEO = 13;
+    int TYPE_AUDIO = 14;
+    int TYPE_WIDGET = 15;
 
-    public boolean isAppendable;
+    int getType();
 
-    public NewsElement(boolean appendable)
-    {
-        this.isAppendable = appendable;
-    }
+    void setContent(String content);
 
-    public abstract int getType();
+    T getContent();
 
-    public abstract void setContent(String content);
+    NewsElement getNewElement();
 
-    public abstract T getContent();
+    boolean isAppendable();
 
-    public abstract NewsElement getNewElement();
+    void setNotAppendable();
 
 }

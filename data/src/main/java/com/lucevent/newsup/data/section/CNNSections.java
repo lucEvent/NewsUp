@@ -19,7 +19,6 @@ public class CNNSections extends Sections {
         add(new Section("Middle East", "http://rss.cnn.com/rss/edition_meast.rss", 1));
         add(new Section("U.S.", "http://rss.cnn.com/rss/edition_us.rss", 1));
 
-        add(new Section("Technology", "http://rss.cnn.com/rss/money_technology.rss", 0));
         add(new Section("Entertainment", "http://rss.cnn.com/rss/edition_entertainment.rss", 0));
         add(new Section("Politics", "http://rss.cnn.com/rss/cnn_allpolitics.rss", 0));
         add(new Section("Health", "http://rss.cnn.com/rss/cnn_health.rss", 0));

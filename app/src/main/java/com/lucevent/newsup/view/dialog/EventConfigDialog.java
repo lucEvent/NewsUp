@@ -1,4 +1,4 @@
-package com.lucevent.newsup.view.util;
+package com.lucevent.newsup.view.dialog;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -20,6 +20,7 @@ import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.ScheduleManager;
 import com.lucevent.newsup.services.util.Download;
 import com.lucevent.newsup.view.activity.DownloadScheduleEditorActivity;
+import com.lucevent.newsup.view.util.FilterCheckBox;
 
 import java.util.ArrayList;
 import java.util.TreeMap;

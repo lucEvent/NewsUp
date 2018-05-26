@@ -4,6 +4,9 @@ import com.lucevent.newsup.backend.utils.BackendParser;
 import com.lucevent.newsup.backend.utils.Event;
 import com.lucevent.newsup.backend.utils.Report;
 import com.lucevent.newsup.backend.utils.Reports;
+import com.lucevent.newsup.data.util.NewsArray;
+import com.lucevent.newsup.data.util.Section;
+import com.lucevent.newsup.data.util.Sections;
 import com.lucevent.newsup.data.util.Site;
 
 import java.io.IOException;
@@ -55,6 +58,10 @@ public class DevelopmentServer extends HttpServlet {
 
             resp_reports(resp);
 
+        } else if (req.getParameter("search_sections") != null) {
+
+            resp_key_sections(req.getParameter("key").split(","), resp);
+
         } else if (req.getParameter("events") != null) {
 
             resp_events(resp);
@@ -76,8 +83,84 @@ public class DevelopmentServer extends HttpServlet {
             for (Site site : Data.sites)
                 site.news.clear();
 
+        } else if (req.getParameter("debugsite") != null) {
+
+            String[] request = req.getParameter("site").split(",");
+
+            Site site = Data.getSite(Integer.parseInt(request[0]));
+
+            int[] section_codes = new int[request.length - 1];
+            for (int i = 0; i < section_codes.length; i++)
+                section_codes[i] = Integer.parseInt(request[i + 1]);
+
+            NewsArray news = site.readNewsHeaders(section_codes);
+
+            resp.getWriter().println(BackendParser.toEntry(news).toString());
+
+            resp.getWriter().println("##  \n Extra info \n");
+
+            resp.getWriter().println("section_codes.length=" + section_codes.length);
+            //
+            int c = 0;
+            Sections sections = site.getSections();
+            for (int section_code : section_codes) {
+                Section section = sections.getSectionByCode(section_code);
+                if (section == null || section.url == null)
+                    continue;
+
+                c++;
+            }
+            //
+            resp.getWriter().println("sections checked=" + c);
+
+            if (news.isEmpty() && c > 0) {
+                Section section = sections.getSectionByCode(section_codes[0]);
+                resp.getWriter().println("url->" + section.url);
+
+                String result;
+                try {
+                    result = org.jsoup.Jsoup.connect(section.url)
+                            .timeout(10000)
+                            // .userAgent(USER_AGENT)
+                            .followRedirects(true)
+
+                            .header("Accept-Encoding", "gzip, deflate, br")
+                            .header("Accept-Language", "es-ES,es;q=0.9,en;q=0.8")
+                            .header("Cache-Control", "max-age=0")
+                            .header("Cookie", "accessec=15022931512a4643caef9f3e4a5f007970652b02ca; visid_incap_661214=sjdBFAdCQ/eYlUWYpvr2e6Asi1kAAAAAQUIPAAAAAAAHuY/W5FT1egljEUHWwetd; _ga=GA1.2.2137369746.1502293153; mp_vilynx=%7B%22distinct_id%22%3A%20%2215e0b92652e14f-0ba80ee6c563f3-c313760-100200-15e0b92652f1b3%22%2C%22%24search_engine%22%3A%20%22google%22%2C%22%24initial_referrer%22%3A%20%22https%3A%2F%2Fwww.google.es%2F%22%2C%22%24initial_referring_domain%22%3A%20%22www.google.es%22%7D; visitedsections_ec=eyIyNCI6MSwiMjE0IjoxLCIxIjoxMCwiMzE4IjoxLCI4Ijo0LCI3IjoxfQ%3D%3D; powersections_ec=eyIyNCI6MSwiMjE0IjoxLCIxIjoxMCwiMzE4IjoxLCI4Ijo0LCI3IjoxfQ%3D%3D; ___tg_vis=7B8554B2AC5B2965.1522923070029; ___tg_vis_sec=170:1522923070029; amplitude_idelconfidencial.com=eyJkZXZpY2VJZCI6IjhjYWQ0ZDc2LTYxNTQtNDkxNi1iOTEwLWE3YTg1OTA2MjI5Y1IiLCJ1c2VySWQiOm51bGwsIm9wdE91dCI6ZmFsc2UsInNlc3Npb25JZCI6MTUyMjkyMzA2ODg2NCwibGFzdEV2ZW50VGltZSI6MTUyMjkyMzA2ODg5NSwiZXZlbnRJZCI6MjQsImlkZW50aWZ5SWQiOjQ4LCJzZXF1ZW5jZU51bWJlciI6NzJ9; PHPSESSID=4f9eek2tpbkip1bggqpv8t78g1; incap_ses_509_661214=XCEVFbU5STt1FxKNjFUQBwbk2FoAAAAAsce8DDzoGHeOj/Gz7GOuVw==")
+                            .header("Upgrade-Insecure-Requests", "1")
+                            .header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36")
+                            .referrer("https://www.google.com/")
+
+                            .get().outerHtml();
+
+                    //     resp.getWriter().println("status.code->"+response.statusCode());
+                    //    resp.getWriter().println("status.msg->"+response.statusMessage());
+                    resp.getWriter().println("result->" + result);
+                    resp.getWriter().println("Testing again without errors");
+                } catch (Exception e) {
+                    resp.getWriter().println("#Error#");
+                    resp.getWriter().println("name->" + e.getClass().getSimpleName());
+                    resp.getWriter().println("mesg->" + e.getMessage());
+
+
+                    StackTraceElement[] trace = e.getStackTrace();
+                    for (StackTraceElement traceElement : trace)
+                        resp.getWriter().println("\tat " + traceElement);
+
+
+                }
+                //     resp.getWriter().println(result);
+            }
+            //
+            //      resp.getWriter().println("");
+            //    resp.getWriter().println("");
+
         }
     }
+
+    private static final String USER_AGENT = "Mozilla/5.0 (Linux; Android 6.0.1; GT-I9300 Build/MOB30Z) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.91 Mobile Safari/537.36";
+
 
     private void resp_stats(String options, String filters, String reset, HttpServletResponse resp) throws IOException
     {
@@ -115,6 +198,43 @@ public class DevelopmentServer extends HttpServlet {
                     .append("]]></message></report>");
 
         sb.append("</content>");
+        resp.getWriter().println(sb);
+    }
+
+    private void resp_key_sections(String[] keys, HttpServletResponse resp) throws IOException
+    {
+        for (int i = 0; i < keys.length; i++)
+            keys[i] = keys[i].toLowerCase();
+
+        StringBuilder sb = new StringBuilder("[");
+        for (Site s : Data.sites) {
+            Sections sections = s.getSections();
+            for (int i = 0; i < sections.size(); i++) {
+                Section sec = sections.get(i);
+                for (String key : keys) {
+                    if (key.equals(sec.name.toLowerCase())) {
+                        if (sb.length() > 1)
+                            sb.append(",");
+
+                        String pname = "";
+                        if (sec.level > 0) {
+                            int j = i - 1;
+                            while (sections.get(j).level > 0)
+                                j--;
+                            pname = sections.get(j).name;
+                        }
+                        sb.append("{\"level\":").append(sec.level)
+                                .append(",\"name\":\"").append(sec.name)
+                                .append("\",\"code\":").append(sec.code)
+                                .append(",\"pname\":\"").append(pname)
+                                .append("\",\"scode\":").append(s.code)
+                                .append(",\"sname\":\"").append(s.name)
+                                .append("\"}");
+                    }
+                }
+            }
+        }
+        sb.append("]");
         resp.getWriter().println(sb);
     }
 

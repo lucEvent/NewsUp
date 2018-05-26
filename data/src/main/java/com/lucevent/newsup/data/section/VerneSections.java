@@ -9,9 +9,8 @@ public class VerneSections extends Sections {
     {
         super();
 
-        add(new Section("Espa\u00F1a", "http://verne.elpais.com/rss/verne/portada.xml", 0));
-        add(new Section("M\u00E9xico", "http://verne.elpais.com/rss/verne/portada_mexico.xml", 0));
-
+        add(new Section("Espa\u00F1a", "https://verne.elpais.com/rss/verne/portada.xml", 0));
+        add(new Section("M\u00E9xico", "https://verne.elpais.com/rss/verne/portada_mexico.xml", 0));
     }
 
 }

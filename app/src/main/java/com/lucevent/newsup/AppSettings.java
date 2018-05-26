@@ -173,7 +173,7 @@ public class AppSettings {
         return getFavoriteSitesCodesString().contains(code);
     }
 
-    public static void toggleFavorite(Site site)
+    public static void toggleFavorite(Site site, boolean notify)
     {
         String code = Integer.toString(site.code);
 
@@ -184,7 +184,8 @@ public class AppSettings {
 
         setFavoriteSitesCodes(pref);
 
-        changeListener.onFavoritesChange();
+        if (notify)
+            changeListener.onFavoritesChange();
     }
 
     public static void toggleShownInMain(Site site)

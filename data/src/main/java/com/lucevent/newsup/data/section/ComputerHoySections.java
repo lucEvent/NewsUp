@@ -9,7 +9,7 @@ public class ComputerHoySections extends Sections {
     {
         super();
 
-        add(new Section("Principal", "http://computerhoy.com/rss.xml", 0));
+        add(new Section("Principal", "https://computerhoy.com/rss.xml", 0));
 
     }
 

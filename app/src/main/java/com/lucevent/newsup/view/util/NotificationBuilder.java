@@ -13,14 +13,17 @@ import com.lucevent.newsup.R;
 
 public class NotificationBuilder {
 
-    public static Notification build(Context context, Intent intent, String[] headlines)
+    /**
+     * @return Notification for download schedule
+     */
+    public static Notification build(Context context, Intent intent, String title, String[] headlines)
     {
         PendingIntent resultPendingIntent =
                 PendingIntent.getActivity(context, (int) System.currentTimeMillis(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("News Up")
+                .setContentTitle(title)
                 .setAutoCancel(true)
                 .setColor(0xff8BC34A)
                 .setLights(Color.GREEN, 1000, 2000)
@@ -29,7 +32,7 @@ public class NotificationBuilder {
                 .setContentIntent(resultPendingIntent);
 
         if (headlines.length == 1) {
-            builder.setContentText(headlines[0]);
+            builder.setStyle(new NotificationCompat.BigTextStyle().bigText(headlines[0]));
 
         } else {
             NotificationCompat.InboxStyle style = new NotificationCompat.InboxStyle();
@@ -45,8 +48,8 @@ public class NotificationBuilder {
 
     public static void notifyUser(Context context, Notification notification)
     {
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify((int) System.currentTimeMillis(), notification);
+        ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE))
+                .notify((int) System.currentTimeMillis(), notification);
     }
 
 }
