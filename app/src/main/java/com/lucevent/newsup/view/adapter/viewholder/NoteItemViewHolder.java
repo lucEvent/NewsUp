@@ -9,17 +9,17 @@ import com.lucevent.newsup.kernel.util.Note;
 
 public class NoteItemViewHolder extends RecyclerView.ViewHolder {
 
-    private TextView view;
+	private TextView mNote;
 
-    public NoteItemViewHolder(View v)
-    {
-        super(v);
-        view = (TextView) v.findViewById(R.id.text);
-    }
+	public NoteItemViewHolder(View v)
+	{
+		super(v);
+		mNote = (TextView) v.findViewById(R.id.text);
+	}
 
-    public void bind(Note note)
-    {
-        view.setText(note.note);
-    }
+	public void bind(Note note)
+	{
+		mNote.setText(note.note);
+	}
 
 }

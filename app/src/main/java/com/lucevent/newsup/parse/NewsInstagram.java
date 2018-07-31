@@ -2,45 +2,45 @@ package com.lucevent.newsup.parse;
 
 public class NewsInstagram implements NewsElement<String> {
 
-    private String mContent;
+	private String mContent;
 
-    public NewsInstagram()
-    {
-    }
+	public NewsInstagram()
+	{
+	}
 
-    @Override
-    public int getType()
-    {
-        return TYPE_INSTAGRAM;
-    }
+	@Override
+	public int getType()
+	{
+		return TYPE_INSTAGRAM;
+	}
 
-    @Override
-    public void setContent(String content)
-    {
-        this.mContent = content;
-    }
+	@Override
+	public void setContent(String content)
+	{
+		this.mContent = content;
+	}
 
-    @Override
-    public String getContent()
-    {
-        return mContent;
-    }
+	@Override
+	public String getContent()
+	{
+		return mContent;
+	}
 
-    @Override
-    public NewsElement getNewElement()
-    {
-        return new NewsInstagram();
-    }
+	@Override
+	public NewsElement getNewElement()
+	{
+		return new NewsInstagram();
+	}
 
-    @Override
-    public boolean isAppendable()
-    {
-        return false;
-    }
+	@Override
+	public boolean isAppendable()
+	{
+		return false;
+	}
 
-    @Override
-    public void setNotAppendable()
-    {
-    }
+	@Override
+	public void setNotAppendable()
+	{
+	}
 
 }

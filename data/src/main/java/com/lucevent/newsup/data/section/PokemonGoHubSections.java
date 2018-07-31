@@ -5,12 +5,12 @@ import com.lucevent.newsup.data.util.Sections;
 
 public class PokemonGoHubSections extends Sections {
 
-    public PokemonGoHubSections()
-    {
-        super();
+	public PokemonGoHubSections()
+	{
+		super();
 
-        add(new Section("Main", "https://pokemongohub.net/feed/", 0));
+		add(new Section("Main", "https://pokemongohub.net/feed/", 0));
 
-    }
+	}
 
 }

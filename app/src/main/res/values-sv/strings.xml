@@ -41,6 +41,16 @@
     <string name="x_section_selected">%d sektioner valda</string>
     <string name="event">Händelse</string>
     <string name="no_internet_no_media">Elementet är inte tillgängligt utan anslutning</string>
+    <string name="plus_x_more">+ %d mer</string>
+    <string name="site_request">Hitta publikation</string>
+    <string name="notifications">Aviseringar</string>
+    <string name="searching">sökande %s</string>
+    <string name="previous">Tidigare</string>
+    <string name="next">Nästa</string>
+    <string name="open_news">Öppna Nyheter</string>
+    <string name="do_not_show_again">Visa inte igen</string>
+    <string name="shortcut_select_label">Välj publikation</string>
+    <string name="lbl_site_search">· Sök exempel:\n\t\tthecanary.co\n\t\tthe ringer\n\n· NewsUp är en RSS-läsare, så sökningen visar bara publikationer som erbjuder RSS.\n\n· En google-sökning utförs för att hitta publikationswebbplatsen du letar efter; om sökningen inte lyckades, försök att skriva in hela webbplatsnamnet.\n\n· Den här funktionen är på test. Det kan ge bättre resultat för din sökning i framtiden.</string>
 
     <string name="mon">Mån</string>
     <string name="tue">Tis</string>
@@ -72,6 +82,9 @@
     <string name="update">Uppdatera</string>
     <string name="not_now">Inte nu</string>
     <string name="rate">Betygsätta</string>
+    <string name="got_it">Förstått</string>
+    <string name="start">Börja</string>
+    <string name="reload">Försök igen</string>
 
     <!-- * ******************** Hints **************************** * -->
     <string name="hint_pref_pro_mode">Skriva in PRO kod</string>
@@ -79,6 +92,7 @@
     <string name="hint_create_note">Skriva in en anteckning</string>
     <string name="hint_email">Din email (valfri)</string>
     <string name="hint_message_suggestion_report">Ditt meddelande, förslag eller rapport</string>
+    <string name="hint_enter_publication_search">Publikationens namn</string>
 
     <!-- * ******************** Messages **************************** * -->
     <string name="msg_confirm_to_remove_all_saved_news">Bekräfta att radera alla bokmärkta nyheter</string>
@@ -95,8 +109,6 @@
     <string name="msg_no_internet_connection">Ingen internetanslutning</string>
     <string name="msg_unlocked_finnish">Finska publikationer olåsta.</string>
     <string name="msg_invalid_code">Ogiltig kod</string>
-    <string name="msg_unlocked_statistics">Statistiker olåsta</string>
-    <string name="msg_unlocked_notes">Anteckningar olåsta</string>
     <string name="msg_app_must_restart_to_apply_changes">App måste startas om för att verkställa ändringarna</string>
     <string name="msg_permission_bookmark_denied">du kan INTE bokmärke nyheter tills du bevilja tillstånd</string>
     <string name="msg_empty_input">Tom ingång</string>
@@ -113,6 +125,18 @@
     <string name="msg_needs_update">Det finns en ny version av NewsUp tillgänglig</string>
     <string name="msg_rate">Tycker du om den här appen hittills? Skulle du betygsätta det på Google Play?</string>
     <string name="msg_report">Har du något problem, förslag eller klagomål om den här appen? Berätta för oss</string>
+    <string name="msg_permission_save_image_denied">Du kan INTE spara bilder tills du beviljar tillstånd</string>
+    <string name="msg_downloading_image">Nedladdning bild</string>
+    <string name="msg_clean_cache_start">Startande rengöring…</string>
+    <string name="msg_clean_cache_remove_news">Radera nyheter…</string>
+    <string name="msg_clean_cache_remove_images">Radera bilder…</string>
+    <string name="msg_didnt_find_results">Det gick inte att hitta några resultat</string>
+    <string name="msg_page_not_found">· Det gick inte att komma åt den hittade webbsidan</string>
+    <string name="msg_page_tried">· Den hittades webbsidan var %s</string>
+    <string name="msg_try_full_page_if_not">· Försök att söka efter det fullständiga webbsidans namn om det inte är korrekt</string>
+    <string name="msg_rss_not_found">· RSS-support kunde inte hittas</string>
+    <string name="msg_publication_not_supported">Denna publikation stöds inte längre av NewsUp</string>
+    <string name="msg_content_could_not_be_loaded">Ups, innehållet kunde inte laddas</string>
 
     <!-- * *************** Activities and fragment's titles ********************* * -->
     <string name="title_frg_settings_of">Inställningar för %1$s</string>
@@ -152,6 +176,5 @@
     <string name="about_content_contact">Utvecklat av Rafael J. Lucena\nKontakt: rafaa89(snabel-a)gmail.com</string>
     <string name="about_content_title_new_features">De senaste funktionerna och förbättringarna:</string>
     <string name="about_content_title_next_sites">Publikationer som kan läggas till i följande utgåvor:</string>
-
 
 </resources>

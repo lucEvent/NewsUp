@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:background="@color/clear_background"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/clear_background">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -14,7 +13,7 @@
             android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <FrameLayout
             android:id="@+id/progress_bar"
@@ -29,17 +28,29 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
-                android:padding="8dp"/>
+                android:padding="8dp" />
         </FrameLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/view_hands_free"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:alpha="0.6"
+            android:src="@drawable/ic_hands_free"
+            app:backgroundTint="@color/colorPrimary"
+            app:fabSize="mini"
+            app:rippleColor="@color/colorAccent"
+            app:useCompatPadding="true" />
 
     </RelativeLayout>
 
     <ViewStub
-        android:id="@+id/no_content"
+        android:id="@+id/try_reload"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:inflatedId="@+id/no_downloads"
-        android:layout="@layout/vs_no_content"/>
+        android:inflatedId="@+id/try_reload"
+        android:layout="@layout/vs_try_reload" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/button_sections"
@@ -51,7 +62,7 @@
         android:src="@drawable/ic_more"
         app:backgroundTint="@color/colorPrimary"
         app:rippleColor="@color/colorAccent"
-        app:useCompatPadding="true"/>
+        app:useCompatPadding="true" />
 
     <com.lucevent.newsup.view.util.NewsView
         android:id="@+id/news_view"
@@ -59,6 +70,6 @@
         android:layout_height="match_parent"
         android:clipChildren="false"
         android:visibility="gone"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </android.support.design.widget.CoordinatorLayout>

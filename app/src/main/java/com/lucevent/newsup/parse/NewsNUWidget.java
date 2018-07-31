@@ -3,45 +3,45 @@ package com.lucevent.newsup.parse;
 
 public class NewsNUWidget implements NewsElement<String> {
 
-    private String mContent;
+	private String mContent;
 
-    public NewsNUWidget()
-    {
-    }
+	public NewsNUWidget()
+	{
+	}
 
-    @Override
-    public int getType()
-    {
-        return TYPE_WIDGET;
-    }
+	@Override
+	public int getType()
+	{
+		return TYPE_WIDGET;
+	}
 
-    @Override
-    public void setContent(String content)
-    {
-        mContent = content;
-    }
+	@Override
+	public void setContent(String content)
+	{
+		mContent = content;
+	}
 
-    @Override
-    public String getContent()
-    {
-        return mContent;
-    }
+	@Override
+	public String getContent()
+	{
+		return mContent;
+	}
 
-    @Override
-    public NewsElement getNewElement()
-    {
-        return new NewsNUWidget();
-    }
+	@Override
+	public NewsElement getNewElement()
+	{
+		return new NewsNUWidget();
+	}
 
-    @Override
-    public boolean isAppendable()
-    {
-        return false;
-    }
+	@Override
+	public boolean isAppendable()
+	{
+		return false;
+	}
 
-    @Override
-    public void setNotAppendable()
-    {
-    }
+	@Override
+	public void setNotAppendable()
+	{
+	}
 
 }

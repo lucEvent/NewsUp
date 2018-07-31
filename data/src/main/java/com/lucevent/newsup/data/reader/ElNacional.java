@@ -13,52 +13,52 @@ public class ElNacional extends com.lucevent.newsup.data.util.NewsReader {
         [category, description, guid, item, link, pubdate, title,... author, enclosure]
     */
 
-    public ElNacional()
-    {
-        super(TAG_ITEM_ITEMS,
-                new int[]{TAG_TITLE},
-                new int[]{TAG_LINK},
-                new int[]{TAG_DESCRIPTION},
-                new int[]{TAG_CONTENT_ENCODED},
-                new int[]{TAG_PUBDATE},
-                new int[]{TAG_CATEGORY},
-                new int[]{TAG_ENCLOSURE, TAG_MEDIA_CONTENT},
-                "");
-    }
+	public ElNacional()
+	{
+		super(TAG_ITEM_ITEMS,
+				new int[]{TAG_TITLE},
+				new int[]{TAG_LINK},
+				new int[]{TAG_DESCRIPTION},
+				new int[]{TAG_CONTENT_ENCODED},
+				new int[]{TAG_PUBDATE},
+				new int[]{TAG_CATEGORY},
+				new int[]{TAG_ENCLOSURE, TAG_MEDIA_CONTENT},
+				"");
+	}
 
-    @Override
-    protected String parseContent(Element prop)
-    {
-        Element article = jsoupParse(prop);
-        article.select("script,link,.videoPC,.eb-picto").remove();
+	@Override
+	protected String parseContent(Element prop)
+	{
+		Element article = jsoupParse(prop);
+		article.select("script,link,.videoPC,.eb-picto").remove();
 
-        for (Element script : article.select("script[id^='infogram']")) {
-            String src = script.attr("id").replaceFirst("infogram_0_", "https://e.infogram.com/") + "?src=embed";
+		for (Element script : article.select("script[id^='infogram']")) {
+			String src = script.attr("id").replaceFirst("infogram_0_", "https://e.infogram.com/") + "?src=embed";
 
-            cleanAttributes(script);
-            script.tagName("div");
-            script.html(insertIframe(src));
-        }
-        for (Element h : article.select(".cs-horoscop")) {
-            h.select("td:has(.dates)").tagName("h3");
-            Elements elems = h.select("h3,p");
-            h.html(elems.outerHtml());
-        }
+			cleanAttributes(script);
+			script.tagName("div");
+			script.html(insertIframe(src));
+		}
+		for (Element h : article.select(".cs-horoscop")) {
+			h.select("td:has(.dates)").tagName("h3");
+			Elements elems = h.select("h3,p");
+			h.html(elems.outerHtml());
+		}
 
-        article.select(".caption").tagName("figcaption");
+		article.select(".caption").tagName("figcaption");
 
-        return finalFormat(article, false);
-    }
+		return finalFormat(article, false);
+	}
 
-    @Override
-    protected void readNewsContent(Document doc, News news)
-    {
-        Elements article = doc.select(".article-img img,.article-body");
-        article.select("script,[data-type='related-content']").remove();
+	@Override
+	protected void readNewsContent(Document doc, News news)
+	{
+		Elements article = doc.select(".article-img img,.article-body");
+		article.select("script,[data-type='related-content']").remove();
 
-        cleanAttributes(article.select("img"), "src");
+		cleanAttributes(article.select("img"), "src");
 
-        news.content = finalFormat(article, true);
-    }
+		news.content = finalFormat(article, true);
+	}
 
 }

@@ -12,33 +12,33 @@ import com.lucevent.newsup.view.adapter.viewholder.NoteItemViewHolder;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteItemViewHolder> {
 
-    private Notes items;
+	private Notes mItems;
 
-    private LayoutInflater inflater;
+	private LayoutInflater mInflater;
 
-    public NoteAdapter(Context context, Notes items)
-    {
-        this.items = items;
-        inflater = LayoutInflater.from(context);
-    }
+	public NoteAdapter(Context context, Notes items)
+	{
+		mItems = items;
+		mInflater = LayoutInflater.from(context);
+	}
 
-    @Override
-    public NoteItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-    {
-        View v = inflater.inflate(R.layout.i_note, parent, false);
-        return new NoteItemViewHolder(v);
-    }
+	@Override
+	public NoteItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+	{
+		View v = mInflater.inflate(R.layout.i_note, parent, false);
+		return new NoteItemViewHolder(v);
+	}
 
-    @Override
-    public void onBindViewHolder(NoteItemViewHolder holder, int position)
-    {
-        holder.bind(items.get(position));
-    }
+	@Override
+	public void onBindViewHolder(NoteItemViewHolder holder, int position)
+	{
+		holder.bind(mItems.get(position));
+	}
 
-    @Override
-    public int getItemCount()
-    {
-        return items.size();
-    }
+	@Override
+	public int getItemCount()
+	{
+		return mItems.size();
+	}
 
 }

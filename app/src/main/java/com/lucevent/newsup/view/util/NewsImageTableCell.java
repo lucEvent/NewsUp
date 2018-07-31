@@ -20,59 +20,59 @@ import org.jsoup.select.Elements;
 
 public class NewsImageTableCell extends LinearLayout {
 
-    private static RequestOptions glideOptions = new RequestOptions().fitCenter();
+	private static RequestOptions glideOptions = new RequestOptions().fitCenter();
 
-    private TextView mTextView;
+	private TextView mTextView;
 
-    public NewsImageTableCell(Context context, String content)
-    {
-        super(context);
+	public NewsImageTableCell(Context context, String content)
+	{
+		super(context);
 
-        ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
-                .inflate(R.layout.v_image_table_cell, this, true);
+		((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+				.inflate(R.layout.v_image_table_cell, this, true);
 
-        setOrientation(LinearLayout.VERTICAL);
+		setOrientation(LinearLayout.VERTICAL);
 
-        Document doc = org.jsoup.Jsoup.parse(content);
-        Elements imgs = doc.select("img");
-        if (!imgs.isEmpty()) {
-            Element img = imgs.first();
-            ImageView imageView = (ImageView) findViewById(R.id.image);
+		Document doc = org.jsoup.Jsoup.parse(content);
+		Elements imgs = doc.select("img");
+		if (!imgs.isEmpty()) {
+			Element img = imgs.first();
+			ImageView imageView = (ImageView) findViewById(R.id.image);
 
-            try {
-                int width = Integer.parseInt(img.attr("width"));
-                int height = Integer.parseInt(img.attr("height"));
-                Resources r = getResources();
+			try {
+				int width = Integer.parseInt(img.attr("width"));
+				int height = Integer.parseInt(img.attr("height"));
+				Resources r = getResources();
 
-                imageView.getLayoutParams().width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, width, r.getDisplayMetrics());
-                imageView.getLayoutParams().height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, r.getDisplayMetrics());
-            } catch (Exception ignored) {
-            }
+				imageView.getLayoutParams().width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, width, r.getDisplayMetrics());
+				imageView.getLayoutParams().height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, r.getDisplayMetrics());
+			} catch (Exception ignored) {
+			}
 
-            Glide.with(context)
-                    .load(img.attr("src"))
-                    .apply(glideOptions)
-                    .into(imageView);
-            imgs.remove();
-        }
+			Glide.with(context)
+					.load(img.attr("src"))
+					.apply(glideOptions)
+					.into(imageView);
+			imgs.remove();
+		}
 
-        mTextView = (TextView) findViewById(R.id.text);
-        mTextView.setText(Html.fromHtml(doc.body().html()));
-    }
+		mTextView = (TextView) findViewById(R.id.text);
+		mTextView.setText(Html.fromHtml(doc.body().html()));
+	}
 
-    public void setTextSize(float fontSize)
-    {
-        mTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
-    }
+	public void setTextSize(float fontSize)
+	{
+		mTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize);
+	}
 
-    public void setTextColor(int textColor)
-    {
-        mTextView.setTextColor(textColor);
-    }
+	public void setTextColor(int textColor)
+	{
+		mTextView.setTextColor(textColor);
+	}
 
-    public void setLinkTextColor(int linkColor)
-    {
-        mTextView.setLinkTextColor(linkColor);
-    }
+	public void setLinkTextColor(int linkColor)
+	{
+		mTextView.setLinkTextColor(linkColor);
+	}
 
 }

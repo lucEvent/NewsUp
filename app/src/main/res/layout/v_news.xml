@@ -1,5 +1,4 @@
-<merge
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -12,7 +11,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:keepScreenOn="true"/>
+            android:keepScreenOn="true" />
     </ScrollView>
 
     <ViewStub
@@ -20,12 +19,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:inflatedId="@+id/box_font_size"
-        android:layout="@layout/vs_font_size_picker"/>
+        android:layout="@layout/vs_font_size_picker" />
 
     <com.lucevent.newsup.view.util.NewsSideToolbar
         android:id="@+id/side_toolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/floating_button_margin"/>
+        android:layout_margin="@dimen/floating_button_margin" />
 
 </merge>

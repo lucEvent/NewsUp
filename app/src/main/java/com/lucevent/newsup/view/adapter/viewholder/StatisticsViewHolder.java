@@ -13,30 +13,30 @@ import com.lucevent.newsup.kernel.stats.SiteStat;
 
 public class StatisticsViewHolder extends RecyclerView.ViewHolder {
 
-    private ImageView icon;
-    private TextView name, requests, readings, last, version;
+	private ImageView mIcon;
+	private TextView mName, mRequests, mReadings, mLast, mVersion;
 
-    public StatisticsViewHolder(View v)
-    {
-        super(v);
+	public StatisticsViewHolder(View v)
+	{
+		super(v);
 
-        icon = (ImageView) v.findViewById(R.id.icon);
-        name = (TextView) v.findViewById(R.id.name);
-        requests = (TextView) v.findViewById(R.id.requests);
-        readings = (TextView) v.findViewById(R.id.readings);
-        last = (TextView) v.findViewById(R.id.last);
-        version = (TextView) v.findViewById(R.id.version);
-    }
+		mIcon = (ImageView) v.findViewById(R.id.icon);
+		mName = (TextView) v.findViewById(R.id.name);
+		mRequests = (TextView) v.findViewById(R.id.requests);
+		mReadings = (TextView) v.findViewById(R.id.readings);
+		mLast = (TextView) v.findViewById(R.id.last);
+		mVersion = (TextView) v.findViewById(R.id.version);
+	}
 
-    @SuppressLint("SetTextI18n")
-    public void bind(SiteStat siteStat)
-    {
-        icon.setBackground(LogoManager.getLogo(siteStat.siteCode, LogoManager.Size.I_ITEM));
-        name.setText(siteStat.siteName);
-        requests.setText(siteStat.monthRequests + "/" + siteStat.totalRequests);
-        readings.setText(Integer.toString(siteStat.readings));
-        last.setText(Date.getAge(siteStat.lastRequest));
-        version.setText(siteStat.version);
-    }
+	@SuppressLint("SetTextI18n")
+	public void bind(SiteStat siteStat)
+	{
+		mIcon.setBackground(LogoManager.getLogo(siteStat.siteCode, LogoManager.Size.I_ITEM));
+		mName.setText(siteStat.siteName);
+		mRequests.setText(siteStat.monthRequests + "/" + siteStat.totalRequests);
+		mReadings.setText(Integer.toString(siteStat.readings));
+		mLast.setText(Date.getAge(siteStat.lastRequest));
+		mVersion.setText(siteStat.version);
+	}
 
 }

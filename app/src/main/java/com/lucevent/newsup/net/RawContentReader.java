@@ -9,22 +9,22 @@ import java.net.URL;
 
 public class RawContentReader {
 
-    public static StringBuilder getUrl(String url) throws IOException
-    {
-        AppSettings.printlog(url);
+	public static StringBuilder getUrl(String url) throws IOException
+	{
+		AppSettings.printlog(url);
 
-        BufferedReader in = new BufferedReader(new InputStreamReader(new URL(url).openStream()));
+		BufferedReader in = new BufferedReader(new InputStreamReader(new URL(url).openStream()));
 
-        StringBuilder sb = new StringBuilder();
-        int len = 2048;
-        char[] buffer = new char[len];
+		StringBuilder sb = new StringBuilder();
+		int len = 2048;
+		char[] buffer = new char[len];
 
-        while ((len = in.read(buffer, 0, len)) > 0)
-            sb.append(buffer, 0, len);
+		while ((len = in.read(buffer, 0, len)) > 0)
+			sb.append(buffer, 0, len);
 
-        in.close();
+		in.close();
 
-        return sb;
-    }
+		return sb;
+	}
 
 }

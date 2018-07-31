@@ -7,20 +7,20 @@ import java.util.TreeMap;
  */
 public class NewsMap extends TreeMap<Integer, News> {
 
-    public NewsMap()
-    {
-        super();
-    }
+	public NewsMap()
+	{
+		super();
+	}
 
-    public void add(News news)
-    {
-        put(news.id, news);
-    }
+	public void add(News news)
+	{
+		put(news.id, news);
+	}
 
-    public void addAll(NewsArray news)
-    {
-        for (News n : news)
-            put(n.id, n);
-    }
+	public void addAll(NewsArray news)
+	{
+		for (News n : news)
+			put(n.id, n);
+	}
 
 }

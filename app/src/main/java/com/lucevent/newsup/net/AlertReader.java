@@ -7,79 +7,66 @@ import com.lucevent.newsup.data.alert.AlertCode;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.Locale;
 import java.util.Random;
 import java.util.TreeSet;
 
 public class AlertReader implements AlertCode {
 
-    private final String mAppVersion;
+	private final String mAppVersion;
 
-    public AlertReader(String appVersion)
-    {
-        mAppVersion = appVersion;
-    }
+	public AlertReader(String appVersion)
+	{
+		mAppVersion = appVersion;
+	}
 
-    public Alert fetch()
-    {
-        try {
-            String url = "http://newsup-2406.appspot.com/appv2?alerts&lang=" + Locale.getDefault().getLanguage() + "&v=" + mAppVersion;
+	public Alert fetch()
+	{
+		try {
+			StringBuilder sb = RawContentReader.getUrl(
+					"http://newsup-2406.appspot.com/appv2?alerts&lang=" + Locale.getDefault().getLanguage() + "&v=" + mAppVersion
+			);
 
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(new URL(url).openStream()));
+			JSONArray json = new JSONArray(sb.toString());
+			TreeSet<Alert> alerts = new TreeSet<>();
 
-            char[] buff = new char[1024];
-            StringBuilder sb = new StringBuilder(1000);
-            int len;
-            while ((len = in.read(buff, 0, buff.length)) > 0)
-                sb.append(buff, 0, len);
+			for (int i = 0; i < json.length(); i++) {
+				Alert alert = new Alert();
+				JSONObject jsonAlert = (JSONObject) json.get(i);
 
-            in.close();
+				alert.id = jsonAlert.getInt(JSON_ID);
+				alert.probability = jsonAlert.getInt(JSON_PROBABILITY);
 
-            //
-            JSONArray json = new JSONArray(sb.toString());
-            TreeSet<Alert> alerts = new TreeSet<>();
+				alert.message_code = jsonAlert.getInt(JSON_MESSAGE_CODE);
+				alert.message = jsonAlert.getString(JSON_MESSAGE);
 
-            for (int i = 0; i < json.length(); i++) {
-                Alert alert = new Alert();
-                JSONObject jsonAlert = (JSONObject) json.get(i);
+				alert.btn_start_action = jsonAlert.getInt(JSON_BTN_START_ACTION);
+				alert.btn_start_code = jsonAlert.getInt(JSON_BTN_START_CODE);
+				alert.btn_start_text = jsonAlert.getString(JSON_BTN_START_TEXT);
 
-                alert.id = jsonAlert.getInt(JSON_ID);
-                alert.probability = jsonAlert.getInt(JSON_PROBABILITY);
+				alert.btn_center_action = jsonAlert.getInt(JSON_BTN_CENTER_ACTION);
+				alert.btn_center_code = jsonAlert.getInt(JSON_BTN_CENTER_CODE);
+				alert.btn_center_text = jsonAlert.getString(JSON_BTN_CENTER_TEXT);
 
-                alert.message_code = jsonAlert.getInt(JSON_MESSAGE_CODE);
-                alert.message = jsonAlert.getString(JSON_MESSAGE);
+				alert.btn_end_action = jsonAlert.getInt(JSON_BTN_END_ACTION);
+				alert.btn_end_code = jsonAlert.getInt(JSON_BTN_END_CODE);
+				alert.btn_end_text = jsonAlert.getString(JSON_BTN_END_TEXT);
 
-                alert.btn_start_action = jsonAlert.getInt(JSON_BTN_START_ACTION);
-                alert.btn_start_code = jsonAlert.getInt(JSON_BTN_START_CODE);
-                alert.btn_start_text = jsonAlert.getString(JSON_BTN_START_TEXT);
+				alerts.add(alert);
+			}
 
-                alert.btn_center_action = jsonAlert.getInt(JSON_BTN_CENTER_ACTION);
-                alert.btn_center_code = jsonAlert.getInt(JSON_BTN_CENTER_CODE);
-                alert.btn_center_text = jsonAlert.getString(JSON_BTN_CENTER_TEXT);
+			Random rand = new Random();
+			for (final Alert alert : alerts) {
+				int ri = rand.nextInt(100);
+				if (alert.probability >= ri
+						&& !AppSettings.wasAlertShown(alert.id))
+					return alert;
+			}
 
-                alert.btn_end_action = jsonAlert.getInt(JSON_BTN_END_ACTION);
-                alert.btn_end_code = jsonAlert.getInt(JSON_BTN_END_CODE);
-                alert.btn_end_text = jsonAlert.getString(JSON_BTN_END_TEXT);
-
-                alerts.add(alert);
-            }
-
-            Random rand = new Random();
-            for (final Alert alert : alerts) {
-                int ri = rand.nextInt(100);
-                if (alert.probability >= ri
-                        && !AppSettings.wasAlertShown(alert.id))
-                    return alert;
-            }
-
-        } catch (Exception e) {
-            AppSettings.printerror("[AR] Error on Alert Service", e);
-        }
-        return null;
-    }
+		} catch (Exception e) {
+			AppSettings.printerror("[AR] Error on Alert Service", e);
+		}
+		return null;
+	}
 
 }

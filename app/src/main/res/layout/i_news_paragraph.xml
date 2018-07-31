@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.lucevent.newsup.view.util.AppTextView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.lucevent.newsup.view.util.AppTextView xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/newsTextStyle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -9,4 +8,4 @@
     android:paddingRight="@dimen/side_padding"
     android:paddingTop="@dimen/paragraph_top_padding"
     android:text="Paragraph"
-    android:textSize="@dimen/text_normal_size"/>
+    android:textSize="@dimen/text_normal_size" />

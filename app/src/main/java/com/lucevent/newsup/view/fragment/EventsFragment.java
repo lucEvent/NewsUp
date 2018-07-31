@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.TextView;
 
-import com.lucevent.newsup.AppSettings;
+import com.lucevent.newsup.ProSettings;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.event.Event;
 import com.lucevent.newsup.data.event.Events;
@@ -24,22 +24,22 @@ import com.lucevent.newsup.view.adapter.EventsAdapter;
 
 public class EventsFragment extends android.app.Fragment implements View.OnClickListener, EventsManager.Callback {
 
-    private EventsManager eventsManager;
-    private EventsAdapter adapter;
+	private EventsManager eventsManager;
+	private EventsAdapter adapter;
 
-    private View noContentMessage;
+	private View noContentMessage;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        //       setHasOptionsMenu(true);
+	@Override
+	public void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+		//       setHasOptionsMenu(true);
 
-        adapter = new EventsAdapter(this);
+		adapter = new EventsAdapter(this);
 
-        eventsManager = new EventsManager(getActivity());
-        eventsManager.readEvents(getActivity(), this);
-    }
+		eventsManager = new EventsManager(getActivity());
+		eventsManager.readEvents(getActivity(), this);
+	}
 /*
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
@@ -53,66 +53,69 @@ public class EventsFragment extends android.app.Fragment implements View.OnClick
     }
 */
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
-        View view = inflater.inflate(R.layout.f_list, container, false);
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	{
+		if (container != null)
+			container.removeAllViews();
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setAutoMeasureEnabled(true);
+		View view = inflater.inflate(R.layout.f_list, container, false);
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
-        recyclerView.setNestedScrollingEnabled(false);
-        recyclerView.setHasFixedSize(false);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
+		LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+		layoutManager.setAutoMeasureEnabled(true);
 
-        noContentMessage = view.findViewById(R.id.no_content);
+		RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
+		recyclerView.setNestedScrollingEnabled(false);
+		recyclerView.setHasFixedSize(false);
+		recyclerView.setLayoutManager(layoutManager);
+		recyclerView.setAdapter(adapter);
 
-        return view;
-    }
+		noContentMessage = view.findViewById(R.id.no_content);
+
+		return view;
+	}
 
 
-    @Override
-    public void onEventsRead(Events result)
-    {
-        adapter.addAll(result);
-    }
+	@Override
+	public void onEventsRead(Events result)
+	{
+		adapter.addAll(result);
+	}
 
-    @Override
-    public void onNoConnectionAvailable()
-    {
-        if (noContentMessage != null) {
-            displayNoContentMessage();
-            Snackbar.make(noContentMessage, R.string.msg_no_internet_connection, Snackbar.LENGTH_LONG).show();
-        }
-    }
+	@Override
+	public void onNoConnectionAvailable()
+	{
+		if (noContentMessage != null) {
+			displayNoContentMessage();
+			Snackbar.make(noContentMessage, R.string.msg_no_internet_connection, Snackbar.LENGTH_LONG).show();
+		}
+	}
 
-    @Override
-    public void onClick(View v)
-    {
-        Event e = (Event) v.getTag();
+	@Override
+	public void onClick(View v)
+	{
+		Event e = (Event) v.getTag();
 
-        if (!AppSettings.DEBUG) {
-            Context c = getActivity();
-            c.startService(
-                    new Intent(c, StatisticsService.class)
-                            .putExtra(AppCode.REQUEST_CODE, StatisticsService.REQ_EVENT)
-                            .putExtra(AppCode.EVENT_CODE, e.code)
-            );
-        }
+		if (!ProSettings.isDeveloperModeEnabled()) {
+			Context c = getActivity();
+			c.startService(
+					new Intent(c, StatisticsService.class)
+							.putExtra(AppCode.REQUEST_CODE, StatisticsService.REQ_EVENT)
+							.putExtra(AppCode.EVENT_CODE, e.code)
+			);
+		}
 
-        Intent intent = new Intent(getActivity(), EventActivity.class);
-        intent.putExtra(AppCode.EVENT_CODE, e.code);
-        startActivity(intent);
-    }
+		Intent intent = new Intent(getActivity(), EventActivity.class);
+		intent.putExtra(AppCode.EVENT_CODE, e.code);
+		startActivity(intent);
+	}
 
-    private void displayNoContentMessage()
-    {
-        if (noContentMessage instanceof ViewStub)
-            noContentMessage = ((ViewStub) noContentMessage).inflate();
+	private void displayNoContentMessage()
+	{
+		if (noContentMessage instanceof ViewStub)
+			noContentMessage = ((ViewStub) noContentMessage).inflate();
 
-        ((TextView) noContentMessage.findViewById(R.id.message)).setText(R.string.msg_no_events);
-    }
+		((TextView) noContentMessage.findViewById(R.id.message)).setText(R.string.msg_no_events);
+	}
 
 }

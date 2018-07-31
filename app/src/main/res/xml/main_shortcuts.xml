@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_select"
+        android:shortcutId="shortcut_select_publication"
+        android:shortcutLongLabel="@string/shortcut_select_label"
+        android:shortcutShortLabel="@string/shortcut_select_label"
+        android:tint="#000">
+
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.lucevent.newsup.Main"
+            android:targetPackage="com.lucevent.newsup">
+            <extra
+                android:name="shortcut_select"
+                android:value=""/>
+        </intent>
+
+        <categories android:name="android.shortcut.conversation"/>
+    </shortcut>
+</shortcuts>
+    

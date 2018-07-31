@@ -13,41 +13,41 @@ import java.util.ArrayList;
 
 public class DownloadScheduleAdapter extends RecyclerView.Adapter<DownloadScheduleViewHolder> {
 
-    private ArrayList<Download> dataset;
-    private View.OnClickListener itemListener;
-    private View.OnClickListener deleteListener;
+	private ArrayList<Download> mDataSet;
+	private View.OnClickListener mOnItemClickListener;
+	private View.OnClickListener mOnDeleteItemListener;
 
-    public DownloadScheduleAdapter(ArrayList<Download> dataset, View.OnClickListener itemListener,
-                                   View.OnClickListener deleteListener)
-    {
-        this.dataset = dataset;
-        this.itemListener = itemListener;
-        this.deleteListener = deleteListener;
-    }
+	public DownloadScheduleAdapter(ArrayList<Download> dataSet, View.OnClickListener onItemClickListener,
+	                               View.OnClickListener onDeleteItemListener)
+	{
+		mDataSet = dataSet;
+		mOnItemClickListener = onItemClickListener;
+		mOnDeleteItemListener = onDeleteItemListener;
+	}
 
-    @Override
-    public DownloadScheduleViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-    {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.i_download_schedule, parent, false);
-        v.setOnClickListener(itemListener);
-        return new DownloadScheduleViewHolder(v);
-    }
+	@Override
+	public DownloadScheduleViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+	{
+		View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.i_download_schedule, parent, false);
+		v.setOnClickListener(mOnItemClickListener);
+		return new DownloadScheduleViewHolder(v);
+	}
 
-    @Override
-    public void onBindViewHolder(DownloadScheduleViewHolder holder, int position)
-    {
-        holder.bind(dataset.get(position), deleteListener);
-    }
+	@Override
+	public void onBindViewHolder(DownloadScheduleViewHolder holder, int position)
+	{
+		holder.bind(mDataSet.get(position), mOnDeleteItemListener);
+	}
 
-    @Override
-    public int getItemCount()
-    {
-        return dataset.size();
-    }
+	@Override
+	public int getItemCount()
+	{
+		return mDataSet.size();
+	}
 
-    public void remove(Download schedule)
-    {
-        notifyItemRemoved(dataset.indexOf(schedule));
-    }
+	public void remove(Download schedule)
+	{
+		notifyItemRemoved(mDataSet.indexOf(schedule));
+	}
 
 }

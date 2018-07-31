@@ -5,12 +5,12 @@ import com.lucevent.newsup.data.util.Sections;
 
 public class GizmodoUkSections extends Sections {
 
-    public GizmodoUkSections()
-    {
-        super();
+	public GizmodoUkSections()
+	{
+		super();
 
-        add(new Section("Homepage", "http://www.gizmodo.co.uk/feed", 0));
+		add(new Section("Homepage", "http://www.gizmodo.co.uk/feed", 0));
 
-    }
+	}
 
 }

@@ -11,21 +11,21 @@ import com.lucevent.newsup.io.LogoManager;
 
 public class SiteListViewHolder extends RecyclerView.ViewHolder {
 
-    private ImageView icon;
-    private TextView name;
+	private ImageView mIcon;
+	private TextView mName;
 
-    public SiteListViewHolder(View v)
-    {
-        super(v);
-        icon = (ImageView) v.findViewById(R.id.icon);
-        name = (TextView) v.findViewById(R.id.name);
-    }
+	public SiteListViewHolder(View v)
+	{
+		super(v);
+		mIcon = (ImageView) v.findViewById(R.id.icon);
+		mName = (TextView) v.findViewById(R.id.name);
+	}
 
-    public void bind(Site site)
-    {
-        icon.setImageDrawable(LogoManager.getLogo(site.code, LogoManager.Size.ACTION_BAR));
-        name.setText(site.name);
-        itemView.setTag(site.code);
-    }
+	public void bind(Site site)
+	{
+		mIcon.setImageDrawable(LogoManager.getLogo(site.code, LogoManager.Size.ACTION_BAR));
+		mName.setText(site.name);
+		itemView.setTag(site.code);
+	}
 
 }

@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.io.LogoManager;
@@ -24,84 +25,89 @@ import com.lucevent.newsup.view.util.OnBackPressedListener;
 
 public class SiteMain extends AppCompatActivity implements MainChangeListener {
 
-    private FragmentManager fragmentManager;
+	private FragmentManager fragmentManager;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        AppCompatDelegate.setDefaultNightMode(
-                PreferenceManager.getDefaultSharedPreferences(this).getBoolean(getString(R.string.pref_night_mode_key), false) ?
-                        AppCompatDelegate.MODE_NIGHT_YES :
-                        AppCompatDelegate.MODE_NIGHT_NO
-        );
-        super.onCreate(savedInstanceState);
+	@Override
+	protected void onCreate(Bundle savedInstanceState)
+	{
+		AppCompatDelegate.setDefaultNightMode(
+				PreferenceManager.getDefaultSharedPreferences(this).getBoolean(getString(R.string.pref_night_mode_key), false) ?
+						AppCompatDelegate.MODE_NIGHT_YES :
+						AppCompatDelegate.MODE_NIGHT_NO
+		);
+		super.onCreate(savedInstanceState);
 
-        AppSettings.initialize(this, this);
-        new KernelManager(this);
+		AppSettings.initialize(this, this);
+		new KernelManager(this);
 
-        setContentView(R.layout.a_site_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+		int code = (int) getIntent().getExtras().get(AppCode.SITE_CODE);
+		Site site = AppData.getSiteByCode(code);
+		if (site == null) {
+			Toast.makeText(this, R.string.msg_publication_not_supported, Toast.LENGTH_LONG).show();
+			finish();
+			return;
+		}
 
-        fragmentManager = new FragmentManager(this, null, R.id.main_content);
+		setContentView(R.layout.a_site_main);
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
 
-        int code = (int) getIntent().getExtras().get(AppCode.SITE_CODE);
-        Site site = AppData.getSiteByCode(code);
+		fragmentManager = new FragmentManager(this, null, R.id.main_content);
 
-        NewsListFragment newsFragment = NewsListFragment.instanceFor(code);
-        fragmentManager.addFragment(newsFragment, R.id.nav_my_news);
+		NewsListFragment newsFragment = NewsListFragment.instanceFor(code);
+		fragmentManager.addFragment(newsFragment, R.id.nav_my_news);
 
-        toolbar.setTitle(site.name);
-        toolbar.setLogo(LogoManager.getLogo(code, LogoManager.Size.ACTION_BAR));
-        toolbar.setBackgroundColor(site.color);
-        toolbar.setTitleTextColor(site.needsBrightColors() ? Color.WHITE : Color.BLACK);
+		toolbar.setTitle(site.name);
+		toolbar.setLogo(LogoManager.getLogo(code, LogoManager.Size.ACTION_BAR));
+		toolbar.setBackgroundColor(site.color);
+		toolbar.setTitleTextColor(site.needsBrightColors() ? Color.WHITE : Color.BLACK);
 
-        int statusBarColor = site.color;
-        if (statusBarColor == 0xffffffff) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                findViewById(R.id.main_content).setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-            else
-                statusBarColor = 0xffcccccc;
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(statusBarColor);
-        }
-    }
+		int statusBarColor = site.color;
+		if (statusBarColor == 0xffffffff) {
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+				findViewById(R.id.main_content).setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+			else
+				statusBarColor = 0xffcccccc;
+		}
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			Window window = getWindow();
+			window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+			window.setStatusBarColor(statusBarColor);
+		}
+	}
 
-    @Override
-    public void onBackPressed()
-    {
-        if (fragmentManager.currentFragment instanceof OnBackPressedListener
-                && ((OnBackPressedListener) fragmentManager.currentFragment).onBackPressed()) {
-            // do nothing
-        } else if (fragmentManager.getBackStackEntryCount() > 0) {
+	@Override
+	public void onBackPressed()
+	{
+		if (fragmentManager.getCurrentFragment() instanceof OnBackPressedListener
+				&& ((OnBackPressedListener) fragmentManager.getCurrentFragment()).onBackPressed()) {
+			// do nothing
+		} else if (fragmentManager.getBackStackEntryCount() > 0) {
 
-            fragmentManager.popFragment();
+			fragmentManager.popFragment();
 
-        } else super.onBackPressed();
-    }
+		} else super.onBackPressed();
+	}
 
-    @Override
-    public void onMainistsChange()
-    {
-    }
+	@Override
+	public void onMainistsChange()
+	{
+	}
 
-    @Override
-    public void onFavoritesChange()
-    {
-    }
+	@Override
+	public void onFavoritesChange()
+	{
+	}
 
-    @Override
-    public void onReplaceFragment(Fragment f, int navigationViewIndex, boolean addToStack)
-    {
-        fragmentManager.replaceFragment(f, navigationViewIndex, addToStack);
-    }
+	@Override
+	public void onReplaceFragment(Fragment f, int navigationViewIndex, boolean addToStack)
+	{
+		fragmentManager.replaceFragment(f, navigationViewIndex, addToStack);
+	}
 
-    @Override
-    public void onLoadImagesPreferenceChanged()
-    {
-    }
+	@Override
+	public void onLoadImagesPreferenceChanged()
+	{
+	}
 
 }

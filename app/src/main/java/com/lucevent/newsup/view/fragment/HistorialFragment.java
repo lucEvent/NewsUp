@@ -37,227 +37,229 @@ import java.util.Collection;
 import java.util.TreeSet;
 
 public class HistorialFragment extends StoragePermissionFragment implements View.OnClickListener,
-        OnBackPressedListener, NUSearchBar.CallBack {
+		OnBackPressedListener, NUSearchBar.CallBack {
 
-    private HistoryManager dataManager;
-    private NewsFilterAdapter adapter;
-    private NewsView newsView;
-    private NUSearchBar searchView;
+	private HistoryManager dataManager;
+	private NewsFilterAdapter adapter;
+	private NewsView newsView;
+	private NUSearchBar searchView;
 
-    private View noContentMessage;
+	private View noContentMessage;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+	@Override
+	public void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
 
-        Handler handler = new Handler(this);
-        dataManager = new HistoryManager(getActivity(), handler);
-    }
+		Handler handler = new Handler(this);
+		dataManager = new HistoryManager(getActivity(), handler);
+	}
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
-        View view = inflater.inflate(R.layout.f_historial, container, false);
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	{
+		if (container != null)
+			container.removeAllViews();
 
-        adapter = new NewsFilterAdapter(this, onBookmarkClick, NewsAdapterList.SortBy.byReadOn);
-        adapter.showSiteIcon(true);
+		View view = inflater.inflate(R.layout.f_historial, container, false);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setAutoMeasureEnabled(true);
+		adapter = new NewsFilterAdapter(this, onBookmarkClick, NewsAdapterList.SortBy.byReadOn);
+		adapter.showSiteIcon(true);
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
-        recyclerView.setNestedScrollingEnabled(false);
-        recyclerView.setHasFixedSize(false);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
+		LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+		layoutManager.setAutoMeasureEnabled(true);
 
-        newsView = (NewsView) view.findViewById(R.id.news_view);
-        newsView.setFragmentContext(this, ((Main) getActivity()).drawer);
-        newsView.setBookmarkStateChangeListener(onBookmarkClick);
-        newsView.setImageLongClickListener(onImageLongClick);
+		RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
+		recyclerView.setNestedScrollingEnabled(false);
+		recyclerView.setHasFixedSize(false);
+		recyclerView.setLayoutManager(layoutManager);
+		recyclerView.setAdapter(adapter);
 
-        noContentMessage = view.findViewById(R.id.no_content);
-        searchView = (NUSearchBar) view.findViewById(R.id.searchView);
-        view.findViewById(R.id.filter).setOnClickListener(onFilterClick);
+		newsView = (NewsView) view.findViewById(R.id.news_view);
+		newsView.setFragmentContext(this, ((Main) getActivity()).drawer);
+		newsView.setBookmarkStateChangeListener(onBookmarkClick);
+		newsView.setImageLongClickListener(onImageLongClick);
 
-        dataManager.getReadNews();
+		noContentMessage = view.findViewById(R.id.no_content);
+		searchView = (NUSearchBar) view.findViewById(R.id.searchView);
+		view.findViewById(R.id.filter).setOnClickListener(onFilterClick);
 
-        return view;
-    }
+		dataManager.getReadNews();
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
-    {
-        menu.add(R.string.search)
-                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
-                .setIcon(R.drawable.ic_search_white)
-                .setOnMenuItemClickListener(onSearchAction);
+		return view;
+	}
 
-        menu.add(R.string.menu_delete_all)
-                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
-                .setIcon(R.drawable.ic_remove_all)
-                .setOnMenuItemClickListener(onDeleteAllAction);
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+	{
+		menu.add(R.string.search)
+				.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
+				.setIcon(R.drawable.ic_search_white)
+				.setOnMenuItemClickListener(onSearchAction);
 
-        super.onCreateOptionsMenu(menu, inflater);
-    }
+		menu.add(R.string.menu_delete_all)
+				.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
+				.setIcon(R.drawable.ic_remove_all)
+				.setOnMenuItemClickListener(onDeleteAllAction);
 
-    private boolean displayingNews = false;
+		super.onCreateOptionsMenu(menu, inflater);
+	}
 
-    @Override
-    public boolean onBackPressed()
-    {
-        if (displayingNews) {
-            newsView.hideNews();
-            displayingNews = false;
-            return true;
-        } else if (searchView.isShown()) {
-            searchView.hide();
-            return true;
-        }
-        return false;
-    }
+	private boolean displayingNews = false;
 
-    @Override
-    public void onDestroyView()
-    {
-        super.onDestroyView();
-        if (searchView.isShown())
-            searchView.hide();
-    }
+	@Override
+	public boolean onBackPressed()
+	{
+		if (displayingNews) {
+			newsView.hideNews();
+			displayingNews = false;
+			return true;
+		} else if (searchView.isShown()) {
+			searchView.hide();
+			return true;
+		}
+		return false;
+	}
 
-    @Override
-    public void onClick(View v)
-    {
-        News news = (News) v.getTag();
+	@Override
+	public void onDestroyView()
+	{
+		super.onDestroyView();
+		if (searchView.isShown())
+			searchView.hide();
+	}
 
-        KernelManager.readContentOf(news);
+	@Override
+	public void onClick(View v)
+	{
+		News news = (News) v.getTag();
 
-        displayingNews = true;
-        newsView.displayNews(news);
-        searchView.hideKeyBoard();
+		KernelManager.readContentOf(news);
 
-        News clone = new News(news.id, news.title, news.link, news.description, news.date, news.tags, news.site_code, news.section_code, news.readOn);
-        KernelManager.setNewsRead(clone);
-    }
+		displayingNews = true;
+		newsView.displayNews(news);
+		searchView.hideKeyBoard();
 
-    @Override
-    public void onFilter(String filter)
-    {
-        adapter.filter(filter);
-    }
+		dataManager.getDataManager().setNewsRead(news.clone());
+	}
 
-    @Override
-    public void onEnd()
-    {
-        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
-    }
+	@Override
+	public void onFilter(String filter)
+	{
+		adapter.filter(filter);
+	}
 
-    static class Handler extends android.os.Handler {
+	@Override
+	public void onEnd()
+	{
+		((AppCompatActivity) getActivity()).getSupportActionBar().show();
+	}
 
-        private final WeakReference<HistorialFragment> context;
+	static class Handler extends android.os.Handler {
 
-        Handler(HistorialFragment context)
-        {
-            this.context = new WeakReference<>(context);
-        }
+		private final WeakReference<HistorialFragment> context;
 
-        @Override
-        public void handleMessage(Message msg)
-        {
-            HistorialFragment service = context.get();
-            switch (msg.what) {
-                case AppCode.NEWS_COLLECTION:
-                    Collection<News> news = (Collection<News>) msg.obj;
-                    if (!news.isEmpty()) {
-                        service.adapter.addAll(news);
-                        break;
-                    }
-                case AppCode.ERROR:
-                    service.displayNoRecordsMessage();
-                    break;
-                default:
-                    AppSettings.printerror("[HF] OPTION UNKNOWN: " + msg.what, null);
-            }
-        }
-    }
+		Handler(HistorialFragment context)
+		{
+			this.context = new WeakReference<>(context);
+		}
 
-    private MenuItem.OnMenuItemClickListener onSearchAction = new MenuItem.OnMenuItemClickListener() {
-        @Override
-        public boolean onMenuItemClick(MenuItem item)
-        {
-            ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
-            searchView.start(HistorialFragment.this);
-            return true;
-        }
-    };
+		@Override
+		public void handleMessage(Message msg)
+		{
+			HistorialFragment service = context.get();
+			switch (msg.what) {
+				case AppCode.NEWS_COLLECTION:
+					Collection<News> news = (Collection<News>) msg.obj;
+					if (!news.isEmpty()) {
+						service.adapter.addAll(news);
+						break;
+					}
+				case AppCode.ERROR:
+					service.displayNoRecordsMessage();
+					break;
+				default:
+					AppSettings.printerror("[HF] OPTION UNKNOWN: " + msg.what, null);
+			}
+		}
+	}
 
-    private MenuItem.OnMenuItemClickListener onDeleteAllAction = new MenuItem.OnMenuItemClickListener() {
-        @Override
-        public boolean onMenuItemClick(MenuItem item)
-        {
-            if (adapter.getItemCount() > 0)
-                new AlertDialog.Builder(getActivity())
-                        .setMessage(R.string.msg_confirm_to_clear_history)
-                        .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which)
-                            {
-                                dataManager.clearHistory();
-                                adapter.clear();
-                                displayNoRecordsMessage();
-                            }
-                        })
-                        .setNegativeButton(R.string.cancel, null)
-                        .show();
-            return true;
-        }
-    };
+	private MenuItem.OnMenuItemClickListener onSearchAction = new MenuItem.OnMenuItemClickListener() {
+		@Override
+		public boolean onMenuItemClick(MenuItem item)
+		{
+			((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+			searchView.start(HistorialFragment.this);
+			return true;
+		}
+	};
 
-    @Override
-    protected void onBookmarkStateChanged(View btn)
-    {
-        News news = (News) btn.getTag();
+	private MenuItem.OnMenuItemClickListener onDeleteAllAction = new MenuItem.OnMenuItemClickListener() {
+		@Override
+		public boolean onMenuItemClick(MenuItem item)
+		{
+			if (adapter.getItemCount() > 0)
+				new AlertDialog.Builder(getActivity())
+						.setMessage(R.string.msg_confirm_to_clear_history)
+						.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which)
+							{
+								dataManager.clearHistory();
+								adapter.clear();
+								displayNoRecordsMessage();
+							}
+						})
+						.setNegativeButton(R.string.cancel, null)
+						.show();
+			return true;
+		}
+	};
 
-        btn.setSelected(
-                BookmarksManager.toggleBookmark(news)
-        );
+	@Override
+	protected void onBookmarkStateChanged(View btn)
+	{
+		News news = (News) btn.getTag();
 
-        if (btn instanceof FloatingActionButton)
-            adapter.update(news);
-    }
+		btn.setSelected(
+				BookmarksManager.toggleBookmark(news)
+		);
 
-    private void displayNoRecordsMessage()
-    {
-        if (noContentMessage instanceof ViewStub)
-            noContentMessage = ((ViewStub) noContentMessage).inflate();
+		if (btn instanceof FloatingActionButton)
+			adapter.update(news);
+	}
 
-        ((TextView) noContentMessage.findViewById(R.id.message)).setText(R.string.msg_no_history);
-    }
+	private void displayNoRecordsMessage()
+	{
+		if (noContentMessage instanceof ViewStub)
+			noContentMessage = ((ViewStub) noContentMessage).inflate();
 
-    private FilterDialog filterDialog;
+		((TextView) noContentMessage.findViewById(R.id.message)).setText(R.string.msg_no_history);
+	}
 
-    private View.OnClickListener onFilterClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View v)
-        {
-            if (filterDialog == null)
-                filterDialog = new FilterDialog(getActivity())
-                        .news(adapter.getDataSet())
-                        .listener(onFilterListener);
+	private FilterDialog filterDialog;
 
-            filterDialog.show();
-        }
+	private View.OnClickListener onFilterClick = new View.OnClickListener() {
+		@Override
+		public void onClick(View v)
+		{
+			if (filterDialog == null)
+				filterDialog = new FilterDialog(getActivity())
+						.news(adapter.getDataSet())
+						.listener(onFilterListener);
 
-        FilterDialog.Callback onFilterListener = new FilterDialog.Callback() {
-            @Override
-            public void onFilter(TreeSet<Integer> f)
-            {
-                adapter.filter(f);
-            }
-        };
-    };
+			filterDialog.show();
+		}
+
+		FilterDialog.Callback onFilterListener = new FilterDialog.Callback() {
+			@Override
+			public void onFilter(TreeSet<Integer> f)
+			{
+				adapter.filter(f);
+			}
+		};
+	};
 
 }
 

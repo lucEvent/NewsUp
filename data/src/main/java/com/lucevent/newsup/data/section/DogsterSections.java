@@ -5,12 +5,12 @@ import com.lucevent.newsup.data.util.Sections;
 
 public class DogsterSections extends Sections {
 
-    public DogsterSections()
-    {
-        super();
+	public DogsterSections()
+	{
+		super();
 
-        add(new Section("News", "http://www.dogster.com/feed/", 0));
+		add(new Section("News", "http://www.dogster.com/feed/", 0));
 
-    }
+	}
 
 }

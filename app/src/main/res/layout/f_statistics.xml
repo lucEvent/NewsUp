@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,7 +10,7 @@
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/sort_name"
@@ -21,7 +20,7 @@
         app:backgroundTint="@color/colorPrimaryDark"
         app:fabSize="mini"
         app:rippleColor="@color/colorAccent"
-        app:useCompatPadding="true"/>
+        app:useCompatPadding="true" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/sort_total_requests"
@@ -31,7 +30,7 @@
         app:backgroundTint="@color/colorPrimaryDark"
         app:fabSize="mini"
         app:rippleColor="@color/colorAccent"
-        app:useCompatPadding="true"/>
+        app:useCompatPadding="true" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/sort_month_requests"
@@ -41,7 +40,7 @@
         app:backgroundTint="@color/colorPrimaryDark"
         app:fabSize="mini"
         app:rippleColor="@color/colorAccent"
-        app:useCompatPadding="true"/>
+        app:useCompatPadding="true" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/sort_readings"
@@ -51,7 +50,7 @@
         app:backgroundTint="@color/colorPrimaryDark"
         app:fabSize="mini"
         app:rippleColor="@color/colorAccent"
-        app:useCompatPadding="true"/>
+        app:useCompatPadding="true" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/sort_time"
@@ -61,6 +60,6 @@
         app:backgroundTint="@color/colorPrimaryDark"
         app:fabSize="mini"
         app:rippleColor="@color/colorAccent"
-        app:useCompatPadding="true"/>
+        app:useCompatPadding="true" />
 
 </RelativeLayout>

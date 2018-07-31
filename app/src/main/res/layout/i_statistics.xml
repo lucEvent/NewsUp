@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/nv_background_dark"
@@ -20,9 +19,9 @@
             android:id="@+id/icon"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:background="@mipmap/ic_launcher"/>
+            android:background="@mipmap/ic_launcher" />
 
-        <TextView
+        <com.lucevent.newsup.view.util.AppTextView
             android:id="@+id/name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -31,15 +30,15 @@
             android:paddingEnd="10dp"
             android:paddingStart="10dp"
             android:text="Site name"
-            android:textColor="@color/nv_text_dark"/>
+            android:textColor="@color/nv_text_dark" />
 
-        <TextView
+        <com.lucevent.newsup.view.util.AppTextView
             android:id="@+id/version"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="version"
             android:textAlignment="textEnd"
-            android:textColor="@color/nv_text_dark"/>
+            android:textColor="@color/nv_text_dark" />
 
     </LinearLayout>
 
@@ -53,42 +52,42 @@
         <ImageView
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:background="@drawable/ic_add_white"/>
+            android:background="@drawable/ic_add_white" />
 
-        <TextView
+        <com.lucevent.newsup.view.util.AppTextView
             android:id="@+id/requests"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:paddingStart="5dp"
             android:text="5/100"
-            android:textColor="@color/nv_text_dark"/>
+            android:textColor="@color/nv_text_dark" />
 
         <ImageView
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:background="@drawable/ic_read_white"/>
+            android:background="@drawable/ic_read_white" />
 
-        <TextView
+        <com.lucevent.newsup.view.util.AppTextView
             android:id="@+id/readings"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:paddingStart="5dp"
             android:text="45"
-            android:textColor="@color/nv_text_dark"/>
+            android:textColor="@color/nv_text_dark" />
 
         <ImageView
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:background="@drawable/ic_access_time"/>
+            android:background="@drawable/ic_access_time" />
 
-        <TextView
+        <com.lucevent.newsup.view.util.AppTextView
             android:id="@+id/last"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingStart="5dp"
             android:text="5 minutes ago"
             android:textAlignment="textEnd"
-            android:textColor="@color/nv_text_dark"/>
+            android:textColor="@color/nv_text_dark" />
 
     </LinearLayout>
 

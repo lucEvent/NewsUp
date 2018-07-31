@@ -1,15 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module external.linked.project.id=":backend" external.linked.project.path="$MODULE_DIR$" external.root.project.path="$MODULE_DIR$/.." external.system.id="GRADLE" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
-    <facet type="app-engine-gradle" name="App Engine Gradle">
-      <configuration>
-        <option name="HTTP_ADDRESS" value="localhost" />
-        <option name="HTTP_PORT" value="8080" />
-        <option name="WAR_DIR" value="C:\Users\rafa_\Dropbox\Workspaces\AndroidStudioProjects\NewsUp\backend\build\exploded-app" />
-        <option name="WEB_APP_DIR" value="C:\Users\rafa_\Dropbox\Workspaces\AndroidStudioProjects\NewsUp\backend\src\main\webapp" />
-        <option name="APPENGINE_SDKROOT" value="C:\Users\rafa_\.gradle\appengine-sdk\appengine-java-sdk-1.9.58" />
-      </configuration>
-    </facet>
     <facet type="android-gradle" name="Android-Gradle">
       <configuration>
         <option name="GRADLE_PROJECT_PATH" value=":backend" />
@@ -19,6 +10,15 @@
       <configuration>
         <option name="BUILD_FOLDER_PATH" value="$MODULE_DIR$/build" />
         <option name="BUILDABLE" value="true" />
+      </configuration>
+    </facet>
+    <facet type="app-engine-gradle" name="App Engine Gradle">
+      <configuration>
+        <option name="HTTP_ADDRESS" value="localhost" />
+        <option name="HTTP_PORT" value="8080" />
+        <option name="WAR_DIR" value="C:\Users\rafa_\Dropbox\Workspaces\AndroidStudioProjects\NewsUp\backend\build\exploded-app" />
+        <option name="WEB_APP_DIR" value="C:\Users\rafa_\Dropbox\Workspaces\AndroidStudioProjects\NewsUp\backend\src\main\webapp" />
+        <option name="APPENGINE_SDKROOT" value="C:\Users\rafa_\.gradle\appengine-sdk\appengine-java-sdk-1.9.58" />
       </configuration>
     </facet>
   </component>

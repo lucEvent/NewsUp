@@ -11,42 +11,41 @@ import com.lucevent.newsup.view.adapter.viewholder.EventViewHolder;
 
 public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
 
-    private final View.OnClickListener onClick;
+	private final View.OnClickListener mOnItemClickListener;
 
-    private final Events dataSet;
+	private final Events mDataSet;
 
-    public EventsAdapter(View.OnClickListener onClick)
-    {
-        this.onClick = onClick;
-        dataSet = new Events();
-    }
+	public EventsAdapter(View.OnClickListener onItemClickListener)
+	{
+		mOnItemClickListener = onItemClickListener;
+		mDataSet = new Events();
+	}
 
-    @Override
-    public EventViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-    {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.i_event, parent, false);
-        v.setOnClickListener(onClick);
+	@Override
+	public EventViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+	{
+		View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.i_event, parent, false);
+		v.setOnClickListener(mOnItemClickListener);
+		return new EventViewHolder(v);
+	}
 
-        return new EventViewHolder(v);
-    }
+	@Override
+	public void onBindViewHolder(EventViewHolder holder, int position)
+	{
+		holder.bind(mDataSet.get(position));
+	}
 
-    @Override
-    public void onBindViewHolder(EventViewHolder holder, int position)
-    {
-        holder.bind(dataSet.get(position));
-    }
+	@Override
+	public int getItemCount()
+	{
+		return mDataSet.size();
+	}
 
-    @Override
-    public int getItemCount()
-    {
-        return dataSet.size();
-    }
-
-    public void addAll(Events newDataSet)
-    {
-        dataSet.addAll(newDataSet);
-        notifyDataSetChanged();
-    }
+	public void addAll(Events newDataSet)
+	{
+		mDataSet.addAll(newDataSet);
+		notifyDataSetChanged();
+	}
 
 }
 

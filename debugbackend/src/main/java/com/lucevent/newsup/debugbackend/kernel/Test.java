@@ -19,16 +19,14 @@ public class Test {
 
     private Database db;
 
-    public Test()
-    {
+    public Test() {
         db = new Database();
     }
 
     /**
      * @return report of the task performed
      */
-    public String doTest(ReportCallback urgentCallback)
-    {
+    public String doTest(ReportCallback urgentCallback) {
         Sites sites = Sites.getDefault(true);
         Evaluator evaluator = new Evaluator();
 
@@ -96,8 +94,7 @@ public class Test {
 
         TreeSet<PartialTestResult> partials = new TreeSet<>(new Comparator<PartialTestResult>() {
             @Override
-            public int compare(PartialTestResult o1, PartialTestResult o2)
-            {
+            public int compare(PartialTestResult o1, PartialTestResult o2) {
                 return Integer.compare(o1.siteCode, o2.siteCode);
             }
         });
@@ -124,8 +121,7 @@ public class Test {
         return sb.toString();
     }
 
-    public void clearTestCache()
-    {
+    public void clearTestCache() {
         db.clearTestCache();
     }
 
@@ -153,8 +149,7 @@ public class Test {
                 "secciones vacias"
         };
 
-        public int[] evaluate(NewsArray news, Database db)
-        {
+        public int[] evaluate(NewsArray news, Database db) {
             int[] res = new int[descriptions.length];
             for (int i = 0; i < res.length; i++)
                 res[i] = 0;
@@ -166,29 +161,36 @@ public class Test {
                     res[D_EMPTY]++;
                 }
                 if (evaluateHs(doc)) {
-                    db.saveErrorOn(n);
+                    db.saveBugOn(n, "h1 or h2");
                     res[D_HS]++;
                 }
                 if (evaluateScripts(doc)) {
                     res[D_SCRIPTS]++;
                 }
                 if (evaluateLinks(n.content)) {
-                    db.saveErrorOn(n);
+                    String description = "descr: ";
+                    int i0 = n.content.indexOf("=\"//");
+                    if (i0 == -1) i0 = n.content.indexOf("='//");
+                    i0 = Math.max(0, i0 - 20);
+                    int i1 = Math.min(i0 + 40, n.content.length() - 1);
+                    description += n.content.substring(i0, i1);
+
+                    db.saveBugOn(n, description);
                     res[D_LINKS]++;
                 }
                 if (evaluateStyleTag(doc)) {
-                    db.saveErrorOn(n);
+                    db.saveBugOn(n, "style tag");
                     res[D_STYLES_TAGS]++;
                 }
                 if (evaluateStyleAttr(doc)) {
                     res[D_STYLE_ATTR]++;
                 }
                 if (evaluateAWithObject(doc)) {
-                    db.saveErrorOn(n);
+                    db.saveBugOn(n, "");
                     res[D_A_OBJECT]++;
                 }
                 if (evaluateComments(n.content)) {
-                    db.saveErrorOn(n);
+                    db.saveBugOn(n, "comments");
                     res[D_COMMENTS]++;
                 }
             }
@@ -199,53 +201,43 @@ public class Test {
             return res;
         }
 
-        private boolean evaluateHs(Document doc)
-        {
+        private boolean evaluateHs(Document doc) {
             return !doc.select("h1,h2").isEmpty();
         }
 
-        private boolean evaluateEmpty(String content)
-        {
+        private boolean evaluateEmpty(String content) {
             return content == null || content.isEmpty();
         }
 
-        private boolean evaluateScripts(Document doc)
-        {
+        private boolean evaluateScripts(Document doc) {
             return !doc.select("script").isEmpty();
         }
 
-        private boolean evaluateLinks(String content)
-        {
+        private boolean evaluateLinks(String content) {
             return content.contains("=\"//") || content.contains("='//");
         }
 
-        private boolean evaluateStyleTag(Document doc)
-        {
+        private boolean evaluateStyleTag(Document doc) {
             return !doc.select("style").isEmpty();
         }
 
-        private boolean evaluateStyleAttr(Document doc)
-        {
+        private boolean evaluateStyleAttr(Document doc) {
             return !doc.select("[style]").isEmpty();
         }
 
-        private boolean evaluateAWithObject(Document doc)
-        {
+        private boolean evaluateAWithObject(Document doc) {
             return !doc.select("a:has(img,iframe,video,figure,picture)").isEmpty();
         }
 
-        private boolean evaluateComments(String content)
-        {
+        private boolean evaluateComments(String content) {
             return content.contains("<!--");
         }
 
-        int size()
-        {
+        int size() {
             return descriptions.length;
         }
 
-        String getDescription(int position)
-        {
+        String getDescription(int position) {
             return descriptions[position];
         }
 

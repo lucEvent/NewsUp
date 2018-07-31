@@ -11,32 +11,32 @@ import com.lucevent.newsup.data.event.Event;
 
 public class EventViewHolder extends RecyclerView.ViewHolder {
 
-    private TextView title, topic;
-    private ImageView picture;
+	private TextView mTitle, mTopic;
+	private ImageView mPicture;
 
-    public EventViewHolder(View v)
-    {
-        super(v);
+	public EventViewHolder(View v)
+	{
+		super(v);
 
-        title = (TextView) v.findViewById(R.id.title);
-        topic = (TextView) v.findViewById(R.id.topic);
-        picture = (ImageView) v.findViewById(R.id.picture);
-    }
+		mTitle = (TextView) v.findViewById(R.id.title);
+		mTopic = (TextView) v.findViewById(R.id.topic);
+		mPicture = (ImageView) v.findViewById(R.id.picture);
+	}
 
-    public void bind(Event event)
-    {
-        picture.setImageBitmap(null);
+	public void bind(Event event)
+	{
+		mPicture.setImageBitmap(null);
 
-        Glide.with(picture.getContext())
-                .load(event.imgSrc)
-                .into(picture);
+		Glide.with(mPicture.getContext())
+				.load(event.imgSrc)
+				.into(mPicture);
 
-        picture.setVisibility(View.VISIBLE);
+		mPicture.setVisibility(View.VISIBLE);
 
-        title.setText(event.title);
-        topic.setText(event.topic);
+		mTitle.setText(event.title);
+		mTopic.setText(event.topic);
 
-        itemView.setTag(event);
-    }
+		itemView.setTag(event);
+	}
 
 }

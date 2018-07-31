@@ -1,6 +1,5 @@
 package com.lucevent.newsup.backend.utils;
 
-import com.lucevent.newsup.data.util.Enclosures;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.Site;
@@ -37,9 +36,8 @@ public class UpdateMessageCreator {
                 description.append("Click for more info");
         }
 
-        News news = new News(title.toString(), applink, description.toString(), System.currentTimeMillis(), new Tags(), -1, -1, -1);
+        News news = new News(title.toString(), applink, description.toString(), System.currentTimeMillis(), null, new Tags(), -1, -1, -1);
         news.content = content;
-        news.enclosures = new Enclosures();
 
         NewsArray na = new NewsArray();
         na.add(news);

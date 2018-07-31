@@ -5,12 +5,12 @@ import com.lucevent.newsup.data.util.Sections;
 
 public class LifeScienceSwedenSections extends Sections {
 
-    public LifeScienceSwedenSections()
-    {
-        super();
+	public LifeScienceSwedenSections()
+	{
+		super();
 
-        add(new Section("Nyheter", "https://www.lifesciencesweden.se/xml/rss2/articles?description=true", 0));
+		add(new Section("Nyheter", "https://www.lifesciencesweden.se/xml/rss2/articles?description=true", 0));
 
-    }
+	}
 
 }

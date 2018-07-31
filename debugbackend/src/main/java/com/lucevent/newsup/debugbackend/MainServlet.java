@@ -3,6 +3,7 @@ package com.lucevent.newsup.debugbackend;
 import com.googlecode.objectify.ObjectifyFactory;
 import com.googlecode.objectify.ObjectifyService;
 import com.lucevent.newsup.data.util.Date;
+import com.lucevent.newsup.debugbackend.data.Bug;
 import com.lucevent.newsup.debugbackend.data.PartialTestResult;
 import com.lucevent.newsup.debugbackend.data.Task;
 import com.lucevent.newsup.debugbackend.data.TestCounter;
@@ -90,7 +91,7 @@ public class MainServlet extends HttpServlet implements ReportCallback {
         oFactory.register(PartialTestResult.class);
         oFactory.register(Task.class);
         oFactory.register(TestCounter.class);
-        oFactory.register(com.lucevent.newsup.debugbackend.data.Error.class);
+        oFactory.register(Bug.class);
         oFactory.begin();
     }
 

@@ -9,6 +9,6 @@ import java.util.Set;
 
 public interface OnMoreSectionsClickListener extends View.OnClickListener {
 
-    Set<Pair<Integer, Section>> sections();
+	Set<Pair<Integer, Section>> sections();
 
 }

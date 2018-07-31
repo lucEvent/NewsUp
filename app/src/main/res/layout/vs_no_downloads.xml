@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <TextView
+    <com.lucevent.newsup.view.util.AppTextView
         android:id="@+id/message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="@string/no_downloads_scheduled"
-        android:textAppearance="?android:attr/textAppearanceSmall"/>
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
-    <TextView
+    <com.lucevent.newsup.view.util.AppTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/arrow"
         android:layout_toStartOf="@+id/arrow"
         android:padding="10dp"
         android:text="@string/schedule_one_now"
-        android:textAppearance="?android:attr/textAppearanceSmall"/>
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <ImageView
         android:id="@+id/arrow"
@@ -31,6 +31,6 @@
         android:rotation="225"
         android:scaleX="2"
         android:src="@drawable/ic_long_arrow_back"
-        android:tint="#ff737373"/>
+        android:tint="#ff737373" />
 
 </RelativeLayout>

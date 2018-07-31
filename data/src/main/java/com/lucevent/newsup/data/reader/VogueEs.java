@@ -11,92 +11,92 @@ import org.jsoup.select.Elements;
 
 public class VogueEs extends com.lucevent.newsup.data.util.NewsReader {
 
-    //tags: [author, entry, id, link, name, summary, title, updated]
+	//tags: [author, entry, id, link, name, summary, title, updated]
 
-    public VogueEs()
-    {
-        super(TAG_ITEM_ENTRY,
-                new int[]{TAG_TITLE},
-                new int[]{TAG_LINK},
-                new int[]{TAG_SUMMARY},
-                new int[]{},
-                new int[]{TAG_UPDATED},
-                new int[]{},
-                new int[]{},
-                "");
-    }
+	public VogueEs()
+	{
+		super(TAG_ITEM_ENTRY,
+				new int[]{TAG_TITLE},
+				new int[]{TAG_LINK},
+				new int[]{TAG_SUMMARY},
+				new int[]{},
+				new int[]{TAG_UPDATED},
+				new int[]{},
+				new int[]{},
+				"");
+	}
 
-    @Override
-    protected String parseLink(Element prop)
-    {
-        return prop.attr("href");
-    }
+	@Override
+	protected String parseLink(Element prop)
+	{
+		return prop.attr("href");
+	}
 
-    @Override
-    protected long parseDate(Element prop)
-    {
-        return super.parseDate(prop) - 2 * 60 * 60 * 1000; // - 2 hours
-    }
+	@Override
+	protected long parseDate(Element prop)
+	{
+		return super.parseDate(prop) - 2 * 60 * 60 * 1000; // - 2 hours
+	}
 
-    @Override
-    protected void readNewsContent(Document doc, News news)
-    {
-        if (news.link.contains("/galerias/")) {
+	@Override
+	protected void readNewsContent(Document doc, News news)
+	{
+		if (news.link.contains("/galerias/")) {
 
-            String gallery_json = "";
-            for (Element sc : doc.select("script")) {
-                gallery_json = sc.html();
-                if (gallery_json.startsWith("var gallery_content"))
-                    break;
-            }
-            gallery_json = gallery_json.replaceFirst("var gallery_content = ", "");
+			String gallery_json = "";
+			for (Element sc : doc.select("script")) {
+				gallery_json = sc.html();
+				if (gallery_json.startsWith("var gallery_content"))
+					break;
+			}
+			gallery_json = gallery_json.replaceFirst("var gallery_content = ", "");
 
-            StringBuilder sb = new StringBuilder();
-            try {
-                JSONObject json_data = new JSONObject(gallery_json);
+			StringBuilder sb = new StringBuilder();
+			try {
+				JSONObject json_data = new JSONObject(gallery_json);
 
-                String description = json_data.getString("subtitle");
-                sb.append("<p><strong>").append(description).append("</strong></p><br/>");
+				String description = json_data.getString("subtitle");
+				sb.append("<p><strong>").append(description).append("</strong></p><br/>");
 
-                JSONArray pics = json_data.optJSONArray("pictures");
-                for (int i = 0; i < pics.length() - 1; i++) {
-                    JSONObject pic = pics.getJSONObject(i);
+				JSONArray pics = json_data.optJSONArray("pictures");
+				for (int i = 0; i < pics.length() - 1; i++) {
+					JSONObject pic = pics.getJSONObject(i);
 
-                    String pic_title = pic.getString("picture_title");
-                    String pic_desc = pic.getString("description");
-                    String pic_src = pic.getString("picture_src");
+					String pic_title = pic.getString("picture_title");
+					String pic_desc = pic.getString("description");
+					String pic_src = pic.getString("picture_src");
 
-                    sb.append("<h4>").append(pic_title).append("</h4>");
-                    sb.append("<img src='").append(pic_src).append("'>");
-                    sb.append("<p>").append(pic_desc).append("</p><br/>");
-                }
-            } catch (JSONException e) {
-                //     System.out.println("JSON exception:" + e.getMessage());
-            }
+					sb.append("<h4>").append(pic_title).append("</h4>");
+					sb.append("<img src='").append(pic_src).append("'>");
+					sb.append("<p>").append(pic_desc).append("</p><br/>");
+				}
+			} catch (JSONException e) {
+				//     System.out.println("JSON exception:" + e.getMessage());
+			}
 
-            Element article = jsoupParse(sb.toString());
-            article.getElementsByTag("o:p").remove();
-            article.select("[style]").removeAttr("style");
+			Element article = jsoupParse(sb.toString());
+			article.getElementsByTag("o:p").remove();
+			article.select("[style]").removeAttr("style");
 
-            news.content = finalFormat(article, false);
-            return;
-        }
-        doc.getElementsByTag("o:p").remove();
-        Elements article = doc.select(".article_subtitle,.article_content");
-        article.select("script,.interior_articulo_ad,[id^='div-gpt-ad-'],.BrightcoveExperience,.read_more,.quick_nav_and_social,#videos_more_viewed").remove();
+			news.content = finalFormat(article, false);
+			return;
+		}
+		doc.getElementsByTag("o:p").remove();
+		Elements article = doc.select(".article_subtitle,.article_content");
+		article.select("script,.interior_articulo_ad,[id^='div-gpt-ad-'],.BrightcoveExperience,.read_more,.quick_nav_and_social,#videos_more_viewed").remove();
 
-        for (Element subtitle : article.select(".article_subtitle"))
-            subtitle.tagName("p").html("<strong>" + subtitle.text() + "</strong>");
+		for (Element subtitle : article.select(".article_subtitle"))
+			subtitle.tagName("p").html("<strong>" + subtitle.text() + "</strong>");
 
-        for (Element lazy_img : article.select("img.lazy")) {
-            String src = lazy_img.attr("data-src");
-            cleanAttributes(lazy_img);
-            lazy_img.attr("src", src);
-        }
+		for (Element lazy_img : article.select("img.lazy")) {
+			String src = lazy_img.attr("data-src");
+			cleanAttributes(lazy_img);
+			lazy_img.attr("src", src);
+		}
 
-        article.select(".full_image_block .info").tagName("figcaption");
+		article.select(".full_image_block .info").tagName("figcaption");
 
-        news.content = finalFormat(article, true);
-    }
+		news.content = finalFormat(article, true);
+	}
 
 }

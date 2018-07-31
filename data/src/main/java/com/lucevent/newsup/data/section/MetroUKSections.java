@@ -5,12 +5,12 @@ import com.lucevent.newsup.data.util.Sections;
 
 public class MetroUKSections extends Sections {
 
-    public MetroUKSections()
-    {
-        super();
+	public MetroUKSections()
+	{
+		super();
 
-        add(new Section("Homepage", "https://www.metro.news/feed/", 0));
+		add(new Section("Homepage", "https://www.metro.news/feed/", 0));
 
-    }
+	}
 
 }

@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".view.activity.DownloadScheduleEditorActivity">
+    tools:context=".view.activity.DownloadEditorActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,7 +25,7 @@
                 android:background="@drawable/ripple_round"
                 android:contentDescription="@string/cancel"
                 android:onClick="actionCancel"
-                app:srcCompat="@drawable/ic_clear"/>
+                app:srcCompat="@drawable/ic_clear" />
 
             <Button
                 style="?android:attr/buttonBarButtonStyle"
@@ -35,11 +34,11 @@
                 android:layout_alignParentEnd="true"
                 android:gravity="center"
                 android:onClick="actionSave"
-                android:text="@string/save"/>
+                android:text="@string/save" />
 
         </RelativeLayout>
 
-        <TextView
+        <com.lucevent.newsup.view.util.AppBoldTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
@@ -50,7 +49,7 @@
             android:text="@string/schedule_download"
             android:textAlignment="viewStart"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -61,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
+                <com.lucevent.newsup.view.util.AppTextView
                     android:id="@+id/text_time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -71,7 +70,7 @@
                     android:onClick="onTimePickerAction"
                     android:padding="20dp"
                     android:text="00:00"
-                    android:textSize="48sp"/>
+                    android:textSize="48sp" />
 
                 <LinearLayout
                     style="?android:attr/buttonBarStyle"
@@ -85,43 +84,43 @@
                         android:id="@+id/monday"
                         style="@style/dayPicker"
                         android:textOff="@string/mon"
-                        android:textOn="@string/mon"/>
+                        android:textOn="@string/mon" />
 
                     <ToggleButton
                         android:id="@+id/tuesday"
                         style="@style/dayPicker"
                         android:textOff="@string/tue"
-                        android:textOn="@string/tue"/>
+                        android:textOn="@string/tue" />
 
                     <ToggleButton
                         android:id="@+id/wednesday"
                         style="@style/dayPicker"
                         android:textOff="@string/wed"
-                        android:textOn="@string/wed"/>
+                        android:textOn="@string/wed" />
 
                     <ToggleButton
                         android:id="@+id/thursday"
                         style="@style/dayPicker"
                         android:textOff="@string/thu"
-                        android:textOn="@string/thu"/>
+                        android:textOn="@string/thu" />
 
                     <ToggleButton
                         android:id="@+id/friday"
                         style="@style/dayPicker"
                         android:textOff="@string/fri"
-                        android:textOn="@string/fri"/>
+                        android:textOn="@string/fri" />
 
                     <ToggleButton
                         android:id="@+id/saturday"
                         style="@style/dayPicker"
                         android:textOff="@string/sat"
-                        android:textOn="@string/sat"/>
+                        android:textOn="@string/sat" />
 
                     <ToggleButton
                         android:id="@+id/sunday"
                         style="@style/dayPicker"
                         android:textOff="@string/sun"
-                        android:textOn="@string/sun"/>
+                        android:textOn="@string/sun" />
 
                 </LinearLayout>
 
@@ -146,7 +145,7 @@
                         android:checked="true"
                         android:clickable="false"
                         android:padding="5dp"
-                        android:text="@string/repeat"/>
+                        android:text="@string/repeat" />
 
                 </LinearLayout>
 
@@ -171,7 +170,7 @@
                         android:checked="true"
                         android:clickable="false"
                         android:padding="5dp"
-                        android:text="@string/notify"/>
+                        android:text="@string/notify" />
 
                 </LinearLayout>
 
@@ -183,7 +182,7 @@
                     android:layout_margin="10dp"
                     android:onClick="onSelectSitesAction"
                     android:padding="15dp"
-                    android:text="@string/select_sites_to_download"/>
+                    android:text="@string/select_sites_to_download" />
 
             </LinearLayout>
         </ScrollView>

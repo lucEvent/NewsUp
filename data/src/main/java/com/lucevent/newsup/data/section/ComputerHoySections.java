@@ -5,12 +5,12 @@ import com.lucevent.newsup.data.util.Sections;
 
 public class ComputerHoySections extends Sections {
 
-    public ComputerHoySections()
-    {
-        super();
+	public ComputerHoySections()
+	{
+		super();
 
-        add(new Section("Principal", "https://computerhoy.com/rss.xml", 0));
+		add(new Section("Principal", "https://computerhoy.com/rss.xml", 0));
 
-    }
+	}
 
 }

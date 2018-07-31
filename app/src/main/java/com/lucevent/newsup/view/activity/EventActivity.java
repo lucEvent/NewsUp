@@ -36,247 +36,264 @@ import java.util.TreeSet;
 
 public class EventActivity extends StoragePermissionActivity implements View.OnClickListener {
 
-    private Event mEvent;
+	private Event mEvent;
 
-    private KernelManager manager;
+	private KernelManager mManager;
 
-    private Handler handler;
+	private Handler mHandler;
 
-    private NewsFilterAdapter mAdapter;
-    private NewsView newsView;
-    private RecyclerView recyclerView;
-    private View progressBar;
+	private NewsFilterAdapter mAdapter;
+	private NewsView mNewsView;
+	private RecyclerView mRecyclerView;
+	private View mProgressBar;
 
-    private boolean displayingNews = false;
+	private boolean mDisplayingNews = false;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.a_event);
+	@Override
+	protected void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.a_event);
 
-        handler = new Handler(this);
-        manager = new KernelManager(this);
+		mHandler = new Handler(this);
+		mManager = new KernelManager(this);
 
-        // Views
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+		// Views
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setHomeButtonEnabled(true);
 
-        mAdapter = new NewsFilterAdapter(this, onBookmarkClick, NewsAdapterList.SortBy.byTime);
-        mAdapter.setUserPreferences(this);
-        mAdapter.showSiteIcon(true);
+		mAdapter = new NewsFilterAdapter(this, onBookmarkClick, NewsAdapterList.SortBy.byTime);
+		mAdapter.setUserPreferences(this);
+		mAdapter.showSiteIcon(true);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setAutoMeasureEnabled(true);
+		LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+		layoutManager.setAutoMeasureEnabled(true);
 
-        recyclerView = (RecyclerView) findViewById(R.id.list);
-        recyclerView.setNestedScrollingEnabled(false);
-        recyclerView.setHasFixedSize(false);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(mAdapter);
+		mRecyclerView = (RecyclerView) findViewById(R.id.list);
+		mRecyclerView.setNestedScrollingEnabled(false);
+		mRecyclerView.setHasFixedSize(false);
+		mRecyclerView.setLayoutManager(layoutManager);
+		mRecyclerView.setAdapter(mAdapter);
 
-        newsView = (NewsView) findViewById(R.id.news_view);
-        newsView.setFragmentContext(this, null);
-        newsView.setBookmarkStateChangeListener(onBookmarkClick);
-        newsView.setImageLongClickListener(onImageLongClick);
+		mNewsView = (NewsView) findViewById(R.id.news_view);
+		mNewsView.setFragmentContext(this, null);
+		mNewsView.setBookmarkStateChangeListener(onBookmarkClick);
+		mNewsView.setImageLongClickListener(onImageLongClick);
 
-        progressBar = findViewById(R.id.progress_bar);
-        progressBar.setVisibility(ProgressBar.VISIBLE);
+		mProgressBar = findViewById(R.id.progress_bar);
+		mProgressBar.setVisibility(ProgressBar.VISIBLE);
 
-        // setup
-        Bundle bundle = getIntent().getExtras();
-        mEvent = AppData.getEvent(bundle.getInt(AppCode.EVENT_CODE));
+		findViewById(R.id.view_hands_free).setOnClickListener(onViewHandsFree);
 
-        TreeSet<Integer> filterCodes = AppSettings.getEventFilter(mEvent.code);
-        if (filterCodes != null)
-            mAdapter.filter(filterCodes);
+		// setup
+		Bundle bundle = getIntent().getExtras();
+		mEvent = AppData.getEvent(bundle.getInt(AppCode.EVENT_CODE));
 
-        manager.getEvent(mEvent, handler);
-        setTitle(mEvent.title);
-    }
+		TreeSet<Integer> filterCodes = AppSettings.getEventFilter(mEvent.code);
+		if (filterCodes != null)
+			mAdapter.filter(filterCodes);
 
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-        if (displayingNews)
-            newsView.resume();
-    }
+		mManager.getReaderManager().read(mEvent, mHandler);
+		setTitle(mEvent.title);
+	}
 
-    @Override
-    public void onPause()
-    {
-        super.onPause();
-        if (displayingNews)
-            newsView.pause();
-    }
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+		mNewsView.resume();
+	}
 
-    @Override
-    public void onBackPressed()
-    {
-        if (displayingNews) {
-            newsView.hideNews();
-            displayingNews = false;
-        } else {
-            manager.cancelAll();
-            super.onBackPressed();
-        }
-    }
+	@Override
+	public void onPause()
+	{
+		super.onPause();
+		mNewsView.pause();
+	}
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        menu.add(R.string.menu_settings)
-                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
-                .setIcon(R.drawable.ic_configuration)
-                .setOnMenuItemClickListener(onConfiguration);
-        return true;
-    }
+	@Override
+	protected void onDestroy()
+	{
+		super.onDestroy();
+		mNewsView.destroy();
+	}
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        super.onOptionsItemSelected(item);
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-        }
-        return true;
-    }
+	@Override
+	public void onBackPressed()
+	{
+		if (mDisplayingNews) {
+			mNewsView.hideNews();
+			mDisplayingNews = false;
+		} else {
+			mManager.getReaderManager().cancelAll();
+			super.onBackPressed();
+		}
+	}
 
-    @Override
-    public void onClick(final View v)
-    {
-        final News news = (News) v.getTag();
-        final Context context = this;
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		menu.add(R.string.menu_settings)
+				.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
+				.setIcon(R.drawable.ic_configuration)
+				.setOnMenuItemClickListener(onConfiguration);
+		return true;
+	}
 
-        KernelManager.readContentOf(news);
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		super.onOptionsItemSelected(item);
+		switch (item.getItemId()) {
+			case android.R.id.home:
+				finish();
+		}
+		return true;
+	}
 
-        if (news.content != null && !news.content.isEmpty()) {
-            newsView.displayNews(news);
-            displayingNews = true;
-            KernelManager.setNewsRead(news);
-            return;
-        }
-        KernelManager.fetchContentOf(news);
+	@Override
+	public void onClick(final View v)
+	{
+		final News news = (News) v.getTag();
+		final Context context = this;
 
-        View view = LayoutInflater.from(context).inflate(R.layout.d_news_not_found, null);
+		KernelManager.readContentOf(news);
 
-        final AlertDialog dialog = new AlertDialog.Builder(context)
-                .setTitle(R.string.msg_cant_load_content)
-                .setMessage(R.string.msg_news_not_found)
-                .setView(view)
-                .create();
+		if (news.content != null && !news.content.isEmpty()) {
+			mNewsView.displayNews(news);
+			mDisplayingNews = true;
+			KernelManager.setNewsRead(news);
+			return;
+		}
+		KernelManager.fetchContentOf(news);
 
-        view.findViewById(R.id.action_try_again).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v2)
-            {
-                EventActivity.this.onClick(v);
-                dialog.dismiss();
-            }
-        });
-        view.findViewById(R.id.action_open_in_browser).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v2)
-            {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(news.link));
-                context.startActivity(browserIntent);
-                dialog.dismiss();
-            }
-        });
-        view.findViewById(R.id.action_close).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v2)
-            {
-                dialog.dismiss();
-            }
-        });
+		View view = LayoutInflater.from(context).inflate(R.layout.d_news_not_found, null);
 
-        dialog.show();
-    }
+		final AlertDialog dialog = new AlertDialog.Builder(context)
+				.setTitle(R.string.msg_cant_load_content)
+				.setMessage(R.string.msg_news_not_found)
+				.setView(view)
+				.create();
 
-    private static class Handler extends android.os.Handler {
+		view.findViewById(R.id.action_try_again).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v2)
+			{
+				EventActivity.this.onClick(v);
+				dialog.dismiss();
+			}
+		});
+		view.findViewById(R.id.action_open_in_browser).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v2)
+			{
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(news.link));
+				context.startActivity(browserIntent);
+				dialog.dismiss();
+			}
+		});
+		view.findViewById(R.id.action_close).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v2)
+			{
+				dialog.dismiss();
+			}
+		});
 
-        private final WeakReference<EventActivity> context;
+		dialog.show();
+	}
 
-        Handler(EventActivity context)
-        {
-            this.context = new WeakReference<>(context);
-        }
+	private View.OnClickListener onViewHandsFree = new View.OnClickListener() {
 
-        @Override
-        public void handleMessage(Message msg)
-        {
-            EventActivity service = context.get();
-            switch (msg.what) {
-                case AppCode.NEWS_COLLECTION:
-                    if (service.mAdapter == null)
-                        return;
+		@Override
+		public void onClick(View v)
+		{
+			mAdapter.discloseData();
+			startActivity(new Intent(EventActivity.this, HandsFreeNewsViewActivity.class));
+		}
+	};
 
-                    Collection<News> news = (Collection<News>) msg.obj;
+	private static class Handler extends android.os.Handler {
 
-                    if (news.isEmpty())
-                        return;
+		private final WeakReference<EventActivity> context;
 
-                    service.mAdapter.addAll(news);
-                    if (service.mAdapter.getItemCount() == 0 || service.recyclerView.computeVerticalScrollOffset() == 0)
-                        service.recyclerView.smoothScrollToPosition(0);
-                    break;
-                case AppCode.NEWS_LOADED:
-                    service.progressBar.setVisibility(ProgressBar.GONE);
-                    break;
-                case AppCode.NO_INTERNET:
-                    Snackbar.make(service.recyclerView, R.string.msg_no_internet_connection, Snackbar.LENGTH_LONG).show();
-                    break;
-                case AppCode.ERROR:
-                    AppSettings.printerror("[EA] Error received by the Handler", null);
-                    break;
-                default:
-                    AppSettings.printerror("[EA] OPTION UNKNOWN: " + msg.what, null);
-            }
-        }
+		Handler(EventActivity context)
+		{
+			this.context = new WeakReference<>(context);
+		}
 
-    }
+		@Override
+		public void handleMessage(Message msg)
+		{
+			EventActivity service = context.get();
+			switch (msg.what) {
+				case AppCode.NEWS_COLLECTION:
+					if (service.mAdapter == null)
+						return;
 
-    private EventConfigDialog configDialog;
+					Collection<News> news = (Collection<News>) msg.obj;
 
-    private MenuItem.OnMenuItemClickListener onConfiguration = new MenuItem.OnMenuItemClickListener() {
-        @Override
-        public boolean onMenuItemClick(MenuItem item)
-        {
-            if (configDialog == null)
-                configDialog = new EventConfigDialog(EventActivity.this)
-                        .event(mEvent)
-                        .listener(onFilterListener);
+					if (news.isEmpty())
+						return;
 
-            configDialog.show();
-            return true;
-        }
+					service.mAdapter.addAll(news);
+					if (service.mAdapter.getItemCount() == 0 || service.mRecyclerView.computeVerticalScrollOffset() == 0)
+						service.mRecyclerView.smoothScrollToPosition(0);
+					break;
+				case AppCode.NEWS_LOADED:
+					service.mProgressBar.setVisibility(ProgressBar.GONE);
+					break;
+				case AppCode.NO_INTERNET:
+					Snackbar.make(service.mRecyclerView, R.string.msg_no_internet_connection, Snackbar.LENGTH_LONG).show();
+					break;
+				case AppCode.ERROR:
+					AppSettings.printerror("[EA] Error received by the Handler", null);
+					break;
+				default:
+					AppSettings.printerror("[EA] OPTION UNKNOWN: " + msg.what, null);
+			}
+		}
 
-        EventConfigDialog.Callback onFilterListener = new EventConfigDialog.Callback() {
-            @Override
-            public void onFilter(TreeSet<Integer> f)
-            {
-                mAdapter.filter(f);
-            }
-        };
+	}
 
-    };
+	private EventConfigDialog configDialog;
 
-    @Override
-    protected void onBookmarkStateChanged(View btn)
-    {
-        News news = (News) btn.getTag();
+	private MenuItem.OnMenuItemClickListener onConfiguration = new MenuItem.OnMenuItemClickListener() {
+		@Override
+		public boolean onMenuItemClick(MenuItem item)
+		{
+			if (configDialog == null)
+				configDialog = new EventConfigDialog(EventActivity.this)
+						.event(mEvent)
+						.listener(onFilterListener);
 
-        btn.setSelected(
-                BookmarksManager.toggleBookmark(news)
-        );
+			configDialog.show();
+			return true;
+		}
 
-        if (btn instanceof FloatingActionButton)
-            mAdapter.update(news);
-    }
+		EventConfigDialog.Callback onFilterListener = new EventConfigDialog.Callback() {
+			@Override
+			public void onFilter(TreeSet<Integer> f)
+			{
+				mAdapter.filter(f);
+			}
+		};
+
+	};
+
+	@Override
+	protected void onBookmarkStateChanged(View btn)
+	{
+		News news = (News) btn.getTag();
+
+		btn.setSelected(
+				BookmarksManager.toggleBookmark(news)
+		);
+
+		if (btn instanceof FloatingActionButton)
+			mAdapter.update(news);
+	}
 
 }

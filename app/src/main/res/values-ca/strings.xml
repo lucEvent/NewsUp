@@ -41,6 +41,16 @@
     <string name="x_section_selected">%d seccions seleccionades</string>
     <string name="event">Esdeveniment</string>
     <string name="no_internet_no_media">Element no displonible sense connexió</string>
+    <string name="plus_x_more">+ %d més</string>
+    <string name="site_request">Trobar publicació</string>
+    <string name="notifications">Notificacions</string>
+    <string name="searching">cercant %s</string>
+    <string name="previous">Anterior</string>
+    <string name="next">Següent</string>
+    <string name="open_news">Obrir notícia</string>
+    <string name="do_not_show_again">No tornar a mostrar</string>
+    <string name="shortcut_select_label">Triar publicació</string>
+    <string name="lbl_site_search">· Exemple de cerca:\n\t\tthecanary.co\n\t\tcatalunya diari\n\n· NewsUp és un lector d\'RSS, així que la cerca només mostrarà publicacions que ofereixin RSS.\n\n· Es cercarà a google la pàgina web de la publicació que cerques; si no hi han resultats, prova a cercar el nom complert de la pàgina web.\n\n· Aquesta funció està en desenvolupament. Pot ser que ofereixi millors resultats en el futur.</string>
 
     <string name="mon">Dl</string>
     <string name="tue">Dm</string>
@@ -72,6 +82,9 @@
     <string name="update">Actualitzar</string>
     <string name="not_now">Ara no</string>
     <string name="rate">Valorar</string>
+    <string name="got_it">Entès</string>
+    <string name="start">Començar</string>
+    <string name="reload">Reintentar</string>
 
     <!-- * ******************** Hints **************************** * -->
     <string name="hint_pref_pro_mode">Entra codi PRO</string>
@@ -79,6 +92,7 @@
     <string name="hint_create_note">Inserta anotació</string>
     <string name="hint_email">El teu email (opcional)</string>
     <string name="hint_message_suggestion_report">El teu missatge, suggeriment o informe d\'error</string>
+    <string name="hint_enter_publication_search">Nom de la publicació</string>
 
     <!-- * ******************** Messages **************************** * -->
     <string name="msg_confirm_to_remove_all_saved_news">Confirma per eliminar tot</string>
@@ -93,8 +107,6 @@
     <string name="msg_news_not_found">Oohh… La aplicació es increïble però encara no pot llegir aquesta notícia.\n¿Què fem?</string>
     <string name="msg_no_internet_connection">No hi ha connexió a internet</string>
     <string name="msg_unlocked_finnish">Publicacions fineses desbloquejades</string>
-    <string name="msg_unlocked_statistics">Estadístiques desbloquejades</string>
-    <string name="msg_unlocked_notes">Notes desbloquejades</string>
     <string name="msg_invalid_code">Codi invàlid</string>
     <string name="msg_app_must_restart_to_apply_changes">Has de reinicialitzar l\'app per aplicar canvis</string>
     <string name="msg_permission_bookmark_denied">NO podràs marcar notícies fins que no concedeixis aquest permís</string>
@@ -113,6 +125,18 @@
     <string name="msg_needs_update">Hi ha una nova versió de NewsUp disponible</string>
     <string name="msg_rate">Què et sembla l\'app? Podries donar-nos la teva valoració a la Google Play?</string>
     <string name="msg_report">Tens algun problema, suggeriment o queixa? Contacta\'ns</string>
+    <string name="msg_permission_save_image_denied">No es poden desar imatges fins que no concediu el permís</string>
+    <string name="msg_downloading_image">Descarregant imatge</string>
+    <string name="msg_clean_cache_start">Començant la neteja…</string>
+    <string name="msg_clean_cache_remove_news">Eliminant notícies…</string>
+    <string name="msg_clean_cache_remove_images">Eliminant imatges…</string>
+    <string name="msg_didnt_find_results">No s\'han trobat resultats</string>
+    <string name="msg_page_not_found">· No s\'ha pogut accedir a la pàgina trobada</string>
+    <string name="msg_page_tried">· La pàgina trobada és %s</string>
+    <string name="msg_try_full_page_if_not">· Intenta cercar pel nom complert de la pàgina web si aquesta no és correcta</string>
+    <string name="msg_rss_not_found">· No s\'ha trobat suport per a RSS</string>
+    <string name="msg_publication_not_supported">Aquesta publicació ja no està disponible a NewsUp</string>
+    <string name="msg_content_could_not_be_loaded">Ups, no s\'ha pogut carregar el contingut</string>
 
     <!-- * *************** Activities and fragment's titles ********************* * -->
     <string name="title_frg_settings_of">Configuració de %1$s</string>

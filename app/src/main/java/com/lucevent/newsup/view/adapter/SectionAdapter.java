@@ -20,84 +20,87 @@ import java.util.Set;
 
 public class SectionAdapter extends RecyclerView.Adapter<SectionViewHolder> implements CompoundButton.OnCheckedChangeListener {
 
-    private Site currentSite;
-    private Sections dataset;
-    private Set<String> sectionStates;
-    private View.OnClickListener itemListener;
+	private Site mCurrentSite;
+	private Sections mDataSet;
+	private Set<String> mSectionStates;
+	private final View.OnClickListener mOnItemClickListener;
 
-    public SectionAdapter(Context context, Site site, View.OnClickListener itemListener)
-    {
-        this.itemListener = itemListener;
+	private LayoutInflater mInflater;
 
-        dwSelected = context.getResources().getDrawable(R.drawable.ic_main_section_selected).mutate();
-        dwUnselected = context.getResources().getDrawable(R.drawable.ic_main_section_unselected);
+	public SectionAdapter(Context context, Site site, View.OnClickListener onItemClickListener)
+	{
+		mOnItemClickListener = onItemClickListener;
+		mInflater = LayoutInflater.from(context);
 
-        setNewDataSet(site);
-    }
+		mSelectedDrawable = context.getResources().getDrawable(R.drawable.ic_main_section_selected).mutate();
+		mUnselectedDrawable = context.getResources().getDrawable(R.drawable.ic_main_section_unselected);
 
-    @Override
-    public int getItemViewType(int position)
-    {
-        return dataset.get(position).level <= 0 ? 0 : 1;
-    }
+		setNewDataSet(site);
+	}
 
-    @Override
-    public SectionViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-    {
-        int res_id = viewType == 0 ? R.layout.i_section_header : R.layout.i_section;
-        View v = LayoutInflater.from(parent.getContext()).inflate(res_id, parent, false);
-        v.setOnClickListener(itemListener);
-        return new SectionViewHolder(v, this);
-    }
+	@Override
+	public int getItemViewType(int position)
+	{
+		return mDataSet.get(position).level <= 0 ? 0 : 1;
+	}
 
-    private Drawable dwSelected, dwUnselected;
+	@Override
+	public SectionViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+	{
+		int res_id = viewType == 0 ? R.layout.i_section_header : R.layout.i_section;
+		View v = mInflater.inflate(res_id, parent, false);
+		v.setOnClickListener(mOnItemClickListener);
+		return new SectionViewHolder(v, this);
+	}
 
-    @Override
-    public void onBindViewHolder(SectionViewHolder holder, int position)
-    {
-        boolean checked = sectionStates.contains(Integer.toString(position));
-        holder.bind(dataset.get(position), position, checked, checked ? dwSelected : dwUnselected, this);
-    }
+	private Drawable mSelectedDrawable, mUnselectedDrawable;
 
-    @Override
-    public int getItemCount()
-    {
-        return dataset.size();
-    }
+	@Override
+	public void onBindViewHolder(SectionViewHolder holder, int position)
+	{
+		boolean checked = mSectionStates.contains(Integer.toString(position));
+		holder.bind(mDataSet.get(position), position, checked, checked ? mSelectedDrawable : mUnselectedDrawable, this);
+	}
 
-    public void setNewDataSet(Site site)
-    {
-        this.currentSite = site;
-        if (site != null) {
-            this.dataset = site.getSections();
-            this.sectionStates = AppSettings.getMainSectionsString(site);
-            notifyDataSetChanged();
+	@Override
+	public int getItemCount()
+	{
+		return mDataSet.size();
+	}
 
-            DrawableCompat.setTint(dwSelected, site.color == 0xffffffff ? 0xff666666 : site.color);
-        }
-    }
+	public void setNewDataSet(Site site)
+	{
+		mCurrentSite = site;
+		if (site != null) {
+			mDataSet = site.getSections();
+			mSectionStates = AppSettings.getMainSectionsString(site);
+			notifyDataSetChanged();
 
-    @Override
-    public void onCheckedChanged(CompoundButton toggleButton, boolean isChecked)
-    {
-        String iSection = Integer.toString((Integer) toggleButton.getTag());
+			DrawableCompat.setTint(mSelectedDrawable, site.color == 0xffffffff ? 0xff666666 : site.color);
+		}
+	}
 
-        if (isChecked) {
-            sectionStates.add(iSection);
-            toggleButton.setBackground(dwSelected);
-        } else {
-            if (sectionStates.size() == 1) {
-                toggleButton.setOnCheckedChangeListener(null);
-                toggleButton.setChecked(true);
-                toggleButton.setOnCheckedChangeListener(this);
-                Toast.makeText(toggleButton.getContext(), R.string.msg_minimum_one_checked, Toast.LENGTH_SHORT).show();
-                return;
-            } else {
-                sectionStates.remove(iSection);
-                toggleButton.setBackground(dwUnselected);
-            }
-        }
-        AppSettings.setMainSections(currentSite, sectionStates);
-    }
+	@Override
+	public void onCheckedChanged(CompoundButton toggleButton, boolean isChecked)
+	{
+		String iSection = Integer.toString((Integer) toggleButton.getTag());
+
+		if (isChecked) {
+			mSectionStates.add(iSection);
+			toggleButton.setBackground(mSelectedDrawable);
+		} else {
+			if (mSectionStates.size() == 1) {
+				toggleButton.setOnCheckedChangeListener(null);
+				toggleButton.setChecked(true);
+				toggleButton.setOnCheckedChangeListener(this);
+				Toast.makeText(toggleButton.getContext(), R.string.msg_minimum_one_checked, Toast.LENGTH_SHORT).show();
+				return;
+			} else {
+				mSectionStates.remove(iSection);
+				toggleButton.setBackground(mUnselectedDrawable);
+			}
+		}
+		AppSettings.setMainSections(mCurrentSite, mSectionStates);
+	}
 
 }

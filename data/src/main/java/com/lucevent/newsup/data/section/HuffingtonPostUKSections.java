@@ -5,12 +5,12 @@ import com.lucevent.newsup.data.util.Sections;
 
 public class HuffingtonPostUKSections extends Sections {
 
-    public HuffingtonPostUKSections()
-    {
-        super();
+	public HuffingtonPostUKSections()
+	{
+		super();
 
-        add(new Section("Homepage", "https://m.huffingtonpost.co.uk/feeds/index.xml", 0));
+		add(new Section("Homepage", "https://m.huffingtonpost.co.uk/feeds/index.xml", 0));
 
-    }
+	}
 
 }

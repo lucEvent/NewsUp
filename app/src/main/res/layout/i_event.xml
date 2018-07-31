@@ -1,5 +1,4 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/listItemContainer"
     android:layout_margin="0dp">
 
@@ -7,14 +6,14 @@
         android:id="@+id/picture"
         android:layout_width="match_parent"
         android:layout_height="220dp"
-        android:layout_alignParentTop="true"/>
+        android:layout_alignParentTop="true" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="220dp"
-        android:background="#4000"/>
+        android:background="#4000" />
 
-    <TextView
+    <com.lucevent.newsup.view.util.AppBoldTextView
         android:id="@+id/topic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -26,10 +25,9 @@
         android:text="topic"
         android:textAllCaps="true"
         android:textColor="@color/nv_text_dark"
-        android:textSize="10sp"
-        android:textStyle="bold"/>
+        android:textSize="9sp" />
 
-    <TextView
+    <com.lucevent.newsup.view.util.AppBoldTextView
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -39,7 +37,6 @@
         android:text="Title of the Event"
         android:textAlignment="viewStart"
         android:textColor="@color/nv_text_dark"
-        android:textSize="24sp"
-        android:textStyle="bold"/>
+        android:textSize="24sp" />
 
 </RelativeLayout>

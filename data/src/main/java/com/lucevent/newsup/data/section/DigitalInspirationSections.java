@@ -5,12 +5,12 @@ import com.lucevent.newsup.data.util.Sections;
 
 public class DigitalInspirationSections extends Sections {
 
-    public DigitalInspirationSections()
-    {
-        super();
+	public DigitalInspirationSections()
+	{
+		super();
 
-        add(new Section("Main", "http://feeds.labnol.org/labnol", 0));
+		add(new Section("Main", "http://feeds.labnol.org/labnol", 0));
 
-    }
+	}
 
 }

@@ -5,9 +5,9 @@ import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.VoidWork;
 import com.lucevent.newsup.backend.utils.Event;
 import com.lucevent.newsup.backend.utils.MonthStats;
+import com.lucevent.newsup.backend.utils.Poll;
 import com.lucevent.newsup.backend.utils.Report;
 import com.lucevent.newsup.backend.utils.RequestedSite;
-import com.lucevent.newsup.backend.utils.RequestedSiteNotFound;
 import com.lucevent.newsup.backend.utils.RequestedSites;
 import com.lucevent.newsup.backend.utils.SiteStats;
 import com.lucevent.newsup.backend.utils.Statistics;
@@ -35,7 +35,7 @@ public class Data {
         oFactory.register(Report.class);
         oFactory.register(Event.class);
         oFactory.register(RequestedSite.class);
-        oFactory.register(RequestedSiteNotFound.class);
+        oFactory.register(Poll.class);
         oFactory.begin();
 
         Date.setTitles(new String[]{"%d seconds ago", "%d minutes ago", "%d hours ago", "%d days ago", "%d months ago", "%d years ago",});
@@ -44,6 +44,8 @@ public class Data {
             // to avoid errors if some old version requests this dep site
             sites.add(new Site(330, "Metro", 0, "", 0, com.lucevent.newsup.data.util.Sections.class, com.lucevent.newsup.data.reader.MetroSV.class));
             sites.add(new Site(1710, "The Berry", 0, "", 0, com.lucevent.newsup.data.util.Sections.class, com.lucevent.newsup.data.reader.MetroSV.class));
+            sites.add(new Site(885, "The Geek Hammer", 0, "", 0, com.lucevent.newsup.data.util.Sections.class, com.lucevent.newsup.data.reader.MetroSV.class));
+            sites.add(new Site(1800, "Full M\u00FAsculo", 0, "", 0, com.lucevent.newsup.data.util.Sections.class, com.lucevent.newsup.data.reader.MetroSV.class));
             for (Site s : sites)
                 s.news = new NewsMap();
 

@@ -9,12 +9,12 @@ import com.lucevent.newsup.kernel.ScheduleManager;
 
 public class onConcerningEventReceiver extends BroadcastReceiver {
 
-    @Override
-    public void onReceive(Context context, Intent intent)
-    {
-        AppSettings.initialize(context);
-        ScheduledDownloadReceiver.scheduleDownloads(context,
-                new ScheduleManager(context).getSchedule());
-    }
+	@Override
+	public void onReceive(Context context, Intent intent)
+	{
+		AppSettings.initialize(context);
+		ScheduledDownloadReceiver.scheduleDownloads(context,
+				new ScheduleManager(context).getSchedule());
+	}
 
 }

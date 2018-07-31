@@ -5,16 +5,16 @@ import com.lucevent.newsup.data.util.Sections;
 
 public class GizmodoSections extends Sections {
 
-    public GizmodoSections()
-    {
-        super();
+	public GizmodoSections()
+	{
+		super();
 
-        add(new Section("Homepage", "http://gizmodo.com/rss/vip", 0));
-        add(new Section("Sploid", "http://sploid.gizmodo.com/rss/vip", 0));
-        add(new Section("Paleofuture", "http://paleofuture.gizmodo.com/rss/vip", 0));
-        add(new Section("io9", "http://io9.gizmodo.com/rss/vip", 0));
-        add(new Section("Field guide", "http://fieldguide.gizmodo.com/rss/vip", 0));
+		add(new Section("Homepage", "http://gizmodo.com/rss/vip", 0));
+		add(new Section("Sploid", "http://sploid.gizmodo.com/rss/vip", 0));
+		add(new Section("Paleofuture", "http://paleofuture.gizmodo.com/rss/vip", 0));
+		add(new Section("io9", "http://io9.gizmodo.com/rss/vip", 0));
+		add(new Section("Field guide", "http://fieldguide.gizmodo.com/rss/vip", 0));
 
-    }
+	}
 
 }

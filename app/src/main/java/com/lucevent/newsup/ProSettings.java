@@ -4,56 +4,67 @@ import android.content.SharedPreferences;
 
 public class ProSettings {
 
-    private static final int FINLAND_SITES_CODE = -593347822;
-    public static final String FINLAND_SITES_KEY = "finlandsites";
+	private static boolean DEVELOPER_MODE;
+	private static final int DEVELOPER_MODE_ON_CODE = -80680689;
+	private static final int DEVELOPER_MODE_OFF_CODE = 1793865220;
+	private static final String DEVELOPER_MODE_KEY = "devmode";
 
-    private static final int STATISTICS_CODE = 2113281681;
-    public static final String STATISTICS_KEY = "statistics";
+	private static final int FINLAND_SITES_CODE = -593347822;
+	private static final String FINLAND_SITES_KEY = "finlandsites";
 
-    private static final int NOTES_CODE = 1793461659;
-    public static final String NOTES_KEY = "notes";
+	private static SharedPreferences preferences;
 
-    private static final int PRO_CODES[] = new int[]{FINLAND_SITES_CODE, STATISTICS_CODE, NOTES_CODE};
-    private static final String PRO_KEYS[] = new String[]{FINLAND_SITES_KEY, STATISTICS_KEY, NOTES_KEY};
-    private static final int MESSAGES[] = new int[]{R.string.msg_unlocked_finnish, R.string.msg_unlocked_statistics, R.string.msg_unlocked_notes};
+	public static void initialize(SharedPreferences preferences)
+	{
+		ProSettings.preferences = preferences;
+		ProSettings.DEVELOPER_MODE = preferences != null && preferences.getBoolean(DEVELOPER_MODE_KEY, false);
+	}
 
-    private static SharedPreferences preferences;
+	public static boolean isPremiumModeEnabled()
+	{
+		return false;
+	}
 
-    public static void initialize(SharedPreferences preferences)
-    {
-        ProSettings.preferences = preferences;
-    }
+	public static boolean isDeveloperModeEnabled()
+	{
+		return ProSettings.DEVELOPER_MODE;
+	}
 
-    public static boolean isProModeActivated()
-    {
-        return 2 == 1 + 1;
-    }
+	public static boolean areFinnishPublicationsEnabled()
+	{
+		return DEVELOPER_MODE || (preferences != null && preferences.getBoolean(FINLAND_SITES_KEY, false));
+	}
 
-    public static boolean checkEnabled(String key)
-    {
-        return preferences != null && (AppSettings.DEBUG || preferences.getBoolean(key, false));
-    }
+	public static int checkProCode(String code)
+	{
+		switch (hash(code)) {
+			case DEVELOPER_MODE_ON_CODE:
+				edit(DEVELOPER_MODE_KEY, true);
+				DEVELOPER_MODE = true;
+				return R.string.msg_developer_mode_on;
+			case DEVELOPER_MODE_OFF_CODE:
+				edit(DEVELOPER_MODE_KEY, false);
+				DEVELOPER_MODE = false;
+				return R.string.msg_developer_mode_off;
+			case FINLAND_SITES_CODE:
+				edit(FINLAND_SITES_KEY, true);
+				return R.string.msg_unlocked_finnish;
+			default:
+				return R.string.msg_invalid_code;
+		}
+	}
 
-    public static int checkProCode(String code)
-    {
-        int icode = convert(code);
-        for (int i = 0; i < PRO_CODES.length; ++i) {
-            if (icode == PRO_CODES[i]) {
+	private static void edit(String key, boolean value)
+	{
+		SharedPreferences.Editor editor = preferences.edit();
+		editor.putBoolean(key, value);
+		editor.apply();
+	}
 
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putBoolean(PRO_KEYS[i], true);
-                editor.apply();
-
-                return MESSAGES[i];
-            }
-        }
-        return R.string.msg_invalid_code;
-    }
-
-    private static int convert(String c)
-    {
-        int code = c.toLowerCase().hashCode();
-        return code + (Integer.bitCount(code) << ((code >> 16) & 32));
-    }
+	private static int hash(String c)
+	{
+		int code = c.toLowerCase().hashCode();
+		return code + (Integer.bitCount(code) << ((code >> 16) & 32));
+	}
 
 }

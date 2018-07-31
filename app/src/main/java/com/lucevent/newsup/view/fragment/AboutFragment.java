@@ -9,10 +9,13 @@ import com.lucevent.newsup.R;
 
 public class AboutFragment extends android.app.Fragment {
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
-        return inflater.inflate(R.layout.f_about, container, false);
-    }
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	{
+		if (container != null)
+			container.removeAllViews();
+
+		return inflater.inflate(R.layout.f_about, container, false);
+	}
 
 }

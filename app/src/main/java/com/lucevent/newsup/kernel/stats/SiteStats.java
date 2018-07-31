@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 public class SiteStats extends ArrayList<SiteStat> {
 
-    public SiteStats()
-    {
-        super();
-    }
+	public SiteStats()
+	{
+		super();
+	}
 
 }

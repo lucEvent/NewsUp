@@ -1,16 +1,13 @@
 package com.lucevent.newsup.kernel;
 
 import android.content.Context;
-import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Pair;
 
 import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.ProSettings;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.Sites;
-import com.lucevent.newsup.data.event.Event;
 import com.lucevent.newsup.data.util.Date;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsMap;
@@ -21,8 +18,8 @@ import com.lucevent.newsup.io.LogoManager;
 import com.lucevent.newsup.io.SDManager;
 import com.lucevent.newsup.io.StorageCallback;
 import com.lucevent.newsup.net.NewsReaderManager;
-import com.lucevent.newsup.services.util.Download;
-import com.lucevent.newsup.services.util.DownloadResponse;
+import com.lucevent.newsup.services.util.DownloadData;
+import com.lucevent.newsup.services.util.DownloadNotification;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,191 +27,192 @@ import java.util.Locale;
 
 public class KernelManager implements StorageCallback {
 
-    private Context context;
+	private Context context;
 
-    protected static DBManager dbmanager;
-    protected static SDManager sdmanager;
-    private static LogoManager logoManager;
-    private static NewsReaderManager readerManager;
+	protected static DBManager dbmanager;
+	protected static SDManager sdmanager;
+	private static LogoManager logoManager;
+	private static NewsReaderManager readerManager;
 
-    public KernelManager(@NonNull Context context)
-    {
-        this.context = context;
-        AppSettings.initialize(context);
+	public KernelManager(@NonNull Context context)
+	{
+		this.context = context;
+		AppSettings.initialize(context);
 
-        Date.setTitles(context.getResources().getStringArray(R.array.date_messages));
+		Date.setTitles(context.getResources().getStringArray(R.array.date_messages));
 
-        if (dbmanager == null)
-            dbmanager = new DBManager(context);
+		if (dbmanager == null)
+			dbmanager = new DBManager(context);
 
-        if (sdmanager == null)
-            sdmanager = new SDManager(context);
+		if (sdmanager == null)
+			sdmanager = new SDManager(context);
 
-        if (AppData.getSites() == null) {
-            Sites sites = Sites.getDefault(ProSettings.checkEnabled(ProSettings.FINLAND_SITES_KEY)
-                    || Locale.getDefault().getLanguage().equals("fi"));
-            sites.addAll(dbmanager.readUserSites());
+		if (AppData.getSites() == null) {
+			Sites sites = Sites.getDefault(ProSettings.areFinnishPublicationsEnabled()
+					|| Locale.getDefault().getLanguage().equals("fi"));
+			sites.addAll(dbmanager.readUserSites());
 
-            AppData.setSites(sites);
-            dbmanager.readReadings(AppData.getSites());
-        }
+			AppData.setSites(sites, dbmanager);
+			dbmanager.readReadings(AppData.getSites());
+		}
 
-        if (logoManager == null)
-            logoManager = LogoManager.getInstance(context, AppData.getSites().size());
+		if (logoManager == null)
+			logoManager = LogoManager.getInstance(context, AppData.getSites().size());
 
-        if (readerManager == null)
-            readerManager = new NewsReaderManager(context, this);
-    }
+		if (readerManager == null)
+			readerManager = new NewsReaderManager(context, this);
+	}
 
-    public Sites getFavoriteSites()
-    {
-        int[] favorite_codes = AppSettings.getFavoriteSitesCodes();
-        Sites res = new Sites(favorite_codes.length);
-        for (int code : favorite_codes) {
-            Site s = AppData.getSiteByCode(code);
-            if (s == null)
-                AppSettings.toggleFavorite(new Site(code, "", 0, "", 0, null, null), false);
-            else res.add(s);
-        }
-        return res;
-    }
+	public static void readContentOf(News news)
+	{
+		if (news.content == null || news.content.isEmpty())
+			sdmanager.readNewsContent(news);
+	}
 
-    public void addSite(UserSite site)
-    {
-        if (dbmanager.insertUserSite(site)) {
-            AppData.getSites().add(site);
+	public static void fetchContentOf(News news)
+	{
+		if (news.content.isEmpty())
+			readerManager.readNow(AppData.getSiteByCode(news.site_code), news);
+	}
 
-            if (site.icon != null)
-                logoManager.downloadLogo(site);
-        }
-    }
+	public static void setNewsRead(News news)
+	{
+		dbmanager.setNewsRead(news);
+	}
 
-    public News getNewsById(int id)
-    {
-        return dbmanager.readNews(id);
-    }
+	public static long getCacheSize()
+	{
+		return sdmanager.getDBSize()
+				+ sdmanager.getSize()
+				+ sdmanager.getGlideCacheSize();
+	}
 
-    public void getNewsOf(@NonNull Site site, @Nullable int[] sections, @NonNull Handler handler)
-    {
-        readerManager.readNewsOf(site, sections, handler);
-    }
+	public static void cleanCache()
+	{
+		sdmanager.wipeData();
+		dbmanager.wipeData();
+		for (Site s : AppData.getSites())
+			if (s.news != null)
+				s.news.clear();
+	}
 
-    public void getMainNews(@NonNull Handler handler)
-    {
-        readerManager.readNewsOf(AppData.getSites(AppSettings.getMainSitesCodes()), handler);
-    }
+	public static void cleanGlideCache()
+	{
+		sdmanager.wipeGlideData();
+	}
 
-    public DownloadResponse getNews(@NonNull Download downloadScheduled)
-    {
-        return readerManager.readNews(downloadScheduled);
-    }
+	public Sites getFavoriteSites()
+	{
+		int[] favorite_codes = AppSettings.getFavoriteSitesCodes();
+		Sites res = new Sites(favorite_codes.length);
+		for (int code : favorite_codes) {
+			Site s = AppData.getSiteByCode(code);
+			if (s == null)
+				AppSettings.toggleFavorite(new Site(code, "", 0, "", 0, null, null), false);
+			else res.add(s);
+		}
+		return res;
+	}
 
-    public DownloadResponse getEventNews(@NonNull int eventCode)
-    {
-        return readerManager.readEventNews(context, eventCode);
-    }
+	public void addSite(UserSite site)
+	{
+		if (dbmanager.insertUserSite(site)) {
+			AppData.getSites().add(site);
 
-    public void getEvent(Event event, @NonNull Handler handler)
-    {
-        readerManager.readEvent(event, handler);
-    }
+			if (site.icon != null)
+				logoManager.downloadLogo(site);
+		}
+	}
 
-    public Collection<News> getSavedNewsOf(DownloadResponse.Source s)
-    {
-        return dbmanager.readNews(s.siteCode, s.sections).values();
-    }
+	public News getNewsById(int id)
+	{
+		return dbmanager.readNews(id);
+	}
 
-    public void cancelAll()
-    {
-        readerManager.cancelAll();
-    }
+	public NewsReaderManager getReaderManager()
+	{
+		return readerManager;
+	}
 
-    @Override
-    public void save(News news)
-    {
-        try {
-            dbmanager.insertNews(news);
-            sdmanager.saveNews(news);
-        } catch (Exception e) {
-            AppSettings.printerror("Error on KM.saveNews", e);
-        }
-    }
+	public DBManager getDatabaseManager()
+	{
+		return dbmanager;
+	}
 
-    @Override
-    public boolean contains(News news)
-    {
-        return dbmanager.contains(news);
-    }
+	public Collection<News> getSavedNewsOf(DownloadNotification.Source s)
+	{
+		return dbmanager.readNews(s.siteCode, s.sections).values();
+	}
 
-    @Override
-    public NewsMap getNewsOf(Site site)
-    {
-        if (site.news == null) {
-            try {
-                site.news = dbmanager.readNews(site);
-            } catch (Exception e) {
-                dbmanager = new DBManager(context);
-                return getNewsOf(site);
-            }
-        }
-        return site.news;
-    }
+	public void delete(DownloadData data)
+	{
+		dbmanager.delete(data);
+	}
 
-    @Override
-    public NewsMap getNewsOf(Site site, int[] section_codes)
-    {
-        return dbmanager.readNews(site, section_codes);
-    }
+	@Override
+	public void save(News news)
+	{
+		try {
+			dbmanager.insertNews(news);
+			sdmanager.saveNewsContent(news);
+		} catch (Exception e) {
+			AppSettings.printerror("Error on KM.saveNews", e);
+		}
+	}
 
-    @Override
-    public void deleteOldNews(long timeBound)
-    {
-        AppSettings.printlog("Time bound: " + Date.getAge(timeBound));
-        int[] delete_news_ids = dbmanager.deleteNewsSince(timeBound);
-        for (int news_id : delete_news_ids)
-            sdmanager.deleteNews(news_id);
-    }
+	@Override
+	public void save(DownloadData downloadData)
+	{
+		try {
+			dbmanager.insert(downloadData);
+		} catch (Exception e) {
+			AppSettings.printerror("Error on KM.save(D.D)", e);
+		}
+	}
 
-    public static News readContentOf(News news)
-    {
-        if (news.content == null || news.content.isEmpty())
-            sdmanager.readNews(news);
-        return news;
-    }
+	@Override
+	public boolean contains(News news)
+	{
+		return dbmanager.contains(news);
+	}
 
-    public static void fetchContentOf(News news)
-    {
-        if (news.content.isEmpty())
-            readerManager.readNow(AppData.getSiteByCode(news.site_code), news);
-    }
+	@Override
+	public NewsMap getNewsOf(Site site)
+	{
+		if (site.news == null) {
+			try {
+				site.news = dbmanager.readNews(site);
+			} catch (Exception e) {
+				dbmanager = new DBManager(context);
+				return getNewsOf(site);
+			}
+		}
+		return site.news;
+	}
 
-    public static void setNewsRead(News news)
-    {
-        dbmanager.setNewsRead(news);
-    }
+	@Override
+	public NewsMap getNewsOf(Site site, int[] section_codes)
+	{
+		return dbmanager.readNews(site, section_codes);
+	}
 
-    public ArrayList<Pair<Integer, Integer>> getTempReadingStats()
-    {
-        return dbmanager.readSyncReadings();
-    }
+	@Override
+	public void deleteOldNews(long timeBound)
+	{
+		AppSettings.printlog("Time bound: " + Date.getAge(timeBound));
+		int[] delete_news_ids = dbmanager.deleteNewsSince(timeBound);
+		for (int news_id : delete_news_ids)
+			sdmanager.deleteNews(news_id);
+	}
 
-    public void clearReadingStats()
-    {
-        dbmanager.clearSyncReadings();
-    }
+	public ArrayList<Pair<Integer, Integer>> getTempReadingStats()
+	{
+		return dbmanager.readSyncReadings();
+	}
 
-    public static long getCacheSize()
-    {
-        return sdmanager.getCacheSize();
-    }
-
-    public static void cleanCache()
-    {
-        sdmanager.wipeData();
-        dbmanager.wipeData();
-        for (Site s : AppData.getSites())
-            if (s.news != null)
-                s.news.clear();
-    }
+	public void clearReadingStats()
+	{
+		dbmanager.clearSyncReadings();
+	}
 
 }

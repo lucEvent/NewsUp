@@ -14,47 +14,47 @@ import java.util.Collection;
 
 public class UserSiteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private final View.OnClickListener mOnClick;
+	private final View.OnClickListener mOnClick;
 
-    private final ArrayList<UserSite> mDataSet;
+	private final ArrayList<UserSite> mDataSet;
 
-    public UserSiteAdapter(View.OnClickListener onClick)
-    {
-        mOnClick = onClick;
-        mDataSet = new ArrayList<>(1);
-    }
+	public UserSiteAdapter(View.OnClickListener onClick)
+	{
+		mOnClick = onClick;
+		mDataSet = new ArrayList<>(1);
+	}
 
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-    {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.i_user_site, parent, false);
-        v.setOnClickListener(mOnClick);
-        return new UserSiteViewHolder(v);
-    }
+	@Override
+	public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+	{
+		View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.i_user_site, parent, false);
+		v.setOnClickListener(mOnClick);
+		return new UserSiteViewHolder(v);
+	}
 
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position)
-    {
-        ((UserSiteViewHolder) holder).bind(mDataSet.get(position));
-    }
+	@Override
+	public void onBindViewHolder(RecyclerView.ViewHolder holder, int position)
+	{
+		((UserSiteViewHolder) holder).bind(mDataSet.get(position));
+	}
 
-    @Override
-    public int getItemCount()
-    {
-        return mDataSet.size();
-    }
+	@Override
+	public int getItemCount()
+	{
+		return mDataSet.size();
+	}
 
-    public void setNewDataSet(Collection<UserSite> newDataSet)
-    {
-        mDataSet.clear();
-        mDataSet.addAll(newDataSet);
-        notifyDataSetChanged();
-    }
+	public void setNewDataSet(Collection<UserSite> newDataSet)
+	{
+		mDataSet.clear();
+		mDataSet.addAll(newDataSet);
+		notifyDataSetChanged();
+	}
 
-    public void clear()
-    {
-        mDataSet.clear();
-        notifyDataSetChanged();
-    }
+	public void clear()
+	{
+		mDataSet.clear();
+		notifyDataSetChanged();
+	}
 
 }

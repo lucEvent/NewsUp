@@ -1,5 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosures;
 import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.nodes.Document;
@@ -12,85 +13,85 @@ import java.net.URL;
 
 public class Vandal extends com.lucevent.newsup.data.util.NewsReader {
 
-    // tags: [category, description, guid, item, link, pubdate, title]
+	// tags: [category, description, guid, item, link, pubdate, title]
 
-    public Vandal()
-    {
-        super(TAG_ITEM_ITEMS,
-                new int[]{TAG_TITLE},
-                new int[]{TAG_LINK},
-                new int[]{},
-                new int[]{TAG_DESCRIPTION},
-                new int[]{TAG_PUBDATE},
-                new int[]{TAG_CATEGORY},
-                new int[]{},
-                "");
-    }
+	public Vandal()
+	{
+		super(TAG_ITEM_ITEMS,
+				new int[]{TAG_TITLE},
+				new int[]{TAG_LINK},
+				new int[]{},
+				new int[]{TAG_DESCRIPTION},
+				new int[]{TAG_PUBDATE},
+				new int[]{TAG_CATEGORY},
+				new int[]{},
+				"");
+	}
 
-    @Override
-    protected News onNewsRead(News news)
-    {
-        Element article = jsoupParse(news.content);
-        if (!news.link.contains("feedproxy")) {
-            article.select("script").remove();
+	@Override
+	protected News onNewsRead(News news, Enclosures enclosures)
+	{
+		Element article = jsoupParse(news.content);
+		if (!news.link.contains("feedproxy")) {
+			article.select("script").remove();
 
-            for (Element video : article.select("a[href^='http://www.vandal.net/video']")) {
-                String link = video.attr("href");
-                String video_id = link.substring(28, link.indexOf("/", 28));
+			for (Element video : article.select("a[href^='http://www.vandal.net/video']")) {
+				String link = video.attr("href");
+				String video_id = link.substring(28, link.indexOf("/", 28));
 
-                cleanAttributes(video);
-                video.tagName("video")
-                        .attr("controls", "")
-                        .html("<source src='http://videosold.vandalimg.com/mp4/" + video_id + ".mp4' type='video/mp4'>");
-            }
-            for (Element img : article.select("img[src^='http://media.vandalimg.com/t200']"))
-                img.attr("src",
-                        img.attr("src").replace("http://media.vandalimg.com/t200", "http://mediamaster.vandal.net/m"));
+				cleanAttributes(video);
+				video.tagName("video")
+						.attr("controls", "")
+						.html("<source src='http://videosold.vandalimg.com/mp4/" + video_id + ".mp4' type='video/mp4'>");
+			}
+			for (Element img : article.select("img[src^='http://media.vandalimg.com/t200']"))
+				img.attr("src",
+						img.attr("src").replace("http://media.vandalimg.com/t200", "http://mediamaster.vandal.net/m"));
 
-            for (Element e : article.select(".fright"))
-                e.tagName("blockquote").removeAttr("style");
+			for (Element e : article.select(".fright"))
+				e.tagName("blockquote").removeAttr("style");
 
-            article.select("br").tagName("p");
+			article.select("br").tagName("p");
 
-            news.content = finalFormat(article, false);
-        } else {
-            news.description = article.text();
-            news.content = "";
-        }
-        return news;
-    }
+			news.content = finalFormat(article, false);
+		} else {
+			news.description = article.text();
+			news.content = "";
+		}
+		return news;
+	}
 
-    @Override
-    protected void readNewsContent(Document doc, News news)
-    {
-        if (news.link.contains("VideosVandalOnline")) {
-            Elements video = doc.select("meta[property='og:video']");
+	@Override
+	protected void readNewsContent(Document doc, News news)
+	{
+		if (news.link.contains("VideosVandalOnline")) {
+			Elements video = doc.select("meta[property='og:video']");
 
-            String link = video.first().attr("content");
+			String link = video.first().attr("content");
 
-            news.content = insertIframe(link);
+			news.content = insertIframe(link);
 
-            Elements dscr = doc.select("meta[name='description']");
-            if (!dscr.isEmpty())
-                news.content += "<p>" + dscr.first().attr("content") + "</p>";
+			Elements dscr = doc.select("meta[name='description']");
+			if (!dscr.isEmpty())
+				news.content += "<p>" + dscr.first().attr("content") + "</p>";
 
-        } else if (news.link.contains("BlogsVandalOnline")) {
-            Elements e = doc.select(".contenidoprincipal [class='tn mt10']");
-            doc.select("[style]").removeAttr("style");
-            doc.select("[onclick]").removeAttr("onclick");
-            cleanAttributes(e.select("img"), "src");
-            news.content = finalFormat(e, true);
-        }
-    }
+		} else if (news.link.contains("BlogsVandalOnline")) {
+			Elements e = doc.select(".contenidoprincipal [class='tn mt10']");
+			doc.select("[style]").removeAttr("style");
+			doc.select("[onclick]").removeAttr("onclick");
+			cleanAttributes(e.select("img"), "src");
+			news.content = finalFormat(e, true);
+		}
+	}
 
-    @Override
-    protected org.jsoup.nodes.Document getDocument(String url)
-    {
-        try {
-            return org.jsoup.Jsoup.parse(new URL(url).openStream(), "ISO-8859-1", url, new Parser(new XmlTreeBuilder()));
-        } catch (Exception ignore) {
-        }
-        return super.getDocument(url);
-    }
+	@Override
+	protected org.jsoup.nodes.Document getDocument(String url)
+	{
+		try {
+			return org.jsoup.Jsoup.parse(new URL(url).openStream(), "ISO-8859-1", url, new Parser(new XmlTreeBuilder()));
+		} catch (Exception ignore) {
+		}
+		return super.getDocument(url);
+	}
 
 }

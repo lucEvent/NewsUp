@@ -5,60 +5,60 @@ import org.jsoup.select.Elements;
 
 public class ComingSoon extends com.lucevent.newsup.data.util.NewsReader {
 
-    //tags: [category, content:encoded, dc:creator, description, guid, item, link, pubdate, title]
+	//tags: [category, content:encoded, dc:creator, description, guid, item, link, pubdate, title]
 
-    public ComingSoon()
-    {
-        super(TAG_ITEM_ITEMS,
-                new int[]{TAG_TITLE},
-                new int[]{TAG_LINK},
-                new int[]{TAG_DESCRIPTION},
-                new int[]{TAG_CONTENT_ENCODED},
-                new int[]{TAG_PUBDATE},
-                new int[]{TAG_CATEGORY},
-                new int[]{},
-                "");
-    }
+	public ComingSoon()
+	{
+		super(TAG_ITEM_ITEMS,
+				new int[]{TAG_TITLE},
+				new int[]{TAG_LINK},
+				new int[]{TAG_DESCRIPTION},
+				new int[]{TAG_CONTENT_ENCODED},
+				new int[]{TAG_PUBDATE},
+				new int[]{TAG_CATEGORY},
+				new int[]{},
+				"");
+	}
 
-    @Override
-    protected String parseDescription(Element prop)
-    {
-        return jsoupParse(prop).select("p").first().text();
-    }
+	@Override
+	protected String parseDescription(Element prop)
+	{
+		return jsoupParse(prop).select("p").first().text();
+	}
 
-    @Override
-    protected String parseContent(Element prop)
-    {
-        Element article = jsoupParse(prop);
+	@Override
+	protected String parseContent(Element prop)
+	{
+		Element article = jsoupParse(prop);
 
-        for (Element slideshow : article.select(".pbslideshow-wrapper")) {
-            StringBuilder res = new StringBuilder();
-            for (Element img : slideshow.select("img")) {
-                res.append("<figure>")
-                        .append(insertImg(img.attr("src")))
-                        .append("<figcaption>").append(img.attr("alt")).append("<figcaption>")
-                        .append("</figure>");
+		for (Element slideshow : article.select(".pbslideshow-wrapper")) {
+			StringBuilder res = new StringBuilder();
+			for (Element img : slideshow.select("img")) {
+				res.append("<figure>")
+						.append(insertImg(img.attr("src")))
+						.append("<figcaption>").append(img.attr("alt")).append("<figcaption>")
+						.append("</figure>");
 
-            }
-            slideshow.html(res.toString());
-        }
-        for (Element rel : article.select("a:has(strong,b),strong:has(a)")) {
-            String text = rel.text();
-            if (text.startsWith("RELATED"))
-                rel.remove();
-        }
-        article.select("h2:has(img)").tagName("p");
-        article.select(".caption").tagName("figcaption");
-        article.select("script").remove();
+			}
+			slideshow.html(res.toString());
+		}
+		for (Element rel : article.select("a:has(strong,b),strong:has(a)")) {
+			String text = rel.text();
+			if (text.startsWith("RELATED"))
+				rel.remove();
+		}
+		article.select("h2:has(img)").tagName("p");
+		article.select(".caption").tagName("figcaption");
+		article.select("script").remove();
 
-        Elements titles = article.select("h2");
-        if (!titles.isEmpty()) {
-            titles.first().remove();
-        }
+		Elements titles = article.select("h2");
+		if (!titles.isEmpty()) {
+			titles.first().remove();
+		}
 
-        cleanAttributes(article.select("img"), "src");
+		cleanAttributes(article.select("img"), "src");
 
-        return finalFormat(article, false);
-    }
+		return finalFormat(article, false);
+	}
 
 }

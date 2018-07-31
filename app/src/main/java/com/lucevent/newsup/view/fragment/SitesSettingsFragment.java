@@ -18,40 +18,43 @@ import java.util.Collections;
 
 public class SitesSettingsFragment extends android.app.Fragment implements View.OnClickListener {
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
-        View view = inflater.inflate(R.layout.f_list, container, false);
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	{
+		if (container != null)
+			container.removeAllViews();
 
-        Sites sites = new Sites(AppData.getSites());
-        Collections.sort(sites, SitesMap.SITE_COMPARATOR_BY_NAME);
+		View view = inflater.inflate(R.layout.f_list, container, false);
 
-        SiteListAdapter adapter = new SiteListAdapter(sites, this);
+		Sites sites = new Sites(AppData.getSites());
+		Collections.sort(sites, SitesMap.SITE_COMPARATOR_BY_NAME);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setAutoMeasureEnabled(true);
+		SiteListAdapter adapter = new SiteListAdapter(sites, this);
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
-        recyclerView.setNestedScrollingEnabled(false);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
+		LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+		layoutManager.setAutoMeasureEnabled(true);
 
-        return view;
-    }
+		RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
+		recyclerView.setNestedScrollingEnabled(false);
+		recyclerView.setHasFixedSize(true);
+		recyclerView.setLayoutManager(layoutManager);
+		recyclerView.setAdapter(adapter);
 
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-        getActivity().setTitle(R.string.pref_sites_settings);
-    }
+		return view;
+	}
 
-    @Override
-    public void onClick(final View v)
-    {
-        int code = (int) v.getTag();
-        ((Main) getActivity()).onReplaceFragment(SiteSettingsFragment.instanceFor(code), R.id.nav_settings, true);
-    }
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+		getActivity().setTitle(R.string.pref_sites_settings);
+	}
+
+	@Override
+	public void onClick(final View v)
+	{
+		int code = (int) v.getTag();
+		((Main) getActivity()).onReplaceFragment(SiteSettingsFragment.instanceFor(code), R.id.nav_settings, true);
+	}
 
 }

@@ -14,63 +14,63 @@ import com.lucevent.newsup.permission.PermissionHandler;
 
 public abstract class StoragePermissionFragment extends android.app.Fragment {
 
-    private PermissionHandler mPermissionHandler;
+	private PermissionHandler mPermissionHandler;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
+	@Override
+	public void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
 
-        mPermissionHandler = new PermissionHandler(getActivity(), AppData.STORAGE_PERMISSIONS);
-    }
+		mPermissionHandler = new PermissionHandler(getActivity(), AppData.STORAGE_PERMISSIONS);
+	}
 
-    private View mTempData;
+	private View mTempData;
 
-    protected View.OnClickListener onBookmarkClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View v)
-        {
-            if (mPermissionHandler.checkAndAsk(StoragePermissionFragment.this, AppCode.REQUEST_PERMISSION_BOOKMARK))
-                onBookmarkStateChanged(v);
-            else
-                mTempData = v;
-        }
-    };
+	protected View.OnClickListener onBookmarkClick = new View.OnClickListener() {
+		@Override
+		public void onClick(View v)
+		{
+			if (mPermissionHandler.checkAndAsk(StoragePermissionFragment.this, AppCode.REQUEST_PERMISSION_BOOKMARK))
+				onBookmarkStateChanged(v);
+			else
+				mTempData = v;
+		}
+	};
 
-    protected View.OnLongClickListener onImageLongClick = new View.OnLongClickListener() {
+	protected View.OnLongClickListener onImageLongClick = new View.OnLongClickListener() {
 
-        @Override
-        public boolean onLongClick(View v)
-        {
-            if (mPermissionHandler.checkAndAsk(StoragePermissionFragment.this, AppCode.REQUEST_PERMISSION_SAVE_IMAGE))
-                onSaveImage(v);
-            else
-                mTempData = v;
-            return true;
-        }
-    };
+		@Override
+		public boolean onLongClick(View v)
+		{
+			if (mPermissionHandler.checkAndAsk(StoragePermissionFragment.this, AppCode.REQUEST_PERMISSION_SAVE_IMAGE))
+				onSaveImage(v);
+			else
+				mTempData = v;
+			return true;
+		}
+	};
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults)
-    {
-        if (mPermissionHandler.isPermissionGranted(permissions, grantResults)) {
-            if (requestCode == AppCode.REQUEST_PERMISSION_BOOKMARK)
-                onBookmarkStateChanged(mTempData);
-            else if (requestCode == AppCode.REQUEST_PERMISSION_SAVE_IMAGE)
-                onSaveImage(mTempData);
-        } else {
-            if (requestCode == AppCode.REQUEST_PERMISSION_BOOKMARK)
-                Toast.makeText(getActivity(), R.string.msg_permission_bookmark_denied, Toast.LENGTH_LONG).show();
-            else if (requestCode == AppCode.REQUEST_PERMISSION_SAVE_IMAGE)
-                Toast.makeText(getActivity(), R.string.msg_permission_save_image_denied, Toast.LENGTH_LONG).show();
-        }
-    }
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults)
+	{
+		if (mPermissionHandler.isPermissionGranted(permissions, grantResults)) {
+			if (requestCode == AppCode.REQUEST_PERMISSION_BOOKMARK)
+				onBookmarkStateChanged(mTempData);
+			else if (requestCode == AppCode.REQUEST_PERMISSION_SAVE_IMAGE)
+				onSaveImage(mTempData);
+		} else {
+			if (requestCode == AppCode.REQUEST_PERMISSION_BOOKMARK)
+				Toast.makeText(getActivity(), R.string.msg_permission_bookmark_denied, Toast.LENGTH_LONG).show();
+			else if (requestCode == AppCode.REQUEST_PERMISSION_SAVE_IMAGE)
+				Toast.makeText(getActivity(), R.string.msg_permission_save_image_denied, Toast.LENGTH_LONG).show();
+		}
+	}
 
-    protected abstract void onBookmarkStateChanged(View btn);
+	protected abstract void onBookmarkStateChanged(View btn);
 
-    private void onSaveImage(View img)
-    {
-        SDManager.downloadFile(getActivity(), (String) img.getTag(AppCode.TAG_IMAGE));
-    }
+	private void onSaveImage(View img)
+	{
+		SDManager.downloadFile(getActivity(), (String) img.getTag(AppCode.TAG_IMAGE));
+	}
 
 }

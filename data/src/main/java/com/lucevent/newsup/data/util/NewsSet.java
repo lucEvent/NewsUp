@@ -9,20 +9,20 @@ import java.util.TreeSet;
  */
 public class NewsSet extends TreeSet<News> {
 
-    public NewsSet()
-    {
-        super();
-    }
+	public NewsSet()
+	{
+		super();
+	}
 
-    public NewsSet(Collection<? extends News> c)
-    {
-        super(c);
-    }
+	public NewsSet(Collection<? extends News> c)
+	{
+		super(c);
+	}
 
-    public NewsSet(Comparator<News> comparator)
-    {
-        super(comparator);
-    }
+	public NewsSet(Comparator<News> comparator)
+	{
+		super(comparator);
+	}
 
 }
 

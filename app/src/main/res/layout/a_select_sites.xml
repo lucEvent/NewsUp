@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinator"
@@ -25,7 +24,7 @@
             app:contentScrim="?attr/colorPrimaryDark"
             app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed">
 
-            <TextView
+            <com.lucevent.newsup.view.util.AppTextView
                 android:id="@+id/introduction"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -36,8 +35,7 @@
                 android:textAlignment="center"
                 android:textColor="#eeee"
                 android:textSize="22sp"
-                android:typeface="sans"
-                app:layout_scrollFlags="enterAlways|enterAlwaysCollapsed"/>
+                app:layout_scrollFlags="enterAlways|enterAlwaysCollapsed" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
@@ -57,7 +55,7 @@
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:orientation="vertical"
-            android:paddingBottom="?attr/actionBarSize"/>
+            android:paddingBottom="?attr/actionBarSize" />
 
     </android.support.v4.widget.NestedScrollView>
 
@@ -79,7 +77,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onActionCompleted"
-                android:text="@string/thats_it"/>
+                android:text="@string/thats_it" />
 
         </LinearLayout>
     </RelativeLayout>
@@ -103,7 +101,7 @@
             android:layout_margin="6dp"
             android:background="@drawable/ic_sort"
             android:entries="@array/site_sort_by"
-            android:spinnerMode="dropdown"/>
+            android:spinnerMode="dropdown" />
 
         <EditText
             android:id="@+id/input"
@@ -120,7 +118,7 @@
             android:lines="1"
             android:maxLines="1"
             android:paddingEnd="12dp"
-            android:paddingStart="12dp"/>
+            android:paddingStart="12dp" />
 
     </LinearLayout>
 

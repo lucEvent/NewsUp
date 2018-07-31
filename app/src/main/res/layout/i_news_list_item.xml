@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:orientation="horizontal"
-              android:paddingBottom="@dimen/paragraph_bottom_padding"
-              android:paddingLeft="@dimen/side_padding"
-              android:paddingRight="@dimen/side_padding"
-              android:paddingTop="@dimen/paragraph_top_padding">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/paragraph_bottom_padding"
+    android:paddingLeft="@dimen/side_padding"
+    android:paddingRight="@dimen/side_padding"
+    android:paddingTop="@dimen/paragraph_top_padding">
 
     <com.lucevent.newsup.view.util.AppTextView
         android:id="@+id/bullet"
@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:paddingEnd="10dp"
         android:text="\u2022"
-        android:textSize="@dimen/text_normal_size"/>
+        android:textSize="@dimen/text_normal_size" />
 
     <com.lucevent.newsup.view.util.AppTextView
         android:id="@+id/content"
@@ -24,6 +24,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="TextView"
-        android:textSize="@dimen/text_normal_size"/>
+        android:textSize="@dimen/text_normal_size" />
 
 </LinearLayout>

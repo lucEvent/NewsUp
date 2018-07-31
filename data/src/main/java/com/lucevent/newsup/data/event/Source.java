@@ -4,7 +4,7 @@ import com.lucevent.newsup.data.util.Site;
 
 public class Source {
 
-    public Site site;
-    public int[] sections;
+	public Site site;
+	public int[] sections;
 
 }

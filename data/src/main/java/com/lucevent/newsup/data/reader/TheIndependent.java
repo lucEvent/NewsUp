@@ -8,44 +8,44 @@ import org.jsoup.select.Elements;
 
 public class TheIndependent extends com.lucevent.newsup.data.util.NewsReader {
 
-    //tags: [author, dc:creator, dc:date, description, guid, item, link, media:content, media:text, media:thumbnail, pubdate, title]
+	//tags: [author, dc:creator, dc:date, description, guid, item, link, media:content, media:text, media:thumbnail, pubdate, title]
 
-    public TheIndependent()
-    {
-        super(TAG_ITEM_ITEMS,
-                new int[]{TAG_TITLE},
-                new int[]{TAG_LINK},
-                new int[]{TAG_DESCRIPTION},
-                new int[]{},
-                new int[]{TAG_PUBDATE},
-                new int[]{},
-                new int[]{TAG_MEDIA_CONTENT},
-                "");
-    }
+	public TheIndependent()
+	{
+		super(TAG_ITEM_ITEMS,
+				new int[]{TAG_TITLE},
+				new int[]{TAG_LINK},
+				new int[]{TAG_DESCRIPTION},
+				new int[]{},
+				new int[]{TAG_PUBDATE},
+				new int[]{},
+				new int[]{TAG_MEDIA_CONTENT},
+				"");
+	}
 
-    @Override
-    protected void readNewsContent(Document doc, News news)
-    {
-        Elements article = doc.select("[itemprop='associatedMedia image'],[itemprop=articleBody]");
-        article.select("script,.inline-block-related-single,.inline-pipes-list,.syndication-btn,#gigya-share-btns-2,.type-gallery,figure header,.relatedlinkslist,.type-video").remove();
+	@Override
+	protected void readNewsContent(Document doc, News news)
+	{
+		Elements article = doc.select(".sub-headline,.hero-wrapper-inner,.body-content");
+		article.select("script,.ad-wrapper,i-amphtml-sizer,.i-gallery,.persistent-player-headline,.video-popout-close-container,.inline-readmore,.inline-related,button").remove();
 
-        for (Element gallery : article.select(".featured-media:has(.full-gallery)")) {
+		article.select(".sub-headline").tagName("strong");
+		article.select("amp-iframe").tagName("iframe");
+		article.select("amp-img").tagName("img");
+		cleanAttributes(article.select("img[src]"), "src");
 
-            Elements imgs = gallery.select("[data-gallery-item]");
-            Elements descs = gallery.select("[data-gallery-legend]");
-            descs.select(".credits").remove();
-            descs.select("h2").tagName("h4");
+		for (Element e : article.select("amp-brightcove")) {
+			e.parent().html(insertIframe(
+					"https://players.brightcove.net/" + e.attr("data-account")
+							+ "/" + e.attr("data-player")
+							+ "_" + e.attr("data-embed")
+							+ "/index.html?videoId=" + e.attr("data-video-id"))
+			);
+		}
 
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < imgs.size(); i++)
-                sb.append("<img src='").append(imgs.get(i).attr("data-original")).append("'> ")
-                        .append(descs.get(i).html());
+		article.select("iframe").html("");
 
-            gallery.html(sb.toString());
-        }
-        article.select(".dnd-caption-wrapper").tagName("figcaption");
-
-        news.content = finalFormat(article, true);
-    }
+		news.content = finalFormat(article, true);
+	}
 
 }

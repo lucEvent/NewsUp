@@ -8,28 +8,28 @@ import java.util.Collection;
 
 public class Event {
 
-    public int code;
+	public int code;
 
-    public String title, topic;
+	public String title, topic;
 
-    public String imgSrc;
+	public String imgSrc;
 
-    public ArrayList<Source> sources;
+	public ArrayList<Source> sources;
 
-    public String[] keyWords;
+	public String[] keyWords;
 
-    public Event()
-    {
-    }
+	public Event()
+	{
+	}
 
-    public NewsArray filter(Collection<News> c)
-    {
-        NewsArray r = new NewsArray(c.size());
-        for (News n : c)
-            if (n.hasKeyWords(keyWords))
-                r.add(n);
+	public NewsArray filter(Collection<News> c)
+	{
+		NewsArray r = new NewsArray(c.size());
+		for (News n : c)
+			if (n.hasKeyWords(keyWords))
+				r.add(n);
 
-        return r;
-    }
+		return r;
+	}
 
 }

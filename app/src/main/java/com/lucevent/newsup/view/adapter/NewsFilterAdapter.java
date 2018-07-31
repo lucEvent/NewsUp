@@ -6,127 +6,134 @@ import android.view.View;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.view.util.NewsAdapterList;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.TreeSet;
 
 public class NewsFilterAdapter extends NewsAdapter {
 
-    private ArrayList<News> mOriginalValues;
-    private ArrayList<News> mFilteredValues, mLastQueryValues;
+	private ArrayList<News> mOriginalValues;
+	private ArrayList<News> mFilteredValues, mLastQueryValues;
 
-    private TreeSet<Integer> mLastFilterCodes = new TreeSet<>();
-    private String mLastFilter = "";
+	private TreeSet<Integer> mLastFilterCodes = new TreeSet<>();
+	private String mLastFilter = "";
 
-    public NewsFilterAdapter(View.OnClickListener onClick, View.OnClickListener onBookmarkClick, NewsAdapterList.SortBy sortBy)
-    {
-        super(onClick, onBookmarkClick, sortBy);
-    }
+	public NewsFilterAdapter(View.OnClickListener onClick, View.OnClickListener onBookmarkClick, NewsAdapterList.SortBy sortBy)
+	{
+		super(onClick, onBookmarkClick, sortBy);
+	}
 
-    public ArrayList<News> getDataSet()
-    {
-        init();
-        return mOriginalValues;
-    }
+	public ArrayList<News> getDataSet()
+	{
+		init();
+		return mOriginalValues;
+	}
 
-    private void init()
-    {
-        if (mOriginalValues == null) {
-            SortedList<News> sortedList = mDataSet;
-            mOriginalValues = new ArrayList<>(sortedList.size());
-            mLastQueryValues = new ArrayList<>(sortedList.size());
-            for (int i = 0; i < sortedList.size(); i++)
-                mOriginalValues.add(sortedList.get(i));
-        }
-    }
+	private void init()
+	{
+		if (mOriginalValues == null) {
+			SortedList<News> sortedList = mDataSet;
+			mOriginalValues = new ArrayList<>(sortedList.size());
+			mLastQueryValues = new ArrayList<>(sortedList.size());
+			for (int i = 0; i < sortedList.size(); i++)
+				mOriginalValues.add(sortedList.get(i));
+		}
+	}
 
-    private Collection<News> applyFilters(Collection<News> c)
-    {
-        return applyTextFilter(applyCodeFilter(c));
-    }
+	private Collection<News> applyFilters(Collection<News> c)
+	{
+		return applyTextFilter(applyCodeFilter(c));
+	}
 
-    private Collection<News> applyCodeFilter(Collection<News> c)
-    {
-        if (mLastFilterCodes.isEmpty())
-            return c;
+	private Collection<News> applyCodeFilter(Collection<News> c)
+	{
+		if (mLastFilterCodes.isEmpty())
+			return c;
 
-        ArrayList<News> filteredValues = new ArrayList<>();
-        for (News n : c)
-            if (mLastFilterCodes.contains(n.site_code))
-                filteredValues.add(n);
+		ArrayList<News> filteredValues = new ArrayList<>();
+		for (News n : c)
+			if (mLastFilterCodes.contains(n.site_code))
+				filteredValues.add(n);
 
-        return filteredValues;
-    }
+		return filteredValues;
+	}
 
-    private Collection<News> applyTextFilter(Collection<News> c)
-    {
-        if (mLastFilter.isEmpty())
-            return c;
+	private String normalize(String s)
+	{
+		return Normalizer.normalize(s.toLowerCase(), Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+	}
 
-        ArrayList<News> filteredValues = new ArrayList<>();
-        for (News n : c)
-            if (n.title.toLowerCase().contains(mLastFilter))
-                filteredValues.add(n);
+	private Collection<News> applyTextFilter(Collection<News> c)
+	{
+		if (mLastFilter.isEmpty())
+			return c;
 
-        return filteredValues;
-    }
+		String normFilter = normalize(mLastFilter);
+		ArrayList<News> filteredValues = new ArrayList<>();
+		for (News n : c)
+			if (normalize(n.title).contains(normFilter))
+				filteredValues.add(n);
 
-    public void filter(String filter)
-    {
-        init();
+		return filteredValues;
+	}
 
-        ArrayList<News> searchableValues;
-        if (mFilteredValues != null)
-            searchableValues = mFilteredValues;
-        else
-            searchableValues = filter.startsWith(mLastFilter) && !mLastFilter.isEmpty() ? mLastQueryValues : mOriginalValues;
+	public void filter(String filter)
+	{
+		init();
 
-        mLastFilter = filter;
-        mLastQueryValues = (ArrayList<News>) applyTextFilter(searchableValues);
+		ArrayList<News> searchableValues;
+		if (mFilteredValues != null)
+			searchableValues = mFilteredValues;
+		else
+			searchableValues = filter.startsWith(mLastFilter) && !mLastFilter.isEmpty() ? mLastQueryValues : mOriginalValues;
 
-        super.replaceAll(mLastQueryValues);
-    }
+		mLastFilter = filter;
+		mLastQueryValues = (ArrayList<News>) applyTextFilter(searchableValues);
 
-    public void filter(TreeSet<Integer> filter)
-    {
-        init();
+		super.replaceAll(mLastQueryValues);
+	}
 
-        mLastFilterCodes = filter;
-        mFilteredValues = (ArrayList<News>) applyCodeFilter(mOriginalValues);
-        mLastQueryValues = (ArrayList<News>) applyTextFilter(mFilteredValues);
+	public void filter(TreeSet<Integer> filter)
+	{
+		init();
 
-        super.replaceAll(mLastQueryValues);
-    }
+		mLastFilterCodes = filter;
+		mFilteredValues = (ArrayList<News>) applyCodeFilter(mOriginalValues);
+		mLastQueryValues = (ArrayList<News>) applyTextFilter(mFilteredValues);
 
-    @Override
-    public void setNewDataSet(Collection<News> c)
-    {
-        mOriginalValues = c instanceof ArrayList ? (ArrayList<News>) c : new ArrayList<>(c);
-        super.setNewDataSet(applyFilters(c));
-    }
+		super.replaceAll(mLastQueryValues);
+	}
 
-    @Override
-    public void addAll(Collection<News> c)
-    {
-        super.addAll(applyFilters(c));
-        if (mOriginalValues != null)
-            mOriginalValues.addAll(c);
-    }
+	@Override
+	public void setNewDataSet(Collection<News> c)
+	{
+		mOriginalValues = c instanceof ArrayList ? (ArrayList<News>) c : new ArrayList<>(c);
+		super.setNewDataSet(applyFilters(c));
+	}
 
-    @Override
-    public void replaceAll(Collection<News> c)
-    {
-        mOriginalValues = c instanceof ArrayList ? (ArrayList<News>) c : new ArrayList<>(c);
-        super.replaceAll(applyFilters(c));
-    }
+	@Override
+	public void addAll(Collection<News> c)
+	{
+		super.addAll(applyFilters(c));
+		if (mOriginalValues != null)
+			mOriginalValues.addAll(c);
+	}
 
-    @Override
-    public void clear()
-    {
-        super.clear();
-        mOriginalValues = null;
-        mLastQueryValues = null;
-        mLastFilter = "";
-    }
+	@Override
+	public void replaceAll(Collection<News> c)
+	{
+		mOriginalValues = c instanceof ArrayList ? (ArrayList<News>) c : new ArrayList<>(c);
+		super.replaceAll(applyFilters(c));
+	}
+
+	@Override
+	public void clear()
+	{
+		super.clear();
+		mOriginalValues = null;
+		mLastQueryValues = null;
+		mLastFilter = "";
+	}
 
 }

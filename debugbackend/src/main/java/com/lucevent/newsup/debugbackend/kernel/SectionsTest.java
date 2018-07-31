@@ -105,15 +105,20 @@ public class SectionsTest {
             task.siteTestResults[3] += repeatedUrlSectionsCounter;
             task.siteTestResults[4] += repeatedSectionsContentCounter;
 
-            if (emptySectionsCounter != 0 || oldSectionsCounter != 0 || repeatedNameSectionsCounter != 0 || repeatedUrlSectionsCounter != 0 || repeatedSectionsContentCounter != 0) {
-                String error = site.name + ":" +
-                        "\nEmpty sections:" + emptySectionsCounter +
-                        "\nOld sections:" + oldSectionsCounter +
-                        "\nRepeated section names:" + repeatedNameSectionsCounter +
-                        "\nRepeated section links:" + repeatedUrlSectionsCounter +
-                        "\nRepeated section content:" + repeatedSectionsContentCounter;
-                db.saveError(site, error);
-            }
+            if (emptySectionsCounter != 0)
+                db.saveBug(site, "Empty sections:" + emptySectionsCounter);
+
+            if (oldSectionsCounter != 0)
+                db.saveBug(site, "Old sections:" + oldSectionsCounter);
+
+            if (repeatedNameSectionsCounter != 0)
+                db.saveBug(site, "Repeated section names:" + repeatedNameSectionsCounter);
+
+            if (repeatedUrlSectionsCounter != 0)
+                db.saveBug(site, "Repeated section links:" + repeatedUrlSectionsCounter);
+
+            if (repeatedSectionsContentCounter != 0)
+                db.saveBug(site, "Repeated section content:" + repeatedSectionsContentCounter);
 
             task.currentEvaluatingSite++;
             db.save(task, false);

@@ -16,53 +16,53 @@ import com.lucevent.newsup.io.LogoManager;
 
 public class NewsViewHolder extends RecyclerView.ViewHolder {
 
-    private static final RequestOptions OPTIONS = new RequestOptions().fitCenter();
+	private static final RequestOptions OPTIONS = new RequestOptions().fitCenter();
 
-    private View logo;
-    private TextView title, description, date;
-    private ImageButton bookmarkButton;
-    private ImageView picture;
+	private View mLogo;
+	private TextView mTitle, mDescription, mDate;
+	private ImageButton mBookmark;
+	private ImageView mPicture;
 
-    public NewsViewHolder(View v, View.OnClickListener onBookmark)
-    {
-        super(v);
+	public NewsViewHolder(View v, View.OnClickListener onBookmark)
+	{
+		super(v);
 
-        title = (TextView) v.findViewById(R.id.title);
-        description = (TextView) v.findViewById(R.id.description);
-        date = (TextView) v.findViewById(R.id.date);
-        logo = v.findViewById(R.id.logo);
-        bookmarkButton = (ImageButton) v.findViewById(R.id.button_bookmark);
-        bookmarkButton.setOnClickListener(onBookmark);
-        picture = (ImageView) v.findViewById(R.id.picture);
-    }
+		mTitle = (TextView) v.findViewById(R.id.title);
+		mDescription = (TextView) v.findViewById(R.id.description);
+		mDate = (TextView) v.findViewById(R.id.date);
+		mLogo = v.findViewById(R.id.logo);
+		mBookmark = (ImageButton) v.findViewById(R.id.button_bookmark);
+		mBookmark.setOnClickListener(onBookmark);
+		mPicture = (ImageView) v.findViewById(R.id.picture);
+	}
 
-    public void bind(News news, boolean showSiteLogo, boolean loadImage, boolean bookmarked)
-    {
-        if (showSiteLogo) {
-            logo.setVisibility(View.VISIBLE);
-            logo.setBackground(LogoManager.getLogo(news.site_code, LogoManager.Size.I_ITEM));
-        } else
-            logo.setVisibility(View.GONE);
+	public void bind(News news, boolean showSiteLogo, boolean loadImage, boolean bookmarked)
+	{
+		if (showSiteLogo) {
+			mLogo.setVisibility(View.VISIBLE);
+			mLogo.setBackground(LogoManager.getLogo(news.site_code, LogoManager.Size.I_ITEM));
+		} else
+			mLogo.setVisibility(View.GONE);
 
-        if (loadImage && news.enclosures != null && !news.enclosures.isEmpty() && !news.enclosures.get(0).src.isEmpty()) {
+		if (loadImage && news.imgSrc != null) {
 
-            picture.setImageDrawable(null);
+			mPicture.setImageDrawable(null);
 
-            Glide.with(picture.getContext())
-                    .applyDefaultRequestOptions(OPTIONS)
-                    .load(news.enclosures.get(0).src)
-                    .into(picture);
-        } else {
-            picture.setImageDrawable(null);
-        }
+			Glide.with(mPicture.getContext())
+					.applyDefaultRequestOptions(OPTIONS)
+					.load(news.imgSrc)
+					.into(mPicture);
+		} else {
+			mPicture.setImageDrawable(null);
+		}
 
-        title.setText(Html.fromHtml(news.title));
-        description.setText(news.description);
-        date.setText(Date.getAge(news.date));
-        bookmarkButton.setSelected(bookmarked);
+		mTitle.setText(Html.fromHtml(news.title));
+		mDescription.setText(news.description);
+		mDate.setText(Date.getAge(news.date));
+		mBookmark.setSelected(bookmarked);
 
-        bookmarkButton.setTag(news);
-        itemView.setTag(news);
-    }
+		mBookmark.setTag(news);
+		itemView.setTag(news);
+	}
 
 }

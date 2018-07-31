@@ -85,31 +85,33 @@ public class Database {
                 .list();
     }
 
-    public void saveErrorOn(News news)
+    public void saveBugOn(News news, String description)
     {
-        Error error = new Error();
-        error.n_link = news.link;
-        error.n_content = news.content;
-        error.n_site = news.site_code;
+        Bug bug = new Bug();
+        bug.site_code = news.site_code;
+        bug.time = System.currentTimeMillis();
+        bug.description = description;
+        bug.link = "";
+        bug.content = news.content;
 
-        ofy().save().entity(error).now();
+        ofy().save().entity(bug).now();
     }
 
-    public void saveError(Site s, String errorContent)
+    public void saveBug(Site s, String description)
     {
-        Error error = new Error();
-        error.n_link = "";
-        error.n_content = errorContent;
-        error.n_site = s.code;
+        Bug bug = new Bug();
+        bug.site_code = s.code;
+        bug.time = System.currentTimeMillis();
+        bug.description = description;
+        bug.link = "";
+        bug.content = "";
 
-        ofy().save().entity(error).now();
+        ofy().save().entity(bug).now();
     }
 
-    public ArrayList<Error> getErrors()
+    public ArrayList<Bug> getBugs()
     {
-        ArrayList<Error> res = new ArrayList<>();
-        res.addAll(ofy().load().type(Error.class).list());
-        return res;
+        return new ArrayList<>(ofy().load().type(Bug.class).list());
     }
 
     public TreeSet<Task> getTasks()

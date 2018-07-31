@@ -11,33 +11,33 @@ import com.lucevent.newsup.view.adapter.viewholder.SiteListViewHolder;
 
 public class SiteListAdapter extends RecyclerView.Adapter<SiteListViewHolder> {
 
-    private Sites sites;
-    private View.OnClickListener itemListener;
+	private Sites mSites;
+	private View.OnClickListener mOnItemClickListener;
 
-    public SiteListAdapter(Sites sites, View.OnClickListener itemListener)
-    {
-        this.sites = sites;
-        this.itemListener = itemListener;
-    }
+	public SiteListAdapter(Sites sites, View.OnClickListener onItemClickListener)
+	{
+		mSites = sites;
+		mOnItemClickListener = onItemClickListener;
+	}
 
-    @Override
-    public SiteListViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-    {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.i_site_list, parent, false);
-        v.setOnClickListener(itemListener);
-        return new SiteListViewHolder(v);
-    }
+	@Override
+	public SiteListViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+	{
+		View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.i_site_list, parent, false);
+		v.setOnClickListener(mOnItemClickListener);
+		return new SiteListViewHolder(v);
+	}
 
-    @Override
-    public void onBindViewHolder(SiteListViewHolder holder, int position)
-    {
-        holder.bind(sites.get(position));
-    }
+	@Override
+	public void onBindViewHolder(SiteListViewHolder holder, int position)
+	{
+		holder.bind(mSites.get(position));
+	}
 
-    @Override
-    public int getItemCount()
-    {
-        return sites.size();
-    }
+	@Override
+	public int getItemCount()
+	{
+		return mSites.size();
+	}
 
 }

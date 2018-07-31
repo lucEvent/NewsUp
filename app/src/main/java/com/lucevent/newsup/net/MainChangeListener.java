@@ -4,12 +4,12 @@ import android.app.Fragment;
 
 public interface MainChangeListener {
 
-    void onMainistsChange();
+	void onMainistsChange();
 
-    void onFavoritesChange();
+	void onFavoritesChange();
 
-    void onReplaceFragment(Fragment f, int navigationViewIndex, boolean addToStack);
+	void onReplaceFragment(Fragment f, int navigationViewIndex, boolean addToStack);
 
-    void onLoadImagesPreferenceChanged();
+	void onLoadImagesPreferenceChanged();
 
 }

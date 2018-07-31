@@ -5,12 +5,12 @@ import com.lucevent.newsup.data.util.Sections;
 
 public class OmicronoSections extends Sections {
 
-    public OmicronoSections()
-    {
-        super();
+	public OmicronoSections()
+	{
+		super();
 
-        add(new Section("Principal", "http://feeds.feedburner.com/omicrono", 0));
+		add(new Section("Principal", "http://feeds.feedburner.com/omicrono", 0));
 
-    }
+	}
 
 }

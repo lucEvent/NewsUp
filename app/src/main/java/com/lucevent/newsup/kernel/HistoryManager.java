@@ -8,32 +8,37 @@ import com.lucevent.newsup.io.DBManager;
 
 public class HistoryManager {
 
-    private final Handler handler;
+	private final Handler handler;
 
-    private DBManager dbmanager;
+	private DBManager dbmanager;
 
-    public HistoryManager(Context context, Handler handler)
-    {
-        this.handler = handler;
+	public HistoryManager(Context context, Handler handler)
+	{
+		this.handler = handler;
 
-        dbmanager = new DBManager(context);
-    }
+		dbmanager = new DBManager(context);
+	}
 
-    public void getReadNews()
-    {
-        new Thread(new Runnable() {
-            @Override
-            public void run()
-            {
-                NewsMap news = dbmanager.readReadNews();
-                handler.obtainMessage(AppCode.NEWS_COLLECTION, news.values()).sendToTarget();
-            }
-        }).start();
-    }
+	public void getReadNews()
+	{
+		new Thread(new Runnable() {
+			@Override
+			public void run()
+			{
+				NewsMap news = dbmanager.readReadNews();
+				handler.obtainMessage(AppCode.NEWS_COLLECTION, news.values()).sendToTarget();
+			}
+		}).start();
+	}
 
-    public void clearHistory()
-    {
-        dbmanager.deleteHistory();
-    }
+	public DBManager getDataManager()
+	{
+		return dbmanager;
+	}
+
+	public void clearHistory()
+	{
+		dbmanager.deleteHistory();
+	}
 
 }

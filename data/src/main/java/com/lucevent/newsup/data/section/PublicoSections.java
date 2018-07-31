@@ -5,12 +5,12 @@ import com.lucevent.newsup.data.util.Sections;
 
 public class PublicoSections extends Sections {
 
-    public PublicoSections()
-    {
-        super();
+	public PublicoSections()
+	{
+		super();
 
-        add(new Section("Portada", "http://www.publico.es/rss/", 0));
+		add(new Section("Portada", "http://www.publico.es/rss/", 0));
 
-    }
+	}
 
 }

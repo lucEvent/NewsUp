@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 public class Notes extends ArrayList<Note> {
 
-    public Notes()
-    {
-        super();
-    }
+	public Notes()
+	{
+		super();
+	}
 
 }

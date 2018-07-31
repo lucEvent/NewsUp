@@ -10,7 +10,7 @@ public class Report {
 
     @Id
     @Index
-    private Long id;
+    public Long id;
 
     @Index
     public Long time;

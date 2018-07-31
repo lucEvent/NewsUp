@@ -1,6 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.Enclosure;
+import com.lucevent.newsup.data.util.Enclosures;
 import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.nodes.Document;
@@ -8,44 +8,39 @@ import org.jsoup.select.Elements;
 
 public class HelsinkiTimes extends com.lucevent.newsup.data.util.NewsReader {
 
-    //Tags:[author, category, description, guid, item, link, pubdate, title]
+	//Tags:[author, category, description, guid, item, link, pubdate, title]
 
-    public HelsinkiTimes()
-    {
-        super(TAG_ITEM_ITEMS,
-                new int[]{TAG_TITLE},
-                new int[]{TAG_LINK},
-                new int[]{TAG_DESCRIPTION},
-                new int[]{},
-                new int[]{TAG_PUBDATE},
-                new int[]{TAG_CATEGORY},
-                new int[]{},
-                "");
-    }
+	public HelsinkiTimes()
+	{
+		super(TAG_ITEM_ITEMS,
+				new int[]{TAG_TITLE},
+				new int[]{TAG_LINK},
+				new int[]{TAG_DESCRIPTION},
+				new int[]{},
+				new int[]{TAG_PUBDATE},
+				new int[]{TAG_CATEGORY},
+				new int[]{},
+				"");
+	}
 
-    @Override
-    protected News onNewsRead(News news)
-    {
-        Document doc = org.jsoup.Jsoup.parse(news.description);
+	@Override
+	protected News onNewsRead(News news, Enclosures enclosures)
+	{
+		Document doc = org.jsoup.Jsoup.parse(news.description);
+		news.imgSrc = findImageSrc(doc);
+		news.description = doc.text();
+		return news;
+	}
 
-        Elements enc = doc.select("img");
-        if (!enc.isEmpty())
-            news.enclosures.add(new Enclosure(enc.get(0).attr("src"), "image", ""));
+	@Override
+	protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+	{
+		Elements article = doc.select(".article-content-main");
+		article.select("script,.infobox").remove();
 
-        news.description = doc.text();
+		article.select("[style]").removeAttr("style");
 
-        return news;
-    }
-
-    @Override
-    protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
-    {
-        Elements article = doc.select(".article-content-main");
-        article.select("script,.infobox").remove();
-
-        article.select("[style]").removeAttr("style");
-
-        news.content = finalFormat(article, true);
-    }
+		news.content = finalFormat(article, true);
+	}
 
 }

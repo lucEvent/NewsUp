@@ -5,9 +5,11 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Rect;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.DrawerLayout;
@@ -22,7 +24,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -37,271 +38,300 @@ import com.lucevent.newsup.view.adapter.viewholder.news.NewsWebViewViewHolder;
 
 public class NewsView extends RelativeLayout {
 
-    private News currentNews;
+	private News currentNews;
 
-    private Activity activityContext;
-    private DrawerLayout drawer;
-    private ActionBar actionBar;
+	private Activity activityContext;
+	private DrawerLayout drawer;
+	private ActionBar actionBar;
 
-    private NewsElementsListView listView;
-    private FloatingActionButton button_bookmark;
-    private NewsSideToolbar sideToolbar;
-    private boolean nightMode, displayActionBar;
+	private NewsElementsListView listView;
+	private FloatingActionButton button_bookmark;
+	private NewsSideToolbar sideToolbar;
+	private boolean displayActionBar;
 
-    public NewsView(Context context, AttributeSet attrs)
-    {
-        super(context, attrs);
+	public NewsView(Context context, AttributeSet attrs)
+	{
+		super(context, attrs);
 
-        nightMode = AppSettings.getNightModeStatus();
-        displayActionBar = false;
+		displayActionBar = false;
 
-        ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
-                .inflate(R.layout.v_news, this, true);
+		((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+				.inflate(R.layout.v_news, this, true);
 
-        listView = (NewsElementsListView) findViewById(R.id.list);
-        ((ScrollView) listView.getParent()).setBackgroundResource(nightMode ? R.color.nv_background_dark : R.color.nv_background);
+		listView = (NewsElementsListView) findViewById(R.id.list);
+		sideToolbar = (NewsSideToolbar) findViewById(R.id.side_toolbar);
 
-        sideToolbar = (NewsSideToolbar) findViewById(R.id.side_toolbar);
+		button_bookmark = (FloatingActionButton) findViewById(R.id.button_bookmark);
+		findViewById(R.id.button_share).setOnClickListener(onShareAction);
+		findViewById(R.id.button_night).setOnClickListener(onNightModeSelected);
+		findViewById(R.id.button_font_size).setOnClickListener(onFontSizeSelected);
+		findViewById(R.id.button_open_in_browser).setOnClickListener(onOpenInBrowserSelected);
 
-        button_bookmark = (FloatingActionButton) findViewById(R.id.button_bookmark);
-        findViewById(R.id.button_share).setOnClickListener(onShareAction);
-        findViewById(R.id.button_night).setOnClickListener(onNightModeSelected);
-        findViewById(R.id.button_font_size).setOnClickListener(onFontSizeSelected);
+		setUpNightMode();
+		PreferenceManager.getDefaultSharedPreferences(context).registerOnSharedPreferenceChangeListener(onPreferenceChange);
+	}
 
-        //     gd = new GestureDetectorCompat(context, onGestureListener);
-    }
+	@Override
+	protected void onConfigurationChanged(Configuration newConfig)
+	{
+		super.onConfigurationChanged(newConfig);
 
-    @Override
-    protected void onConfigurationChanged(Configuration newConfig)
-    {
-        super.onConfigurationChanged(newConfig);
+		if (viewHeight != -2) {
+			int aux = viewWidth;
+			viewWidth = viewHeight;
+			viewHeight = aux;
+		}
 
-        if (viewHeight != -2) {
-            int aux = viewWidth;
-            viewWidth = viewHeight;
-            viewHeight = aux;
-        }
+		if (getVisibility() == View.VISIBLE) {
 
-        if (getVisibility() == View.VISIBLE) {
+			ViewGroup.LayoutParams layoutParams = getLayoutParams();
 
-            ViewGroup.LayoutParams layoutParams = getLayoutParams();
+			layoutParams.width = -1;
+			layoutParams.height = -1;
 
-            layoutParams.width = -1;
-            layoutParams.height = -1;
+			requestLayout();
+		}
+	}
 
-            requestLayout();
-        }
-    }
+	public void setFragmentContext(Fragment fragmentContext, @Nullable DrawerLayout drawer)
+	{
+		setFragmentContext(fragmentContext.getActivity(), drawer);
+	}
 
-    public void setFragmentContext(Fragment fragmentContext, @Nullable DrawerLayout drawer)
-    {
-        setFragmentContext(fragmentContext.getActivity(), drawer);
-    }
+	public void setFragmentContext(Activity a, @Nullable DrawerLayout drawer)
+	{
+		this.activityContext = a;
+		if (a instanceof AppCompatActivity) {
+			this.actionBar = ((AppCompatActivity) a).getSupportActionBar();
+			this.actionBar.setShowHideAnimationEnabled(false);
+		}
+		this.drawer = drawer;
+	}
 
-    public void setFragmentContext(Activity activityContext, @Nullable DrawerLayout drawer)
-    {
-        this.activityContext = activityContext;
-        this.actionBar = ((AppCompatActivity) activityContext).getSupportActionBar();
-        this.actionBar.setShowHideAnimationEnabled(false);
-        this.drawer = drawer;
-    }
+	public void setBookmarkStateChangeListener(View.OnClickListener bookmarkStateChangeListener)
+	{
+		button_bookmark.setOnClickListener(bookmarkStateChangeListener);
+	}
 
-    public void setBookmarkStateChangeListener(View.OnClickListener bookmarkStateChangeListener)
-    {
-        button_bookmark.setOnClickListener(bookmarkStateChangeListener);
-    }
+	public void setImageLongClickListener(OnLongClickListener listener)
+	{
+		listView.setImageLongClickListener(listener);
+	}
 
-    public void setImageLongClickListener(OnLongClickListener listener)
-    {
-        listView.setImageLongClickListener(listener);
-    }
+	public void setUpNightMode()
+	{
+		boolean nightMode = AppSettings.getNightModeStatus();
+		((ViewGroup) listView.getParent()).setBackgroundResource(nightMode ? R.color.nv_background_dark : R.color.nv_background);
+		listView.setDarkStyle(nightMode);
+	}
 
-    private int viewWidth = -2;
-    private int viewHeight = -2;
+	private int viewWidth = -2;
+	private int viewHeight = -2;
 
-    public void displayNews(News news)
-    {
-        currentNews = news;
-        button_bookmark.setTag(news);
-        button_bookmark.setSelected(BookmarksManager.isBookmarked(news));
+	public void displayNews(News news)
+	{
+		currentNews = news;
+		button_bookmark.setTag(news);
+		button_bookmark.setSelected(BookmarksManager.isBookmarked(news));
 
-        Site site = AppData.getSiteByCode(currentNews.site_code);
+		Site site = AppData.getSiteByCode(currentNews.site_code);
 
-        listView.clear();
-        listView.set(currentNews.title, new NTVParser().parse(currentNews.content, site), site);
+		listView.clear();
+		listView.set(currentNews.title, new NTVParser().parse(currentNews.content, site), site);
 
-        if (drawer != null)
-            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+		if (drawer != null)
+			drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
-        if (actionBar.isShowing()) {
-            displayActionBar = true;
-            actionBar.hide();
-        }
+		if (actionBar != null && actionBar.isShowing()) {
+			displayActionBar = true;
+			actionBar.hide();
+		}
 
-        setVisibility(View.VISIBLE);
+		setVisibility(View.VISIBLE);
 
-        if (viewHeight == -2) {
-            Rect r = new Rect();
-            activityContext.getWindow().getDecorView().getWindowVisibleDisplayFrame(r);
-            viewHeight = ((ViewGroup) getParent()).getHeight() + actionBar.getHeight() + r.top;
-            viewWidth = getWidth();
-        }
+		if (viewHeight == -2) {
+			Rect r = new Rect();
+			activityContext.getWindow().getDecorView().getWindowVisibleDisplayFrame(r);
+			viewHeight = ((ViewGroup) getParent()).getHeight() + (actionBar != null ? actionBar.getHeight() : 0) + r.top;
+			viewWidth = getWidth();
+		}
 
-        AppAnimator.swipeUp(this, viewHeight, new AppAnimator.AppAnimatorListener() {
-            @Override
-            public void onAnimationEnd(Animation animation)
-            {
-                //  hiding System UI
-                Window w = activityContext.getWindow();
-                w.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-                w.getDecorView().setSystemUiVisibility(
-                        View.SYSTEM_UI_FLAG_LOW_PROFILE
-                                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-            }
-        });
-    }
+		AppAnimator.swipeUp(this, viewHeight, new AppAnimator.AppAnimatorListener() {
+			@Override
+			public void onAnimationEnd(Animation animation)
+			{
+				//  hiding System UI
+				Window w = activityContext.getWindow();
+				w.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+				w.getDecorView().setSystemUiVisibility(
+						View.SYSTEM_UI_FLAG_LOW_PROFILE
+								| View.SYSTEM_UI_FLAG_FULLSCREEN
+								| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+								| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+			}
+		});
+	}
 
-    public void resume()
-    {
-        //      listView.onResume();
-    }
+	public void resume()
+	{
+		//      listView.onResume();
+	}
 
-    public void pause()
-    {
-        //     listView.onPause();
-    }
+	public void pause()
+	{
+		//   listView.onPause();
+	}
 
-    public void hideNews()
-    {
-        // showing System UI
-        Window w = activityContext.getWindow();
-        w.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        w.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+	public void destroy()
+	{
+		PreferenceManager.getDefaultSharedPreferences(getContext()).unregisterOnSharedPreferenceChangeListener(onPreferenceChange);
+	}
 
-        if (displayActionBar)
-            actionBar.show();
-        displayActionBar = false;
+	public void hideNews()
+	{
+		if (actionBar != null) {
+			// showing System UI
+			Window w = activityContext.getWindow();
+			w.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+			w.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run()
-            {
-                listView.clear();
-            }
-        }, 400);
-        AppAnimator.swipeDown(this, this.getY(), viewHeight, new AppAnimator.AppAnimatorListener() {
+			if (displayActionBar)
+				actionBar.show();
+			displayActionBar = false;
+		}
 
-            @Override
-            public void onAnimationEnd(Animation animation)
-            {
-                if (drawer != null)
-                    drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+		new Handler().postDelayed(new Runnable() {
+			@Override
+			public void run()
+			{
+				listView.clear();
+			}
+		}, 400);
+		AppAnimator.swipeDown(this, this.getY(), viewHeight, new AppAnimator.AppAnimatorListener() {
 
-                setVisibility(View.GONE);
-            }
-        });
+			@Override
+			public void onAnimationEnd(Animation animation)
+			{
+				if (drawer != null)
+					drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
-        if (!sideToolbar.closed)
-            sideToolbar.close();
-    }
+				setVisibility(View.GONE);
+			}
+		});
 
-    private final View.OnClickListener onShareAction = new View.OnClickListener() {
-        @Override
-        public void onClick(View v)
-        {
-            Intent sendIntent = new Intent();
-            sendIntent.setAction(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_TEXT, currentNews.title + " " + currentNews.link);
-            sendIntent.setType("text/plain");
-            getContext().startActivity(Intent.createChooser(sendIntent, getContext().getString(R.string.share_with)));
-        }
-    };
+		if (!sideToolbar.isClosed())
+			sideToolbar.close();
+	}
 
-    private final View.OnClickListener onNightModeSelected = new View.OnClickListener() {
-        @Override
-        public void onClick(View v)
-        {
-            nightMode = !nightMode;
-            listView.setDarkStyle(nightMode);
-            ((ScrollView) listView.getParent()).setBackgroundResource(nightMode ? R.color.nv_background_dark : R.color.nv_background);
-            AppSettings.setNightModeStatus(nightMode);
-        }
-    };
+	private final View.OnClickListener onShareAction = new View.OnClickListener() {
+		@Override
+		public void onClick(View v)
+		{
+			Intent sendIntent = new Intent();
+			sendIntent.setAction(Intent.ACTION_SEND);
+			sendIntent.putExtra(Intent.EXTRA_TEXT, currentNews.title + " " + currentNews.link);
+			sendIntent.setType("text/plain");
+			getContext().startActivity(Intent.createChooser(sendIntent, getContext().getString(R.string.share_with)));
+		}
+	};
 
-    //
-    private View fontSizeBox;
-    private boolean fontSizeBoxShouldHide;
-    private Handler mHandler = new Handler();
-    //
-    private final View.OnClickListener onFontSizeSelected = new View.OnClickListener() {
-        @SuppressLint("SetTextI18n")
-        @Override
-        public void onClick(View v)
-        {
-            if (fontSizeBox == null) {
-                fontSizeBox = ((ViewStub) findViewById(R.id.box_font_size)).inflate();
+	private final View.OnClickListener onNightModeSelected = new View.OnClickListener() {
+		@Override
+		public void onClick(View v)
+		{
+			AppSettings.toggleNightMode();
+			setUpNightMode();
+		}
+	};
 
-                int current_font_size = AppSettings.getFontSize(2);
-                ((TextView) fontSizeBox.findViewById(R.id.label)).setText(NewsWebViewViewHolder.FONT_SIZE_VALUES[current_font_size] + "%");
+	//
+	private View fontSizeBox;
+	private boolean fontSizeBoxShouldHide;
+	private Handler mHandler = new Handler();
+	//
+	private final View.OnClickListener onFontSizeSelected = new View.OnClickListener() {
+		@SuppressLint("SetTextI18n")
+		@Override
+		public void onClick(View v)
+		{
+			if (fontSizeBox == null) {
+				fontSizeBox = ((ViewStub) findViewById(R.id.box_font_size)).inflate();
 
-                SeekBar seekBar = (SeekBar) fontSizeBox.findViewById(R.id.seekBar);
-                seekBar.setProgress(current_font_size);
-                seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+				int current_font_size = AppSettings.getFontSize(2);
+				((TextView) fontSizeBox.findViewById(R.id.label)).setText(NewsWebViewViewHolder.FONT_SIZE_VALUES[current_font_size] + "%");
 
-                    @Override
-                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
-                    {
-                        listView.setTextSize(progress);
-                        ((TextView) fontSizeBox.findViewById(R.id.label)).setText(NewsWebViewViewHolder.FONT_SIZE_VALUES[progress] + "%");
-                        AppSettings.setFontSize(progress);
-                    }
+				SeekBar seekBar = (SeekBar) fontSizeBox.findViewById(R.id.seekBar);
+				seekBar.setProgress(current_font_size);
+				seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
-                    @Override
-                    public void onStartTrackingTouch(SeekBar seekBar)
-                    {
-                        synchronized (onFontSizeSelected) {
-                            fontSizeBoxShouldHide = false;
-                        }
-                    }
+					@Override
+					public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
+					{
+						listView.setTextSize(progress);
+						((TextView) fontSizeBox.findViewById(R.id.label)).setText(NewsWebViewViewHolder.FONT_SIZE_VALUES[progress] + "%");
+						AppSettings.setFontSize(progress);
+					}
 
-                    @Override
-                    public void onStopTrackingTouch(SeekBar seekBar)
-                    {
-                        mHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run()
-                            {
-                                fontSizeBox.setVisibility(View.GONE);
-                            }
-                        }, 1000);
-                    }
-                });
-                setHidingTimer();
-                return;
-            }
-            if (fontSizeBox.getVisibility() != VISIBLE) {
-                fontSizeBox.setVisibility(VISIBLE);
-                setHidingTimer();
-            } else
-                fontSizeBox.setVisibility(GONE);
-        }
+					@Override
+					public void onStartTrackingTouch(SeekBar seekBar)
+					{
+						synchronized (onFontSizeSelected) {
+							fontSizeBoxShouldHide = false;
+						}
+					}
 
-        private void setHidingTimer()
-        {
-            fontSizeBoxShouldHide = true;
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run()
-                {
-                    synchronized (onFontSizeSelected) {
-                        if (fontSizeBoxShouldHide)
-                            fontSizeBox.setVisibility(View.GONE);
-                    }
-                }
-            }, 3000);
-        }
-    };
+					@Override
+					public void onStopTrackingTouch(SeekBar seekBar)
+					{
+						mHandler.postDelayed(new Runnable() {
+							@Override
+							public void run()
+							{
+								fontSizeBox.setVisibility(View.GONE);
+							}
+						}, 1000);
+					}
+				});
+				setHidingTimer();
+				return;
+			}
+			if (fontSizeBox.getVisibility() != VISIBLE) {
+				fontSizeBox.setVisibility(VISIBLE);
+				setHidingTimer();
+			} else
+				fontSizeBox.setVisibility(GONE);
+		}
+
+		private void setHidingTimer()
+		{
+			fontSizeBoxShouldHide = true;
+			mHandler.postDelayed(new Runnable() {
+				@Override
+				public void run()
+				{
+					synchronized (onFontSizeSelected) {
+						if (fontSizeBoxShouldHide)
+							fontSizeBox.setVisibility(View.GONE);
+					}
+				}
+			}, 3000);
+		}
+	};
+
+	private final View.OnClickListener onOpenInBrowserSelected = new View.OnClickListener() {
+		@Override
+		public void onClick(View v)
+		{
+			Utils.openCustomTab(v.getContext(), currentNews);
+		}
+	};
+
+	SharedPreferences.OnSharedPreferenceChangeListener onPreferenceChange = new SharedPreferences.OnSharedPreferenceChangeListener() {
+		public void onSharedPreferenceChanged(SharedPreferences prefs, String key)
+		{
+			if (key.equals(AppSettings.PREF_NIGHT_MODE_KEY))
+				setUpNightMode();
+		}
+	};
 
 }

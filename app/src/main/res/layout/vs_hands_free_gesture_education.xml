@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#9000"
+    tools:ignore="RtlHardcoded">
+
+    <RelativeLayout
+        android:id="@+id/box_gestures"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:clipChildren="false">
+
+        <LinearLayout
+            style="@style/hf_gestureBox"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/box_center_gestures"
+            android:translationY="20dp">
+
+            <ImageView
+                style="@style/hf_dragInd"
+                android:rotation="90" />
+
+            <com.lucevent.newsup.view.util.AppTextView
+                style="@style/hf_textInd"
+                android:text="@string/previous" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/box_center_gestures"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <com.lucevent.newsup.view.util.AppTextView
+                style="@style/hf_textInd"
+                android:text="@string/close" />
+
+            <ImageView
+                style="@style/hf_dragInd"
+                android:rotation="180" />
+
+            <ImageView
+                style="@style/hf_dragInd"
+                android:layout_marginTop="90dp" />
+
+            <com.lucevent.newsup.view.util.AppTextView
+                style="@style/hf_textInd"
+                android:text="@string/open_news" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/hf_gestureBox"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/box_center_gestures"
+            android:translationY="20dp">
+
+            <ImageView
+                style="@style/hf_dragInd"
+                android:rotation="-90" />
+
+            <com.lucevent.newsup.view.util.AppTextView
+                style="@style/hf_textInd"
+                android:text="@string/next" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/box_gestures">
+
+        <Button
+            android:id="@+id/btn_ok"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:alpha=".8"
+            android:backgroundTint="#3eee"
+            android:text="@string/got_it"
+            android:textColor="#fff"
+            android:textSize="16sp" />
+
+        <CheckBox
+            android:id="@+id/do_not_show_again"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btn_ok"
+            android:layout_centerInParent="true"
+            android:buttonTint="#fff"
+            android:text="@string/do_not_show_again"
+            android:textColor="#fff"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
+</RelativeLayout>

@@ -1,61 +1,80 @@
 package com.lucevent.newsup.data.util;
 
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 import java.io.Serializable;
 
 public class News implements Comparable<News>, Serializable {
 
-    public final int id;
+	public static final int ID_DUMMY = -9;
 
-    public final String title, link;
+	public final int id;
 
-    public final long date;
+	public final String title, link;
 
-    public long readOn;
+	public final long date;
+	public final int site_code, section_code;
+	public final Tags tags;
+	public long readOn;
+	public String description, content;
+	public String imgSrc;
 
-    public final int site_code, section_code;
+	public News(int id, String title, String link, String description, long date, String imgSrc, Tags tags, int site_code, int section_code, long readOn)
+	{
+		this.id = id;
+		this.title = title;
+		this.link = link;
+		this.description = description;
+		this.date = date;
+		this.imgSrc = imgSrc;
+		this.tags = tags;
+		this.section_code = section_code;
+		this.readOn = readOn;
+		this.site_code = site_code;
+	}
 
-    public String description, content;
+	public News(String title, String link, String description, long date, String imgSrc, Tags categories, int site_code, int section_code, long readOn)
+	{
+		this(link.hashCode(), title, link, description, date, imgSrc, categories, site_code, section_code, readOn);
+	}
 
-    public final Tags tags;
+	public News clone()
+	{
+		return new News(id, title, link, description, date, imgSrc, tags, site_code, section_code, readOn);
+	}
 
-    public Enclosures enclosures;
+	public boolean hasKeyWords(String[] keyWords)
+	{
+		for (String keyW : keyWords) {
+			for (String tag : tags)
+				if (tag.equals(keyW))
+					return true;
 
-    public News(int id, String title, String link, String description, long date, Tags tags, int site_code, int section_code, long readOn)
-    {
-        this.id = id;
-        this.title = title;
-        this.link = link;
-        this.description = description;
-        this.date = date;
-        this.tags = tags;
-        this.section_code = section_code;
-        this.readOn = readOn;
-        this.site_code = site_code;
-    }
+			if (title.toLowerCase().contains(keyW))
+				return true;
+		}
+		return false;
+	}
 
-    public News(String title, String link, String description, long date, Tags categories, int site_code, int section_code, long readOn)
-    {
-        this(link.hashCode(), title, link, description, date, categories, site_code, section_code, readOn);
-    }
+	@Override
+	public int compareTo(News o)
+	{
+		int comparison = Long.compare(this.date, o.date);
+		return comparison != 0 ? -comparison : Integer.compare(this.id, o.id);
+	}
 
-    public boolean hasKeyWords(String[] keyWords)
-    {
-        for (String keyW : keyWords) {
-            for (String tag : tags)
-                if (tag.equals(keyW))
-                    return true;
+	public void forceImage()
+	{
+		if ((content == null || content.isEmpty()) && imgSrc == null)
+			return;
 
-            if (title.toLowerCase().contains(keyW))
-                return true;
-        }
-        return false;
-    }
+		Element parse = org.jsoup.Jsoup.parse(content);
+		Elements images = parse.select("img[src]");
+		if (images.isEmpty())
+			return;
 
-    @Override
-    public int compareTo(News o)
-    {
-        int comparison = Long.compare(this.date, o.date);
-        return comparison != 0 ? -comparison : Integer.compare(this.id, o.id);
-    }
+		imgSrc = images.first().attr("src");
+	}
 
 }

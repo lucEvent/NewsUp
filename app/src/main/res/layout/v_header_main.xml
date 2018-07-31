@@ -1,52 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/nav_header_height"
-        android:background="@drawable/side_nav_bar"
-        android:gravity="bottom"
-        android:orientation="vertical"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin">
+        android:background="@drawable/side_nav_bar">
 
-        <ImageView
+        <ImageButton
+            android:id="@+id/switch_night_mode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/nav_header_vertical_spacing"
-            android:src="@mipmap/ic_launcher"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="@dimen/nav_header_vertical_spacing"
-            android:text="@string/app_name"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="8dp"
+            android:background="@drawable/ripple_round"
+            android:onClick="onNightModeChange"
+            android:padding="8dp"
+            android:src="@drawable/ic_night_off"
+            android:tint="@color/tint_btn_drawer_action_bar" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:gravity="bottom"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
 
-            <TextView
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingEnd="5dp"
-                android:text="@string/version"/>
+                android:paddingTop="@dimen/nav_header_vertical_spacing"
+                android:src="@mipmap/ic_launcher" />
 
-            <TextView
+            <com.lucevent.newsup.view.util.AppTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/app_version"/>
+                android:paddingTop="@dimen/nav_header_vertical_spacing"
+                android:text="@string/app_name"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.lucevent.newsup.view.util.AppTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingEnd="5dp"
+                    android:text="@string/version" />
+
+                <com.lucevent.newsup.view.util.AppTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/app_version" />
+            </LinearLayout>
+
         </LinearLayout>
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -57,37 +75,37 @@
             android:id="@+id/nav_my_news"
             style="@style/btnDrawerActionbar"
             android:onClick="onDrawerActionBarItemSelected"
-            android:src="@drawable/ic_app_icon"/>
+            android:src="@drawable/ic_app_icon" />
 
         <ImageButton
             android:id="@+id/nav_events"
             style="@style/btnDrawerActionbar"
             android:onClick="onDrawerActionBarItemSelected"
-            android:src="@drawable/ic_events"/>
+            android:src="@drawable/ic_events" />
 
         <ImageButton
             android:id="@+id/nav_saved_news"
             style="@style/btnDrawerActionbar"
             android:onClick="onDrawerActionBarItemSelected"
-            android:src="@drawable/ic_bookmark"/>
+            android:src="@drawable/ic_bookmarks" />
 
         <ImageButton
             android:id="@+id/nav_read_news"
             style="@style/btnDrawerActionbar"
             android:onClick="onDrawerActionBarItemSelected"
-            android:src="@drawable/ic_history"/>
+            android:src="@drawable/ic_history" />
 
         <ImageButton
             android:id="@+id/nav_stats"
             style="@style/btnDrawerActionbar"
             android:onClick="onDrawerActionBarItemSelected"
-            android:src="@drawable/ic_statistics"/>
+            android:src="@drawable/ic_statistics" />
 
         <ImageButton
             android:id="@+id/nav_more_publications"
             style="@style/btnDrawerActionbar"
             android:onClick="onDrawerActionBarItemSelected"
-            android:src="@drawable/ic_more_sites"/>
+            android:src="@drawable/ic_more_sites" />
 
     </LinearLayout>
 
@@ -95,6 +113,6 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="6dp"
-        android:background="@color/divisor"/>
+        android:background="@color/divisor" />
 
 </LinearLayout>

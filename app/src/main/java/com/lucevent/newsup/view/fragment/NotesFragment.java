@@ -24,79 +24,82 @@ import com.lucevent.newsup.view.util.ListItemSwipeListener;
 
 public class NotesFragment extends Fragment implements TextView.OnEditorActionListener, ListItemSwipeListener {
 
-    private EditText input;
-    private NoteAdapter adapter;
+	private EditText input;
+	private NoteAdapter adapter;
 
-    private NoteManager noteManager;
+	private NoteManager noteManager;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
-        Context context = getActivity();
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	{
+		if (container != null)
+			container.removeAllViews();
 
-        if (noteManager == null) {
-            noteManager = new NoteManager(context);
-            adapter = new NoteAdapter(context, noteManager.getNotes());
-        }
+		Context context = getActivity();
 
-        View view = inflater.inflate(R.layout.f_drawer, container, false);
+		if (noteManager == null) {
+			noteManager = new NoteManager(context);
+			adapter = new NoteAdapter(context, noteManager.getNotes());
+		}
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-        layoutManager.setAutoMeasureEnabled(true);
+		View view = inflater.inflate(R.layout.f_drawer, container, false);
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
-        recyclerView.setHasFixedSize(false);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
+		LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+		layoutManager.setAutoMeasureEnabled(true);
+
+		RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
+		recyclerView.setHasFixedSize(false);
+		recyclerView.setLayoutManager(layoutManager);
+		recyclerView.setAdapter(adapter);
 
 
-        ItemTouchHelper.Callback callback = new ListItemSwipeCallback(this, (TextView) view.findViewById(R.id.swipe_message));
-        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
-        touchHelper.attachToRecyclerView(recyclerView);
+		ItemTouchHelper.Callback callback = new ListItemSwipeCallback(this, (TextView) view.findViewById(R.id.swipe_message));
+		ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+		touchHelper.attachToRecyclerView(recyclerView);
 
-        input = (EditText) view.findViewById(R.id.input);
-        input.setOnEditorActionListener(this);
+		input = (EditText) view.findViewById(R.id.input);
+		input.setOnEditorActionListener(this);
 
-        ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE))
-                .toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+		((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE))
+				.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
-        return view;
-    }
+		return view;
+	}
 
-    @Override
-    public void onPause()
-    {
-        super.onPause();
+	@Override
+	public void onPause()
+	{
+		super.onPause();
 
-        ((InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE))
-                .hideSoftInputFromWindow(input.getWindowToken(), 0);
-    }
+		((InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE))
+				.hideSoftInputFromWindow(input.getWindowToken(), 0);
+	}
 
-    @Override
-    public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
-    {
-        String in = input.getText().toString();
-        if (in.isEmpty())
-            Toast.makeText(getActivity(), R.string.msg_empty_input, Toast.LENGTH_SHORT).show();
+	@Override
+	public boolean onEditorAction(TextView v, int actionId, KeyEvent event)
+	{
+		String in = input.getText().toString();
+		if (in.isEmpty())
+			Toast.makeText(getActivity(), R.string.msg_empty_input, Toast.LENGTH_SHORT).show();
 
-        else {
-            noteManager.createNote(in);
-            adapter.notifyDataSetChanged();
-            input.setText("");
-        }
-        return true;
-    }
+		else {
+			noteManager.createNote(in);
+			adapter.notifyDataSetChanged();
+			input.setText("");
+		}
+		return true;
+	}
 
-    @Override
-    public void onItemDismiss(int position)
-    {
-        noteManager.deleteNote(position);
-        adapter.notifyItemRemoved(position);
-    }
+	@Override
+	public void onItemDismiss(int position)
+	{
+		noteManager.deleteNote(position);
+		adapter.notifyItemRemoved(position);
+	}
 
-    @Override
-    public void onItemMove(int fromPosition, int toPosition)
-    {
-    }
+	@Override
+	public void onItemMove(int fromPosition, int toPosition)
+	{
+	}
 
 }

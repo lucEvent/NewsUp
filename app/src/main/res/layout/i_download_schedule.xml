@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/listItemContainer"
     android:layout_marginBottom="5dp"
     android:orientation="vertical"
     android:paddingBottom="5dp"
     android:paddingTop="5dp">
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,28 +20,28 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingEnd="12dp"
-            android:paddingStart="16dp"/>
+            android:paddingStart="16dp" />
 
         <ImageView
             android:id="@+id/repeat"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:padding="4dp"
-            android:src="@drawable/ic_repeat"/>
+            android:src="@drawable/ic_repeat" />
 
         <ImageView
             android:id="@+id/notify"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:padding="4dp"
-            android:src="@drawable/ic_notification"/>
+            android:src="@drawable/ic_notification_on" />
 
         <ImageButton
             android:id="@+id/action_delete"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@drawable/ripple_round"
-            android:src="@drawable/ic_remove"/>
+            android:src="@drawable/ic_remove" />
 
     </LinearLayout>
 
@@ -56,6 +54,6 @@
         android:paddingStart="16dp"
         android:paddingTop="10dp"
         android:text="8:00 - Mon, Tue, Wed, Thu, Fri, Sat, Sun"
-        android:textSize="17sp"/>
+        android:textSize="17sp" />
 
 </LinearLayout>

@@ -13,52 +13,52 @@ import java.util.Set;
 
 public class MoreSectionsViewHolder extends RecyclerView.ViewHolder {
 
-    private OnMoreSectionsClickListener onMoreClick;
-    private Button[] buttons;
+	private OnMoreSectionsClickListener mOnMoreClickListener;
+	private Button[] mButtons;
 
-    public MoreSectionsViewHolder(View v, OnMoreSectionsClickListener onMoreClick)
-    {
-        super(v);
+	public MoreSectionsViewHolder(View v, OnMoreSectionsClickListener onMoreClickListener)
+	{
+		super(v);
 
-        this.onMoreClick = onMoreClick;
+		mOnMoreClickListener = onMoreClickListener;
 
-        buttons = new Button[9];
-        buttons[0] = (Button) v.findViewById(R.id.button_1);
-        buttons[1] = (Button) v.findViewById(R.id.button_2);
-        buttons[2] = (Button) v.findViewById(R.id.button_3);
-        buttons[3] = (Button) v.findViewById(R.id.button_4);
-        buttons[4] = (Button) v.findViewById(R.id.button_5);
-        buttons[5] = (Button) v.findViewById(R.id.button_6);
-        buttons[6] = (Button) v.findViewById(R.id.button_7);
-        buttons[7] = (Button) v.findViewById(R.id.button_8);
-        buttons[8] = (Button) v.findViewById(R.id.button_9);
+		mButtons = new Button[9];
+		mButtons[0] = (Button) v.findViewById(R.id.button_1);
+		mButtons[1] = (Button) v.findViewById(R.id.button_2);
+		mButtons[2] = (Button) v.findViewById(R.id.button_3);
+		mButtons[3] = (Button) v.findViewById(R.id.button_4);
+		mButtons[4] = (Button) v.findViewById(R.id.button_5);
+		mButtons[5] = (Button) v.findViewById(R.id.button_6);
+		mButtons[6] = (Button) v.findViewById(R.id.button_7);
+		mButtons[7] = (Button) v.findViewById(R.id.button_8);
+		mButtons[8] = (Button) v.findViewById(R.id.button_9);
 
-        for (Button b : buttons)
-            b.setOnClickListener(onMoreClick);
-    }
+		for (Button b : mButtons)
+			b.setOnClickListener(onMoreClickListener);
+	}
 
-    public void bind()
-    {
-        Set<Pair<Integer, Section>> sections = onMoreClick.sections();
-        int i = 0;
-        int charCounter = 0;
-        for (Pair<Integer, Section> section : sections) {
-            if (i % 3 == 0)
-                charCounter = 0;
+	public void bind()
+	{
+		Set<Pair<Integer, Section>> sections = mOnMoreClickListener.sections();
+		int i = 0;
+		int charCounter = 0;
+		for (Pair<Integer, Section> section : sections) {
+			if (i % 3 == 0)
+				charCounter = 0;
 
-            charCounter += section.second.name.length();
-            if (charCounter < 32) {
-                buttons[i].setVisibility(View.VISIBLE);
-                buttons[i].setText(section.second.name);
-                buttons[i].setTag(section.first);
-            } else
-                buttons[i].setVisibility(View.GONE);
+			charCounter += section.second.name.length();
+			if (charCounter < 32) {
+				mButtons[i].setVisibility(View.VISIBLE);
+				mButtons[i].setText(section.second.name);
+				mButtons[i].setTag(section.first);
+			} else
+				mButtons[i].setVisibility(View.GONE);
 
-            i++;
-        }
-        for (; i < buttons.length; i++)
-            buttons[i].setVisibility(View.GONE);
+			i++;
+		}
+		for (; i < mButtons.length; i++)
+			mButtons[i].setVisibility(View.GONE);
 
-    }
+	}
 
 }
