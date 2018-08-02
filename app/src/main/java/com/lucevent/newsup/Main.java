@@ -242,7 +242,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 		Sites favorites = dataManager.getFavoriteSites();
 		for (Site site : favorites) {
 			int order = Math.max(0, 0xffff - site.getNumReadings() - 1);
-			MenuItem mi = menu.add(R.id.group_favorites, site.code, order, site.name + " (" + site.getNumReadings() + ")");
+			MenuItem mi = menu.add(R.id.group_favorites, site.code, order, site.name);
 			configureMenuItem(mi, site);
 		}
 
