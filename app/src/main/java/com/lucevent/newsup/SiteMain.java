@@ -82,11 +82,11 @@ public class SiteMain extends AppCompatActivity implements MainChangeListener {
 		if (fragmentManager.getCurrentFragment() instanceof OnBackPressedListener
 				&& ((OnBackPressedListener) fragmentManager.getCurrentFragment()).onBackPressed()) {
 			// do nothing
-		} else if (fragmentManager.getBackStackEntryCount() > 0) {
+		} else if (fragmentManager.getBackStackEntryCount() > 1) {
 
 			fragmentManager.popFragment();
 
-		} else super.onBackPressed();
+		} else finish();
 	}
 
 	@Override

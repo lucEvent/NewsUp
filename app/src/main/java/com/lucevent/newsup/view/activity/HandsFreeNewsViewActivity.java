@@ -70,8 +70,6 @@ public class HandsFreeNewsViewActivity extends Activity implements
 		//
 
 		mNews = AppData.getCurrentNewsList();
-		mGDetector = new GestureDetectorCompat(this, this);
-		mGDetector.setIsLongpressEnabled(false);
 
 		mNewsView = (NewsView) findViewById(R.id.news_view);
 		mNewsView.setFragmentContext(this, null);
@@ -89,12 +87,23 @@ public class HandsFreeNewsViewActivity extends Activity implements
 					if (((CheckBox) findViewById(R.id.do_not_show_again)).isChecked())
 						AppSettings.setStatus(GESTURE_EDUCATION_SHOWN_KEY, true);
 
+					startGestureDetection(true);
 				}
 			});
-		}
+		} else
+			startGestureDetection(false);
 
 		hideSystemUi();
 		displayCurrent();
+	}
+
+	private void startGestureDetection(boolean wasEducationShown)
+	{
+		mGDetector = new GestureDetectorCompat(this, this);
+		mGDetector.setIsLongpressEnabled(false);
+
+		if (wasEducationShown)
+			mHandler.postDelayed(this, SECONDS_BETWEEN_NEWS);
 	}
 
 	private void displayNext()
@@ -139,7 +148,8 @@ public class HandsFreeNewsViewActivity extends Activity implements
 					.load(news.imgSrc)
 					.into(mIVimage);
 
-		mHandler.postDelayed(this, SECONDS_BETWEEN_NEWS);
+		if (mGDetector != null)
+			mHandler.postDelayed(this, SECONDS_BETWEEN_NEWS);
 	}
 
 	@Override
@@ -176,7 +186,7 @@ public class HandsFreeNewsViewActivity extends Activity implements
 	@Override
 	public boolean onTouchEvent(MotionEvent event)
 	{
-		return mGDetector.onTouchEvent(event) || super.onTouchEvent(event);
+		return (mGDetector != null && mGDetector.onTouchEvent(event)) || super.onTouchEvent(event);
 	}
 
 	@Override

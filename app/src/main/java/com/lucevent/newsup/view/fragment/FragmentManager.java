@@ -111,7 +111,7 @@ public class FragmentManager {
 
 	public int getBackStackEntryCount()
 	{
-		return mStackPointer;
+		return mStackPointer + 1;
 	}
 
 	public void setNavigationItemId(int position, int navId)

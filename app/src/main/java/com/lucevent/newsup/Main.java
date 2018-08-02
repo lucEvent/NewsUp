@@ -37,7 +37,7 @@ import com.lucevent.newsup.net.MainChangeListener;
 import com.lucevent.newsup.permission.PermissionHandler;
 import com.lucevent.newsup.services.ScheduledDownloadReceiver;
 import com.lucevent.newsup.view.activity.ContactActivity;
-import com.lucevent.newsup.view.activity.NewSiteRequestActivity;
+import com.lucevent.newsup.view.activity.FindPublicationActivity;
 import com.lucevent.newsup.view.activity.SelectSitesActivity;
 import com.lucevent.newsup.view.fragment.AboutFragment;
 import com.lucevent.newsup.view.fragment.AppSettingsFragment;
@@ -135,7 +135,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 		else if (fragmentManager.getCurrentFragment() instanceof OnBackPressedListener
 				&& ((OnBackPressedListener) fragmentManager.getCurrentFragment()).onBackPressed()) {
 			// do nothing
-		} else if (fragmentManager.getBackStackEntryCount() > 0) {
+		} else if (fragmentManager.getBackStackEntryCount() > 1) {
 
 			Fragment f = fragmentManager.popFragment();
 			if (f == newsFragment) {
@@ -143,7 +143,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 				lastItemSelected = R.id.nav_my_news;
 			}
 
-		} else super.onBackPressed();
+		} else finish();
 	}
 
 	@Override
@@ -313,7 +313,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 				startActivityForResult(intent, AppCode.REQUEST_ADD_CONTENT);
 				return true;
 			case R.id.nav_new_site_request:
-				startActivityForResult(new Intent(this, NewSiteRequestActivity.class), AppCode.REQUEST_SITE);
+				startActivityForResult(new Intent(this, FindPublicationActivity.class), AppCode.REQUEST_SITE);
 				return true;
 			case R.id.nav_notifications:
 				fragment = new NotificationsFragment();
