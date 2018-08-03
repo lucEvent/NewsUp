@@ -307,7 +307,7 @@ public class Database extends SQLiteOpenHelper {
 				db.execSQL(DBDownloadData.creator);
 
 				// modifying News table to contain imageSrc
-				db.delete("news", null, null);
+				db.delete("t_news", null, null);
 				db.execSQL("DROP TABLE t_news");
 				db.execSQL(DBNews.creator);
 		}

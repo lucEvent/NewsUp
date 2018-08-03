@@ -33,7 +33,6 @@ import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.AppData;
 import com.lucevent.newsup.kernel.KernelManager;
 import com.lucevent.newsup.kernel.ScheduleManager;
-import com.lucevent.newsup.net.MainChangeListener;
 import com.lucevent.newsup.permission.PermissionHandler;
 import com.lucevent.newsup.services.ScheduledDownloadReceiver;
 import com.lucevent.newsup.view.activity.ContactActivity;
@@ -52,7 +51,7 @@ import com.lucevent.newsup.view.fragment.StatisticsFragment;
 import com.lucevent.newsup.view.util.OnBackPressedListener;
 
 public class Main extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
-		MainChangeListener {
+		OnSettingsChangeListener, OnReplaceFragmentListener {
 
 	private NewsListFragment newsFragment;
 
@@ -409,7 +408,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 	}
 
 	@Override
-	public void onMainistsChange()
+	public void onMainPublicationsChange()
 	{
 		if (newsFragment.lastLoadedSiteCode == -1)
 			newsFragment.lastLoadedSiteCode = -9;

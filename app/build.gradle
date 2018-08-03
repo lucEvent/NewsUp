@@ -8,8 +8,8 @@ android {
         applicationId "com.lucevent.newsup"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 23
-        versionName "2.7.0"
+        versionCode 24
+        versionName "2.7.1"
     }
     buildTypes {
         release {

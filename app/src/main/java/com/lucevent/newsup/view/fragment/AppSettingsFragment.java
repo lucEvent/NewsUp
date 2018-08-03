@@ -21,6 +21,8 @@ import android.view.ViewGroup;
 
 import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.Main;
+import com.lucevent.newsup.OnReplaceFragmentListener;
+import com.lucevent.newsup.OnSettingsChangeListener;
 import com.lucevent.newsup.ProSettings;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.util.Site;
@@ -28,7 +30,6 @@ import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.AppData;
 import com.lucevent.newsup.kernel.KernelManager;
 import com.lucevent.newsup.kernel.ScheduleManager;
-import com.lucevent.newsup.net.MainChangeListener;
 import com.lucevent.newsup.services.util.Download;
 import com.lucevent.newsup.view.activity.SelectSitesActivity;
 
@@ -78,7 +79,7 @@ public class AppSettingsFragment extends PreferenceFragment
 		@Override
 		public boolean onPreferenceClick(Preference preference)
 		{
-			((MainChangeListener) getActivity()).onReplaceFragment(new DownloadSettingsFragment(), R.id.nav_settings, true);
+			((OnReplaceFragmentListener) getActivity()).onReplaceFragment(new DownloadSettingsFragment(), R.id.nav_settings, true);
 			return true;
 		}
 	};
@@ -140,9 +141,9 @@ public class AppSettingsFragment extends PreferenceFragment
 	{
 		if (key.equals(AppSettings.PREF_MAIN_SITES_KEY)) {
 			setUpPreferenceSummaries(PREF_MAIN_SITES_MASK);
-			((MainChangeListener) getActivity()).onMainistsChange();
+			((OnSettingsChangeListener) getActivity()).onMainPublicationsChange();
 		} else if (key.equals(AppSettings.PREF_FAVORITE_SITES_KEY)) {
-			((MainChangeListener) getActivity()).onFavoritesChange();
+			((OnSettingsChangeListener) getActivity()).onFavoritesChange();
 			setUpPreferenceSummaries(PREF_FAVORITES_MASK);
 		} else if (key.equals(AppSettings.PREF_SCHEDULE_DOWNLOADS_KEY))
 			setUpPreferenceSummaries(PREF_SCHEDULE_DOWNLOADS_MASK);
@@ -177,7 +178,7 @@ public class AppSettingsFragment extends PreferenceFragment
 		} else if (key.equals(AppSettings.PREF_KEEP_NEWS_KEY))
 			setUpPreferenceSummaries(PREF_KEEP_NEWS_MASK);
 		else if (key.equals(AppSettings.PREF_LOAD_IMAGES_KEY) || key.equals(AppSettings.PREF_COMPACTED_IMAGES_KEY))
-			((MainChangeListener) getActivity()).onLoadImagesPreferenceChanged();
+			((OnSettingsChangeListener) getActivity()).onLoadImagesPreferenceChanged();
 	}
 
 	private void setUpPreferenceSummaries(int preferencesMask)
@@ -233,10 +234,10 @@ public class AppSettingsFragment extends PreferenceFragment
 		super.onActivityResult(requestCode, resultCode, data);
 		switch (requestCode) {
 			case REQUEST_SELECT_MAIN:
-				((MainChangeListener) getActivity()).onMainistsChange();
+				((OnSettingsChangeListener) getActivity()).onMainPublicationsChange();
 				break;
 			case REQUEST_SELECT_FAVORITE:
-				((MainChangeListener) getActivity()).onFavoritesChange();
+				((OnSettingsChangeListener) getActivity()).onFavoritesChange();
 				break;
 		}
 	}

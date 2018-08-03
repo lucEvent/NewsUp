@@ -6,7 +6,6 @@ import android.content.res.Resources;
 import android.preference.PreferenceManager;
 
 import com.lucevent.newsup.data.util.Site;
-import com.lucevent.newsup.net.MainChangeListener;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -66,12 +65,12 @@ public class AppSettings {
 		ProSettings.initialize(preferences);
 	}
 
-	private static MainChangeListener changeListener;
+	private static OnSettingsChangeListener mChangeListener;
 
-	public static void initialize(Context context, MainChangeListener changeListener)
+	public static void initialize(Context context, OnSettingsChangeListener changeListener)
 	{
 		initialize(context);
-		AppSettings.changeListener = changeListener;
+		mChangeListener = changeListener;
 	}
 
 	public static boolean firstStart()
@@ -184,7 +183,7 @@ public class AppSettings {
 		setFavoriteSitesCodes(pref);
 
 		if (notify)
-			changeListener.onFavoritesChange();
+			mChangeListener.onFavoritesChange();
 	}
 
 	public static void toggleShownInMain(Site site)
@@ -200,7 +199,7 @@ public class AppSettings {
 		editor.putStringSet(PREF_MAIN_SITES_KEY, pref);
 		editor.apply();
 
-		changeListener.onMainistsChange();
+		mChangeListener.onMainPublicationsChange();
 	}
 
 	public static boolean loadImages()

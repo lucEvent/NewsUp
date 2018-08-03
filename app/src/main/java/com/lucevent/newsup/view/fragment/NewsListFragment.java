@@ -28,6 +28,7 @@ import android.widget.ProgressBar;
 
 import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.Main;
+import com.lucevent.newsup.OnReplaceFragmentListener;
 import com.lucevent.newsup.ProSettings;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.alert.Alert;
@@ -41,7 +42,6 @@ import com.lucevent.newsup.io.BookmarksManager;
 import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.AppData;
 import com.lucevent.newsup.kernel.KernelManager;
-import com.lucevent.newsup.net.MainChangeListener;
 import com.lucevent.newsup.services.StatisticsService;
 import com.lucevent.newsup.services.util.DownloadData;
 import com.lucevent.newsup.services.util.DownloadNotification;
@@ -536,7 +536,7 @@ public class NewsListFragment extends StoragePermissionFragment implements View.
 		@Override
 		public boolean onMenuItemClick(MenuItem item)
 		{
-			((MainChangeListener) getActivity()).onReplaceFragment(SiteSettingsFragment.instanceFor(currentSite.code), R.id.nav_settings, true);
+			((OnReplaceFragmentListener) getActivity()).onReplaceFragment(SiteSettingsFragment.instanceFor(currentSite.code), R.id.nav_settings, true);
 			return true;
 		}
 	};

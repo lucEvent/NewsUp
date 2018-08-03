@@ -18,12 +18,11 @@ import com.lucevent.newsup.io.LogoManager;
 import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.AppData;
 import com.lucevent.newsup.kernel.KernelManager;
-import com.lucevent.newsup.net.MainChangeListener;
 import com.lucevent.newsup.view.fragment.FragmentManager;
 import com.lucevent.newsup.view.fragment.NewsListFragment;
 import com.lucevent.newsup.view.util.OnBackPressedListener;
 
-public class SiteMain extends AppCompatActivity implements MainChangeListener {
+public class SiteMain extends AppCompatActivity implements OnSettingsChangeListener, OnReplaceFragmentListener {
 
 	private FragmentManager fragmentManager;
 
@@ -90,7 +89,7 @@ public class SiteMain extends AppCompatActivity implements MainChangeListener {
 	}
 
 	@Override
-	public void onMainistsChange()
+	public void onMainPublicationsChange()
 	{
 	}
 
