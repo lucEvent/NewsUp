@@ -10,8 +10,11 @@ import com.lucevent.newsup.data.event.Events;
 import com.lucevent.newsup.data.event.Source;
 import com.lucevent.newsup.kernel.AppData;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
-import java.util.Locale;
 
 public final class EventsManager {
 
@@ -21,33 +24,30 @@ public final class EventsManager {
 		void onNoConnectionAvailable();
 	}
 
-	private static final String query_all_events = "http://newsup-2406.appspot.com/appv2?events&lang=%s";
-	private final String version;
-	private final String device_language;
+	private final String mAppVersion;
 
-	private static ConnectivityManager connectivityManager;
+	private static ConnectivityManager mConnectivityManager;
 
 	public EventsManager(Context context)
 	{
-		this.version = context.getString(R.string.app_version);
-		this.device_language = Locale.getDefault().getLanguage();
-		connectivityManager = new ConnectivityManager(context);
+		mAppVersion = context.getString(R.string.app_version);
+		mConnectivityManager = new ConnectivityManager(context);
 	}
 
-	public void readEvents(final Activity context, final Callback onResult)
+	public void readEvents(final Activity context, final String[] regionCodes, final Callback onResult)
 	{
 		new Thread(new Runnable() {
 			@Override
 			public void run()
 			{
-				fetchEvents(context, onResult);
+				fetchEvents(context, regionCodes, onResult);
 			}
 		}).start();
 	}
 
-	private void fetchEvents(Activity context, final Callback onResult)
+	private void fetchEvents(Activity context, String[] regionCodes, final Callback onResult)
 	{
-		if (!connectivityManager.isInternetAvailable()) {
+		if (!mConnectivityManager.isInternetAvailable()) {
 			context.runOnUiThread(new Runnable() {
 				@Override
 				public void run()
@@ -58,112 +58,61 @@ public final class EventsManager {
 			return;
 		}
 
-		String eventsQuery = String.format(query_all_events, device_language);
-		AppSettings.printlog("Query: " + eventsQuery);
+		StringBuilder sb = new StringBuilder(regionCodes[0]);
+		for (int i = 1; i < regionCodes.length; i++)
+			sb.append(",").append(regionCodes[i]);
 
-		org.jsoup.nodes.Document doc = getDocument(eventsQuery);
-		if (doc == null) return;
+		try {
+			sb = RawContentReader.getUrl(
+					"http://newsup-2406.appspot.com/appv2?events=" + sb.toString() + "&v=" + mAppVersion
+			);
 
-		final Events res = new Events();
+			final Events res = new Events();
 
-		for (org.jsoup.nodes.Element jEvent : doc.select("event")) {
-			Event e = new Event();
-			e.code = Integer.parseInt(jEvent.attr("code"));
-			e.title = jEvent.attr("title");
-			e.topic = jEvent.attr("topic");
-			e.imgSrc = jEvent.attr("imgsrc");
-			e.keyWords = jEvent.attr("tags").split(",");
-			e.sources = new ArrayList<>();
+			JSONArray json = new JSONArray(sb.toString());
+			for (int i = 0; i < json.length(); i++)
+				res.add(parseEvent((JSONObject) json.get(i)));
 
-			String[] sources = jEvent.attr("sources").split(";");
-			for (String s : sources) {
-				String[] parts = s.split(",");
-				Source source = new Source();
-				source.site = AppData.getSiteByCode(Integer.parseInt(parts[0]));
+			AppData.setEvents(res);
 
-				if (source.site == null)
-					continue;
-
-				source.sections = new int[parts.length - 1];
-				for (int i = 0; i < source.sections.length; i++)
-					source.sections[i] = Integer.parseInt(parts[i + 1]);
-
-				e.sources.add(source);
-			}
-
-			res.add(e);
+			context.runOnUiThread(new Runnable() {
+				@Override
+				public void run()
+				{
+					onResult.onEventsRead(res);
+				}
+			});
+		} catch (Exception e) {
+			AppSettings.printerror("[EM] Error on Events Manager", e);
 		}
-		AppData.setEvents(res);
-
-		context.runOnUiThread(new Runnable() {
-			@Override
-			public void run()
-			{
-				onResult.onEventsRead(res);
-			}
-		});
 	}
 
-	/**
-	 * This call must be called in a thread different from the Master/UI thread
-	 *
-	 * @param eventCode
-	 * @return the Event with code given, if any exists
-	 */
-	public Event fetchEvent(int eventCode)
+	private Event parseEvent(JSONObject jEvent) throws JSONException
 	{
-		if (!connectivityManager.isInternetAvailable())
-			return null;
+		Event e = new Event();
+		e.code = jEvent.getInt("code");
+		e.title = jEvent.getString("title");
+		e.imgSrc = jEvent.getString("imgsrc");
+		e.keyWords = jEvent.getString("tags").split(",");
+		e.sources = new ArrayList<>();
 
-		String eventsQuery = String.format(query_all_events, device_language);
-		AppSettings.printlog("Query: " + eventsQuery);
+		JSONArray jSources = jEvent.getJSONArray("sources");
+		for (int j = 0; j < jSources.length(); j++) {
+			Source source = new Source();
+			JSONObject jSource = (JSONObject) jSources.get(j);
+			source.site = AppData.getSiteByCode(jSource.getInt("si_c"));
 
-		org.jsoup.nodes.Document doc = getDocument(eventsQuery);
-		if (doc == null) return null;
-
-		for (org.jsoup.nodes.Element jEvent : doc.select("event")) {
-			int code = Integer.parseInt(jEvent.attr("code"));
-			if (code != eventCode)
+			if (source.site == null)
 				continue;
 
-			Event e = new Event();
-			e.code = code;
-			e.title = jEvent.attr("title");
-			e.topic = jEvent.attr("topic");
-			e.imgSrc = jEvent.attr("imgsrc");
-			e.keyWords = jEvent.attr("tags").split(",");
-			e.sources = new ArrayList<>();
+			JSONArray jSectionCodes = jSource.getJSONArray("se_c");
+			source.sections = new int[jSectionCodes.length()];
+			for (int k = 0; k < jSectionCodes.length(); k++)
+				source.sections[k] = jSectionCodes.getInt(k);
 
-			String[] sources = jEvent.attr("sources").split(";");
-			for (String s : sources) {
-				String[] parts = s.split(",");
-				Source source = new Source();
-				source.site = AppData.getSiteByCode(Integer.parseInt(parts[0]));
-
-				if (source.site == null)
-					continue;
-
-				source.sections = new int[parts.length - 1];
-				for (int i = 0; i < source.sections.length; i++)
-					source.sections[i] = Integer.parseInt(parts[i + 1]);
-
-				e.sources.add(source);
-			}
-
-			return e;
+			e.sources.add(source);
 		}
-
-		return null;
-	}
-
-	private org.jsoup.nodes.Document getDocument(String url)
-	{
-		try {
-			return org.jsoup.Jsoup.connect(url).parser(org.jsoup.parser.Parser.xmlParser()).timeout(10000).get();
-		} catch (Exception e) {
-			AppSettings.printerror("[NR] Can't read url: " + url, e);
-		}
-		return null;
+		return e;
 	}
 
 }

@@ -25,7 +25,6 @@ public class ElleSections extends Sections {
 		add(new Section("Diario de una estudiante", "http://diario-de-una-estudiante.blogs.elle.es/feed/", 1));
 		add(new Section("Honeydressing", "http://honeydressing.blogs.elle.es/feed/", 1));
 		add(new Section("Mammamia", "http://mammamia.blogs.elle.es/feed/", 1));
-		add(new Section("Miss mass", "http://miss-mass.blogs.elle.es/feed/", 1));
 		add(new Section("Paula Echevarria", "http://paula-echevarria.blogs.elle.es/feed/", 1));
 		add(new Section("Raquel del rosario", "http://raquel-del-rosario.blogs.elle.es/feed/", 1));
 		add(new Section("Sara Carbonero", "http://sara-carbonero.blogs.elle.es/feed/", 1));

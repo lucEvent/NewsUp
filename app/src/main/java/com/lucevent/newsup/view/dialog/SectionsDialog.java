@@ -20,28 +20,25 @@ public class SectionsDialog {
 	private static final int CORNER_RAD = 26;
 	private static int BORDER_WIDTH = 10;
 
-	private RecyclerView recyclerView;
+	private RecyclerView mRecyclerView;
 
-	private SectionAdapter adapter;
-	private Dialog dialog;
+	private SectionAdapter mAdapter;
+	private Dialog mDialog;
 
-	public SectionsDialog(Context context, Site site, View.OnClickListener onItemClickListener)
+	public SectionsDialog(Context context, Site site, View.OnClickListener onSectionClickListener)
 	{
 		BORDER_WIDTH = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, context.getResources().getDisplayMetrics());
 
-		adapter = new SectionAdapter(context, site, onItemClickListener);
+		mAdapter = new SectionAdapter(context, site, onSectionClickListener);
 
-		LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-		layoutManager.setAutoMeasureEnabled(true);
+		mRecyclerView = (RecyclerView) LayoutInflater.from(context).inflate(R.layout.d_sections, null);
+		mRecyclerView.setNestedScrollingEnabled(false);
+		mRecyclerView.setHasFixedSize(false);
+		mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
+		mRecyclerView.setAdapter(mAdapter);
 
-		recyclerView = (RecyclerView) LayoutInflater.from(context).inflate(R.layout.d_sections, null);
-		recyclerView.setNestedScrollingEnabled(false);
-		recyclerView.setHasFixedSize(false);
-		recyclerView.setLayoutManager(layoutManager);
-		recyclerView.setAdapter(adapter);
-
-		dialog = new AlertDialog.Builder(context)
-				.setView(recyclerView)
+		mDialog = new AlertDialog.Builder(context)
+				.setView(mRecyclerView)
 				.create();
 	}
 
@@ -49,20 +46,19 @@ public class SectionsDialog {
 	{
 		if (site != null) {
 			setColor(site);
-			adapter.setNewDataSet(site);
+			mAdapter.setNewDataSet(site);
 		}
 	}
 
 	public void show()
 	{
-		dialog.show();
-		dialog.getWindow().getDecorView().setBackgroundResource(android.R.color.transparent);
-
+		mDialog.show();
+		mDialog.getWindow().getDecorView().setBackgroundResource(android.R.color.transparent);
 	}
 
 	public void dismiss()
 	{
-		dialog.dismiss();
+		mDialog.dismiss();
 	}
 
 	private void setColor(Site site)
@@ -71,8 +67,8 @@ public class SectionsDialog {
 		shape.setShape(GradientDrawable.RECTANGLE);
 		shape.setCornerRadii(new float[]{CORNER_RAD, CORNER_RAD, CORNER_RAD, CORNER_RAD, CORNER_RAD, CORNER_RAD, CORNER_RAD, CORNER_RAD});
 		shape.setColor(Color.WHITE);
-		shape.setStroke(BORDER_WIDTH, site.color == 0xffffffff ? 0xff666666 : site.color);
-		recyclerView.setBackground(shape);
+		shape.setStroke(BORDER_WIDTH, site.getDarkColor());
+		mRecyclerView.setBackground(shape);
 	}
 
 }

@@ -92,8 +92,14 @@ public class NewsReaderManager {
 	public void read(Event event, Handler handler)
 	{
 		uiCallback = handler;
-		for (Source source : event.sources)
-			addEventPetition(event, source.site, source.sections);
+		EventNewsPetition petition = new EventNewsPetition();
+		petition.site = null;
+		petition.sections = null;
+		petition.event = event;
+		synchronized (petitionQueue) {
+			petitionQueue.add(petition);
+			petitionQueue.notify();
+		}
 	}
 
 	public DownloadNotification read(Download download)
@@ -101,7 +107,8 @@ public class NewsReaderManager {
 		if (!connectivityManager.isInternetAvailable())
 			return null;
 
-		DownloadNotification notification = new DownloadNotification(download.sites_codes.length);
+		DownloadNotification notification = new DownloadNotification();
+		notification.time = System.currentTimeMillis();
 		int server = 0;
 		ArrayList<Integer> news_ids = new ArrayList<>();
 		for (int sCode : download.sites_codes) {
@@ -121,10 +128,10 @@ public class NewsReaderManager {
 						}
 						news_ids.add(n.id);
 					}
-					notification.add(site.code, section_codes, news.get(0));
+					notification.add(site.code, news.get(0));
 				}
 			} catch (Exception e) {
-				AppSettings.printerror("[NM] FATAL ERROR DURING SERVICE :(", e);
+				AppSettings.printerror("[NRM] Error on read(download) :(", e);
 			}
 		}
 
@@ -134,7 +141,7 @@ public class NewsReaderManager {
 				i_news_ids[i] = news_ids.get(i);
 
 			DownloadData data = new DownloadData(
-					System.currentTimeMillis(),
+					notification.time,
 					download.sites_codes,
 					i_news_ids
 			);
@@ -143,33 +150,33 @@ public class NewsReaderManager {
 		return notification;
 	}
 
-	public DownloadNotification read(Event event, Download download)
+	public DownloadNotification read(int eventCode, Download download)
 	{
 		if (!connectivityManager.isInternetAvailable())
 			return null;
 
-		DownloadNotification notification = new DownloadNotification(event.sources.size());
-		notification.filters = event.keyWords;
+		DownloadNotification notification = new DownloadNotification();
+		notification.time = System.currentTimeMillis();
 		int server = 0;
 		ArrayList<Integer> news_ids = new ArrayList<>();
-		for (Source source : event.sources) {
-			try {
-				NewsArray news = readEventHeaders(event, source.site, source.sections);
-				if (news != null) {
-					for (News n : news) {
-						if (!mDB.contains(n)) {
-							if (n.content == null || n.content.isEmpty())
-								readContent(server++ % NewsReader.NUM_SERVERS, source.site, n);
+		try {
+			NewsArray news = newsReader.readEventHeaders(eventCode);
+			if (news != null) {
+				for (News n : news) {
+					if (!mDB.contains(n)) {
+						if (n.content == null || n.content.isEmpty())
+							readContent(server++ % NewsReader.NUM_SERVERS, AppData.getSiteByCode(n.site_code), n);
 
-							if (!n.content.isEmpty())
-								mDB.save(n);
-						}
-						news_ids.add(n.id);
+						if (!n.content.isEmpty())
+							mDB.save(n);
 					}
-					notification.add(source.site.code, source.sections, news.get(0));
+
+					news_ids.add(n.id);
+					if (!notification.hasHeadline(n.site_code))
+						notification.add(n.site_code, n);
 				}
-			} catch (Exception ignored) {
 			}
+		} catch (Exception ignored) {
 		}
 
 		if (!news_ids.isEmpty()) {
@@ -178,7 +185,7 @@ public class NewsReaderManager {
 				i_news_ids[i] = news_ids.get(i);
 
 			DownloadData data = new DownloadData(
-					System.currentTimeMillis(),
+					notification.time,
 					download.sites_codes,
 					i_news_ids
 			);
@@ -269,11 +276,17 @@ public class NewsReaderManager {
 
 					if (news != null) {
 
-						mDB.getNewsOf(petition.site);
-
 						// Send news to Kernel
 						if (uiCallback != null)
 							uiCallback.obtainMessage(AppCode.NEWS_COLLECTION, news).sendToTarget();
+
+						if (petition instanceof EventNewsPetition && petition.site == null) {
+
+							for (Source s : ((EventNewsPetition) petition).event.sources)
+								mDB.getNewsOf(s.site);
+
+						} else
+							mDB.getNewsOf(petition.site);
 
 						if (petition.site instanceof UserSite)
 							continue;
@@ -312,7 +325,7 @@ public class NewsReaderManager {
 					}
 					continue;
 				}
-
+				System.out.println("Site_code:" + news.site_code);
 				Site site = AppData.getSiteByCode(news.site_code);
 
 				NewsMap history = mDB.getNewsOf(site);
@@ -387,8 +400,17 @@ public class NewsReaderManager {
 
 	private NewsArray readEventHeaders(Event event, Site site, int[] section_codes)
 	{
-		NewsArray news = newsReader.readEventHeaders(site.code, section_codes, event.code);
-		if (news == null) {
+		NewsArray news = null;
+		if (site == null) {
+
+			news = newsReader.readEventHeaders(event.code);
+
+			if (news == null)
+				for (Source source : event.sources)
+					addEventPetition(event, source.site, source.sections);
+
+		} else {
+
 			try {
 
 				news = event.filter(

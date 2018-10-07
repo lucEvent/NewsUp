@@ -9,7 +9,7 @@ public class PublicoSections extends Sections {
 	{
 		super();
 
-		add(new Section("Portada", "http://www.publico.es/rss/", 0));
+		add(new Section("Portada", "https://www.publico.es/rss/", 0));
 
 	}
 

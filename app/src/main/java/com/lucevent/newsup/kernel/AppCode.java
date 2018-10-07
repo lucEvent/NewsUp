@@ -27,7 +27,8 @@ public interface AppCode {
 	String REQUEST_CODE = "r.code";
 	String SELECTED = "selected";
 	String EVENT_CODE = "e.code";
-	String STRING_FILTERS = "fts";
+	String NOTIFICATION = "notif";
+	String TIME = "time";
 
 	String ACTION = "action";
 	String RESTART = "restart";

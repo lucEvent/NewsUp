@@ -6,28 +6,28 @@
             android:entries="@null"
             android:entryValues="@null"
             android:key="@string/pref_main_sites_key"
-            android:title="@string/pref_main_sites"/>
+            android:title="@string/pref_main_sites" />
 
         <Preference
             android:entries="@null"
             android:entryValues="@null"
             android:key="@string/pref_favorite_sites_key"
-            android:title="@string/pref_favorite_sites"/>
+            android:title="@string/pref_favorite_sites" />
 
         <Preference
             android:key="@string/pref_sites_settings_key"
-            android:title="@string/pref_sites_settings"/>
+            android:title="@string/pref_sites_settings" />
 
         <SwitchPreference
             android:defaultValue="false"
             android:key="@string/pref_night_mode_key"
-            android:title="@string/pref_night_mode"/>
+            android:title="@string/pref_night_mode" />
 
         <EditTextPreference
             android:defaultValue=""
             android:hint="@string/hint_pref_pro_mode"
             android:key="@string/pref_pro_code_key"
-            android:title="@string/pref_pro_code"/>
+            android:title="@string/pref_pro_code" />
 
     </PreferenceCategory>
 
@@ -35,7 +35,7 @@
 
         <Preference
             android:key="@string/pref_schedule_downloads_key"
-            android:title="@string/pref_schedule_downloads"/>
+            android:title="@string/pref_schedule_downloads" />
 
     </PreferenceCategory>
 
@@ -45,19 +45,19 @@
             android:defaultValue="true"
             android:key="@string/pref_load_images_key"
             android:summary="@string/pref_load_images_summary"
-            android:title="@string/pref_load_images"/>
+            android:title="@string/pref_load_images" />
 
         <SwitchPreference
             android:defaultValue="false"
             android:dependency="@string/pref_load_images_key"
             android:key="@string/pref_load_images_compact_key"
-            android:title="@string/pref_load_images_compact"/>
+            android:title="@string/pref_load_images_compact" />
 
         <SwitchPreference
             android:defaultValue="true"
             android:dependency="@string/pref_load_images_key"
             android:key="@string/pref_load_images_wifi_only_key"
-            android:title="@string/pref_load_images_wifi_only"/>
+            android:title="@string/pref_load_images_wifi_only" />
 
     </PreferenceCategory>
 
@@ -68,11 +68,11 @@
             android:entries="@array/keep_time_titles"
             android:entryValues="@array/keep_time_values"
             android:key="@string/pref_keep_news_key"
-            android:title="@string/pref_keep_news"/>
+            android:title="@string/pref_keep_news" />
 
         <com.lucevent.newsup.view.preference.CleanCachePreference
             android:key="@string/pref_clean_cache_key"
-            android:title="@string/pref_clean_cache"/>
+            android:title="@string/pref_clean_cache" />
 
     </PreferenceCategory>
 

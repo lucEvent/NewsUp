@@ -37,11 +37,12 @@ public class StatisticsFragment extends android.app.Fragment {
 
 	public static final SortOrder DEFAULT_ORDER = SortOrder.SORT_BY_MONTH_REQUESTS;
 
-	private Handler handler;
+	private Handler mHandler;
 
-	private StatisticsAdapter adapter;
+	private StatisticsAdapter mAdapter;
 
-	private View mainView;
+	private View mMainView;
+	private View mLastSelectedBtn, mCurrentSelectedBtn;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -49,7 +50,7 @@ public class StatisticsFragment extends android.app.Fragment {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
 
-		handler = new Handler(this);
+		mHandler = new Handler(this);
 	}
 
 	@Override
@@ -67,27 +68,26 @@ public class StatisticsFragment extends android.app.Fragment {
 		if (container != null)
 			container.removeAllViews();
 
-		if (mainView == null) {
-			mainView = inflater.inflate(R.layout.f_statistics, container, false);
+		if (mMainView == null) {
+			mMainView = inflater.inflate(R.layout.f_statistics, container, false);
 
-			adapter = new StatisticsAdapter();
+			mAdapter = new StatisticsAdapter();
 
-			LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-			layoutManager.setAutoMeasureEnabled(true);
-
-			RecyclerView recyclerView = (RecyclerView) mainView.findViewById(R.id.list);
+			RecyclerView recyclerView = (RecyclerView) mMainView.findViewById(R.id.list);
 			recyclerView.setNestedScrollingEnabled(false);
 			recyclerView.setHasFixedSize(false);
-			recyclerView.setLayoutManager(layoutManager);
-			recyclerView.setAdapter(adapter);
+			recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+			recyclerView.setAdapter(mAdapter);
 
-			mainView.findViewById(R.id.sort_name).setOnClickListener(onOrderChanged);
-			mainView.findViewById(R.id.sort_total_requests).setOnClickListener(onOrderChanged);
-			mainView.findViewById(R.id.sort_month_requests).setOnClickListener(onOrderChanged);
-			mainView.findViewById(R.id.sort_readings).setOnClickListener(onOrderChanged);
-			mainView.findViewById(R.id.sort_time).setOnClickListener(onOrderChanged);
+			mMainView.findViewById(R.id.sort_name).setOnClickListener(onOrderChanged);
+			mMainView.findViewById(R.id.sort_total_requests).setOnClickListener(onOrderChanged);
+			mMainView.findViewById(R.id.sort_month_requests).setOnClickListener(onOrderChanged);
+			mMainView.findViewById(R.id.sort_readings).setOnClickListener(onOrderChanged);
+			mMainView.findViewById(R.id.sort_time).setOnClickListener(onOrderChanged);
+
+			mLastSelectedBtn = mCurrentSelectedBtn = mMainView.findViewById(R.id.sort_month_requests);
 		}
-		return mainView;
+		return mMainView;
 	}
 
 	@Override
@@ -113,7 +113,7 @@ public class StatisticsFragment extends android.app.Fragment {
 							@Override
 							public void onClick(DialogInterface dialogInterface, int i)
 							{
-								service.resetStatistics(handler);
+								service.resetStatistics(mHandler);
 							}
 						})
 						.show();
@@ -127,6 +127,9 @@ public class StatisticsFragment extends android.app.Fragment {
 		@Override
 		public void onClick(View v)
 		{
+			mLastSelectedBtn = mCurrentSelectedBtn;
+			mCurrentSelectedBtn = v;
+
 			if (service.isInternetAvailable()) {
 				SortOrder order = DEFAULT_ORDER;
 				switch (v.getId()) {
@@ -146,7 +149,7 @@ public class StatisticsFragment extends android.app.Fragment {
 						order = SortOrder.SORT_BY_TIME;
 						break;
 				}
-				service.getStatistics(handler, order);
+				service.getStatistics(mHandler, order);
 			} else
 				notifyNoInternet();
 		}
@@ -154,7 +157,7 @@ public class StatisticsFragment extends android.app.Fragment {
 
 	private void notifyNoInternet()
 	{
-		Snackbar.make(mainView, R.string.msg_no_internet_connection, Snackbar.LENGTH_LONG).show();
+		Snackbar.make(mMainView, R.string.msg_no_internet_connection, Snackbar.LENGTH_LONG).show();
 	}
 
 	static class Handler extends android.os.Handler {
@@ -172,7 +175,9 @@ public class StatisticsFragment extends android.app.Fragment {
 			StatisticsFragment service = context.get();
 			switch (msg.what) {
 				case AppCode.STATISTICS:
-					service.adapter.setNewDataSet((Statistics) msg.obj);
+					service.mLastSelectedBtn.setEnabled(true);
+					service.mAdapter.setNewDataSet((Statistics) msg.obj);
+					service.mCurrentSelectedBtn.setEnabled(false);
 					break;
 				default:
 					AppSettings.printerror("[SF] OPTION UNKNOWN: " + msg.what, null);
@@ -217,7 +222,7 @@ public class StatisticsFragment extends android.app.Fragment {
 			service = ((StatisticsService.Binder) ibinder).getService();
 			serviceBound = true;
 			if (service.isInternetAvailable())
-				service.getStatistics(handler, DEFAULT_ORDER);
+				service.getStatistics(mHandler, DEFAULT_ORDER);
 			else
 				notifyNoInternet();
 		}

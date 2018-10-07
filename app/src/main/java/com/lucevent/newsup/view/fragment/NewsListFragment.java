@@ -1,5 +1,6 @@
 package com.lucevent.newsup.view.fragment;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -32,7 +34,6 @@ import com.lucevent.newsup.OnReplaceFragmentListener;
 import com.lucevent.newsup.ProSettings;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.alert.Alert;
-import com.lucevent.newsup.data.event.Event;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.Section;
 import com.lucevent.newsup.data.util.Sections;
@@ -44,7 +45,6 @@ import com.lucevent.newsup.kernel.AppData;
 import com.lucevent.newsup.kernel.KernelManager;
 import com.lucevent.newsup.services.StatisticsService;
 import com.lucevent.newsup.services.util.DownloadData;
-import com.lucevent.newsup.services.util.DownloadNotification;
 import com.lucevent.newsup.view.activity.HandsFreeNewsViewActivity;
 import com.lucevent.newsup.view.adapter.NewsAdapter;
 import com.lucevent.newsup.view.dialog.AppAlertDialog;
@@ -56,7 +56,6 @@ import com.lucevent.newsup.view.util.OnMoreSectionsClickListener;
 import com.lucevent.newsup.view.util.Utils;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -65,11 +64,10 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class NewsListFragment extends StoragePermissionFragment implements View.OnClickListener,
-		OnBackPressedListener {
+		OnBackPressedListener, SwipeRefreshLayout.OnRefreshListener {
 
 	private static final int MAIN_PUBLICATIONS = -1;
-	private static final int NOTIFICATION = -2;
-	private static final int SAVED_NOTIFICATION = -3;
+	private static final int SAVED_NOTIFICATION = -2;
 
 	public static NewsListFragment instanceFor(int site_code)
 	{
@@ -78,15 +76,6 @@ public class NewsListFragment extends StoragePermissionFragment implements View.
 
 		NewsListFragment fragment = new NewsListFragment();
 		fragment.setArguments(bundle);
-		return fragment;
-	}
-
-	public static NewsListFragment instanceFor(Bundle extras)
-	{
-		extras.putInt(AppCode.SITE_CODE, NOTIFICATION);
-
-		NewsListFragment fragment = new NewsListFragment();
-		fragment.setArguments(extras);
 		return fragment;
 	}
 
@@ -146,29 +135,6 @@ public class NewsListFragment extends StoragePermissionFragment implements View.
 				mHandler.obtainMessage(AppCode.NEWS_LOADED).sendToTarget();
 				break;
 
-			case NOTIFICATION:    // Load from notification
-				mAdapter.setOnMoreSectionsClick(null);
-				showSectionsButton = false;
-
-				Event event = null;
-				if (getArguments().containsKey(AppCode.STRING_FILTERS)) {
-					event = new Event();
-					event.keyWords = getArguments().getStringArray(AppCode.STRING_FILTERS);
-				}
-				ArrayList<DownloadNotification.Source> sources = (ArrayList<DownloadNotification.Source>) getArguments().getSerializable(AppCode.SOURCES);
-				assert sources != null : "Arguments can't be recovered";
-
-				for (DownloadNotification.Source s : sources) {
-					c = mDataManager.getSavedNewsOf(s);
-					if (event != null)
-						c = event.filter(c);
-
-					mHandler.obtainMessage(AppCode.NEWS_COLLECTION, c).sendToTarget();
-				}
-
-				mHandler.obtainMessage(AppCode.NEWS_LOADED).sendToTarget();
-				break;
-
 			case MAIN_PUBLICATIONS:
 				showSectionsButton = false;
 				mAdapter.setOnMoreSectionsClick(null);
@@ -195,6 +161,7 @@ public class NewsListFragment extends StoragePermissionFragment implements View.
 
 	private View mMainView;
 	private NewsView mNewsView;
+	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private RecyclerView mRecyclerView;
 	private FloatingActionButton mBtnSections;
 	private View mProgressBar, mReloadBox;
@@ -227,22 +194,25 @@ public class NewsListFragment extends StoragePermissionFragment implements View.
 			container.removeAllViews();
 
 		if (mAdapter == null) {
+			Activity activity = getActivity();
+
 			mMainView = inflater.inflate(R.layout.f_news_list, container, false);
 
 			mAdapter = new NewsAdapter(this, onBookmarkClick, NewsAdapterList.SortBy.byTime);
 			onLoadImagesPreferenceChanged();
 
-			LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-			layoutManager.setAutoMeasureEnabled(true);
+			mSwipeRefreshLayout = mMainView.findViewById(R.id.refresh_trigger);
+			mSwipeRefreshLayout.setOnRefreshListener(this);
+			mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent);
 
 			mRecyclerView = (RecyclerView) mMainView.findViewById(R.id.list);
 			mRecyclerView.setNestedScrollingEnabled(false);
 			mRecyclerView.setHasFixedSize(false);
-			mRecyclerView.setLayoutManager(layoutManager);
+			mRecyclerView.setLayoutManager(new LinearLayoutManager(activity));
 			mRecyclerView.setAdapter(mAdapter);
 
 			mNewsView = (NewsView) mMainView.findViewById(R.id.news_view);
-			mNewsView.setFragmentContext(this, getActivity() instanceof Main ? ((Main) getActivity()).drawer : null);
+			mNewsView.setFragmentContext(this, activity instanceof Main ? ((Main) activity).drawer : null);
 			mNewsView.setBookmarkStateChangeListener(onBookmarkClick);
 			mNewsView.setImageLongClickListener(onImageLongClick);
 
@@ -381,9 +351,20 @@ public class NewsListFragment extends StoragePermissionFragment implements View.
 		public void onClick(View v)
 		{
 			mAdapter.discloseData();
-			startActivity(new Intent(getActivity(), HandsFreeNewsViewActivity.class));
+			if (mAdapter.getItemCount() > 0)
+				startActivity(new Intent(getActivity(), HandsFreeNewsViewActivity.class));
 		}
 	};
+
+	@Override
+	public void onRefresh()
+	{
+		mAdapter.clear();
+		if (currentSite == null)
+			mDataManager.getReaderManager().read(AppData.getSites(AppSettings.getMainSitesCodes()), mHandler);
+		else
+			mDataManager.getReaderManager().read(currentSite, currentSections, mHandler);
+	}
 
 	private static class Handler extends android.os.Handler {
 
@@ -422,6 +403,8 @@ public class NewsListFragment extends StoragePermissionFragment implements View.
 						}
 						service.mReloadBox.setVisibility(View.VISIBLE);
 					}
+					if (service.mSwipeRefreshLayout.isRefreshing())
+						service.mSwipeRefreshLayout.setRefreshing(false);
 					break;
 				case AppCode.NO_INTERNET:
 					Snackbar snackbar = Snackbar.make(service.mMainView, R.string.msg_no_internet_connection, Snackbar.LENGTH_LONG);
@@ -456,9 +439,6 @@ public class NewsListFragment extends StoragePermissionFragment implements View.
 			switch (currentSiteCode) {
 				case SAVED_NOTIFICATION:
 					ab.setTitle(R.string.notification);
-					break;
-				case NOTIFICATION:
-					ab.setTitle(R.string.app_name);
 					break;
 				case MAIN_PUBLICATIONS:
 					ab.setTitle(R.string.my_news);

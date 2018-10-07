@@ -105,6 +105,11 @@ public class Site {
 		return colorDarkness >= 0.3;
 	}
 
+	public int getDarkColor()
+	{
+		return color == 0xffffffff ? 0xff888888 : color;
+	}
+
 	public String getStyle()
 	{
 		return getReader().style;

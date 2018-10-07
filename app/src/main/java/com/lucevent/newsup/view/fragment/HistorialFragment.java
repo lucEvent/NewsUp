@@ -39,12 +39,12 @@ import java.util.TreeSet;
 public class HistorialFragment extends StoragePermissionFragment implements View.OnClickListener,
 		OnBackPressedListener, NUSearchBar.CallBack {
 
-	private HistoryManager dataManager;
-	private NewsFilterAdapter adapter;
-	private NewsView newsView;
-	private NUSearchBar searchView;
+	private HistoryManager mDataManager;
+	private NewsFilterAdapter mAdapter;
+	private NewsView mNewsView;
+	private NUSearchBar mSearchView;
 
-	private View noContentMessage;
+	private View mNoContentMessage;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -53,7 +53,7 @@ public class HistorialFragment extends StoragePermissionFragment implements View
 		setHasOptionsMenu(true);
 
 		Handler handler = new Handler(this);
-		dataManager = new HistoryManager(getActivity(), handler);
+		mDataManager = new HistoryManager(getActivity(), handler);
 	}
 
 	@Override
@@ -64,28 +64,25 @@ public class HistorialFragment extends StoragePermissionFragment implements View
 
 		View view = inflater.inflate(R.layout.f_historial, container, false);
 
-		adapter = new NewsFilterAdapter(this, onBookmarkClick, NewsAdapterList.SortBy.byReadOn);
-		adapter.showSiteIcon(true);
-
-		LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-		layoutManager.setAutoMeasureEnabled(true);
+		mAdapter = new NewsFilterAdapter(this, onBookmarkClick, NewsAdapterList.SortBy.byReadOn);
+		mAdapter.showSiteIcon(true);
 
 		RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
 		recyclerView.setNestedScrollingEnabled(false);
 		recyclerView.setHasFixedSize(false);
-		recyclerView.setLayoutManager(layoutManager);
-		recyclerView.setAdapter(adapter);
+		recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+		recyclerView.setAdapter(mAdapter);
 
-		newsView = (NewsView) view.findViewById(R.id.news_view);
-		newsView.setFragmentContext(this, ((Main) getActivity()).drawer);
-		newsView.setBookmarkStateChangeListener(onBookmarkClick);
-		newsView.setImageLongClickListener(onImageLongClick);
+		mNewsView = (NewsView) view.findViewById(R.id.news_view);
+		mNewsView.setFragmentContext(this, ((Main) getActivity()).drawer);
+		mNewsView.setBookmarkStateChangeListener(onBookmarkClick);
+		mNewsView.setImageLongClickListener(onImageLongClick);
 
-		noContentMessage = view.findViewById(R.id.no_content);
-		searchView = (NUSearchBar) view.findViewById(R.id.searchView);
-		view.findViewById(R.id.filter).setOnClickListener(onFilterClick);
+		mNoContentMessage = view.findViewById(R.id.no_content);
+		mSearchView = (NUSearchBar) view.findViewById(R.id.searchView);
+		view.findViewById(R.id.filter).setOnClickListener(mOnFilterClick);
 
-		dataManager.getReadNews();
+		mDataManager.getReadNews();
 
 		return view;
 	}
@@ -96,27 +93,27 @@ public class HistorialFragment extends StoragePermissionFragment implements View
 		menu.add(R.string.search)
 				.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
 				.setIcon(R.drawable.ic_search_white)
-				.setOnMenuItemClickListener(onSearchAction);
+				.setOnMenuItemClickListener(mOnSearchAction);
 
 		menu.add(R.string.menu_delete_all)
 				.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
 				.setIcon(R.drawable.ic_remove_all)
-				.setOnMenuItemClickListener(onDeleteAllAction);
+				.setOnMenuItemClickListener(mOnDeleteAllAction);
 
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 
-	private boolean displayingNews = false;
+	private boolean mDisplayingNews = false;
 
 	@Override
 	public boolean onBackPressed()
 	{
-		if (displayingNews) {
-			newsView.hideNews();
-			displayingNews = false;
+		if (mDisplayingNews) {
+			mNewsView.hideNews();
+			mDisplayingNews = false;
 			return true;
-		} else if (searchView.isShown()) {
-			searchView.hide();
+		} else if (mSearchView.isShown()) {
+			mSearchView.hide();
 			return true;
 		}
 		return false;
@@ -126,8 +123,8 @@ public class HistorialFragment extends StoragePermissionFragment implements View
 	public void onDestroyView()
 	{
 		super.onDestroyView();
-		if (searchView.isShown())
-			searchView.hide();
+		if (mSearchView.isShown())
+			mSearchView.hide();
 	}
 
 	@Override
@@ -137,17 +134,17 @@ public class HistorialFragment extends StoragePermissionFragment implements View
 
 		KernelManager.readContentOf(news);
 
-		displayingNews = true;
-		newsView.displayNews(news);
-		searchView.hideKeyBoard();
+		mDisplayingNews = true;
+		mNewsView.displayNews(news);
+		mSearchView.hideKeyBoard();
 
-		dataManager.getDataManager().setNewsRead(news.clone());
+		mDataManager.getDataManager().setNewsRead(news.clone());
 	}
 
 	@Override
 	public void onFilter(String filter)
 	{
-		adapter.filter(filter);
+		mAdapter.filter(filter);
 	}
 
 	@Override
@@ -158,22 +155,22 @@ public class HistorialFragment extends StoragePermissionFragment implements View
 
 	static class Handler extends android.os.Handler {
 
-		private final WeakReference<HistorialFragment> context;
+		private final WeakReference<HistorialFragment> mContext;
 
 		Handler(HistorialFragment context)
 		{
-			this.context = new WeakReference<>(context);
+			mContext = new WeakReference<>(context);
 		}
 
 		@Override
 		public void handleMessage(Message msg)
 		{
-			HistorialFragment service = context.get();
+			HistorialFragment service = mContext.get();
 			switch (msg.what) {
 				case AppCode.NEWS_COLLECTION:
 					Collection<News> news = (Collection<News>) msg.obj;
 					if (!news.isEmpty()) {
-						service.adapter.addAll(news);
+						service.mAdapter.addAll(news);
 						break;
 					}
 				case AppCode.ERROR:
@@ -185,29 +182,29 @@ public class HistorialFragment extends StoragePermissionFragment implements View
 		}
 	}
 
-	private MenuItem.OnMenuItemClickListener onSearchAction = new MenuItem.OnMenuItemClickListener() {
+	private MenuItem.OnMenuItemClickListener mOnSearchAction = new MenuItem.OnMenuItemClickListener() {
 		@Override
 		public boolean onMenuItemClick(MenuItem item)
 		{
 			((AppCompatActivity) getActivity()).getSupportActionBar().hide();
-			searchView.start(HistorialFragment.this);
+			mSearchView.start(HistorialFragment.this);
 			return true;
 		}
 	};
 
-	private MenuItem.OnMenuItemClickListener onDeleteAllAction = new MenuItem.OnMenuItemClickListener() {
+	private MenuItem.OnMenuItemClickListener mOnDeleteAllAction = new MenuItem.OnMenuItemClickListener() {
 		@Override
 		public boolean onMenuItemClick(MenuItem item)
 		{
-			if (adapter.getItemCount() > 0)
+			if (mAdapter.getItemCount() > 0)
 				new AlertDialog.Builder(getActivity())
 						.setMessage(R.string.msg_confirm_to_clear_history)
 						.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog, int which)
 							{
-								dataManager.clearHistory();
-								adapter.clear();
+								mDataManager.clearHistory();
+								mAdapter.clear();
 								displayNoRecordsMessage();
 							}
 						})
@@ -227,36 +224,36 @@ public class HistorialFragment extends StoragePermissionFragment implements View
 		);
 
 		if (btn instanceof FloatingActionButton)
-			adapter.update(news);
+			mAdapter.update(news);
 	}
 
 	private void displayNoRecordsMessage()
 	{
-		if (noContentMessage instanceof ViewStub)
-			noContentMessage = ((ViewStub) noContentMessage).inflate();
+		if (mNoContentMessage instanceof ViewStub)
+			mNoContentMessage = ((ViewStub) mNoContentMessage).inflate();
 
-		((TextView) noContentMessage.findViewById(R.id.message)).setText(R.string.msg_no_history);
+		((TextView) mNoContentMessage.findViewById(R.id.message)).setText(R.string.msg_no_history);
 	}
 
-	private FilterDialog filterDialog;
+	private FilterDialog mFilterDialog;
 
-	private View.OnClickListener onFilterClick = new View.OnClickListener() {
+	private View.OnClickListener mOnFilterClick = new View.OnClickListener() {
 		@Override
 		public void onClick(View v)
 		{
-			if (filterDialog == null)
-				filterDialog = new FilterDialog(getActivity())
-						.news(adapter.getDataSet())
+			if (mFilterDialog == null)
+				mFilterDialog = new FilterDialog(getActivity())
+						.news(mAdapter.getDataSet())
 						.listener(onFilterListener);
 
-			filterDialog.show();
+			mFilterDialog.show();
 		}
 
 		FilterDialog.Callback onFilterListener = new FilterDialog.Callback() {
 			@Override
 			public void onFilter(TreeSet<Integer> f)
 			{
-				adapter.filter(f);
+				mAdapter.filter(f);
 			}
 		};
 	};

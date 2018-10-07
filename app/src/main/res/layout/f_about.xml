@@ -6,66 +6,102 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="6dp">
+            android:layout_margin="20dp"
+            android:gravity="bottom"
+            android:orientation="horizontal">
 
-            <com.lucevent.newsup.view.util.AppBoldTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/app_name"
-                android:textSize="20sp" />
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@mipmap/ic_launcher" />
 
-            <com.lucevent.newsup.view.util.AppBoldTextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="6dp"
-                android:text="@string/app_version"
-                android:textSize="20sp" />
+                android:layout_gravity="bottom"
+                android:orientation="vertical"
+                android:paddingBottom="1dp"
+                android:paddingEnd="0dp"
+                android:paddingStart="8dp">
+
+                <com.lucevent.newsup.view.util.AppBoldTextView
+                    android:id="@+id/app_name_version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="NewsUp 2.X.X"
+                    android:textSize="20sp" />
+
+                <com.lucevent.newsup.view.util.AppTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/about_developed"
+                    android:textSize="14sp" />
+
+                <com.lucevent.newsup.view.util.AppTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/about_email"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-        <com.lucevent.newsup.view.util.AppBoldTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="6dp"
-            android:text="@string/about_content_contact"
-            android:textSize="16sp" />
-
-        <com.lucevent.newsup.view.util.AppBoldTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="6dp"
-            android:text="@string/about_content_title_new_features"
-            android:textSize="14sp" />
+        <View style="@style/about_divisor" />
 
         <com.lucevent.newsup.view.util.AppTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:padding="6dp"
-            android:text="@string/about_content_new_features"
-            android:textSize="14sp" />
+            android:id="@+id/about_new_in_this_version"
+            style="@style/about_row"
+            android:text="@string/about_version_changelog" />
 
-        <com.lucevent.newsup.view.util.AppBoldTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="6dp"
-            android:text="@string/about_content_title_next_sites"
-            android:textSize="14sp" />
+        <View style="@style/about_divisor" />
 
         <com.lucevent.newsup.view.util.AppTextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:padding="6dp"
-            android:text="@string/about_content_next_sites"
-            android:textSize="14sp" />
+            android:id="@+id/about_full_changelog"
+            style="@style/about_row"
+            android:text="@string/about_full_changelog" />
+
+        <View style="@style/about_divisor" />
+
+        <com.lucevent.newsup.view.util.AppTextView
+            android:id="@+id/about_possible_additions"
+            style="@style/about_row"
+            android:text="@string/about_possible_publications" />
+
+        <View style="@style/about_divisor" />
+
+        <LinearLayout
+            android:id="@+id/about_contact"
+            style="@style/about_row"
+            android:orientation="vertical"
+            android:text="@string/about_contact">
+
+            <com.lucevent.newsup.view.util.AppTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/about_contact"
+                android:textColor="@color/dark_text"
+                android:textSize="16sp" />
+
+            <com.lucevent.newsup.view.util.AppTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/about_contact_description"
+                android:textSize="13sp" />
+
+        </LinearLayout>
+
+        <View style="@style/about_divisor" />
+
+        <com.lucevent.newsup.view.util.AppTextView
+            android:id="@+id/about_term_and_conditions"
+            style="@style/about_row"
+            android:text="@string/about_term_and_conditions" />
 
     </LinearLayout>
 

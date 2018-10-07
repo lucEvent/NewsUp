@@ -26,13 +26,12 @@
     <string name="x_category">Categoría: <b>%1$s</b></string>
     <string name="notes">Anotaciones</string>
     <string name="send">Enviar</string>
-    <string name="report_n_contact">Informa &amp; Contacta</string>
     <string name="x_favorites">%d favoritos</string>
     <string name="schedule_one_now">Programa una ahora</string>
     <string name="no_downloads_scheduled">No hay descargas programadas</string>
     <string name="expand_to_see_headlines">Expande para ver los titulares</string>
     <string name="see_something_else">Te interesa algún tema más?</string>
-    <string name="happening_now">Acontecimientos</string>
+    <string name="happening_now">Temas del día</string>
     <string name="languages">Idiomas</string>
     <string name="countries">Paises</string>
     <string name="publications">Publicaciones</string>
@@ -85,6 +84,7 @@
     <string name="got_it">Entendido</string>
     <string name="start">Comenzar</string>
     <string name="reload">Reintentar</string>
+    <string name="download">Descarga</string>
 
     <!-- * ******************** Hints **************************** * -->
     <string name="hint_pref_pro_mode">Inserta código PRO</string>
@@ -137,6 +137,8 @@
     <string name="msg_rss_not_found">· No se encontró soporte para RSS</string>
     <string name="msg_publication_not_supported">Esta publicación ya no está disponible en NewsUp</string>
     <string name="msg_content_could_not_be_loaded">Ups, no se pudo cargar el contenido</string>
+    <string name="msg_confirm_to_download_image">Confirma para descargar esta imagen</string>
+    <string name="msg_confirm_to_clear_notifications">Confirma para eliminar todas las notificaciones</string>
 
     <!-- * *************** Activities and fragment's titles ********************* * -->
     <string name="title_frg_settings_of">Configuración de %1$s</string>
@@ -173,8 +175,12 @@
     <string name="pref_night_mode">Modo nocturno</string>
 
     <!-- ***************************** ***************** ********************************** -->
-    <string name="about_content_contact">Desarrollado por Rafael J. Lucena\nContacto: rafaa89(arroba)gmail.com</string>
-    <string name="about_content_title_new_features">Últimas características y mejoras:</string>
-    <string name="about_content_title_next_sites">Publicaciones que podrían ser añadidas próximamente:</string>
+    <string name="about_developed">Desarrollado por Rafael J. Lucena</string>
+    <string name="about_version_changelog">Notas de la versión</string>
+    <string name="about_full_changelog">Notas de versiones anteriores</string>
+    <string name="about_possible_publications">Publicaciones que podrían ser añadidas</string>
+    <string name="about_term_and_conditions">Términos y Condiciones</string>
+    <string name="about_contact">Contáctanos</string>
+    <string name="about_contact_description">Pregunta, Informa de errores, Solicita una publicación…</string>
 
 </resources>

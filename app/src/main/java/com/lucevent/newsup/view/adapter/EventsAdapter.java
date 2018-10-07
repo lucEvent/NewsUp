@@ -1,5 +1,6 @@
 package com.lucevent.newsup.view.adapter;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,8 +22,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
 		mDataSet = new Events();
 	}
 
+	@NonNull
 	@Override
-	public EventViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+	public EventViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
 	{
 		View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.i_event, parent, false);
 		v.setOnClickListener(mOnItemClickListener);
@@ -30,7 +32,7 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
 	}
 
 	@Override
-	public void onBindViewHolder(EventViewHolder holder, int position)
+	public void onBindViewHolder(@NonNull EventViewHolder holder, int position)
 	{
 		holder.bind(mDataSet.get(position));
 	}
@@ -41,8 +43,9 @@ public class EventsAdapter extends RecyclerView.Adapter<EventViewHolder> {
 		return mDataSet.size();
 	}
 
-	public void addAll(Events newDataSet)
+	public void setNewsDataSet(Events newDataSet)
 	{
+		mDataSet.clear();
 		mDataSet.addAll(newDataSet);
 		notifyDataSetChanged();
 	}

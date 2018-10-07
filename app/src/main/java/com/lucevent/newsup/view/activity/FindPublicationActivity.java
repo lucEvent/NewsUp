@@ -166,13 +166,10 @@ public class FindPublicationActivity extends AppCompatActivity {
 
 		mAdapter = new UserSiteAdapter(onSiteSelected);
 
-		LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-		layoutManager.setAutoMeasureEnabled(true);
-
 		RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 		recyclerView.setNestedScrollingEnabled(false);
 		recyclerView.setHasFixedSize(false);
-		recyclerView.setLayoutManager(layoutManager);
+		recyclerView.setLayoutManager(new LinearLayoutManager(this));
 		recyclerView.setAdapter(mAdapter);
 
 		findViewById(R.id.start).requestFocus();

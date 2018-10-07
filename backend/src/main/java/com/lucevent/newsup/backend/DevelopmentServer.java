@@ -95,6 +95,17 @@ public class DevelopmentServer extends HttpServlet {
 				resp.getWriter().println("{\"result\":1}");
 			}
 
+		} else if (req.getParameter("osu") != null) {
+/*
+			String request = "vnexpress.net";
+			String name = "VnExpress";
+			String site_url = "https://vnexpress.net";
+			String rss_url = "https://vnexpress.net/rss/tin-moi-nhat.rss";
+			String icon = "https://scdn.vnecdn.net/vnexpress/restruct/i/v61/logos/114x114.png";
+			int info = 70465;
+			int color = 0xcccccc;
+			Data.requestedSites.createSite(request, name, site_url, rss_url, icon, info, color);
+*/
 		}
 
 	}
@@ -217,16 +228,10 @@ public class DevelopmentServer extends HttpServlet {
 
 			sb.append("'>");
 
-			for (int i = 0; i < E.info.length; i++) {
-				Event.EventInfo eventInfo = E.info[i];
-				sb.append("<description lang='")
-						.append(eventInfo.lang)
-						.append("' title=\"")
-						.append(eventInfo.title)
-						.append("\" topic=\"")
-						.append(eventInfo.topic)
-						.append("\"/>");
-			}
+			sb.append("<description lang='").append(E.region_code)
+					.append("' title=\"").append(E.title)
+					.append("\"/>");
+
 			sb.append("</event>");
 		}
 		sb.append("</data>");
@@ -249,7 +254,8 @@ public class DevelopmentServer extends HttpServlet {
 					e.startTime = newEvent.startTime;
 					e.endTime = newEvent.endTime;
 					e.tags = newEvent.tags;
-					e.info = newEvent.info;
+					e.title = newEvent.title;
+					e.region_code = newEvent.region_code;
 					e.sites = newEvent.sites;
 					ofy().save().entity(e).now();
 					resp.getWriter().println("Event updated successfully");

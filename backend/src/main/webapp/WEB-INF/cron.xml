@@ -5,4 +5,9 @@
         <description>Start view counter for the new month</description>
         <schedule>1 of jan,feb,mar,apr,may,jun,jul,aug,sep,oct,nov,dec 00:00</schedule>
     </cron>
+    <cron>
+        <url>/manager?find_events</url>
+        <description>Find last minute events</description>
+        <schedule>every 100 minutes</schedule>
+    </cron>
 </cronentries>

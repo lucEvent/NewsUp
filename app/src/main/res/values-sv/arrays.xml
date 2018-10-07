@@ -113,21 +113,29 @@
     </string-array>
     <string-array name="site_categories">
         <item>Nyheter</item>
-        <item>Sportnyheter</item>
+        <item>Sport</item>
         <item>Teknik</item>
-        <item>Bloggar</item>
-        <item>Tidskrifter</item>
+        <item>Vetenskap</item>
         <item>Astronomi</item>
-        <item>Science</item>
+        <item>Ekonomi</item>
         <item>Videospel</item>
         <item>Livsstil</item>
-        <item>Bilnyheter</item>
+        <item>Motor</item>
         <item>Underhållning</item>
-        <item>Fitness</item>
+        <item>Hälsa</item>
         <item>Musik</item>
-        <item>Ekonomi</item>
         <item>Politik</item>
-        <item>Olika</item>
+        <item>Kändis &amp; Skvaller</item>
+        <item>Gastronomi</item>
+        <item>Satirisk</item>
+        <item>Konsument</item>
+        <item>Företag</item>
+        <item>Resa</item>
+        <item>Kultur</item>
+        <item>Husdjur</item>
+        <item>Mode</item>
+        <item>Gör det själv</item>
+        <item>Bloggar</item>
     </string-array>
     <integer-array name="site_language_weights">
         <item>5</item>
@@ -218,5 +226,18 @@
         <item>8</item>
         <item>69</item>
     </integer-array>
-
+    <string-array name="event_co_titles">
+        <!--<item>Sweden</item>-->
+        <item>UK</item>
+        <!--<item>USA</item>-->
+        <item>Spain</item>
+        <!--<item>Catalonia</item>-->
+    </string-array>
+    <string-array name="event_co_codes">
+        <!--<item>sv_se</item>-->
+        <item>en_gb</item>
+        <!--<item>en_us</item>-->
+        <item>es_es</item>
+        <!--<item>ca_es</item>-->
+    </string-array>
 </resources>

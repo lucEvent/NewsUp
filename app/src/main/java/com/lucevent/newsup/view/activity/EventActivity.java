@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -34,7 +35,8 @@ import java.lang.ref.WeakReference;
 import java.util.Collection;
 import java.util.TreeSet;
 
-public class EventActivity extends StoragePermissionActivity implements View.OnClickListener {
+public class EventActivity extends StoragePermissionActivity implements View.OnClickListener,
+		SwipeRefreshLayout.OnRefreshListener {
 
 	private Event mEvent;
 
@@ -44,6 +46,7 @@ public class EventActivity extends StoragePermissionActivity implements View.OnC
 
 	private NewsFilterAdapter mAdapter;
 	private NewsView mNewsView;
+	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private RecyclerView mRecyclerView;
 	private View mProgressBar;
 
@@ -68,13 +71,14 @@ public class EventActivity extends StoragePermissionActivity implements View.OnC
 		mAdapter.setUserPreferences(this);
 		mAdapter.showSiteIcon(true);
 
-		LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-		layoutManager.setAutoMeasureEnabled(true);
+		mSwipeRefreshLayout = findViewById(R.id.refresh_trigger);
+		mSwipeRefreshLayout.setOnRefreshListener(this);
+		mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent);
 
 		mRecyclerView = (RecyclerView) findViewById(R.id.list);
 		mRecyclerView.setNestedScrollingEnabled(false);
 		mRecyclerView.setHasFixedSize(false);
-		mRecyclerView.setLayoutManager(layoutManager);
+		mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 		mRecyclerView.setAdapter(mAdapter);
 
 		mNewsView = (NewsView) findViewById(R.id.news_view);
@@ -211,9 +215,17 @@ public class EventActivity extends StoragePermissionActivity implements View.OnC
 		public void onClick(View v)
 		{
 			mAdapter.discloseData();
-			startActivity(new Intent(EventActivity.this, HandsFreeNewsViewActivity.class));
+			if (mAdapter.getItemCount() > 0)
+				startActivity(new Intent(EventActivity.this, HandsFreeNewsViewActivity.class));
 		}
 	};
+
+	@Override
+	public void onRefresh()
+	{
+		mAdapter.clear();
+		mManager.getReaderManager().read(mEvent, mHandler);
+	}
 
 	private static class Handler extends android.os.Handler {
 
@@ -243,6 +255,8 @@ public class EventActivity extends StoragePermissionActivity implements View.OnC
 						service.mRecyclerView.smoothScrollToPosition(0);
 					break;
 				case AppCode.NEWS_LOADED:
+					if (service.mSwipeRefreshLayout.isRefreshing())
+						service.mSwipeRefreshLayout.setRefreshing(false);
 					service.mProgressBar.setVisibility(ProgressBar.GONE);
 					break;
 				case AppCode.NO_INTERNET:

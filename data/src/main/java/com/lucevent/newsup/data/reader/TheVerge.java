@@ -1,5 +1,8 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosures;
+import com.lucevent.newsup.data.util.News;
+
 import org.jsoup.nodes.Element;
 
 public class TheVerge extends com.lucevent.newsup.data.util.NewsReader {
@@ -20,18 +23,22 @@ public class TheVerge extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected String parseContent(Element prop)
+	protected News onNewsRead(News news, Enclosures enclosures)
 	{
-		Element article = jsoupParse(prop);
-		article.select("script").remove();
+		if (!news.content.isEmpty()) {
+			Element article = jsoupParse(news.content);
+			article.select("script").remove();
 
-		article.select("figure cite,.caption,q").tagName("figcaption");
-		article.select("[style]:not(.instagram-media [style]").removeAttr("style");
+			article.select("figure cite,.caption,q").tagName("figcaption");
+			article.select("[style]:not(.instagram-media [style]").removeAttr("style");
 
-		for (Element e : article.select(".c-float-right,.c-float-left"))
-			e.tagName("blockquote").removeAttr("class");
+			for (Element e : article.select(".c-float-right,.c-float-left"))
+				e.tagName("blockquote").removeAttr("class");
 
-		return finalFormat(article, false);
+			news.imgSrc = findImageSrc(article);
+			news.content = finalFormat(article, false);
+		}
+		return news;
 	}
 
 }

@@ -1,5 +1,8 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosures;
+import com.lucevent.newsup.data.util.News;
+
 import org.jsoup.nodes.Element;
 
 public class AstronomyNow extends com.lucevent.newsup.data.util.NewsReader {
@@ -26,15 +29,19 @@ public class AstronomyNow extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected String parseContent(Element prop)
+	protected News onNewsRead(News news, Enclosures enclosures)
 	{
-		Element article = jsoupParse(prop);
-		article.select("script,.fb-comments").remove();
+		if (!news.content.isEmpty()) {
+			Element article = jsoupParse(news.content);
+			article.select("script,.fb-comments").remove();
 
-		article.select("[style]").removeAttr("style");
-		cleanAttributes(article.select("img"), "src");
+			article.select("[style]").removeAttr("style");
+			cleanAttributes(article.select("img"), "src");
 
-		return finalFormat(article, false);
+			news.imgSrc = findImageSrc(article);
+			news.content = finalFormat(article, false);
+		}
+		return news;
 	}
 
 }

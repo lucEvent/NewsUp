@@ -11,7 +11,7 @@ import com.lucevent.newsup.data.event.Event;
 
 public class EventViewHolder extends RecyclerView.ViewHolder {
 
-	private TextView mTitle, mTopic;
+	private TextView mTitle;
 	private ImageView mPicture;
 
 	public EventViewHolder(View v)
@@ -19,7 +19,6 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
 		super(v);
 
 		mTitle = (TextView) v.findViewById(R.id.title);
-		mTopic = (TextView) v.findViewById(R.id.topic);
 		mPicture = (ImageView) v.findViewById(R.id.picture);
 	}
 
@@ -34,7 +33,6 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
 		mPicture.setVisibility(View.VISIBLE);
 
 		mTitle.setText(event.title);
-		mTopic.setText(event.topic);
 
 		itemView.setTag(event);
 	}

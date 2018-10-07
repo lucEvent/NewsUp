@@ -1,5 +1,8 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosures;
+import com.lucevent.newsup.data.util.News;
+
 import org.jsoup.nodes.Element;
 
 public class DigitalCamera extends com.lucevent.newsup.data.util.NewsReader {
@@ -20,14 +23,25 @@ public class DigitalCamera extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected String parseContent(Element prop)
+	protected String parseDescription(Element prop)
 	{
-		Element article = jsoupParse(prop);
-		article.select("script").remove();
-		article.select("[style]").removeAttr("style");
-		article.select("[id]").removeAttr("id");
-		article.select(".wp-caption-text").tagName("figcaption");
-		return finalFormat(article, false).replace("<p>&nbsp;</p>", "");
+		return jsoupParse(prop).text();
+	}
+
+	@Override
+	protected News onNewsRead(News news, Enclosures enclosures)
+	{
+		if (!news.content.isEmpty()) {
+			Element article = jsoupParse(news.content);
+			article.select("script").remove();
+			article.select("[style]").removeAttr("style");
+			article.select("[id]").removeAttr("id");
+			article.select(".wp-caption-text").tagName("figcaption");
+
+			news.imgSrc = findImageSrc(article);
+			news.content = finalFormat(article, false).replace("<p>&nbsp;</p>", "");
+		}
+		return news;
 	}
 
 }

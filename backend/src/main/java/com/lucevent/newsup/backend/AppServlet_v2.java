@@ -3,6 +3,7 @@ package com.lucevent.newsup.backend;
 import com.lucevent.newsup.backend.utils.Alerts;
 import com.lucevent.newsup.backend.utils.BackendParser;
 import com.lucevent.newsup.backend.utils.Event;
+import com.lucevent.newsup.backend.utils.EventNews;
 import com.lucevent.newsup.backend.utils.Reports;
 import com.lucevent.newsup.backend.utils.SiteSearchEngine;
 import com.lucevent.newsup.data.util.News;
@@ -13,6 +14,7 @@ import com.lucevent.newsup.data.util.UserSite;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpServlet;
@@ -43,7 +45,7 @@ public class AppServlet_v2 extends HttpServlet {
 		if (req.getParameter("content") != null) {
 
 			resp_content(
-					Data.getSite(Integer.parseInt(req.getParameter("site"))),
+					Integer.parseInt(req.getParameter("site")),
 					req.getParameter("l"),
 					resp
 			);
@@ -62,7 +64,7 @@ public class AppServlet_v2 extends HttpServlet {
 
 			resp_event_headers(
 					req.getParameter("site"),
-					Integer.parseInt(req.getParameter("ecode")),
+					Long.parseLong(req.getParameter("ecode")),
 					req.getParameter("v"),
 					resp
 			);
@@ -93,7 +95,11 @@ public class AppServlet_v2 extends HttpServlet {
 
 		} else if (req.getParameter("events") != null) {
 
-			resp_events(req.getParameter("lang"), resp);
+			resp_events(req.getParameter("events"), resp);
+
+		} else if (req.getParameter("event") != null) {
+
+			resp_event(Long.parseLong(req.getParameter("event")), resp);
 
 		} else if (req.getParameter("alerts") != null) {
 
@@ -135,27 +141,26 @@ public class AppServlet_v2 extends HttpServlet {
 		resp.getWriter().println(BackendParser.toEntry(news).toString());
 	}
 
-	private void resp_event_headers(String site_request, int event_code, String app_version, HttpServletResponse resp) throws IOException
+	@Deprecated
+	/**
+	 * @deprecated Should call {@link #resp_event(long, HttpServletResponse)}
+	 */
+	private void resp_event_headers(String site_request, long event_code, String app_version, HttpServletResponse resp) throws IOException
 	{
-		String[] parts = site_request.split(",");
-		Site site = Data.getSite(Integer.parseInt(parts[0]));
+		int site_code = Integer.parseInt(site_request.split(",")[0]);
 /*
-            if (UpdateMessageCreator.needsUpdate(app_version)) {
-                UpdateMessageCreator.generateUpdateNews(site, resp)
-                return;
-            }
+		if (UpdateMessageCreator.needsUpdate(app_version)) {
+			Site site = Data.getSite(site_code);
+			UpdateMessageCreator.generateUpdateNews(site, resp)
+			return;
+		}
 */
-		NewsArray news = getHeaders(site, parts);
+		List<EventNews> event_news = ofy().load().type(EventNews.class)
+				.filter("event_code", event_code)
+				.filter("site_code", site_code)
+				.list();
 
-		Event event = ofy().load().type(Event.class)
-				.id(event_code)
-				.now();
-
-		for (int i = news.size() - 1; i >= 0; i--)
-			if (!news.get(i).hasKeyWords(event.tags))
-				news.remove(i);
-
-		resp.getWriter().println(BackendParser.toEntry(news).toString());
+		resp.getWriter().println(BackendParser.toEntry(event_news).toString());
 	}
 
 	private NewsArray getHeaders(Site site, String[] parts)
@@ -170,8 +175,12 @@ public class AppServlet_v2 extends HttpServlet {
 		return news;
 	}
 
-	private void resp_content(Site site, String link, HttpServletResponse resp) throws IOException
+	private void resp_content(int site_code, String link, HttpServletResponse resp) throws IOException
 	{
+		Site site = Data.getSite(site_code);
+		if (site == null)
+			return;
+
 		int id = link.hashCode();
 
 		News news = site.news.get(id);
@@ -189,30 +198,51 @@ public class AppServlet_v2 extends HttpServlet {
 		}
 	}
 
-	private void resp_events(String lang, HttpServletResponse resp) throws IOException
+	private void resp_events(String region_codes, HttpServletResponse resp) throws IOException
 	{
-
 		long currentTime = System.currentTimeMillis();
-		TreeSet<Event> events = new TreeSet<>(new Comparator<Event>() {
-			@Override
-			public int compare(Event o1, Event o2)
-			{
-				long currentTime = System.currentTimeMillis();
-				return Long.compare(o1.endTime - currentTime, o2.endTime - currentTime);
-			}
-		});
 		ArrayList<Event> aux = new ArrayList<>(ofy().load().type(Event.class)
 				.filter("visible", true)
 				.filter("endTime >", currentTime)
 				.list());
 
-		for (int i = aux.size() - 1; i >= 0; i--)
-			if (aux.get(i).startTime > currentTime)
+		String[] m_region_codes = region_codes.split(",");
+		for (int i = aux.size() - 1; i >= 0; i--) {
+			Event e = aux.get(i);
+			if (e.startTime > currentTime)
 				aux.remove(i);
 
+			boolean match = false;
+			for (String rc : m_region_codes)
+				if (e.region_code.equals(rc)) {
+					match = true;
+					break;
+				}
+
+			if (!match)
+				aux.remove(i);
+		}
+
+		TreeSet<Event> events = new TreeSet<>(new Comparator<Event>() {
+			@Override
+			public int compare(Event o1, Event o2)
+			{
+				int r = Long.compare(o1.startTime, o2.startTime);
+				return r != 0 ? -r : 1;
+			}
+		});
 		events.addAll(aux);
 
-		resp.getWriter().println(BackendParser.toEntry(events, lang).toString());
+		resp.getWriter().println(BackendParser.json(events).toString());
+	}
+
+	private void resp_event(long event_code, HttpServletResponse resp) throws IOException
+	{
+		List<EventNews> event_news = ofy().load().type(EventNews.class)
+				.filter("event_code", event_code)
+				.list();
+
+		resp.getWriter().println(BackendParser.toEntry(event_news).toString());
 	}
 
 	private void resp_alerts(String app_version, String lang, HttpServletResponse resp) throws IOException
@@ -220,11 +250,11 @@ public class AppServlet_v2 extends HttpServlet {
 		Alerts alerts = new Alerts();
 
 		if (app_version == null || app_version.isEmpty() ||
-				!(app_version.startsWith("2.6.") || app_version.startsWith("2.7."))) {
+				!(app_version.startsWith("2.7.") || app_version.startsWith("2.8."))) {
 			alerts.addUpdateAlert();
 		} else {
 
-			if (app_version.startsWith("2.7."))
+			if (app_version.startsWith("2.8."))
 				alerts.addPolls(lang);
 
 			alerts.addRateAlert();

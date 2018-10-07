@@ -34,11 +34,6 @@
             android:title="@string/notes" />
 
         <item
-            android:id="@+id/nav_contact"
-            android:icon="@drawable/ic_reports"
-            android:title="@string/report_n_contact" />
-
-        <item
             android:id="@+id/nav_about"
             android:icon="@drawable/ic_info"
             android:title="@string/about" />

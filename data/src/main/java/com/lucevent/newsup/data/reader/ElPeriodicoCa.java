@@ -39,7 +39,7 @@ public class ElPeriodicoCa extends com.lucevent.newsup.data.util.NewsReader {
 	@Override
 	protected String parseDescription(Element prop)
 	{
-		return org.jsoup.Jsoup.parse(prop.text()).text().replace("&lt;br /&gt;", ". ");
+		return jsoupParse(prop.text()).text().replace("Seguir leyendo....", "");
 	}
 
 	@Override

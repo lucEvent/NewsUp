@@ -1,5 +1,8 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosures;
+import com.lucevent.newsup.data.util.News;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,45 +26,49 @@ public class Gizmodo extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected String parseContent(Element prop)
+	protected News onNewsRead(News news, Enclosures enclosures)
 	{
-		Element article = jsoupParse(prop);
-		article.select(".ad-container,.js_ad-dynamic").remove();
+		if (!news.content.isEmpty()) {
+			Element article = jsoupParse(news.content);
+			article.select(".ad-container,.js_ad-dynamic").remove();
 
-		article.select(".pullquote").tagName("blockquote");
+			article.select(".pullquote").tagName("blockquote");
 
-		for (Element e : article.select("figure.js_marquee-assetfigure:has(picture)")) {
-			e.removeAttr("style");
-			e.html(e.select("picture,figcaption").outerHtml());
-		}
-
-		for (Element slides : article.select(".slideshow-inset [data-slides]")) {
-			String data = slides.attr("data-slides");
-			if (data.isEmpty())
-				continue;
-
-			StringBuilder sb = new StringBuilder();
-			try {
-				JSONArray items = new JSONObject("{items:" + data + "}").optJSONArray("items");
-				for (int i = 0; i < items.length(); i++) {
-					JSONObject item = items.getJSONObject(i);
-
-					String imgsrc = "https://i.kinja-img.com/gawker-media/image/upload/" + item.getString("id") + "." + item.getString("format");
-					String caption = item.getJSONArray("caption").getJSONObject(0).getString("value");
-
-					sb.append("<img src='").append(imgsrc).append("'>");
-					sb.append("<figcaption>").append(caption).append("</figcaption>");
-				}
-
-			} catch (JSONException e) {
-				//   System.out.println("JSON exception:" + e.getMessage());
+			for (Element e : article.select("figure.js_marquee-assetfigure:has(picture)")) {
+				e.removeAttr("style");
+				e.html(e.select("picture,figcaption").outerHtml());
 			}
-			slides.parent().html(sb.toString());
+
+			for (Element slides : article.select(".slideshow-inset [data-slides]")) {
+				String data = slides.attr("data-slides");
+				if (data.isEmpty())
+					continue;
+
+				StringBuilder sb = new StringBuilder();
+				try {
+					JSONArray items = new JSONObject("{items:" + data + "}").optJSONArray("items");
+					for (int i = 0; i < items.length(); i++) {
+						JSONObject item = items.getJSONObject(i);
+
+						String imgsrc = "https://i.kinja-img.com/gawker-media/image/upload/" + item.getString("id") + "." + item.getString("format");
+						String caption = item.getJSONArray("caption").getJSONObject(0).getString("value");
+
+						sb.append("<img src='").append(imgsrc).append("'>");
+						sb.append("<figcaption>").append(caption).append("</figcaption>");
+					}
+
+				} catch (JSONException e) {
+					//   System.out.println("JSON exception:" + e.getMessage());
+				}
+				slides.parent().html(sb.toString());
+			}
+
+			cleanAttributes(article.select("img"), "src");
+
+			news.imgSrc = findImageSrc(article);
+			news.content = finalFormat(article, false);
 		}
-
-		cleanAttributes(article.select("img"), "src");
-
-		return finalFormat(article, false);
+		return news;
 	}
 
 }

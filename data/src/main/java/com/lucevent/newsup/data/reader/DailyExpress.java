@@ -1,5 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosures;
 import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.nodes.Document;
@@ -24,9 +25,14 @@ public class DailyExpress extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected String parseDescription(Element prop)
+	protected News onNewsRead(News news, Enclosures enclosures)
 	{
-		return jsoupParse(prop).text();
+		if (!news.description.isEmpty()) {
+			Element e = jsoupParse(news.description);
+			news.description = e.text();
+			news.imgSrc = findImageSrc(e);
+		}
+		return news;
 	}
 
 	@Override
@@ -42,13 +48,7 @@ public class DailyExpress extends com.lucevent.newsup.data.util.NewsReader {
 			intro.html("<strong>" + intro.html() + "</strong>");
 		}
 
-		for (Element scribble : article.select("article[data-trigger='scribble']")) {
-			cleanAttributes(scribble);
-			scribble.tagName("div");
-			Element ns = scribble.nextElementSibling();
-			scribble.html(ns.select("header img,.list .item .time,.list .item .content").outerHtml());
-			ns.remove();
-		}
+		cleanAttributes(article.select("[data-trigger='scribble']"));
 
 		for (Element bcvideo : article.select(".htmlappend video")) {
 			bcvideo.parent().parent().parent()

@@ -1,6 +1,7 @@
 package com.lucevent.newsup.view.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,8 +29,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationViewHo
 		mInflater = LayoutInflater.from(context);
 	}
 
+	@NonNull
 	@Override
-	public NotificationViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+	public NotificationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
 	{
 		View v = mInflater.inflate(R.layout.i_notification, parent, false);
 		v.setOnClickListener(mOnItemClickListener);
@@ -37,7 +39,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationViewHo
 	}
 
 	@Override
-	public void onBindViewHolder(NotificationViewHolder holder, int position)
+	public void onBindViewHolder(@NonNull NotificationViewHolder holder, int position)
 	{
 		holder.bind(mDataSet.get(position), mOnDeleteListener);
 	}
@@ -57,4 +59,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationViewHo
 			notifyItemRemoved(pos);
 		}
 	}
+
+	public void clear()
+	{
+		mDataSet.clear();
+		notifyDataSetChanged();
+	}
+
 }

@@ -35,7 +35,6 @@ import com.lucevent.newsup.kernel.KernelManager;
 import com.lucevent.newsup.kernel.ScheduleManager;
 import com.lucevent.newsup.permission.PermissionHandler;
 import com.lucevent.newsup.services.ScheduledDownloadReceiver;
-import com.lucevent.newsup.view.activity.ContactActivity;
 import com.lucevent.newsup.view.activity.FindPublicationActivity;
 import com.lucevent.newsup.view.activity.SelectSitesActivity;
 import com.lucevent.newsup.view.fragment.AboutFragment;
@@ -104,10 +103,12 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
-			if (extras.containsKey(AppCode.SOURCES))
-				newsFragment = NewsListFragment.instanceFor(extras);
+			if (extras.containsKey(AppCode.NOTIFICATION)) {
+				newsFragment = NewsListFragment.instanceFor(
+						dataManager.getDatabaseManager().readNotification(extras.getLong(AppCode.TIME))
+				);
 
-			else if (extras.containsKey("shortcut_select")) {
+			} else if (extras.containsKey("shortcut_select")) {
 
 				Intent intent = new Intent(this, SelectSitesActivity.class);
 				intent.putExtra(AppCode.PURPOSE, SelectSitesActivity.For.SELECT_ONE);
@@ -326,9 +327,6 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 				fragment = new NotesFragment();
 				title = getString(R.string.notes);
 				break;
-			case R.id.nav_contact:
-				startActivity(new Intent(this, ContactActivity.class));
-				return false;
 			case R.id.nav_about:
 				fragment = new AboutFragment();
 				title = getString(R.string.about);

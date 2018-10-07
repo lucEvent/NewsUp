@@ -9,10 +9,13 @@ public class TheBolivarCommercialSections extends Sections {
 	{
 		super();
 
-		add(new Section("News", "http://www.bolivarcommercial.com/news/?format=feed&type=atom", 0));
-		add(new Section("Sports", "http://www.bolivarcommercial.com/sports/?format=feed&type=atom", 0));
-		add(new Section("Lifestyles", "http://www.bolivarcommercial.com/news/lifestyles/?format=feed&type=atom", 0));
-		add(new Section("Opinion", "http://www.bolivarcommercial.com/news/opinion/?format=feed&type=atom", 0));
+		add(new Section("Homepage", "https://bolivarcommercial.com/feed/", 0));
+		add(new Section("News", "https://bolivarcommercial.com/category/news/feed/", 0));
+		add(new Section("Schools", "https://bolivarcommercial.com/category/schools/feed/", 0));
+		add(new Section("Business", "https://bolivarcommercial.com/category/business/feed/", 0));
+		add(new Section("Lifestyles", "https://bolivarcommercial.com/category/lifestyles/feed/", 0));
+		add(new Section("Opinion", "https://bolivarcommercial.com/category/opinion/feed/", 0));
+		add(new Section("Sports", "https://bolivarcommercial.com/category/sports/feed/", 0));
 
 	}
 

@@ -3,7 +3,6 @@ package com.lucevent.newsup.backend.utils;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
-import com.googlecode.objectify.annotation.Unindex;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,10 +15,6 @@ import java.util.TimeZone;
 
 @Entity
 public class Event {
-
-	public static class EventInfo {
-		public String lang, title, topic;
-	}
 
 	public static class EventSite {
 		public int site_code;
@@ -39,28 +34,16 @@ public class Event {
 	@Index
 	public boolean visible;
 
-	@Unindex
-	public EventInfo[] info;
+	public String region_code;
 
-	@Unindex
-	public String imgSrc;
+	public String title, imgSrc;
 
-	@Unindex
 	public String[] tags;
 
-	@Unindex
 	public EventSite[] sites;
 
 	public Event()
 	{
-	}
-
-	public EventInfo getInfo(String lang)
-	{
-		for (EventInfo ei : info)
-			if (lang.equals(ei.lang))
-				return ei;
-		return getInfo("en");
 	}
 
 	public static Event parse(String json) throws Exception
@@ -103,7 +86,7 @@ public class Event {
 				auxTags = Arrays.copyOfRange(auxTags, 0, validTags);
 			res.tags = auxTags;
 
-
+/*  //// TODO: 01/10/2018
 			JSONArray parsedInfo = parsed.getJSONArray("info");
 			res.info = new EventInfo[parsedInfo.length()];
 			for (int i = 0; i < parsedInfo.length(); i++) {
@@ -113,7 +96,7 @@ public class Event {
 				res.info[i].lang = p.getString("lang");
 				res.info[i].title = p.getString("title");
 				res.info[i].topic = p.getString("topic");
-			}
+			}*/
 
 			JSONArray parsedSites = parsed.getJSONArray("sites");
 			res.sites = new EventSite[parsedSites.length()];

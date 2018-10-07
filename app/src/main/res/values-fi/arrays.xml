@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string-array name="date_messages">
         <item>%d sekuntia sitten</item>
         <item>%d minuuttia sitten</item>
@@ -113,21 +112,29 @@
     </string-array>
     <string-array name="site_categories">
         <item>Uutiset</item>
-        <item>Urheilu-uutisia</item>
+        <item>Urheilu</item>
         <item>Teknologia</item>
-        <item>Blogit</item>
-        <item>Aikakauslehdet</item>
-        <item>Tähtitiede</item>
         <item>Tiede</item>
+        <item>Tähtitiede</item>
+        <item>Talous</item>
         <item>Videopelit</item>
         <item>Elämäntapa</item>
         <item>Moottori</item>
         <item>Viihde</item>
-        <item>Fitness</item>
+        <item>Terveys &amp; Kunto</item>
         <item>Musiikki</item>
-        <item>Talous</item>
         <item>Politiikka</item>
-        <item>Useat</item>
+        <item>Juoru</item>
+        <item>Gastronomia</item>
+        <item>Satiirinen</item>
+        <item>Kulutus</item>
+        <item>Liiketoiminta</item>
+        <item>Matkustaa</item>
+        <item>Kulttuuri</item>
+        <item>Lemmikkieläimet</item>
+        <item>Muoti</item>
+        <item>Tee se itse</item>
+        <item>Blogit</item>
     </string-array>
     <integer-array name="site_language_weights">
         <item>4</item>
@@ -218,5 +225,18 @@
         <item>8</item>
         <item>69</item>
     </integer-array>
-
+    <string-array name="event_co_titles">
+        <!--<item>Sweden</item>-->
+        <item>UK</item>
+        <!--<item>USA</item>-->
+        <item>Spain</item>
+        <!--<item>Catalonia</item>-->
+    </string-array>
+    <string-array name="event_co_codes">
+        <!--<item>sv_se</item>-->
+        <item>en_gb</item>
+        <!--<item>en_us</item>-->
+        <item>es_es</item>
+        <!--<item>ca_es</item>-->
+    </string-array>
 </resources>

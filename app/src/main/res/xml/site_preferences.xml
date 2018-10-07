@@ -4,29 +4,29 @@
     <SwitchPreference
         android:defaultValue="false"
         android:key="@string/pref_show_in_my_feed_key"
-        android:title="@string/pref_show_in_my_feed"/>
+        android:title="@string/pref_show_in_my_feed" />
 
     <com.lucevent.newsup.view.preference.SectionsMultiSelectPreference
         android:key="@string/pref_main_sections_key"
-        android:title="@string/pref_main_sections"/>
+        android:title="@string/pref_main_sections" />
 
     <SwitchPreference
         android:defaultValue="false"
         android:key="@string/pref_favorite_key"
-        android:title="@string/pref_favorite"/>
+        android:title="@string/pref_favorite" />
 
     <Preference
         android:key="@string/pref_shortcut_key"
         android:summary="@string/pref_shortcut_summary"
-        android:title="@string/pref_shortcut"/>
+        android:title="@string/pref_shortcut" />
 
     <Preference
         android:key="@string/pref_schedule_one_download_key"
-        android:title="@string/pref_schedule_one_download"/>
+        android:title="@string/pref_schedule_one_download" />
 
     <com.lucevent.newsup.view.preference.SectionsMultiSelectPreference
         android:key="@string/pref_download_sections_key"
-        android:title="@string/pref_download_sections"/>
+        android:title="@string/pref_download_sections" />
 
 
 </PreferenceScreen>

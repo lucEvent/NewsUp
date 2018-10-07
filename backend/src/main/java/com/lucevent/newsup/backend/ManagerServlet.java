@@ -1,46 +1,66 @@
 package com.lucevent.newsup.backend;
 
+import com.googlecode.objectify.cmd.LoadType;
+import com.lucevent.newsup.backend.utils.Event;
+import com.lucevent.newsup.backend.utils.EventFinder;
+
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static com.googlecode.objectify.ObjectifyService.ofy;
+
 public class ManagerServlet extends HttpServlet {
 
-    @Override
-    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
-    {
-        processPetition(req, resp);
-    }
+	@Override
+	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
+	{
+		processPetition(req, resp);
+	}
 
-    @Override
-    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException
-    {
-        processPetition(req, resp);
-    }
+	@Override
+	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException
+	{
+		processPetition(req, resp);
+	}
 
-    private void processPetition(HttpServletRequest req, HttpServletResponse resp) throws IOException
-    {
-        resp.setContentType("text/plain");
-        resp.setCharacterEncoding("utf-8");
+	private void processPetition(HttpServletRequest req, HttpServletResponse resp) throws IOException
+	{
+		if (req.getParameter("new_month") != null) {
 
-        if (req.getParameter("new_month") != null) {
+			Data.stats.newMonth();
 
-            Data.stats.newMonth();
+		} else if (req.getParameter("find_events") != null) {
 
-        }
+			ArrayList<Event> events = new EventFinder().find();
+			LoadType<Event> loader = ofy().load().type(Event.class);
+			for (Event e : events) {
+				Event dbEvent = loader.id(e.code).now();
+				if (dbEvent == null)
+					ofy().save().entity(e).now();
+				else {
+					dbEvent.startTime = e.startTime;
+					dbEvent.endTime = e.endTime;
+					dbEvent.imgSrc = e.imgSrc;
+					ofy().save().entity(e).now();
+				}
 
-    }
+			}
+		}
 
-    @Override
-    public void init() throws ServletException
-    {
-        super.init();
+	}
 
-        new Data();
-    }
+	@Override
+	public void init() throws ServletException
+	{
+		super.init();
+
+		new Data();
+	}
 
 }
 

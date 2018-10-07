@@ -9,7 +9,7 @@ public class ElJuevesSections extends Sections {
 	{
 		super();
 
-		add(new Section("Principal", "http://www.eljueves.es/feeds/rss.html", 0));
+		add(new Section("Principal", "https://www.eljueves.es/feeds/rss.html", 0));
 
 	}
 

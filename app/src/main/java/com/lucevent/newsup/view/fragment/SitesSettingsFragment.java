@@ -31,13 +31,10 @@ public class SitesSettingsFragment extends android.app.Fragment implements View.
 
 		SiteListAdapter adapter = new SiteListAdapter(sites, this);
 
-		LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-		layoutManager.setAutoMeasureEnabled(true);
-
 		RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
 		recyclerView.setNestedScrollingEnabled(false);
 		recyclerView.setHasFixedSize(true);
-		recyclerView.setLayoutManager(layoutManager);
+		recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 		recyclerView.setAdapter(adapter);
 
 		return view;

@@ -44,12 +44,9 @@ public class NotesFragment extends Fragment implements TextView.OnEditorActionLi
 
 		View view = inflater.inflate(R.layout.f_drawer, container, false);
 
-		LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-		layoutManager.setAutoMeasureEnabled(true);
-
 		RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
 		recyclerView.setHasFixedSize(false);
-		recyclerView.setLayoutManager(layoutManager);
+		recyclerView.setLayoutManager(new LinearLayoutManager(context));
 		recyclerView.setAdapter(adapter);
 
 

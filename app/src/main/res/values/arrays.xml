@@ -121,21 +121,29 @@
     </string-array>
     <string-array name="site_categories">
         <item>News</item>
-        <item>Sport News</item>
+        <item>Sports</item>
         <item>Technology</item>
-        <item>Blogs</item>
-        <item>Magazines</item>
-        <item>Astronomy</item>
         <item>Science</item>
-        <item>Videogames</item>
+        <item>Astronomy</item>
+        <item>Economy</item>
+        <item>Video games</item>
         <item>Lifestyle</item>
         <item>Motor</item>
         <item>Entertainment</item>
-        <item>Fitness</item>
+        <item>Health &amp; Fitness</item>
         <item>Music</item>
-        <item>Economy</item>
         <item>Politics</item>
-        <item>Various</item>
+        <item>Gossip</item>
+        <item>Gastronomy</item>
+        <item>Satirical</item>
+        <item>Consumption</item>
+        <item>Business</item>
+        <item>Travel</item>
+        <item>Culture</item>
+        <item>Pets</item>
+        <item>Fashion</item>
+        <item>Do it yourself</item>
+        <item>Blogs</item>
     </string-array>
     <integer-array name="site_language_weights">
         <item>10</item>
@@ -226,75 +234,18 @@
         <item>8</item>
         <item>69</item>
     </integer-array>
-    <!--
-    <integer-array name="site_country_weights">
-        <item>10</item>
-        <item>11</item>
-        <item>Australia</item>
-        <item>12</item>
-        <item>13</item>
-        <item>14</item>
-        <item>15</item>
-        <item>16</item>
-        <item>17</item>
-        <item>Canadá</item>
-        <item>18</item>
-        <item>19</item>
-        <item>20</item>
-        <item>21</item>
-        <item>22</item>
-        <item>23</item>
-        <item>24</item>
-        <item>25</item>
-        <item>26</item>
-        <item>27</item>
-        <item>28</item>
-        <item>29</item>
-        <item>España</item>
-        <item>Estados Unidos</item>
-        <item>30</item>
-        <item>31</item>
-        <item>32</item>
-        <item>Finlandia</item>
-        <item>33</item>
-        <item>34</item>
-        <item>35</item>
-        <item>36</item>
-        <item>37</item>
-        <item>38</item>
-        <item>39</item>
-        <item>40</item>
-        <item>41</item>
-        <item>42</item>
-        <item>43</item>
-        <item>44</item>
-        <item>45</item>
-        <item>46</item>
-        <item>47</item>
-        <item>48</item>
-        <item>50</item>
-        <item>51</item>
-        <item>52</item>
-        <item>53</item>
-        <item>54</item>
-        <item>55</item>
-        <item>56</item>
-        <item>57</item>
-        <item>58</item>
-        <item>59</item>
-        <item>60</item>
-        <item>Reino Unido</item>
-        <item>61</item>
-        <item>62</item>
-        <item>63</item>
-        <item>Suecia</item>
-        <item>64</item>
-        <item>65</item>
-        <item>66</item>
-        <item>67</item>
-        <item>Europa</item>
-        <item>World</item>
-    </integer-array>
-    -->
-
+    <string-array name="event_co_titles">
+        <item>UK</item>
+        <!--<item>USA</item>-->
+        <item>Spain</item>
+        <!--<item>Sweden</item>-->
+        <!--<item>Catalonia</item>-->
+    </string-array>
+    <string-array name="event_co_codes">
+        <item>en_gb</item>
+        <!--<item>en_us</item>-->
+        <item>es_es</item>
+        <!--<item>sv_se</item>-->
+        <!--<item>ca_es</item>-->
+    </string-array>
 </resources>

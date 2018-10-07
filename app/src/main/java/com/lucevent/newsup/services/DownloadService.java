@@ -6,12 +6,10 @@ import android.content.Intent;
 
 import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.Main;
-import com.lucevent.newsup.data.event.Event;
 import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.kernel.AppData;
 import com.lucevent.newsup.kernel.ScheduleManager;
-import com.lucevent.newsup.net.EventsManager;
 import com.lucevent.newsup.services.util.Download;
 import com.lucevent.newsup.services.util.DownloadNotification;
 import com.lucevent.newsup.view.util.NotificationBuilder;
@@ -65,35 +63,30 @@ public class DownloadService extends IntentService {
 
 		DownloadNotification notificationData;
 		if (task.isEvent()) {
-			Event event = new EventsManager(context).fetchEvent(-task.id);
-			if (event == null)
-				return;
-
-			notificationData = dataManager.getReaderManager().read(event, task);
+			notificationData = dataManager.getReaderManager().read(-task.id, task);
 		} else
 			notificationData = dataManager.getReaderManager().read(task);
 
 		if (task.notify && notificationData != null && !notificationData.isEmpty()) {
 			String title;
 			String[] headlines = new String[notificationData.headlines.size()];
-			if (notificationData.sources.size() == 1) {
-				Site s = AppData.getSiteByCode(notificationData.sources.get(0).siteCode);
+			if (notificationData.headlines.size() == 1) {
+				Site s = AppData.getSiteByCode(notificationData.headlines.keyAt(0));
 				title = (s == null ? "" : s.name) + " [via News Up]";
-				headlines[0] = notificationData.headlines.get(0);
+				headlines[0] = notificationData.headlines.valueAt(0);
 			} else {
 				title = "News Up";
 				for (int i = 0; i < notificationData.headlines.size(); i++) {
-					Site s = AppData.getSiteByCode(notificationData.sources.get(i).siteCode);
+					Site s = AppData.getSiteByCode(notificationData.headlines.keyAt(i));
 					String siteName = s == null ? "" : s.name;
-					headlines[i] = siteName + ": " + notificationData.headlines.get(i);
+					headlines[i] = siteName + ": " + notificationData.headlines.valueAt(i);
 				}
 			}
 
 			// build notification
 			Intent notificationIntent = new Intent(this, Main.class);
-			notificationIntent.putExtra(AppCode.SOURCES, notificationData.sources);
-			if (task.isEvent())
-				notificationIntent.putExtra(AppCode.STRING_FILTERS, notificationData.filters);
+			notificationIntent.putExtra(AppCode.NOTIFICATION, true);
+			notificationIntent.putExtra(AppCode.TIME, notificationData.time);
 
 			NotificationBuilder.notifyUser(this,
 					NotificationBuilder.build(this, notificationIntent, title, headlines));

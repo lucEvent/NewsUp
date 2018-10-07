@@ -22,20 +22,19 @@ import com.lucevent.newsup.view.adapter.DownloadScheduleAdapter;
 
 public class DownloadSettingsFragment extends Fragment {
 
-	private ScheduleManager dataManager;
-	private DownloadScheduleAdapter adapter;
+	private ScheduleManager mDataManager;
+	private DownloadScheduleAdapter mAdapter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 
-		dataManager = new ScheduleManager(getActivity());
-		adapter = new DownloadScheduleAdapter(dataManager.getSchedule(), onModifyAction, onDeleteAction);
-
+		mDataManager = new ScheduleManager(getActivity());
+		mAdapter = new DownloadScheduleAdapter(mDataManager.getSchedule(), mOnModifyAction, mOnDeleteAction);
 	}
 
-	private View noDownloadsScreen;
+	private View mNoDownloadsScreen;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -45,21 +44,18 @@ public class DownloadSettingsFragment extends Fragment {
 
 		View view = inflater.inflate(R.layout.f_schedule_download_settings, container, false);
 
-		LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-		layoutManager.setAutoMeasureEnabled(true);
-
 		RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
 		recyclerView.setNestedScrollingEnabled(false);
 		recyclerView.setHasFixedSize(false);
-		recyclerView.setLayoutManager(layoutManager);
-		recyclerView.setAdapter(adapter);
+		recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+		recyclerView.setAdapter(mAdapter);
 
-		noDownloadsScreen = view.findViewById(R.id.no_downloads);
+		mNoDownloadsScreen = view.findViewById(R.id.no_downloads);
 
-		if (adapter.getItemCount() == 0)
-			noDownloadsScreen.setVisibility(View.VISIBLE);
+		if (mAdapter.getItemCount() == 0)
+			mNoDownloadsScreen.setVisibility(View.VISIBLE);
 
-		view.findViewById(R.id.btn_add).setOnClickListener(onAddAction);
+		view.findViewById(R.id.btn_add).setOnClickListener(mOnAddAction);
 
 		return view;
 	}
@@ -76,17 +72,17 @@ public class DownloadSettingsFragment extends Fragment {
 	{
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == Activity.RESULT_OK) {
-			adapter.notifyDataSetChanged();
+			mAdapter.notifyDataSetChanged();
 
 			ScheduledDownloadReceiver.scheduleDownloads(getActivity(),
-					dataManager.getSchedule());
+					mDataManager.getSchedule());
 
-			if (noDownloadsScreen.getVisibility() == View.VISIBLE)
-				noDownloadsScreen.setVisibility(View.GONE);
+			if (mNoDownloadsScreen.getVisibility() == View.VISIBLE)
+				mNoDownloadsScreen.setVisibility(View.GONE);
 		}
 	}
 
-	private View.OnClickListener onAddAction = new View.OnClickListener() {
+	private View.OnClickListener mOnAddAction = new View.OnClickListener() {
 		@Override
 		public void onClick(View v)
 		{
@@ -96,7 +92,7 @@ public class DownloadSettingsFragment extends Fragment {
 		}
 	};
 
-	private View.OnClickListener onModifyAction = new View.OnClickListener() {
+	private View.OnClickListener mOnModifyAction = new View.OnClickListener() {
 		@Override
 		public void onClick(View v)
 		{
@@ -107,7 +103,7 @@ public class DownloadSettingsFragment extends Fragment {
 		}
 	};
 
-	private View.OnClickListener onDeleteAction = new View.OnClickListener() {
+	private View.OnClickListener mOnDeleteAction = new View.OnClickListener() {
 		@Override
 		public void onClick(final View v)
 		{
@@ -119,12 +115,12 @@ public class DownloadSettingsFragment extends Fragment {
 						{
 
 							Download schedule = (Download) v.getTag();
-							adapter.remove(schedule);
-							dataManager.deleteSchedule(schedule);
-							ScheduledDownloadReceiver.scheduleDownloads(getActivity(), dataManager.getSchedule());
+							mAdapter.remove(schedule);
+							mDataManager.deleteSchedule(schedule);
+							ScheduledDownloadReceiver.scheduleDownloads(getActivity(), mDataManager.getSchedule());
 
-							if (adapter.getItemCount() == 0)
-								noDownloadsScreen.setVisibility(View.VISIBLE);
+							if (mAdapter.getItemCount() == 0)
+								mNoDownloadsScreen.setVisibility(View.VISIBLE);
 						}
 					})
 					.setNegativeButton(R.string.cancel, null)

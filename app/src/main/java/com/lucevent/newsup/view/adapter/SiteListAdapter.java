@@ -1,5 +1,6 @@
 package com.lucevent.newsup.view.adapter;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,8 +21,9 @@ public class SiteListAdapter extends RecyclerView.Adapter<SiteListViewHolder> {
 		mOnItemClickListener = onItemClickListener;
 	}
 
+	@NonNull
 	@Override
-	public SiteListViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+	public SiteListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
 	{
 		View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.i_site_list, parent, false);
 		v.setOnClickListener(mOnItemClickListener);
@@ -29,7 +31,7 @@ public class SiteListAdapter extends RecyclerView.Adapter<SiteListViewHolder> {
 	}
 
 	@Override
-	public void onBindViewHolder(SiteListViewHolder holder, int position)
+	public void onBindViewHolder(@NonNull SiteListViewHolder holder, int position)
 	{
 		holder.bind(mSites.get(position));
 	}

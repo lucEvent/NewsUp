@@ -163,7 +163,7 @@ public abstract class Reader {
 	 * @param start     Starting of the substring
 	 * @param end       Ending of the substring
 	 * @param inclusive Whether or not include the start and end
-	 * @return the subtring delimited by start and end (including start and end if inclusive=true), null if not found
+	 * @return the substring delimited by start and end (including start and end if inclusive=true), null if not found
 	 */
 	protected final String findSubstringBetween(String data, String start, String end, boolean inclusive)
 	{

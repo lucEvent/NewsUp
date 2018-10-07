@@ -100,15 +100,18 @@ public class Aftonbladet extends com.lucevent.newsup.data.util.NewsReader {
 		}
 		if (vidScript != null) {
 			for (Element e : article.select("._1W-u7,._2XM84")) {
-				String vidId = e.select("[id^='meetricsId-']").get(0).id().replace("meetricsId-", "");
-				if (!vidId.isEmpty()) {
-					int i = vidScript.indexOf("\"id\":\"" + vidId);
-					if (i > 0) {
-						String src = findSubstringBetween(vidScript.substring(i), "\"mp4\":\"", "\"", false);
-						if (src != null && !src.isEmpty()) {
-							src = src.replace("\\u002F", "/");
-							e.html(insertIframe(src));
-							continue;
+				Elements aux = e.select("[id^='meetricsId-']");
+				if (!aux.isEmpty()) {
+					String vidId = aux.get(0).id().replace("meetricsId-", "");
+					if (!vidId.isEmpty()) {
+						int i = vidScript.indexOf("\"id\":\"" + vidId);
+						if (i > 0) {
+							String src = findSubstringBetween(vidScript.substring(i), "\"mp4\":\"", "\"", false);
+							if (src != null && !src.isEmpty()) {
+								src = src.replace("\\u002F", "/");
+								e.html(insertIframe(src));
+								continue;
+							}
 						}
 					}
 				}

@@ -22,7 +22,7 @@ public class HuffingtonPostUSASections extends com.lucevent.newsup.data.util.Sec
 		add(new Section("TV & Film", "https://www.huffingtonpost.com/section/tv/feed", 1));
 
 		add(new Section("Politics", "https://www.huffingtonpost.com/section/politics/feed", 0));
-		add(new Section("Congress", "https://www.huffingtonpost.com/topic/congress/feed", 1));
+		add(new Section("Congress", "https://www.huffingtonpost.com/topic/us-congress/feed", 1));
 		add(new Section("Donald Trump", "https://www.huffingtonpost.com/topic/donald-trump/feed", 1));
 		add(new Section("2018 Elections", "https://www.huffingtonpost.com/topic/2018-elections/feed", 1));
 		add(new Section("Extremism", "https://www.huffingtonpost.com/topic/extremism/feed", 1));
@@ -32,7 +32,7 @@ public class HuffingtonPostUSASections extends com.lucevent.newsup.data.util.Sec
 		add(new Section("Women", "https://www.huffingtonpost.com/section/women/feed", 1));
 		add(new Section("Black Voices", "https://www.huffingtonpost.com/section/black-voices/feed", 1));
 		add(new Section("Latino Voices", "https://www.huffingtonpost.com/section/latino-voices/feed", 1));
-		add(new Section("Asian Voices", "https://www.huffingtonpost.com/topic/asian-voices/feed", 1));
+		add(new Section("Asian Voices", "https://www.huffingtonpost.com/section/asian-voices/feed", 1));
 
 		add(new Section("Life", "https://www.huffingtonpost.com/dept/lifestyle/feed", 0));
 		add(new Section("Style & Beauty", "https://www.huffingtonpost.com/section/style/feed", 1));
@@ -41,7 +41,7 @@ public class HuffingtonPostUSASections extends com.lucevent.newsup.data.util.Sec
 		add(new Section("Travel", "https://www.huffingtonpost.com/section/travel/feed", 1));
 		add(new Section("Finds", "https://www.huffingtonpost.com/topic/finds/feed", 1));
 		add(new Section("Wellness", "https://www.huffingtonpost.com/section/healthy-living/feed", 1));
-		add(new Section("Relationships", "https://www.huffingtonpost.com/topic/relationships/feed", 1));
+		add(new Section("Relationships", "https://www.huffingtonpost.com/section/relationships/feed", 1));
 		add(new Section("Money", "https://www.huffingtonpost.com/section/money/feed", 1));
 		add(new Section("Home & Living", "https://www.huffingtonpost.com/section/huffpost-home/feed", 1));
 

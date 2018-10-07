@@ -1,13 +1,17 @@
 package com.lucevent.newsup.view.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
+import com.ablanco.zoomy.LongPressListener;
+import com.ablanco.zoomy.Zoomy;
 import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.util.Site;
@@ -23,7 +27,7 @@ import com.lucevent.newsup.view.adapter.viewholder.news.NewsTextViewHolder;
 
 import java.util.ArrayList;
 
-public class NewsElementsListView extends LinearLayout {
+public class NewsElementsListView extends ScrollView {
 
 	private final ArrayList<NewsElementViewHolder> mViews;
 
@@ -33,16 +37,24 @@ public class NewsElementsListView extends LinearLayout {
 
 	private final String TWITTER_SCRIPT, INSTAGRAM_SCRIPT;
 
+	private final LinearLayout mContainer;
+
 	private LayoutInflater mInflater;
 	private ConnectivityManager mConnectivityManager;
-	private View.OnLongClickListener mOnImageLongClick;
+	private Activity mActivityContext;
+	private View.OnLongClickListener mOnImageViewLongClickListener;
 
 	private ContentLoader contentLoader;
 
 	public NewsElementsListView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
-		setOrientation(LinearLayout.VERTICAL);
+		mActivityContext = (Activity) context;
+
+		mContainer = new LinearLayout(context);
+		mContainer.setLayoutParams(new ScrollView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+		mContainer.setOrientation(LinearLayout.VERTICAL);
+		addView(mContainer);
 
 		mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		mConnectivityManager = new ConnectivityManager(context);
@@ -60,14 +72,14 @@ public class NewsElementsListView extends LinearLayout {
 	public void set(String newsTitle, NewsElements elements, Site site)
 	{
 		mCurrentSite = site;
-		contentLoader.reset((ScrollView) getParent(), newsTitle, elements, computeLinkColor(mCurrentSite));
+		contentLoader.reset(this, newsTitle, elements, computeLinkColor(mCurrentSite));
 	}
 
 	public void clear()
 	{
 		mViews.clear();
 		contentLoader.clear();
-		removeAllViews();
+		mContainer.removeAllViews();
 	}
 
 	public void setDarkStyle(boolean darkStyle)
@@ -90,7 +102,7 @@ public class NewsElementsListView extends LinearLayout {
 
 	public void setImageLongClickListener(OnLongClickListener listener)
 	{
-		mOnImageLongClick = listener;
+		mOnImageViewLongClickListener = listener;
 	}
 
 	private NewsElementViewHolder createViewHolder(NewsElement elem)
@@ -107,7 +119,16 @@ public class NewsElementsListView extends LinearLayout {
 				h = new com.lucevent.newsup.view.adapter.viewholder.news.NewsTextViewHolder(mInflater.inflate(R.layout.i_news_paragraph, this, false), NewsTextViewHolder.TEXT_SIZE_NORMAL);
 				break;
 			case NewsElement.TYPE_IMAGE:
-				h = new com.lucevent.newsup.view.adapter.viewholder.news.NewsImageViewHolder(mInflater.inflate(R.layout.i_news_image, this, false), mOnImageLongClick);
+				Zoomy.Builder zoomyBuilder = new Zoomy.Builder(mActivityContext)
+						.enableImmersiveMode(false)
+						.longPressListener(new LongPressListener() {
+							@Override
+							public void onLongPress(View v)
+							{
+								mOnImageViewLongClickListener.onLongClick(v);
+							}
+						});
+				h = new com.lucevent.newsup.view.adapter.viewholder.news.NewsImageViewHolder(mInflater.inflate(R.layout.i_news_image, this, false), zoomyBuilder);
 				break;
 			case NewsElement.TYPE_CAPTION:
 				h = new com.lucevent.newsup.view.adapter.viewholder.news.NewsTextViewHolder(mInflater.inflate(R.layout.i_news_caption, this, false), NewsTextViewHolder.TEXT_SIZE_SMALL);
@@ -216,7 +237,7 @@ public class NewsElementsListView extends LinearLayout {
 		{
 			NewsElementViewHolder holder = createViewHolder(elem);
 			mViews.add(holder);
-			addView(holder.get());
+			mContainer.addView(holder.get());
 
 			holder.bind(mDarkStyle);
 			holder.setTextSize(mTextSize);

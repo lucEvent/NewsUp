@@ -71,7 +71,7 @@ public class TheNewYorkTimesSections extends Sections {
 
 		add(new Section("Other Blog", null, -1));
 		add(new Section("Obituaries", "http://rss.nytimes.com/services/xml/rss/nyt/Obituaries.xml", 1));
-		add(new Section("Times Wire", "http://www.nytimes.com/timeswire/feeds/", 1));
+		add(new Section("Times Wire", "https://content.api.nytimes.com/svc/news/v3/all/recent.rss", 1));
 		add(new Section("Most Shared", "http://rss.nytimes.com/services/xml/rss/nyt/MostShared.xml", 1));
 		add(new Section("Most Viewed", "http://rss.nytimes.com/services/xml/rss/nyt/MostViewed.xml", 1));
 

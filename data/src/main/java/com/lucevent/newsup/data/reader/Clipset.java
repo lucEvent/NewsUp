@@ -1,9 +1,9 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosures;
 import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class Clipset extends com.lucevent.newsup.data.util.NewsReader {
@@ -24,9 +24,14 @@ public class Clipset extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected String parseDescription(Element prop)
+	protected News onNewsRead(News news, Enclosures enclosures)
 	{
-		return org.jsoup.Jsoup.parse(prop.text()).text();
+		if (!news.description.isEmpty()) {
+			Document article = org.jsoup.Jsoup.parse(news.description);
+			news.imgSrc = findImageSrc(article);
+			news.description = article.text();
+		}
+		return news;
 	}
 
 	@Override

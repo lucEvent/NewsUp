@@ -3,8 +3,10 @@ package com.lucevent.newsup.view.adapter.viewholder.news;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.ablanco.zoomy.Zoomy;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.lucevent.newsup.R;
 import com.lucevent.newsup.kernel.AppCode;
 import com.lucevent.newsup.parse.NewsImage;
 
@@ -12,10 +14,17 @@ public class NewsImageViewHolder extends NewsElementViewHolder {
 
 	private static RequestOptions glideOptions = new RequestOptions().fitCenter();
 
-	public NewsImageViewHolder(View v, View.OnLongClickListener longClickListener)
+	private ImageView mImage;
+
+	public NewsImageViewHolder(View v, Zoomy.Builder zoomyBuilder)
 	{
 		super(v);
-		v.setOnLongClickListener(longClickListener);
+		mImage = v.findViewById(R.id.image);
+
+		zoomyBuilder
+				.target(mImage)
+				.enableImmersiveMode(false)
+				.register();
 	}
 
 	@Override
@@ -27,7 +36,7 @@ public class NewsImageViewHolder extends NewsElementViewHolder {
 		Glide.with(itemView.getContext())
 				.load(imgSrc)
 				.apply(glideOptions)
-				.into((ImageView) itemView);
+				.into(mImage);
 	}
 
 	@Override

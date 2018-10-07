@@ -17,7 +17,7 @@
         style="@style/statistics_floating_button"
         android:layout_above="@+id/sort_total_requests"
         android:src="@drawable/ic_sort_by_name"
-        app:backgroundTint="@color/colorPrimaryDark"
+        app:backgroundTint="@color/tint_btn_statistics"
         app:fabSize="mini"
         app:rippleColor="@color/colorAccent"
         app:useCompatPadding="true" />
@@ -27,7 +27,7 @@
         style="@style/statistics_floating_button"
         android:layout_above="@+id/sort_month_requests"
         android:src="@drawable/ic_sort_by_number"
-        app:backgroundTint="@color/colorPrimaryDark"
+        app:backgroundTint="@color/tint_btn_statistics"
         app:fabSize="mini"
         app:rippleColor="@color/colorAccent"
         app:useCompatPadding="true" />
@@ -37,7 +37,7 @@
         style="@style/statistics_floating_button"
         android:layout_above="@+id/sort_readings"
         android:src="@drawable/ic_add_white"
-        app:backgroundTint="@color/colorPrimaryDark"
+        app:backgroundTint="@color/tint_btn_statistics"
         app:fabSize="mini"
         app:rippleColor="@color/colorAccent"
         app:useCompatPadding="true" />
@@ -47,7 +47,7 @@
         style="@style/statistics_floating_button"
         android:layout_above="@+id/sort_time"
         android:src="@drawable/ic_read_white"
-        app:backgroundTint="@color/colorPrimaryDark"
+        app:backgroundTint="@color/tint_btn_statistics"
         app:fabSize="mini"
         app:rippleColor="@color/colorAccent"
         app:useCompatPadding="true" />
@@ -57,7 +57,7 @@
         style="@style/statistics_floating_button"
         android:layout_alignParentBottom="true"
         android:src="@drawable/ic_access_time"
-        app:backgroundTint="@color/colorPrimaryDark"
+        app:backgroundTint="@color/tint_btn_statistics"
         app:fabSize="mini"
         app:rippleColor="@color/colorAccent"
         app:useCompatPadding="true" />

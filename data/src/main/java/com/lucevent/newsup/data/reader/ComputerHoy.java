@@ -4,8 +4,6 @@ import com.lucevent.newsup.data.util.Enclosures;
 import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 public class ComputerHoy extends com.lucevent.newsup.data.util.NewsReader {
 
@@ -31,8 +29,8 @@ public class ComputerHoy extends com.lucevent.newsup.data.util.NewsReader {
 		super(TAG_ITEM_ITEMS,
 				new int[]{TAG_TITLE},
 				new int[]{TAG_LINK},
-				new int[]{TAG_DESCRIPTION},
 				new int[]{},
+				new int[]{TAG_DESCRIPTION},
 				new int[]{TAG_PUBDATE},
 				new int[]{},
 				new int[]{},
@@ -42,25 +40,13 @@ public class ComputerHoy extends com.lucevent.newsup.data.util.NewsReader {
 	@Override
 	protected News onNewsRead(News news, Enclosures enclosures)
 	{
-		Document doc = org.jsoup.Jsoup.parse(news.description);
-		news.description = doc.text();
-
-		Elements enc = doc.select("[itemprop='image']");
-		if (!enc.isEmpty())
-			news.imgSrc = enc.get(0).attr("src");
-
+		if (!news.content.isEmpty()) {
+			Document article = org.jsoup.Jsoup.parse(news.content);
+			news.description = article.body().ownText();
+			news.imgSrc = findImageSrc(article);
+			news.content = finalFormat(article.select(".article-body"), false);
+		}
 		return news;
-	}
-
-	@Override
-	protected void readNewsContent(Document doc, News news)
-	{
-		Elements article = doc.select(".main-element img,.article-body");
-
-		for (Element divimg : article.select(".container-img:has(img)"))
-			divimg.html(divimg.select("img").outerHtml());
-
-		news.content = finalFormat(article, true);
 	}
 
 }

@@ -12,8 +12,8 @@ import com.lucevent.newsup.data.util.Site;
 
 import org.json.JSONObject;
 
-import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -36,6 +36,31 @@ public class BackendParser {
 		res.append("</content><categories>");
 		res.append(news.tags.toString());
 		res.append("</categories><section>");
+		res.append(news.section_code);
+		res.append("</section>");
+		if (news.imgSrc != null && !news.imgSrc.isEmpty())
+			res.append("<enclosure>").append(news.imgSrc).append("</enclosure>");
+		res.append("</item>");
+		return res;
+	}
+
+	public static StringBuilder toEntry(EventNews news)
+	{
+		StringBuilder res = new StringBuilder("<item><title>");
+		res.append(news.title);
+		res.append("</title><link>");
+		res.append(news.link);
+		res.append("</link><date>");
+		res.append(news.date);
+		res.append("</date><description>");
+		res.append(news.description);
+		res.append("</description><content>");
+		if (news.content != null && !news.content.isEmpty()) res.append(news.content);
+		res.append("</content><categories>");
+		if (news.tags != null) res.append(news.tags.toString());
+		res.append("</categories><sitecode>");
+		res.append(news.site_code);
+		res.append("</sitecode><section>");
 		res.append(news.section_code);
 		res.append("</section>");
 		if (news.imgSrc != null && !news.imgSrc.isEmpty())
@@ -70,6 +95,17 @@ public class BackendParser {
 		StringBuilder sb = new StringBuilder("<channel>");
 
 		for (News N : news)
+			sb.append(BackendParser.toEntry(N));
+
+		sb.append("</channel>");
+		return sb;
+	}
+
+	public static StringBuilder toEntry(List<EventNews> news)
+	{
+		StringBuilder sb = new StringBuilder("<channel>");
+
+		for (EventNews N : news)
 			sb.append(BackendParser.toEntry(N));
 
 		sb.append("</channel>");
@@ -201,38 +237,45 @@ public class BackendParser {
 		return sb.toString();
 	}
 
-	public static StringBuilder toEntry(Set<Event> events, String lang)
+	public static StringBuilder json(Set<Event> events)
 	{
-		StringBuilder sb = new StringBuilder("<data>");
+		StringBuilder sb = new StringBuilder(200);
+		sb.append("[");
+
+		boolean needsComma = false;
 		for (Event E : events) {
-			Event.EventInfo eventInfo = E.getInfo(lang);
-			sb.append("<event code='")
-					.append(E.code)
-					.append("' title=\"")
-					.append(eventInfo.title)
-					.append("\" topic=\"")
-					.append(eventInfo.topic)
-					.append("\" imgsrc='")
-					.append(E.imgSrc)
-					.append("' sources='");
+			if (needsComma)
+				sb.append(",");
+			else needsComma = true;
+
+			sb.append("{\"code\":").append(E.code)
+					.append(", \"title\":\"").append(E.title)
+					.append("\", \"imgsrc\":\"").append(E.imgSrc)
+					.append("\", \"sources\":[");
 
 			for (int i = 0; i < E.sites.length; i++) {
-				if (i != 0) sb.append(";");
+				if (i != 0) sb.append(",");
 				Event.EventSite s = E.sites[i];
-				sb.append(s.site_code);
-				for (int is : s.section_codes)
-					sb.append(",").append(is);
+
+				sb.append("{\"si_c\":").append(s.site_code)
+						.append(", \"se_c\":[");
+
+				for (int j = 0; j < s.section_codes.length; j++) {
+					if (j != 0) sb.append(",");
+					sb.append(s.section_codes[j]);
+				}
+				sb.append("]}");
 			}
 
-			sb.append("' tags='");
+			sb.append("], \"tags\":\"");
 			for (int i = 0; i < E.tags.length; i++) {
 				if (i != 0) sb.append(",");
 				sb.append(E.tags[i]);
 			}
 
-			sb.append("'/>");
+			sb.append("\"}");
 		}
-		sb.append("</data>");
+		sb.append("]");
 		return sb;
 	}
 

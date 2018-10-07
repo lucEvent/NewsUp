@@ -1,5 +1,8 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosures;
+import com.lucevent.newsup.data.util.News;
+
 import org.jsoup.nodes.Element;
 
 public class CosmoNoticias extends com.lucevent.newsup.data.util.NewsReader {
@@ -26,18 +29,22 @@ public class CosmoNoticias extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected String parseContent(Element prop)
+	protected News onNewsRead(News news, Enclosures enclosures)
 	{
-		Element article = jsoupParse(prop);
-		article.select("script").remove();
+		if (!news.content.isEmpty()) {
+			Element article = jsoupParse(news.content);
+			article.select("script").remove();
 
-		article.select(".wp-caption-text").tagName("figcaption");
-		article.select("[style]").removeAttr("style");
-		article.select("[onclick]").removeAttr("onclick");
+			article.select(".wp-caption-text").tagName("figcaption");
+			article.select("[style]").removeAttr("style");
+			article.select("[onclick]").removeAttr("onclick");
 
-		cleanAttributes(article.select("img"), "src");
+			cleanAttributes(article.select("img"), "src");
 
-		return finalFormat(article, false);
+			news.imgSrc = findImageSrc(article);
+			news.content = finalFormat(article, false);
+		}
+		return news;
 	}
 
 }

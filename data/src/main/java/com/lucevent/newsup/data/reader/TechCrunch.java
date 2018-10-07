@@ -1,5 +1,8 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosures;
+import com.lucevent.newsup.data.util.News;
+
 import org.jsoup.nodes.Element;
 
 public class TechCrunch extends com.lucevent.newsup.data.util.NewsReader {
@@ -15,18 +18,23 @@ public class TechCrunch extends com.lucevent.newsup.data.util.NewsReader {
 				new int[]{TAG_CONTENT_ENCODED},
 				new int[]{TAG_PUBDATE},
 				new int[]{TAG_CATEGORY},
-				new int[]{TAG_MEDIA_CONTENT},
+				new int[]{},
 				"");
 	}
 
 	@Override
-	protected String parseContent(Element prop)
+	protected News onNewsRead(News news, Enclosures enclosures)
 	{
-		Element article = jsoupParse(prop);
-		article.select("script").remove();
-		article.select(".wp-caption-text").tagName("figcaption");
-		article.select("[style]").removeAttr("style");
-		return finalFormat(article, false);
+		if (!news.content.isEmpty()) {
+			Element article = jsoupParse(news.content);
+			article.select("script").remove();
+			article.select(".wp-caption-text").tagName("figcaption");
+			article.select("[style]").removeAttr("style");
+
+			news.imgSrc = findImageSrc(article);
+			news.content = finalFormat(article, false);
+		}
+		return news;
 	}
 
 }

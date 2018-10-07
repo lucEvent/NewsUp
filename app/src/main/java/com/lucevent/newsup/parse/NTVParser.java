@@ -96,6 +96,7 @@ public class NTVParser {
 				case "section":
 					endBlock(res);
 				case "div":
+				case "center":
 					if (currentElement == null) {
 						currentElement = new NewsParagraph();
 					}
@@ -253,7 +254,6 @@ public class NTVParser {
 					res.add(ne);
 					continue;
 				case "#comment":
-				case "center":
 				case "noscript":
 				case "object":
 				case "script":

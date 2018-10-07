@@ -1,6 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.Enclosure;
+import com.lucevent.newsup.data.util.Enclosures;
 import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.nodes.Document;
@@ -9,7 +9,7 @@ import org.jsoup.select.Elements;
 
 public class TeknikensVarld extends com.lucevent.newsup.data.util.NewsReader {
 
-	//tags: [category, content:encoded, dc:creator, description, guid, item, link, media:content, media:credit, media:description, media:thumbnail, media:title, pubdate, title]
+	//tags: [category, content:encoded, dc:creator, description, guid, item, link, pubdate, title]
 
 	public TeknikensVarld()
 	{
@@ -17,17 +17,26 @@ public class TeknikensVarld extends com.lucevent.newsup.data.util.NewsReader {
 				new int[]{TAG_TITLE},
 				new int[]{TAG_LINK},
 				new int[]{TAG_DESCRIPTION},
-				new int[]{},
+				new int[]{TAG_CONTENT_ENCODED},
 				new int[]{TAG_PUBDATE},
 				new int[]{TAG_CATEGORY},
-				new int[]{TAG_MEDIA_CONTENT},
+				new int[]{},
 				"");
 	}
 
 	@Override
-	protected Enclosure parseEnclosure(Element prop)
+	protected News onNewsRead(News news, Enclosures enclosures)
 	{
-		return new Enclosure(prop.attr("url"), prop.attr("medium"), "");
+		if (!news.content.isEmpty()) {
+			Element article = jsoupParse(news.content);
+			article.select("script,.-teaser-as-list,.desktop-ad,.mobile-ad,.c-image-slider").remove();
+			article.select(".wp-caption-text,.caption,.photographer").tagName("figcaption");
+			article.select(".btdm-factbox").tagName("blockquote");
+
+			news.imgSrc = findImageSrc(article);
+			news.content = finalFormat(article, false);
+		}
+		return news;
 	}
 
 	@Override

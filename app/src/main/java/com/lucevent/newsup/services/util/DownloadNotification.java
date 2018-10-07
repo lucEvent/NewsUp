@@ -1,41 +1,32 @@
 package com.lucevent.newsup.services.util;
 
-import com.lucevent.newsup.data.util.News;
+import android.util.SparseArray;
 
-import java.util.ArrayList;
+import com.lucevent.newsup.data.util.News;
 
 public class DownloadNotification implements java.io.Serializable {
 
-	public class Source implements java.io.Serializable {
-		public int siteCode;
-		public int[] sections;
+	public long time;   // time here matches with time on DownloadData
+	public SparseArray<String> headlines;
 
-		Source(int siteCode, int[] sections)
-		{
-			this.siteCode = siteCode;
-			this.sections = sections;
-		}
+	public DownloadNotification()
+	{
+		headlines = new SparseArray<>();
 	}
 
-	public ArrayList<Source> sources;
-	public ArrayList<String> headlines;
-	public String[] filters;
-
-	public DownloadNotification(int capacity)
+	public boolean hasHeadline(int siteCode)
 	{
-		sources = new ArrayList<>(capacity);
-		headlines = new ArrayList<>(capacity);
+		return headlines.get(siteCode) != null;
 	}
 
-	public void add(int siteCode, int[] sections, News news)
+	public void add(int siteCode, News news)
 	{
-		sources.add(new Source(siteCode, sections));
-		headlines.add(news.title);
+		headlines.put(siteCode, news.title);
 	}
 
 	public boolean isEmpty()
 	{
-		return headlines.isEmpty();
+		return headlines.size() == 0;
 	}
 
 }

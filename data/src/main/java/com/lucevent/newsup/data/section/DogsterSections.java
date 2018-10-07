@@ -9,7 +9,7 @@ public class DogsterSections extends Sections {
 	{
 		super();
 
-		add(new Section("News", "http://www.dogster.com/feed/", 0));
+		add(new Section("News", "https://www.dogster.com/feed/", 0));
 
 	}
 

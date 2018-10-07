@@ -31,14 +31,14 @@ import java.util.Collection;
 public class BookmarksFragment extends StoragePermissionFragment implements View.OnClickListener,
 		OnBackPressedListener, NUSearchBar.CallBack {
 
-	private NewsFilterAdapter adapter;
+	private NewsFilterAdapter mAdapter;
 
-	private NewsView newsView;
-	private NUSearchBar searchView;
+	private NewsView mNewsView;
+	private NUSearchBar mSearchView;
 
-	private boolean displayingNews = false;
+	private boolean mDisplayingNews = false;
 
-	private View noContentMessage;
+	private View mNoContentMessage;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -46,8 +46,8 @@ public class BookmarksFragment extends StoragePermissionFragment implements View
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
 
-		adapter = new NewsFilterAdapter(this, onBookmarkClick, NewsAdapterList.SortBy.byTime);
-		adapter.showSiteIcon(true);
+		mAdapter = new NewsFilterAdapter(this, onBookmarkClick, NewsAdapterList.SortBy.byTime);
+		mAdapter.showSiteIcon(true);
 	}
 
 	@Override
@@ -56,12 +56,12 @@ public class BookmarksFragment extends StoragePermissionFragment implements View
 		menu.add(R.string.search)
 				.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
 				.setIcon(R.drawable.ic_search_white)
-				.setOnMenuItemClickListener(onSearchAction);
+				.setOnMenuItemClickListener(mOnSearchAction);
 
 		menu.add(R.string.menu_delete_all)
 				.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
 				.setIcon(R.drawable.ic_remove_all)
-				.setOnMenuItemClickListener(onDeleteAllAction);
+				.setOnMenuItemClickListener(mOnDeleteAllAction);
 
 		super.onCreateOptionsMenu(menu, inflater);
 	}
@@ -74,26 +74,23 @@ public class BookmarksFragment extends StoragePermissionFragment implements View
 
 		View view = inflater.inflate(R.layout.f_news_list_with_search, container, false);
 
-		LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-		layoutManager.setAutoMeasureEnabled(true);
-
 		RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
 		recyclerView.setNestedScrollingEnabled(false);
 		recyclerView.setHasFixedSize(false);
-		recyclerView.setLayoutManager(layoutManager);
-		recyclerView.setAdapter(adapter);
+		recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+		recyclerView.setAdapter(mAdapter);
 
-		newsView = (NewsView) view.findViewById(R.id.news_view);
-		newsView.setFragmentContext(this, ((Main) getActivity()).drawer);
-		newsView.setBookmarkStateChangeListener(onBookmarkClick);
-		newsView.setImageLongClickListener(onImageLongClick);
+		mNewsView = (NewsView) view.findViewById(R.id.news_view);
+		mNewsView.setFragmentContext(this, ((Main) getActivity()).drawer);
+		mNewsView.setBookmarkStateChangeListener(onBookmarkClick);
+		mNewsView.setImageLongClickListener(onImageLongClick);
 
-		noContentMessage = view.findViewById(R.id.no_content);
-		searchView = (NUSearchBar) view.findViewById(R.id.searchView);
+		mNoContentMessage = view.findViewById(R.id.no_content);
+		mSearchView = (NUSearchBar) view.findViewById(R.id.searchView);
 
 		Collection<News> bmNews = BookmarksManager.getBookmarkedNews();
 		if (!bmNews.isEmpty())
-			adapter.setNewDataSet(bmNews);
+			mAdapter.setNewDataSet(bmNews);
 		else
 			displayNoBookmarksMessage();
 
@@ -103,12 +100,12 @@ public class BookmarksFragment extends StoragePermissionFragment implements View
 	@Override
 	public boolean onBackPressed()
 	{
-		if (displayingNews) {
-			newsView.hideNews();
-			displayingNews = false;
+		if (mDisplayingNews) {
+			mNewsView.hideNews();
+			mDisplayingNews = false;
 			return true;
-		} else if (searchView.isShown()) {
-			searchView.hide();
+		} else if (mSearchView.isShown()) {
+			mSearchView.hide();
 			return true;
 		}
 		return false;
@@ -118,8 +115,8 @@ public class BookmarksFragment extends StoragePermissionFragment implements View
 	public void onDestroyView()
 	{
 		super.onDestroyView();
-		if (searchView.isShown())
-			searchView.hide();
+		if (mSearchView.isShown())
+			mSearchView.hide();
 	}
 
 	@Override
@@ -128,16 +125,16 @@ public class BookmarksFragment extends StoragePermissionFragment implements View
 		News news = (News) v.getTag();
 		KernelManager.readContentOf(news);
 
-		displayingNews = true;
+		mDisplayingNews = true;
 		KernelManager.setNewsRead(news);
-		newsView.displayNews(news);
-		searchView.hideKeyBoard();
+		mNewsView.displayNews(news);
+		mSearchView.hideKeyBoard();
 	}
 
 	@Override
 	public void onFilter(String filter)
 	{
-		adapter.filter(filter);
+		mAdapter.filter(filter);
 	}
 
 	@Override
@@ -146,21 +143,21 @@ public class BookmarksFragment extends StoragePermissionFragment implements View
 		((AppCompatActivity) getActivity()).getSupportActionBar().show();
 	}
 
-	private MenuItem.OnMenuItemClickListener onSearchAction = new MenuItem.OnMenuItemClickListener() {
+	private MenuItem.OnMenuItemClickListener mOnSearchAction = new MenuItem.OnMenuItemClickListener() {
 		@Override
 		public boolean onMenuItemClick(MenuItem item)
 		{
 			((AppCompatActivity) getActivity()).getSupportActionBar().hide();
-			searchView.start(BookmarksFragment.this);
+			mSearchView.start(BookmarksFragment.this);
 			return true;
 		}
 	};
 
-	private MenuItem.OnMenuItemClickListener onDeleteAllAction = new MenuItem.OnMenuItemClickListener() {
+	private MenuItem.OnMenuItemClickListener mOnDeleteAllAction = new MenuItem.OnMenuItemClickListener() {
 		@Override
 		public boolean onMenuItemClick(MenuItem item)
 		{
-			if (adapter.getItemCount() > 0)
+			if (mAdapter.getItemCount() > 0)
 				new AlertDialog.Builder(getActivity())
 						.setMessage(R.string.msg_confirm_to_remove_all_saved_news)
 						.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
@@ -168,7 +165,7 @@ public class BookmarksFragment extends StoragePermissionFragment implements View
 							public void onClick(DialogInterface dialog, int which)
 							{
 								BookmarksManager.removeAllEntries();
-								adapter.clear();
+								mAdapter.clear();
 								displayNoBookmarksMessage();
 							}
 						})
@@ -186,22 +183,22 @@ public class BookmarksFragment extends StoragePermissionFragment implements View
 		boolean isBookmarked = BookmarksManager.toggleBookmark(news);
 
 		if (!isBookmarked) {
-			adapter.remove(news);
+			mAdapter.remove(news);
 
-			if (adapter.getItemCount() == 0)
+			if (mAdapter.getItemCount() == 0)
 				displayNoBookmarksMessage();
 		} else
-			adapter.add(news);
+			mAdapter.add(news);
 
 		btn.setSelected(isBookmarked);
 	}
 
 	private void displayNoBookmarksMessage()
 	{
-		if (noContentMessage instanceof ViewStub)
-			noContentMessage = ((ViewStub) noContentMessage).inflate();
+		if (mNoContentMessage instanceof ViewStub)
+			mNoContentMessage = ((ViewStub) mNoContentMessage).inflate();
 
-		((TextView) noContentMessage.findViewById(R.id.message)).setText(R.string.msg_no_bookmarks);
+		((TextView) mNoContentMessage.findViewById(R.id.message)).setText(R.string.msg_no_bookmarks);
 	}
 
 }

@@ -5,7 +5,7 @@ import com.lucevent.newsup.data.util.Enclosure;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-public class HuffingtonPostCanada extends com.lucevent.newsup.data.util.NewsReader {
+public class HuffingtonPostCanada extends AbstractEnglishHuffingtonPost {
 
 	// Tags: [author, description, enclosure, guid, item, link, pubdate, title]
 
@@ -18,7 +18,7 @@ public class HuffingtonPostCanada extends com.lucevent.newsup.data.util.NewsRead
 				new int[]{TAG_DESCRIPTION},
 				new int[]{TAG_PUBDATE},
 				new int[]{TAG_CATEGORY},
-				new int[]{TAG_ENCLOSURE},
+				new int[]{TAG_MEDIA_CONTENT},
 				"");
 	}
 
@@ -26,6 +26,8 @@ public class HuffingtonPostCanada extends com.lucevent.newsup.data.util.NewsRead
 	protected String parseContent(Element prop)
 	{
 		Element article = jsoupParse(prop.text().replace("<br />", "<p></p>"));
+		fixVDBPlayer(article);
+
 		article.select("script[src*='.twitter.'],script[src*='.instagram.']").remove();
 
 		repairLinks(article, "data-placeholder");
@@ -55,17 +57,7 @@ public class HuffingtonPostCanada extends com.lucevent.newsup.data.util.NewsRead
 	@Override
 	protected Enclosure parseEnclosure(Element prop)
 	{
-		String type = prop.attr("type");
-		if (type.startsWith("image")) {
-			String url = prop.attr("url");
-			if (url.contains("74_58"))
-				url = url.replace("74_58", "300_219");
-			else if (url.contains("-mini")) {
-				url = url.replace("-mini", "-large300");
-			}
-			return new Enclosure(url, type, "");
-		}
-		return null;
+		return new Enclosure(prop.attr("url"), prop.attr("medium"), "");
 	}
 
 	@Override

@@ -1,7 +1,11 @@
 <resources>
-    <string name="about_content_contact">Developed by Rafael J. Lucena\nContact: rafaa89(at)gmail.com</string>
-    <string name="about_content_title_new_features">Last features and improvements:</string>
-    <string name="about_content_title_next_sites">Publications that might be added in next releases:</string>
+    <string name="about_developed">Developed by Rafael J. Lucena</string>
+    <string name="about_version_changelog">Version notes</string>
+    <string name="about_full_changelog">Past version notes</string>
+    <string name="about_possible_publications">Publications that might be added</string>
+    <string name="about_term_and_conditions">Terms &amp; Conditions</string>
+    <string name="about_contact">Contact us</string>
+    <string name="about_contact_description">Ask, Report bugs, Request publications…</string>
     <string name="version">version</string>
     <string name="my_news">My news</string>
     <string name="bookmarks">Bookmarks</string>
@@ -26,7 +30,6 @@
     <string name="x_category">Category: <b>%1$s</b></string>
     <string name="notes">Notes</string>
     <string name="send">Send</string>
-    <string name="report_n_contact">Report &amp; Contact</string>
     <string name="x_favorites">%d favorites</string>
     <string name="schedule_one_now">Schedule one now</string>
     <string name="no_downloads_scheduled">There are no downloads scheduled</string>
@@ -82,6 +85,7 @@
     <string name="got_it">Got it</string>
     <string name="start">Start</string>
     <string name="reload">Retry</string>
+    <string name="download">Download</string>
     <string name="hint_pref_pro_mode">Enter PRO code</string>
     <string name="search">Search</string>
     <string name="hint_create_note">Enter one annotation</string>
@@ -130,6 +134,8 @@
     <string name="msg_rss_not_found">· RSS support was not found</string>
     <string name="msg_publication_not_supported">This publication is no longer supported by NewsUp</string>
     <string name="msg_content_could_not_be_loaded">Ups, the content couldn\'t be loaded</string>
+    <string name="msg_confirm_to_download_image">Confirm to download this image</string>
+    <string name="msg_confirm_to_clear_notifications">Confirm to clear all notifications</string>
     <string name="title_frg_settings_of">Settings of %1$s</string>
     <string name="menu_favorite">Favorite</string>
     <string name="menu_settings">Publication settings</string>

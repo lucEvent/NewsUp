@@ -1,76 +1,17 @@
 <resources>
 
     <string name="app_name" translatable="false">NewsUp</string>
-    <string name="app_version" translatable="false">2.7.1.git</string>
+    <string name="app_version" translatable="false">2.8.0</string>
     <string name="default_font" translatable="false">sans-serif-light</string>
-    <string name="about_content_contact">Developed by Rafael J. Lucena\nContact: rafaa89(at)gmail.com</string>
-    <string name="about_content_title_new_features">Last features and improvements:</string>
-    <string name="about_content_new_features" translatable="false">
-Version 2.7.1 2018-08-03:\nNew: \'Hands-free\' headlines view.\nNew: Notifications (check drawer).\nNew: Find external publications (RSS support needed).\nApp night-mode shortcut in drawer.\nApp icon shortcut to go to a specific publication.\nDownload images by long-pressing on them.\nClean Cache improved.\nSearch ignoring accent marks in all search bars.\nReaders and Sections updated.\nOverall fixes and improvements.\n
-\nVersion 2.6.0 2018-02-17:\nNew: Night mode!\nFilters added in History.\nFilters and scheduled downloads for Events.\nScheduled downloads improves.\nCompact view for news (check settings).\nImages load Wi-Fi only option (check settings).\nFont changes.\nRTL fixes.\nSome readers updated.\nBug fixes.\n
-\nVersion 2.5.0 2017-12-30:\nNew NewsView improving the user experience.\nSearch feature added on bookmarks and history screens.\nSupport added for The Independent, Daily Mail, The Sun, Metro UK, Evening Standard, Daily Mirror, The National Scotland, Daily Express, Sports Illustrated and WIRED.\nSection dialog improved.\nChange font size option in NewsView.\nAll sections revised.\nTwitter videos are now supported too.\nSmall bug fixes.\n
-\nVersion 2.4.0 2017-10-05:\nNew: Events (Happening now).\nAdded support for El Punt Avui, Catalonia Today, L\'esportiu, Nació Digital, El Nacional, WWWhat\'s new?, Vogue España, CounterPunch, Lucky Puppy Mag and The Berry.\nReaders improves.\nBug fixes.\n
-\nVersion 2.3.2 2017-08-20:\nPublications list in navigation panel ordered by user\'s accesses.\nDatabase simplified.\nVisual bugs fixes on Kitkat.\nVarious readers improved.\nOther miscellaneous fixes and improvements.\n
-\nVersion 2.3.1 2017-06-30:\nBug fixes (all bugs reported by users).\n
-\nVersion 2.3.0 2017-06-22:\nNew: Select your favorite sections directly from the section popup list.\nPublication icons updated and resized throughout the app.\nNotification bug fixed.\nUsability improved, more bug fixes and optimizations.\n
-\nVersion 2.2.0 2017-03-14:\nLoading of news list optimized.\nNight mode improved.\nSupport for Astronomy Now, Chicago Suntimes, Coming soon, El Imparcial (Mx), El Periódico Extremadura, Full Músculo, Göteborgs-Posten, Omicrono, The Chive and The Conversation (UK, US, Australia, Africa and France versions).\n
-\nVersion 2.1.1 2017-02-21:\nSupport for Pokemon Go news.\nNew and faster download system.\n
-\nVersion 2.1.0 2017-02-10:\nAdded support for Andro4all, Topes de gama, La Patilla, Cosmo Noticias, Life Science Sweden, Teknikens Värld, Código Nuevo, The Geek Hammer and The Bolivar commercial. Sections and Readers updated. Instagram photos support.\n
-\nVersion 2.0.0 2016-11-09:\nNew: Shortcuts for each publication in home screen.\nNew: Pictures on news list (and preference to show/hide them).\nNew: More sections shown at the end of the news list (if available).\nNew animations and some animation changes.\nNews List view changed.\nBookmark from News list.\nSome texts changed for better understanding.\nSchedule a download directly from one particular publication preference screen.\nDark gray sections button for white color publications.\nFavorites added to preferences (finally).\nMain/Favorite/Schedule publications selection improved.\nSchedule downloads list now gives indications when there are no downloads scheduled.\nNo more repeated news in History news list.\nNotifications improved :).\nNew option buttons in news view (Plus night/day view option added).\nSections button hidden when a publication has only one section.\nWhite icon color issue in Kitkat devices solved.\nIn android 6 and above: Dark icons on notification bar with \'light-color\' publications.\nBug fixes and improvements.\n
-\nVersion 1.8.0 2016-10-10:\nAdded support for newspapers The Herald Scotland, The Guardian and The Times of India, and online magazines and blogs Clipset, Elle Spain, Google Earth Blog, TechCrunch, The Intercept and Vice.\n
-\nVersion 1.7.2 2016-10-02:\nNew: Report/Suggestion feature.\nBookmarked news list updating fixed.\nPublication selection screen now orders by device locale, and each section by publication name.\nFull-translated to swedish.\nPartially translated to Finnish.\nLoading animation comes up when loading a section too now.\nMore bug fixes and improvements.\n
-\nVersion 1.7.0 2016-09-24:\nAdded support for newspapers Abc, Metro UK, Siberian Times and USA Today, and online magazines and blogs Digital Inspiration, Meristation, PC World, The Verge and Vandal.\nBug fixes.\n
-\nVersion 1.6.0 2016-09-12:\nNewsView: images, videos and iframes are hidden when there is no internet connection.\nFixed severe bug when a schedule is executed while the user is interacting with the app.\nFixed severe bug opening news from notification.\nSupport for tweets.\nNews load faster.\nAdded animation to show that news are loading.\nIntroducing notes with Pro code.\nAvoid news reloading when unnecessary.\nBug fixes and improvements.\n
-\nVersion 1.5.1 2016-07-08:\nScreen overlapping on navigation back fixed, plus coherence with drawer row selected.\n
-\nVersion 1.5.0 2016-07-01:\nInit screen to select your favorite publications.\nDrawer list reconfigured.\n
-\nVersion 1.4.0 2016-06-25:\nMarshmallow support!!\nIMPORTANT FIX: Huge leak when closing news view fixed.\nNews display style improved (margins).\nZoom disabled.\n
-\nVersion 1.3.0 2016-06-16:\nNew: Pro codes.\nAbout screen performance improved.\nDatabase bug fixed.\n
-\nVersion 1.2.3 2016-06-02:\nNew "Keep time" preference to control storage limits.\n
-\nVersion 1.0.0 2016-04-19:\nLollipop support!!\nSettings standardized.\nMinimum version supported: Kitkat\n
-    </string>
-    <string name="about_content_title_next_sites">Publications that might be added in next releases:</string>
-    <string name="about_content_next_sites" translatable="false">
-- National geographic\n
-- The Times\n
-- Motherboard\n
-- IGN España\n
-- Tech Eye\n
-- Hollywood Reporter\n
-- The Wall Street Journal\n
-- Esquire\n
-- The Canary\n
-- New Scientist\n
-- Digital Trends Español\n
-- NewsLaundry\n
-- Ara\n
-- EUObserver\n
-- The Japan Times\n
-- Republica.com\n
-- Revista Cuore\n
-- Deadspin\n
-- Jalopnik\n
-- Jezebel\n
-- Kotaku\n
-- Charged\n
-- TabTimes\n
-- VR Source\n
-- Sound Guys\n
-- Spaceflight Now\n
-- NASA\n
-- Svenska Yle\n
-- Vagabond\n
-- Science magazine\n
-- The bark\n
-- Nova dog magazine\n
-- Ny Teknik\n
-- Sweclockers\n
-- Idg\n
-- Veckans Affärer\n
-- Tech Times\n
-- Astrophysical journal\n
-- BuzzFeed News\n
-- BackChannel\n\n
-    </string>
+
+    <string name="about_developed">Developed by Rafael J. Lucena</string>
+    <string name="about_email" translatable="false">rafaa89@gmail.com</string>
+    <string name="about_version_changelog">Version notes</string>
+    <string name="about_full_changelog">Past version notes</string>
+    <string name="about_possible_publications">Publications that might be added</string>
+    <string name="about_term_and_conditions">Terms &amp; Conditions</string>
+    <string name="about_contact">Contact us</string>
+    <string name="about_contact_description">Ask, Report bugs, Request publications…</string>
 
     <string name="version">version</string>
 
@@ -98,7 +39,6 @@ Version 2.7.1 2018-08-03:\nNew: \'Hands-free\' headlines view.\nNew: Notificatio
     <string name="x_category">Category: <b>%1$s</b></string>
     <string name="notes">Notes</string>
     <string name="send">Send</string>
-    <string name="report_n_contact">Report &amp; Contact</string>
     <string name="x_favorites">%d favorites</string>
     <string name="schedule_one_now">Schedule one now</string>
     <string name="no_downloads_scheduled">There are no downloads scheduled</string>
@@ -157,6 +97,7 @@ Version 2.7.1 2018-08-03:\nNew: \'Hands-free\' headlines view.\nNew: Notificatio
     <string name="got_it">Got it</string>
     <string name="start">Start</string>
     <string name="reload">Retry</string>
+    <string name="download">Download</string>
 
     <!-- * ******************** Hints **************************** * -->
     <string name="hint_pref_pro_mode">Enter PRO code</string>
@@ -209,6 +150,8 @@ Version 2.7.1 2018-08-03:\nNew: \'Hands-free\' headlines view.\nNew: Notificatio
     <string name="msg_rss_not_found">· RSS support was not found</string>
     <string name="msg_publication_not_supported">This publication is no longer supported by NewsUp</string>
     <string name="msg_content_could_not_be_loaded">Ups, the content couldn\'t be loaded</string>
+    <string name="msg_confirm_to_download_image">Confirm to download this image</string>
+    <string name="msg_confirm_to_clear_notifications">Confirm to clear all notifications</string>
 
     <!-- * *************** Activities and fragment's titles ********************* * -->
     <string name="title_frg_settings_of">Settings of %1$s</string>

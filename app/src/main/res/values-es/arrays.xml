@@ -113,21 +113,29 @@
     </string-array>
     <string-array name="site_categories">
         <item>Noticias</item>
-        <item>Noticias Deportivas</item>
+        <item>Deportes</item>
         <item>Tecnología</item>
-        <item>Blogs</item>
-        <item>Revistas</item>
-        <item>Astronomía</item>
         <item>Ciencia</item>
+        <item>Astronomía</item>
+        <item>Economía</item>
         <item>Videojuegos</item>
         <item>Estilo de vida</item>
         <item>Motor</item>
         <item>Entretenimiento</item>
-        <item>Fitness</item>
+        <item>Salud &amp; Fitness</item>
         <item>Música</item>
-        <item>Economía</item>
         <item>Política</item>
-        <item>Varios</item>
+        <item>Prensa Rosa</item>
+        <item>Gastronomía</item>
+        <item>Sátira</item>
+        <item>Consumo</item>
+        <item>Negocios</item>
+        <item>Viajes</item>
+        <item>Cultura</item>
+        <item>Mascotas</item>
+        <item>Moda</item>
+        <item>Hágalo usted mismo</item>
+        <item>Blogs</item>
     </string-array>
     <integer-array name="site_language_weights">
         <item>10</item>
@@ -218,5 +226,18 @@
         <item>8</item>
         <item>69</item>
     </integer-array>
-
+    <string-array name="event_co_titles">
+        <item>Spain</item>
+        <item>UK</item>
+        <!--<item>USA</item>-->
+        <!--<item>Sweden</item>-->
+        <!--<item>Catalonia</item>-->
+    </string-array>
+    <string-array name="event_co_codes">
+        <item>es_es</item>
+        <item>en_gb</item>
+        <!--<item>en_us</item>-->
+        <!--<item>sv_se</item>-->
+        <!--<item>ca_es</item>-->
+    </string-array>
 </resources>

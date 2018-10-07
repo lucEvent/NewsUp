@@ -7,6 +7,12 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="fontFamily">@string/default_font</item>
+        <item name="android:actionOverflowButtonStyle">@style/EventCountrySelectionBtn</item>
+    </style>
+
+    <style name="EventCountrySelectionBtn" parent="android:style/Widget.Holo.Light.ActionButton.Overflow">
+        <item name="android:src">@drawable/ic_language</item>
+        <item name="android:contentDescription">overflow</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -145,6 +151,22 @@
         <item name="android:paddingBottom">8dp</item>
         <item name="android:textColor">#fff</item>
         <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="about_divisor">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/divisor</item>
+    </style>
+
+    <style name="about_row">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:padding">18dp</item>
+        <item name="android:textColor">@color/dark_text</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:background">@drawable/ripple</item>
     </style>
 
 </resources>

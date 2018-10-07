@@ -1,14 +1,12 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.Enclosure;
-
 import org.jsoup.nodes.Element;
 
-public class HuffingtonPostUK extends com.lucevent.newsup.data.util.NewsReader {
+public class HuffingtonPostUK extends AbstractEnglishHuffingtonPost {
 
-	private static final String PLAYBUZZ_WIDGETS = "<script type='text/javascript' src='http://cdn.playbuzz.com/widget/feed.js'>";
+	private static final String PLAYBUZZ_WIDGETS = "<script type='text/javascript' src='http://cdn.playbuzz.com/widget/feed.js'></script>";
 
-	// Tags: [author, description, enclosure, guid, item, link, pubdate, title]
+	// Tags: [category, dc:created, dc:creator, dc:identifier, dc:publisher, dc:rightsholder, description, guid, ingested, item, link, media:content, media:credit, media:description, media:embed, media:media_html, media:title, modified, pubdate, source_id, ss:media_html, ss:slideshow, title]
 
 	public HuffingtonPostUK()
 	{
@@ -18,8 +16,8 @@ public class HuffingtonPostUK extends com.lucevent.newsup.data.util.NewsReader {
 				new int[]{},
 				new int[]{TAG_DESCRIPTION},
 				new int[]{TAG_PUBDATE},
-				new int[]{},
-				new int[]{TAG_ENCLOSURE},
+				new int[]{TAG_CATEGORY},
+				new int[]{TAG_MEDIA_CONTENT},
 				PLAYBUZZ_WIDGETS);
 	}
 
@@ -27,7 +25,9 @@ public class HuffingtonPostUK extends com.lucevent.newsup.data.util.NewsReader {
 	protected String parseContent(Element prop)
 	{
 		Element article = jsoupParse(prop);
-		article.select("script").remove();
+		fixVDBPlayer(article);
+
+		article.select("script,.related-entries,.extra-content").remove();
 		article.select("br").tagName("p");
 
 		for (Element e : article.select("strong"))
@@ -59,22 +59,6 @@ public class HuffingtonPostUK extends com.lucevent.newsup.data.util.NewsReader {
 			}
 		}
 		return content;
-	}
-
-	@Override
-	protected Enclosure parseEnclosure(Element prop)
-	{
-		String type = prop.attr("type");
-		if (type.startsWith("image")) {
-			String url = prop.attr("url");
-			if (url.contains("74_58"))
-				url = url.replace("74_58", "300_219");
-			else if (url.contains("-mini")) {
-				url = url.replace("-mini", "-large300");
-			}
-			return new Enclosure(url, type, "");
-		}
-		return null;
 	}
 
 }

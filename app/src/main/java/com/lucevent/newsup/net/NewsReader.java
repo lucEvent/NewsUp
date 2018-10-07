@@ -12,20 +12,21 @@ import java.net.URL;
 
 public final class NewsReader {
 
-	private static final int HASH_TITLE = 110371416;
-	private static final int HASH_LINK = 3321850;
-	private static final int HASH_DATE = 3076014;
-	private static final int HASH_DESCRIPTION = -1724546052;
-	private static final int HASH_CATEGORIES = 1296516636;
-	private static final int HASH_CONTENT = 951530617;
-	private static final int HASH_ENCLOSURE = 1432853874;
-	private static final int HASH_SECTION = 1970241253;
+	private static final String TAG_TITLE = "title";
+	private static final String TAG_LINK = "link";
+	private static final String TAG_DATE = "date";
+	private static final String TAG_DESCRIPTION = "description";
+	private static final String TAG_CATEGORIES = "categories";
+	private static final String TAG_CONTENT = "content";
+	private static final String TAG_ENCLOSURE = "enclosure";
+	private static final String TAG_SECTION = "section";
+	private static final String TAG_SITE_CODE = "sitecode";
 
 	public static final int NUM_SERVERS = 8;
 	private static final String[] SERVER_IDS = {"newsup-1", "newsup-2", "newsup-3", "newsup-4", "newsup-5", "newsup-1", "newsup-2", "newsup-3"};
 
 	private static final String query_index = "http://newsup-2406.appspot.com/appv2?news&site=%s%s&v=%s" + (ProSettings.isDeveloperModeEnabled() ? "&nc" : "");
-	private static final String query_event_index = "http://newsup-2406.appspot.com/appv2?eventnews&site=%s%s&ecode=%s&v=%s";
+	private static final String query_event_index = "http://newsup-2406.appspot.com/appv2?event=%s&v=%s";
 	private static final String query_content = "http://%s.appspot.com/appv2?content&site=%d&l=%s";
 	private final String version;
 
@@ -39,9 +40,9 @@ public final class NewsReader {
 		return readHeaders(String.format(query_index, site_code, stringify(section_codes), version), site_code);
 	}
 
-	public NewsArray readEventHeaders(int site_code, int[] section_codes, int event_code)
+	public NewsArray readEventHeaders(int event_code)
 	{
-		return readHeaders(String.format(query_event_index, site_code, stringify(section_codes), event_code, version), site_code);
+		return readHeaders(String.format(query_event_index, event_code, version), event_code);
 	}
 
 	private String stringify(int[] section_codes)
@@ -69,31 +70,33 @@ public final class NewsReader {
 			long date = 0;
 
 			for (org.jsoup.nodes.Element prop : item.children()) {
-
-				switch (prop.tagName().hashCode()) {
-					case HASH_TITLE:
+				switch (prop.tagName()) {
+					case TAG_TITLE:
 						title = prop.html();
 						break;
-					case HASH_LINK:
+					case TAG_LINK:
 						link = prop.html();
 						break;
-					case HASH_DATE:
+					case TAG_DATE:
 						date = Long.parseLong(prop.html());
 						break;
-					case HASH_DESCRIPTION:
+					case TAG_DESCRIPTION:
 						description = prop.text();
 						break;
-					case HASH_CATEGORIES:
+					case TAG_CATEGORIES:
 						categories = prop.html();
 						break;
-					case HASH_CONTENT:
+					case TAG_CONTENT:
 						content = prop.html();
 						break;
-					case HASH_ENCLOSURE:
+					case TAG_ENCLOSURE:
 						imgSrc = prop.text();
 						break;
-					case HASH_SECTION:
+					case TAG_SECTION:
 						section = Integer.parseInt(prop.text());
+						break;
+					case TAG_SITE_CODE:
+						site_code = Integer.parseInt(prop.text());
 						break;
 				}
 			}

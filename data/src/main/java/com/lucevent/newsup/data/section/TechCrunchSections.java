@@ -24,23 +24,23 @@ public class TechCrunchSections extends Sections {
 
 		add(new Section("Authors", null, -1));
 		add(new Section("John Biggs", "https://techcrunch.com/author/john-biggs/feed/", 1));
-		add(new Section("Matt Burns", "https://techcrunch.com/author/mjburnsy/feed/", 1));
+		add(new Section("Matt Burns", "https://techcrunch.com/author/matt-burns/feed/", 1));
 		add(new Section("Mike Butcher", "https://techcrunch.com/author/mike-butcher/feed/", 1));
-		add(new Section("Devin Coldewey", "https://techcrunch.com/author/tcdevin/feed/", 1));
-		add(new Section("Josh Constine", "https://techcrunch.com/author/joshsc/feed/", 1));
+		add(new Section("Devin Coldewey", "https://techcrunch.com/author/devin-coldewey/feed/", 1));
+		add(new Section("Josh Constine", "https://techcrunch.com/author/josh-constine/feed/", 1));
 		add(new Section("Jordan Crook", "https://techcrunch.com/author/jordan-crook/feed/", 1));
 		add(new Section("Darrell Etherington", "https://techcrunch.com/author/darrell-etherington/feed/", 1));
 		add(new Section("Anna Escher", "https://techcrunch.com/author/anna-escher/feed/", 1));
 		add(new Section("Steve Gillmor", "https://techcrunch.com/author/steve-gillmor/feed/", 1));
-		add(new Section("Anthony Ha", "https://techcrunch.com/author/anthha/feed/", 1));
+		add(new Section("Anthony Ha", "https://techcrunch.com/author/anthony-ha/feed/", 1));
 		add(new Section("Taylor Hatmaker", "https://techcrunch.com/author/taylor-hatmaker/feed/", 1));
-		add(new Section("Brian Heater", "https://techcrunch.com/author/bheater/feed/", 1));
-		add(new Section("Frederic Lardinois", "https://techcrunch.com/author/fredericlardinois/feed/", 1));
+		add(new Section("Brian Heater", "https://techcrunch.com/author/brian-heater/feed/", 1));
+		add(new Section("Frederic Lardinois", "https://techcrunch.com/author/frederic-lardinois/feed/", 1));
 		add(new Section("Connie Loizos", "https://techcrunch.com/author/connie-loizos/feed/", 1));
 		add(new Section("Ingrid Lunden", "https://techcrunch.com/author/ingrid-lunden/feed/", 1));
-		add(new Section("Natasha Lomas", "https://techcrunch.com/author/nelomas/feed/", 1));
+		add(new Section("Natasha Lomas", "https://techcrunch.com/author/natasha-lomas/feed/", 1));
 		add(new Section("John Mannes", "https://techcrunch.com/author/john-mannes/feed/", 1));
-		add(new Section("Sarah Perez", "https://techcrunch.com/author/sarahintampa/feed/", 1));
+		add(new Section("Sarah Perez", "https://techcrunch.com/author/sarah-perez/feed/", 1));
 
 	}
 

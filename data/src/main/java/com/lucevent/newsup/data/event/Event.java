@@ -10,7 +10,7 @@ public class Event {
 
 	public int code;
 
-	public String title, topic;
+	public String title;
 
 	public String imgSrc;
 

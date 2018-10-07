@@ -13,7 +13,7 @@ public class GizmodoSections extends Sections {
 		add(new Section("Sploid", "http://sploid.gizmodo.com/rss/vip", 0));
 		add(new Section("Paleofuture", "http://paleofuture.gizmodo.com/rss/vip", 0));
 		add(new Section("io9", "http://io9.gizmodo.com/rss/vip", 0));
-		add(new Section("Field guide", "http://fieldguide.gizmodo.com/rss/vip", 0));
+		add(new Section("Earther", "http://earther.gizmodo.com/rss/vip", 0));
 
 	}
 

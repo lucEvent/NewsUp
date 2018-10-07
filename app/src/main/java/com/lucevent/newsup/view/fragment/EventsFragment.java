@@ -7,11 +7,16 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.ProSettings;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.event.Event;
@@ -24,34 +29,66 @@ import com.lucevent.newsup.view.adapter.EventsAdapter;
 
 public class EventsFragment extends android.app.Fragment implements View.OnClickListener, EventsManager.Callback {
 
-	private EventsManager eventsManager;
-	private EventsAdapter adapter;
+	private EventsManager mEventsManager;
+	private EventsAdapter mAdapter;
 
-	private View noContentMessage;
+	private View mNoContentMessage;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		//       setHasOptionsMenu(true);
+		setHasOptionsMenu(true);
 
-		adapter = new EventsAdapter(this);
+		mAdapter = new EventsAdapter(this);
 
-		eventsManager = new EventsManager(getActivity());
-		eventsManager.readEvents(getActivity(), this);
+		mEventsManager = new EventsManager(getActivity());
+		mEventsManager.readEvents(getActivity(), AppSettings.getEventsLocaleSetting(), this);
 	}
-/*
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
-    {
-        menu.add(R.string.add)
-                .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS)
-                .setIcon(R.drawable.ic_add)
-                .setOnMenuItemClickListener(onCreateEvent);
 
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-*/
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+	{
+		super.onCreateOptionsMenu(menu, inflater);
+
+		String[] countriesSelected = AppSettings.getEventsLocaleSetting();
+
+		String[] titles = getResources().getStringArray(R.array.event_co_titles);
+		String[] codes = getResources().getStringArray(R.array.event_co_codes);
+
+		for (int i = 0; i < titles.length; i++) {
+			boolean sel = false;
+			for (String c : countriesSelected)
+				if (codes[i].equals(c)) {
+					sel = true;
+					break;
+				}
+
+			menu.add(0, i, i, titles[i])
+					.setCheckable(true)
+					.setChecked(sel);
+		}
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		super.onOptionsItemSelected(item);
+		String region_code = getResources().getStringArray(R.array.event_co_codes)[item.getOrder()];
+
+		if (item.isChecked()) {
+			if (!AppSettings.removeEventsLocaleSetting(region_code)) {
+				Toast.makeText(getActivity(), R.string.msg_must_select_at_least_one, Toast.LENGTH_SHORT).show();
+				return true;
+			}
+			item.setChecked(false);
+		} else {
+			item.setChecked(true);
+			AppSettings.addEventsLocaleSetting(region_code);
+		}
+		mEventsManager.readEvents(getActivity(), AppSettings.getEventsLocaleSetting(), this);
+		return true;
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -61,33 +98,29 @@ public class EventsFragment extends android.app.Fragment implements View.OnClick
 
 		View view = inflater.inflate(R.layout.f_list, container, false);
 
-		LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-		layoutManager.setAutoMeasureEnabled(true);
-
 		RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
 		recyclerView.setNestedScrollingEnabled(false);
 		recyclerView.setHasFixedSize(false);
-		recyclerView.setLayoutManager(layoutManager);
-		recyclerView.setAdapter(adapter);
+		recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+		recyclerView.setAdapter(mAdapter);
 
-		noContentMessage = view.findViewById(R.id.no_content);
+		mNoContentMessage = view.findViewById(R.id.no_content);
 
 		return view;
 	}
 
-
 	@Override
 	public void onEventsRead(Events result)
 	{
-		adapter.addAll(result);
+		mAdapter.setNewsDataSet(result);
 	}
 
 	@Override
 	public void onNoConnectionAvailable()
 	{
-		if (noContentMessage != null) {
+		if (mNoContentMessage != null) {
 			displayNoContentMessage();
-			Snackbar.make(noContentMessage, R.string.msg_no_internet_connection, Snackbar.LENGTH_LONG).show();
+			Snackbar.make(mNoContentMessage, R.string.msg_no_internet_connection, Snackbar.LENGTH_LONG).show();
 		}
 	}
 
@@ -112,10 +145,10 @@ public class EventsFragment extends android.app.Fragment implements View.OnClick
 
 	private void displayNoContentMessage()
 	{
-		if (noContentMessage instanceof ViewStub)
-			noContentMessage = ((ViewStub) noContentMessage).inflate();
+		if (mNoContentMessage instanceof ViewStub)
+			mNoContentMessage = ((ViewStub) mNoContentMessage).inflate();
 
-		((TextView) noContentMessage.findViewById(R.id.message)).setText(R.string.msg_no_events);
+		((TextView) mNoContentMessage.findViewById(R.id.message)).setText(R.string.msg_no_events);
 	}
 
 }

@@ -14,6 +14,7 @@
     <color name="default_background">#feee</color>
     <color name="clear_background">#ffff</color>
     <color name="default_text">#ff727272</color>
+    <color name="dark_text">#ff000000</color>
     <color name="default_icon">#ff000000</color>
 
     <color name="default_ripple">#fff9f9f9</color>
@@ -23,12 +24,16 @@
 
     <color name="input_background">#afefefef</color>
     <color name="divisor">#ffdddddd</color>
+    <color name="divisor_light">#ffeeeeee</color>
 
     <color name="black_overlay">#66000000</color>
     <color name="disabled">#ffcccccc</color>
     <color name="ripple_pressed_dark">#55999999</color>
     <color name="drawer_btn_pressed">#ffebebeb</color>
     <color name="default_drawer_icon_tint">#737373</color>
+
+    <color name="enabled_section_text_color">#727272</color>
+    <color name="disabled_section_text_color">#D6D6D6</color>
 
     <!-- NewsViews light -->
     <color name="nv_text">#ff14171a</color>

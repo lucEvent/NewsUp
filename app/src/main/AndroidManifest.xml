@@ -94,7 +94,7 @@
 
         <activity
             android:name=".view.activity.ContactActivity"
-            android:label="@string/report_n_contact"
+            android:label="@string/about_contact"
             android:parentActivityName=".Main"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateAlwaysVisible|adjustResize">
@@ -122,6 +122,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.lucevent.newsup.Main" />
         </activity>
+
     </application>
 
 </manifest>

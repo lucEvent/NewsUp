@@ -2,8 +2,10 @@ package com.lucevent.newsup.view.util;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -38,30 +40,30 @@ import com.lucevent.newsup.view.adapter.viewholder.news.NewsWebViewViewHolder;
 
 public class NewsView extends RelativeLayout {
 
-	private News currentNews;
+	private News mCurrentNews;
 
-	private Activity activityContext;
-	private DrawerLayout drawer;
-	private ActionBar actionBar;
+	private Activity mActivityContext;
+	private DrawerLayout mDrawer;
+	private ActionBar mActionBar;
 
-	private NewsElementsListView listView;
-	private FloatingActionButton button_bookmark;
-	private NewsSideToolbar sideToolbar;
-	private boolean displayActionBar;
+	private NewsElementsListView mListView;
+	private FloatingActionButton mBookmarkBtn;
+	private NewsSideToolbar mSideToolbar;
+	private boolean mDisplayActionBar;
 
 	public NewsView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
 
-		displayActionBar = false;
+		mDisplayActionBar = false;
 
 		((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
 				.inflate(R.layout.v_news, this, true);
 
-		listView = (NewsElementsListView) findViewById(R.id.list);
-		sideToolbar = (NewsSideToolbar) findViewById(R.id.side_toolbar);
+		mListView = (NewsElementsListView) findViewById(R.id.list);
+		mSideToolbar = (NewsSideToolbar) findViewById(R.id.side_toolbar);
 
-		button_bookmark = (FloatingActionButton) findViewById(R.id.button_bookmark);
+		mBookmarkBtn = (FloatingActionButton) findViewById(R.id.button_bookmark);
 		findViewById(R.id.button_share).setOnClickListener(onShareAction);
 		findViewById(R.id.button_night).setOnClickListener(onNightModeSelected);
 		findViewById(R.id.button_font_size).setOnClickListener(onFontSizeSelected);
@@ -76,10 +78,10 @@ public class NewsView extends RelativeLayout {
 	{
 		super.onConfigurationChanged(newConfig);
 
-		if (viewHeight != -2) {
-			int aux = viewWidth;
-			viewWidth = viewHeight;
-			viewHeight = aux;
+		if (mHeight != -2) {
+			int aux = mWidth;
+			mWidth = mHeight;
+			mHeight = aux;
 		}
 
 		if (getVisibility() == View.VISIBLE) {
@@ -100,68 +102,90 @@ public class NewsView extends RelativeLayout {
 
 	public void setFragmentContext(Activity a, @Nullable DrawerLayout drawer)
 	{
-		this.activityContext = a;
+		mActivityContext = a;
 		if (a instanceof AppCompatActivity) {
-			this.actionBar = ((AppCompatActivity) a).getSupportActionBar();
-			this.actionBar.setShowHideAnimationEnabled(false);
+			mActionBar = ((AppCompatActivity) a).getSupportActionBar();
+			mActionBar.setShowHideAnimationEnabled(false);
 		}
-		this.drawer = drawer;
+		mDrawer = drawer;
 	}
 
 	public void setBookmarkStateChangeListener(View.OnClickListener bookmarkStateChangeListener)
 	{
-		button_bookmark.setOnClickListener(bookmarkStateChangeListener);
+		mBookmarkBtn.setOnClickListener(bookmarkStateChangeListener);
 	}
+
+	private OnLongClickListener mOnImageLongClickListener = new OnLongClickListener() {
+		@Override
+		public boolean onLongClick(final View v)
+		{
+			new AlertDialog.Builder(getContext())
+					.setMessage(R.string.msg_confirm_to_download_image)
+					.setNegativeButton(R.string.cancel, null)
+					.setPositiveButton(R.string.download, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which)
+						{
+							onImageLongClickListener.onLongClick(v);
+						}
+					})
+					.show();
+			return true;
+		}
+	};
+
+	private OnLongClickListener onImageLongClickListener;
 
 	public void setImageLongClickListener(OnLongClickListener listener)
 	{
-		listView.setImageLongClickListener(listener);
+		onImageLongClickListener = listener;
+		mListView.setImageLongClickListener(mOnImageLongClickListener);
 	}
 
 	public void setUpNightMode()
 	{
 		boolean nightMode = AppSettings.getNightModeStatus();
-		((ViewGroup) listView.getParent()).setBackgroundResource(nightMode ? R.color.nv_background_dark : R.color.nv_background);
-		listView.setDarkStyle(nightMode);
+		((ViewGroup) mListView.getParent()).setBackgroundResource(nightMode ? R.color.nv_background_dark : R.color.nv_background);
+		mListView.setDarkStyle(nightMode);
 	}
 
-	private int viewWidth = -2;
-	private int viewHeight = -2;
+	private int mWidth = -2;
+	private int mHeight = -2;
 
 	public void displayNews(News news)
 	{
-		currentNews = news;
-		button_bookmark.setTag(news);
-		button_bookmark.setSelected(BookmarksManager.isBookmarked(news));
+		mCurrentNews = news;
+		mBookmarkBtn.setTag(news);
+		mBookmarkBtn.setSelected(BookmarksManager.isBookmarked(news));
 
-		Site site = AppData.getSiteByCode(currentNews.site_code);
+		Site site = AppData.getSiteByCode(mCurrentNews.site_code);
 
-		listView.clear();
-		listView.set(currentNews.title, new NTVParser().parse(currentNews.content, site), site);
+		mListView.clear();
+		mListView.set(mCurrentNews.title, new NTVParser().parse(mCurrentNews.content, site), site);
 
-		if (drawer != null)
-			drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+		if (mDrawer != null)
+			mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
-		if (actionBar != null && actionBar.isShowing()) {
-			displayActionBar = true;
-			actionBar.hide();
+		if (mActionBar != null && mActionBar.isShowing()) {
+			mDisplayActionBar = true;
+			mActionBar.hide();
 		}
 
 		setVisibility(View.VISIBLE);
 
-		if (viewHeight == -2) {
+		if (mHeight == -2) {
 			Rect r = new Rect();
-			activityContext.getWindow().getDecorView().getWindowVisibleDisplayFrame(r);
-			viewHeight = ((ViewGroup) getParent()).getHeight() + (actionBar != null ? actionBar.getHeight() : 0) + r.top;
-			viewWidth = getWidth();
+			mActivityContext.getWindow().getDecorView().getWindowVisibleDisplayFrame(r);
+			mHeight = ((ViewGroup) getParent()).getHeight() + (mActionBar != null ? mActionBar.getHeight() : 0) + r.top;
+			mWidth = getWidth();
 		}
 
-		AppAnimator.swipeUp(this, viewHeight, new AppAnimator.AppAnimatorListener() {
+		AppAnimator.swipeUp(this, mHeight, new AppAnimator.AppAnimatorListener() {
 			@Override
 			public void onAnimationEnd(Animation animation)
 			{
 				//  hiding System UI
-				Window w = activityContext.getWindow();
+				Window w = mActivityContext.getWindow();
 				w.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 				w.getDecorView().setSystemUiVisibility(
 						View.SYSTEM_UI_FLAG_LOW_PROFILE
@@ -174,12 +198,12 @@ public class NewsView extends RelativeLayout {
 
 	public void resume()
 	{
-		//      listView.onResume();
+//      mListView.onResume();
 	}
 
 	public void pause()
 	{
-		//   listView.onPause();
+//   mListView.onPause();
 	}
 
 	public void destroy()
@@ -189,38 +213,38 @@ public class NewsView extends RelativeLayout {
 
 	public void hideNews()
 	{
-		if (actionBar != null) {
+		if (mActionBar != null) {
 			// showing System UI
-			Window w = activityContext.getWindow();
+			Window w = mActivityContext.getWindow();
 			w.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 			w.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
 
-			if (displayActionBar)
-				actionBar.show();
-			displayActionBar = false;
+			if (mDisplayActionBar)
+				mActionBar.show();
+			mDisplayActionBar = false;
 		}
 
 		new Handler().postDelayed(new Runnable() {
 			@Override
 			public void run()
 			{
-				listView.clear();
+				mListView.clear();
 			}
 		}, 400);
-		AppAnimator.swipeDown(this, this.getY(), viewHeight, new AppAnimator.AppAnimatorListener() {
+		AppAnimator.swipeDown(this, this.getY(), mHeight, new AppAnimator.AppAnimatorListener() {
 
 			@Override
 			public void onAnimationEnd(Animation animation)
 			{
-				if (drawer != null)
-					drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+				if (mDrawer != null)
+					mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
 				setVisibility(View.GONE);
 			}
 		});
 
-		if (!sideToolbar.isClosed())
-			sideToolbar.close();
+		if (!mSideToolbar.isClosed())
+			mSideToolbar.close();
 	}
 
 	private final View.OnClickListener onShareAction = new View.OnClickListener() {
@@ -229,7 +253,7 @@ public class NewsView extends RelativeLayout {
 		{
 			Intent sendIntent = new Intent();
 			sendIntent.setAction(Intent.ACTION_SEND);
-			sendIntent.putExtra(Intent.EXTRA_TEXT, currentNews.title + " " + currentNews.link);
+			sendIntent.putExtra(Intent.EXTRA_TEXT, mCurrentNews.title + " " + mCurrentNews.link);
 			sendIntent.setType("text/plain");
 			getContext().startActivity(Intent.createChooser(sendIntent, getContext().getString(R.string.share_with)));
 		}
@@ -245,8 +269,8 @@ public class NewsView extends RelativeLayout {
 	};
 
 	//
-	private View fontSizeBox;
-	private boolean fontSizeBoxShouldHide;
+	private View mFontSizeBox;
+	private boolean mFontSizeBoxShouldHide;
 	private Handler mHandler = new Handler();
 	//
 	private final View.OnClickListener onFontSizeSelected = new View.OnClickListener() {
@@ -254,21 +278,21 @@ public class NewsView extends RelativeLayout {
 		@Override
 		public void onClick(View v)
 		{
-			if (fontSizeBox == null) {
-				fontSizeBox = ((ViewStub) findViewById(R.id.box_font_size)).inflate();
+			if (mFontSizeBox == null) {
+				mFontSizeBox = ((ViewStub) findViewById(R.id.box_font_size)).inflate();
 
 				int current_font_size = AppSettings.getFontSize(2);
-				((TextView) fontSizeBox.findViewById(R.id.label)).setText(NewsWebViewViewHolder.FONT_SIZE_VALUES[current_font_size] + "%");
+				((TextView) mFontSizeBox.findViewById(R.id.label)).setText(NewsWebViewViewHolder.FONT_SIZE_VALUES[current_font_size] + "%");
 
-				SeekBar seekBar = (SeekBar) fontSizeBox.findViewById(R.id.seekBar);
+				SeekBar seekBar = (SeekBar) mFontSizeBox.findViewById(R.id.seekBar);
 				seekBar.setProgress(current_font_size);
 				seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
 					@Override
 					public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
 					{
-						listView.setTextSize(progress);
-						((TextView) fontSizeBox.findViewById(R.id.label)).setText(NewsWebViewViewHolder.FONT_SIZE_VALUES[progress] + "%");
+						mListView.setTextSize(progress);
+						((TextView) mFontSizeBox.findViewById(R.id.label)).setText(NewsWebViewViewHolder.FONT_SIZE_VALUES[progress] + "%");
 						AppSettings.setFontSize(progress);
 					}
 
@@ -276,7 +300,7 @@ public class NewsView extends RelativeLayout {
 					public void onStartTrackingTouch(SeekBar seekBar)
 					{
 						synchronized (onFontSizeSelected) {
-							fontSizeBoxShouldHide = false;
+							mFontSizeBoxShouldHide = false;
 						}
 					}
 
@@ -287,7 +311,7 @@ public class NewsView extends RelativeLayout {
 							@Override
 							public void run()
 							{
-								fontSizeBox.setVisibility(View.GONE);
+								mFontSizeBox.setVisibility(View.GONE);
 							}
 						}, 1000);
 					}
@@ -295,23 +319,23 @@ public class NewsView extends RelativeLayout {
 				setHidingTimer();
 				return;
 			}
-			if (fontSizeBox.getVisibility() != VISIBLE) {
-				fontSizeBox.setVisibility(VISIBLE);
+			if (mFontSizeBox.getVisibility() != VISIBLE) {
+				mFontSizeBox.setVisibility(VISIBLE);
 				setHidingTimer();
 			} else
-				fontSizeBox.setVisibility(GONE);
+				mFontSizeBox.setVisibility(GONE);
 		}
 
 		private void setHidingTimer()
 		{
-			fontSizeBoxShouldHide = true;
+			mFontSizeBoxShouldHide = true;
 			mHandler.postDelayed(new Runnable() {
 				@Override
 				public void run()
 				{
 					synchronized (onFontSizeSelected) {
-						if (fontSizeBoxShouldHide)
-							fontSizeBox.setVisibility(View.GONE);
+						if (mFontSizeBoxShouldHide)
+							mFontSizeBox.setVisibility(View.GONE);
 					}
 				}
 			}, 3000);
@@ -322,7 +346,7 @@ public class NewsView extends RelativeLayout {
 		@Override
 		public void onClick(View v)
 		{
-			Utils.openCustomTab(v.getContext(), currentNews);
+			Utils.openCustomTab(v.getContext(), mCurrentNews);
 		}
 	};
 

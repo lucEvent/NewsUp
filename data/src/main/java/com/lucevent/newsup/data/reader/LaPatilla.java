@@ -1,5 +1,8 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosures;
+import com.lucevent.newsup.data.util.News;
+
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
@@ -23,20 +26,30 @@ public class LaPatilla extends com.lucevent.newsup.data.util.NewsReader {
 	@Override
 	protected String parseDescription(Element prop)
 	{
-		return super.parseDescription(prop).trim().replace("[...]", "...");
+		String dscr = jsoupParse(prop).text();
+
+		int i = dscr.indexOf("[");
+		if (i > 0) {
+			dscr = dscr.substring(0, i);
+		}
+		return dscr.replace("\u00A0", "").trim();
 	}
 
 	@Override
-	protected String parseContent(Element prop)
+	protected News onNewsRead(News news, Enclosures enclosures)
 	{
-		Element article = jsoupParse(prop);
-		article.select("script,br,.image_credits,.image_author").remove();
+		if (!news.content.isEmpty()) {
+			Element article = jsoupParse(news.content);
+			article.select("script,br,.image_credits,.image_author").remove();
 
-		article.select("[style]").removeAttr("style");
+			article.select("[style]").removeAttr("style");
 
-		cleanAttributes(article.select("img"), "src");
+			cleanAttributes(article.select("img"), "src");
 
-		return finalFormat(article, false).replace("<p>&nbsp;</p>", "");
+			news.imgSrc = findImageSrc(article);
+			news.content = finalFormat(article, false).replace("<p>&nbsp;</p>", "");
+		}
+		return news;
 	}
 
 	@Override

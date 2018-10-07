@@ -1,5 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosures;
 import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.nodes.Element;
@@ -23,9 +24,16 @@ public class Expressen extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected String parseDescription(org.jsoup.nodes.Element prop)
+	protected News onNewsRead(News news, Enclosures enclosures)
 	{
-		return org.jsoup.Jsoup.parse(prop.text()).text();
+		if (!news.description.isEmpty()) {
+			Element e = jsoupParse(news.description);
+			news.description = e.text();
+			news.imgSrc = findImageSrc(e);
+			if (news.imgSrc != null)
+				news.imgSrc = news.imgSrc.replace("x6/265@70.jpg", "x9/632@60.jpg");
+		}
+		return news;
 	}
 
 	@Override

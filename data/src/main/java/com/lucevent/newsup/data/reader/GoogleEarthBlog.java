@@ -1,5 +1,8 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosures;
+import com.lucevent.newsup.data.util.News;
+
 import org.jsoup.nodes.Element;
 import org.jsoup.parser.Parser;
 
@@ -36,24 +39,29 @@ public class GoogleEarthBlog extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected String parseContent(Element prop)
+	protected News onNewsRead(News news, Enclosures enclosures)
 	{
-		Element article = jsoupParse(prop);
-		article.select("script,link,label,input").remove();
+		if (!news.content.isEmpty()) {
+			Element article = jsoupParse(news.content);
+			article.select("script,link,label,input").remove();
 
-		article.select("img+br+i").tagName("figcaption");
-		article.select("strike").tagName("s");
-		article.select("[style]").removeAttr("style");
-		article.select("[width]").removeAttr("width");
-		article.select("iframe").attr("frameborder", "0");
+			article.select("img+br+i").tagName("figcaption");
+			article.select("strike").tagName("s");
+			article.select("[style]").removeAttr("style");
+			article.select("[width]").removeAttr("width");
+			article.select("iframe").attr("frameborder", "0");
 
-		for (Element img : article.select("img")) {
-			String src = img.attr("src");
-			img.attr("src", src.replace("resize=150%2C150", "resize=676%2C530"));
-			if (src.endsWith("mac-cmdkey.gif") && src.endsWith("gelogoicon.gif") && src.contains("/icons/"))
-				img.wrap("<p>");
+			for (Element img : article.select("img")) {
+				String src = img.attr("src");
+				img.attr("src", src.replace("resize=150%2C150", "resize=676%2C530"));
+				if (src.endsWith("mac-cmdkey.gif") && src.endsWith("gelogoicon.gif") && src.contains("/icons/"))
+					img.wrap("<p>");
+			}
+
+			news.imgSrc = findImageSrc(article);
+			news.content = finalFormat(article, false);
 		}
-		return finalFormat(article, false);
+		return news;
 	}
 
 	@Override

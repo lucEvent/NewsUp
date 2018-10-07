@@ -39,14 +39,19 @@ public class Utils {
 				Math.max((int) (b * factor), 0));
 	}
 
-	public static void openCustomTab(Context c, News n)
+	public static void openCustomTab(Context c, String url)
 	{
 		CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
 		builder.setToolbarColor(c.getResources().getColor(R.color.colorPrimary));
 		builder.setShowTitle(true);
 
 		CustomTabsIntent customTabsIntent = builder.build();
-		customTabsIntent.launchUrl(c, Uri.parse(n.link));
+		customTabsIntent.launchUrl(c, Uri.parse(url));
+	}
+
+	public static void openCustomTab(Context c, News n)
+	{
+		openCustomTab(c, n.link);
 	}
 
 }

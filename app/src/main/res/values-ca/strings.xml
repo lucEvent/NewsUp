@@ -26,13 +26,12 @@
     <string name="x_category">Categoria: <b>%1$s</b></string>
     <string name="notes">Anotacions</string>
     <string name="send">Enviar</string>
-    <string name="report_n_contact">Informa &amp; Contacta</string>
     <string name="x_favorites">%d favorits</string>
     <string name="schedule_one_now">Programa una ara</string>
     <string name="no_downloads_scheduled">No hi ha descàrregues programades</string>
     <string name="expand_to_see_headlines">Expandeix per veure els titulars</string>
     <string name="see_something_else">Interessat en algun tema més?</string>
-    <string name="happening_now">Esdeveniments</string>
+    <string name="happening_now">Temes del dia</string>
     <string name="languages">Idiomes</string>
     <string name="countries">Països</string>
     <string name="publications">Publicacions</string>
@@ -85,6 +84,7 @@
     <string name="got_it">Entès</string>
     <string name="start">Començar</string>
     <string name="reload">Reintentar</string>
+    <string name="download">Descarrega</string>
 
     <!-- * ******************** Hints **************************** * -->
     <string name="hint_pref_pro_mode">Entra codi PRO</string>
@@ -137,6 +137,8 @@
     <string name="msg_rss_not_found">· No s\'ha trobat suport per a RSS</string>
     <string name="msg_publication_not_supported">Aquesta publicació ja no està disponible a NewsUp</string>
     <string name="msg_content_could_not_be_loaded">Ups, no s\'ha pogut carregar el contingut</string>
+    <string name="msg_confirm_to_download_image">Confirma per descarregar la imatge</string>
+    <string name="msg_confirm_to_clear_notifications">Confirma per eliminar totes les notificacions</string>
 
     <!-- * *************** Activities and fragment's titles ********************* * -->
     <string name="title_frg_settings_of">Configuració de %1$s</string>
@@ -173,8 +175,12 @@
     <string name="pref_night_mode">Mode nocturn</string>
 
     <!-- ***************************** ***************** ********************************** -->
-    <string name="about_content_contact">Desenvolupat per Rafael J. Lucena\nContacte: rafaa89(arrova)gmail.com</string>
-    <string name="about_content_title_new_features">Darreres característiques i millores:</string>
-    <string name="about_content_title_next_sites">Publicacions que podrien ser afegides properament:</string>
+    <string name="about_developed">Desenvolupat per Rafael J. Lucena</string>
+    <string name="about_version_changelog">Notes de la versió</string>
+    <string name="about_full_changelog">Notes de versions anteriors</string>
+    <string name="about_possible_publications">Publicacions que podrien ser afegides</string>
+    <string name="about_term_and_conditions">Termes y Condicions</string>
+    <string name="about_contact">Contacta\'ns</string>
+    <string name="about_contact_description">Pregunta, Informa d\'errors, Sol·licita publicacions…</string>
 
 </resources>

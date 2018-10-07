@@ -1,5 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosures;
 import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.nodes.Document;
@@ -10,8 +11,8 @@ public class TheTimesOfIndia extends com.lucevent.newsup.data.util.NewsReader {
 
 	/**
 	 * tags:
-	 * [                             description, guid, item, link, pubdate, title]
-	 * [category, cmsid, dc:creator, description, guid, item, link, pubdate, title]
+	 * [                      description, guid, item, link, pubdate, title]
+	 * [category, dc:creator, description, guid, item, link, pubdate, title]
 	 */
 
 	public TheTimesOfIndia()
@@ -23,8 +24,19 @@ public class TheTimesOfIndia extends com.lucevent.newsup.data.util.NewsReader {
 				new int[]{},
 				new int[]{TAG_PUBDATE},
 				new int[]{TAG_CATEGORY},
-				new int[]{TAG_MEDIA_CONTENT},
+				new int[]{},
 				"");
+	}
+
+	@Override
+	protected News onNewsRead(News news, Enclosures enclosures)
+	{
+		if (!news.description.isEmpty()) {
+			Element e = jsoupParse(news.description);
+			news.imgSrc = findImageSrc(e);
+			news.description = e.text();
+		}
+		return news;
 	}
 
 	@Override

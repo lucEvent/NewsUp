@@ -58,6 +58,7 @@ public class Vandal extends com.lucevent.newsup.data.util.NewsReader {
 			news.description = article.text();
 			news.content = "";
 		}
+		news.imgSrc = findImageSrc(article);
 		return news;
 	}
 

@@ -19,10 +19,8 @@ import com.lucevent.newsup.io.SDManager;
 import com.lucevent.newsup.io.StorageCallback;
 import com.lucevent.newsup.net.NewsReaderManager;
 import com.lucevent.newsup.services.util.DownloadData;
-import com.lucevent.newsup.services.util.DownloadNotification;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Locale;
 
 public class KernelManager implements StorageCallback {
@@ -137,16 +135,6 @@ public class KernelManager implements StorageCallback {
 	public DBManager getDatabaseManager()
 	{
 		return dbmanager;
-	}
-
-	public Collection<News> getSavedNewsOf(DownloadNotification.Source s)
-	{
-		return dbmanager.readNews(s.siteCode, s.sections).values();
-	}
-
-	public void delete(DownloadData data)
-	{
-		dbmanager.delete(data);
 	}
 
 	@Override

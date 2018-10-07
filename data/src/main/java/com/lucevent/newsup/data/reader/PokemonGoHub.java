@@ -1,5 +1,8 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosures;
+import com.lucevent.newsup.data.util.News;
+
 import org.jsoup.nodes.Element;
 
 public class PokemonGoHub extends com.lucevent.newsup.data.util.NewsReader {
@@ -26,16 +29,23 @@ public class PokemonGoHub extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected String parseContent(Element prop)
+	protected News onNewsRead(News news, Enclosures enclosures)
 	{
-		Element article = jsoupParse(prop);
-		article.select("img[src*='/user_avatar/'],script").remove();
-		article.select("h6").tagName("h4");
-		article.select("pre").tagName("blockquote");
-		article.select("figure[style],img[style],iframe[style]").removeAttr("style");
-		cleanAttributes(article.select("img[srcset]"), "src");
+		if (!news.content.isEmpty()) {
+			Element article = jsoupParse(news.content);
+			article.select("img[src*='/user_avatar/'],script").remove();
+			article.select("h6").tagName("h4");
+			article.select("pre").tagName("blockquote");
+			article.select("figure[style],img[style],iframe[style]").removeAttr("style");
+			cleanAttributes(article.select("img[srcset]"), "src");
 
-		return finalFormat(article, false);
+			news.imgSrc = findImageSrc(article);
+			if (news.imgSrc != null && news.imgSrc.startsWith("/"))
+				news.imgSrc = "https://pokemongohub.net" + news.imgSrc;
+
+			news.content = finalFormat(article, false);
+		}
+		return news;
 	}
 
 }

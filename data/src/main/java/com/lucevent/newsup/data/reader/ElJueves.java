@@ -60,7 +60,7 @@ public class ElJueves extends com.lucevent.newsup.data.util.NewsReader {
 
 		Elements main = doc.select("#main");
 
-		String tag = findSubstringBetween(news.link, "http://www.eljueves.es/", "/", false);
+		String tag = findSubstringBetween(news.link, "www.eljueves.es/", "/", false);
 		Elements article;
 		switch (tag) {
 			case "news":
@@ -92,6 +92,7 @@ public class ElJueves extends com.lucevent.newsup.data.util.NewsReader {
 				break;
 			case "mmmh":
 			case "temazo":
+			case "se-esta-hablando":
 				// sexo
 
 				article = main.select(".fgs-slider .slide[id] img");

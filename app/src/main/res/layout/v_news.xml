@@ -2,17 +2,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
+    <com.lucevent.newsup.view.util.NewsElementsListView
+        android:id="@+id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.lucevent.newsup.view.util.NewsElementsListView
-            android:id="@+id/list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:keepScreenOn="true" />
-    </ScrollView>
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:keepScreenOn="true" />
 
     <ViewStub
         android:id="@+id/box_font_size"

@@ -14,10 +14,10 @@
             android:targetPackage="com.lucevent.newsup">
             <extra
                 android:name="shortcut_select"
-                android:value=""/>
+                android:value="" />
         </intent>
 
-        <categories android:name="android.shortcut.conversation"/>
+        <categories android:name="android.shortcut.conversation" />
     </shortcut>
 </shortcuts>
     

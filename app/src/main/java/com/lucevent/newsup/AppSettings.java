@@ -9,6 +9,7 @@ import com.lucevent.newsup.data.util.Site;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -304,11 +305,11 @@ public class AppSettings {
 		editor.apply();
 	}
 
-	private static final String PREF_EVENT_CONF_KEY = "evf_";
+	private static final String PREF_EVENT_CONFIG_KEY = "evf_";
 
 	public static TreeSet<Integer> getEventFilter(int event_code)
 	{
-		String filter = preferences.getString(PREF_EVENT_CONF_KEY + event_code, null);
+		String filter = preferences.getString(PREF_EVENT_CONFIG_KEY + event_code, null);
 		if (filter != null) {
 			String[] codes = filter.substring(1, filter.length() - 1).split(", ");
 			TreeSet<Integer> filterCodes = new TreeSet<>();
@@ -323,7 +324,59 @@ public class AppSettings {
 	public static void setEventFilter(int event_code, TreeSet<Integer> filter)
 	{
 		SharedPreferences.Editor editor = preferences.edit();
-		editor.putString(PREF_EVENT_CONF_KEY + event_code, filter == null ? null : Arrays.toString(filter.toArray()));
+		editor.putString(PREF_EVENT_CONFIG_KEY + event_code, filter == null ? null : Arrays.toString(filter.toArray()));
+		editor.apply();
+	}
+
+	private static final String PREF_EVENTS_COUNTRIES_KEY = "ev_co";
+
+	public static String[] getEventsLocaleSetting()
+	{
+		String filter = preferences.getString(PREF_EVENTS_COUNTRIES_KEY, null);
+		if (filter != null)
+			return filter.split(",");
+
+		Locale locale = Locale.getDefault();
+		return new String[]{locale.getLanguage() + "_" + locale.getCountry().toLowerCase()};
+	}
+
+	public static void addEventsLocaleSetting(String setting)
+	{
+		String[] cur_setting = getEventsLocaleSetting();
+		String[] new_setting = Arrays.copyOf(cur_setting, cur_setting.length + 1);
+		new_setting[cur_setting.length] = setting;
+		saveEventsLocaleSetting(new_setting);
+	}
+
+	public static boolean removeEventsLocaleSetting(String setting)
+	{
+		String[] cur_setting = getEventsLocaleSetting();
+		if (cur_setting.length == 1)
+			return false;
+
+		int remove_index = 0;
+		for (; ; remove_index++)
+			if (setting.equals(cur_setting[remove_index]))
+				break;
+
+		String[] new_setting = new String[cur_setting.length - 1];
+		System.arraycopy(cur_setting, 0, new_setting, 0, remove_index);
+		System.arraycopy(cur_setting, remove_index + 1, new_setting, remove_index, cur_setting.length - remove_index - 1);
+
+		saveEventsLocaleSetting(new_setting);
+		return true;
+	}
+
+	public static void saveEventsLocaleSetting(String[] setting)
+	{
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < setting.length; i++) {
+			if (i != 0) sb.append(",");
+			sb.append(setting[i]);
+		}
+
+		SharedPreferences.Editor editor = preferences.edit();
+		editor.putString(PREF_EVENTS_COUNTRIES_KEY, sb.toString());
 		editor.apply();
 	}
 

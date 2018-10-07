@@ -133,6 +133,9 @@ public class Date {
 		if (age < YEAR_TIME)
 			return String.format(Locale.ENGLISH, msg_month, (age / MONTH_TIME));
 
+		if (date <= 0)
+			return "";
+
 		return String.format(Locale.ENGLISH, msg_year, (age / YEAR_TIME));
 	}
 

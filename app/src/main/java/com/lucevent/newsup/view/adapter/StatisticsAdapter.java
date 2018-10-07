@@ -1,5 +1,6 @@
 package com.lucevent.newsup.view.adapter;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,15 +18,16 @@ public class StatisticsAdapter extends RecyclerView.Adapter<StatisticsViewHolder
 	{
 	}
 
+	@NonNull
 	@Override
-	public StatisticsViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+	public StatisticsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
 	{
 		View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.i_statistics, parent, false);
 		return new StatisticsViewHolder(v);
 	}
 
 	@Override
-	public void onBindViewHolder(StatisticsViewHolder holder, int position)
+	public void onBindViewHolder(@NonNull StatisticsViewHolder holder, int position)
 	{
 		holder.bind(mDataSet.siteStats.get(position));
 	}

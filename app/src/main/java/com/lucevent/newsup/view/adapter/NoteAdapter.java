@@ -1,6 +1,7 @@
 package com.lucevent.newsup.view.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,15 +23,16 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteItemViewHolder> {
 		mInflater = LayoutInflater.from(context);
 	}
 
+	@NonNull
 	@Override
-	public NoteItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+	public NoteItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
 	{
 		View v = mInflater.inflate(R.layout.i_note, parent, false);
 		return new NoteItemViewHolder(v);
 	}
 
 	@Override
-	public void onBindViewHolder(NoteItemViewHolder holder, int position)
+	public void onBindViewHolder(@NonNull NoteItemViewHolder holder, int position)
 	{
 		holder.bind(mItems.get(position));
 	}

@@ -46,13 +46,15 @@ public class News implements Comparable<News>, Serializable {
 
 	public boolean hasKeyWords(String[] keyWords)
 	{
+		String[] titleTags = title.toLowerCase().replaceAll("[^\\p{IsAlphabetic}^\\p{Blank}^\\p{IsDigit}]", "").split(" ");
 		for (String keyW : keyWords) {
 			for (String tag : tags)
 				if (tag.equals(keyW))
 					return true;
 
-			if (title.toLowerCase().contains(keyW))
-				return true;
+			for (String tag : titleTags)
+				if (tag.equals(keyW))
+					return true;
 		}
 		return false;
 	}

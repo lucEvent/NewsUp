@@ -1,17 +1,20 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosures;
+import com.lucevent.newsup.data.util.News;
+
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class Omicrono extends com.lucevent.newsup.data.util.NewsReader {
 
-	//tags: [category, content:encoded, dc:creator, description, feedburner:origlink, guid, item, link, pubdate, title]
+	//tags: [category, content:encoded, dc:creator, description, guid, item, link, pubdate, title]
 
 	public Omicrono()
 	{
 		super(TAG_ITEM_ITEMS,
 				new int[]{TAG_TITLE},
-				new int[]{"feedburner:origlink".hashCode()},
+				new int[]{TAG_LINK},
 				new int[]{TAG_DESCRIPTION},
 				new int[]{TAG_CONTENT_ENCODED},
 				new int[]{TAG_PUBDATE},
@@ -31,12 +34,17 @@ public class Omicrono extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected String parseContent(Element prop)
+	protected News onNewsRead(News news, Enclosures enclosures)
 	{
-		Element article = jsoupParse(prop);
-		article.select("script,.blockquoteLink,.feedflare,[width='1'],.blockquoteRelated").remove();
-		cleanAttributes(article.select("img"), "src");
-		return finalFormat(article, false);
+		if (!news.content.isEmpty()) {
+			Element article = jsoupParse(news.content);
+			article.select("script,.blockquoteLink,.feedflare,[width='1'],.blockquoteRelated").remove();
+			cleanAttributes(article.select("img"), "src");
+
+			news.imgSrc = findImageSrc(article);
+			news.content = finalFormat(article, false);
+		}
+		return news;
 	}
 
 }

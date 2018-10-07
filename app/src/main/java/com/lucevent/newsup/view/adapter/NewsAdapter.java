@@ -41,8 +41,9 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 		discloseData();
 	}
 
+	@NonNull
 	@Override
-	public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+	public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
 	{
 		RecyclerView.ViewHolder vh = null;
 		switch (viewType) {
@@ -65,7 +66,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 	}
 
 	@Override
-	public void onBindViewHolder(RecyclerView.ViewHolder holder, int position)
+	public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position)
 	{
 		if (holder instanceof NewsViewHolder) {
 			News news = mDataSet.get(position);

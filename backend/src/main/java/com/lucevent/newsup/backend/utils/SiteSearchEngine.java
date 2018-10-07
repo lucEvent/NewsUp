@@ -56,18 +56,18 @@ public class SiteSearchEngine {
 			try {
 				d = getPage(site_url);
 			} catch (Exception e) {
-				return new Response(UserSite.ERROR_GETTING_PAGE, "{\"url\":\"" + site_url + "\",\"error\":\"ERROR_GETTING_PAGE e.msg:" + e.getMessage() + "\"}");
+				return new Response(UserSite.ERROR_GETTING_PAGE, errorToJsonString(request, site_url, "ERROR_GETTING_PAGE e.msg:" + e.getMessage()));
 			}
 
 			// extract info
 			String rss_url = extractRssUrl(d);
-			if (rss_url == null || rss_url.isEmpty())
-				return new Response(UserSite.ERROR_RSS_NOT_FOUND, "{\"url\":\"" + site_url + "\",\"error\":\"ERROR_RSS_NOT_FOUND\"}");
-
+			if (rss_url == null || rss_url.isEmpty()) {
+				return new Response(UserSite.ERROR_RSS_NOT_FOUND, errorToJsonString(request, site_url, "ERROR_RSS_NOT_FOUND"));
+			}
 			String icon = extractIcon(d);
 			int color = extractColor(d);
 			String name = extractName(d, request);
-			int info = SiteLanguage.VARIOUS | SiteCountry.VARIOUS | SiteCategory.VARIOUS;// TODO: 18/05/2018
+			int info = SiteLanguage.VARIOUS | SiteCountry.VARIOUS | SiteCategory.NEWS;// TODO: 18/05/2018
 
 			site = Data.requestedSites.createSite(request, name, site_url, rss_url, icon, info, color);
 		}
@@ -82,6 +82,15 @@ public class SiteSearchEngine {
 						"\", \"color\":" + site.color + "}";
 
 		return new Response(UserSite.OK, data);
+	}
+
+	private static String errorToJsonString(String request, String site_url, String error)
+	{
+		return "{" +
+				"\"request\":\"" + request + "\"," +
+				"\"url\":\"" + site_url + "\"," +
+				"\"error\":\"" + error + "\"" +
+				"}";
 	}
 
 	private static Document getPage(String url) throws Exception
@@ -104,6 +113,7 @@ public class SiteSearchEngine {
 
 	private static String extractRssUrl(Document d)
 	{
+		//<a href="https://www.lasprovincias.es/rss/" title="RSS">
 		Elements links = d.select("link[type='application/rss+xml']");
 		if (links.isEmpty()) {
 			return null;

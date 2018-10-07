@@ -284,6 +284,22 @@ public class DBManager {
 		return result;
 	}
 
+	public DownloadData readNotification(long time)
+	{
+		DownloadData result = null;
+		synchronized (this) {
+			SQLiteDatabase database = db.getReadableDatabase();
+			Cursor cursor = database.query(DBDownloadData.db, DBDownloadData.cols, DBDownloadData.time + "=" + time, null, null, null, null);
+
+			if (cursor.moveToFirst())
+				result = DBDownloadData.parse(cursor);
+
+			cursor.close();
+			database.close();
+		}
+		return result;
+	}
+
 	public ArrayList<DownloadData> readNotifications()
 	{
 		ArrayList<DownloadData> result = new ArrayList<>();
@@ -579,6 +595,15 @@ public class DBManager {
 		synchronized (this) {
 			SQLiteDatabase database = db.getWritableDatabase();
 			database.delete(DBDownloadData.db, DBDownloadData.time + "=" + data.time, null);
+			database.close();
+		}
+	}
+
+	public void clearDownloadData()
+	{
+		synchronized (this) {
+			SQLiteDatabase database = db.getWritableDatabase();
+			database.delete(DBDownloadData.db, null, null);
 			database.close();
 		}
 	}

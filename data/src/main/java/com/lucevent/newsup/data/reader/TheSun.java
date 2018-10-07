@@ -1,5 +1,8 @@
 package com.lucevent.newsup.data.reader;
 
+import com.lucevent.newsup.data.util.Enclosures;
+import com.lucevent.newsup.data.util.News;
+
 import org.jsoup.nodes.Element;
 
 public class TheSun extends com.lucevent.newsup.data.util.NewsReader {
@@ -26,28 +29,32 @@ public class TheSun extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected String parseContent(Element prop)
+	protected News onNewsRead(News news, Enclosures enclosures)
 	{
-		Element article = jsoupParse(prop);
-		article.getElementsByTag("fb:post").remove();
-		article.select("script,.incon_widgets,.sun-grid-container,opta-widget,[rel='noopener'],.article-boxout").remove();
+		if (!news.content.isEmpty()) {
+			Element article = jsoupParse(news.content);
+			article.getElementsByTag("fb:post").remove();
+			article.select("script,.incon_widgets,.sun-grid-container,opta-widget,[rel='noopener'],.article-boxout").remove();
 
-		article.select("figure[style]").removeAttr("style");
-		article.select("figcredit").tagName("figcaption");
-		article.select("div:has(video)").removeAttr("style");
+			article.select("figure[style]").removeAttr("style");
+			article.select("figcredit").tagName("figcaption");
+			article.select("div:has(video)").removeAttr("style");
 
-		for (Element bcvideo : article.select("video[data-video-id]")) {
-			bcvideo.parent()
-					.html(insertIframe(
-							"https://players.brightcove.net/"
-									+ bcvideo.attr("data-account") + "/"
-									+ bcvideo.attr("data-player") + "_"
-									+ bcvideo.attr("data-embed") + "/index.html?videoId="
-									+ bcvideo.attr("data-video-id")
-					));
+			for (Element bcvideo : article.select("video[data-video-id]")) {
+				bcvideo.parent()
+						.html(insertIframe(
+								"https://players.brightcove.net/"
+										+ bcvideo.attr("data-account") + "/"
+										+ bcvideo.attr("data-player") + "_"
+										+ bcvideo.attr("data-embed") + "/index.html?videoId="
+										+ bcvideo.attr("data-video-id")
+						));
+			}
+
+			news.content = finalFormat(article, false);
+			news.imgSrc = findImageSrc(article);
 		}
-
-		return finalFormat(article, false);
+		return news;
 	}
 
 }

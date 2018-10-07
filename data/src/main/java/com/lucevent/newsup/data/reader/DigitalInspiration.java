@@ -1,6 +1,8 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
+import com.lucevent.newsup.data.util.Enclosures;
+import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.nodes.Element;
 
@@ -17,7 +19,7 @@ public class DigitalInspiration extends com.lucevent.newsup.data.util.NewsReader
 				new int[]{TAG_CONTENT_ENCODED},
 				new int[]{TAG_PUBDATE},
 				new int[]{TAG_CATEGORY},
-				new int[]{TAG_ENCLOSURE},
+				new int[]{},
 				"");
 	}
 
@@ -30,27 +32,36 @@ public class DigitalInspiration extends com.lucevent.newsup.data.util.NewsReader
 	}
 
 	@Override
-	protected String parseContent(Element prop)
+	protected String parseDescription(Element prop)
 	{
-		org.jsoup.nodes.Element article = jsoupParse(prop);
-		article.select("script").remove();
+		return jsoupParse(prop).select("p").first().text();
+	}
 
-		for (Element ytv : article.select(".youtube-player,.youtube"))
-			ytv.html(insertIframe("https://www.youtube.com/embed/" + ytv.attr("data-id")));
+	@Override
+	protected News onNewsRead(News news, Enclosures enclosures)
+	{
+		if (!news.content.isEmpty()) {
+			Element article = jsoupParse(news.content);
+			article.select("script").remove();
 
+			for (Element ytv : article.select(".youtube-player,.youtube"))
+				ytv.html(insertIframe("https://www.youtube.com/embed/" + ytv.attr("data-id")));
 
-		for (Element code : article.select("pre"))
-			code.tagName("p").wrap("code");
+			for (Element code : article.select("pre"))
+				code.tagName("p").wrap("code");
 
-		article.select("[style]").removeAttr("style");
+			article.select("[style]").removeAttr("style");
 
-		String content = finalFormat(article, false);
+			news.imgSrc = findImageSrc(article);
+			String content = finalFormat(article, false);
 
-		int index = content.lastIndexOf("<hr>");
-		if (index != -1)
-			content = content.substring(0, index);
+			int index = content.lastIndexOf("<hr>");
+			if (index != -1)
+				content = content.substring(0, index);
 
-		return content;
+			news.content = content;
+		}
+		return news;
 	}
 
 }
