@@ -50,6 +50,7 @@
     <string name="do_not_show_again">Visa inte igen</string>
     <string name="shortcut_select_label">Välj publikation</string>
     <string name="lbl_site_search">· Sök exempel:\n\t\tthecanary.co\n\t\tthe ringer\n\n· NewsUp är en RSS-läsare, så sökningen visar bara publikationer som erbjuder RSS.\n\n· En google-sökning utförs för att hitta publikationswebbplatsen du letar efter; om sökningen inte lyckades, försök att skriva in hela webbplatsnamnet.\n\n· Den här funktionen är på test. Det kan ge bättre resultat för din sökning i framtiden.</string>
+    <string name="select_region">Välj region</string>
 
     <string name="mon">Mån</string>
     <string name="tue">Tis</string>

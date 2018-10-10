@@ -50,6 +50,7 @@
     <string name="do_not_show_again">No volver a mostrar</string>
     <string name="shortcut_select_label">Elegir publicación</string>
     <string name="lbl_site_search">· Ejemplos de búsqueda:\n\t\tthecanary.co\n\t\tel español\n\n· NewsUp es un lector de RSS, por lo que la búsqueda únicamente mostrará publicaciones que ofrecen RSS.\n\n· Se buscará en google la página web de la publicación que buscas; si no hay resultados, prueba a indicar el nombre completo de la página web.\n\n· Esta función está en desarrollo. Puede que ofrezca mejores resultados en un futuro.</string>
+    <string name="select_region">Selecciona región</string>
 
     <string name="mon">Lun</string>
     <string name="tue">Mar</string>

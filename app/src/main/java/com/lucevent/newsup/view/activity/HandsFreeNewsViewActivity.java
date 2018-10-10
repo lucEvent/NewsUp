@@ -44,7 +44,8 @@ import com.lucevent.newsup.view.util.Utils;
 public class HandsFreeNewsViewActivity extends FragmentActivity implements
 		ViewPager.OnPageChangeListener,
 		Runnable,
-		GestureDetector.OnGestureListener {
+		GestureDetector.OnGestureListener,
+		AppData.OnNewsListChange {
 
 	private static final int SECONDS_BETWEEN_NEWS = 10 * 1000;
 	private static final String GESTURE_EDUCATION_SHOWN_KEY = "gh_hands_free";
@@ -111,6 +112,7 @@ public class HandsFreeNewsViewActivity extends FragmentActivity implements
 		} else
 			startGestureDetection();
 
+		AppData.setOnNewsListChange(this);
 		hideSystemUi();
 	}
 
@@ -153,6 +155,7 @@ public class HandsFreeNewsViewActivity extends FragmentActivity implements
 	{
 		super.onDestroy();
 		mNewsView.destroy();
+		AppData.setOnNewsListChange(null);
 	}
 
 	private void hideSystemUi()
@@ -351,6 +354,12 @@ public class HandsFreeNewsViewActivity extends FragmentActivity implements
 
 		if (mGDetector != null)
 			mHandler.postDelayed(this, SECONDS_BETWEEN_NEWS);
+	}
+
+	@Override
+	public void onChange(NewsAdapterList currentNewsList)
+	{
+		mHeadlinesPagerAdapter.notifyDataSetChanged();
 	}
 
 	/**

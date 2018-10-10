@@ -392,8 +392,11 @@ public class Sites extends ArrayList<Site> {
 				SiteCountry.USA | SiteLanguage.ENGLISH | SiteCategory.VIDEOGAMES,
 				com.lucevent.newsup.data.section.PokemonGoHubSections.class, com.lucevent.newsup.data.reader.PokemonGoHub.class));
 		res.add(new Site(1320, "Nintenderos", 0xffff0000, "http://www.nintenderos.com/",
-				SiteCountry.VARIOUS | SiteLanguage.SPANISH | SiteCategory.VIDEOGAMES,
+				SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.VIDEOGAMES,
 				com.lucevent.newsup.data.section.NintenderosSections.class, com.lucevent.newsup.data.reader.Nintenderos.class));
+		res.add(new Site(1325, "IGN Espa\u00F1a", 0xffd3222a, "https://es.ign.com/",
+				SiteCountry.SPAIN | SiteLanguage.SPANISH | SiteCategory.VIDEOGAMES,
+				com.lucevent.newsup.data.section.IGNEsSections.class, com.lucevent.newsup.data.reader.IGNEs.class));
 
 		// LifeStyle (1400)
 		res.add(new Site(1400, "Vice", 0xff000000, "https://www.vice.com",

@@ -22,10 +22,11 @@ public class AboutFragment extends android.app.Fragment {
 	private static final String URL_TERM_AND_CONDITIONS = "https://newsup-2406.appspot.com/term_and_conditions/";
 
 	private static final String[] VERSION_CHANGELOG = {
-			"2.8.0", "2018-10-07", "Zoom images", "Headlines hands-free screen interaction improved", "Refresh news lists by swiping down", "About screen improved", "Now the current section is highlighted", "Support for Kinja publications", "Bug fixes and improvements"
+			"2.8.1", "2018-10-10", "Support for IGN Spain", "Bug fixes from the previous version"
 	};
 
 	private static final String[][] CHANGELOG = {
+			{"2.8.0", "2018-10-07", "Zoom images", "Headlines hands-free screen interaction improved", "Refresh news lists by swiping down", "About screen improved", "Now the current section is highlighted", "Support for Kinja publications", "Bug fixes and improvements"},
 			{"2.7.1", "2018-08-03", "New: 'Hands-free' headlines view.", "New: Notifications (check drawer).", "New: Find external publications (RSS support needed).", "App night-mode shortcut in drawer.", "App icon shortcut to go to a specific publication.", "Download images by long-pressing on them.", "Clean Cache improved.", "Search ignoring accent marks in all search bars.", "Readers and Sections updated.", "Overall fixes and improvements."},
 			{"2.6.0", "2018-02-17", "New: Night mode!", "Filters added in History.", "Filters and scheduled downloads for Events.", "Scheduled downloads improves.", "Compact view for news (check settings).", "Images load Wi-Fi only option (check settings).", "Font changes.", "RTL fixes.", "Some readers updated.", "Bug fixes."},
 			{"2.5.0", "2017-12-30", "New NewsView improving the user experience.", "Search feature added on bookmarks and history screens.", "Support added for The Independent, Daily Mail, The Sun, Metro UK, Evening Standard, Daily Mirror, The National Scotland, Daily Express, Sports Illustrated and WIRED.", "Section dialog improved.", "Change font size option in NewsView.", "All sections revised.", "Twitter videos are now supported too.", "Small bug fixes."},

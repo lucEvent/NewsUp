@@ -403,8 +403,11 @@ public class NewsListFragment extends StoragePermissionFragment implements View.
 						}
 						service.mReloadBox.setVisibility(View.VISIBLE);
 					}
-					if (service.mSwipeRefreshLayout.isRefreshing())
+					if (service.mSwipeRefreshLayout.isRefreshing()) {
 						service.mSwipeRefreshLayout.setRefreshing(false);
+						if (service.mReloadBox.getVisibility() == View.VISIBLE)
+							service.mReloadBox.setVisibility(View.GONE);
+					}
 					break;
 				case AppCode.NO_INTERNET:
 					Snackbar snackbar = Snackbar.make(service.mMainView, R.string.msg_no_internet_connection, Snackbar.LENGTH_LONG);
@@ -431,7 +434,7 @@ public class NewsListFragment extends StoragePermissionFragment implements View.
 	@SuppressWarnings("ConstantConditions")
 	private void setUpColors()
 	{
-		if (mMenu == null || mMenu.size() < 2) return;
+		if (mMenu == null || mMenu.size() < 2 || mMenu.getItem(1).getIcon() == null) return;
 
 		Toolbar ab = (Toolbar) getActivity().findViewById(R.id.toolbar);
 		if (currentSite == null) {

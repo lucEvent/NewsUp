@@ -226,11 +226,11 @@
         <item>69</item>
     </integer-array>
     <string-array name="event_co_titles">
-        <!--<item>Sweden</item>-->
-        <item>UK</item>
-        <!--<item>USA</item>-->
-        <item>Spain</item>
-        <!--<item>Catalonia</item>-->
+        <!--<item>Ruotsi</item>-->
+        <item>Yhdistynyt kuningaskunta</item>
+        <!--<item>Yhdysvallat</item>-->
+        <item>Espanja</item>
+        <!--<item>Katalonia</item>-->
     </string-array>
     <string-array name="event_co_codes">
         <!--<item>sv_se</item>-->

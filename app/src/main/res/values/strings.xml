@@ -1,7 +1,7 @@
 <resources>
 
     <string name="app_name" translatable="false">NewsUp</string>
-    <string name="app_version" translatable="false">2.8.0</string>
+    <string name="app_version" translatable="false">2.8.1</string>
     <string name="default_font" translatable="false">sans-serif-light</string>
 
     <string name="about_developed">Developed by Rafael J. Lucena</string>
@@ -63,6 +63,7 @@
     <string name="do_not_show_again">Don\'t show again</string>
     <string name="shortcut_select_label">Select publication</string>
     <string name="lbl_site_search">· Search examples:\n\t\tthecanary.co\n\t\tthe ringer\n\n· NewsUp is an RSS reader app, thus the search will only show publications which offer RSS.\n\n· A google search is performed to find the publication website that you are looking for, if the search is not successful, try entering the full website name.\n\n· This feature is incubating. It might offer better results for your search in the future.</string>
+    <string name="select_region">Select region</string>
 
     <string name="mon">Mon</string>
     <string name="tue">Tue</string>

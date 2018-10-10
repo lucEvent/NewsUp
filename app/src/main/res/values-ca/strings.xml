@@ -50,6 +50,7 @@
     <string name="do_not_show_again">No tornar a mostrar</string>
     <string name="shortcut_select_label">Triar publicació</string>
     <string name="lbl_site_search">· Exemple de cerca:\n\t\tthecanary.co\n\t\tcatalunya diari\n\n· NewsUp és un lector d\'RSS, així que la cerca només mostrarà publicacions que ofereixin RSS.\n\n· Es cercarà a google la pàgina web de la publicació que cerques; si no hi han resultats, prova a cercar el nom complert de la pàgina web.\n\n· Aquesta funció està en desenvolupament. Pot ser que ofereixi millors resultats en el futur.</string>
+    <string name="select_region">Selecciona la regió</string>
 
     <string name="mon">Dl</string>
     <string name="tue">Dm</string>

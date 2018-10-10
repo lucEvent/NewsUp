@@ -20,23 +20,28 @@ import java.util.TreeSet;
 
 public final class AppData {
 
+	public interface OnNewsListChange {
+		void onChange(NewsAdapterList currentNewsList);
+	}
+
 	public static final String[] STORAGE_PERMISSIONS = new String[]{
 			Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
 	private static final int DATA_REVISION_N = 5;
-	private static Sites sites;
+	private static Sites mSites;
 
-	private static Events events;
+	private static Events mEvents;
 
-	private static NewsAdapterList currentNewsList;
+	private static OnNewsListChange mOnNewsListChange;
+	private static NewsAdapterList mCurrentNewsList;
 
 	public static Sites getSites()
 	{
-		return sites;
+		return mSites;
 	}
 
 	public static void setSites(Sites sites, DBManager dbManager)
 	{
-		AppData.sites = sites;
+		AppData.mSites = sites;
 
 		int last_revision_n = AppSettings.getIntValue(AppSettings.LAST_DATA_REVISION_KEY, 0);
 		if (last_revision_n < DATA_REVISION_N) {
@@ -67,12 +72,12 @@ public final class AppData {
 
 	public static Site getSiteByCode(int code)
 	{
-		return sites.getSiteByCode(code);
+		return mSites.getSiteByCode(code);
 	}
 
 	public static Event getEvent(int code)
 	{
-		for (Event e : events)
+		for (Event e : mEvents)
 			if (e.code == code)
 				return e;
 
@@ -83,7 +88,7 @@ public final class AppData {
 	{
 		Sites res = new Sites();
 		for (int code : codes) {
-			Site s = sites.getSiteByCode(code);
+			Site s = mSites.getSiteByCode(code);
 			if (s != null)
 				res.add(s);
 		}
@@ -93,7 +98,7 @@ public final class AppData {
 
 	public static void setEvents(Events events)
 	{
-		AppData.events = events;
+		AppData.mEvents = events;
 	}
 
 	private static Set<String> correctSections(Site site, Set<String> section_indexes)
@@ -201,14 +206,26 @@ public final class AppData {
 		return new Pair<>(false, null);
 	}
 
+	public static void setOnNewsListChange(OnNewsListChange l)
+	{
+		AppData.mOnNewsListChange = l;
+	}
+
 	public static NewsAdapterList getCurrentNewsList()
 	{
-		return currentNewsList;
+		return mCurrentNewsList;
+	}
+
+	public static void notifyCurrentNewsListChanged(NewsAdapterList l)
+	{
+		mCurrentNewsList = l;
+		if (mOnNewsListChange != null)
+			mOnNewsListChange.onChange(mCurrentNewsList);
 	}
 
 	public static void setCurrentNewsList(NewsAdapterList l)
 	{
-		currentNewsList = l;
+		mCurrentNewsList = l;
 	}
 
 }

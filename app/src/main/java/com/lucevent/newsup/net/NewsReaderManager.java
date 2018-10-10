@@ -325,7 +325,7 @@ public class NewsReaderManager {
 					}
 					continue;
 				}
-				System.out.println("Site_code:" + news.site_code);
+
 				Site site = AppData.getSiteByCode(news.site_code);
 
 				NewsMap history = mDB.getNewsOf(site);

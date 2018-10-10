@@ -144,6 +144,7 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 			mDataSet.endBatchedUpdates();
 		}
+		AppData.notifyCurrentNewsListChanged(mDataSet);
 	}
 
 	public void addAll(Collection<News> newDataSet)
@@ -156,22 +157,27 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 			mDataSet.add(new News(-9, "", "", "", -9, null, null, -1, -1, -1));
 
 		mDataSet.endBatchedUpdates();
+		AppData.notifyCurrentNewsListChanged(mDataSet);
 	}
 
 	public void add(News item)
 	{
 		mDataSet.add(item);
+		AppData.notifyCurrentNewsListChanged(mDataSet);
 	}
 
 	public boolean remove(News item)
 	{
-		return mDataSet.remove(item);
+		boolean r = mDataSet.remove(item);
+		AppData.notifyCurrentNewsListChanged(mDataSet);
+		return r;
 	}
 
 	public final void update(News news)
 	{
 		int index = mDataSet.indexOf(news);
 		mDataSet.updateItemAt(index, news);
+		AppData.notifyCurrentNewsListChanged(mDataSet);
 	}
 
 	public void replaceAll(Collection<News> newDataSet)
@@ -185,11 +191,13 @@ public class NewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 		}
 		mDataSet.addAll(newDataSet);
 		mDataSet.endBatchedUpdates();
+		AppData.notifyCurrentNewsListChanged(mDataSet);
 	}
 
 	public void clear()
 	{
 		mDataSet.clear();
+		AppData.notifyCurrentNewsListChanged(mDataSet);
 	}
 
 	public void discloseData()
