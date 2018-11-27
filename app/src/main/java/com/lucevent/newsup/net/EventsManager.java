@@ -16,7 +16,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public final class EventsManager {
+public final class EventsManager implements BackendNames {
 
 	public interface Callback {
 		void onEventsRead(Events result);
@@ -64,7 +64,7 @@ public final class EventsManager {
 
 		try {
 			sb = RawContentReader.getUrl(
-					"http://newsup-2406.appspot.com/appv2?events=" + sb.toString() + "&v=" + mAppVersion
+					MAIN_APP_SERVER + "?events=" + sb.toString() + "&v=" + mAppVersion
 			);
 
 			final Events res = new Events();

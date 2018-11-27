@@ -3,9 +3,10 @@
     style="@style/newsTextStyle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="@dimen/caption_bottom_padding"
     android:paddingLeft="@dimen/caption_side_padding"
-    android:paddingRight="@dimen/caption_side_padding"
     android:paddingTop="@dimen/caption_top_padding"
+    android:paddingRight="@dimen/caption_side_padding"
+    android:paddingBottom="@dimen/caption_bottom_padding"
     android:text="Caption"
+    android:textIsSelectable="true"
     android:textSize="@dimen/text_small_size" />

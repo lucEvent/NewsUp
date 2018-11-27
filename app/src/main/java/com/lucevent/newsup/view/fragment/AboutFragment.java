@@ -13,19 +13,21 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.lucevent.newsup.R;
+import com.lucevent.newsup.net.BackendNames;
 import com.lucevent.newsup.view.activity.ContactActivity;
 import com.lucevent.newsup.view.util.AppTextView;
 import com.lucevent.newsup.view.util.Utils;
 
-public class AboutFragment extends android.app.Fragment {
+public class AboutFragment extends android.app.Fragment implements BackendNames {
 
-	private static final String URL_TERM_AND_CONDITIONS = "https://newsup-2406.appspot.com/term_and_conditions/";
+	private static final String URL_TERM_AND_CONDITIONS = MAIN_SERVER + "term_and_conditions/";
 
 	private static final String[] VERSION_CHANGELOG = {
-			"2.8.1", "2018-10-10", "Support for IGN Spain", "Bug fixes from the previous version"
+			"2.8.2", "2018-XX-XX", "Find publication now offers better results", "Support for all IGN publications.", "Text is now selectable.", "News from not supported publications can now be bookmarked and will be keep in records."
 	};
 
 	private static final String[][] CHANGELOG = {
+			{"2.8.1", "2018-10-10", "Support for IGN Spain", "Bug fixes from the previous version"},
 			{"2.8.0", "2018-10-07", "Zoom images", "Headlines hands-free screen interaction improved", "Refresh news lists by swiping down", "About screen improved", "Now the current section is highlighted", "Support for Kinja publications", "Bug fixes and improvements"},
 			{"2.7.1", "2018-08-03", "New: 'Hands-free' headlines view.", "New: Notifications (check drawer).", "New: Find external publications (RSS support needed).", "App night-mode shortcut in drawer.", "App icon shortcut to go to a specific publication.", "Download images by long-pressing on them.", "Clean Cache improved.", "Search ignoring accent marks in all search bars.", "Readers and Sections updated.", "Overall fixes and improvements."},
 			{"2.6.0", "2018-02-17", "New: Night mode!", "Filters added in History.", "Filters and scheduled downloads for Events.", "Scheduled downloads improves.", "Compact view for news (check settings).", "Images load Wi-Fi only option (check settings).", "Font changes.", "RTL fixes.", "Some readers updated.", "Bug fixes."},
@@ -51,22 +53,12 @@ public class AboutFragment extends android.app.Fragment {
 	};
 
 	private static final String[] POSSIBLE_PUBLICATIONS = {
-			"National geographic",
 			"The Times",
-			"Motherboard",
-			"IGN España",
-			"Tech Eye",
-			"Hollywood Reporter",
-			"The Wall Street Journal",
+			"The Wall Street Journal",//
 			"Esquire",
-			"The Canary",
-			"New Scientist",
-			"Digital Trends Español",
 			"NewsLaundry",
-			"Ara",
-			"EUObserver",
-			"The Japan Times",
-			"Republica.com",
+			"The Japan Times",//
+			"Republica.com",//
 			"Revista Cuore",
 			"Charged",
 			"TabTimes",

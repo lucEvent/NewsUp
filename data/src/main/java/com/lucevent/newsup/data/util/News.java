@@ -1,6 +1,5 @@
 package com.lucevent.newsup.data.util;
 
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.Serializable;
@@ -71,8 +70,7 @@ public class News implements Comparable<News>, Serializable {
 		if ((content == null || content.isEmpty()) && imgSrc == null)
 			return;
 
-		Element parse = org.jsoup.Jsoup.parse(content);
-		Elements images = parse.select("img[src]");
+		Elements images = org.jsoup.Jsoup.parse(content).select("img[src]");
 		if (images.isEmpty())
 			return;
 

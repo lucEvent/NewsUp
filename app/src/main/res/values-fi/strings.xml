@@ -129,10 +129,6 @@
     <string name="msg_clean_cache_remove_news">Removing news…</string>
     <string name="msg_clean_cache_remove_images">Removing images…</string>
     <string name="msg_didnt_find_results">Couldn\'t find any results</string>
-    <string name="msg_page_not_found">· Couldn\'t access the found web page</string>
-    <string name="msg_page_tried">· The web page found was %s</string>
-    <string name="msg_try_full_page_if_not">· Try searching for the full web page name if this isn\'t correct</string>
-    <string name="msg_rss_not_found">· RSS support was not found</string>
     <string name="msg_publication_not_supported">This publication is no longer supported by NewsUp</string>
     <string name="msg_content_could_not_be_loaded">Ups, the content couldn\'t be loaded</string>
     <string name="msg_confirm_to_download_image">Confirm to download this image</string>

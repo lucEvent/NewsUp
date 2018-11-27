@@ -23,19 +23,19 @@ import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.util.UserSite;
 import com.lucevent.newsup.kernel.KernelManager;
+import com.lucevent.newsup.net.BackendNames;
 import com.lucevent.newsup.net.RawContentReader;
 import com.lucevent.newsup.view.adapter.UserSiteAdapter;
 import com.lucevent.newsup.view.util.AppAnimator;
 import com.lucevent.newsup.view.util.AppTextView;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
-public class FindPublicationActivity extends AppCompatActivity {
-
-	private static final String REQUEST_QUERY = "http://newsup-2406.appspot.com/appv2?request_site=";
+public class FindPublicationActivity extends AppCompatActivity implements BackendNames {
 
 	private UserSiteAdapter mAdapter;
 	private EditText mInput;
@@ -59,7 +59,7 @@ public class FindPublicationActivity extends AppCompatActivity {
 				{
 					String response = "";
 					try {
-						response = RawContentReader.getUrl(REQUEST_QUERY + URLEncoder.encode(request, "utf-8")).toString();
+						response = RawContentReader.getUrl(MAIN_APP_SERVER + "?request_site=" + URLEncoder.encode(request, "utf-8")).toString();
 					} catch (Exception ignored) {
 						AppSettings.printerror("Error", ignored);
 						notifyError(getString(R.string.msg_no_internet_connection));
@@ -68,44 +68,31 @@ public class FindPublicationActivity extends AppCompatActivity {
 					final ArrayList<UserSite> aux = new ArrayList<>();
 					try {
 						JSONObject json = new JSONObject(response);
-
-						int result = json.getInt("result");
-						JSONObject data = json.getJSONObject("data");
-						switch (result) {
+						switch (json.getInt("result")) {
 							case UserSite.OK:
-								int code = data.getInt("code");
-								String name = data.getString("name");
-								String url = data.getString("url");
-								String rss = data.getString("rss");
-								String icon = data.getString("icon");
-								int info = data.getInt("info");
-								int color = 0xff000000 | data.getInt("color");
+								JSONArray results = json.getJSONArray("results");
+								for (int i = 0; i < results.length(); i++) {
+									JSONObject r = (JSONObject) results.get(i);
 
-								aux.add(new UserSite(code, name, color, url, info, rss, icon));
+									int code = r.getInt("code");
+									String name = r.getString("name");
+									String url = r.getString("url");
+									String rss = r.getString("rss");
+									String icon = r.getString("icon");
+									int info = r.getInt("info");
+									int color = 0xff000000 | r.getInt("color");
+
+									aux.add(new UserSite(code, name, color, url, info, rss, icon));
+								}
 								break;
-							case UserSite.ERROR_IN_GOOGLE_SEARCH:
+							case UserSite.ERROR_IN_FEEDLY_QUERY:
 								notifyError(
 										getString(R.string.msg_didnt_find_results)
 								);
 								break;
-							case UserSite.ERROR_GETTING_PAGE:
-								notifyError(
-										getString(R.string.msg_page_not_found)
-												+ "\n\n" + getString(R.string.msg_page_tried, data.getString("url"))
-												+ "\n\n" + getString(R.string.msg_try_full_page_if_not)
-								);
-								break;
-							case UserSite.ERROR_RSS_NOT_FOUND:
-								notifyError(
-										getString(R.string.msg_rss_not_found)
-												+ "\n\n" + getString(R.string.msg_page_tried, data.getString("url"))
-												+ "\n\n" + getString(R.string.msg_try_full_page_if_not)
-								);
-								break;
 						}
-
-					} catch (Exception ignored) {
-						AppSettings.printerror("Error", ignored);
+					} catch (Exception e) {
+						AppSettings.printerror("Error", e);
 					}
 
 					// Hiding progress bar & message

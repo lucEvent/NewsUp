@@ -2,10 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/blockquote_top_bottom_margin"
     android:layout_marginLeft="@dimen/blockquote_side_margin"
-    android:layout_marginRight="@dimen/blockquote_side_margin"
     android:layout_marginTop="@dimen/blockquote_top_bottom_margin"
+    android:layout_marginRight="@dimen/blockquote_side_margin"
+    android:layout_marginBottom="@dimen/blockquote_top_bottom_margin"
     android:background="#feee"
     android:orientation="vertical"
     android:paddingBottom="@dimen/blockquote_top_bottom_padding" />

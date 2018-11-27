@@ -21,7 +21,7 @@ public class IGNEsSections extends Sections {
 		add(new Section("Cine", "https://es.ign.com/movies.xml", 0));
 		add(new Section("TV", "https://es.ign.com/tv.xml", 0));
 		add(new Section("Tech", "https://es.ign.com/tech.xml", 0));
-		add(new Section("Móviles", "https://es.ign.com/mobile.xml", 0));
+		add(new Section("M\u00F3viles", "https://es.ign.com/mobile.xml", 0));
 		add(new Section("Comics", "https://es.ign.com/comics.xml", 0));
 		add(new Section("eSports", "https://es.ign.com/esports.xml", 0));
 

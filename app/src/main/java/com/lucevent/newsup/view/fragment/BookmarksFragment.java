@@ -25,6 +25,7 @@ import com.lucevent.newsup.view.util.NUSearchBar;
 import com.lucevent.newsup.view.util.NewsAdapterList;
 import com.lucevent.newsup.view.util.NewsView;
 import com.lucevent.newsup.view.util.OnBackPressedListener;
+import com.lucevent.newsup.view.util.Utils;
 
 import java.util.Collection;
 
@@ -124,6 +125,11 @@ public class BookmarksFragment extends StoragePermissionFragment implements View
 	{
 		News news = (News) v.getTag();
 		KernelManager.readContentOf(news);
+
+		if (news.content == null || news.content.isEmpty()) {
+			Utils.openCustomTab(getActivity(), news);
+			return;
+		}
 
 		mDisplayingNews = true;
 		KernelManager.setNewsRead(news);

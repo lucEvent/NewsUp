@@ -6,6 +6,7 @@ import com.lucevent.newsup.backend.utils.Event;
 import com.lucevent.newsup.backend.utils.Poll;
 import com.lucevent.newsup.backend.utils.Report;
 import com.lucevent.newsup.backend.utils.Reports;
+import com.lucevent.newsup.backend.utils.SiteStatus;
 import com.lucevent.newsup.data.alert.Alert;
 import com.lucevent.newsup.data.util.Section;
 import com.lucevent.newsup.data.util.Sections;
@@ -24,6 +25,8 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
 
 public class DevelopmentServer extends HttpServlet {
 
+	private static final int DEVELOPER_HASH_CODE = -80680689;
+
 	@Override
 	public void init() throws ServletException
 	{
@@ -32,15 +35,23 @@ public class DevelopmentServer extends HttpServlet {
 	}
 
 	@Override
-	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
+	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 	{
-		processPetition(req, resp);
+		try {
+			processPetition(req, resp);
+		} catch (Exception e) {
+			Data.notifyException(req, e, "DevelopmentServlet");
+		}
 	}
 
 	@Override
-	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException
+	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 	{
-		processPetition(req, resp);
+		try {
+			processPetition(req, resp);
+		} catch (Exception e) {
+			Data.notifyException(req, e, "DevelopmentServlet");
+		}
 	}
 
 	private void processPetition(HttpServletRequest req, HttpServletResponse resp) throws IOException
@@ -50,10 +61,15 @@ public class DevelopmentServer extends HttpServlet {
 
 		if (req.getParameter("stats") != null) {
 
+			if (req.getParameter("reset") != null) {
+				String resetPassword = req.getParameter("pass");
+				if (resetPassword != null && resetPassword.hashCode() == DEVELOPER_HASH_CODE)
+					Data.stats.reset();
+			}
+
 			resp_stats(
 					req.getParameter("options"),
 					req.getParameter("only"),
-					req.getParameter("reset"),
 					resp
 			);
 
@@ -95,26 +111,16 @@ public class DevelopmentServer extends HttpServlet {
 				resp.getWriter().println("{\"result\":1}");
 			}
 
-		} else if (req.getParameter("osu") != null) {
-/*
-			String request = "vnexpress.net";
-			String name = "VnExpress";
-			String site_url = "https://vnexpress.net";
-			String rss_url = "https://vnexpress.net/rss/tin-moi-nhat.rss";
-			String icon = "https://scdn.vnecdn.net/vnexpress/restruct/i/v61/logos/114x114.png";
-			int info = 70465;
-			int color = 0xcccccc;
-			Data.requestedSites.createSite(request, name, site_url, rss_url, icon, info, color);
-*/
+		} else if (req.getParameter("new_status") != null) {
+
+			resp_new_status(req);
+
 		}
 
 	}
 
-	private void resp_stats(String options, String filters, String reset, HttpServletResponse resp) throws IOException
+	private void resp_stats(String options, String filters, HttpServletResponse resp) throws IOException
 	{
-		if (reset != null)
-			Data.stats.reset();
-
 		StringBuilder sb = new StringBuilder();
 		sb.append("{")
 				.append(BackendParser.json(Data.stats.getMonthStats()))
@@ -195,6 +201,8 @@ public class DevelopmentServer extends HttpServlet {
 		resp.getWriter().println(sb);
 	}
 
+	private static final long MAX_EVENT_TIME_ON = 12 * 60 * 60 * 1000; // 1/2 Day (ms)
+
 	private void resp_events(HttpServletResponse resp) throws IOException
 	{
 		List<Event> events = ofy().load().type(Event.class).list();
@@ -206,10 +214,10 @@ public class DevelopmentServer extends HttpServlet {
 					.append(E.visible)
 					.append("' imgsrc='")
 					.append(E.imgSrc)
-					.append("' start='")
-					.append(E.startTime)
+					.append("' start='")    //  // TODO: 31/10/2018 merge start and end and only send lastTime
+					.append(E.lastNewsTime)
 					.append("' end='")
-					.append(E.endTime)
+					.append(E.lastNewsTime + MAX_EVENT_TIME_ON)
 					.append("' sources='");
 
 			for (int i = 0; i < E.sites.length; i++) {
@@ -251,8 +259,7 @@ public class DevelopmentServer extends HttpServlet {
 				} else {
 					e.visible = newEvent.visible;
 					e.imgSrc = newEvent.imgSrc;
-					e.startTime = newEvent.startTime;
-					e.endTime = newEvent.endTime;
+					e.lastNewsTime = newEvent.lastNewsTime;
 					e.tags = newEvent.tags;
 					e.title = newEvent.title;
 					e.region_code = newEvent.region_code;
@@ -316,6 +323,37 @@ public class DevelopmentServer extends HttpServlet {
 
 		resp.setContentType("json");
 		resp.getWriter().println(sb);
+	}
+
+	private void resp_new_status(HttpServletRequest req)
+	{
+		int code = Integer.parseInt(req.getParameter("code"));
+		String name = req.getParameter("name");
+		int info = Integer.parseInt(req.getParameter("info"));
+
+		SiteStatus ss = SiteStatus.getInstance(code);
+		if (ss == null)
+			ss = SiteStatus.makeInstance(code, name, info);
+
+		ss.last_check_time = Long.parseLong(req.getParameter("check_time"));
+		ss.last_check_duration = Long.parseLong(req.getParameter("check_duration"));
+		ss.last_check_rounds = Integer.parseInt(req.getParameter("check_rounds"));
+		ss.current_num_news = Integer.parseInt(req.getParameter("num_news"));
+		ss.current_num_news_without_content = Integer.parseInt(req.getParameter("no_content"));
+
+		if (ss.status == SiteStatus.STATUS_WORKING) {
+
+			if (ss.current_num_news == 0 || (ss.current_num_news / 2) < ss.current_num_news_without_content)
+				ss.status = SiteStatus.STATUS_NOT_WORKING;
+
+		} else {
+
+			if (ss.current_num_news > 0 && (ss.current_num_news / 2) > ss.current_num_news_without_content)
+				ss.status = SiteStatus.STATUS_WORKING;
+
+		}
+
+		ss.save();
 	}
 
 }

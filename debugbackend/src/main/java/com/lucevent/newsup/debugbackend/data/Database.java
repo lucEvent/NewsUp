@@ -41,35 +41,9 @@ public class Database {
 				res.siteTestResults[i] = 0;
 			}
 
-			ofy().save().entity(res).now();
+			res.save();
 		}
 		return res;
-	}
-
-	public void newRound(Task task)
-	{
-		task.rounds++;
-		ofy().save().entity(task).now();
-	}
-
-	public void finish(Task task)
-	{
-		task.finishTime = System.currentTimeMillis();
-		ofy().save().entity(task).now();
-	}
-
-	public void save(Task data, boolean deferred)
-	{
-		if (deferred)
-			ofy().defer().save().entity(data);
-
-		else
-			ofy().save().entity(data).now();
-	}
-
-	public void savePartialResult(PartialTestResult ptr)
-	{
-		ofy().save().entity(ptr).now();
 	}
 
 	public void clearTestCache()

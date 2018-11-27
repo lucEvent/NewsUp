@@ -383,9 +383,8 @@ public class DBManager {
 	/**
 	 * *********************** INSERTS ************************
 	 **/
-	public void insertNews(News news)
+	private void fill(ContentValues values, News news)
 	{
-		ContentValues values = new ContentValues();
 		values.put(Database.id, news.id);
 		values.put(DBNews.site_code, news.site_code);
 		values.put(DBNews.title, news.title);
@@ -396,6 +395,12 @@ public class DBManager {
 		values.put(DBNews.tags, news.tags.toString());
 		values.put(DBNews.section_code, news.section_code);
 		values.put(DBNews.read_on, 0);
+	}
+
+	public void insertNews(News news)
+	{
+		ContentValues values = new ContentValues();
+		fill(values, news);
 
 		synchronized (this) {
 			SQLiteDatabase database = db.getWritableDatabase();
@@ -413,7 +418,12 @@ public class DBManager {
 
 		synchronized (this) {
 			SQLiteDatabase database = db.getWritableDatabase();
-			database.update(DBNews.db, values, Database.id + " = " + news.id, null);
+			if (database.update(DBNews.db, values, Database.id + " = " + news.id, null)
+					== 0) {
+				fill(values, news);
+				values.put(DBNews.read_on, news.readOn);
+				database.insert(DBNews.db, null, values);
+			}
 			values.clear();
 
 			Cursor cursor = database.query(DBReadings.db, DBReadings.cols,

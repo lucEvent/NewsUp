@@ -2,6 +2,7 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
 
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class DagensNyheter extends com.lucevent.newsup.data.util.NewsReader {
@@ -30,15 +31,29 @@ public class DagensNyheter extends com.lucevent.newsup.data.util.NewsReader {
 	@Override
 	protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
 	{
-		Elements imgs = doc.select(".article__header-img noscript");
-		Elements preamble = doc.select(".article__body .article__lead");
-		Elements content = doc.select(".article__body .article__body-content");
-		content.select("script,.ad-outer-container,.scrbbl-embed,.ad-container").remove();
-		content.select("[style]").removeAttr("style");
+		Elements article = doc.select(".article__img,.article__content");
+		if (article.isEmpty()) {
+			article = doc.select(".article__header-img,.article__body");
+			article.select(".article-toolbar,.byline,.article__widgets").remove();
 
-		cleanAttributes(content.select("img"), "src");
+			for (Element e : article.select(".image-box__container"))
+				e.html(e.select("noscript").html());
 
-		news.content = finalFormat(preamble, false) + imgs.html() + finalFormat(content, false);
+			article.select(".image-box__caption").tagName("figcaption");
+		}
+		article.select("time,.paywall,.sharing,.author-box,.tools,.ad,.article-teaser-list").remove();
+
+		article.select(".article__lead").tagName("h4");
+
+		for (Element fbox : article.select(".fact-box,.js-article-block")) {
+			fbox.tagName("blockquote");
+			fbox.select("hidden").remove();
+		}
+
+		article.select("div[style]").removeAttr("style");
+		cleanAttributes(article.select("img[src]"), "src");
+
+		news.content = finalFormat(article, false);
 	}
 
 }

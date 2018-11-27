@@ -49,7 +49,7 @@
     <string name="open_news">Öppna Nyheter</string>
     <string name="do_not_show_again">Visa inte igen</string>
     <string name="shortcut_select_label">Välj publikation</string>
-    <string name="lbl_site_search">· Sök exempel:\n\t\tthecanary.co\n\t\tthe ringer\n\n· NewsUp är en RSS-läsare, så sökningen visar bara publikationer som erbjuder RSS.\n\n· En google-sökning utförs för att hitta publikationswebbplatsen du letar efter; om sökningen inte lyckades, försök att skriva in hela webbplatsnamnet.\n\n· Den här funktionen är på test. Det kan ge bättre resultat för din sökning i framtiden.</string>
+    <string name="lbl_site_search">· Sök på webbplatsens namn eller länk\n\n· NewsUp är en RSS-läsare, så sökningen visar bara publikationer som erbjuder RSS.\n\n· Den här funktionen är på test. Det kan ge bättre resultat för din sökning i framtiden.</string>
     <string name="select_region">Välj region</string>
 
     <string name="mon">Mån</string>
@@ -132,10 +132,6 @@
     <string name="msg_clean_cache_remove_news">Radera nyheter…</string>
     <string name="msg_clean_cache_remove_images">Radera bilder…</string>
     <string name="msg_didnt_find_results">Det gick inte att hitta några resultat</string>
-    <string name="msg_page_not_found">· Det gick inte att komma åt den hittade webbsidan</string>
-    <string name="msg_page_tried">· Den hittades webbsidan var %s</string>
-    <string name="msg_try_full_page_if_not">· Försök att söka efter det fullständiga webbsidans namn om det inte är korrekt</string>
-    <string name="msg_rss_not_found">· RSS-support kunde inte hittas</string>
     <string name="msg_publication_not_supported">Denna publikation stöds inte längre av NewsUp</string>
     <string name="msg_content_could_not_be_loaded">Ups, innehållet kunde inte laddas</string>
     <string name="msg_confirm_to_download_image">Bekräfta att ladda ner bilden</string>
@@ -174,6 +170,8 @@
     <string name="pref_load_images_compact">Kompakt vy</string>
     <string name="pref_load_images_wifi_only">Endast Wi-Fi</string>
     <string name="pref_night_mode">Nattläge</string>
+    <string name="pref_open_links_in_app">Använd intern webbläsare</string>
+    <string name="pref_open_links_in_app_summary">Öppna externa länkar i appen</string>
 
     <!-- ***************************** ***************** ********************************** -->
     <string name="about_developed">Utvecklat av Rafael J. Lucena</string>

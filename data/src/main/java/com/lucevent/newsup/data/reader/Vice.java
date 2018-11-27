@@ -4,6 +4,7 @@ import com.lucevent.newsup.data.util.Date;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.parser.Parser;
 
 public class Vice extends com.lucevent.newsup.data.util.NewsReader {
 
@@ -56,6 +57,7 @@ public class Vice extends com.lucevent.newsup.data.util.NewsReader {
 			return org.jsoup.Jsoup.connect(url)
 					.userAgent(USER_AGENT)
 					.cookie("cookiewall", "yes")
+					.parser(Parser.xmlParser())
 					.get();
 		} catch (Exception ignored) {
 		}

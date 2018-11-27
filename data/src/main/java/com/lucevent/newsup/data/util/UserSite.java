@@ -4,11 +4,8 @@ import com.lucevent.newsup.data.reader.UserSiteReader;
 
 public class UserSite extends Site {
 
-	public static final int ERROR_IN_GOOGLE_SEARCH = 0;
-	public static final int ERROR_GETTING_PAGE = 1;
-	public static final int ERROR_RSS_NOT_FOUND = 2;
-	public static final int RSS_NOT_PRESENT = 3;
 	public static final int OK = 3;
+	public static final int ERROR_IN_FEEDLY_QUERY = 4;
 
 	public final String icon;
 
@@ -16,7 +13,9 @@ public class UserSite extends Site {
 
 	public UserSite(int code, String name, int color, String url, int info, String rssUrl, String icon)
 	{
-		super(code, name, color, url, info, Sections.class, UserSiteReader.class);
+		super(code, name, color, url,
+				(info >> SiteCountry.shift) & 0xff, (info >> SiteLanguage.shift) & 0xff, (info >> SiteCategory.shift) & 0xff,
+				Sections.class, UserSiteReader.class);
 		this.rssUrl = rssUrl;
 		this.icon = icon;
 	}

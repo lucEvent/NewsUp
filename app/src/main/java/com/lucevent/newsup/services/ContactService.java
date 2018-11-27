@@ -10,11 +10,12 @@ import android.os.IBinder;
 
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.kernel.AppCode;
+import com.lucevent.newsup.net.BackendNames;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 
-public class ContactService extends Service {
+public class ContactService extends Service implements BackendNames {
 
 	private final IBinder binder = new Binder();
 
@@ -60,7 +61,7 @@ public class ContactService extends Service {
 			{
 				try {
 
-					Connection.Response response = Jsoup.connect("http://newsup-2406.appspot.com/appv2?report")
+					Connection.Response response = Jsoup.connect(MAIN_APP_SERVER + "?report")
 							.method(Connection.Method.POST)
 							.postDataCharset("UTF-8")
 							.data("version", getString(R.string.app_version), "email", email, "message", message)

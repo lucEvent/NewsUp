@@ -19,6 +19,13 @@
             android:title="@string/pref_sites_settings" />
 
         <SwitchPreference
+            android:defaultValue="true"
+            android:enabled="false"
+            android:key="@string/pref_open_links_in_app_key"
+            android:summary="@string/pref_open_links_in_app_summary"
+            android:title="@string/pref_open_links_in_app" />
+
+        <SwitchPreference
             android:defaultValue="false"
             android:key="@string/pref_night_mode_key"
             android:title="@string/pref_night_mode" />

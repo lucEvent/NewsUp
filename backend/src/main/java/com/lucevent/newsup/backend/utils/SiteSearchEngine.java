@@ -6,9 +6,15 @@ import com.lucevent.newsup.data.util.SiteCountry;
 import com.lucevent.newsup.data.util.SiteLanguage;
 import com.lucevent.newsup.data.util.UserSite;
 
-import org.jsoup.Connection;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLEncoder;
 
 public class SiteSearchEngine {
 
@@ -26,62 +32,60 @@ public class SiteSearchEngine {
 
 	public static Response search(String request)
 	{
-		Elements dd;
+		JSONObject results;
 		try {
-			dd = getPage("http://www.google.com/search?start=0&num=4&q=" + request.replace(" ", "+")).select("cite");
+			String query_url = "https://feedly.com/v3/search/feeds?q=" + URLEncoder.encode(request, "utf-8") +
+					"&n=8&fullTerm=false&organic=true&promoted=true&locale=es-ES&useV2=true&ck="
+					+ System.currentTimeMillis() + "&ct=feedly.desktop&cv=31.0.228";
+			System.out.println(query_url);
+			results = new JSONObject(getUrl(query_url).toString());
 		} catch (Exception e) {
-			return new Response(UserSite.ERROR_IN_GOOGLE_SEARCH, "{\"error\":\"ERROR_IN_GOOGLE_SEARCH e.msg:" + e.getMessage() + "\"}");
+			e.printStackTrace();
+			return new Response(UserSite.ERROR_IN_FEEDLY_QUERY, "{\"error\":\"ERROR_IN_FEEDLY_QUERY e.msg:" + e.getMessage() + "\"}");
 		}
 
-		if (!dd.isEmpty()) {
-			request = dd.first().text();
-		} else {
-			request = request.toLowerCase().replace(" ", "");
-			if (!request.contains("."))
-				request = request + ".com";
-		}
-		if (request.endsWith("/"))
-			request = request.substring(0, request.length() - 1);
-
-		//  System.out.println("RS:" + request);
-
-		RequestedSite site = Data.getRequestedSite(request);
-		if (site == null) {
-			// First try HTTP
-			String site_url = request;
-			if (!request.startsWith("http"))
-				site_url = "http://" + site_url;
-
-			Document d;
+		StringBuilder sb = new StringBuilder("\"results\":[");
+		JSONArray elems = results.getJSONArray("results");
+		boolean needsComma = false;
+		for (int i = 0; i < elems.length(); i++) {
+			JSONObject json = (JSONObject) elems.get(i);
 			try {
-				d = getPage(site_url);
+				String name = new String(json.getString("title").getBytes(), "utf-8");
+				String site_url = json.getString("website");
+				System.out.println(site_url);
+				String rss_url = json.getString("feedId").substring(5);
+				String icon_url =
+						json.has("visualUrl") ?
+								json.getString("visualUrl") :
+								"";
+				int info = parseInfo(json.getString("language"), json.getJSONArray("deliciousTags"));
+				int color =
+						json.has("coverColor") ?
+								Integer.parseInt(json.getString("coverColor"), 16) :
+								-1;
+
+				RequestedSite site = Data.requestedSites.createSite(request, name, site_url, rss_url, icon_url, info, color);
+
+				if (needsComma)
+					sb.append(",");
+				else
+					needsComma = true;
+
+				sb.append("{\"code\":").append(site.code)
+						.append(",\"name\":\"").append(site.name)
+						.append("\", \"url\":\"").append(site.url)
+						.append("\", \"rss\":\"").append(site.rss_url)
+						.append("\", \"icon\":\"").append(site.icon_url)
+						.append("\", \"info\":\"").append(site.info)
+						.append("\", \"color\":").append(site.color)
+						.append("}");
 			} catch (Exception e) {
-				return new Response(UserSite.ERROR_GETTING_PAGE, errorToJsonString(request, site_url, "ERROR_GETTING_PAGE e.msg:" + e.getMessage()));
+				e.printStackTrace();
 			}
-
-			// extract info
-			String rss_url = extractRssUrl(d);
-			if (rss_url == null || rss_url.isEmpty()) {
-				return new Response(UserSite.ERROR_RSS_NOT_FOUND, errorToJsonString(request, site_url, "ERROR_RSS_NOT_FOUND"));
-			}
-			String icon = extractIcon(d);
-			int color = extractColor(d);
-			String name = extractName(d, request);
-			int info = SiteLanguage.VARIOUS | SiteCountry.VARIOUS | SiteCategory.NEWS;// TODO: 18/05/2018
-
-			site = Data.requestedSites.createSite(request, name, site_url, rss_url, icon, info, color);
 		}
+		sb.append("]");
 
-		String data =
-				"{\"code\":" + site.code +
-						",\"name\":\"" + site.name +
-						"\", \"url\":\"" + site.url +
-						"\", \"rss\":\"" + site.rss_url +
-						"\", \"icon\":\"" + site.icon_url +
-						"\", \"info\":\"" + site.info +
-						"\", \"color\":" + site.color + "}";
-
-		return new Response(UserSite.OK, data);
+		return new Response(UserSite.OK, sb.toString());
 	}
 
 	private static String errorToJsonString(String request, String site_url, String error)
@@ -93,69 +97,163 @@ public class SiteSearchEngine {
 				"}";
 	}
 
-	private static Document getPage(String url) throws Exception
+	public static StringBuilder getUrl(String url) throws IOException
 	{
-		return org.jsoup.Jsoup.connect(url)
-				.timeout(10000)
-				.userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36")
-				.referrer("http://www.google.com/")
-				//   .validateTLSCertificates(false)
-				.ignoreContentType(true)
-				.method(Connection.Method.GET)
-				.get();
+		BufferedReader in = new BufferedReader(new InputStreamReader(new URL(url).openStream()));
+
+		StringBuilder sb = new StringBuilder();
+		int len = 2048;
+		char[] buffer = new char[len];
+
+		while ((len = in.read(buffer, 0, len)) > 0)
+			sb.append(buffer, 0, len);
+
+		in.close();
+
+		return sb;
 	}
 
-	private static String extractIcon(Document d)
+	private static int parseInfo(String language, JSONArray tags) throws UnsupportedEncodingException
 	{
-		Elements icons = d.select("link[rel=icon],link[rel='shortcut icon']");
-		return icons.isEmpty() ? "" : icons.last().attr("href");
-	}
-
-	private static String extractRssUrl(Document d)
-	{
-		//<a href="https://www.lasprovincias.es/rss/" title="RSS">
-		Elements links = d.select("link[type='application/rss+xml']");
-		if (links.isEmpty()) {
-			return null;
+		int lang = SiteLanguage.VARIOUS;
+		switch (language) {
+			case "de":
+				lang = SiteLanguage.GERMAN;
+				break;
+			case "ar":
+				lang = SiteLanguage.ARABIC;
+				break;
+			case "bn":
+				lang = SiteLanguage.BENGALI;
+				break;
+			case "zh":
+				lang = SiteLanguage.CHINESE;
+				break;
+			case "ko":
+				lang = SiteLanguage.KOREAN;
+				break;
+			case "es":
+				lang = SiteLanguage.SPANISH;
+				break;
+			case "fi":
+				lang = SiteLanguage.FINNISH;
+				break;
+			case "fr":
+				lang = SiteLanguage.FRENCH;
+				break;
+			case "hi":
+				lang = SiteLanguage.HINDI;
+				break;
+			case "id":
+				lang = SiteLanguage.INDONESIAN;
+				break;
+			case "en":
+				lang = SiteLanguage.ENGLISH;
+				break;
+			case "it":
+				lang = SiteLanguage.ITALIAN;
+				break;
+			case "ja":
+				lang = SiteLanguage.JAPANESE;
+				break;
+			case "pt":
+				lang = SiteLanguage.PORTUGUESE;
+				break;
+			case "ru":
+				lang = SiteLanguage.RUSSIAN;
+				break;
+			case "sv":
+				lang = SiteLanguage.SWEDISH;
+				break;
+			case "ur":
+				lang = SiteLanguage.URDU;
+				break;
 		}
-		return links.first().attr("href");
-	}
 
-	private static int extractColor(Document d)
-	{
-		Elements colors = d.select("meta[name='theme-color']");
-		String color_s = colors.isEmpty() ? "" : colors.first().attr("content");
-		return color_s.isEmpty() ? /*0x8BC34A*/ -1 : Integer.parseInt(color_s.replace("#", ""), 16);
-	}
-
-	private static String extractName(Document d, String request)
-	{
-		Elements etitle = d.select("title");
-		if (etitle.isEmpty()) {
-			int last_dot_index = request.lastIndexOf(".");
-			String site_name = request.substring(0, last_dot_index == -1 ? request.length() : last_dot_index);
-			site_name = site_name.replace("http://", "").replace("https://", "").replace("www.", "");
-			return Character.toUpperCase(site_name.charAt(0)) + site_name.substring(1);
-		}
-
-		String title = etitle.first().text();
-		int c = title.indexOf("-");
-		if (c != -1)
-			title = title.substring(0, c).trim();
-		title = title.toLowerCase();
-		char[] letters = title.toCharArray();
-		boolean capitalize = true;
-		for (int i = 0; i < letters.length; i++) {
-			if (letters[i] == ' ') {
-				capitalize = true;
-				continue;
+		int cat = SiteCategory.NEWS;
+		for (int i = 0; i < tags.length(); i++) {
+			String tag = new String(tags.getString(i).getBytes(), "UTF-8");
+			System.out.println("tag:" + tag);
+			switch (tag) {
+				case "fashion":
+				case "moda":
+					cat = SiteCategory.FASHION;
+					break;
+				case "politics":
+				case "política":
+					cat = SiteCategory.POLITICS;
+					break;
+				case "sport":
+				case "sports":
+				case "deporte":
+					cat = SiteCategory.SPORTS;
+					break;
+				case "bloggar":
+					cat = SiteCategory.BLOG;
+					break;
+				case "cultura":
+					cat = SiteCategory.CULTURE;
+					break;
+				case "economia":
+					cat = SiteCategory.ECONOMY;
+					break;
+				case "fitness":
+				case "salud":
+					cat = SiteCategory.HEALTH_AND_FITNESS;
+					break;
+				case "lifestyle":
+					cat = SiteCategory.LIFESTYLE;
+					break;
+				case "gastronomia":
+					cat = SiteCategory.GASTRONOMY;
+					break;
+				case "music":
+				case "música":
+					cat = SiteCategory.MUSIC;
+					break;
+				case "games":
+					cat = SiteCategory.VIDEOGAMES;
+					break;
 			}
-			if (capitalize) {
-				letters[i] = Character.toUpperCase(letters[i]);
-				capitalize = false;
+		}
+
+		int country = SiteCountry.VARIOUS;
+		for (int i = 0; i < tags.length(); i++) {
+			String tag = new String(tags.getString(i).getBytes(), "UTF-8");
+			switch (tag) {
+				case "uk":
+					country = SiteCountry.UK;
+					break;
+				case "sverige":
+				case "sweden":
+					country = SiteCountry.SWEDEN;
+					break;
+				case "catalunya":
+				case "notícies":
+					lang = SiteLanguage.CATALAN;
+					country = SiteCountry.SPAIN;
+					break;
+				case "colombia":
+					country = SiteCountry.COLOMBIA;
+					break;
+				case "japan":
+					country = SiteCountry.JAPAN;
+					break;
+				case "india":
+					country = SiteCountry.INDIA;
+					break;
+				case "indonesia":
+					country = SiteCountry.INDONESIA;
+					break;
+				case "portugal":
+					country = SiteCountry.PORTUGAL;
+					break;
+				case "russia":
+					country = SiteCountry.RUSSIA;
+					break;
 			}
 		}
-		return new String(letters);
+		return (lang << SiteLanguage.shift) | (country << SiteCountry.shift) | (cat << SiteCategory.shift);
 	}
 
 }

@@ -11,7 +11,7 @@ import java.util.Locale;
 import java.util.Random;
 import java.util.TreeSet;
 
-public class AlertReader implements AlertCode {
+public class AlertReader implements AlertCode, BackendNames {
 
 	private final String mAppVersion;
 
@@ -24,7 +24,7 @@ public class AlertReader implements AlertCode {
 	{
 		try {
 			StringBuilder sb = RawContentReader.getUrl(
-					"http://newsup-2406.appspot.com/appv2?alerts&lang=" + Locale.getDefault().getLanguage() + "&v=" + mAppVersion
+					MAIN_APP_SERVER + "?alerts=" + Locale.getDefault().getLanguage() + "&v=" + mAppVersion
 			);
 
 			JSONArray json = new JSONArray(sb.toString());

@@ -23,7 +23,6 @@ public class DagensNyheterSections extends Sections {
 
 		add(new Section("Sport", "https://www.dn.se/rss/sport/", 0));
 		add(new Section("Ishockey", "https://www.dn.se/rss/sport/ishockey/", 1));
-		add(new Section("Fotboll", "https://www.dn.se/rss/sport/fotboll/", 1));
 
 		add(new Section("Kultur", "https://www.dn.se/rss/kultur-noje/", 0));
 		add(new Section("Bok", "https://www.dn.se/rss/dnbok/", 1));
@@ -31,8 +30,6 @@ public class DagensNyheterSections extends Sections {
 		add(new Section("Film - TV", "https://www.dn.se/rss/kultur-noje/film-tv/", 1));
 		add(new Section("Musik", "https://www.dn.se/rss/kultur-noje/musik/", 1));
 		add(new Section("Scen", "https://www.dn.se/rss/kultur-noje/scen/", 1));
-
-		add(new Section("\u00C5sikt", "https://asikt.dn.se/feed/", 0));
 
 	}
 

@@ -1,6 +1,13 @@
 package com.lucevent.newsup.view.activity;
 
+import android.app.Activity;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -12,6 +19,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.ViewPager;
 import android.util.TypedValue;
+import android.view.Display;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -23,6 +31,7 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.CheckBox;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -181,6 +190,9 @@ public class HandsFreeNewsViewActivity extends FragmentActivity implements
 	{
 		mProgressBar.setMax((mHeadlinesPagerAdapter.getCount() - 1) * 100);
 		mProgressBar.setProgress(position * 100);
+
+		if (position == mHeadlinesPagerAdapter.getCount() - 1)
+			finish();
 	}
 
 	boolean dragging = false;
@@ -378,6 +390,9 @@ public class HandsFreeNewsViewActivity extends FragmentActivity implements
 		@Override
 		public Fragment getItem(int i)
 		{
+			if (/*i==0 ||*/i == getCount() - 1)
+				return new DummyFragment();
+
 			Fragment fragment = new HeadlineFragment();
 			Bundle args = new Bundle();
 			args.putInt(HeadlineFragment.ARG_ITEM, i);
@@ -389,7 +404,7 @@ public class HandsFreeNewsViewActivity extends FragmentActivity implements
 		public int getCount()
 		{
 			int size = mNews.size();
-			return mNews.get(size - 1).id == News.ID_DUMMY ? size - 1 : size;
+			return (mNews.get(size - 1).id == News.ID_DUMMY ? size - 1 : size) + 1;
 		}
 
 		@Override
@@ -443,8 +458,62 @@ public class HandsFreeNewsViewActivity extends FragmentActivity implements
 				Glide.with(this)
 						.applyDefaultRequestOptions(glideOptions)
 						.load(news.imgSrc)
-						.into(mIVimage);
+						.into(mIVimage)
+						.onLoadFailed(getNoImageDrawable());
+			else
+				mIVimage.setImageDrawable(getNoImageDrawable());
 
+			return v;
+		}
+
+		private static Drawable mNoImageDrawable = null;
+
+		private Drawable getNoImageDrawable()
+		{
+			if (mNoImageDrawable == null) {
+				Activity activity = getActivity();
+				Resources res = activity.getResources();
+
+				// Getting screen width
+				Display display = activity.getWindowManager().getDefaultDisplay();
+				Point size = new Point();
+				display.getSize(size);
+				int width = size.x;
+
+				// Setting paint
+				Paint p = new Paint();
+				p.setStrokeWidth(4);
+				p.setColor(res.getColor(R.color.default_text));
+				p.setStyle(Paint.Style.STROKE);
+
+				int bgColor = res.getColor(R.color.colorPrimary);
+				int framePadding = 40;
+
+				// Drawing canvas
+				Bitmap bm = Bitmap.createBitmap(width, HEADLINE_IMAGE_HEIGHT, Bitmap.Config.RGB_565);
+				Canvas c = new Canvas(bm);
+				c.drawARGB(0xff, (bgColor >> 16) & 0xff, (bgColor >> 8) & 0xff, bgColor & 0xff);
+				c.drawRect(framePadding, framePadding, width - framePadding, HEADLINE_IMAGE_HEIGHT - framePadding, p);
+
+				// Drawing text
+				p.setStyle(Paint.Style.FILL);
+				p.setTextAlign(Paint.Align.CENTER);
+				p.setTextSize(48);
+				c.drawText(res.getText(R.string.msg_no_image).toString(), width / 2, HEADLINE_IMAGE_HEIGHT / 2, p);
+
+				mNoImageDrawable = new BitmapDrawable(getResources(), bm);
+			}
+			return mNoImageDrawable;
+		}
+	}
+
+	public static class DummyFragment extends Fragment {
+		@Override
+		public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+		{
+			View v = new FrameLayout(inflater.getContext());
+			v.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+			v.setBackgroundColor(0x00000000);
 			return v;
 		}
 	}

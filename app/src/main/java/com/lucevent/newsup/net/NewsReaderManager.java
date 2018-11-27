@@ -436,14 +436,21 @@ public class NewsReaderManager {
 				AppSettings.printerror("Error reading content (in device) of " + news.link, e);
 			}
 		}
+
+		if (!news.content.isEmpty() && news.imgSrc == null)
+			news.forceImage();
 	}
 
 	public void readNow(Site site, News news)
 	{
 		site.readNewsContent(news);
 
-		if (!news.content.isEmpty())
+		if (!news.content.isEmpty()) {
+			if (news.imgSrc == null)
+				news.forceImage();
+
 			mDB.save(news);
+		}
 	}
 
 	private int[] sectionIndexesToCodes(Site site, int[] indexes)

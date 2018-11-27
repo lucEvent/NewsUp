@@ -49,7 +49,7 @@
     <string name="open_news">Obrir notícia</string>
     <string name="do_not_show_again">No tornar a mostrar</string>
     <string name="shortcut_select_label">Triar publicació</string>
-    <string name="lbl_site_search">· Exemple de cerca:\n\t\tthecanary.co\n\t\tcatalunya diari\n\n· NewsUp és un lector d\'RSS, així que la cerca només mostrarà publicacions que ofereixin RSS.\n\n· Es cercarà a google la pàgina web de la publicació que cerques; si no hi han resultats, prova a cercar el nom complert de la pàgina web.\n\n· Aquesta funció està en desenvolupament. Pot ser que ofereixi millors resultats en el futur.</string>
+    <string name="lbl_site_search">· Cerca per nom o enllaç de la publicació/pàgina web\n\n· NewsUp és un lector d\'RSS, així que la cerca només mostrarà publicacions que ofereixin RSS.\n\n· Aquesta funció està en desenvolupament. Pot ser que ofereixi millors resultats en el futur.</string>
     <string name="select_region">Selecciona la regió</string>
 
     <string name="mon">Dl</string>
@@ -132,10 +132,6 @@
     <string name="msg_clean_cache_remove_news">Eliminant notícies…</string>
     <string name="msg_clean_cache_remove_images">Eliminant imatges…</string>
     <string name="msg_didnt_find_results">No s\'han trobat resultats</string>
-    <string name="msg_page_not_found">· No s\'ha pogut accedir a la pàgina trobada</string>
-    <string name="msg_page_tried">· La pàgina trobada és %s</string>
-    <string name="msg_try_full_page_if_not">· Intenta cercar pel nom complert de la pàgina web si aquesta no és correcta</string>
-    <string name="msg_rss_not_found">· No s\'ha trobat suport per a RSS</string>
     <string name="msg_publication_not_supported">Aquesta publicació ja no està disponible a NewsUp</string>
     <string name="msg_content_could_not_be_loaded">Ups, no s\'ha pogut carregar el contingut</string>
     <string name="msg_confirm_to_download_image">Confirma per descarregar la imatge</string>
@@ -174,6 +170,8 @@
     <string name="pref_load_images_compact">Vista compacta</string>
     <string name="pref_load_images_wifi_only">Només amb Wi-Fi</string>
     <string name="pref_night_mode">Mode nocturn</string>
+    <string name="pref_open_links_in_app">Utilitzar navegador intern</string>
+    <string name="pref_open_links_in_app_summary">Obre enllaços externs a l\'aplicació</string>
 
     <!-- ***************************** ***************** ********************************** -->
     <string name="about_developed">Desenvolupat per Rafael J. Lucena</string>

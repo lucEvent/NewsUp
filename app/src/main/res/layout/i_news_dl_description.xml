@@ -3,9 +3,10 @@
     style="@style/newsTextStyle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="@dimen/paragraph_bottom_padding"
     android:paddingLeft="@dimen/side_padding"
-    android:paddingRight="@dimen/side_padding"
     android:paddingTop="@dimen/paragraph_top_padding"
+    android:paddingRight="@dimen/side_padding"
+    android:paddingBottom="@dimen/paragraph_bottom_padding"
     android:text="DL Description"
+    android:textIsSelectable="true"
     android:textSize="@dimen/text_normal_size" />

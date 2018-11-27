@@ -19,6 +19,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.R;
@@ -101,25 +102,44 @@ public class StatisticsFragment extends android.app.Fragment {
 		super.onCreateOptionsMenu(menu, inflater);
 	}
 
+	private EditText mResetPasswordEditText;
+
 	private MenuItem.OnMenuItemClickListener onResetAction = new MenuItem.OnMenuItemClickListener() {
 		@Override
 		public boolean onMenuItemClick(MenuItem item)
 		{
 			if (service.isInternetAvailable()) {
-				new AlertDialog.Builder(getActivity())
-						.setMessage(R.string.msg_confirm_to_reset_statistics)
+				Context c = getActivity();
+
+				View view = LayoutInflater.from(c).inflate(R.layout.v_dialog_password, null, false);
+				mResetPasswordEditText = (EditText) view.findViewById(R.id.input);
+				new AlertDialog.Builder(c)
+						.setView(view)
 						.setNegativeButton(R.string.cancel, null)
-						.setPositiveButton(R.string.reset, new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialogInterface, int i)
-							{
-								service.resetStatistics(mHandler);
-							}
-						})
+						.setPositiveButton(R.string.ok, onResetActionPasswordEntered)
 						.show();
 			} else
 				notifyNoInternet();
 			return true;
+		}
+	};
+
+	private DialogInterface.OnClickListener onResetActionPasswordEntered = new DialogInterface.OnClickListener() {
+
+		@Override
+		public void onClick(DialogInterface dialog, int which)
+		{
+			new AlertDialog.Builder(getActivity())
+					.setMessage(R.string.msg_confirm_to_reset_statistics)
+					.setNegativeButton(R.string.cancel, null)
+					.setPositiveButton(R.string.reset, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialogInterface, int i)
+						{
+							service.resetStatistics(mHandler, mResetPasswordEditText.getText().toString());
+						}
+					})
+					.show();
 		}
 	};
 

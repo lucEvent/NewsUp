@@ -16,6 +16,7 @@ import com.lucevent.newsup.kernel.KernelManager;
 import com.lucevent.newsup.kernel.stats.SiteStat;
 import com.lucevent.newsup.kernel.stats.SiteStats;
 import com.lucevent.newsup.kernel.stats.Statistics;
+import com.lucevent.newsup.net.BackendNames;
 import com.lucevent.newsup.view.fragment.StatisticsFragment;
 
 import org.json.JSONArray;
@@ -26,7 +27,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class StatisticsService extends Service {
+public class StatisticsService extends Service implements BackendNames {
 
 	public static final int REQ_GET = 0;
 	public static final int REQ_RESET = 1;
@@ -62,7 +63,7 @@ public class StatisticsService extends Service {
 			case REQ_GET:
 				getStatistics(null, StatisticsFragment.SortOrder.SORT_BY_NAME);
 			case REQ_RESET:
-				resetStatistics(null);
+				resetStatistics(null, "");
 				break;
 			case REQ_SEND:
 				sendUpdate();
@@ -92,22 +93,22 @@ public class StatisticsService extends Service {
 			@Override
 			public void run()
 			{
-				String url = "";
+				String url = DEVELOPER_APP_SERVER + "?stats&options=";
 				switch (order) {
 					case SORT_BY_NAME:
-						url = "http://newsup-2406.appspot.com/dev?stats&options=s";
+						url += "s";
 						break;
 					case SORT_BY_TOTAL_REQUESTS:
-						url = "http://newsup-2406.appspot.com/dev?stats&options=n";
+						url += "n";
 						break;
 					case SORT_BY_MONTH_REQUESTS:
-						url = "http://newsup-2406.appspot.com/dev?stats&options=m";
+						url += "m";
 						break;
 					case SORT_BY_READINGS:
-						url = "http://newsup-2406.appspot.com/dev?stats&options=r";
+						url += "r";
 						break;
 					case SORT_BY_TIME:
-						url = "http://newsup-2406.appspot.com/dev?stats&options=t";
+						url += "t";
 				}
 
 				try {
@@ -144,14 +145,14 @@ public class StatisticsService extends Service {
 		}).start();
 	}
 
-	public void resetStatistics(final Handler handler)
+	public void resetStatistics(final Handler handler, final String resetPassword)
 	{
 		new Thread(new Runnable() {
 			@Override
 			public void run()
 			{
 				try {
-					JSONObject json = new JSONObject(fetch("http://newsup-2406.appspot.com/dev?stats&reset"));
+					JSONObject json = new JSONObject(fetch(DEVELOPER_APP_SERVER + "?stats&reset&pass=" + resetPassword));
 					json = json.getJSONObject("stats");
 
 					long since = json.getLong("since");
@@ -194,7 +195,7 @@ public class StatisticsService extends Service {
 					ArrayList<Pair<Integer, Integer>> readingStats = manager.getTempReadingStats();
 
 					if (!readingStats.isEmpty()) {
-						StringBuilder url = new StringBuilder("http://newsup-2406.appspot.com/appv2?notify&values=");
+						StringBuilder url = new StringBuilder(MAIN_APP_SERVER + "?notify&values=");
 						for (Pair<Integer, Integer> pair : readingStats) {
 							url.append(pair.first).append(",")
 									.append(pair.second).append(",");
@@ -217,7 +218,7 @@ public class StatisticsService extends Service {
 			@Override
 			public void run()
 			{
-				String url = "http://newsup-2406.appspot.com/appv2?notifyevent=" + event_code + "&v=" + getString(R.string.app_version);
+				String url = MAIN_APP_SERVER + "?notifyevent=" + event_code + "&v=" + getString(R.string.app_version);
 				try {
 					URL request = new URL(url);
 					request.openStream().close();

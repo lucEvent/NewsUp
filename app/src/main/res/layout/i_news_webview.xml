@@ -2,5 +2,5 @@
 <WebView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/paragraph_bottom_padding"
-    android:layout_marginTop="@dimen/paragraph_top_padding" />
+    android:layout_marginTop="@dimen/paragraph_top_padding"
+    android:layout_marginBottom="@dimen/paragraph_bottom_padding" />

@@ -106,7 +106,7 @@ public class KernelManager implements StorageCallback {
 		for (int code : favorite_codes) {
 			Site s = AppData.getSiteByCode(code);
 			if (s == null)
-				AppSettings.toggleFavorite(new Site(code, "", 0, "", 0, null, null), false);
+				AppSettings.toggleFavorite(Site.getDummy(code), false);
 			else res.add(s);
 		}
 		return res;

@@ -22,8 +22,6 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
 
 public class EventFinder {
 
-	private static final String QUERY_IMAGE = "https://www.google.com/search?q=%s&source=lnms&tbm=isch";
-
 	private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36";
 
 	private interface EventExtractor {
@@ -32,9 +30,9 @@ public class EventFinder {
 	}
 
 	// ignored words which length > 1
-	private static final String[] ES_IGNORED_WORDS = {"la", "las", "lo", "los", "el", "un", "una", "del", "ante", "bajo", "cabe", "con", "contra", "de", "desde", "en", "entre", "hacia", "hasta", "para", "por", "según", "sin", "so", "sobre", "tras"};
-	private static final String[] EN_IGNORED_WORDS = {"a", "about", "all", "also", "and", "as", "at", "be", "because", "but", "by", "can", "come", "could", "day", "do", "even", "find", "first", "for", "from", "get", "give", "go", "have", "he", "her", "here", "him", "his", "how", "I", "if", "in", "into", "it", "its", "just", "know", "like", "look", "make", "man", "many", "me", "more", "my", "new", "no", "not", "now", "of", "on", "one", "only", "or", "other", "our", "out", "people", "say", "see", "she", "so", "some", "take", "tell", "than", "that", "the", "their", "them", "then", "there", "these", "they", "thing", "think", "this", "those", "time", "to", "two", "up", "use", "very", "want", "way", "we", "well", "what", "when", "which", "who", "will", "with", "would", "year", "you", "your"};
-	private static final String[] CA_IGNORED_WORDS = {};
+	private static final String[] ES_IGNORED_WORDS = {"la", "las", "lo", "los", "el", "un", "una", "unos", "unas", "del", "ante", "bajo", "cabe", "con", "contra", "de", "desde", "en", "entre", "hacia", "hasta", "para", "por", "según", "sin", "so", "sobre", "tras", "día", "días", "mes", "meses", "año", "años"};
+	private static final String[] EN_IGNORED_WORDS = {"a", "about", "all", "also", "and", "as", "at", "be", "because", "but", "by", "can", "come", "could", "day", "days", "do", "even", "find", "first", "for", "from", "get", "give", "go", "have", "he", "her", "here", "him", "his", "how", "I", "if", "in", "into", "it", "its", "just", "know", "like", "look", "make", "man", "many", "me", "month", "months", "more", "my", "new", "no", "not", "now", "of", "on", "one", "only", "or", "other", "our", "out", "people", "say", "see", "she", "so", "some", "take", "tell", "than", "that", "the", "their", "them", "then", "there", "these", "they", "thing", "think", "this", "those", "time", "to", "two", "up", "use", "very", "want", "way", "we", "well", "what", "when", "which", "who", "will", "with", "would", "year", "years", "you", "your"};
+	private static final String[] CA_IGNORED_WORDS = {"la", "les", "el", "lo", "els", "un", "una", "uns", "unes", "del", "a", "amb", "arran", "cap", "contra", "d'", "dalt", "damunt", "davall", "de", "deçà", "dellà", "des", "devers", "devora", "dintre", "durant", "en", "entre", "envers", "excepte", "fins", "llevat", "malgrat", "mitjançant", "per", "pro", "salvant", "salvat", "segons", "sens", "sense", "sobre", "sota", "sots", "tret", "ultra", "via", "dia", "dies", "mes", "mesos", "any", "anys"};
 	private static final String[] SV_IGNORED_WORDS = {};
 
 	private static final int[][] ES_SOURCES = {
@@ -86,7 +84,7 @@ public class EventFinder {
 
 	public ArrayList<Event> find()
 	{
-		ArrayList<Event> tts_es = findEvents("es", "es", "es_es", "https://www.20minutos.es/", new EventExtractor() {
+		ArrayList<Event> evs_es = findEvents("es", "es", "es_es", "https://www.20minutos.es/", new EventExtractor() {
 			@Override
 			public ArrayList<String> getTopics(Document d)
 			{
@@ -99,38 +97,59 @@ public class EventFinder {
 				return res;
 			}
 		});
+		findNews(evs_es);
 
-		findNews(tts_es);
-
-		ArrayList<Event> tts_uk = findEvents("uk", "en", "en_uk", "https://www.theguardian.com/uk", new EventExtractor() {
+		ArrayList<Event> evs_uk = findEvents("uk", "en", "en_gb", "https://www.theguardian.com/uk", new EventExtractor() {
 			@Override
 			public ArrayList<String> getTopics(Document d)
 			{
 				Elements elems = d.select("[data-title='Headlines'] .fc-item__kicker");
 
 				ArrayList<String> res = new ArrayList<>(elems.size());
-				for (Element e : elems) {
+				for (Element e : elems)
 					res.add(e.text());
-				}
+
 				return res;
 			}
 		});
+		findNews(evs_uk);
 
-		findNews(tts_es);
+		ArrayList<Event> evs_cat = findEvents("cat", "ca", "ca_es", "https://www.ara.cat", new EventExtractor() {
+			@Override
+			public ArrayList<String> getTopics(Document d)
+			{
+				Elements elems = d.select("em.tx");
 
-		tts_es.addAll(tts_uk);
-		return tts_es;
+				ArrayList<String> res = new ArrayList<>(4);
+				for (int i = 1; i < Math.min(5, elems.size()); i++)
+					res.add(elems.get(i).text());
+
+				return res;
+			}
+		});
+		findNews(evs_cat);
+
+		evs_es.addAll(evs_uk);
+		evs_es.addAll(evs_cat);
+		return evs_es;
 	}
 
 	private void findNews(ArrayList<Event> tts)
 	{
-		int n_source = tts == null || tts.isEmpty() ? 0 : tts.get(0).sites.length;
-		for (int i = 0; i < n_source; i++) {
+		if (tts == null || tts.isEmpty())
+			return;
+
+		boolean[] hasNews = new boolean[tts.size()];
+		for (int i = 0; i < hasNews.length; i++)
+			hasNews[i] = false;
+
+		for (int i = 0; i < tts.get(0).sites.length; i++) {
 			Site site = Data.getSite(tts.get(0).sites[i].site_code);
 
 			NewsArray news = site.readNewsHeaders(tts.get(0).sites[i].section_codes);
 			for (News n : news)
-				for (Event e : tts) {
+				for (int ie = 0; ie < tts.size(); ie++) {
+					Event e = tts.get(ie);
 					if (n.hasKeyWords(e.tags)) {
 
 						if (ofy().load().type(EventNews.class)
@@ -138,6 +157,13 @@ public class EventFinder {
 								.filter("site_code", site.code)
 								.filter("link", n.link)
 								.count() == 0) {
+
+							hasNews[ie] = true;
+
+							if (e.lastNewsTime < n.date)
+								e.lastNewsTime = n.date;
+							if (e.imgSrc == null || e.imgSrc.isEmpty())
+								e.imgSrc = n.imgSrc;
 
 							EventNews en = new EventNews();
 							en.id = n.id * e.code;
@@ -157,6 +183,11 @@ public class EventFinder {
 					}
 				}
 		}
+
+		// Removing Events without news found
+		for (int i = tts.size() - 1; i >= 0; i--)
+			if (!hasNews[i])
+				tts.remove(i);
 	}
 
 	private ArrayList<Event> findEvents(String countryCode, String langCode, String regionCode, String url, EventExtractor eventExtractor)
@@ -186,26 +217,7 @@ public class EventFinder {
 			events.add(e);
 		}
 
-		// Getting images
-		for (int i = 0; i < tts.size(); i++) {
-			final String tt = tts.get(i).replace(" ", "+");
-
-			d = getDocument(String.format(QUERY_IMAGE, tt), true);
-			if (d == null) {
-				//	System.out.println("Doc is null");
-				continue;
-			}
-
-			Elements imgCon = d.select(".rg_meta");
-			if (imgCon.isEmpty())
-				continue;
-
-			events.get(i).imgSrc = findSubstringBetween(imgCon.get(0).text(), "\"ou\":\"", "\"", false);
-		}
-
 		// Setting codes, dates, descriptions
-		long startDate = System.currentTimeMillis();
-		long endDate = startDate + 12 * 60 * 60 * 1000; // startDate + 1/2 Day
 		Event.EventSite[] siteSources = getSources(countryCode);
 		for (int i = 0; i < tts.size(); i++) {
 			Event e = events.get(i);
@@ -213,8 +225,7 @@ public class EventFinder {
 
 			e.code = 20000 + (tt.hashCode() % 10000);
 			e.region_code = regionCode;
-			e.startTime = startDate - i;
-			e.endTime = endDate + i;
+			e.lastNewsTime = -1;
 			e.title = tt;
 			e.sites = siteSources;
 			e.visible = true;

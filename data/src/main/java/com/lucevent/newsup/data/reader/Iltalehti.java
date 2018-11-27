@@ -3,6 +3,7 @@ package com.lucevent.newsup.data.reader;
 import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class Iltalehti extends com.lucevent.newsup.data.util.NewsReader {
@@ -31,10 +32,24 @@ public class Iltalehti extends com.lucevent.newsup.data.util.NewsReader {
 			article.select(".article__image__preview").remove();
 
 			article.select(".article__description").tagName("strong");
-			article.select(".article__image__info").tagName("figcaption");
+			article.select(".article__image__info,.media-caption").tagName("figcaption");
 
 			cleanAttributes(article.select(".article__image,.article__image__container"));
 			cleanAttributes(article.select("img[src]"), "src");
+
+
+			Element aux = new Element(org.jsoup.parser.Tag.valueOf("p"), "");
+			for (Element iframe : article.select("iframe[srcdoc]")) {
+
+				Elements r = aux.html(iframe.attr("srcdoc")).select("iframe");
+
+				if (!r.isEmpty())
+					iframe.parent().html(insertIframe(
+							r.attr("src")
+					));
+				else
+					iframe.parent().remove();
+			}
 
 			news.content = finalFormat(article, true);
 		}

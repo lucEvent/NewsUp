@@ -11,7 +11,7 @@ public class PeopleSections extends Sections {
 
 		add(new Section("Home", "https://people.com/feed/", 0));
 		add(new Section("Celebrity", "https://people.com/celebrity/feed/", 0));
-		add(new Section("Photos", "https://people.com/photos/feed/", 0));
+		add(new Section("Photos", "https://people.com/tag/photos/feed/", 0));
 		add(new Section("Style", "https://people.com/style/feed/", 0));
 		add(new Section("Fashion", "https://people.com/fashion/feed/", 0));
 		add(new Section("Beauty", "https://people.com/beauty/feed/", 0));

@@ -1,12 +1,12 @@
 package com.lucevent.newsup.view.adapter.viewholder.news;
 
 import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
 
 import com.lucevent.newsup.parse.NewsElement;
+import com.lucevent.newsup.view.util.CustomMovementMethod;
 
 public class NewsTextViewHolder extends NewsElementViewHolder {
 
@@ -35,7 +35,7 @@ public class NewsTextViewHolder extends NewsElementViewHolder {
 				mTextSizeValues = FONT_SIZE_SMALL_VALUES;
 				break;
 		}
-		((TextView) itemView).setMovementMethod(LinkMovementMethod.getInstance());
+		((TextView) itemView).setMovementMethod(new CustomMovementMethod());
 	}
 
 	@Override

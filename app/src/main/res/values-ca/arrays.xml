@@ -226,15 +226,15 @@
         <item>8</item>
         <item>69</item>
     </integer-array>
-    <string-array name="event_co_titles">
-        <!--<item>Catalunya</item>-->
+    <string-array name="event_region_titles">
+        <item>Catalunya</item>
         <item>Espanya</item>
         <item>UK</item>
         <!--<item>USA</item>-->
         <!--<item>Suècia</item>-->
     </string-array>
-    <string-array name="event_co_codes">
-        <!--<item>ca_es</item>-->
+    <string-array name="event_region_codes">
+        <item>ca_es</item>
         <item>es_es</item>
         <item>en_gb</item>
         <!--<item>en_us</item>-->

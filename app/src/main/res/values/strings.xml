@@ -1,7 +1,7 @@
 <resources>
 
     <string name="app_name" translatable="false">NewsUp</string>
-    <string name="app_version" translatable="false">2.8.1</string>
+    <string name="app_version" translatable="false">2.8.2.g</string>
     <string name="default_font" translatable="false">sans-serif-light</string>
 
     <string name="about_developed">Developed by Rafael J. Lucena</string>
@@ -62,7 +62,7 @@
     <string name="open_news">Open News</string>
     <string name="do_not_show_again">Don\'t show again</string>
     <string name="shortcut_select_label">Select publication</string>
-    <string name="lbl_site_search">· Search examples:\n\t\tthecanary.co\n\t\tthe ringer\n\n· NewsUp is an RSS reader app, thus the search will only show publications which offer RSS.\n\n· A google search is performed to find the publication website that you are looking for, if the search is not successful, try entering the full website name.\n\n· This feature is incubating. It might offer better results for your search in the future.</string>
+    <string name="lbl_site_search">· Search by website/publication name or link\n\n· NewsUp is an RSS reader app, thus the search will only show publications which offer RSS.\n\n· This feature is incubating. It might offer better results in next updates.</string>
     <string name="select_region">Select region</string>
 
     <string name="mon">Mon</string>
@@ -145,10 +145,6 @@
     <string name="msg_clean_cache_remove_news">Removing news…</string>
     <string name="msg_clean_cache_remove_images">Removing images…</string>
     <string name="msg_didnt_find_results">Couldn\'t find any results</string>
-    <string name="msg_page_not_found">· Couldn\'t access the found web page</string>
-    <string name="msg_page_tried">· The web page found was %s</string>
-    <string name="msg_try_full_page_if_not">· Try searching for the full web page name if this isn\'t correct</string>
-    <string name="msg_rss_not_found">· RSS support was not found</string>
     <string name="msg_publication_not_supported">This publication is no longer supported by NewsUp</string>
     <string name="msg_content_could_not_be_loaded">Ups, the content couldn\'t be loaded</string>
     <string name="msg_confirm_to_download_image">Confirm to download this image</string>
@@ -187,6 +183,8 @@
     <string name="pref_load_images_compact">Compact view</string>
     <string name="pref_load_images_wifi_only">Wi-Fi only</string>
     <string name="pref_night_mode">Night mode</string>
+    <string name="pref_open_links_in_app">In-App Browser</string>
+    <string name="pref_open_links_in_app_summary">Open external links within the app</string>
 
     <string name="pref_main_sites_key" translatable="false">app_pref1</string>
     <string name="pref_favorite_sites_key" translatable="false">app_pref2</string>
@@ -199,6 +197,7 @@
     <string name="pref_load_images_compact_key" translatable="false">app_pref10</string>
     <string name="pref_load_images_wifi_only_key" translatable="false">app_pref11</string>
     <string name="pref_night_mode_key" translatable="false">app_pref12</string>
+    <string name="pref_open_links_in_app_key" translatable="false">app_pref13</string>
 
     <string name="pref_show_in_my_feed_key" translatable="false">site_pref1</string>
     <string name="pref_favorite_key" translatable="false">site_pref2</string>
@@ -212,5 +211,8 @@
     <string name="navigation_drawer_close" translatable="false">Close drawer</string>
     <string name="msg_developer_mode_on" translatable="false">Developer mode ON</string>
     <string name="msg_developer_mode_off" translatable="false">Developer mode OFF</string>
+
+    <string name="hint_enter_password">Enter password</string>
+    <string name="msg_no_image">No Image</string>
 
 </resources>

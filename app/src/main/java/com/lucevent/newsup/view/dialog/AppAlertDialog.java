@@ -13,10 +13,11 @@ import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.alert.Alert;
 import com.lucevent.newsup.data.alert.AlertCode;
+import com.lucevent.newsup.net.BackendNames;
 import com.lucevent.newsup.net.RawContentReader;
 import com.lucevent.newsup.view.activity.ContactActivity;
 
-public class AppAlertDialog implements AlertCode {
+public class AppAlertDialog implements AlertCode, BackendNames {
 
 	private int parseMessage(int message)
 	{
@@ -230,7 +231,7 @@ public class AppAlertDialog implements AlertCode {
 					}
 
 					try {
-						RawContentReader.getUrl("http://newsup-2406.appspot.com/appv2?poll=" + mAlert.id + "&ans=" + answer);
+						RawContentReader.getUrl(MAIN_APP_SERVER + "?poll=" + mAlert.id + "&ans=" + answer);
 					} catch (Exception ignored) {
 						AppSettings.printerror("[AAD] Couldn't send answer", ignored);
 					}

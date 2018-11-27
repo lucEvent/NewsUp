@@ -39,7 +39,7 @@
         </FrameLayout>
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/view_hands_free"
+            android:id="@+id/btn_hands_free"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"

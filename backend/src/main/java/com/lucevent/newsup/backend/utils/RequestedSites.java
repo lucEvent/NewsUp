@@ -36,7 +36,7 @@ public class RequestedSites {
 	public RequestedSite createSite(String request, String name, String url, String rss_url, String icon_url, int info, int color)
 	{
 		RequestedSite r = new RequestedSite();
-		r.code = 10000 + (Math.abs(url.hashCode()) % 10000);
+		r.code = Math.abs(url.hashCode());
 		r.original_request = request;
 		r.name = name;
 		r.url = url;

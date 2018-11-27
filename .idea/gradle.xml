@@ -12,6 +12,7 @@
             <option value="$PROJECT_DIR$/backend" />
             <option value="$PROJECT_DIR$/data" />
             <option value="$PROJECT_DIR$/debugbackend" />
+            <option value="$PROJECT_DIR$/development" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

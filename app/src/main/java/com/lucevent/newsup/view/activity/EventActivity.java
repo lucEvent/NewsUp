@@ -89,7 +89,7 @@ public class EventActivity extends StoragePermissionActivity implements View.OnC
 		mProgressBar = findViewById(R.id.progress_bar);
 		mProgressBar.setVisibility(ProgressBar.VISIBLE);
 
-		findViewById(R.id.view_hands_free).setOnClickListener(onViewHandsFree);
+		findViewById(R.id.btn_hands_free).setOnClickListener(onViewHandsFree);
 
 		// setup
 		Bundle bundle = getIntent().getExtras();

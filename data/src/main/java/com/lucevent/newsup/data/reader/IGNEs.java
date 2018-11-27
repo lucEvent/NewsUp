@@ -64,16 +64,28 @@ public class IGNEs extends com.lucevent.newsup.data.util.NewsReader {
 	private void fixIframes(Elements iframes)
 	{
 		for (Element e : iframes) {
-			String preUrl = e.attr("src");
-			if (preUrl.startsWith("/"))
-				preUrl = "https://es.ign.com" + preUrl;
-
+			String preUrl = e.attr("abs:src");
 			try {
 				Document d = getDocument(preUrl);
 				String json = d.select(".video-embed-content-v6").first().attr("data-settings");
 
-				e.attr("src",
-						findSubstringBetween(json, "1080\":{\"url\":\"", "\"", false).replace("\\", ""));
+				String url = findSubstringBetween(json, "1080\":{\"url\":\"", "\"", false);
+				if (url == null) {
+					url = findSubstringBetween(json, "720\":{\"url\":\"", "\"", false);
+					if (url == null) {
+						url = findSubstringBetween(json, "540\":{\"url\":\"", "\"", false);
+						if (url == null) {
+							url = findSubstringBetween(json, "480\":{\"url\":\"", "\"", false);
+							if (url == null) {
+								url = findSubstringBetween(json, "360\":{\"url\":\"", "\"", false);
+								if (url == null) {
+									continue;
+								}
+							}
+						}
+					}
+				}
+				e.attr("src", url.replace("\\", ""));
 			} catch (Exception ignored) {
 			}
 		}

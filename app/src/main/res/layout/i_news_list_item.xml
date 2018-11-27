@@ -3,10 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:paddingBottom="@dimen/paragraph_bottom_padding"
     android:paddingLeft="@dimen/side_padding"
+    android:paddingTop="@dimen/paragraph_top_padding"
     android:paddingRight="@dimen/side_padding"
-    android:paddingTop="@dimen/paragraph_top_padding">
+    android:paddingBottom="@dimen/paragraph_bottom_padding">
 
     <com.lucevent.newsup.view.util.AppTextView
         android:id="@+id/bullet"
@@ -24,6 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="TextView"
+        android:textIsSelectable="true"
         android:textSize="@dimen/text_normal_size" />
 
 </LinearLayout>

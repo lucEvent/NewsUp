@@ -10,7 +10,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 
-public final class NewsReader {
+public final class NewsReader implements BackendNames {
 
 	private static final String TAG_TITLE = "title";
 	private static final String TAG_LINK = "link";
@@ -25,9 +25,9 @@ public final class NewsReader {
 	public static final int NUM_SERVERS = 8;
 	private static final String[] SERVER_IDS = {"newsup-1", "newsup-2", "newsup-3", "newsup-4", "newsup-5", "newsup-1", "newsup-2", "newsup-3"};
 
-	private static final String query_index = "http://newsup-2406.appspot.com/appv2?news&site=%s%s&v=%s" + (ProSettings.isDeveloperModeEnabled() ? "&nc" : "");
-	private static final String query_event_index = "http://newsup-2406.appspot.com/appv2?event=%s&v=%s";
-	private static final String query_content = "http://%s.appspot.com/appv2?content&site=%d&l=%s";
+	private static final String query_index = MAIN_APP_SERVER + "?news&site=%s%s&v=%s" + (ProSettings.isDeveloperModeEnabled() ? "&nc" : "");
+	private static final String query_event_index = MAIN_APP_SERVER + "?event=%s&v=%s";
+	private static final String query_content = "http://%s.appspot.com/" + APP_SERVLET + "?content&site=%d&l=%s";
 	private final String version;
 
 	public NewsReader(String version)

@@ -51,15 +51,15 @@ public class EventsFragment extends android.app.Fragment implements View.OnClick
 	{
 		super.onCreateOptionsMenu(menu, inflater);
 
-		String[] countriesSelected = AppSettings.getEventsLocaleSetting();
+		String[] regionsSelected = AppSettings.getEventsLocaleSetting();
 
-		String[] titles = getResources().getStringArray(R.array.event_co_titles);
-		String[] codes = getResources().getStringArray(R.array.event_co_codes);
+		String[] titles = getResources().getStringArray(R.array.event_region_titles);
+		String[] codes = getResources().getStringArray(R.array.event_region_codes);
 
 		for (int i = 0; i < titles.length; i++) {
 			boolean sel = false;
-			for (String c : countriesSelected)
-				if (codes[i].equals(c)) {
+			for (String r : regionsSelected)
+				if (codes[i].equals(r)) {
 					sel = true;
 					break;
 				}
@@ -74,7 +74,7 @@ public class EventsFragment extends android.app.Fragment implements View.OnClick
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
 		super.onOptionsItemSelected(item);
-		String region_code = getResources().getStringArray(R.array.event_co_codes)[item.getOrder()];
+		String region_code = getResources().getStringArray(R.array.event_region_codes)[item.getOrder()];
 
 		if (item.isChecked()) {
 			if (!AppSettings.removeEventsLocaleSetting(region_code)) {

@@ -26,10 +26,7 @@ public class Event {
 	public long code;
 
 	@Index
-	public long startTime;
-
-	@Index
-	public long endTime;
+	public long lastNewsTime;
 
 	@Index
 	public boolean visible;
@@ -58,14 +55,9 @@ public class Event {
 			res.code = parsed.getInt("code");
 
 			try {
-				res.startTime = sdf.parse(parsed.getString("start")).getTime();
+			//	res.lastNewsTime = sdf.parse(parsed.getString("start")).getTime();
 			} catch (Exception e) {
 				throw new Exception("Wrong start time");
-			}
-			try {
-				res.endTime = sdf.parse(parsed.getString("end")).getTime();
-			} catch (Exception e) {
-				throw new Exception("Wrong end time");
 			}
 			try {
 				res.imgSrc = new URL(parsed.getString("imgsrc")).toURI().toString();

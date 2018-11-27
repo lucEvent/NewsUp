@@ -222,7 +222,7 @@ public class NewsListFragment extends StoragePermissionFragment implements View.
 			mProgressBar = mMainView.findViewById(R.id.progress_bar);
 			mReloadBox = mMainView.findViewById(R.id.try_reload);
 
-			mMainView.findViewById(R.id.view_hands_free).setOnClickListener(onViewHandsFree);
+			mMainView.findViewById(R.id.btn_hands_free).setOnClickListener(onViewHandsFree);
 		}
 		setUp();
 		return mMainView;
@@ -292,10 +292,10 @@ public class NewsListFragment extends StoragePermissionFragment implements View.
 	public void onClick(final View v)
 	{
 		final News news = (News) v.getTag();
-		Context context = getActivity();
 
 		if (currentSite instanceof UserSite) {
-			Utils.openCustomTab(context, news);
+			addToHistory(news);
+			Utils.openCustomTab(getActivity(), news);
 			return;
 		}
 
@@ -305,11 +305,12 @@ public class NewsListFragment extends StoragePermissionFragment implements View.
 			mNewsView.displayNews(news);
 			mBtnSections.setVisibility(View.GONE);
 			displayingNews = true;
-			mDataManager.getDatabaseManager().setNewsRead(news);
+			addToHistory(news);
 			return;
 		}
 		KernelManager.fetchContentOf(news);
 
+		Context context = getActivity();
 		View view = LayoutInflater.from(context).inflate(R.layout.d_news_not_found, null);
 
 		final AlertDialog dialog = new AlertDialog.Builder(context)
@@ -330,6 +331,7 @@ public class NewsListFragment extends StoragePermissionFragment implements View.
 			@Override
 			public void onClick(View v2)
 			{
+				addToHistory(news);
 				Utils.openCustomTab(getActivity(), news);
 				dialog.dismiss();
 			}
@@ -345,6 +347,11 @@ public class NewsListFragment extends StoragePermissionFragment implements View.
 		dialog.show();
 	}
 
+	private void addToHistory(News n)
+	{
+		mDataManager.getDatabaseManager().setNewsRead(n);
+	}
+
 	private View.OnClickListener onViewHandsFree = new View.OnClickListener() {
 
 		@Override
@@ -353,6 +360,8 @@ public class NewsListFragment extends StoragePermissionFragment implements View.
 			mAdapter.discloseData();
 			if (mAdapter.getItemCount() > 0)
 				startActivity(new Intent(getActivity(), HandsFreeNewsViewActivity.class));
+
+
 		}
 	};
 
@@ -452,7 +461,7 @@ public class NewsListFragment extends StoragePermissionFragment implements View.
 			mMenu.getItem(0).setVisible(false);
 			mMenu.getItem(1).setVisible(false);
 
-			((FloatingActionButton) mMainView.findViewById(R.id.view_hands_free))
+			((FloatingActionButton) mMainView.findViewById(R.id.btn_hands_free))
 					.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorPrimary)));
 
 		} else {
@@ -465,7 +474,7 @@ public class NewsListFragment extends StoragePermissionFragment implements View.
 			} else
 				mBtnSections.setVisibility(ImageButton.GONE);
 
-			FloatingActionButton handsFreeBtn = (FloatingActionButton) mMainView.findViewById(R.id.view_hands_free);
+			FloatingActionButton handsFreeBtn = (FloatingActionButton) mMainView.findViewById(R.id.btn_hands_free);
 			handsFreeBtn.setBackgroundTintList(ColorStateList.valueOf(currentSite.color == 0xffffffff ? 0xff666666 : currentSite.color));
 
 			setFavoriteIcon();

@@ -1,13 +1,13 @@
 package com.lucevent.newsup.view.adapter.viewholder.news;
 
 import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
 
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.parse.NewsListItem;
+import com.lucevent.newsup.view.util.CustomMovementMethod;
 
 public class NewsListItemViewHolder extends NewsElementViewHolder {
 
@@ -18,7 +18,7 @@ public class NewsListItemViewHolder extends NewsElementViewHolder {
 		super(v);
 		bullet = (TextView) v.findViewById(R.id.bullet);
 		content = (TextView) v.findViewById(R.id.content);
-		content.setMovementMethod(LinkMovementMethod.getInstance());
+		content.setMovementMethod(new CustomMovementMethod());
 	}
 
 	@Override

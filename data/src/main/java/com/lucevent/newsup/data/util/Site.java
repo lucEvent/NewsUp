@@ -21,18 +21,28 @@ public class Site {
 	private Class sectionsClass;
 	protected Sections sections;
 
-	public Site(int code, String name, int color, String url, int info, Class sectionsClass, Class readerClass)
+	public static Site getDummy(int code)
+	{
+		return new Site(code, "", 0, "", 0, 0, 0, null, null);
+	}
+
+	public Site(int code, String name, int color, String url, int country, int language, int category, Class sectionsClass, Class readerClass)
 	{
 		this.code = code;
 		this.name = name;
 		this.url = url;
-		this.info = 0x1000000 | info;
+		this.info = country << SiteCountry.shift | language << SiteLanguage.shift | category << SiteCategory.shift;
 		this.num_readings = 0;
 		this.color = color;
 		this.sectionsClass = sectionsClass;
 		this.readerClass = readerClass;
 
 		colorDarkness = 1 - (0.299 * ((color >> 16) & 0xFF) + 0.587 * ((color >> 8) & 0xFF) + 0.114 * (color & 0xFF)) / 255;
+	}
+
+	public boolean isMultiRegion()
+	{
+		return false;
 	}
 
 	public int getCountry()

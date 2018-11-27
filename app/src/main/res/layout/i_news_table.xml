@@ -9,9 +9,9 @@
         android:id="@+id/table"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/paragraph_bottom_padding"
         android:paddingLeft="@dimen/side_padding"
+        android:paddingTop="@dimen/paragraph_top_padding"
         android:paddingRight="@dimen/side_padding"
-        android:paddingTop="@dimen/paragraph_top_padding"></TableLayout>
+        android:paddingBottom="@dimen/paragraph_bottom_padding"></TableLayout>
 
 </HorizontalScrollView>

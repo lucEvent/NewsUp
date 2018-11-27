@@ -76,6 +76,12 @@ public class ElPais extends com.lucevent.newsup.data.util.NewsReader {
 		article.select(".sumario_despiece,.texto_grande").tagName("blockquote");
 		article.select(".nota_pie").tagName("figcaption");
 
+		for (Element img : article.select("img[data-src]")) {
+			String src = img.attr("data-src");
+			cleanAttributes(img);
+			img.attr("src", src);
+		}
+
 		for (Element e : article.select(".sumario_eskup")) {
 			Elements content = e.select("noscript");
 			content.select(".autor").remove();

@@ -8,6 +8,7 @@ import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.debugbackend.data.Database;
 import com.lucevent.newsup.debugbackend.data.PartialTestResult;
 import com.lucevent.newsup.debugbackend.data.Task;
+import com.lucevent.newsup.debugbackend.net.Net;
 import com.lucevent.newsup.debugbackend.util.ReportCallback;
 
 import org.jsoup.nodes.Document;
@@ -18,6 +19,9 @@ import java.util.TreeSet;
 public class Test {
 
 	private Database db;
+
+	private long mSiteStartTestTime = -1;
+	private int mSiteRoundCounter = 0;
 
 	public Test()
 	{
@@ -33,13 +37,16 @@ public class Test {
 		Evaluator evaluator = new Evaluator();
 
 		Task task = db.getCurrentTask(evaluator.size());
-
-		db.newRound(task);
+		task.newRound();
+		mSiteRoundCounter++;
 
 		if (task.currentEvaluatingSite < sites.size()) {
 			Site site = sites.get(task.currentEvaluatingSite);
 
-			for (; task.currentEvaluatingSection < site.getSections().size(); task.currentEvaluatingSection++, db.save(task, true)) {
+			if (mSiteStartTestTime == -1)
+				mSiteStartTestTime = System.currentTimeMillis();
+
+			for (; task.currentEvaluatingSection < site.getSections().size(); task.currentEvaluatingSection++, task.saveDeferred()) {
 				Section section = site.getSections().get(task.currentEvaluatingSection);
 				if (section.url != null) {
 
@@ -67,13 +74,23 @@ public class Test {
 				}
 			}
 
+			//
+			long now = System.currentTimeMillis();
+			Net.sendStatus(
+					site.code, site.name, site.info,
+					now, now - mSiteStartTestTime, mSiteRoundCounter,
+					task.siteNumNews, task.siteTestResults[0]
+			);
+			mSiteStartTestTime = -1;
+			mSiteRoundCounter = 0;
+
 			// Saving results for current Site
 			PartialTestResult ptr = new PartialTestResult();
 			ptr.taskId = task.id;
 			ptr.siteCode = site.code;
 			ptr.numNews = task.siteNumNews;
 			ptr.testResults = task.siteTestResults;
-			db.savePartialResult(ptr);
+			ptr.save();
 
 			if (task.siteNumNews == 0 || (task.siteNumNews / 2) < task.siteTestResults[0])
 				urgentCallback.report(site.name + " | " + task.siteNumNews + " news read / " + task.siteTestResults[0] + " without content");
@@ -86,13 +103,11 @@ public class Test {
 			task.currentEvaluatingSite++;
 			task.currentEvaluatingSection = 0;
 			task.siteNumNews = 0;
-			db.save(task, false);
+			task.save();
 
 			return null;
 		}
-
-		db.finish(task);
-
+		task.finish();
 
 		TreeSet<PartialTestResult> partials = new TreeSet<>(new Comparator<PartialTestResult>() {
 			@Override

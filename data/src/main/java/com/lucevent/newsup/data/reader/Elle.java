@@ -86,7 +86,7 @@ public class Elle extends com.lucevent.newsup.data.util.NewsReader {
 				article.select(".listicle-slide-hed").tagName("h4");
 			}
 		}
-		article.select(".standard-info,.breaker-ad,.longform-info").remove();
+		article.select(".standard-info,.breaker-ad,.longform-info,.social-button-group").remove();
 		article.select(".image-credit").tagName("figcaption");
 
 		for (Element img : article.select("img[data-src]")) {

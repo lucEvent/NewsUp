@@ -17,24 +17,34 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.TreeSet;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
+@Deprecated
 public class AppServlet_v2 extends HttpServlet {
 
 	@Override
-	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
+	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 	{
-		processPetition(req, resp);
+		try {
+			processPetition(req, resp);
+		} catch (Exception e) {
+			Data.notifyException(req, e, "AppServlet_v2");
+		}
 	}
 
 	@Override
-	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException
+	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 	{
-		processPetition(req, resp);
+		try {
+			processPetition(req, resp);
+		} catch (Exception e) {
+			Data.notifyException(req, e, "AppServlet_v2");
+		}
 	}
 
 	private void processPetition(HttpServletRequest req, HttpServletResponse resp) throws IOException
@@ -198,20 +208,20 @@ public class AppServlet_v2 extends HttpServlet {
 		}
 	}
 
+	private static final long MAX_EVENT_TIME_ON = 12 * 60 * 60 * 1000; // 1/2 Day (ms)
+
 	private void resp_events(String region_codes, HttpServletResponse resp) throws IOException
 	{
 		long currentTime = System.currentTimeMillis();
 		ArrayList<Event> aux = new ArrayList<>(ofy().load().type(Event.class)
 				.filter("visible", true)
-				.filter("endTime >", currentTime)
+				.filter("lastNewsTime >", currentTime - MAX_EVENT_TIME_ON)
 				.list());
 
 		String[] m_region_codes = region_codes.split(",");
 		for (int i = aux.size() - 1; i >= 0; i--) {
 			Event e = aux.get(i);
-			if (e.startTime > currentTime)
-				aux.remove(i);
-
+			// checking if regions requested match
 			boolean match = false;
 			for (String rc : m_region_codes)
 				if (e.region_code.equals(rc)) {
@@ -227,7 +237,7 @@ public class AppServlet_v2 extends HttpServlet {
 			@Override
 			public int compare(Event o1, Event o2)
 			{
-				int r = Long.compare(o1.startTime, o2.startTime);
+				int r = Long.compare(o1.lastNewsTime, o2.lastNewsTime);
 				return r != 0 ? -r : 1;
 			}
 		});
@@ -276,8 +286,18 @@ public class AppServlet_v2 extends HttpServlet {
 					"request:" + request_site + "\nresult code:" + r.result + "\nresult data:" + r.data.replace("\"", "'"));
 		}
 
+		//
+		String data_v2 = "\"data\":";
+
+		int i = r.data.indexOf("}");
+		if (i == -1)
+			data_v2 = data_v2 + "{}";
+		else
+			data_v2 = data_v2 + r.data.substring(11, i + 1);
+		//
+
 		resp.getWriter().println(
-				"{\"result\":" + r.result + ",\"data\":" + r.data + "}"
+				"{\"result\":" + r.result + "," + data_v2 + "}"
 		);
 	}
 

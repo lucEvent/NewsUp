@@ -1,13 +1,6 @@
 package com.lucevent.newsup.backend;
 
-import com.googlecode.objectify.ObjectifyFactory;
-import com.googlecode.objectify.ObjectifyService;
-import com.lucevent.newsup.backend.utils.MonthStats;
-import com.lucevent.newsup.backend.utils.Report;
 import com.lucevent.newsup.backend.utils.Reports;
-import com.lucevent.newsup.backend.utils.SiteStats;
-import com.lucevent.newsup.backend.utils.Statistics;
-import com.lucevent.newsup.backend.utils.TimeStats;
 import com.lucevent.newsup.backend.utils.UpdateMessageCreator;
 import com.lucevent.newsup.data.util.Site;
 
@@ -18,22 +11,37 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@Deprecated
 public class AppServlet extends HttpServlet {
 
 	@Override
-	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException
+	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 	{
-		processPetition(req, resp);
+		try {
+			processPetition(req, resp);
+		} catch (Exception e) {
+			Data.notifyException(req, e, "AppServlet");
+		}
 	}
 
 	@Override
-	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException
+	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 	{
-		processPetition(req, resp);
+		try {
+			processPetition(req, resp);
+		} catch (Exception e) {
+			Data.notifyException(req, e, "AppServlet");
+		}
 	}
 
 	private void processPetition(HttpServletRequest req, HttpServletResponse resp) throws IOException
 	{
+		Reports.addReport(
+				req.getParameter("v"),
+				req.getRemoteAddr(),
+				"AppServlet_v1",
+				req.getRequestURL() + req.getQueryString());
+
 		resp.setContentType("text/plain");
 		resp.setCharacterEncoding("utf-8");
 
@@ -70,15 +78,6 @@ public class AppServlet extends HttpServlet {
 	public void init() throws ServletException
 	{
 		super.init();
-
-		ObjectifyFactory oFactory = ObjectifyService.factory();
-		oFactory.register(SiteStats.class);
-		oFactory.register(TimeStats.class);
-		oFactory.register(MonthStats.class);
-		oFactory.register(Statistics.class);
-		oFactory.register(Report.class);
-		oFactory.begin();
-
 		new Data();
 	}
 

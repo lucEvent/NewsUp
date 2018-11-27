@@ -49,7 +49,7 @@
     <string name="open_news">Abrir noticia</string>
     <string name="do_not_show_again">No volver a mostrar</string>
     <string name="shortcut_select_label">Elegir publicación</string>
-    <string name="lbl_site_search">· Ejemplos de búsqueda:\n\t\tthecanary.co\n\t\tel español\n\n· NewsUp es un lector de RSS, por lo que la búsqueda únicamente mostrará publicaciones que ofrecen RSS.\n\n· Se buscará en google la página web de la publicación que buscas; si no hay resultados, prueba a indicar el nombre completo de la página web.\n\n· Esta función está en desarrollo. Puede que ofrezca mejores resultados en un futuro.</string>
+    <string name="lbl_site_search">· Busca por nombre o enlace de la publicación/página web\n\n· NewsUp es un lector de RSS, por lo que la búsqueda únicamente mostrará publicaciones que ofrecen RSS.\n\n· Esta función está en desarrollo. Puede que ofrezca mejores resultados en un futuro.</string>
     <string name="select_region">Selecciona región</string>
 
     <string name="mon">Lun</string>
@@ -132,10 +132,6 @@
     <string name="msg_clean_cache_remove_news">Eliminando noticias…</string>
     <string name="msg_clean_cache_remove_images">Eliminando imágenes…</string>
     <string name="msg_didnt_find_results">No se encontraron resultados</string>
-    <string name="msg_page_not_found">· No se pudo acceder a la página encontrada</string>
-    <string name="msg_page_tried">· La página encontrada es %s</string>
-    <string name="msg_try_full_page_if_not">· Intenta buscar por el nombre completo de la página web si ésta no es correcta</string>
-    <string name="msg_rss_not_found">· No se encontró soporte para RSS</string>
     <string name="msg_publication_not_supported">Esta publicación ya no está disponible en NewsUp</string>
     <string name="msg_content_could_not_be_loaded">Ups, no se pudo cargar el contenido</string>
     <string name="msg_confirm_to_download_image">Confirma para descargar esta imagen</string>
@@ -174,6 +170,8 @@
     <string name="pref_load_images_compact">Vista compacta</string>
     <string name="pref_load_images_wifi_only">Solo con Wi-Fi</string>
     <string name="pref_night_mode">Modo nocturno</string>
+    <string name="pref_open_links_in_app">Usar navegador interno</string>
+    <string name="pref_open_links_in_app_summary">Abrir enlaces externos en la aplicación</string>
 
     <!-- ***************************** ***************** ********************************** -->
     <string name="about_developed">Desarrollado por Rafael J. Lucena</string>

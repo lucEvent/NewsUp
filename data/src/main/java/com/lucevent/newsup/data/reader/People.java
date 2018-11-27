@@ -71,5 +71,18 @@ public class People extends com.lucevent.newsup.data.util.NewsReader {
 		news.content = finalFormat(article, false);
 	}
 
+	@Override
+	protected org.jsoup.nodes.Document getDocument(String url)
+	{
+		try {
+			return org.jsoup.Jsoup.connect(url)
+					.userAgent(USER_AGENT)
+					.timeout(10000)
+					.cookie("euConsent", "true")
+					.get();
+		} catch (Exception ignored) {
+		}
+		return super.getDocument(url);
+	}
 
 }

@@ -15,6 +15,8 @@ display: none;
 z-index: 98 !important;
 }
 
+
+
     </style>
     <script>
     var v_title, v_author, v_age;
@@ -86,7 +88,7 @@ z-index: 98 !important;
     function cnv_small_row(n){return cnv("n_small_row",n,true);}
     function cnv_medium(n){return cnv("n_medium",n,true);}
     function cnv(n_class, n, tag){
-        var html = "<div class='news "+ n_class + "' sitecode='" + n.sc + "' title='" + n.title + "' age='" + n.age + "' nid='" + n.nid + "' style='background";
+        var html = "<div target='_self' class='news "+ n_class + "' sitecode='" + n.sc + "' title='" + n.title + "' age='" + n.age + "' nid='" + n.nid + "' style='background";
 
         if (n.imgsrc.length>0)
             html += "-image:url(" + n.imgsrc + ");'>";
@@ -109,7 +111,7 @@ z-index: 98 !important;
         var html = ""
         for (var i = 0; i < json.length; ++i) {
             var site = json[i];
-            html += "<span class='site' id='" + site.code + "' co='"+ site.co + "' la='"+ site.la + "' ty='"+ site.ty + "'><img src='img/" + site.code + ".png'>" + site.name + "</span>";
+            html += "<span target='_self' class='site' id='" + site.code + "' co='"+ site.co + "' la='"+ site.la + "' ty='"+ site.ty + "'><img src='img/" + site.code + ".png'>" + site.name + "</span>";
         }
 
         $("#sites").html(html);
@@ -126,7 +128,7 @@ z-index: 98 !important;
                 _class="section groupsection";
             else if (s.level==1)
                 _class="section subsection";
-            html += "<p class='"+ _class +"' index='" + i + "'><a>" + s.name + "</a></p>";
+            html += "<p class='"+ _class +"' index='" + i + "'><a target='_self'>" + s.name + "</a></p>";
         }
         $("#sections-content").html(html);
     }
@@ -279,6 +281,8 @@ z-index: 98 !important;
             error: display_error("Error loading news from .news")
         });
     });
+
+
     </script>
 </head>
 <body>
@@ -327,18 +331,29 @@ z-index: 98 !important;
                 <select id="sel_category">
                     <option value="0">All</option>
                     <option value="1">News</option>
-                    <option value="2">Sport news</option>
+                    <option value="2">Sports</option>
                     <option value="3">Technology</option>
-                    <option value="4">Blogs</option>
-                    <option value="5">Magazines</option>
-                    <option value="6">Astronomy</option>
-                    <option value="7">Science</option>
-                    <option value="8">Videogames</option>
-                    <option value="9">Lifestyle</option>
-                    <option value="10">Motor</option>
-                    <option value="11">Entertainment</option>
-                    <option value="12">Fitness</option>
-                    <option value="13">Music</option>
+                    <option value="4">Science</option>
+                    <option value="5">Astronomy</option>
+                    <option value="6">Economy</option>
+                    <option value="7">Video games</option>
+                    <option value="8">Lifestyle</option>
+                    <option value="9">Motor</option>
+                    <option value="10">Entertainment</option>
+                    <option value="11">Health & Fitness</option>
+                    <option value="12">Music</option>
+                    <option value="13">Politics</option>
+                    <option value="14">Gossip</option>
+                    <option value="15">Gastronomy</option>
+                    <option value="16">Satirical</option>
+                    <option value="17">Consumption</option>
+                    <option value="18">Business</option>
+                    <option value="19">Travel</option>
+                    <option value="20">Culture</option>
+                    <option value="21">Pets</option>
+                    <option value="22">Fashion</option>
+                    <option value="23">Do it yourself</option>
+                    <option value="24">Blogs</option>
                 </select>
             </td>
         </tr>

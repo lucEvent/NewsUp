@@ -226,18 +226,18 @@
         <item>8</item>
         <item>69</item>
     </integer-array>
-    <string-array name="event_co_titles">
+    <string-array name="event_region_titles">
         <!--<item>Sverige</item>-->
         <item>Storbritannien</item>
         <!--<item>USA</item>-->
         <item>Spanien</item>
-        <!--<item>Katalonien</item>-->
+        <item>Katalonien</item>
     </string-array>
-    <string-array name="event_co_codes">
+    <string-array name="event_region_codes">
         <!--<item>sv_se</item>-->
         <item>en_gb</item>
         <!--<item>en_us</item>-->
         <item>es_es</item>
-        <!--<item>ca_es</item>-->
+        <item>ca_es</item>
     </string-array>
 </resources>

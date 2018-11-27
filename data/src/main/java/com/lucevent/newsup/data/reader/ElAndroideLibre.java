@@ -1,9 +1,10 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.Enclosures;
 import com.lucevent.newsup.data.util.News;
 
+import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class ElAndroideLibre extends com.lucevent.newsup.data.util.NewsReader {
 
@@ -47,23 +48,23 @@ public class ElAndroideLibre extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected News onNewsRead(News news, Enclosures enclosures)
+	protected void readNewsContent(Document doc, News news)
 	{
-		if (!news.content.isEmpty()) {
-			Element article = jsoupParse(news.content);
+		Elements article = doc.select("#singlePostHeaderImgBox,.article-body__content");
+		article.select("script,a:has(.blockquoteLink),.zioamz,.blockquoteRelated").remove();
+		article.select("#noddus2,#admansurf,#sunmedia,.singlePostShare,#singlePostRelated,#instagram,#singlePostAdvertising").remove();
+		article.select("zio").tagName("nuwidget");
 
-			article.select("script,a:has(.blockquoteLink),.zioamz").remove();
-			article.select("zio").tagName("nuwidget");
-
-			for (Element app : article.select(".APP")) {
-				app.tagName("nuwidget");
-				app.html(app.select(".APPimagen img,.APPnombre a,.APPinstalarMobile").outerHtml());
-			}
-
-			news.imgSrc = findImageSrc(article);
-			news.content = finalFormat(article, false);
+		for (Element app : article.select(".APP")) {
+			app.tagName("nuwidget");
+			app.html(app.select(".APPimagen img,.APPnombre a,.APPinstalarMobile").outerHtml());
 		}
-		return news;
+
+		cleanAttributes(article.select("p[style]"));
+		cleanAttributes(article.select("img[src]"), "src");
+		article.select("img+em").tagName("figcaption");
+
+		news.content = finalFormat(article, false);
 	}
 
 }

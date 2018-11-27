@@ -56,6 +56,7 @@ public class Wired extends com.lucevent.newsup.data.util.NewsReader {
 		article.select(".special-carve").tagName("blockquote");
 
 		cleanAttributes(article.select("img[src]"), "src");
+		cleanAttributes(article.select("div[data-url]"));
 
 		news.content = finalFormat(article, false);
 	}
