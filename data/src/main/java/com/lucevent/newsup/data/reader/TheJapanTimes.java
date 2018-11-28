@@ -1,11 +1,11 @@
-package com.lucevent.newsup.development.reader;
+package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-public class TheJapanTimes extends com.lucevent.newsup.development.utils.NewsReader {
+public class TheJapanTimes extends com.lucevent.newsup.data.util.NewsReader {
 
 	//tags: [author, category, description, guid, item, link, media:content, media:full, media:thumbnail, pubdate, tag, title]
 
@@ -25,12 +25,10 @@ public class TheJapanTimes extends com.lucevent.newsup.development.utils.NewsRea
 	@Override
 	protected void readNewsContent(Document doc, News news)
 	{
-		//HardDrive.copyToDeb(doc,true);
-
 		Elements article = doc.select("article[role='main'] .gallery,#jtarticle");
 		doc.select("script,.clearfix,.jt_content_ad,.single-sns-area,.jtarticle_related").remove();
 
-
 		news.content = finalFormat(article, false);
 	}
+
 }

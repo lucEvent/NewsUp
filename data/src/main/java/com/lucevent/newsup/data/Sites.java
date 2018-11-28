@@ -72,6 +72,9 @@ public class Sites extends ArrayList<Site> {
 		res.add(new Site(165, "P\u00FAblico", 0xffc91435, "https://www.publico.es",
 				SiteCountry.SPAIN, SiteLanguage.SPANISH, SiteCategory.NEWS,
 				com.lucevent.newsup.data.section.PublicoSections.class, com.lucevent.newsup.data.reader.Publico.class));
+		res.add(new Site(170, "Republica", 0xffffffff, "https://www.republica.com",
+				SiteCountry.SPAIN, SiteLanguage.SPANISH, SiteCategory.NEWS,
+				com.lucevent.newsup.data.section.RepublicaSections.class, com.lucevent.newsup.data.reader.Republica.class));
 
 		// Catalan news
 		res.add(new Site(200, "El Peri\u00F3dico (Cat)", 0xff477db6, "https://www.elperiodico.cat/ca",
@@ -251,6 +254,9 @@ public class Sites extends ArrayList<Site> {
 		res.add(new Site(750, "El Imparcial", 0xff00adef, "http://www.elimparcial.com",
 				SiteCountry.MEXICO, SiteLanguage.SPANISH, SiteCategory.NEWS,
 				com.lucevent.newsup.data.section.ElImparcialSections.class, com.lucevent.newsup.data.reader.ElImparcial.class));
+		res.add(new Site(755, "The Japan Times", 0xffffffff, "https://www.japantimes.co.jp",
+				SiteCountry.JAPAN, SiteLanguage.ENGLISH, SiteCategory.NEWS,
+				com.lucevent.newsup.data.section.TheJapanTimesSections.class, com.lucevent.newsup.data.reader.TheJapanTimes.class));
 
 		// Technology sites
 		res.add(new Site(800, "El Androide Libre", 0xffa3c23e, "https://elandroidelibre.elespanol.com",
@@ -489,7 +495,7 @@ public class Sites extends ArrayList<Site> {
 		res.add(new Site(2050, "The Inventory", 0xff8F085E, "https://theinventory.com",
 				SiteCountry.USA, SiteLanguage.ENGLISH, SiteCategory.CONSUMPTION,
 				com.lucevent.newsup.data.section.TheInventorySections.class, com.lucevent.newsup.data.reader.TheInventory.class));
-		res.add(new Site(2055, "EUobserver", 0, "https://euobserver.com",
+		res.add(new Site(2055, "EUobserver", 0xff27303f, "https://euobserver.com",
 				SiteCountry.VARIOUS, SiteLanguage.ENGLISH, SiteCategory.POLITICS,
 				com.lucevent.newsup.data.section.EUObserverSections.class, com.lucevent.newsup.data.reader.EUObserver.class));
 		res.add(new Site(2060, "Motherboard", 0xffffffff, "https://motherboard.vice.com",
@@ -498,25 +504,20 @@ public class Sites extends ArrayList<Site> {
 		res.add(new Site(2065, "Digital Trends Espa\u00F1ol", 0xff0095da, "https://es.digitaltrends.com",
 				SiteCountry.USA, SiteLanguage.SPANISH, SiteCategory.TECHNOLOGY,
 				com.lucevent.newsup.data.section.DigitalTrendsEsSections.class, com.lucevent.newsup.data.reader.DigitalTrendsEs.class));
+		res.add(new Site(2070, "The Ringer", 0xff000000, "https://www.theringer.com",
+				SiteCountry.USA, SiteLanguage.ENGLISH, SiteCategory.CULTURE,
+				com.lucevent.newsup.data.section.TheRingerSections.class, com.lucevent.newsup.data.reader.TheRinger.class));
 
 		// Economy (3000-3099)
 		res.add(new Site(3000, "El Economista", 0xffff6600, "https://www.eleconomista.es",
 				SiteCountry.SPAIN, SiteLanguage.SPANISH, SiteCategory.ECONOMY,
 				com.lucevent.newsup.data.section.ElEconomistaSections.class, com.lucevent.newsup.data.reader.ElEconomista.class));
 
-		/*
-		res.add(new Site(755, "The Japan Times", 0xffffffff, "https://www.japantimes.co.jp/",
-				SiteCountry.JAPAN, SiteLanguage.ENGLISH, SiteCategory.NEWS,
-				com.lucevent.newsup.data.section.TheJapanTimesSections.class, com.lucevent.newsup.data.reader.TheJapanTimes.class));
-*/		/*
-//
-//		res.add(new Site(0, "Republica", 0, "", 0, RepublicaSections.class, Republica.class));
-//		res.add(new Site(0, "TheRinger", 0, "", 0, TheRingerSections.class, TheRinger.class));
 //		res.add(new Site(0, "FinlandToday", 0, "", 0, FinlandTodaySections.class, FinlandToday.class));
 //		res.add(new Site(0, "OttawaCitizen", 0, "", 0, OttawaCitizenSections.class, OttawaCitizen.class));
 //		res.add(new Site(0, "iFixit", 0, "", 0, iFixitSections.class, iFixit.class));
 //		res.add(new Site(0, "TheWallStreetJournal", 0, "", 0, TheWallStreetJournalSections.class, TheWallStreetJournal.class));
-		*/
+
 		return res;
 	}
 
