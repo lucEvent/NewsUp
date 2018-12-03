@@ -36,6 +36,15 @@ public class HuffingtonPostUSA extends com.lucevent.newsup.data.util.NewsReader 
 	}
 
 	@Override
+	protected String parseLink(Element prop)
+	{
+		String link = super.parseLink(prop);
+		if (link.startsWith("https://www.huffingtonpost.comhttps"))
+			link = link.replaceFirst("://www.huffingtonpost.comhttps", "");
+		return link;
+	}
+
+	@Override
 	protected Document getDocument(String url)
 	{
 		try {
@@ -44,8 +53,7 @@ public class HuffingtonPostUSA extends com.lucevent.newsup.data.util.NewsReader 
 					.timeout(10000)
 					.validateTLSCertificates(false)
 					.get();
-		} catch (Exception e) {
-			//System.out.println("[" + e.getClass().getSimpleName() + "] Can't read page. Trying again");
+		} catch (Exception ignored) {
 		}
 		return null;
 	}
@@ -53,8 +61,13 @@ public class HuffingtonPostUSA extends com.lucevent.newsup.data.util.NewsReader 
 	@Override
 	protected void readNewsContent(Document doc, News news)
 	{
-		Elements article = doc.select(".top-media--image figure,.content-list-component");
-		article.select("script[src*='.twitter.'],script[src*='.instagram.'],.vdb_player").remove();
+		Elements article;
+		if (doc.baseUri().contains("www.huffpost")) {
+			article = doc.select("#entry-body");
+		} else
+			article = doc.select(".top-media--image figure,.content-list-component");
+
+		article.select("script[src*='.twitter.'],script[src*='.instagram.'],.vdb_player,.cli-related-articles").remove();
 
 		article.select(".image__credit").tagName("figcaption");
 		article.select(".quote").tagName("blockquote");
@@ -90,6 +103,7 @@ public class HuffingtonPostUSA extends com.lucevent.newsup.data.util.NewsReader 
 			e.attr("src", src);
 		}
 		article.select("script").remove();
+		article.select("span[style],div[style]:has(iframe),iframe[style]").removeAttr("style");
 
 		news.content = finalFormat(article, false);
 	}

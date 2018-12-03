@@ -152,6 +152,9 @@ public class Sites extends ArrayList<Site> {
 					SiteCountry.FINLAND, SiteLanguage.FINNISH, SiteCategory.NEWS,
 					com.lucevent.newsup.data.section.YleSections.class, com.lucevent.newsup.data.reader.Yle.class));
 		}
+		res.add(new Site(420, "Finland Today", 0xffffffff, "https://finlandtoday.fi",
+				SiteCountry.FINLAND, SiteLanguage.ENGLISH, SiteCategory.NEWS,
+				com.lucevent.newsup.data.section.FinlandTodaySections.class, com.lucevent.newsup.data.reader.FinlandToday.class));
 
 		// British news
 		res.add(new Site(500, "BBC", 0xffa62e30, "http://www.bbc.com",
@@ -257,6 +260,9 @@ public class Sites extends ArrayList<Site> {
 		res.add(new Site(755, "The Japan Times", 0xffffffff, "https://www.japantimes.co.jp",
 				SiteCountry.JAPAN, SiteLanguage.ENGLISH, SiteCategory.NEWS,
 				com.lucevent.newsup.data.section.TheJapanTimesSections.class, com.lucevent.newsup.data.reader.TheJapanTimes.class));
+		res.add(new Site(760, "Ottawa Citizen", 0xffffffff, "https://ottawacitizen.com",
+				SiteCountry.CANADA, SiteLanguage.ENGLISH, SiteCategory.NEWS,
+				com.lucevent.newsup.data.section.OttawaCitizenSections.class, com.lucevent.newsup.data.reader.OttawaCitizen.class));
 
 		// Technology sites
 		res.add(new Site(800, "El Androide Libre", 0xffa3c23e, "https://elandroidelibre.elespanol.com",
@@ -513,12 +519,6 @@ public class Sites extends ArrayList<Site> {
 				SiteCountry.SPAIN, SiteLanguage.SPANISH, SiteCategory.ECONOMY,
 				com.lucevent.newsup.data.section.ElEconomistaSections.class, com.lucevent.newsup.data.reader.ElEconomista.class));
 
-/*
-		res.add(new Site(420, "Finland Today", 0xffXXXXXXXX, "https://finlandtoday.fi",
-				SiteCountry.FINLAND, SiteLanguage.ENGLISH, SiteCategory.NEWS,
-				com.lucevent.newsup.data.section.FinlandTodaySections.class, com.lucevent.newsup.data.reader.FinlandToday.class));
-*/
-//		res.add(new Site(0, "OttawaCitizen", 0, "", 0, OttawaCitizenSections.class, OttawaCitizen.class));
 //		res.add(new Site(0, "iFixit", 0, "", 0, iFixitSections.class, iFixit.class));
 //		res.add(new Site(0, "TheWallStreetJournal", 0, "", 0, TheWallStreetJournalSections.class, TheWallStreetJournal.class));
 
