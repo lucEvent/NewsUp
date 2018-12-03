@@ -22,8 +22,7 @@ public class PCWorldSections extends Sections {
 		add(new Section("Tablets", "https://www.pcworld.com/category/tablets/index.rss", 0));
 		add(new Section("E-readers", "https://www.pcworld.com/category/e-readers/index.rss", 1));
 
-		add(new Section("Phones", "https://www.pcworld.com/category/phones/index.rss", 0));
-		add(new Section("Phone accessories", "https://www.pcworld.com/category/phone-accessories/index.rss", 1));
+		add(new Section("Phone accessories", "https://www.pcworld.com/category/phone-accessories/index.rss", 0));
 
 		add(new Section("Hardware", "https://www.pcworld.com/category/hardware/index.rss", 0));
 		add(new Section("Computers", "https://www.pcworld.com/category/computers/index.rss", 1));
@@ -36,7 +35,6 @@ public class PCWorldSections extends Sections {
 		add(new Section("Networking", "https://www.pcworld.com/category/networking/index.rss", 1));
 
 		add(new Section("Software", "https://www.pcworld.com/category/software/index.rss", 0));
-		add(new Section("Games", "https://www.pcworld.com/category/software/software-games/index.rss", 1));
 		add(new Section("Windows", "https://www.pcworld.com/category/windows/index.rss", 1));
 
 		add(new Section("Security", "https://www.pcworld.com/category/security/index.rss", 0));
@@ -49,7 +47,6 @@ public class PCWorldSections extends Sections {
 		add(new Section("Max Productivity", "https://www.pcworld.com/column/max-productivity/index.rss", 1));
 		add(new Section("Missing Pieces", "https://www.pcworld.com/column/missing-pieces/index.rss", 1));
 		add(new Section("The Full Nerd", "https://www.pcworld.com/column/the-full-nerd/index.rss", 1));
-		add(new Section("World Beyond Windows", "https://www.pcworld.com/column/world-beyond-windows/index.rss", 1));
 
 	}
 

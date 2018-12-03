@@ -513,7 +513,11 @@ public class Sites extends ArrayList<Site> {
 				SiteCountry.SPAIN, SiteLanguage.SPANISH, SiteCategory.ECONOMY,
 				com.lucevent.newsup.data.section.ElEconomistaSections.class, com.lucevent.newsup.data.reader.ElEconomista.class));
 
-//		res.add(new Site(0, "FinlandToday", 0, "", 0, FinlandTodaySections.class, FinlandToday.class));
+/*
+		res.add(new Site(420, "Finland Today", 0xffXXXXXXXX, "https://finlandtoday.fi",
+				SiteCountry.FINLAND, SiteLanguage.ENGLISH, SiteCategory.NEWS,
+				com.lucevent.newsup.data.section.FinlandTodaySections.class, com.lucevent.newsup.data.reader.FinlandToday.class));
+*/
 //		res.add(new Site(0, "OttawaCitizen", 0, "", 0, OttawaCitizenSections.class, OttawaCitizen.class));
 //		res.add(new Site(0, "iFixit", 0, "", 0, iFixitSections.class, iFixit.class));
 //		res.add(new Site(0, "TheWallStreetJournal", 0, "", 0, TheWallStreetJournalSections.class, TheWallStreetJournal.class));

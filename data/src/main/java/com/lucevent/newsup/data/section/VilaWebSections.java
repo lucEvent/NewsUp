@@ -37,7 +37,6 @@ public class VilaWebSections extends Sections {
 		add(new Section("Policia i just\u00EDcia", "https://www.vilaweb.cat/categoria/societat/policia-i-justicia/feed/", 1));
 
 		add(new Section("Opini\u00F3", "https://www.vilaweb.cat/categoria/opinio/feed/", 0));
-		add(new Section("Editorial", "https://www.vilaweb.cat/categoria/opinio/editorial/feed/", 1));
 		add(new Section("Mail obert", "https://www.vilaweb.cat/categoria/opinio/mail-obert/feed/", 1));
 		add(new Section("Opini\u00F3 contundent", "https://www.vilaweb.cat/categoria/opinio/opinions-contundents/feed/", 1));
 
@@ -76,7 +75,7 @@ public class VilaWebSections extends Sections {
 		add(new Section("Ontinyent", "https://ontinyent.vilaweb.cat/feed/", 1));
 
 		add(new Section("ACN", "https://www.vilaweb.cat/categoria/acn/feed/", 0));
-		add(new Section("Europa-press", "https://www.vilaweb.cat/categoria/europa-press/feed/", 0));
 
 	}
+
 }

@@ -1,7 +1,7 @@
 <resources>
 
     <string name="app_name" translatable="false">NewsUp</string>
-    <string name="app_version" translatable="false">2.8.2.g</string>
+    <string name="app_version" translatable="false">2.8.2</string>
     <string name="default_font" translatable="false">sans-serif-light</string>
 
     <string name="about_developed">Developed by Rafael J. Lucena</string>

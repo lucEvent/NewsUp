@@ -9,8 +9,6 @@ public class LaRazonSections extends Sections {
 	{
 		super();
 
-		add(new Section("\u00DAltimas noticias", "https://www.larazon.es/rss/portada.xml", 0));
-
 		add(new Section("Espa\u00F1a", "https://www.larazon.es/rss/espana.xml", 0));
 		add(new Section("Andaluc\u00EDa", "https://www.larazon.es/rss/local/andalucia.xml", 1));
 		add(new Section("Catalu\u00F1a", "https://www.larazon.es/rss/local/cataluna.xml", 1));
@@ -23,7 +21,6 @@ public class LaRazonSections extends Sections {
 		add(new Section("Tenis", "https://www.larazon.es/rss/deportes/tenis.xml", 1));
 		add(new Section("Golf", "https://www.larazon.es/rss/deportes/golf.xml", 1));
 		add(new Section("Motociclismo", "https://www.larazon.es/rss/deportes/motociclismo.xml", 1));
-		add(new Section("Ciclismo", "https://www.larazon.es/rss/deportes/ciclismo.xml", 1));
 
 		add(new Section("Internacional", "https://www.larazon.es/rss/internacional.xml", 0));
 		add(new Section("Econom\u00EDa", "https://www.larazon.es/rss/economia.xml", 0));

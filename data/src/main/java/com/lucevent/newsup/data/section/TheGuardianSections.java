@@ -97,7 +97,6 @@ public class TheGuardianSections extends Sections {
 		add(new Section("Professional networks", "https://www.theguardian.com/guardian-professional/rss", 0));
 
 		add(new Section("The Guardian's", null, -1));
-		add(new Section("Editorials & letters", "https://www.theguardian.com/theguardian/mainsection/editorialsandreply/rss", 0));
 		add(new Section("Obituaries", "https://www.theguardian.com/tone/obituaries/rss", 0));
 		add(new Section("G2", "https://www.theguardian.com/theguardian/g2/rss", 0));
 		add(new Section("Weekend", "https://www.theguardian.com/theguardian/weekend/rss", 0));

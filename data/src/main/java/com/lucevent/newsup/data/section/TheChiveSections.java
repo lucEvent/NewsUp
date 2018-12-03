@@ -71,7 +71,6 @@ public class TheChiveSections extends Sections {
 		add(new Section("Creepy", "https://thechive.com/category/lifestyle/creepy/feed/", 1));
 		add(new Section("Food and Drink", "https://thechive.com/category/lifestyle/food-and-drink/feed/", 1));
 		add(new Section("Mind Blowing", "https://thechive.com/category/lifestyle/mind-blowing/feed/", 1));
-		add(new Section("Tattoos", "https://thechive.com/category/lifestyle/tattoos-random/feed/", 1));
 		add(new Section("Want vs Need", "https://thechive.com/category/treasure-trove/want-vs-need/feed/", 1));
 		add(new Section("Tech", "https://thechive.com/category/lifestyle/tech/feed/", 1));
 

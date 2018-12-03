@@ -56,14 +56,10 @@ public class MediumSections extends Sections {
 		add(new Section("Android & Tech", "https://medium.com/feed/android-news", 0));
 		add(new Section("Arc Digital", "https://arcdigital.media/feed", 0));
 		add(new Section("ART + marketing", "https://medium.com/feed/art-marketing", 0));
-		add(new Section("Back channel", "https://medium.com/feed/backchannel", 0));
-		add(new Section("Basecs", "https://medium.com/feed/basecs", 0));
 		add(new Section("Be Yourself", "https://byrslf.co/feed", 0));
 		add(new Section("Better Humans", "https://betterhumans.coach.me/feed", 0));
 		add(new Section("BullshitIst", "https://bullshit.ist/feed", 0));
-		add(new Section("Cuepoint", "https://medium.com/feed/cuepoint", 0));
 		add(new Section("Curiosity Never Killed the Writer", "https://medium.com/feed/curiosity-never-killed-the-writer", 0));
-		add(new Section("Echelon Indicators", "https://medium.com/feed/echelon-indicators", 0));
 		add(new Section("Entrepreneur's Handbook", "https://medium.com/feed/entrepreneur-s-handbook", 0));
 		add(new Section("Extra Newsfeed", "https://extranewsfeed.com/feed", 0));
 		add(new Section("Facebook Design", "https://medium.com/feed/facebook-design", 0));
@@ -87,22 +83,15 @@ public class MediumSections extends Sections {
 		add(new Section("Slackjaw", "https://medium.com/feed/slackjaw", 0));
 		add(new Section("Startup Grind", "https://medium.com/feed/startup-grind", 0));
 		add(new Section("Startup Study Group", "https://medium.com/feed/startup-study-group", 0));
-		add(new Section("Stories from UNICEF in Iraq", "https://medium.com/feed/stories-from-unicef-in-iraq-english", 0));
 		add(new Section("TED Fellows", "https://medium.com/feed/ted-fellows", 0));
-		add(new Section("The Awl", "https://www.theawl.com/feed/", 0));
 		add(new Section("The Billfold", "https://www.thebillfold.com/feed/", 0));
 		add(new Section("The Coffeelicious", "https://medium.com/feed/the-coffeelicious", 0));
-		add(new Section("The Development Set", "https://thedevelopmentset.com/feed", 0));
 		add(new Section("The Everyday Projects", "https://medium.com/feed/the-everyday-projects", 0));
 		add(new Section("The Mission", "https://medium.com/feed/the-mission", 0));
 		add(new Section("The Startup", "https://medium.com/feed/swlh", 0));
-		add(new Section("The Synapse", "https://medium.com/feed/synapse", 0));
 		add(new Section("The Washington Post", "https://medium.com/feed/thewashingtonpost", 0));
-		add(new Section("The year of the looking glass", "https://medium.com/feed/the-year-of-the-looking-glass", 0));
 		add(new Section("ThinkProgress", "https://thinkprogress.org/feed/", 0));
-		add(new Section("Thrive Global", "https://www.thriveglobal.com/stories.rss", 0));
 		add(new Section("Timeline", "https://timeline.com/feed", 0));
-		add(new Section("Uprooted IRC", "https://medium.com/feed/uprooted", 0));
 		add(new Section("War Is Boring", "https://warisboring.com/feed/", 0));
 		add(new Section("Whither news?", "https://medium.com/feed/whither-news", 0));
 

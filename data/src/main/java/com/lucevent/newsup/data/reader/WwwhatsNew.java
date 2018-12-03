@@ -29,7 +29,7 @@ public class WwwhatsNew extends com.lucevent.newsup.data.util.NewsReader {
 	protected News onNewsRead(News news, Enclosures enclosures)
 	{
 		Element article = jsoupParse(news.content);
-		article.select(".feedflare,[width='1']").remove();
+		article.select("script,.feedflare,[width='1']").remove();
 
 		news.content = finalFormat(article, false);
 		news.imgSrc = findImageSrc(article);
@@ -46,6 +46,5 @@ public class WwwhatsNew extends com.lucevent.newsup.data.util.NewsReader {
 		}
 		return super.getDocument(url);
 	}
-
 
 }

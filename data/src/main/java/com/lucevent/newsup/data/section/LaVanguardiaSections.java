@@ -11,9 +11,6 @@ public class LaVanguardiaSections extends Sections {
 
 		add(new Section("Principal", "https://www.lavanguardia.com/feed/rss/home", 0));
 		add(new Section("Internacional", "https://www.lavanguardia.com/feed/rss/internacional", 0));
-		add(new Section("Pol\u00EDtica", "https://www.lavanguardia.com/feed/rss/politica", 0));
-		add(new Section("Vida", "https://www.lavanguardia.com/feed/rss/vida", 0));
-		add(new Section("Deportes", "https://www.lavanguardia.com/feed/rss/deportes", 0));
 		add(new Section("Econom\u00EDa", "https://www.lavanguardia.com/feed/rss/economia", 0));
 		add(new Section("Opini\u00F3n", "https://www.lavanguardia.com/feed/rss/opinion", 0));
 		add(new Section("Cultura", "https://www.lavanguardia.com/feed/rss/cultura", 0));
@@ -37,7 +34,6 @@ public class LaVanguardiaSections extends Sections {
 		add(new Section("Lleida", "https://www.lavanguardia.com/feed/rss/local/lleida", 1));
 		add(new Section("Girona", "https://www.lavanguardia.com/feed/rss/local/girona", 1));
 		add(new Section("Madrid", "https://www.lavanguardia.com/feed/rss/local/madrid", 1));
-		add(new Section("Andaluc\u00EDa", "https://www.lavanguardia.com/feed/rss/local/sevilla", 1));
 		add(new Section("Comunidad Valenciana", "https://www.lavanguardia.com/feed/rss/local/valencia", 1));
 		add(new Section("Pa\u00EDs Vasco", "https://www.lavanguardia.com/feed/rss/local/paisvasco", 1));
 

@@ -7,8 +7,6 @@ import org.jsoup.nodes.Element;
 
 public class LuckyPuppy extends com.lucevent.newsup.data.util.NewsReader {
 
-	private static final String SITE_STYLE = "<style>ol{padding:0;}</style>";
-
 	//tags: [category, content:encoded, dc:creator, description, guid, item, link, pubdate, title]
 
 	public LuckyPuppy()
@@ -21,7 +19,7 @@ public class LuckyPuppy extends com.lucevent.newsup.data.util.NewsReader {
 				new int[]{TAG_PUBDATE},
 				new int[]{TAG_CATEGORY},
 				new int[]{},
-				SITE_STYLE);
+				"");
 	}
 
 	@Override
@@ -35,6 +33,7 @@ public class LuckyPuppy extends com.lucevent.newsup.data.util.NewsReader {
 	protected News onNewsRead(News news, Enclosures enclosures)
 	{
 		Element article = jsoupParse(news.content);
+		article.select("script").remove();
 		article.select("[style]").removeAttr("style");
 
 		news.content = finalFormat(article, false);

@@ -25,7 +25,6 @@ public class TheSunSections extends Sections {
 		add(new Section("WWE", "https://www.thesun.co.uk/sport/wwe/feed/", 1));
 		add(new Section("Cricket", "https://www.thesun.co.uk/sport/cricket/feed/", 1));
 		add(new Section("F1", "https://www.thesun.co.uk/sport/motorsport/feed/", 1));
-		add(new Section("Horse Racing", "https://www.thesun.co.uk/sport/horseracing/feed/", 1));
 		add(new Section("Golf", "https://www.thesun.co.uk/sport/golf/feed/", 1));
 		add(new Section("Rugby Union", "https://www.thesun.co.uk/sport/rugbyunion/feed/", 1));
 		add(new Section("Tennis", "https://www.thesun.co.uk/sport/tennis/feed/", 1));

@@ -53,9 +53,7 @@ public class HuffingtonPostUSASections extends com.lucevent.newsup.data.util.Sec
 
 		add(new Section("From Our Partners", null, -1));
 		add(new Section("Sleep & Wellness", "https://www.huffingtonpost.com/topic/sleep-wellness/feed", 1));
-		add(new Section("Outspeak", "https://www.huffingtonpost.com/topic/outspeak/feed", 1));
 		add(new Section("What's Working: Purpose + Profit", "https://www.huffingtonpost.com/topic/purpose-profit/feed", 1));
-		add(new Section("The Power of Humanity", "https://www.huffingtonpost.com/topic/power-of-humanity/feed", 1));
 		add(new Section("Difference Maker 100", "https://www.huffingtonpost.com/topic/difference-maker-100/feed", 1));
 
 		add(new Section("Opinion", "https://www.huffingtonpost.com/section/opinion/feed", 0));
@@ -63,14 +61,12 @@ public class HuffingtonPostUSASections extends com.lucevent.newsup.data.util.Sec
 		add(new Section("Books", "https://www.huffingtonpost.com/section/books/feed", 0));
 		add(new Section("Comedy", "https://www.huffingtonpost.com/section/comedy/feed", 0));
 		add(new Section("Crime", "https://www.huffingtonpost.com/section/crime/feed", 0));
-		add(new Section("Divorce", "https://www.huffingtonpost.com/section/divorce/feed", 0));
 		add(new Section("Education", "https://www.huffingtonpost.com/section/education/feed", 0));
 		add(new Section("Post 50", "https://www.huffingtonpost.com/section/fifty/feed", 0));
 		add(new Section("Good News", "https://www.huffingtonpost.com/topic/good-news/feed", 0));
 		add(new Section("HuffPost Partners", "https://www.huffingtonpost.com/section/huffpost-partners/feed", 0));
 		add(new Section("HuffPost Personal", "https://www.huffingtonpost.com/section/huffpost-personal/feed", 0));
 		add(new Section("Impact", "https://www.huffingtonpost.com/section/impact/feed", 0));
-		add(new Section("OWN", "https://www.huffingtonpost.com/section/own/feed", 0));
 		add(new Section("Religion", "https://www.huffingtonpost.com/section/religion/feed", 0));
 		add(new Section("Science", "https://www.huffingtonpost.com/section/science/feed", 0));
 		add(new Section("Sports", "https://www.huffingtonpost.com/section/sports/feed", 0));

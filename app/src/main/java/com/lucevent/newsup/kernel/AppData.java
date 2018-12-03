@@ -26,7 +26,7 @@ public final class AppData {
 
 	public static final String[] STORAGE_PERMISSIONS = new String[]{
 			Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
-	private static final int DATA_REVISION_N = 5;
+	private static final int DATA_REVISION_N = 6;
 	private static Sites mSites;
 
 	private static Events mEvents;
@@ -66,6 +66,8 @@ public final class AppData {
 				case 3:
 				case 4:
 					removeSettingsOf(new int[]{330  /*Metro Sverige*/, 885  /*The Geek Hammer*/, 1710 /*The Berry*/, 1800/*Full Músculo*/}, dbManager);
+				case 5:
+					removeSettingsOf(new int[]{1300  /*Meristation*/}, dbManager);
 			}
 		}
 	}

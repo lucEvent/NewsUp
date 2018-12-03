@@ -57,8 +57,6 @@ public class AboutFragment extends android.app.Fragment implements BackendNames 
 			"The Wall Street Journal",//
 			"Esquire",
 			"NewsLaundry",
-			"The Japan Times",//
-			"Republica.com",//
 			"Revista Cuore",
 			"Charged",
 			"TabTimes",

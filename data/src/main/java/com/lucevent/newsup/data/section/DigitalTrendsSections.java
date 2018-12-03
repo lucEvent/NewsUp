@@ -27,7 +27,6 @@ public class DigitalTrendsSections extends Sections {
 		add(new Section("Health & fitness", "https://www.digitaltrends.com/health-fitness/feed/", 0));
 		add(new Section("Business", "https://www.digitaltrends.com/business/feed/", 0));
 		add(new Section("Buying Guides", "https://www.digitaltrends.com/buying-guides/feed/", 0));
-		add(new Section("DT Daily", "https://www.digitaltrends.com/dt-daily/feed/", 0));
 		add(new Section("Features", "https://www.digitaltrends.com/features/feed/", 0));
 		add(new Section("How-to", "https://www.digitaltrends.com/how-to/feed/", 0));
 		add(new Section("IFA", "https://www.digitaltrends.com/ifa/feed/", 0));

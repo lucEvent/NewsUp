@@ -18,7 +18,6 @@ public class DailyExpressSections extends Sections {
 		add(new Section("Nature", "http://feeds.feedburner.com/daily-express-nature", 1));
 		add(new Section("History", "http://feeds.feedburner.com/daily-express-history", 1));
 		add(new Section("Science", "http://feeds.feedburner.com/daily-express-science", 1));
-		add(new Section("Obituaries", "http://feeds.feedburner.com/daily-express-obituaries", 1));
 		add(new Section("Weird", "http://feeds.feedburner.com/daily-express-weird-news", 1));
 		add(new Section("Sunday", "http://feeds.feedburner.com/daily-express-sunday", 1));
 		add(new Section("Scotland", "http://feeds.feedburner.com/daily-express-scotland", 1));
@@ -41,7 +40,6 @@ public class DailyExpressSections extends Sections {
 
 		add(new Section("Comment", "http://feeds.feedburner.com/daily-express-comment", 0));
 		add(new Section("Express Comment", "http://feeds.feedburner.com/daily-express-express-comment", 1));
-		add(new Section("Beachcomber", "http://feeds.feedburner.com/daily-express-beachcomber", 1));
 
 		add(new Section("Finance", "http://feeds.feedburner.com/daily-express-finance-news", 0));
 		add(new Section("City & Business", "http://feeds.feedburner.com/daily-express-citybusiness", 1));
@@ -72,8 +70,6 @@ public class DailyExpressSections extends Sections {
 		add(new Section("Property", "http://feeds.feedburner.com/daily-express-property-news", 1));
 		add(new Section("Diets", "http://feeds.feedburner.com/daily-express-diets", 1));
 		add(new Section("Tech", "http://feeds.feedburner.com/daily-express-tech", 1));
-
-		add(new Section("Top 10 Facts", "http://feeds.feedburner.com/daily-express-top-10-facts", 0));
 
 		add(new Section("Premier League", null, -1));
 		add(new Section("Arsenal", "http://feeds.feedburner.com/daily-express-arsenal-news", 1));
@@ -128,8 +124,6 @@ public class DailyExpressSections extends Sections {
 		add(new Section("Motherwell", "http://feeds.feedburner.com/daily-express-motherwell-news", 1));
 		add(new Section("Partick Thistle", "http://feeds.feedburner.com/daily-express-partick-thistle-news", 1));
 		add(new Section("Rangers", "http://feeds.feedburner.com/daily-express-rangers-news", 1));
-		add(new Section("Ross County", "http://feeds.feedburner.com/daily-express-ross-county-news", 1));
-		add(new Section("St Johnstone", "http://feeds.feedburner.com/daily-express-st-johnstone-news", 1));
 
 		add(new Section("Columnists", "http://feeds.feedburner.com/daily-express-columnists", 0));
 		add(new Section("Adam Helliker", "https://www.express.co.uk/columnistsrss/40.237/adam-helliker", 1));
@@ -147,7 +141,6 @@ public class DailyExpressSections extends Sections {
 		add(new Section("Martin Townsend", "https://www.express.co.uk/columnistsrss/40.238/martin-townsend", 1));
 		add(new Section("Mindy Hammond", "https://www.express.co.uk/columnistsrss/40.73154/mindy-hammond", 1));
 		add(new Section("Nick Ferrari", "https://www.express.co.uk/columnistsrss/40.55514/nick-ferrari", 1));
-		add(new Section("Peter Hill", "https://www.express.co.uk/columnistsrss/40.10637/peter-hill", 1));
 		add(new Section("Richard and Judy", "https://www.express.co.uk/columnistsrss/40.272/richard-and-judy", 1));
 		add(new Section("Stuart Winter", "https://www.express.co.uk/columnistsrss/40.268/stuart-winter", 1));
 		add(new Section("Vanessa Feltz", "https://www.express.co.uk/columnistsrss/40.236/vanessa-feltz", 1));

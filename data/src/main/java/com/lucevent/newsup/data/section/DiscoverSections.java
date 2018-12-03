@@ -20,9 +20,7 @@ public class DiscoverSections extends Sections {
 		add(new Section("Environment", "http://feeds.feedburner.com/DiscoverEnvironment", 0));
 
 		add(new Section("Blogs", "http://feeds.feedburner.com/DiscoverBlogs", 0));
-		add(new Section("D-brief", "http://feeds.feedburner.com/d_brief", 1));
 		add(new Section("The Crux", "http://feeds.feedburner.com/discovercrux", 1));
-		add(new Section("Citizen science salon", "http://feeds.feedburner.com/citizen-science-salon", 1));
 		add(new Section("Dead things", "http://feeds.feedburner.com/dead-things/", 1));
 		add(new Section("ImaGeo", "http://feeds.feedburner.com/imageo", 1));
 		add(new Section("Inkfish", "http://feeds.feedburner.com/ink-fish", 1));
@@ -30,7 +28,6 @@ public class DiscoverSections extends Sections {
 		add(new Section("Neuroskeptic", "http://feeds.feedburner.com/neuro-skeptic", 1));
 		add(new Section("Out there", "http://feeds.feedburner.com/out-there", 1));
 		add(new Section("Science sushi", "http://feeds.feedburner.com/Science-Sushi", 1));
-		add(new Section("Seriously, science?", "http://feeds.feedburner.com/seriouslyscience", 1));
 
 		add(new Section("20 things you didn't know about...", "http://feeds.feedburner.com/20ThingsYouDidntKnowAbout", 0));
 		add(new Section("Notes from Earth", "http://feeds.feedburner.com/notes-from-earth", 0));
