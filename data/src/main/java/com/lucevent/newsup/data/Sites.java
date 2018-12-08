@@ -513,14 +513,14 @@ public class Sites extends ArrayList<Site> {
 		res.add(new Site(2070, "The Ringer", 0xff000000, "https://www.theringer.com",
 				SiteCountry.USA, SiteLanguage.ENGLISH, SiteCategory.CULTURE,
 				com.lucevent.newsup.data.section.TheRingerSections.class, com.lucevent.newsup.data.reader.TheRinger.class));
+		res.add(new Site(2075, "iFixit", 0xffffffff, "https://www.ifixit.com",
+				SiteCountry.USA, SiteLanguage.ENGLISH, SiteCategory.DIY,
+				com.lucevent.newsup.data.section.iFixitSections.class, com.lucevent.newsup.data.reader.iFixit.class));
 
 		// Economy (3000-3099)
 		res.add(new Site(3000, "El Economista", 0xffff6600, "https://www.eleconomista.es",
 				SiteCountry.SPAIN, SiteLanguage.SPANISH, SiteCategory.ECONOMY,
 				com.lucevent.newsup.data.section.ElEconomistaSections.class, com.lucevent.newsup.data.reader.ElEconomista.class));
-
-//		res.add(new Site(0, "iFixit", 0, "", 0, iFixitSections.class, iFixit.class));
-//		res.add(new Site(0, "TheWallStreetJournal", 0, "", 0, TheWallStreetJournalSections.class, TheWallStreetJournal.class));
 
 		return res;
 	}

@@ -15,7 +15,7 @@ public class Setter {
 	public static void main(String[] args)
 	{
 		try {
-			createSiteFile("asdasdasdad");
+			createSiteFile("pub_name");
 
 			//createHTMLSiteList();
 		} catch (Exception e) {

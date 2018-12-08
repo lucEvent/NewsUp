@@ -54,13 +54,14 @@ public class AboutFragment extends android.app.Fragment implements BackendNames 
 
 	private static final String[] POSSIBLE_PUBLICATIONS = {
 			"The Times",
-			"The Wall Street Journal",//
 			"Esquire",
-			"NewsLaundry",
+			"Newslaundry",
+			"Washington Post",
+			"Dagen.se",
+			"WATmag",
+			"Thrive Global",
 			"Revista Cuore",
-			"Charged",
-			"TabTimes",
-			"VR Source",
+			"DGiT",
 			"Sound Guys",
 			"Spaceflight Now",
 			"NASA",

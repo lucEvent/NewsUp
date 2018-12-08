@@ -43,7 +43,7 @@ public class FullTest {
 			boolean b = news.content == null || news.content.isEmpty();
 			if (b && show) {
 				System.out.println("WITHOUT CONTENT: " + news.link);
-				// NewsReader.copy(news, "woc" + news.title.hashCode());
+				//HardDrive.copy(news, "woc" + news.title.hashCode());
 			}
 			return b;
 		}
@@ -119,7 +119,7 @@ public class FullTest {
 				for (org.jsoup.nodes.Element e : doc.select("style")) {
 					System.out.println(" * " + e.outerHtml());
 				}
-				//   NewsReader.copy(news, "style" + news.title.hashCode());
+				//   HardDrive.copy(news, "style" + news.title.hashCode());
 			}
 			boolean b2 = news.content.contains("style=");
 			if (b2 && show) {
@@ -129,7 +129,7 @@ public class FullTest {
 				for (org.jsoup.nodes.Element e : doc.select("[style]:not(.instagram-media,.instagram-media *)")) {
 					System.out.println(" * " + e.tagName() + ": " + e.attr("style"));
 				}
-				//     NewsReader.copy(news, "style" + news.title.replace(" ", "_").substring(0, Math.min(10, news.title.length())));
+				//     HardDrive.copy(news, "style" + news.title.replace(" ", "_").substring(0, Math.min(10, news.title.length())));
 			}
 			return b1 || b2;
 		}

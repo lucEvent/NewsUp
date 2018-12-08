@@ -49,40 +49,6 @@ public class Main {
 
 	public static void main(String[] args)
 	{
-/*  para WSJ.COM
-		Date.setTitles(new String[]{"%d seconds ago", "%d minutes ago", "%d hours ago", "%d days ago", "%d MONTHS ago", "%d YEARS ago"});
-		int start = 99;
-		int end = 500;
-		long minDate = System.currentTimeMillis() - (1000 * 60 * 60 * 24 * 151);
-		for (int i = start; i < end; i++) {
-			String digit = "";
-			if (i < 10)
-				digit = "00" + i;
-			else if (i < 100)
-				digit = "0" + i;
-			else
-				digit = "" + i;
-
-			String url = "http://www.wsj.com/xml/rss/3_7" + digit + ".xml";
-			try {
-				Document d = org.jsoup.Jsoup.connect(url)
-						.timeout(10000)
-						.get();
-
-				long date = Date.toDate(d.select("lastBuildDate").first().text());
-				int num = d.select("item").size();
-				String title = d.select("title").first().text();
-
-				if (num > 1 && date > minDate) {
-					System.out.println(i + "# [" + num + "][" + Date.getAge(date) + "] " + title + " ");
-				}
-
-			} catch (Exception e) {
-				//    System.out.println("[" + this.getClass().getSimpleName() + " | " + e.getClass().getSimpleName() + "] Can't read page. Trying again");
-			}
-		}
-*/
-
 		Site s = null;
 		s = new Site(0, "El Imparcial", 0, "", 0, 0, 0, ElImparcialSections.class, ElImparcial.class);
 //		s = new Site(0, "Life Science Sweden", 0, "", 0, 0, 0, LifeScienceSwedenSections.class, LifeScienceSweden.class);
@@ -208,7 +174,6 @@ public class Main {
 //		s = new Site(0, "Iltalehti", 0, "", 0, 0, 0, IltalehtiSections.class, Iltalehti.class);
 //		s = new Site(0, "Omicrono", 0, "", 0, 0, 0, OmicronoSections.class, Omicrono.class);
 //		s = new Site(1015, "People", 0, "", 0, 0, 0, PeopleSections.class, People.class);
-//		s = new Site(0, "TheCanary", 0, "", 0, 0, 0, TheCanarySections.class, TheCanary.class);
 //		s = new Site(0, "EUObserver", 0, "", 0, 0, 0, EUObserverSections.class, EUObserver.class);
 //		s = new Site(0, "NationalGeographicEs", 0, "", 0, 0, 0, NationalGeographicEsSections.class, NationalGeographicEs.class);
 //		s = new Site(0, "Motherboard", 0, "", 0, 0, 0, MotherboardSections.class, Motherboard.class);
@@ -240,17 +205,16 @@ public class Main {
 //		s = new Site(0, "LuckyPuppy", 0, "", 0, 0, 0, LuckyPuppySections.class, LuckyPuppy.class);
 //		s = new Site(0, "HuffingtonPostUSA", 0, "", 0, 0, 0, HuffingtonPostUSASections.class, HuffingtonPostUSA.class);
 //		s = new Site(0, "OttawaCitizen", 0, "", 0, 0, 0, OttawaCitizenSections.class, OttawaCitizen.class);
-
-		s = new Site(0, "iFixit", 0, "", 0, 0, 0, iFixitSections.class, iFixit.class);
-//		s = new Site(0, "TheWallStreetJournal", 0, "", 0, 0, 0, TheWallStreetJournalSections.class, TheWallStreetJournal.class);
+//		s = new Site(0, "iFixit", 0, "", 0, 0, 0, iFixitSections.class, iFixit.class);
+//		s = new Site(0, "TheCanary", 0, "", 0, 0, 0, TheCanarySections.class, TheCanary.class);
 		/*
 		 */
 		// TITLES, NEWS, DATES, TAGS, FULL_TEST, SECTIONS_TEST, COUNT_NEWS
 		// EXTRACT_CONTENT, DOWNLOAD_ERRORS, GOOGLE_PLAY_SITES_TEXT
-		Process p = Process.SECTIONS_TEST;
+		Process p = Process.NEWS;
 		int[] sections = new int[]{0};
 		int position = 0;
-		int lenght = -1;
+		int lenght =1;
 		boolean showTitle = false;
 		boolean copyToFile = true;
 		boolean queryServer = !true;

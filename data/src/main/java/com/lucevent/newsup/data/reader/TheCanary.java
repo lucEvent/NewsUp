@@ -33,20 +33,21 @@ public class TheCanary extends com.lucevent.newsup.data.util.NewsReader {
 	@Override
 	protected void readNewsContent(Document doc, News news)
 	{
-		Elements article = doc.select(".head-image,.article-post-content");
-		article.select("script,.awac-wrapper,.head-image .theme,#CAN_MPU_inline").remove();
+		Elements article = doc.select(".post-header-img noscript,[itemprop='articleBody']");
+		article.select("script,.in-content-ad,.subscribe-panel-wrap,.reveal,.related-posts-inline,#CAN_MPU_inline,h4:has(.lazyload)").remove();
 
-		for (Element g : article.select(".tiled-gallery")) {
-			Elements elems = g.select("img,.tiled-gallery-caption");
-			elems.select(".tiled-gallery-caption").tagName("figcaption");
-			g.html(elems.outerHtml());
+		for (Element i : article.select("iframe[data-src]")) {
+			i.attr("src", i.attr("data-src"))
+					.removeAttr("data-src")
+					.removeAttr("style");
+			Element p = i.parent();
+			if (p != null)
+				p.removeAttr("style");
 		}
-		for (Element i : article.select("iframe[data-src]"))
-			i.attr("src", i.attr("data-src"));
 
-		article.select("[style]").removeAttr("style");
 		cleanAttributes(article.select("img[src]"), "src");
 
 		news.content = finalFormat(article, false);
 	}
+
 }
