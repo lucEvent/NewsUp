@@ -36,7 +36,6 @@ public class GoteborgsPostenSections extends Sections {
 		add(new Section("Resor", "http://www.gp.se/livsstil/resor?rss", 1));
 		add(new Section("Mat", "http://www.gp.se/livsstil/mat?rss", 1));
 		add(new Section("Dryck", "http://www.gp.se/livsstil/dryck?rss", 1));
-		add(new Section("Krog", "http://www.gp.se/livsstil/krog?rss", 1));
 		add(new Section("Konsument", "http://www.gp.se/livsstil/konsument?rss", 1));
 		add(new Section("V\u00E4rldens G\u00E5ng", "http://www.gp.se/livsstil/v%C3%A4rldens-g%C3%A5ng?rss", 1));
 

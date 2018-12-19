@@ -14,6 +14,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -26,7 +27,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.widget.ImageButton;
-import android.widget.ProgressBar;
 
 import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.Main;
@@ -45,7 +45,6 @@ import com.lucevent.newsup.kernel.AppData;
 import com.lucevent.newsup.kernel.KernelManager;
 import com.lucevent.newsup.services.StatisticsService;
 import com.lucevent.newsup.services.util.DownloadData;
-import com.lucevent.newsup.view.activity.HandsFreeNewsViewActivity;
 import com.lucevent.newsup.view.adapter.NewsAdapter;
 import com.lucevent.newsup.view.dialog.AppAlertDialog;
 import com.lucevent.newsup.view.dialog.SectionsDialog;
@@ -122,7 +121,7 @@ public class NewsListFragment extends StoragePermissionFragment implements View.
 		mAdapter.clear();
 		if (mReloadBox.getVisibility() == View.VISIBLE)
 			mReloadBox.setVisibility(View.GONE);
-		mProgressBar.setVisibility(ProgressBar.VISIBLE);
+		mSwipeRefreshLayout.setRefreshing(true);
 		switch (currentSiteCode) {
 			case SAVED_NOTIFICATION:
 				mAdapter.setOnMoreSectionsClick(null);
@@ -164,7 +163,7 @@ public class NewsListFragment extends StoragePermissionFragment implements View.
 	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private RecyclerView mRecyclerView;
 	private FloatingActionButton mBtnSections;
-	private View mProgressBar, mReloadBox;
+	private View mReloadBox;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -219,7 +218,6 @@ public class NewsListFragment extends StoragePermissionFragment implements View.
 			mBtnSections = (FloatingActionButton) mMainView.findViewById(R.id.button_sections);
 			mBtnSections.setOnClickListener(onSectionsAction);
 
-			mProgressBar = mMainView.findViewById(R.id.progress_bar);
 			mReloadBox = mMainView.findViewById(R.id.try_reload);
 
 			mMainView.findViewById(R.id.btn_hands_free).setOnClickListener(onViewHandsFree);
@@ -278,6 +276,12 @@ public class NewsListFragment extends StoragePermissionFragment implements View.
 	@Override
 	public boolean onBackPressed()
 	{
+		if (mHandsFreeFragment != null) {
+			if (!mHandsFreeFragment.onBackPressed())
+				mHandsFreeFragment = null;
+			return true;
+		}
+
 		if (displayingNews) {
 			if (showSectionsButton)
 				mBtnSections.setVisibility(View.VISIBLE);
@@ -302,7 +306,7 @@ public class NewsListFragment extends StoragePermissionFragment implements View.
 		KernelManager.readContentOf(news);
 
 		if (news.content != null && !news.content.isEmpty()) {
-			mNewsView.displayNews(news);
+			mNewsView.displayNews(news, true);
 			mBtnSections.setVisibility(View.GONE);
 			displayingNews = true;
 			addToHistory(news);
@@ -352,16 +356,22 @@ public class NewsListFragment extends StoragePermissionFragment implements View.
 		mDataManager.getDatabaseManager().setNewsRead(n);
 	}
 
+	private HandsFreeNewsViewFragment mHandsFreeFragment;
+
 	private View.OnClickListener onViewHandsFree = new View.OnClickListener() {
 
 		@Override
 		public void onClick(View v)
 		{
 			mAdapter.discloseData();
-			if (mAdapter.getItemCount() > 0)
-				startActivity(new Intent(getActivity(), HandsFreeNewsViewActivity.class));
+			if (mAdapter.getItemCount() > 0) {
+				mHandsFreeFragment = new HandsFreeNewsViewFragment();
+				mHandsFreeFragment.setNewsView(mNewsView);
 
-
+				((AppCompatActivity) getActivity()).getSupportFragmentManager().beginTransaction()
+						.add(R.id.v_hands_free, mHandsFreeFragment)
+						.commit();
+			}
 		}
 	};
 
@@ -404,7 +414,6 @@ public class NewsListFragment extends StoragePermissionFragment implements View.
 						service.mRecyclerView.smoothScrollToPosition(0);
 					break;
 				case AppCode.NEWS_LOADED:
-					service.mProgressBar.setVisibility(ProgressBar.GONE);
 					if (service.mAdapter.getItemCount() == 0) {
 						if (service.mReloadBox instanceof ViewStub) {
 							service.mReloadBox = ((ViewStub) service.mReloadBox).inflate();
@@ -538,7 +547,7 @@ public class NewsListFragment extends StoragePermissionFragment implements View.
 		public void onClick(View v)
 		{
 			mAdapter.clear();
-			mProgressBar.setVisibility(ProgressBar.VISIBLE);
+			mSwipeRefreshLayout.setRefreshing(true);
 			currentSections = new int[]{(int) v.getTag()};
 			mDataManager.getReaderManager().read(currentSite, currentSections, mHandler);
 			sectionsDialog.dismiss();
@@ -601,7 +610,7 @@ public class NewsListFragment extends StoragePermissionFragment implements View.
 		@Override
 		public void onClick(View v)
 		{
-			mProgressBar.setVisibility(ProgressBar.VISIBLE);
+			mSwipeRefreshLayout.setRefreshing(true);
 			mReloadBox.setVisibility(View.GONE);
 
 			if (currentSite == null)

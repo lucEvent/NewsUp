@@ -141,7 +141,7 @@ public class HistorialFragment extends StoragePermissionFragment implements View
 		}
 
 		mDisplayingNews = true;
-		mNewsView.displayNews(news);
+		mNewsView.displayNews(news, true);
 		mSearchView.hideKeyBoard();
 
 		mDataManager.getDataManager().setNewsRead(news.clone());

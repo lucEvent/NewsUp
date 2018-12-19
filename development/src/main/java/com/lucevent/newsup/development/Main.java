@@ -198,7 +198,6 @@ public class Main {
 //		s = new Site(0, "LaVanguardia", 0, "", 0, 0, 0, LaVanguardiaSections.class, LaVanguardia.class);
 //		s = new Site(545, "The Sun", 0, "", 0, 0, 0, TheSunSections.class, TheSun.class);
 //		s = new Site(0, "Nació Digital", 0, "", 0, 0, 0, NacioDigitalSections.class, NacioDigital.class);
-//		s = new Site(0, "Göteborgs-Posten", 0, "", 0, 0, 0, GoteborgsPostenSections.class, GoteborgsPosten.class);
 //		s = new Site(0, "VilaWeb", 0, "", 0, 0, 0, VilaWebSections.class, VilaWeb.class);
 //		s = new Site(0, "LaRazon", 0, "", 0, 0, 0, LaRazonSections.class, LaRazon.class);
 //		s = new Site(0, "WwwhatsNew", 0, "", 0, 0, 0, WwwhatsNewSections.class, WwwhatsNew.class);
@@ -207,6 +206,7 @@ public class Main {
 //		s = new Site(0, "OttawaCitizen", 0, "", 0, 0, 0, OttawaCitizenSections.class, OttawaCitizen.class);
 //		s = new Site(0, "iFixit", 0, "", 0, 0, 0, iFixitSections.class, iFixit.class);
 //		s = new Site(0, "TheCanary", 0, "", 0, 0, 0, TheCanarySections.class, TheCanary.class);
+		s = new Site(0, "Göteborgs-Posten", 0, "", 0, 0, 0, GoteborgsPostenSections.class, GoteborgsPosten.class);
 		/*
 		 */
 		// TITLES, NEWS, DATES, TAGS, FULL_TEST, SECTIONS_TEST, COUNT_NEWS

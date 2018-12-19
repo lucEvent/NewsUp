@@ -20,7 +20,7 @@ public class GoteborgsPosten extends com.lucevent.newsup.data.util.NewsReader {
 				new int[]{TAG_TITLE},
 				new int[]{TAG_LINK},
 				new int[]{TAG_DESCRIPTION},
-				new int[]{TAG_CONTENT_ENCODED},
+				new int[]{},
 				new int[]{TAG_PUBDATE},
 				new int[]{TAG_CATEGORY},
 				new int[]{},
@@ -28,19 +28,13 @@ public class GoteborgsPosten extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected String parseContent(Element prop)
-	{
-		Element article = jsoupParse(prop);
-		article.select("[style]").removeAttr("style");
-		cleanAttributes(article.select("img"), "src");
-		return finalFormat(article, false);
-	}
-
-	@Override
 	protected void readNewsContent(Document doc, News news)
 	{
-		Elements article = doc.select(".article__head .img-container,.article__preamble,.article__body__richtext,.article__body__facts");
-		article.select("script,.article__category,.wp_rp_wrap,.partner").remove();
+//		HardDrive.copyToDeb(doc,true);
+
+		Elements article = doc.select(".c-article__head figure,.c-article__body__content");
+//		Elements article = doc.select(".article__head .img-container,.article__preamble,.article__body__richtext,.article__body__facts");
+//		article.select("script,.article__category,.wp_rp_wrap,.partner").remove();
 
 		Elements preamble = article.select(".article__preamble");
 		if (!preamble.isEmpty()) {
@@ -65,7 +59,7 @@ public class GoteborgsPosten extends com.lucevent.newsup.data.util.NewsReader {
 
 		cleanAttributes(article.select("img"), "src");
 
-		news.content = finalFormat(article, true).replaceAll("&nbsp;", "");
+		news.content = finalFormat(article, true);
 	}
 
 	@Override
@@ -74,7 +68,7 @@ public class GoteborgsPosten extends com.lucevent.newsup.data.util.NewsReader {
 		try {
 			return org.jsoup.Jsoup.connect(url)
 					.timeout(10000)
-					.userAgent(USER_AGENT)
+					.userAgent("Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)")
 					.get();
 		} catch (Exception ignored) {
 		}

@@ -1,6 +1,7 @@
-package com.lucevent.newsup.view.activity;
+package com.lucevent.newsup.view.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -18,6 +19,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -50,7 +54,7 @@ import com.lucevent.newsup.view.util.NewsAdapterList;
 import com.lucevent.newsup.view.util.NewsView;
 import com.lucevent.newsup.view.util.Utils;
 
-public class HandsFreeNewsViewActivity extends FragmentActivity implements
+public class HandsFreeNewsViewFragment extends Fragment implements
 		ViewPager.OnPageChangeListener,
 		Runnable,
 		GestureDetector.OnGestureListener,
@@ -59,8 +63,7 @@ public class HandsFreeNewsViewActivity extends FragmentActivity implements
 	private static final int SECONDS_BETWEEN_NEWS = 10 * 1000;
 	private static final String GESTURE_EDUCATION_SHOWN_KEY = "gh_hands_free";
 	private static RequestOptions glideOptions = new RequestOptions().centerCrop();
-	private static int MAX_SWIPE_FOR_ACTION, MAX_MARK_TRANSLATION;
-	private static final float MAX_MARK_SCALE = 1.4f;
+	private static int MAX_ACTION_SWIPE;
 	private static int HEADLINE_IMAGE_HEIGHT;
 
 	private Handler mHandler = new Handler();
@@ -68,51 +71,54 @@ public class HandsFreeNewsViewActivity extends FragmentActivity implements
 	private NewsView mNewsView;
 
 	private HeadlinesPagerAdapter mHeadlinesPagerAdapter;
-	private ViewPager mViewPager;
+	private HeadLinesViewPager mViewPager;
 	private ProgressBar mProgressBar;
-	private View mCloseMark, mOpenNewsMark;
+	private View mCloseHelp, mOpenNewsHelp;
 
 	private boolean mDisplayingContent = false;
 	private float accumDistanceY = 0f;
 	private boolean mVerticalScrolling = false, mHorizontalScrolling = false, mMustCloseOnUp = false, mMustOpenNewsOnUp = false;
 
-
-	@Override
-	protected void onCreate(@Nullable Bundle savedInstanceState)
+	public void setNewsView(NewsView nv)
 	{
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.a_hands_free_news_view);
+		mNewsView = nv;
+	}
 
-		MAX_SWIPE_FOR_ACTION = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 64, getResources().getDisplayMetrics());
-		MAX_MARK_TRANSLATION = (int) (MAX_SWIPE_FOR_ACTION * 0.35);
+	@Nullable
+	@Override
+	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
+	{
+		FragmentActivity a = getActivity();
+		View v = inflater.inflate(R.layout.f_hands_free_news_view, container, false);
+
+		MAX_ACTION_SWIPE = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 52, getResources().getDisplayMetrics());
 		Point size = new Point();
-		getWindowManager().getDefaultDisplay().getSize(size);
+		a.getWindowManager().getDefaultDisplay().getSize(size);
 		HEADLINE_IMAGE_HEIGHT = (int) (0.45f * size.y);
 
-		mHeadlinesPagerAdapter = new HeadlinesPagerAdapter(getSupportFragmentManager());
-		mViewPager = (ViewPager) findViewById(R.id.pager);
+		mHeadlinesPagerAdapter = new HeadlinesPagerAdapter(a.getSupportFragmentManager());
+		mViewPager = (HeadLinesViewPager) v.findViewById(R.id.pager);
 		mViewPager.setAdapter(mHeadlinesPagerAdapter);
 		mViewPager.addOnPageChangeListener(this);
+		mViewPager.mHFNVFragment = this;
 
-		mProgressBar = (ProgressBar) findViewById(R.id.progress);
-		mProgressBar.setMax((mHeadlinesPagerAdapter.getCount() - 1) * 100);
+		mProgressBar = (ProgressBar) v.findViewById(R.id.progress);
+		mProgressBar.setMax((mHeadlinesPagerAdapter.getCount() - 3) * 100);
 		mProgressBar.setProgress(0);
+		mViewPager.setCurrentItem(1);
 
-		mNewsView = (NewsView) findViewById(R.id.news_view);
-		mNewsView.setFragmentContext(this, null);
-
-		mCloseMark = findViewById(R.id.close_mark);
-		mOpenNewsMark = findViewById(R.id.open_news_mark);
+		mCloseHelp = v.findViewById(R.id.help_close);
+		mOpenNewsHelp = v.findViewById(R.id.help_open_news);
 
 		if (!AppSettings.getStatus(GESTURE_EDUCATION_SHOWN_KEY, false)) {
-			((ViewStub) findViewById(R.id.gesture_education)).inflate();
-			findViewById(R.id.btn_ok).setOnClickListener(new View.OnClickListener() {
+			((ViewStub) v.findViewById(R.id.gesture_education)).inflate();
+			v.findViewById(R.id.btn_ok).setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v)
 				{
-					findViewById(R.id.gesture_education).setVisibility(View.GONE);
+					v.findViewById(R.id.gesture_education).setVisibility(View.GONE);
 
-					if (((CheckBox) findViewById(R.id.do_not_show_again)).isChecked())
+					if (((CheckBox) v.findViewById(R.id.do_not_show_again)).isChecked())
 						AppSettings.setStatus(GESTURE_EDUCATION_SHOWN_KEY, true);
 
 					startGestureDetection();
@@ -122,77 +128,128 @@ public class HandsFreeNewsViewActivity extends FragmentActivity implements
 			startGestureDetection();
 
 		AppData.setOnNewsListChange(this);
-		hideSystemUi();
+		hideSystemUi(a);
+
+		return v;
 	}
 
 	private void startGestureDetection()
 	{
-		mGDetector = new GestureDetectorCompat(this, this);
+		mGDetector = new GestureDetectorCompat(getActivity(), this);
 		mGDetector.setIsLongpressEnabled(false);
 		mHandler.postDelayed(this, SECONDS_BETWEEN_NEWS);
 	}
 
-	@Override
-	public void onBackPressed()
+	public boolean onBackPressed()
 	{
 		if (mDisplayingContent) {
 			mNewsView.hideNews();
 			mDisplayingContent = false;
 			displayNext();
-			return;
+			return true;
 		}
-		mHandler.removeCallbacks(this);
-		super.onBackPressed();
+		finish();
+		return false;
 	}
 
 	@Override
-	protected void onResume()
+	public void onResume()
 	{
 		super.onResume();
 		mNewsView.resume();
 	}
 
 	@Override
-	protected void onPause()
+	public void onPause()
 	{
 		super.onPause();
 		mNewsView.pause();
 	}
 
 	@Override
-	protected void onDestroy()
+	public void onDestroy()
 	{
 		super.onDestroy();
 		mNewsView.destroy();
 		AppData.setOnNewsListChange(null);
 	}
 
-	private void hideSystemUi()
+	private void hideSystemUi(Activity a)
 	{
-		Window w = getWindow();
+		Window w = a.getWindow();
 		w.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		w.getDecorView().setSystemUiVisibility(
 				View.SYSTEM_UI_FLAG_LOW_PROFILE
 						| View.SYSTEM_UI_FLAG_FULLSCREEN
 						| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
 						| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+
+		// Hidding ActionBar
+		try {
+			ActionBar mActionBar = ((AppCompatActivity) a).getSupportActionBar();
+			mActionBar.setShowHideAnimationEnabled(false);
+			mActionBar.hide();
+		} catch (Exception ignored) {
+		}
+	}
+
+	private boolean dispatchTouchEvent(MotionEvent event)
+	{
+		if (mVerticalScrolling && event.getAction() == MotionEvent.ACTION_UP) {
+			mVerticalScrolling = false;
+
+			if (mMustCloseOnUp) {
+				finish();
+				return true;
+			}
+			if (mMustOpenNewsOnUp) {
+				mMustOpenNewsOnUp = false;
+				displayCurrentContent();
+			} else {
+				Animation a = new TranslateAnimation(0f, 0f, mViewPager.getY(), 0f);
+				a.setAnimationListener(new Animation.AnimationListener() {
+					@Override
+					public void onAnimationStart(Animation animation)
+					{
+					}
+
+					@Override
+					public void onAnimationEnd(Animation animation)
+					{
+						mViewPager.setTranslationY(0);
+					}
+
+					@Override
+					public void onAnimationRepeat(Animation animation)
+					{
+					}
+				});
+				a.setDuration(200);
+				mViewPager.startAnimation(a);
+				mHandler.postDelayed(HandsFreeNewsViewFragment.this, SECONDS_BETWEEN_NEWS);
+			}
+			mViewPager.setTranslationY(0);
+			accumDistanceY = 0;
+		}
+		return (mGDetector != null && mGDetector.onTouchEvent(event));
 	}
 
 	@Override
 	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
 	{
 		mHorizontalScrolling = positionOffset != 0.0;
-		mProgressBar.setProgress((int) ((position + positionOffset) * 100));
+		mProgressBar.setProgress((int) ((position - 1 + positionOffset) * 100));
 	}
 
 	@Override
 	public void onPageSelected(int position)
 	{
-		mProgressBar.setMax((mHeadlinesPagerAdapter.getCount() - 1) * 100);
+		mProgressBar.setMax((mHeadlinesPagerAdapter.getCount() - 3) * 100);
 		mProgressBar.setProgress(position * 100);
 
-		if (position == mHeadlinesPagerAdapter.getCount() - 1)
+		if (position == 0 || position == mHeadlinesPagerAdapter.getCount() - 1) {
 			finish();
+		}
 	}
 
 	boolean dragging = false;
@@ -211,54 +268,6 @@ public class HandsFreeNewsViewActivity extends FragmentActivity implements
 				dragging = false;
 			}
 		}
-	}
-
-	@Override
-	public boolean dispatchTouchEvent(MotionEvent event)
-	{
-		if (!mVerticalScrolling)
-			super.dispatchTouchEvent(event);
-
-		if (!mDisplayingContent) {
-			if (mVerticalScrolling && event.getAction() == MotionEvent.ACTION_UP) {
-				mVerticalScrolling = false;
-
-				if (mMustCloseOnUp) {
-					finish();
-					return true;
-				}
-				if (mMustOpenNewsOnUp) {
-					mMustOpenNewsOnUp = false;
-					displayCurrentContent();
-				} else {
-					Animation a = new TranslateAnimation(0f, 0f, mViewPager.getY(), 0f);
-					a.setAnimationListener(new Animation.AnimationListener() {
-						@Override
-						public void onAnimationStart(Animation animation)
-						{
-						}
-
-						@Override
-						public void onAnimationEnd(Animation animation)
-						{
-							mViewPager.setTranslationY(0);
-						}
-
-						@Override
-						public void onAnimationRepeat(Animation animation)
-						{
-						}
-					});
-					a.setDuration(200);
-					mViewPager.startAnimation(a);
-					mHandler.postDelayed(this, SECONDS_BETWEEN_NEWS);
-				}
-				mViewPager.setTranslationY(0);
-				accumDistanceY = 0;
-			}
-			return (mGDetector != null && mGDetector.onTouchEvent(event));
-		}
-		return super.dispatchTouchEvent(event);
 	}
 
 	@Override
@@ -282,34 +291,25 @@ public class HandsFreeNewsViewActivity extends FragmentActivity implements
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
 	{
 		if (!mHorizontalScrolling && !mVerticalScrolling && Math.abs(distanceX) < 2.0) {
+			// vertical scroll just starts in this call
 			mHandler.removeCallbacks(this);
 			mVerticalScrolling = true;
 		}
 		if (mVerticalScrolling) {
 			accumDistanceY -= distanceY;
 
-			mMustCloseOnUp = accumDistanceY > MAX_SWIPE_FOR_ACTION;
-			mMustOpenNewsOnUp = accumDistanceY < -MAX_SWIPE_FOR_ACTION;
+			mMustCloseOnUp = accumDistanceY > MAX_ACTION_SWIPE;
+			mMustOpenNewsOnUp = accumDistanceY < -MAX_ACTION_SWIPE;
 			if (accumDistanceY > 0) {
-				if (accumDistanceY >= MAX_SWIPE_FOR_ACTION)
-					accumDistanceY = MAX_SWIPE_FOR_ACTION;
+				if (accumDistanceY >= MAX_ACTION_SWIPE)
+					accumDistanceY = MAX_ACTION_SWIPE;
 
-				float swipePercent = accumDistanceY / MAX_SWIPE_FOR_ACTION;
-				float scale = MAX_MARK_SCALE * swipePercent;
-
-				mCloseMark.setTranslationY(MAX_MARK_TRANSLATION * swipePercent);
-				mCloseMark.setScaleX(scale);
-				mCloseMark.setScaleY(scale);
+				mCloseHelp.setTranslationY(accumDistanceY - MAX_ACTION_SWIPE);
 			} else {
-				if (accumDistanceY <= -MAX_SWIPE_FOR_ACTION)
-					accumDistanceY = -MAX_SWIPE_FOR_ACTION;
+				if (accumDistanceY <= -MAX_ACTION_SWIPE)
+					accumDistanceY = -MAX_ACTION_SWIPE;
 
-				float swipePercent = accumDistanceY / MAX_SWIPE_FOR_ACTION;
-				float scale = -(MAX_MARK_SCALE * swipePercent);
-
-				mOpenNewsMark.setTranslationY(MAX_MARK_TRANSLATION * swipePercent);
-				mOpenNewsMark.setScaleX(scale);
-				mOpenNewsMark.setScaleY(scale);
+				mOpenNewsHelp.setTranslationY(accumDistanceY + MAX_ACTION_SWIPE);
 			}
 			mViewPager.setTranslationY(accumDistanceY);
 		}
@@ -333,19 +333,19 @@ public class HandsFreeNewsViewActivity extends FragmentActivity implements
 		Site site = AppData.getSiteByCode(news.site_code);
 
 		if (site instanceof UserSite) {
-			Utils.openCustomTab(this, news);
+			Utils.openCustomTab(getActivity(), news);
 			return;
 		}
 
 		KernelManager.readContentOf(news);
 		if (news.content != null && !news.content.isEmpty()) {
-			mNewsView.displayNews(news);
+			mNewsView.displayNews(news, false);
 			mDisplayingContent = true;
 			KernelManager.setNewsRead(news);
 			return;
 		}
 
-		Utils.openCustomTab(this, news);
+		Utils.openCustomTab(getActivity(), news);
 	}
 
 	private void displayNext()
@@ -359,7 +359,6 @@ public class HandsFreeNewsViewActivity extends FragmentActivity implements
 		// Displaying next news
 		int current = mViewPager.getCurrentItem();
 		if (current >= mHeadlinesPagerAdapter.getCount() - 1) {
-			finish();
 			return;
 		}
 		mViewPager.setCurrentItem(current + 1);
@@ -372,6 +371,38 @@ public class HandsFreeNewsViewActivity extends FragmentActivity implements
 	public void onChange(NewsAdapterList currentNewsList)
 	{
 		mHeadlinesPagerAdapter.notifyDataSetChanged();
+	}
+
+	/**
+	 * HeadLinesViewPager
+	 */
+	public static class HeadLinesViewPager extends ViewPager {
+
+		HandsFreeNewsViewFragment mHFNVFragment;
+
+		public HeadLinesViewPager(@NonNull Context context)
+		{
+			super(context);
+		}
+
+		public HeadLinesViewPager(@NonNull Context context, @Nullable AttributeSet attrs)
+		{
+			super(context, attrs);
+		}
+
+		@Override
+		public boolean dispatchTouchEvent(MotionEvent event)
+		{
+			boolean r1 = false, r2 = false;
+			if (!mHFNVFragment.mVerticalScrolling)
+				r1 = super.dispatchTouchEvent(event);
+
+			if (!mHFNVFragment.mDisplayingContent)
+				r2 = mHFNVFragment.dispatchTouchEvent(event);
+
+			return r1 || r2;
+			//	return super.dispatchTouchEvent(event);
+		}
 	}
 
 	/**
@@ -390,12 +421,12 @@ public class HandsFreeNewsViewActivity extends FragmentActivity implements
 		@Override
 		public Fragment getItem(int i)
 		{
-			if (/*i==0 ||*/i == getCount() - 1)
+			if (i == 0 || i == getCount() - 1)  // dummy pages to exit by swiping left/right at the beginning/end
 				return new DummyFragment();
 
 			Fragment fragment = new HeadlineFragment();
 			Bundle args = new Bundle();
-			args.putInt(HeadlineFragment.ARG_ITEM, i);
+			args.putInt(HeadlineFragment.ARG_ITEM, i - 1);
 			fragment.setArguments(args);
 			return fragment;
 		}
@@ -404,7 +435,7 @@ public class HandsFreeNewsViewActivity extends FragmentActivity implements
 		public int getCount()
 		{
 			int size = mNews.size();
-			return (mNews.get(size - 1).id == News.ID_DUMMY ? size - 1 : size) + 1;
+			return (mNews.get(size - 1).id == News.ID_DUMMY ? size - 1 : size) + 2; // +2 -> dummy pages to exit by swiping left/right at the beginning/end
 		}
 
 		@Override
@@ -432,7 +463,7 @@ public class HandsFreeNewsViewActivity extends FragmentActivity implements
 		@Override
 		public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 		{
-			View v = inflater.inflate(R.layout.f_hands_free_news_view, container, false);
+			View v = inflater.inflate(R.layout.f_hands_free_headline, container, false);
 
 			mTVtitle = (TextView) v.findViewById(R.id.title);
 			mTVdescription = (TextView) v.findViewById(R.id.description);
@@ -515,6 +546,29 @@ public class HandsFreeNewsViewActivity extends FragmentActivity implements
 			v.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 			v.setBackgroundColor(0x00000000);
 			return v;
+		}
+	}
+
+	private void finish()
+	{
+		mHandler.removeCallbacks(this);
+
+		FragmentActivity a = getActivity();
+		a.getSupportFragmentManager().beginTransaction()
+				.remove(this)
+				.commit();
+
+		// Redisplaying system IU (top bar)
+		Window w = a.getWindow();
+		w.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		w.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+
+		// Redisplaying ActionBar
+		try {
+			ActionBar mActionBar = ((AppCompatActivity) a).getSupportActionBar();
+			mActionBar.setShowHideAnimationEnabled(false);
+			mActionBar.show();
+		} catch (Exception ignored) {
 		}
 	}
 

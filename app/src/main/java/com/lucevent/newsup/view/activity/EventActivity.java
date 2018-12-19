@@ -16,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
 
 import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.R;
@@ -28,6 +27,7 @@ import com.lucevent.newsup.kernel.AppData;
 import com.lucevent.newsup.kernel.KernelManager;
 import com.lucevent.newsup.view.adapter.NewsFilterAdapter;
 import com.lucevent.newsup.view.dialog.EventConfigDialog;
+import com.lucevent.newsup.view.fragment.HandsFreeNewsViewFragment;
 import com.lucevent.newsup.view.util.NewsAdapterList;
 import com.lucevent.newsup.view.util.NewsView;
 
@@ -48,7 +48,6 @@ public class EventActivity extends StoragePermissionActivity implements View.OnC
 	private NewsView mNewsView;
 	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private RecyclerView mRecyclerView;
-	private View mProgressBar;
 
 	private boolean mDisplayingNews = false;
 
@@ -74,6 +73,7 @@ public class EventActivity extends StoragePermissionActivity implements View.OnC
 		mSwipeRefreshLayout = findViewById(R.id.refresh_trigger);
 		mSwipeRefreshLayout.setOnRefreshListener(this);
 		mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent);
+		mSwipeRefreshLayout.setRefreshing(true);
 
 		mRecyclerView = (RecyclerView) findViewById(R.id.list);
 		mRecyclerView.setNestedScrollingEnabled(false);
@@ -85,9 +85,6 @@ public class EventActivity extends StoragePermissionActivity implements View.OnC
 		mNewsView.setFragmentContext(this, null);
 		mNewsView.setBookmarkStateChangeListener(onBookmarkClick);
 		mNewsView.setImageLongClickListener(onImageLongClick);
-
-		mProgressBar = findViewById(R.id.progress_bar);
-		mProgressBar.setVisibility(ProgressBar.VISIBLE);
 
 		findViewById(R.id.btn_hands_free).setOnClickListener(onViewHandsFree);
 
@@ -127,6 +124,12 @@ public class EventActivity extends StoragePermissionActivity implements View.OnC
 	@Override
 	public void onBackPressed()
 	{
+		if (mHandsFreeFragment != null) {
+			if (!mHandsFreeFragment.onBackPressed())
+				mHandsFreeFragment = null;
+			return;
+		}
+
 		if (mDisplayingNews) {
 			mNewsView.hideNews();
 			mDisplayingNews = false;
@@ -166,7 +169,7 @@ public class EventActivity extends StoragePermissionActivity implements View.OnC
 		KernelManager.readContentOf(news);
 
 		if (news.content != null && !news.content.isEmpty()) {
-			mNewsView.displayNews(news);
+			mNewsView.displayNews(news, true);
 			mDisplayingNews = true;
 			KernelManager.setNewsRead(news);
 			return;
@@ -209,14 +212,22 @@ public class EventActivity extends StoragePermissionActivity implements View.OnC
 		dialog.show();
 	}
 
+	private HandsFreeNewsViewFragment mHandsFreeFragment;
+
 	private View.OnClickListener onViewHandsFree = new View.OnClickListener() {
 
 		@Override
 		public void onClick(View v)
 		{
 			mAdapter.discloseData();
-			if (mAdapter.getItemCount() > 0)
-				startActivity(new Intent(EventActivity.this, HandsFreeNewsViewActivity.class));
+			if (mAdapter.getItemCount() > 0) {
+				mHandsFreeFragment = new HandsFreeNewsViewFragment();
+				mHandsFreeFragment.setNewsView(mNewsView);
+
+				getSupportFragmentManager().beginTransaction()
+						.add(R.id.v_hands_free, mHandsFreeFragment)
+						.commit();
+			}
 		}
 	};
 
@@ -257,7 +268,6 @@ public class EventActivity extends StoragePermissionActivity implements View.OnC
 				case AppCode.NEWS_LOADED:
 					if (service.mSwipeRefreshLayout.isRefreshing())
 						service.mSwipeRefreshLayout.setRefreshing(false);
-					service.mProgressBar.setVisibility(ProgressBar.GONE);
 					break;
 				case AppCode.NO_INTERNET:
 					Snackbar.make(service.mRecyclerView, R.string.msg_no_internet_connection, Snackbar.LENGTH_LONG).show();

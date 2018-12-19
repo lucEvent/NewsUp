@@ -133,7 +133,7 @@ public class BookmarksFragment extends StoragePermissionFragment implements View
 
 		mDisplayingNews = true;
 		KernelManager.setNewsRead(news);
-		mNewsView.displayNews(news);
+		mNewsView.displayNews(news, true);
 		mSearchView.hideKeyBoard();
 	}
 

@@ -45,6 +45,7 @@ public class NewsView extends RelativeLayout {
 	private Activity mActivityContext;
 	private DrawerLayout mDrawer;
 	private ActionBar mActionBar;
+	private boolean mImmersiveMode;
 
 	private NewsElementsListView mListView;
 	private FloatingActionButton mBookmarkBtn;
@@ -152,9 +153,10 @@ public class NewsView extends RelativeLayout {
 	private int mWidth = -2;
 	private int mHeight = -2;
 
-	public void displayNews(News news)
+	public void displayNews(News news, boolean immersiveMode)
 	{
 		mCurrentNews = news;
+		mImmersiveMode = immersiveMode;
 		mBookmarkBtn.setTag(news);
 		mBookmarkBtn.setSelected(BookmarksManager.isBookmarked(news));
 
@@ -166,7 +168,7 @@ public class NewsView extends RelativeLayout {
 		if (mDrawer != null)
 			mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
-		if (mActionBar != null && mActionBar.isShowing()) {
+		if (mActionBar != null && mActionBar.isShowing() && mImmersiveMode) {
 			mDisplayActionBar = true;
 			mActionBar.hide();
 		}
@@ -184,14 +186,16 @@ public class NewsView extends RelativeLayout {
 			@Override
 			public void onAnimationEnd(Animation animation)
 			{
-				//  hiding System UI
-				Window w = mActivityContext.getWindow();
-				w.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-				w.getDecorView().setSystemUiVisibility(
-						View.SYSTEM_UI_FLAG_LOW_PROFILE
-								| View.SYSTEM_UI_FLAG_FULLSCREEN
-								| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-								| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+				if (mImmersiveMode) {
+					//  hiding System UI
+					Window w = mActivityContext.getWindow();
+					w.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+					w.getDecorView().setSystemUiVisibility(
+							View.SYSTEM_UI_FLAG_LOW_PROFILE
+									| View.SYSTEM_UI_FLAG_FULLSCREEN
+									| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+									| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+				}
 			}
 		});
 	}
@@ -213,7 +217,7 @@ public class NewsView extends RelativeLayout {
 
 	public void hideNews()
 	{
-		if (mActionBar != null) {
+		if (mActionBar != null && mImmersiveMode) {
 			// showing System UI
 			Window w = mActivityContext.getWindow();
 			w.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);

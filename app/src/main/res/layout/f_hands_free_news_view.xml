@@ -1,43 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark">
+    android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/image"
+    <LinearLayout
+        android:id="@+id/help_close"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="52dp"
         android:layout_alignParentTop="true"
-        android:background="@color/colorPrimaryDark" />
+        android:background="@color/colorPrimaryDark"
+        android:gravity="bottom"
+        android:orientation="vertical"
+        android:translationY="-52dp">
 
-    <ImageView
-        android:id="@+id/icon"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:layout_margin="12dp"
-        android:src="@drawable/ic_remove" />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/close"
+            android:paddingBottom="10dp"
+            android:src="@drawable/ic_clear"
+            android:tint="@color/colorAccentDark" />
+    </LinearLayout>
 
-    <com.lucevent.newsup.view.util.AppBoldTextView
-        android:id="@+id/title"
+    <LinearLayout
+        android:id="@+id/help_open_news"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/image"
-        android:padding="24dp"
-        android:text="Title"
-        android:textSize="24sp" />
+        android:layout_height="52dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimaryDark"
+        android:orientation="vertical"
+        android:translationY="52dp">
 
-    <com.lucevent.newsup.view.util.AppTextView
-        android:id="@+id/description"
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_indicator_up"
+            android:tint="@color/colorAccentDark"
+            android:translationY="2dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:text="@string/open_news"
+            android:textAlignment="center"
+            android:textColor="@color/colorAccentDark"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <view
+        android:id="@+id/pager"
+        class="com.lucevent.newsup.view.fragment.HandsFreeNewsViewFragment$HeadLinesViewPager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/progress"
-        android:layout_below="@id/title"
-        android:paddingLeft="26dp"
-        android:paddingRight="26dp"
-        android:text="Description"
-        android:textSize="18sp" />
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true" />
+
+    <ProgressBar
+        android:id="@+id/progress"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_alignParentBottom="true"
+        android:indeterminate="false" />
+
+    <ViewStub
+        android:id="@+id/gesture_education"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:inflatedId="@+id/gesture_education"
+        android:layout="@layout/vs_hands_free_gesture_education" />
 
 </RelativeLayout>
