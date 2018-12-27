@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 27
     buildToolsVersion '28.0.3'
+    compileOptions.encoding "ISO-8859-1"
 
     defaultConfig {
         applicationId "com.lucevent.newsup"

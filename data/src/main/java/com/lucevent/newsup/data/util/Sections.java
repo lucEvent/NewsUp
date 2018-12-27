@@ -9,7 +9,6 @@ public class Sections extends ArrayList<Section> {
 		super();
 	}
 
-
 	public int indexOf(int section_code)
 	{
 		for (int i = 0; i < size(); i++)

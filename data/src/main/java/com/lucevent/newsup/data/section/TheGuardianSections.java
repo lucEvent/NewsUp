@@ -97,11 +97,11 @@ public class TheGuardianSections extends Sections {
 		add(new Section("Professional networks", "https://www.theguardian.com/guardian-professional/rss", 0));
 
 		add(new Section("The Guardian's", null, -1));
-		add(new Section("Obituaries", "https://www.theguardian.com/tone/obituaries/rss", 0));
-		add(new Section("G2", "https://www.theguardian.com/theguardian/g2/rss", 0));
-		add(new Section("Weekend", "https://www.theguardian.com/theguardian/weekend/rss", 0));
-		add(new Section("The guide", "https://www.theguardian.com/theguardian/theguide/rss", 0));
-		add(new Section("Saturday review", "https://www.theguardian.com/theguardian/guardianreview/rss", 0));
+		add(new Section("Obituaries", "https://www.theguardian.com/tone/obituaries/rss", 1));
+		add(new Section("G2", "https://www.theguardian.com/theguardian/g2/rss", 1));
+		add(new Section("Weekend", "https://www.theguardian.com/theguardian/weekend/rss", 1));
+		add(new Section("The guide", "https://www.theguardian.com/theguardian/theguide/rss", 1));
+		add(new Section("Saturday review", "https://www.theguardian.com/theguardian/guardianreview/rss", 1));
 
 		add(new Section("The observer", null, -1));
 		add(new Section("Comment", "https://www.theguardian.com/theobserver/news/comment/rss", 1));

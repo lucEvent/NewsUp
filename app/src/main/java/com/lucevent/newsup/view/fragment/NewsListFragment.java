@@ -578,7 +578,7 @@ public class NewsListFragment extends StoragePermissionFragment implements View.
 					int pos;
 					do {
 						pos = r.nextInt(s.size());
-					} while (s.get(pos).level == -1);
+					} while (s.get(pos).url == null);
 					res.add(new Pair<>(pos, s.get(pos)));
 				}
 			}

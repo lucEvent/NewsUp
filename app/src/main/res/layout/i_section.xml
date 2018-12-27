@@ -6,14 +6,15 @@
     android:background="@drawable/ripple"
     android:clickable="true"
     android:focusable="true"
-    android:paddingBottom="10dp"
-    android:paddingEnd="5dp"
     android:paddingStart="25dp"
-    android:paddingTop="10dp">
+    android:paddingTop="10dp"
+    android:paddingEnd="5dp"
+    android:paddingBottom="10dp">
 
     <ToggleButton
         android:id="@+id/home"
-        style="@style/homeSectionToggleButton" />
+        android:layout_width="20dp"
+        android:layout_height="20dp" />
 
     <com.lucevent.newsup.view.util.AppTextView
         android:id="@+id/label"
@@ -22,7 +23,7 @@
         android:layout_gravity="center_vertical"
         android:layout_marginStart="10dp"
         android:text="Section"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="13sp"
         tools:ignore="HardcodedText" />
 
 </LinearLayout>

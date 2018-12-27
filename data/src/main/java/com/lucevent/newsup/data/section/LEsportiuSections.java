@@ -40,7 +40,7 @@ public class LEsportiuSections extends Sections {
 		add(new Section("M\u00E9s b\u00E0squet", "https://www.lesportiudecatalunya.cat/basquet/mes-basquet.feed?type=rss", 1));
 
 		add(new Section("Hoquei", null, -1));
-		add(new Section("OK lliga", "https://www.lesportiudecatalunya.cat/hoquei/ok-lliga.feed?type=rss", 0));
+		add(new Section("OK lliga", "https://www.lesportiudecatalunya.cat/hoquei/ok-lliga.feed?type=rss", 1));
 		add(new Section("Lliga europea", "https://www.lesportiudecatalunya.cat/hoquei/lliga-europea.feed?type=rss", 1));
 		add(new Section("Copa CERS", "https://www.lesportiudecatalunya.cat/hoquei/copa-cers.feed?type=rss", 1));
 		add(new Section("Copa", "https://www.lesportiudecatalunya.cat/hoquei/copa.feed?type=rss", 1));

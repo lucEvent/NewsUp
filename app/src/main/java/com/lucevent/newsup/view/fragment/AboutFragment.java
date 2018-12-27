@@ -23,7 +23,7 @@ public class AboutFragment extends android.app.Fragment implements BackendNames 
 	private static final String URL_TERM_AND_CONDITIONS = MAIN_SERVER + "term_and_conditions/";
 
 	private static final String[] VERSION_CHANGELOG = {
-			"2.8.2", "2018-XX-XX", "Find publication now offers better results", "Support for all IGN publications.", "Text is now selectable.", "News from not supported publications can now be bookmarked and will be keep in records."
+			"2.8.2", "2018-XX-XX", "Find publication now offers better results", "Text is now selectable.", "News from not supported publications can now be bookmarked and will be keep in records.", "Section groups are now expandable/contractable in dialogs.", "Support for all IGN publications.",
 	};
 
 	private static final String[][] CHANGELOG = {
