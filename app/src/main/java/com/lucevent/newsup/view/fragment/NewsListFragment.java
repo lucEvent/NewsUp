@@ -220,7 +220,7 @@ public class NewsListFragment extends StoragePermissionFragment implements View.
 
 			mReloadBox = mMainView.findViewById(R.id.try_reload);
 
-			mMainView.findViewById(R.id.btn_hands_free).setOnClickListener(onViewHandsFree);
+			mMainView.findViewById(R.id.btn_hands_free).setOnClickListener(mOnViewHandsFree);
 		}
 		setUp();
 		return mMainView;
@@ -283,8 +283,6 @@ public class NewsListFragment extends StoragePermissionFragment implements View.
 		}
 
 		if (displayingNews) {
-			if (showSectionsButton)
-				mBtnSections.setVisibility(View.VISIBLE);
 			mNewsView.hideNews();
 			displayingNews = false;
 			return true;
@@ -307,7 +305,6 @@ public class NewsListFragment extends StoragePermissionFragment implements View.
 
 		if (news.content != null && !news.content.isEmpty()) {
 			mNewsView.displayNews(news, true);
-			mBtnSections.setVisibility(View.GONE);
 			displayingNews = true;
 			addToHistory(news);
 			return;
@@ -355,25 +352,6 @@ public class NewsListFragment extends StoragePermissionFragment implements View.
 	{
 		mDataManager.getDatabaseManager().setNewsRead(n);
 	}
-
-	private HandsFreeNewsViewFragment mHandsFreeFragment;
-
-	private View.OnClickListener onViewHandsFree = new View.OnClickListener() {
-
-		@Override
-		public void onClick(View v)
-		{
-			mAdapter.discloseData();
-			if (mAdapter.getItemCount() > 0) {
-				mHandsFreeFragment = new HandsFreeNewsViewFragment();
-				mHandsFreeFragment.setNewsView(mNewsView);
-
-				((AppCompatActivity) getActivity()).getSupportFragmentManager().beginTransaction()
-						.add(R.id.v_hands_free, mHandsFreeFragment)
-						.commit();
-			}
-		}
-	};
 
 	@Override
 	public void onRefresh()
@@ -483,19 +461,19 @@ public class NewsListFragment extends StoragePermissionFragment implements View.
 			} else
 				mBtnSections.setVisibility(ImageButton.GONE);
 
-			FloatingActionButton handsFreeBtn = (FloatingActionButton) mMainView.findViewById(R.id.btn_hands_free);
-			handsFreeBtn.setBackgroundTintList(ColorStateList.valueOf(currentSite.color == 0xffffffff ? 0xff666666 : currentSite.color));
+			FloatingActionButton btnHandsFree = (FloatingActionButton) mMainView.findViewById(R.id.btn_hands_free);
+			btnHandsFree.setBackgroundTintList(ColorStateList.valueOf(currentSite.color == 0xffffffff ? 0xff666666 : currentSite.color));
 
 			setFavoriteIcon();
 			Drawable icon_conf = mMenu.getItem(1).setVisible(true).getIcon();
 
 			if (currentSite.needsBrightColors()) {
 				mBtnSections.clearColorFilter();
-				handsFreeBtn.clearColorFilter();
+				btnHandsFree.clearColorFilter();
 				icon_conf.clearColorFilter();
 			} else {
 				mBtnSections.setColorFilter(Color.BLACK, PorterDuff.Mode.MULTIPLY);
-				handsFreeBtn.setColorFilter(Color.BLACK, PorterDuff.Mode.MULTIPLY);
+				btnHandsFree.setColorFilter(Color.BLACK, PorterDuff.Mode.MULTIPLY);
 				icon_conf.setColorFilter(Color.BLACK, PorterDuff.Mode.MULTIPLY);
 			}
 		}
@@ -514,6 +492,25 @@ public class NewsListFragment extends StoragePermissionFragment implements View.
 		else
 			icon_fav.setColorFilter(Color.BLACK, PorterDuff.Mode.MULTIPLY);
 	}
+
+	private HandsFreeNewsViewFragment mHandsFreeFragment;
+
+	private View.OnClickListener mOnViewHandsFree = new View.OnClickListener() {
+
+		@Override
+		public void onClick(View v)
+		{
+			mAdapter.discloseData();
+			if (mAdapter.getItemCount() > 0) {
+				mHandsFreeFragment = new HandsFreeNewsViewFragment();
+				mHandsFreeFragment.setNewsView(mNewsView);
+
+				((AppCompatActivity) getActivity()).getSupportFragmentManager().beginTransaction()
+						.add(R.id.v_hands_free, mHandsFreeFragment)
+						.commit();
+			}
+		}
+	};
 
 	private View.OnClickListener onSectionsAction = new View.OnClickListener() {
 		@Override

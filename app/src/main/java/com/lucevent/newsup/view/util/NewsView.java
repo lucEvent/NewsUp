@@ -61,7 +61,7 @@ public class NewsView extends RelativeLayout {
 		((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
 				.inflate(R.layout.v_news, this, true);
 
-		mListView = (NewsElementsListView) findViewById(R.id.list);
+		mListView = (NewsElementsListView) findViewById(R.id.news_elems_list);
 		mSideToolbar = (NewsSideToolbar) findViewById(R.id.side_toolbar);
 
 		mBookmarkBtn = (FloatingActionButton) findViewById(R.id.button_bookmark);
@@ -165,7 +165,7 @@ public class NewsView extends RelativeLayout {
 		mListView.clear();
 		mListView.set(mCurrentNews.title, new NTVParser().parse(mCurrentNews.content, site), site);
 
-		if (mDrawer != null)
+		if (mDrawer != null && mImmersiveMode)
 			mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
 		if (mActionBar != null && mActionBar.isShowing() && mImmersiveMode) {
@@ -240,7 +240,7 @@ public class NewsView extends RelativeLayout {
 			@Override
 			public void onAnimationEnd(Animation animation)
 			{
-				if (mDrawer != null)
+				if (mDrawer != null && mImmersiveMode)
 					mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
 				setVisibility(View.GONE);

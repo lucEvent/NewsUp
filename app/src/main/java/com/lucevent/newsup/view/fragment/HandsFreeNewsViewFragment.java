@@ -19,6 +19,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
@@ -43,6 +44,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.lucevent.newsup.AppSettings;
+import com.lucevent.newsup.Main;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.Site;
@@ -157,6 +159,10 @@ public class HandsFreeNewsViewFragment extends Fragment implements
 	{
 		super.onResume();
 		mNewsView.resume();
+
+		Activity a = getActivity();
+		if (a instanceof Main)
+			((Main) a).drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 	}
 
 	@Override
@@ -164,6 +170,10 @@ public class HandsFreeNewsViewFragment extends Fragment implements
 	{
 		super.onPause();
 		mNewsView.pause();
+
+		Activity a = getActivity();
+		if (a instanceof Main)
+			((Main) a).drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 	}
 
 	@Override
@@ -329,7 +339,7 @@ public class HandsFreeNewsViewFragment extends Fragment implements
 
 	private void displayCurrentContent()
 	{
-		News news = mHeadlinesPagerAdapter.getNews(mViewPager.getCurrentItem());
+		News news = mHeadlinesPagerAdapter.getNews(mViewPager.getCurrentItem() - 1);
 		Site site = AppData.getSiteByCode(news.site_code);
 
 		if (site instanceof UserSite) {
@@ -401,7 +411,6 @@ public class HandsFreeNewsViewFragment extends Fragment implements
 				r2 = mHFNVFragment.dispatchTouchEvent(event);
 
 			return r1 || r2;
-			//	return super.dispatchTouchEvent(event);
 		}
 	}
 
@@ -554,6 +563,8 @@ public class HandsFreeNewsViewFragment extends Fragment implements
 		mHandler.removeCallbacks(this);
 
 		FragmentActivity a = getActivity();
+		if (a == null)
+			return;
 		a.getSupportFragmentManager().beginTransaction()
 				.remove(this)
 				.commit();

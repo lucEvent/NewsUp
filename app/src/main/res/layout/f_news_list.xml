@@ -5,48 +5,31 @@
     android:layout_height="match_parent"
     android:background="@color/clear_background">
 
-    <RelativeLayout
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_trigger"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/refresh_trigger"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-        </android.support.v4.widget.SwipeRefreshLayout>
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/btn_hands_free"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:alpha="0.6"
-            android:src="@drawable/ic_hands_free"
-            app:backgroundTint="@color/colorPrimary"
-            app:fabSize="mini"
-            app:rippleColor="@color/colorAccent"
-            app:useCompatPadding="true" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    </RelativeLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
-    <FrameLayout
-        android:id="@+id/v_hands_free"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <ViewStub
-        android:id="@+id/try_reload"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:inflatedId="@+id/try_reload"
-        android:layout="@layout/vs_try_reload" />
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btn_hands_free"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:alpha="0.6"
+        android:src="@drawable/ic_hands_free"
+        app:backgroundTint="@color/colorPrimary"
+        app:fabSize="mini"
+        app:rippleColor="@color/colorAccent"
+        app:useCompatPadding="true" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/button_sections"
@@ -60,12 +43,28 @@
         app:rippleColor="@color/colorAccent"
         app:useCompatPadding="true" />
 
+    <ViewStub
+        android:id="@+id/try_reload"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:inflatedId="@+id/try_reload"
+        android:layout="@layout/vs_try_reload" />
+
+    <FrameLayout
+        android:id="@+id/v_hands_free"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="6dp"
+        app:elevation="6dp" />
+
     <com.lucevent.newsup.view.util.NewsView
         android:id="@+id/news_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipChildren="false"
+        android:elevation="6dp"
         android:visibility="gone"
+        app:elevation="6dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </android.support.design.widget.CoordinatorLayout>
