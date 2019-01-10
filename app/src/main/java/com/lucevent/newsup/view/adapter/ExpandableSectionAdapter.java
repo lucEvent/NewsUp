@@ -10,11 +10,13 @@ import android.widget.Toast;
 import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.util.Section;
+import com.lucevent.newsup.data.util.Sections;
 import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.view.adapter.viewholder.SectionHeaderViewHolder;
 import com.lucevent.newsup.view.adapter.viewholder.SectionViewHolder;
 import com.lucevent.newsup.view.adapter.viewholder.news.ExpandableSectionHeaderViewHolder;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class ExpandableSectionAdapter extends AbstractExpandableSectionAdapter<SectionViewHolder>
@@ -86,6 +88,12 @@ public class ExpandableSectionAdapter extends AbstractExpandableSectionAdapter<S
 			SectionViewHolder.setSelectedTextColor(color);
 
 			mSectionStates = AppSettings.getMainSectionsString(site);
+			if (mSectionStates == null) {
+				Sections sections = site.getSections();
+				mSectionStates = new HashSet<>();
+				mSectionStates.add(Integer.toString(sections.indexOf(sections.getDefault())));
+			}
+
 			mDisplayingMainSections = true;
 		}
 		super.update(site);

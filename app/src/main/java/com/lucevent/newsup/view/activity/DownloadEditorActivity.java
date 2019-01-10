@@ -166,7 +166,7 @@ public class DownloadEditorActivity extends AppCompatActivity {
 	public void onSelectSitesAction(View v)
 	{
 		Intent intent = new Intent(this, SelectSitesActivity.class);
-		intent.putExtra(AppCode.PURPOSE, SelectSitesActivity.For.SELECT_DOWNLOAD);
+		intent.putExtra(AppCode.TARGET, SelectSitesActivity.Target.SELECT_DOWNLOAD);
 		intent.putExtra(AppCode.SELECTED, selected_sites);
 		startActivityForResult(intent, 0);
 	}

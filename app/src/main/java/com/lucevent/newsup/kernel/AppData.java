@@ -105,6 +105,9 @@ public final class AppData {
 
 	private static Set<String> correctSections(Site site, Set<String> section_indexes)
 	{
+		if (section_indexes == null)
+			return null;
+
 		boolean corrected = false;
 		String[] indexes_array = section_indexes.toArray(new String[section_indexes.size()]);
 		Sections sections = site.getSections();

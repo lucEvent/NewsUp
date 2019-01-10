@@ -455,6 +455,9 @@ public class NewsReaderManager {
 
 	private int[] sectionIndexesToCodes(Site site, int[] indexes)
 	{
+		if (indexes == null)
+			return new int[]{site.getSections().getDefault().code};
+
 		int[] codes = new int[indexes.length];
 
 		Sections sections = site.getSections();

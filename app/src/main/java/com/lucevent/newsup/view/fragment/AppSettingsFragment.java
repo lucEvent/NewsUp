@@ -52,7 +52,7 @@ public class AppSettingsFragment extends PreferenceFragment
 		public boolean onPreferenceClick(Preference preference)
 		{
 			Intent intent = new Intent(getActivity(), SelectSitesActivity.class);
-			intent.putExtra(AppCode.PURPOSE, SelectSitesActivity.For.SELECT_MAIN);
+			intent.putExtra(AppCode.TARGET, SelectSitesActivity.Target.SELECT_MAIN);
 			startActivityForResult(intent, REQUEST_SELECT_MAIN);
 			return true;
 		}
@@ -62,7 +62,7 @@ public class AppSettingsFragment extends PreferenceFragment
 		public boolean onPreferenceClick(Preference preference)
 		{
 			Intent intent = new Intent(getActivity(), SelectSitesActivity.class);
-			intent.putExtra(AppCode.PURPOSE, SelectSitesActivity.For.SELECT_FAVORITES);
+			intent.putExtra(AppCode.TARGET, SelectSitesActivity.Target.SELECT_FAVORITES);
 			startActivityForResult(intent, REQUEST_SELECT_FAVORITE);
 			return true;
 		}

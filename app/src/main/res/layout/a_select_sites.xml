@@ -1,125 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/coordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
-    android:fitsSystemWindows="true"
-    tools:context=".view.activity.SelectSitesActivity">
+    android:fitsSystemWindows="true">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
-        android:fitsSystemWindows="true"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimaryDark"
-            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed">
-
-            <com.lucevent.newsup.view.util.AppTextView
-                android:id="@+id/introduction"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:layout_marginTop="24dp"
-                android:padding="16dp"
-                android:text="@string/select_fav_publications"
-                android:textAlignment="center"
-                android:textColor="#eeee"
-                android:textSize="22sp"
-                app:layout_scrollFlags="enterAlways|enterAlwaysCollapsed" />
-
-        </android.support.design.widget.CollapsingToolbarLayout>
-    </android.support.design.widget.AppBarLayout>
-
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/scrollView"
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/coordinator"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="32dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:background="@color/colorPrimaryDark"
+        android:fitsSystemWindows="true"
+        tools:context=".view.activity.SelectSitesActivity">
 
-        <LinearLayout
-            android:id="@+id/container"
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/app_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark"
+            android:fitsSystemWindows="true"
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fitsSystemWindows="true"
+                app:contentScrim="?attr/colorPrimaryDark"
+                app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed">
+
+                <com.lucevent.newsup.view.util.AppTextView
+                    android:id="@+id/introduction"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:padding="16dp"
+                    android:text="@string/select_fav_publications"
+                    android:textAlignment="center"
+                    android:textColor="#eeee"
+                    android:textSize="22sp"
+                    app:layout_scrollFlags="enterAlways|enterAlwaysCollapsed" />
+
+            </android.support.design.widget.CollapsingToolbarLayout>
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/list_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_marginTop="24dp"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:orientation="vertical"
-            android:paddingBottom="?attr/actionBarSize" />
+            android:paddingTop="24dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    </android.support.v4.widget.NestedScrollView>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:focusable="true"
+                android:focusableInTouchMode="true" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        </android.support.v4.widget.NestedScrollView>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            android:layout_marginBottom="12dp"
+            android:onClick="onActionCompleted"
+            android:src="@drawable/ic_next"
+            app:fabSize="normal"
+            app:useCompatPadding="true" />
 
         <LinearLayout
-            android:id="@+id/button_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@color/colorPrimary"
-            android:elevation="20dp"
-            android:gravity="end">
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:background="@drawable/rounded_rect"
+            android:elevation="2dp"
+            android:orientation="horizontal"
+            app:elevation="2dp"
+            app:layout_anchor="@+id/list_container"
+            app:layout_anchorGravity="top">
 
-            <Button
-                android:id="@+id/save"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="onActionCompleted"
-                android:text="@string/thats_it" />
+            <Spinner
+                android:id="@+id/sortSelector"
+                style="?android:attr/spinnerItemStyle"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_gravity="end|center_vertical"
+                android:layout_margin="6dp"
+                android:background="@drawable/ic_sort"
+                android:entries="@array/site_sort_by"
+                android:spinnerMode="dropdown" />
+
+            <EditText
+                android:id="@+id/input"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:background="#0fff"
+                android:drawableEnd="@drawable/ic_search"
+                android:drawablePadding="12dp"
+                android:hint="@string/search"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:lines="1"
+                android:maxLines="1"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp" />
 
         </LinearLayout>
-    </RelativeLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="6dp"
-        android:layout_marginRight="6dp"
-        android:background="@drawable/rounded_rect"
-        android:orientation="horizontal"
-        app:layout_anchor="@+id/scrollView"
-        app:layout_anchorGravity="top">
-
-        <Spinner
-            android:id="@+id/sortSelector"
-            style="?android:attr/spinnerItemStyle"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_gravity="end|center_vertical"
-            android:layout_margin="6dp"
-            android:background="@drawable/ic_sort"
-            android:entries="@array/site_sort_by"
-            android:spinnerMode="dropdown" />
-
-        <EditText
-            android:id="@+id/input"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1"
-            android:background="#0fff"
-            android:drawableEnd="@drawable/ic_search"
-            android:drawablePadding="12dp"
-            android:hint="@string/search"
-            android:imeOptions="actionDone"
-            android:inputType="text"
-            android:lines="1"
-            android:maxLines="1"
-            android:paddingEnd="12dp"
-            android:paddingStart="12dp" />
-
-    </LinearLayout>
-
-</android.support.design.widget.CoordinatorLayout>
+    </android.support.design.widget.CoordinatorLayout>
+</RelativeLayout>

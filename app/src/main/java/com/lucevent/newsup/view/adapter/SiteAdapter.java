@@ -20,6 +20,7 @@ import com.lucevent.newsup.io.LogoManager;
 import com.lucevent.newsup.kernel.AppData;
 import com.lucevent.newsup.view.util.SiteScatterMap;
 
+@Deprecated
 public class SiteAdapter {
 
 	public enum Order {

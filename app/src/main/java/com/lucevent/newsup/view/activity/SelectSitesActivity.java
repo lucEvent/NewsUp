@@ -1,24 +1,24 @@
 package com.lucevent.newsup.view.activity;
 
 import android.content.Intent;
-import android.graphics.PorterDuff;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -27,25 +27,28 @@ import android.widget.Toast;
 import com.lucevent.newsup.AppSettings;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.kernel.AppCode;
-import com.lucevent.newsup.view.adapter.SiteAdapter;
+import com.lucevent.newsup.view.adapter.CategorizedSiteAdapter;
 
 import java.util.TreeSet;
 
 public class SelectSitesActivity extends AppCompatActivity implements
-		AdapterView.OnItemSelectedListener, TextWatcher, View.OnFocusChangeListener {
+		AdapterView.OnItemSelectedListener, TextWatcher, View.OnFocusChangeListener,
+		CategorizedSiteAdapter.OnSiteClickListener {
 
-	public enum For {
+	public enum Target {
 		APP_FIRST_START, SELECT_MAIN, SELECT_FAVORITES, SELECT_DOWNLOAD, SELECT_ONE
 	}
 
-	private static final SiteAdapter.Order DEFAULT_ORDER = SiteAdapter.Order.BY_LANGUAGE;
+	private static final CategorizedSiteAdapter.Order DEFAULT_ORDER = CategorizedSiteAdapter.Order.BY_LANGUAGE;
 
-	private For purpose;
-	private SiteAdapter.Order currentOrder;
-	private String currentSearch = "";
+	private Target mTarget;
+	private CategorizedSiteAdapter.Order mCurrentOrder;
+	private String mCurrentSearch = "";
 
-	private SiteAdapter siteAdapter;
-	private SparseArray<View> siteViewsMap;
+	private int nSitesSelected = 0;
+	private FloatingActionButton mBtnDone;
+	private boolean mBtnDoneOn = false;
+	private CategorizedSiteAdapter mAdapter;
 
 	@SuppressWarnings("ConstantConditions")
 	@Override
@@ -74,52 +77,36 @@ public class SelectSitesActivity extends AppCompatActivity implements
 		input.addTextChangedListener(this);
 		input.setOnFocusChangeListener(this);
 
-		saveButton = (Button) findViewById(R.id.save);
+		mAdapter = new CategorizedSiteAdapter(this, this);
 
-		siteAdapter = new SiteAdapter(this);
+		GridLayoutManager layoutManager = new GridLayoutManager(this, CategorizedSiteAdapter.MAX_ROW_ELEMS);
+		layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+			@Override
+			public int getSpanSize(int position)
+			{
+				return mAdapter.getSpanSize(position);
+			}
+		});
 
-		purpose = (For) getIntent().getExtras().get(AppCode.PURPOSE);
-		if (purpose != For.APP_FIRST_START) {
+		RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+		recyclerView.setNestedScrollingEnabled(false);
+		recyclerView.setHasFixedSize(false);
+		recyclerView.setLayoutManager(layoutManager);
+		recyclerView.setAdapter(mAdapter);
+
+		mTarget = (Target) getIntent().getExtras().get(AppCode.TARGET);
+		if (mTarget != Target.APP_FIRST_START) {
 			TextView intro = (TextView) findViewById(R.id.introduction);
 			intro.setText("");
 			intro.setPadding(0, 0, 0, 0);
 			((CollapsingToolbarLayout.LayoutParams) intro.getLayoutParams()).setMargins(0, 0, 0, 0);
-			NestedScrollView scrollView = (NestedScrollView) findViewById(R.id.scrollView);
-			scrollView.setPadding(0, 0, 0, 0);
+			//	findViewById(R.id.list_container).setPadding(0, 0, 0, 0);
 		}
-		if (purpose == For.SELECT_ONE) {
-			findViewById(R.id.button_bar).setVisibility(View.GONE);
-		}
-
-	}
-
-	private void setSelected(int[] codes)
-	{
-		nSitesSelected = codes.length;
-		for (int code : codes) {
-			View v = siteViewsMap.get(code);
-			if (v != null)
-				v.setSelected(true);
-		}
-	}
-
-	private int nSitesSelected = 0;
-	private Button saveButton;
-
-	public void actionToggle(View view)
-	{
-		if (purpose == For.SELECT_ONE) {
-			setResult((Integer) view.getTag());
-			finish();
-		} else {
-			boolean isSelected = view.isSelected();
-			nSitesSelected += isSelected ? -1 : 1;
-			view.setSelected(!isSelected);
-
-			if (nSitesSelected == 0)
-				saveButton.getBackground().clearColorFilter();
-			else
-				saveButton.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.colorAccent), PorterDuff.Mode.MULTIPLY);
+		if (mTarget == Target.SELECT_ONE)
+			findViewById(R.id.save).setVisibility(View.GONE);
+		else {
+			mBtnDone = findViewById(R.id.save);
+			mBtnDone.setBackgroundTintList(ColorStateList.valueOf(0xffcccccc));
 		}
 	}
 
@@ -127,40 +114,42 @@ public class SelectSitesActivity extends AppCompatActivity implements
 	public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id)
 	{
 		boolean firstStart = false;
-		if (currentOrder == null) {
-			currentOrder = DEFAULT_ORDER;
+		if (mCurrentOrder == null) {
+			mCurrentOrder = DEFAULT_ORDER;
 			firstStart = true;
 		} else
 			switch (position) {
 				default:
 				case 0:
-					currentOrder = SiteAdapter.Order.BY_LANGUAGE;
+					mCurrentOrder = CategorizedSiteAdapter.Order.BY_LANGUAGE;
 					break;
 				case 1:
-					currentOrder = SiteAdapter.Order.BY_COUNTRY;
+					mCurrentOrder = CategorizedSiteAdapter.Order.BY_COUNTRY;
 					break;
 				case 2:
-					currentOrder = SiteAdapter.Order.BY_CATEGORY;
+					mCurrentOrder = CategorizedSiteAdapter.Order.BY_CATEGORY;
 					break;
 				case 3:
-					currentOrder = SiteAdapter.Order.BY_NAME;
+					mCurrentOrder = CategorizedSiteAdapter.Order.BY_NAME;
 					break;
 			}
 
-		siteViewsMap = siteAdapter.createView(this, (ViewGroup) findViewById(R.id.container), 4, currentOrder, currentSearch);
-
+		int[] selectedSiteCodes = null;
 		if (firstStart) {
-			switch (purpose) {
+			switch (mTarget) {
 				case SELECT_MAIN:
-					setSelected(AppSettings.getMainSitesCodes());
+					selectedSiteCodes = AppSettings.getMainSitesCodes();
 					break;
 				case SELECT_FAVORITES:
-					setSelected(AppSettings.getFavoriteSitesCodes());
+					selectedSiteCodes = AppSettings.getFavoriteSitesCodes();
 					break;
 				case SELECT_DOWNLOAD:
-					setSelected((int[]) getIntent().getExtras().get(AppCode.SELECTED));
+					selectedSiteCodes = (int[]) getIntent().getExtras().get(AppCode.SELECTED);
 			}
+			nSitesSelected = selectedSiteCodes == null ? 0 : selectedSiteCodes.length;
 		}
+
+		mAdapter.set(mCurrentOrder, mCurrentSearch, selectedSiteCodes);
 	}
 
 	@Override
@@ -175,13 +164,12 @@ public class SelectSitesActivity extends AppCompatActivity implements
 			return;
 		}
 
+		TreeSet<Integer> tmpCodeSet = mAdapter.getSelectedSiteCodes();
 		TreeSet<String> codeSet = new TreeSet<>();
+		for (Integer c : tmpCodeSet)
+			codeSet.add(Integer.toString(c));
 
-		for (int i = 0; i < siteViewsMap.size(); i++)
-			if (siteViewsMap.valueAt(i).isSelected())
-				codeSet.add(Integer.toString(siteViewsMap.keyAt(i)));
-
-		switch (purpose) {
+		switch (mTarget) {
 			case APP_FIRST_START:
 				AppSettings.setMainSitesCodes(codeSet);
 				AppSettings.setFavoriteSitesCodes(codeSet);
@@ -217,11 +205,11 @@ public class SelectSitesActivity extends AppCompatActivity implements
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count)
 	{
-		if (currentOrder == null)
-			currentOrder = DEFAULT_ORDER;
+		if (mCurrentOrder == null)
+			mCurrentOrder = DEFAULT_ORDER;
 
-		currentSearch = s.toString();
-		siteViewsMap = siteAdapter.createView(this, (ViewGroup) findViewById(R.id.container), 4, currentOrder, currentSearch);
+		mCurrentSearch = s.toString();
+		mAdapter.set(mCurrentOrder, mCurrentSearch, null);
 	}
 
 	@Override
@@ -240,6 +228,37 @@ public class SelectSitesActivity extends AppCompatActivity implements
 			if (behavior != null) {
 				behavior.onNestedFling(coordinator, appBarLayout, null, 0, 10000, true);
 			}
+		}
+	}
+
+	@Override
+	public void onSiteSelected(int code)
+	{
+		if (mTarget == SelectSitesActivity.Target.SELECT_ONE) {
+			setResult(code);
+			finish();
+		} else {
+			nSitesSelected += 1;
+
+			updateDoneBtn();
+		}
+	}
+
+	@Override
+	public void onSiteUnselected(int code)
+	{
+		nSitesSelected -= 1;
+		updateDoneBtn();
+	}
+
+	private void updateDoneBtn()
+	{
+		if (nSitesSelected > 0 && !mBtnDoneOn) {
+			mBtnDone.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.colorAccent));
+			mBtnDoneOn = true;
+		} else if (nSitesSelected == 0 && mBtnDoneOn) {
+			mBtnDone.setBackgroundTintList(ColorStateList.valueOf(0xffcccccc));
+			mBtnDoneOn = false;
 		}
 	}
 

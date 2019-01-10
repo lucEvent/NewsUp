@@ -60,7 +60,8 @@
             android:name=".view.activity.SelectSitesActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|uiMode"
             android:parentActivityName=".Main"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize|stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.lucevent.newsup.Main" />

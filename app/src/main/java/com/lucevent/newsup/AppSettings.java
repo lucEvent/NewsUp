@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 
 import com.lucevent.newsup.data.util.Site;
 
@@ -18,8 +19,8 @@ public class AppSettings {
 	/**
 	 * ************** Default values *********************
 	 **/
-	private static Set<String> DEFAULT_MAIN_SECTIONS;
-	private static Set<String> DEFAULT_DOWNLOAD_SECTIONS;
+//	private static Set<String> DEFAULT_MAIN_SECTIONS;
+//	private static Set<String> DEFAULT_DOWNLOAD_SECTIONS;
 	private static final String DEFAULT_KEEP_TIME = "2592000";
 	private static final boolean DEFAULT_LOAD_IMAGES = true;
 	private static final boolean DEFAULT_LOAD_IMAGES_ONLY_ON_WIFI = true;
@@ -57,11 +58,11 @@ public class AppSettings {
 			PREF_SITE_MAIN_SECTIONS_KEY = r.getString(R.string.pref_main_sections_key);
 			PREF_SITE_DOWNLOAD_SECTIONS_KEY = r.getString(R.string.pref_download_sections_key);
 
-			DEFAULT_MAIN_SECTIONS = new TreeSet<>();
-			DEFAULT_MAIN_SECTIONS.add("0");
-
-			DEFAULT_DOWNLOAD_SECTIONS = new TreeSet<>();
-			DEFAULT_DOWNLOAD_SECTIONS.add("0");
+//			DEFAULT_MAIN_SECTIONS = new TreeSet<>();
+//			DEFAULT_MAIN_SECTIONS.add("0");
+//
+//			DEFAULT_DOWNLOAD_SECTIONS = new TreeSet<>();
+//			DEFAULT_DOWNLOAD_SECTIONS.add("0");
 		}
 		ProSettings.initialize(preferences);
 	}
@@ -110,7 +111,8 @@ public class AppSettings {
 
 	public static Set<String> getMainSectionsString(Site site)
 	{
-		return new HashSet<>(preferences.getStringSet(PREF_SITE_MAIN_SECTIONS_KEY + site.code, DEFAULT_MAIN_SECTIONS));
+		Set<String> s = preferences.getStringSet(PREF_SITE_MAIN_SECTIONS_KEY + site.code, null);
+		return s != null ? new HashSet<>(s) : null;
 	}
 
 
@@ -128,7 +130,7 @@ public class AppSettings {
 
 	public static Set<String> getDownloadSectionsString(Site site)
 	{
-		return preferences.getStringSet(PREF_SITE_DOWNLOAD_SECTIONS_KEY + site.code, DEFAULT_DOWNLOAD_SECTIONS);
+		return preferences.getStringSet(PREF_SITE_DOWNLOAD_SECTIONS_KEY + site.code, null);
 	}
 
 	public static int[] getDownloadSections(Site site)
@@ -218,8 +220,11 @@ public class AppSettings {
 		return preferences.getBoolean(PREF_LOAD_IMAGES_ONLY_ON_WIFI_KEY, DEFAULT_LOAD_IMAGES_ONLY_ON_WIFI);
 	}
 
-	private static int[] getIntArray(Set<String> set)
+	private static int[] getIntArray(@Nullable Set<String> set)
 	{
+		if (set == null)
+			return null;
+
 		int index = 0;
 		int[] res = new int[set.size()];
 		for (String s : set)

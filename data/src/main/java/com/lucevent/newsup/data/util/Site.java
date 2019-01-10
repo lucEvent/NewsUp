@@ -40,11 +40,6 @@ public class Site {
 		colorDarkness = 1 - (0.299 * ((color >> 16) & 0xFF) + 0.587 * ((color >> 8) & 0xFF) + 0.114 * (color & 0xFF)) / 255;
 	}
 
-	public boolean isMultiRegion()
-	{
-		return false;
-	}
-
 	public int getCountry()
 	{
 		return ((info >> SiteCountry.shift) & 0xFF);

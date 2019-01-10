@@ -77,7 +77,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
 		if (AppSettings.firstStart()) {
 			Intent intent = new Intent(this, SelectSitesActivity.class);
-			intent.putExtra(AppCode.PURPOSE, SelectSitesActivity.For.APP_FIRST_START);
+			intent.putExtra(AppCode.TARGET, SelectSitesActivity.Target.APP_FIRST_START);
 			startActivity(intent);
 			finish();
 			return;
@@ -111,7 +111,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 			} else if (extras.containsKey("shortcut_select")) {
 
 				Intent intent = new Intent(this, SelectSitesActivity.class);
-				intent.putExtra(AppCode.PURPOSE, SelectSitesActivity.For.SELECT_ONE);
+				intent.putExtra(AppCode.TARGET, SelectSitesActivity.Target.SELECT_ONE);
 				startActivityForResult(intent, AppCode.REQUEST_ADD_CONTENT);
 
 			} else if (extras.containsKey(AppCode.RESTART))
@@ -309,7 +309,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 				break;
 			case R.id.nav_more_publications:
 				Intent intent = new Intent(this, SelectSitesActivity.class);
-				intent.putExtra(AppCode.PURPOSE, SelectSitesActivity.For.SELECT_ONE);
+				intent.putExtra(AppCode.TARGET, SelectSitesActivity.Target.SELECT_ONE);
 				startActivityForResult(intent, AppCode.REQUEST_ADD_CONTENT);
 				return true;
 			case R.id.nav_new_site_request:

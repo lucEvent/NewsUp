@@ -91,7 +91,7 @@ public class HandsFreeNewsViewFragment extends Fragment implements
 	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
 	{
 		FragmentActivity a = getActivity();
-		View v = inflater.inflate(R.layout.f_hands_free_news_view, container, false);
+		final View v = inflater.inflate(R.layout.f_hands_free_news_view, container, false);
 
 		MAX_ACTION_SWIPE = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 52, getResources().getDisplayMetrics());
 		Point size = new Point();
@@ -116,7 +116,7 @@ public class HandsFreeNewsViewFragment extends Fragment implements
 			((ViewStub) v.findViewById(R.id.gesture_education)).inflate();
 			v.findViewById(R.id.btn_ok).setOnClickListener(new View.OnClickListener() {
 				@Override
-				public void onClick(View v)
+				public void onClick(View btn)
 				{
 					v.findViewById(R.id.gesture_education).setVisibility(View.GONE);
 

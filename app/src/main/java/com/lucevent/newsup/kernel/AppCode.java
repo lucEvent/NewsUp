@@ -23,7 +23,7 @@ public interface AppCode {
 	String SITE_CODE = "site_code";
 	String SOURCES = "sources";
 	String SCHEDULE_ID = "schedule_id";
-	String PURPOSE = "purpose";
+	String TARGET = "target";
 	String REQUEST_CODE = "r.code";
 	String SELECTED = "selected";
 	String EVENT_CODE = "e.code";
