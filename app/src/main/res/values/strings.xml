@@ -64,6 +64,7 @@
     <string name="shortcut_select_label">Select publication</string>
     <string name="lbl_site_search">· Search by website/publication name or link\n\n· NewsUp is an RSS reader app, thus the search will only show publications which offer RSS.\n\n· This feature is incubating. It might offer better results in next updates.</string>
     <string name="select_region">Select region</string>
+    <string name="msg_no_image">No Image</string>
 
     <string name="mon">Mon</string>
     <string name="tue">Tue</string>
@@ -106,6 +107,7 @@
     <string name="hint_email">Your email (optional)</string>
     <string name="hint_message_suggestion_report">Your message, suggestion or report</string>
     <string name="hint_enter_publication_search">enter publication search</string>
+    <string name="hint_enter_password">Enter password</string>
 
     <!-- * ******************** Messages **************************** * -->
     <string name="msg_confirm_to_remove_all_saved_news">Confirm to remove all saved news</string>
@@ -210,8 +212,5 @@
     <string name="navigation_drawer_close" translatable="false">Close drawer</string>
     <string name="msg_developer_mode_on" translatable="false">Developer mode ON</string>
     <string name="msg_developer_mode_off" translatable="false">Developer mode OFF</string>
-
-    <string name="hint_enter_password">Enter password</string>
-    <string name="msg_no_image">No Image</string>
 
 </resources>

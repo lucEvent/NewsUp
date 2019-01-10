@@ -7,7 +7,7 @@
     <ImageView
         android:id="@+id/picture"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="220dp"
         android:layout_alignParentTop="true"
         android:contentDescription="news image" />
 
@@ -17,10 +17,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/picture"
         android:orientation="vertical"
-        android:paddingBottom="10dp"
-        android:paddingEnd="20dp"
         android:paddingStart="20dp"
-        android:paddingTop="10dp">
+        android:paddingTop="10dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="10dp">
 
         <com.lucevent.newsup.view.util.AppBoldTextView
             android:id="@+id/title"
@@ -49,8 +49,8 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_below="@+id/news_description"
-        android:layout_marginEnd="24dp"
         android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
         android:background="@color/divisor" />
 
     <LinearLayout
@@ -59,10 +59,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/divisor"
         android:gravity="bottom"
-        android:paddingBottom="10dp"
-        android:paddingEnd="26dp"
         android:paddingStart="26dp"
-        android:paddingTop="10dp">
+        android:paddingTop="10dp"
+        android:paddingEnd="26dp"
+        android:paddingBottom="10dp">
 
         <View
             android:id="@+id/logo"
@@ -86,8 +86,8 @@
         android:id="@+id/button_bookmark"
         android:layout_width="42dp"
         android:layout_height="42dp"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:layout_marginEnd="14dp"
         android:background="@drawable/ripple_round"
         android:contentDescription="bookmark"

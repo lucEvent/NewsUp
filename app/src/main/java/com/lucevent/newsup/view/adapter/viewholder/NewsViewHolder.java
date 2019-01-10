@@ -16,7 +16,7 @@ import com.lucevent.newsup.io.LogoManager;
 
 public class NewsViewHolder extends RecyclerView.ViewHolder {
 
-	private static final RequestOptions OPTIONS = new RequestOptions().fitCenter();
+	private static final RequestOptions GLIDE_OPTIONS = new RequestOptions().centerCrop();
 
 	private View mLogo;
 	private TextView mTitle, mDescription, mDate;
@@ -47,12 +47,14 @@ public class NewsViewHolder extends RecyclerView.ViewHolder {
 		if (loadImage && news.imgSrc != null) {
 
 			mPicture.setImageDrawable(null);
+			mPicture.setVisibility(View.VISIBLE);
 
 			Glide.with(mPicture.getContext())
-					.applyDefaultRequestOptions(OPTIONS)
+					.applyDefaultRequestOptions(GLIDE_OPTIONS)
 					.load(news.imgSrc)
 					.into(mPicture);
 		} else {
+			mPicture.setVisibility(View.GONE);
 			mPicture.setImageDrawable(null);
 		}
 

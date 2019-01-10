@@ -51,6 +51,7 @@
     <string name="shortcut_select_label">Elegir publicación</string>
     <string name="lbl_site_search">· Busca por nombre o enlace de la publicación/página web\n\n· NewsUp es un lector de RSS, por lo que la búsqueda únicamente mostrará publicaciones que ofrecen RSS.\n\n· Esta función está en desarrollo. Puede que ofrezca mejores resultados en un futuro.</string>
     <string name="select_region">Selecciona región</string>
+    <string name="msg_no_image">Sin imágen</string>
 
     <string name="mon">Lun</string>
     <string name="tue">Mar</string>
@@ -93,6 +94,7 @@
     <string name="hint_email">Tu email (opcional)</string>
     <string name="hint_message_suggestion_report">Tu mensaje, sugerencia o informe de error</string>
     <string name="hint_enter_publication_search">Nombre de la publicación</string>
+    <string name="hint_enter_password">Introduce la contraseña</string>
 
     <!-- * ******************** Messages **************************** * -->
     <string name="msg_confirm_to_remove_all_saved_news">Confirma para eliminar todo</string>

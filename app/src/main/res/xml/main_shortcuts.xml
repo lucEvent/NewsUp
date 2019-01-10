@@ -5,8 +5,7 @@
         android:icon="@drawable/ic_shortcut_select"
         android:shortcutId="shortcut_select_publication"
         android:shortcutLongLabel="@string/shortcut_select_label"
-        android:shortcutShortLabel="@string/shortcut_select_label"
-        android:tint="#000">
+        android:shortcutShortLabel="@string/shortcut_select_label">
 
         <intent
             android:action="android.intent.action.VIEW"
@@ -14,6 +13,24 @@
             android:targetPackage="com.lucevent.newsup">
             <extra
                 android:name="shortcut_select"
+                android:value="" />
+        </intent>
+
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/ic_shortcut_events"
+        android:shortcutId="shortcut_events"
+        android:shortcutLongLabel="@string/happening_now"
+        android:shortcutShortLabel="@string/happening_now">
+
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.lucevent.newsup.Main"
+            android:targetPackage="com.lucevent.newsup">
+            <extra
+                android:name="shortcut_events"
                 android:value="" />
         </intent>
 

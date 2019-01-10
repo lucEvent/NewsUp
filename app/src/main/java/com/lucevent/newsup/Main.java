@@ -101,6 +101,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 		setUpDrawer(night_mode_on);
 		updateFavorites();
 
+		int forceNavigation = -1;
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			if (extras.containsKey(AppCode.NOTIFICATION)) {
@@ -114,6 +115,10 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 				intent.putExtra(AppCode.TARGET, SelectSitesActivity.Target.SELECT_ONE);
 				startActivityForResult(intent, AppCode.REQUEST_ADD_CONTENT);
 
+			} else if (extras.containsKey("shortcut_events")) {
+
+				forceNavigation = R.id.nav_events;
+
 			} else if (extras.containsKey(AppCode.RESTART))
 				ScheduledDownloadReceiver.scheduleDownloads(this, new ScheduleManager(this).getSchedule());
 
@@ -125,6 +130,9 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 		newsFragment.setRetainInstance(true);
 
 		fragmentManager.addFragment(newsFragment, R.id.nav_my_news);
+
+		if (forceNavigation != -1)
+			navigateTo(forceNavigation);
 	}
 
 	@Override

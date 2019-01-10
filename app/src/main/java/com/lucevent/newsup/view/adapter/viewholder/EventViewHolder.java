@@ -6,10 +6,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.lucevent.newsup.R;
 import com.lucevent.newsup.data.event.Event;
 
 public class EventViewHolder extends RecyclerView.ViewHolder {
+
+	private static final RequestOptions GLIDE_OPTIONS = new RequestOptions().centerCrop();
 
 	private TextView mTitle;
 	private ImageView mPicture;
@@ -27,6 +30,7 @@ public class EventViewHolder extends RecyclerView.ViewHolder {
 		mPicture.setImageBitmap(null);
 
 		Glide.with(mPicture.getContext())
+				.applyDefaultRequestOptions(GLIDE_OPTIONS)
 				.load(event.imgSrc)
 				.into(mPicture);
 

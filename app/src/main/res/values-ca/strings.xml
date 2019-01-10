@@ -51,6 +51,7 @@
     <string name="shortcut_select_label">Triar publicació</string>
     <string name="lbl_site_search">· Cerca per nom o enllaç de la publicació/pàgina web\n\n· NewsUp és un lector d\'RSS, així que la cerca només mostrarà publicacions que ofereixin RSS.\n\n· Aquesta funció està en desenvolupament. Pot ser que ofereixi millors resultats en el futur.</string>
     <string name="select_region">Selecciona la regió</string>
+    <string name="msg_no_image">Sense imatge</string>
 
     <string name="mon">Dl</string>
     <string name="tue">Dm</string>
@@ -93,6 +94,7 @@
     <string name="hint_email">El teu email (opcional)</string>
     <string name="hint_message_suggestion_report">El teu missatge, suggeriment o informe d\'error</string>
     <string name="hint_enter_publication_search">Nom de la publicació</string>
+    <string name="hint_enter_password">Introdueïx la contrasenya</string>
 
     <!-- * ******************** Messages **************************** * -->
     <string name="msg_confirm_to_remove_all_saved_news">Confirma per eliminar tot</string>

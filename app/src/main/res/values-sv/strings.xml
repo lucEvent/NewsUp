@@ -51,6 +51,7 @@
     <string name="shortcut_select_label">Välj publikation</string>
     <string name="lbl_site_search">· Sök på webbplatsens namn eller länk\n\n· NewsUp är en RSS-läsare, så sökningen visar bara publikationer som erbjuder RSS.\n\n· Den här funktionen är på test. Det kan ge bättre resultat för din sökning i framtiden.</string>
     <string name="select_region">Välj region</string>
+    <string name="msg_no_image">Ingen bild</string>
 
     <string name="mon">Mån</string>
     <string name="tue">Tis</string>
@@ -93,6 +94,7 @@
     <string name="hint_email">Din email (valfri)</string>
     <string name="hint_message_suggestion_report">Ditt meddelande, förslag eller rapport</string>
     <string name="hint_enter_publication_search">Publikationens namn</string>
+    <string name="hint_enter_password">Skriv in lösenord</string>
 
     <!-- * ******************** Messages **************************** * -->
     <string name="msg_confirm_to_remove_all_saved_news">Bekräfta att radera alla bokmärkta nyheter</string>
