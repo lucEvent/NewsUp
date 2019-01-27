@@ -1,41 +1,49 @@
 package com.lucevent.newsup.backend.utils;
 
+import com.lucevent.newsup.backend.db.Report;
+
 import java.util.Comparator;
 import java.util.TreeSet;
-
-import static com.googlecode.objectify.ObjectifyService.ofy;
 
 public class Reports extends TreeSet<Report> {
 
 	public Reports()
 	{
-		super(new Comparator<Report>() {
+	}
+
+	public Reports(Comparator<Report> c)
+	{
+		super(c);
+	}
+
+	public static Reports getAll()
+	{
+		Reports res = new Reports(new Comparator<Report>() {
 			@Override
 			public int compare(Report o1, Report o2)
 			{
-				return -Long.compare(o1.time, o2.time);
+				return -Long.compare(o1.getTime(), o2.getTime());
 			}
 		});
-		addAll(ofy().load().type(Report.class).list());
+		res.addAll(Report.getAll());
+		return res;
 	}
 
 	public static void addReport(String version, String ip, String email, String message)
 	{
-		Report r = new Report();
-		r.time = System.currentTimeMillis();
-		r.appVersion = version;
-		r.ip = ip;
-		r.email = email;
-		r.message = message;
+		new Report(
+				System.currentTimeMillis(),
+				version,
+				ip,
+				email,
+				message)
 
-		ofy().save().entity(r);
+				.save();
 	}
 
 	public void deleteReport(long id)
 	{
-		Report r = ofy().load().type(Report.class).filter("id", id).first().now();
-		if (r != null)
-			ofy().delete().entity(r);
+		Report.delete(id);
 	}
 
 }

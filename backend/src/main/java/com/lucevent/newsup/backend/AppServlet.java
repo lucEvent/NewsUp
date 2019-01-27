@@ -60,7 +60,7 @@ public class AppServlet extends HttpServlet {
 			String[] values = req.getParameter("values").split(",");
 			for (int i = 0; i < values.length; i += 2) {
 				Site site = Data.getSite(Integer.parseInt(values[i]));
-				Data.stats.read(site, Integer.parseInt(values[i + 1]));
+				Data.stats.countReadTimes(site, Integer.parseInt(values[i + 1]));
 			}
 
 		} else if (req.getParameter("report") != null) {

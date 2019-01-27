@@ -25,7 +25,8 @@ public class DigitalTrends extends com.lucevent.newsup.data.util.NewsReader {
 	@Override
 	protected String parseDescription(Element prop)
 	{
-		return org.jsoup.Jsoup.parse(prop.text()).getElementsByTag("p").get(0).text();
+		Elements ps = org.jsoup.Jsoup.parse(prop.text()).select("p");
+		return ps.isEmpty() ? "" : ps.get(0).text();
 	}
 
 	@Override

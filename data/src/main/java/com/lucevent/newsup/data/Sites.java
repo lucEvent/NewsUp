@@ -406,7 +406,7 @@ public class Sites extends ArrayList<Site> {
 		res.add(new Site(1310, "Pokemon Go", 0xff152bd5, "https://pokemongolive.com",
 				SiteCountry.USA, SiteLanguage.VARIOUS, SiteCategory.VIDEOGAMES,
 				com.lucevent.newsup.data.section.PokemonGoSections.class, com.lucevent.newsup.data.reader.PokemonGo.class));
-		res.add(new Site(1315, "Pok\u00E9mon GO Hub", 0xff1cbc7c, "https://pokemongohub.net",
+		res.add(new Site(1315, "Pokemon GO Hub", 0xff1cbc7c, "https://pokemongohub.net",
 				SiteCountry.USA, SiteLanguage.ENGLISH, SiteCategory.VIDEOGAMES,
 				com.lucevent.newsup.data.section.PokemonGoHubSections.class, com.lucevent.newsup.data.reader.PokemonGoHub.class));
 		res.add(new Site(1320, "Nintenderos", 0xffff0000, "http://www.nintenderos.com",

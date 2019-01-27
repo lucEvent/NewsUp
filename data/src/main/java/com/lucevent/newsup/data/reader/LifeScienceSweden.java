@@ -16,7 +16,7 @@ public class LifeScienceSweden extends com.lucevent.newsup.data.util.NewsReader 
 				new int[]{TAG_GUID},
 				new int[]{TAG_DESCRIPTION},
 				new int[]{},
-				new int[]{TAG_PUBDATE},
+				new int[]{"pubdate".hashCode()},
 				new int[]{},
 				new int[]{},
 				"");

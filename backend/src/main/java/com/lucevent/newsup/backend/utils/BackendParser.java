@@ -1,6 +1,12 @@
 package com.lucevent.newsup.backend.utils;
 
 import com.lucevent.newsup.backend.Data;
+import com.lucevent.newsup.backend.db.Event;
+import com.lucevent.newsup.backend.db.EventNews;
+import com.lucevent.newsup.backend.db.MonthStats;
+import com.lucevent.newsup.backend.db.SiteStats;
+import com.lucevent.newsup.backend.db.Statistics;
+import com.lucevent.newsup.backend.db.TimeStats;
 import com.lucevent.newsup.data.alert.Alert;
 import com.lucevent.newsup.data.alert.AlertCode;
 import com.lucevent.newsup.data.util.Date;
@@ -47,24 +53,25 @@ public class BackendParser {
 	public static StringBuilder toEntry(EventNews news)
 	{
 		StringBuilder res = new StringBuilder("<item><title>");
-		res.append(news.title);
+		res.append(news.getTitle());
 		res.append("</title><link>");
-		res.append(news.link);
+		res.append(news.getLink());
 		res.append("</link><date>");
-		res.append(news.date);
+		res.append(news.getDate());
 		res.append("</date><description>");
-		res.append(news.description);
+		res.append(news.getDescription());
 		res.append("</description><content>");
-		if (news.content != null && !news.content.isEmpty()) res.append(news.content);
+		if (news.getContent() != null && !news.getContent().isEmpty())
+			res.append(news.getContent());
 		res.append("</content><categories>");
-		if (news.tags != null) res.append(news.tags.toString());
+		if (news.getTags() != null) res.append(news.getTags().toString());
 		res.append("</categories><sitecode>");
-		res.append(news.site_code);
+		res.append(news.getSiteCode());
 		res.append("</sitecode><section>");
-		res.append(news.section_code);
+		res.append(news.getSectionCode());
 		res.append("</section>");
-		if (news.imgSrc != null && !news.imgSrc.isEmpty())
-			res.append("<enclosure>").append(news.imgSrc).append("</enclosure>");
+		if (news.getImgSrc() != null && !news.getImgSrc().isEmpty())
+			res.append("<enclosure>").append(news.getImgSrc()).append("</enclosure>");
 		res.append("</item>");
 		return res;
 	}
@@ -142,7 +149,7 @@ public class BackendParser {
 			siteStats = new ArrayList<>(filters.length);
 			for (SiteStats ss : allStats)
 				for (String filter : filters)
-					if (ss.siteName.toLowerCase().contains(filter)) {
+					if (ss.getSiteName().toLowerCase().contains(filter)) {
 						siteStats.add(ss);
 						break;
 					}
@@ -168,9 +175,9 @@ public class BackendParser {
 
 		StringBuilder sb = new StringBuilder(1000);
 		sb.append("\"stats\":{\"since\":")
-				.append(stats.since)
+				.append(stats.getSince())
 				.append(",\"last\":")
-				.append(stats.lastStart)
+				.append(stats.getLastStart())
 				.append(",\"sites\":[");
 
 		boolean needsComma = false;
@@ -179,14 +186,14 @@ public class BackendParser {
 				sb.append(",");
 			else needsComma = true;
 
-			sb.append("{\"c\":").append(ss.siteCode)
-					.append(",\"n\":\"").append(ss.siteName)
-					.append("\",\"a\":").append(ss.totalRequests)
-					.append(",\"m\":").append(ss.monthRequests)
-					.append(",\"r\":").append(ss.readings)
-					.append(",\"l\":").append(ss.lastRequest)
-					.append(",\"i\":\"").append(ss.lastIp)
-					.append("\",\"v\":\"").append(ss.fromVersion)
+			sb.append("{\"c\":").append(ss.getSiteCode())
+					.append(",\"n\":\"").append(ss.getSiteName())
+					.append("\",\"a\":").append(ss.getTotalRequests())
+					.append(",\"m\":").append(ss.getMonthRequests())
+					.append(",\"r\":").append(ss.getReadings())
+					.append(",\"l\":").append(ss.getLastRequest())
+					.append(",\"i\":\"").append(ss.getLastIp())
+					.append("\",\"v\":\"").append(ss.getFromVersion())
 					.append("\"}");
 		}
 
@@ -205,8 +212,8 @@ public class BackendParser {
 				sb.append(",");
 			else needsComma = true;
 
-			sb.append("{\"na\":\"").append(ms.id)
-					.append("\", \"va\":").append(ms.counter)
+			sb.append("{\"na\":\"").append(ms.getId())
+					.append("\", \"va\":").append(ms.getCounter())
 					.append("}");
 		}
 		sb.append("]");
@@ -248,29 +255,24 @@ public class BackendParser {
 				sb.append(",");
 			else needsComma = true;
 
-			sb.append("{\"code\":").append(E.code)
-					.append(", \"title\":\"").append(E.title)
-					.append("\", \"imgsrc\":\"").append(E.imgSrc)
+			sb.append("{\"code\":").append(E.getCode())
+					.append(", \"title\":\"").append(E.getTitle())
+					.append("\", \"imgsrc\":\"").append(E.getImgSrc())
 					.append("\", \"sources\":[");
 
-			for (int i = 0; i < E.sites.length; i++) {
+			int[][] eventSources = EventSource.getSources(E.getRegionCode());
+			for (int i = 0; i < eventSources.length; i++) {
 				if (i != 0) sb.append(",");
-				Event.EventSite s = E.sites[i];
-
-				sb.append("{\"si_c\":").append(s.site_code)
-						.append(", \"se_c\":[");
-
-				for (int j = 0; j < s.section_codes.length; j++) {
-					if (j != 0) sb.append(",");
-					sb.append(s.section_codes[j]);
-				}
-				sb.append("]}");
+				sb.append("{\"si_c\":").append(eventSources[i][0])  // siteCode
+						.append(", \"se_c\":[").append(eventSources[i][1]) // sectionCode
+						.append("]}");
 			}
 
+			ArrayList<String> tags = E.getTags();
 			sb.append("], \"tags\":\"");
-			for (int i = 0; i < E.tags.length; i++) {
+			for (int i = 0; i < tags.size(); i++) {
 				if (i != 0) sb.append(",");
-				sb.append(E.tags[i]);
+				sb.append(tags.get(i));
 			}
 
 			sb.append("\"}");

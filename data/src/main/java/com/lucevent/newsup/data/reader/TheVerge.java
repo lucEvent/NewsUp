@@ -30,7 +30,7 @@ public class TheVerge extends com.lucevent.newsup.data.util.NewsReader {
 			article.select("script").remove();
 
 			article.select("figure cite,.caption,q").tagName("figcaption");
-			article.select("[style]:not(.instagram-media [style]").removeAttr("style");
+			article.select("[style]:not(.instagram-media [style])").removeAttr("style");
 
 			for (Element e : article.select(".c-float-right,.c-float-left"))
 				e.tagName("blockquote").removeAttr("class");

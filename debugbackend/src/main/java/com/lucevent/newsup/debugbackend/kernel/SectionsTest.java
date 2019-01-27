@@ -5,8 +5,8 @@ import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsSet;
 import com.lucevent.newsup.data.util.Section;
 import com.lucevent.newsup.data.util.Site;
-import com.lucevent.newsup.debugbackend.data.Database;
-import com.lucevent.newsup.debugbackend.data.Task;
+import com.lucevent.newsup.debugbackend.db.Bug;
+import com.lucevent.newsup.debugbackend.db.Task;
 import com.lucevent.newsup.debugbackend.util.ReportCallback;
 
 import java.util.ArrayList;
@@ -19,22 +19,19 @@ public class SectionsTest {
 	private static final long AGE_THRESHOLD = AGE_THRESHOLD_MONTHS * 30 * 24 * 60 * 60 * 1000L;
 	private static final long MIN_NEWS_PER_SECTION = 3;
 
-	private Database db;
-
 	public SectionsTest()
 	{
-		db = new Database();
 	}
 
 	public void doTest(ReportCallback urgentCallback)
 	{
 		Sites sites = Sites.getDefault(true);
 
-		Task task = db.getCurrentTask(NUM_TESTS);
+		Task task = Task.getCurrent(NUM_TESTS);
 		task.newRound();
 
-		while (task.currentEvaluatingSite < sites.size()) {
-			Site site = sites.get(task.currentEvaluatingSite);
+		while (task.getCurrentEvaluatingSite() < sites.size()) {
+			Site site = sites.get((int) task.getCurrentEvaluatingSite());
 
 			ArrayList<NewsSet> news = new ArrayList<>(site.getSections().size());
 			for (Section section : site.getSections()) {
@@ -98,28 +95,30 @@ public class SectionsTest {
 			}
 
 			// Total Results
-			task.siteTestResults[0] += emptySectionsCounter;
-			task.siteTestResults[1] += oldSectionsCounter;
-			task.siteTestResults[2] += repeatedNameSectionsCounter;
-			task.siteTestResults[3] += repeatedUrlSectionsCounter;
-			task.siteTestResults[4] += repeatedSectionsContentCounter;
+			int[] siteTestResults = new int[NUM_TESTS];
+			siteTestResults[0] += emptySectionsCounter;
+			siteTestResults[1] += oldSectionsCounter;
+			siteTestResults[2] += repeatedNameSectionsCounter;
+			siteTestResults[3] += repeatedUrlSectionsCounter;
+			siteTestResults[4] += repeatedSectionsContentCounter;
+			task.addSectionResults(news.size(), siteTestResults);
 
 			if (emptySectionsCounter != 0)
-				db.saveBug(site, "Empty sections:" + emptySectionsCounter);
+				new Bug(site, "Empty sections:" + emptySectionsCounter).save();
 
 			if (oldSectionsCounter != 0)
-				db.saveBug(site, "Old sections:" + oldSectionsCounter);
+				new Bug(site, "Old sections:" + oldSectionsCounter).save();
 
 			if (repeatedNameSectionsCounter != 0)
-				db.saveBug(site, "Repeated section names:" + repeatedNameSectionsCounter);
+				new Bug(site, "Repeated section names:" + repeatedNameSectionsCounter).save();
 
 			if (repeatedUrlSectionsCounter != 0)
-				db.saveBug(site, "Repeated section links:" + repeatedUrlSectionsCounter);
+				new Bug(site, "Repeated section links:" + repeatedUrlSectionsCounter).save();
 
 			if (repeatedSectionsContentCounter != 0)
-				db.saveBug(site, "Repeated section content:" + repeatedSectionsContentCounter);
+				new Bug(site, "Repeated section content:" + repeatedSectionsContentCounter).save();
 
-			task.currentEvaluatingSite++;
+			task.currentEvaluatingSiteEnd();
 			task.save();
 		}
 	}

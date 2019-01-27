@@ -1,12 +1,13 @@
 package com.lucevent.newsup.backend;
 
+import com.lucevent.newsup.backend.db.Event;
+import com.lucevent.newsup.backend.db.Poll;
+import com.lucevent.newsup.backend.db.Report;
+import com.lucevent.newsup.backend.db.SiteStatus;
 import com.lucevent.newsup.backend.utils.Alerts;
 import com.lucevent.newsup.backend.utils.BackendParser;
-import com.lucevent.newsup.backend.utils.Event;
-import com.lucevent.newsup.backend.utils.Poll;
-import com.lucevent.newsup.backend.utils.Report;
+import com.lucevent.newsup.backend.utils.EventSource;
 import com.lucevent.newsup.backend.utils.Reports;
-import com.lucevent.newsup.backend.utils.SiteStatus;
 import com.lucevent.newsup.data.alert.Alert;
 import com.lucevent.newsup.data.util.Section;
 import com.lucevent.newsup.data.util.Sections;
@@ -21,9 +22,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.googlecode.objectify.ObjectifyService.ofy;
-
-public class DevelopmentServer extends HttpServlet {
+public class DevelopmentServlet extends HttpServlet {
 
 	private static final int DEVELOPER_HASH_CODE = -80680689;
 
@@ -35,7 +34,7 @@ public class DevelopmentServer extends HttpServlet {
 	}
 
 	@Override
-	public void doGet(HttpServletRequest req, HttpServletResponse resp)
+	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
 	{
 		try {
 			processPetition(req, resp);
@@ -85,12 +84,6 @@ public class DevelopmentServer extends HttpServlet {
 
 			resp_events(resp);
 
-		} else if (req.getParameter("add_event") != null) {
-
-			resp_addEvent(
-					req.getParameter("data"),
-					resp);
-
 		} else if (req.getParameter("remove_event") != null) {
 
 			resp_removeEvent(
@@ -107,7 +100,7 @@ public class DevelopmentServer extends HttpServlet {
 			String par = req.getParameter("report_id");
 			if (par != null) {
 				long report_id = Long.parseLong(par);
-				ofy().delete().type(Report.class).id(report_id).now();
+				Report.delete(report_id);
 				resp.getWriter().println("{\"result\":1}");
 			}
 
@@ -142,7 +135,7 @@ public class DevelopmentServer extends HttpServlet {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{\"reports\":[");
 
-		Reports reports = new Reports();
+		Reports reports = Reports.getAll();
 
 		boolean needsComma = false;
 		for (Report r : reports) {
@@ -150,12 +143,12 @@ public class DevelopmentServer extends HttpServlet {
 				sb.append(",");
 			else needsComma = true;
 
-			sb.append("{\"id\":").append(r.id)
-					.append(",\"ti\":").append(r.time)
-					.append(",\"ve\":\"").append(r.appVersion)
-					.append("\",\"ip\":\"").append(r.ip)
-					.append("\",\"em\":\"").append(r.email)
-					.append("\",\"msg\":\"").append(r.message)
+			sb.append("{\"id\":").append(r.getId())
+					.append(",\"ti\":").append(r.getTime())
+					.append(",\"ve\":\"").append(r.getAppVersion())
+					.append("\",\"ip\":\"").append(r.getIP())
+					.append("\",\"em\":\"").append(r.getEmail())
+					.append("\",\"msg\":\"").append(r.getMessage())
 					.append("\"}");
 		}
 		sb.append("]}");
@@ -205,39 +198,38 @@ public class DevelopmentServer extends HttpServlet {
 
 	private void resp_events(HttpServletResponse resp) throws IOException
 	{
-		List<Event> events = ofy().load().type(Event.class).list();
+		List<Event> events = Event.getAll(0);
 		StringBuilder sb = new StringBuilder("<data>");
 		for (Event E : events) {
 			sb.append("<event code='")
-					.append(E.code)
-					.append("' visible='")
-					.append(E.visible)
+					.append(E.getCode())
+					.append("' visible=true'")  // // TODO: 16/01/2019 remove
 					.append("' imgsrc='")
-					.append(E.imgSrc)
+					.append(E.getImgSrc())
 					.append("' start='")    //  // TODO: 31/10/2018 merge start and end and only send lastTime
-					.append(E.lastNewsTime)
+					.append(E.getLastNewsTime())
 					.append("' end='")
-					.append(E.lastNewsTime + MAX_EVENT_TIME_ON)
+					.append(E.getLastNewsTime() + MAX_EVENT_TIME_ON)
 					.append("' sources='");
 
-			for (int i = 0; i < E.sites.length; i++) {
+			int[][] eventSources = EventSource.getSources(E.getRegionCode());
+			for (int i = 0; i < eventSources.length; i++) {
 				if (i != 0) sb.append(";");
-				Event.EventSite s = E.sites[i];
-				sb.append(s.site_code);
-				for (int is : s.section_codes)
-					sb.append(",").append(is);
+				sb.append(eventSources[i][0])                    // siteCode
+						.append(",").append(eventSources[i][1]); // sectionCode
 			}
 
+			ArrayList<String> tags = E.getTags();
 			sb.append("' tags='");
-			for (int i = 0; i < E.tags.length; i++) {
+			for (int i = 0; i < tags.size(); i++) {
 				if (i != 0) sb.append(",");
-				sb.append(E.tags[i]);
+				sb.append(tags.get(i));
 			}
 
 			sb.append("'>");
 
-			sb.append("<description lang='").append(E.region_code)
-					.append("' title=\"").append(E.title)
+			sb.append("<description lang='").append(E.getRegionCode())
+					.append("' title=\"").append(E.getTitle())
 					.append("\"/>");
 
 			sb.append("</event>");
@@ -247,42 +239,14 @@ public class DevelopmentServer extends HttpServlet {
 		resp.getWriter().println(sb.toString());
 	}
 
-	private void resp_addEvent(String event_data, HttpServletResponse resp) throws IOException
-	{
-		try {
-			Event newEvent = Event.parse(event_data);
-			if (newEvent != null) {
-				Event e = ofy().load().type(Event.class).id(newEvent.code).now();
-				if (e == null) {
-					ofy().save().entity(newEvent).now();
-					resp.getWriter().println("Event saved successfully");
-				} else {
-					e.visible = newEvent.visible;
-					e.imgSrc = newEvent.imgSrc;
-					e.lastNewsTime = newEvent.lastNewsTime;
-					e.tags = newEvent.tags;
-					e.title = newEvent.title;
-					e.region_code = newEvent.region_code;
-					e.sites = newEvent.sites;
-					ofy().save().entity(e).now();
-					resp.getWriter().println("Event updated successfully");
-				}
-			} else
-				resp.getWriter().println("Unknown error");
-		} catch (Exception e) {
-			resp.getWriter().println(e.getMessage());
-		}
-	}
-
 	private void resp_removeEvent(long event_code, HttpServletResponse resp) throws IOException
 	{
-		Event e = ofy().load().type(Event.class).id(event_code).now();
-		if (e == null) {
-			resp.getWriter().println("Event not found");
-		} else {
-			ofy().delete().type(Event.class).id(event_code).now();
-			resp.getWriter().println("Event removed successfully");
-		}
+		resp.getWriter().println(
+				Event.delete(event_code) ?
+						"Event removed successfully" :
+						"Event not found"
+
+		);
 	}
 
 	private void resp_polls(HttpServletResponse resp) throws IOException
@@ -290,7 +254,7 @@ public class DevelopmentServer extends HttpServlet {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{\"polls\":[");
 
-		ArrayList<Poll> polls = new ArrayList<>(ofy().load().type(Poll.class).list());
+		ArrayList<Poll> polls = Poll.getAll();
 		Alerts alerts = new Alerts();
 		alerts.addPolls("en");
 		alerts.addOldPolls();
@@ -303,19 +267,19 @@ public class DevelopmentServer extends HttpServlet {
 
 			Alert poll_alert = null;
 			for (Alert a : alerts)
-				if (a.id == p.id) {
+				if (a.id == p.getId()) {
 					poll_alert = a;
 					break;
 				}
 
-			sb.append("{\"id\":").append(p.id)
+			sb.append("{\"id\":").append(p.getId())
 					.append(",\"q\":\"").append(poll_alert.message)
-					.append("\",\"a1\":").append(p.answer_1_code)
-					.append(",\"a2\":").append(p.answer_2_code)
-					.append(",\"a3\":").append(p.answer_3_code)
-					.append(",\"c1\":").append(p.answer_1_counter)
-					.append(",\"c2\":").append(p.answer_2_counter)
-					.append(",\"c3\":").append(p.answer_3_counter);
+					.append("\",\"a1\":").append(p.getAnswer1Code())
+					.append(",\"a2\":").append(p.getAnswer2Code())
+					.append(",\"a3\":").append(p.getAnswer3Code())
+					.append(",\"c1\":").append(p.getAnswer1Counter())
+					.append(",\"c2\":").append(p.getAnswer2Counter())
+					.append(",\"c3\":").append(p.getAnswer3Counter());
 
 			sb.append("}");
 		}
@@ -331,28 +295,27 @@ public class DevelopmentServer extends HttpServlet {
 		String name = req.getParameter("name");
 		int info = Integer.parseInt(req.getParameter("info"));
 
-		SiteStatus ss = SiteStatus.getInstance(code);
+		SiteStatus ss = SiteStatus.get(code);
 		if (ss == null)
 			ss = SiteStatus.makeInstance(code, name, info);
 
-		ss.last_check_time = Long.parseLong(req.getParameter("check_time"));
-		ss.last_check_duration = Long.parseLong(req.getParameter("check_duration"));
-		ss.last_check_rounds = Integer.parseInt(req.getParameter("check_rounds"));
-		ss.current_num_news = Integer.parseInt(req.getParameter("num_news"));
-		ss.current_num_news_without_content = Integer.parseInt(req.getParameter("no_content"));
+		ss.setLastCheckTime(Long.parseLong(req.getParameter("check_time")));
+		ss.setLastCheckDuration(Long.parseLong(req.getParameter("check_duration")));
+		ss.setLastCheckRounds(Integer.parseInt(req.getParameter("check_rounds")));
+		ss.setCurrentNumNews(Integer.parseInt(req.getParameter("num_news")));
+		ss.setCurrentNumNewsWithoutContent(Integer.parseInt(req.getParameter("no_content")));
 
-		if (ss.status == SiteStatus.STATUS_WORKING) {
+		if (ss.getStatus() == SiteStatus.STATUS_WORKING) {
 
-			if (ss.current_num_news == 0 || (ss.current_num_news / 2) < ss.current_num_news_without_content)
-				ss.status = SiteStatus.STATUS_NOT_WORKING;
+			if (ss.getCurrentNumNews() == 0 || (ss.getCurrentNumNews() / 2) < ss.getCurrentNumNewsWithoutContent())
+				ss.setStatus(SiteStatus.STATUS_NOT_WORKING);
 
 		} else {
 
-			if (ss.current_num_news > 0 && (ss.current_num_news / 2) > ss.current_num_news_without_content)
-				ss.status = SiteStatus.STATUS_WORKING;
+			if (ss.getCurrentNumNews() > 0 && (ss.getCurrentNumNews() / 2) > ss.getCurrentNumNewsWithoutContent())
+				ss.setStatus(SiteStatus.STATUS_WORKING);
 
 		}
-
 		ss.save();
 	}
 

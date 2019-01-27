@@ -195,16 +195,20 @@ public class StatisticsService extends Service implements BackendNames {
 					ArrayList<Pair<Integer, Integer>> readingStats = manager.getTempReadingStats();
 
 					if (!readingStats.isEmpty()) {
-						StringBuilder url = new StringBuilder(MAIN_APP_SERVER + "?notify&values=");
-						for (Pair<Integer, Integer> pair : readingStats) {
-							url.append(pair.first).append(",")
-									.append(pair.second).append(",");
+						StringBuilder data = new StringBuilder();
+						for (Pair<Integer, Integer> pair : readingStats)
+							if (pair.second > 0)
+								data.append(pair.first).append(",")
+										.append(pair.second).append(",");
+
+						if (data.length() > 0) {
+
+							new URL(MAIN_APP_SERVER + "?notify&values=" + data.substring(0, data.length() - 1))
+									.openStream()
+									.close();
+
+							manager.clearReadingStats();
 						}
-
-						URL request = new URL(url.substring(0, url.length() - 1));
-						request.openStream().close();
-
-						manager.clearReadingStats();
 					}
 				} catch (Exception ignored) {
 				}

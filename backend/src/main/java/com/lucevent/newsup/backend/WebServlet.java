@@ -19,6 +19,7 @@ public class WebServlet extends HttpServlet {
 	public void init() throws ServletException
 	{
 		super.init();
+		new Data();
 	}
 
 	@Override

@@ -1,9 +1,9 @@
 package com.lucevent.newsup.backend;
 
+import com.lucevent.newsup.backend.db.Event;
+import com.lucevent.newsup.backend.db.EventNews;
 import com.lucevent.newsup.backend.utils.Alerts;
 import com.lucevent.newsup.backend.utils.BackendParser;
-import com.lucevent.newsup.backend.utils.Event;
-import com.lucevent.newsup.backend.utils.EventNews;
 import com.lucevent.newsup.backend.utils.Reports;
 import com.lucevent.newsup.backend.utils.SiteSearchEngine;
 import com.lucevent.newsup.data.util.News;
@@ -14,19 +14,24 @@ import com.lucevent.newsup.data.util.UserSite;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 import java.util.TreeSet;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import static com.googlecode.objectify.ObjectifyService.ofy;
 
 /**
  * Starting from app version 2.8.2
  */
 public class AppServlet_v3 extends HttpServlet {
+
+	@Override
+	public void init() throws ServletException
+	{
+		super.init();
+		new Data();
+	}
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -72,7 +77,7 @@ public class AppServlet_v3 extends HttpServlet {
 			String[] values = req.getParameter("values").split(",");
 			for (int i = 0; i < values.length; i += 2) {
 				Site site = Data.getSite(Integer.parseInt(values[i]));
-				Data.stats.read(site, Integer.parseInt(values[i + 1]));
+				Data.stats.countReadTimes(site, Integer.parseInt(values[i + 1]));
 			}
 
 		} else if (req.getParameter("notifyevent") != null) {
@@ -179,10 +184,7 @@ public class AppServlet_v3 extends HttpServlet {
 	private void resp_events(String region_codes, HttpServletResponse resp) throws IOException
 	{
 		long currentTime = System.currentTimeMillis();
-		ArrayList<Event> aux = new ArrayList<>(ofy().load().type(Event.class)
-				.filter("visible", true)
-				.filter("lastNewsTime >", currentTime - MAX_EVENT_TIME_ON)
-				.list());
+		ArrayList<Event> aux = Event.getAll(currentTime - MAX_EVENT_TIME_ON);
 
 		String[] m_region_codes = region_codes.split(",");
 		for (int i = aux.size() - 1; i >= 0; i--) {
@@ -190,7 +192,7 @@ public class AppServlet_v3 extends HttpServlet {
 			// checking if regions requested match
 			boolean match = false;
 			for (String rc : m_region_codes)
-				if (e.region_code.equals(rc)) {
+				if (e.getRegionCode().equals(rc)) {
 					match = true;
 					break;
 				}
@@ -203,7 +205,7 @@ public class AppServlet_v3 extends HttpServlet {
 			@Override
 			public int compare(Event o1, Event o2)
 			{
-				int r = Long.compare(o1.lastNewsTime, o2.lastNewsTime);
+				int r = Long.compare(o1.getLastNewsTime(), o2.getLastNewsTime());
 				return r != 0 ? -r : 1;
 			}
 		});
@@ -214,11 +216,9 @@ public class AppServlet_v3 extends HttpServlet {
 
 	private void resp_event(long event_code, HttpServletResponse resp) throws IOException
 	{
-		List<EventNews> event_news = ofy().load().type(EventNews.class)
-				.filter("event_code", event_code)
-				.list();
-
-		resp.getWriter().println(BackendParser.toEntry(event_news).toString());
+		resp.getWriter().println(
+				BackendParser.toEntry(EventNews.get(event_code)).toString()
+		);
 	}
 
 	private void resp_alerts(String app_version, String lang, HttpServletResponse resp) throws IOException

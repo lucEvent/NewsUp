@@ -1,8 +1,8 @@
 package com.lucevent.newsup.backend.utils;
 
-import java.util.List;
+import com.lucevent.newsup.backend.db.RequestedSite;
 
-import static com.googlecode.objectify.ObjectifyService.ofy;
+import java.util.List;
 
 public class RequestedSites {
 
@@ -11,14 +11,14 @@ public class RequestedSites {
 	public static RequestedSites getInstance()
 	{
 		RequestedSites r = new RequestedSites();
-		r.sites = ofy().load().type(RequestedSite.class).list();
+		r.sites = RequestedSite.getAll();
 		return r;
 	}
 
 	public RequestedSite getSiteByCode(int code)
 	{
 		for (RequestedSite site : sites)
-			if (site.code == code)
+			if (site.getCode() == code)
 				return site;
 
 		return null;
@@ -27,28 +27,15 @@ public class RequestedSites {
 	public RequestedSite getSiteByRequest(String request)
 	{
 		for (RequestedSite site : sites)
-			if (site.original_request.equals(request))
+			if (site.getOriginalRequest().equals(request))
 				return site;
 
 		return null;
 	}
 
-	public RequestedSite createSite(String request, String name, String url, String rss_url, String icon_url, int info, int color)
+	public boolean add(RequestedSite rs)
 	{
-		RequestedSite r = new RequestedSite();
-		r.code = Math.abs(url.hashCode());
-		r.original_request = request;
-		r.name = name;
-		r.url = url;
-		r.rss_url = rss_url.startsWith("/") ? url + rss_url : rss_url;
-		r.icon_url = icon_url.startsWith("/") ? url + icon_url : icon_url;
-		r.info = info;
-		r.color = color;
-
-		ofy().save().entity(r).now();
-		sites.add(r);
-
-		return r;
+		return sites.add(rs);
 	}
 
 }

@@ -22,7 +22,7 @@ public abstract class NewsReader extends Reader {
 	protected static final int TAG_TITLE = "title".hashCode();
 	protected static final int TAG_LINK = "link".hashCode();
 	protected static final int TAG_GUID = "guid".hashCode();
-	protected static final int TAG_PUBDATE = "pubdate".hashCode();
+	protected static final int TAG_PUBDATE = "pubDate".hashCode();
 	protected static final int TAG_DC_DATE = "dc:date".hashCode();
 	protected static final int TAG_DESCRIPTION = "description".hashCode();
 	protected static final int TAG_CATEGORY = "category".hashCode();

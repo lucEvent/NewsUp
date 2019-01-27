@@ -13,8 +13,6 @@ import com.lucevent.newsup.data.util.SiteCategory;
 import com.lucevent.newsup.data.util.SiteCountry;
 import com.lucevent.newsup.data.util.SiteLanguage;
 import com.lucevent.newsup.data.util.Tags;
-import com.lucevent.newsup.development.reader.*;
-import com.lucevent.newsup.development.section.*;
 import com.lucevent.newsup.development.utils.FullTest;
 import com.lucevent.newsup.development.utils.HardDrive;
 import com.lucevent.newsup.development.utils.NewsReader;
@@ -206,17 +204,17 @@ public class Main {
 //		s = new Site(0, "OttawaCitizen", 0, "", 0, 0, 0, OttawaCitizenSections.class, OttawaCitizen.class);
 //		s = new Site(0, "iFixit", 0, "", 0, 0, 0, iFixitSections.class, iFixit.class);
 //		s = new Site(0, "TheCanary", 0, "", 0, 0, 0, TheCanarySections.class, TheCanary.class);
-		s = new Site(0, "Göteborgs-Posten", 0, "", 0, 0, 0, GoteborgsPostenSections.class, GoteborgsPosten.class);
+//		s = new Site(0, "Göteborgs-Posten", 0, "", 0, 0, 0, GoteborgsPostenSections.class, GoteborgsPosten.class);
 		/*
 		 */
 		// TITLES, NEWS, DATES, TAGS, FULL_TEST, SECTIONS_TEST, COUNT_NEWS
 		// EXTRACT_CONTENT, DOWNLOAD_ERRORS, GOOGLE_PLAY_SITES_TEXT
-		Process p = Process.NEWS;
+		Process p = Process.TAGS;
 		int[] sections = new int[]{0};
 		int position = 0;
-		int lenght =1;
+		int lenght = -1;
 		boolean showTitle = false;
-		boolean copyToFile = true;
+		boolean copyToFile = !true;
 		boolean queryServer = !true;
 
 		// Readers to check
@@ -310,7 +308,6 @@ public class Main {
 	                              boolean title, boolean link, boolean date, boolean description,
 	                              boolean content, boolean tags, boolean imageSrc)
 	{
-
 		System.out.println(" #################################### ");
 		if (title) {
 			System.out.println("\t" + n.title);

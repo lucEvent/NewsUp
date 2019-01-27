@@ -30,7 +30,8 @@ public class SkyAndTelescope extends com.lucevent.newsup.data.util.NewsReader {
 	@Override
 	protected String parseDescription(Element prop)
 	{
-		String dscr = jsoupParse(prop).select("p").first().text();
+		Elements ps = jsoupParse(prop).select("p");
+		String dscr = ps.isEmpty() ? "" : ps.first().text();
 		return dscr.startsWith("The post") ? "" : dscr;
 	}
 

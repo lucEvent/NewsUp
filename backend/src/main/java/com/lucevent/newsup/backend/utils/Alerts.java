@@ -1,9 +1,8 @@
 package com.lucevent.newsup.backend.utils;
 
+import com.lucevent.newsup.backend.db.Poll;
 import com.lucevent.newsup.data.alert.Alert;
 import com.lucevent.newsup.data.alert.AlertCode;
-
-import static com.googlecode.objectify.ObjectifyService.ofy;
 
 public class Alerts extends java.util.ArrayList<Alert>
 		implements com.lucevent.newsup.data.alert.AlertCode {
@@ -96,7 +95,7 @@ public class Alerts extends java.util.ArrayList<Alert>
 
 	public void pollAnswer(long poll_id, int answer)
 	{
-		Poll poll = ofy().load().type(Poll.class).id(poll_id).now();
+		Poll poll = Poll.get(poll_id);
 
 		if (poll == null) {
 			addPolls("en");
@@ -113,25 +112,22 @@ public class Alerts extends java.util.ArrayList<Alert>
 				return;
 
 			poll = new Poll();
-			poll.id = poll_id;
-
-			poll.answer_1_code = poll_alert.btn_start_code != AlertCode.BTN_CUSTOM ? poll_alert.btn_start_code : poll_alert.btn_start_text.hashCode();
-			poll.answer_2_code = poll_alert.btn_center_code != AlertCode.BTN_CUSTOM ? poll_alert.btn_center_code : poll_alert.btn_center_text.hashCode();
-			poll.answer_3_code = poll_alert.btn_end_code != AlertCode.BTN_CUSTOM ? poll_alert.btn_end_code : poll_alert.btn_end_text.hashCode();
-
-			poll.answer_1_counter = 0;
-			poll.answer_2_counter = 0;
-			poll.answer_3_counter = 0;
+			poll.init(
+					poll_id,
+					poll_alert.btn_start_code != AlertCode.BTN_CUSTOM ? poll_alert.btn_start_code : poll_alert.btn_start_text.hashCode(),
+					poll_alert.btn_center_code != AlertCode.BTN_CUSTOM ? poll_alert.btn_center_code : poll_alert.btn_center_text.hashCode(),
+					poll_alert.btn_end_code != AlertCode.BTN_CUSTOM ? poll_alert.btn_end_code : poll_alert.btn_end_text.hashCode()
+			);
 		}
 
-		if (answer == poll.answer_1_code)
-			poll.answer_1_counter++;
-		else if (answer == poll.answer_2_code)
-			poll.answer_2_counter++;
-		else if (answer == poll.answer_3_code)
-			poll.answer_3_counter++;
+		if (answer == poll.getAnswer1Code())
+			poll.incAnswer1Counter();
+		else if (answer == poll.getAnswer2Code())
+			poll.incAnswer2Counter();
+		else if (answer == poll.getAnswer3Code())
+			poll.incAnswer3Counter();
 
-		ofy().save().entity(poll);
+		poll.save();
 	}
 
 }

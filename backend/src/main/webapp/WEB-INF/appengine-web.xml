@@ -11,8 +11,10 @@
            <application>newsup-4</application>
            <application>newsup-5</application>
     -->
-    <version>2-5-0</version>
+    <version>2-9-0</version>
+    <runtime>java8</runtime>
     <threadsafe>true</threadsafe>
+    <url-stream-handler>urlfetch</url-stream-handler>
 
     <system-properties>
         <property name="java.util.logging.config.file" value="WEB-INF/logging.properties" />

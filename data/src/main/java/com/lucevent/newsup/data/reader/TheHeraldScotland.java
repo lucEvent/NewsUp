@@ -54,13 +54,8 @@ public class TheHeraldScotland extends com.lucevent.newsup.data.util.NewsReader 
 
 		for (Element e : article.select("li:has(strong)")) {
 			String text = e.text();
-			if (text.startsWith("READ MORE") || text.startsWith("Read more")) {
-				Element p = e.parent();
-				if (p != null)
-					p.remove();
-				else
-					e.html("");
-			}
+			if (text.startsWith("READ MORE") || text.startsWith("Read more"))
+				e.html("");
 		}
 
 		for (Element f : article.select("figure:has(img)"))

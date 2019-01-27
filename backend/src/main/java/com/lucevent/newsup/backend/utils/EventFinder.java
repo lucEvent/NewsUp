@@ -1,6 +1,8 @@
 package com.lucevent.newsup.backend.utils;
 
 import com.lucevent.newsup.backend.Data;
+import com.lucevent.newsup.backend.db.Event;
+import com.lucevent.newsup.backend.db.EventNews;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.Site;
@@ -18,8 +20,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.TreeSet;
 
-import static com.googlecode.objectify.ObjectifyService.ofy;
-
 public class EventFinder {
 
 	private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36";
@@ -35,56 +35,9 @@ public class EventFinder {
 	private static final String[] CA_IGNORED_WORDS = {"la", "les", "el", "lo", "els", "un", "una", "uns", "unes", "del", "a", "amb", "arran", "cap", "contra", "d'", "dalt", "damunt", "davall", "de", "deçà", "dellà", "des", "devers", "devora", "dintre", "durant", "en", "entre", "envers", "excepte", "fins", "llevat", "malgrat", "mitjançant", "per", "pro", "salvant", "salvat", "segons", "sens", "sense", "sobre", "sota", "sots", "tret", "ultra", "via", "dia", "dies", "mes", "mesos", "any", "anys"};
 	private static final String[] SV_IGNORED_WORDS = {};
 
-	private static final int[][] ES_SOURCES = {
-			{100, -306162022},
-			{105, 132737269},
-			{110, 1272519773},
-			{125, 2085053711},
-			{130, 132737269},
-			{135, -2141651978},
-			{140, 2085053711},
-			{145, 1272519773},
-			{155, -778380837},
-			{165, 1272519773},
-			{205, 1272519773},
-			{210, 191926286}
-	};
-	private static final int[][] UK_SOURCES = {
-			{500, 816398440}, // BBC
-			{505, 2424563}, // The Telegraph
-			{510, -420727794}, // The Huffington Post UK
-			{515, -369395939}, // Metro.co.uk
-			{520, 307565117}, // The Guardian
-			{535, -420727794}, // The Independent
-			{550, -420727794}, // Metro UK
-			{555, -420727794}, // Evening Standard
-			{570, 2424563}, // Daily Express
-	};
-	private static final int[][] CAT_SOURCES = {
-			{200, 1272519773}, // El Periódico (Cat)
-			{225, 1771822894}, // Racó Català
-			{230, 191926286}, // VilaWeb
-			{235, 1272519773}, // El Punt Avui
-			{250, -890380364}, // Nació Digital
-	};
-	private static final int[][] US_SOURCES = {
-			{600, -1813915576}, // CNN
-			{605, 536598325}, // The Huffington Post USA
-			{610, 1796885759}, // USA Today
-			{615, -232053456}, // The New York Times
-	};
-	private static final int[][] SV_SOURCES = {
-			{300, 438456953}, // Aftonbladet
-			{305, -225859847}, // Expressen
-			{310, -1290138452}, // Dagens Nyheter
-			{315, -1226593567}, // Svenska Dagbladet
-			{320, 80204866}, // Göteborgs-Posten
-			{325, -673985891}, // Fria Tider
-	};
-
 	public ArrayList<Event> find()
 	{
-		ArrayList<Event> evs_es = findEvents("es", "es", "es_es", "https://www.20minutos.es/", new EventExtractor() {
+		ArrayList<Event> evs_es = findEvents("es_es", "https://www.20minutos.es/", new EventExtractor() {
 			@Override
 			public ArrayList<String> getTopics(Document d)
 			{
@@ -99,7 +52,7 @@ public class EventFinder {
 		});
 		findNews(evs_es);
 
-		ArrayList<Event> evs_uk = findEvents("uk", "en", "en_gb", "https://www.theguardian.com/uk", new EventExtractor() {
+		ArrayList<Event> evs_uk = findEvents("en_gb", "https://www.theguardian.com/uk", new EventExtractor() {
 			@Override
 			public ArrayList<String> getTopics(Document d)
 			{
@@ -114,7 +67,7 @@ public class EventFinder {
 		});
 		findNews(evs_uk);
 
-		ArrayList<Event> evs_cat = findEvents("cat", "ca", "ca_es", "https://www.ara.cat", new EventExtractor() {
+		ArrayList<Event> evs_cat = findEvents("ca_es", "https://www.ara.cat", new EventExtractor() {
 			@Override
 			public ArrayList<String> getTopics(Document d)
 			{
@@ -143,42 +96,35 @@ public class EventFinder {
 		for (int i = 0; i < hasNews.length; i++)
 			hasNews[i] = false;
 
-		for (int i = 0; i < tts.get(0).sites.length; i++) {
-			Site site = Data.getSite(tts.get(0).sites[i].site_code);
-
-			NewsArray news = site.readNewsHeaders(tts.get(0).sites[i].section_codes);
+		int[][] sources = EventSource.getSources(tts.get(0).getRegionCode());
+		for (int i = 0; i < sources.length; i++) {
+			Site site = Data.getSite(sources[i][0]);
+			NewsArray news = site.readNewsHeaders(new int[]{sources[i][1]});
 			for (News n : news)
 				for (int ie = 0; ie < tts.size(); ie++) {
 					Event e = tts.get(ie);
-					if (n.hasKeyWords(e.tags)) {
+					if (n.hasKeyWords(e.getTags())) {
 
-						if (ofy().load().type(EventNews.class)
-								.filter("event_code", e.code)
-								.filter("site_code", site.code)
-								.filter("link", n.link)
-								.count() == 0) {
-
+						if (!EventNews.contains(e.getCode(), site.code, n.link)) {
 							hasNews[ie] = true;
 
-							if (e.lastNewsTime < n.date)
-								e.lastNewsTime = n.date;
-							if (e.imgSrc == null || e.imgSrc.isEmpty())
-								e.imgSrc = n.imgSrc;
+							if (e.getLastNewsTime() < n.date)
+								e.setLastNewsTime(n.date);
+							if (e.getImgSrc() == null || e.getImgSrc().isEmpty())
+								e.setImgSrc(n.imgSrc);
 
-							EventNews en = new EventNews();
-							en.id = n.id * e.code;
-							en.event_code = e.code;
-							en.site_code = site.code;
-							en.link = n.link;
-							en.title = n.title;
-							en.description = n.description;
-							en.content = n.content;
-							en.imgSrc = n.imgSrc;
-							en.date = n.date;
-							en.section_code = n.section_code;
-							en.tags = n.tags;
-
-							ofy().save().entity(en).now();
+							new EventNews(
+									n.id * e.getCode(),
+									e.getCode(),
+									site.code,
+									n.link,
+									n.title,
+									n.description,
+									n.content,
+									n.imgSrc,
+									n.date,
+									n.section_code,
+									n.tags);
 						}
 					}
 				}
@@ -190,7 +136,7 @@ public class EventFinder {
 				tts.remove(i);
 	}
 
-	private ArrayList<Event> findEvents(String countryCode, String langCode, String regionCode, String url, EventExtractor eventExtractor)
+	private ArrayList<Event> findEvents(String regionCode, String url, EventExtractor eventExtractor)
 	{
 		ArrayList<Event> events = new ArrayList<>();
 
@@ -204,7 +150,7 @@ public class EventFinder {
 		ArrayList<String> tts = eventExtractor.getTopics(d);
 
 		// Extracting tags
-		TreeSet ignoredWords = getIgnoredWords(langCode);
+		TreeSet ignoredWords = getIgnoredWords(regionCode);
 		for (String tt : tts) {
 			String[] words = tt.trim().toLowerCase().split(" ");
 			ArrayList<String> tags = new ArrayList<>(words.length);
@@ -213,29 +159,27 @@ public class EventFinder {
 					tags.add(w);
 
 			Event e = new Event();
-			e.tags = tags.toArray(new String[tags.size()]);
+			e.setTags(tags);
 			events.add(e);
 		}
 
 		// Setting codes, dates, descriptions
-		Event.EventSite[] siteSources = getSources(countryCode);
 		for (int i = 0; i < tts.size(); i++) {
 			Event e = events.get(i);
 			String tt = tts.get(i);
 
-			e.code = 20000 + (tt.hashCode() % 10000);
-			e.region_code = regionCode;
-			e.lastNewsTime = -1;
-			e.title = tt;
-			e.sites = siteSources;
-			e.visible = true;
+			e.setCode(tt.hashCode());
+			e.setRegionCode(regionCode);
+			e.setLastNewsTime(-1);
+			e.setTitle(tt);
 		}
 
 		return events;
 	}
 
-	private static TreeSet getIgnoredWords(String langCode)
+	private static TreeSet getIgnoredWords(String region_code)
 	{
+		String langCode = region_code.split("_")[0];
 		String[] ignoredWords;
 		switch (langCode) {
 			case "es":
@@ -256,39 +200,6 @@ public class EventFinder {
 		return new TreeSet<>(Arrays.asList(ignoredWords));
 	}
 
-	private Event.EventSite[] getSources(String countryCode)
-	{
-		int[][] sources;
-		switch (countryCode) {
-			case "es":
-				sources = ES_SOURCES;
-				break;
-			case "uk":
-				sources = UK_SOURCES;
-				break;
-			case "us":
-				sources = US_SOURCES;
-				break;
-			case "cat":
-				sources = CAT_SOURCES;
-				break;
-			case "sv":
-				sources = SV_SOURCES;
-				break;
-			default:
-				return null;
-		}
-		Event.EventSite[] res = new Event.EventSite[sources.length];
-		for (int i = 0; i < sources.length; i++) {
-			int[] s = sources[i];
-
-			res[i] = new Event.EventSite();
-			res[i].site_code = s[0];
-			res[i].section_codes = new int[]{s[1]};
-		}
-		return res;
-	}
-
 	private org.jsoup.nodes.Document getDocument(String url, boolean readRaw)
 	{
 		try {
@@ -303,7 +214,7 @@ public class EventFinder {
 						.get();
 
 		} catch (Exception e) {
-			//System.out.println("[EventEngine] Can't read page " + url);
+			//System.out.println("[EventFinder] Can't read page " + url);
 		}
 		return null;
 	}

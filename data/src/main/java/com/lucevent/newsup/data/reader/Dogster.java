@@ -31,7 +31,7 @@ public class Dogster extends com.lucevent.newsup.data.util.NewsReader {
 
 			article.select(".wp-caption-text").tagName("figcaption");
 			article.select("[style]").removeAttr("style");
-			article.select("[class^='m_'").removeAttr("class");
+			article.select("[class^='m_']").removeAttr("class");
 
 			cleanAttributes(article.select("img"), "src");
 

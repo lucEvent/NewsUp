@@ -16,7 +16,7 @@ public class Event {
 
 	public ArrayList<Source> sources;
 
-	public String[] keyWords;
+	public ArrayList<String> keyWords;
 
 	public Event()
 	{

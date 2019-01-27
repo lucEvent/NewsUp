@@ -3,6 +3,7 @@ package com.lucevent.newsup.data.util;
 import org.jsoup.select.Elements;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class News implements Comparable<News>, Serializable {
 
@@ -43,7 +44,7 @@ public class News implements Comparable<News>, Serializable {
 		return new News(id, title, link, description, date, imgSrc, tags, site_code, section_code, readOn);
 	}
 
-	public boolean hasKeyWords(String[] keyWords)
+	public boolean hasKeyWords(ArrayList<String> keyWords)
 	{
 		String[] titleTags = title.toLowerCase().replaceAll("[^\\p{IsAlphabetic}^\\p{Blank}^\\p{IsDigit}]", "").split(" ");
 		for (String keyW : keyWords) {

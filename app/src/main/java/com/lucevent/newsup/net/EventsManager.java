@@ -15,6 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public final class EventsManager implements BackendNames {
 
@@ -93,7 +94,7 @@ public final class EventsManager implements BackendNames {
 		e.code = jEvent.getInt("code");
 		e.title = jEvent.getString("title");
 		e.imgSrc = jEvent.getString("imgsrc");
-		e.keyWords = jEvent.getString("tags").split(",");
+		e.keyWords = new ArrayList<>(Arrays.asList(jEvent.getString("tags").split(",")));
 		e.sources = new ArrayList<>();
 
 		JSONArray jSources = jEvent.getJSONArray("sources");

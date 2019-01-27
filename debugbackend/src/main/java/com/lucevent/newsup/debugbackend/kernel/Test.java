@@ -5,27 +5,25 @@ import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.Section;
 import com.lucevent.newsup.data.util.Site;
-import com.lucevent.newsup.debugbackend.data.Database;
-import com.lucevent.newsup.debugbackend.data.PartialTestResult;
-import com.lucevent.newsup.debugbackend.data.Task;
+import com.lucevent.newsup.debugbackend.db.Bug;
+import com.lucevent.newsup.debugbackend.db.PartialTestResult;
+import com.lucevent.newsup.debugbackend.db.Task;
 import com.lucevent.newsup.debugbackend.net.Net;
 import com.lucevent.newsup.debugbackend.util.ReportCallback;
 
 import org.jsoup.nodes.Document;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.TreeSet;
 
 public class Test {
-
-	private Database db;
 
 	private long mSiteStartTestTime = -1;
 	private int mSiteRoundCounter = 0;
 
 	public Test()
 	{
-		db = new Database();
 	}
 
 	/**
@@ -36,25 +34,25 @@ public class Test {
 		Sites sites = Sites.getDefault(true);
 		Evaluator evaluator = new Evaluator();
 
-		Task task = db.getCurrentTask(evaluator.size());
+		Task task = Task.getCurrent(evaluator.size());
 		task.newRound();
 		mSiteRoundCounter++;
 
-		if (task.currentEvaluatingSite < sites.size()) {
-			Site site = sites.get(task.currentEvaluatingSite);
+		if (task.getCurrentEvaluatingSite() < sites.size()) {
+			Site site = sites.get((int) task.getCurrentEvaluatingSite());
 
 			if (mSiteStartTestTime == -1)
 				mSiteStartTestTime = System.currentTimeMillis();
 
-			for (; task.currentEvaluatingSection < site.getSections().size(); task.currentEvaluatingSection++, task.saveDeferred()) {
-				Section section = site.getSections().get(task.currentEvaluatingSection);
+			for (; task.getCurrentEvaluatingSection() < site.getSections().size(); task.currentEvaluatingSectionEnd(), task.save()) {
+				Section section = site.getSections().get((int) task.getCurrentEvaluatingSection());
 				if (section.url != null) {
 
-					int[] tempValues = new int[task.siteTestResults.length];
+					int[] tempValues = new int[task.getSiteTestResults().size()];
 					for (int i = 0; i < tempValues.length; i++)
 						tempValues[i] = 0;
 
-					NewsArray news = site.readNewsHeaders(new int[]{site.getSections().get(task.currentEvaluatingSection).code});
+					NewsArray news = site.readNewsHeaders(new int[]{section.code});
 					for (News N : news) {
 						if (N.content == null || N.content.isEmpty()) {
 //                            try {
@@ -64,13 +62,11 @@ public class Test {
 							site.readNewsContent(N);
 						}
 					}
-					int[] partialValues = evaluator.evaluate(news, db);
+					int[] partialValues = evaluator.evaluate(news);
 					for (int t = 0; t < tempValues.length; t++)
 						tempValues[t] += partialValues[t];
 
-					task.siteNumNews += news.size();
-					for (int i = 0; i < tempValues.length; i++)
-						task.siteTestResults[i] += tempValues[i];
+					task.addSectionResults(news.size(), tempValues);
 				}
 			}
 
@@ -79,61 +75,58 @@ public class Test {
 			Net.sendStatus(
 					site.code, site.name, site.info,
 					now, now - mSiteStartTestTime, mSiteRoundCounter,
-					task.siteNumNews, task.siteTestResults[0]
+					task.getSiteNumNews(), task.getSiteTestResults().get(0)
 			);
 			mSiteStartTestTime = -1;
 			mSiteRoundCounter = 0;
 
 			// Saving results for current Site
 			PartialTestResult ptr = new PartialTestResult();
-			ptr.taskId = task.id;
-			ptr.siteCode = site.code;
-			ptr.numNews = task.siteNumNews;
-			ptr.testResults = task.siteTestResults;
+			ptr.setTaskId(task.getId());
+			ptr.setSiteCode(site.code);
+			ptr.setNumNews(task.getSiteNumNews());
+			ptr.setTestResults(task.getSiteTestResults());
 			ptr.save();
 
-			if (task.siteNumNews == 0 || (task.siteNumNews / 2) < task.siteTestResults[0])
-				urgentCallback.report(site.name + " | " + task.siteNumNews + " news read / " + task.siteTestResults[0] + " without content");
+			if (task.getSiteNumNews() == 0 || (task.getSiteNumNews() / 2) < task.getSiteTestResults().get(0))
+				urgentCallback.report(site.name + " | " + task.getSiteNumNews() + " news read / " + task.getSiteTestResults().get(0) + " without content");
 
-			task.totalNumNews += task.siteNumNews;
-			for (int t = 0; t < task.totalTestResults.length; t++) {
-				task.totalTestResults[t] += task.siteTestResults[t];
-				task.siteTestResults[t] = 0;
-			}
-			task.currentEvaluatingSite++;
-			task.currentEvaluatingSection = 0;
-			task.siteNumNews = 0;
+			task.addSiteResults(task.getSiteNumNews(), task.getSiteTestResults());
+			task.currentEvaluatingSiteEnd();
+			task.setCurrentEvaluatingSection(0);
+			task.setSiteNumNews(0);
 			task.save();
 
 			return null;
 		}
-		task.finish();
+		task.end();
 
 		TreeSet<PartialTestResult> partials = new TreeSet<>(new Comparator<PartialTestResult>() {
 			@Override
 			public int compare(PartialTestResult o1, PartialTestResult o2)
 			{
-				return Integer.compare(o1.siteCode, o2.siteCode);
+				return Long.compare(o1.getSiteCode(), o2.getSiteCode());
 			}
 		});
-		partials.addAll(db.getPartialTestResults(task.id));
+		partials.addAll(PartialTestResult.getAll(task.getId()));
 
 		// Creating report
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < evaluator.size(); ++i) {
 			sb.append("** ").append(evaluator.getDescription(i)).append(" **\n");
 			for (PartialTestResult ptr : partials) {
-				if (i < ptr.testResults.length && ptr.testResults[i] > 0)
-					sb.append("\t *").append(sites.getSiteByCode(ptr.siteCode).name).append(" (").append(ptr.testResults[i]).append(")\n");
+				ArrayList<Long> testResults = ptr.getTestResults();
+				if (i < testResults.size() && testResults.get(i) > 0)
+					sb.append("\t *").append(sites.getSiteByCode((int) ptr.getSiteCode()).name).append(" (").append(testResults.get(i)).append(")\n");
 			}
 		}
 		sb.append("\n** Resultados totales **\n");
-		sb.append("\t").append(task.totalNumNews).append(" noticias\n");
-		for (int i = 0; i < task.totalTestResults.length; i++) {
-			int res = task.totalTestResults[i];
-			if (res > 0) {
+		sb.append("\t").append(task.getTotalNumNews()).append(" noticias\n");
+		ArrayList<Long> totalTestResults = task.getTotalTestResults();
+		for (int i = 0; i < totalTestResults.size(); i++) {
+			long res = totalTestResults.get(i);
+			if (res > 0)
 				sb.append("\t").append(res).append(" ").append(evaluator.getDescription(i)).append("\n");
-			}
 		}
 
 		return sb.toString();
@@ -141,7 +134,7 @@ public class Test {
 
 	public void clearTestCache()
 	{
-		db.clearTestCache();
+		PartialTestResult.deleteAll();
 	}
 
 	private class Evaluator {
@@ -168,7 +161,7 @@ public class Test {
 				"secciones vacias"
 		};
 
-		public int[] evaluate(NewsArray news, Database db)
+		public int[] evaluate(NewsArray news)
 		{
 			int[] res = new int[descriptions.length];
 			for (int i = 0; i < res.length; i++)
@@ -181,7 +174,7 @@ public class Test {
 					res[D_EMPTY]++;
 				}
 				if (evaluateHs(doc)) {
-					db.saveBugOn(n, "h1 or h2");
+					new Bug(n, "h1 or h2").save();
 					res[D_HS]++;
 				}
 				if (evaluateScripts(doc)) {
@@ -195,22 +188,22 @@ public class Test {
 					int i1 = Math.min(i0 + 40, n.content.length() - 1);
 					description += n.content.substring(i0, i1);
 
-					db.saveBugOn(n, description);
+					new Bug(n, description).save();
 					res[D_LINKS]++;
 				}
 				if (evaluateStyleTag(doc)) {
-					db.saveBugOn(n, "style tag");
+					new Bug(n, "style tag").save();
 					res[D_STYLES_TAGS]++;
 				}
 				if (evaluateStyleAttr(doc)) {
 					res[D_STYLE_ATTR]++;
 				}
 				if (evaluateAWithObject(doc)) {
-					db.saveBugOn(n, "");
+					new Bug(n, "a tag with object").save();
 					res[D_A_OBJECT]++;
 				}
 				if (evaluateComments(n.content)) {
-					db.saveBugOn(n, "comments");
+					new Bug(n, "comments").save();
 					res[D_COMMENTS]++;
 				}
 			}

@@ -1,22 +1,18 @@
 package com.lucevent.newsup.debugbackend;
 
 import com.lucevent.newsup.data.Sites;
-import com.lucevent.newsup.debugbackend.data.Bug;
-import com.lucevent.newsup.debugbackend.data.Database;
-import com.lucevent.newsup.debugbackend.data.Task;
+import com.lucevent.newsup.debugbackend.db.Bug;
+import com.lucevent.newsup.debugbackend.db.Task;
 
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 import java.util.TreeSet;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import static com.googlecode.objectify.ObjectifyService.ofy;
 
 public class DevelopmentServer extends HttpServlet {
 
@@ -40,7 +36,7 @@ public class DevelopmentServer extends HttpServlet {
 		if (req.getParameter("bugs") != null) {
 			sb.append("{\"bugs\":[");
 
-			ArrayList<Bug> bugs = db.getBugs();
+			List<Bug> bugs = Bug.getAll();
 
 			boolean needsComma = false;
 			boolean withContent = req.getParameter("withContent") != null;
@@ -49,15 +45,15 @@ public class DevelopmentServer extends HttpServlet {
 					sb.append(",");
 				else needsComma = true;
 
-				sb.append("{\"id\":").append(b.id)
-						.append(",\"sc\":").append(b.site_code)
-						.append(",\"sn\":\"").append(sites.getSiteByCode(b.site_code).name)
-						.append("\",\"t\":").append(b.time)
-						.append(",\"d\":\"").append(URLEncoder.encode(b.description, "utf-8"));
+				sb.append("{\"id\":").append(b.getId())
+						.append(",\"sc\":").append(b.getSiteCode())
+						.append(",\"sn\":\"").append(sites.getSiteByCode((int) b.getSiteCode()).name)
+						.append("\",\"t\":").append(b.getTime())
+						.append(",\"d\":\"").append(URLEncoder.encode(b.getDescription(), "utf-8"));
 
 				if (withContent)
-					sb.append("\",\"l\":\"").append(b.link)
-							.append("\",\"c\":\"").append(URLEncoder.encode(b.content, "utf-8"));
+					sb.append("\",\"l\":\"").append(b.getLink())
+							.append("\",\"c\":\"").append(URLEncoder.encode(b.getContent(), "utf-8"));
 
 				sb.append("\"}");
 			}
@@ -66,7 +62,7 @@ public class DevelopmentServer extends HttpServlet {
 		} else if (req.getParameter("tasks") != null) {
 			sb.append("{\"tasks\":[");
 
-			TreeSet<Task> tasks = db.getTasks();
+			TreeSet<Task> tasks = Task.getAll();
 
 			boolean needsComma = false;
 			for (Task t : tasks) {
@@ -74,13 +70,13 @@ public class DevelopmentServer extends HttpServlet {
 					sb.append(",");
 				else needsComma = true;
 
-				sb.append("{\"id\":").append(t.id)
-						.append(",\"cur\":").append(t.currentEvaluatingSite)
-						.append(",\"sta\":").append(t.startTime)
-						.append(",\"fin\":").append(t.finishTime)
-						.append(",\"rou\":").append(t.rounds)
-						.append(",\"num\":").append(t.totalNumNews)
-						.append(",\"res\":\"").append(Arrays.toString(t.totalTestResults))
+				sb.append("{\"id\":").append(t.getId())
+						.append(",\"cur\":").append(t.getCurrentEvaluatingSite())
+						.append(",\"sta\":").append(t.getStartTime())
+						.append(",\"fin\":").append(t.getEndTime())
+						.append(",\"rou\":").append(t.getRounds())
+						.append(",\"num\":").append(t.getTotalNumNews())
+						.append(",\"res\":\"").append(t.getTotalTestResults().toString())
 						.append("\"}");
 			}
 
@@ -89,15 +85,19 @@ public class DevelopmentServer extends HttpServlet {
 
 			if (req.getParameter("task_id") != null) {
 
-				long task_id = Long.parseLong(req.getParameter("task_id"));
-				ofy().delete().type(Task.class).id(task_id).now();
-				sb.append("{\"result\":1}");
+				boolean b = Task.delete(
+						Long.parseLong(req.getParameter("task_id"))
+				);
+
+				sb.append("{\"result\":").append(b ? "1" : "0").append("}");
 
 			} else if (req.getParameter("bug_id") != null) {
 
-				long bug_id = Long.parseLong(req.getParameter("bug_id"));
-				ofy().delete().type(Bug.class).id(bug_id).now();
-				sb.append("{\"result\":1}");
+				boolean b = Bug.delete(
+						Long.parseLong(req.getParameter("bug_id"))
+				);
+
+				sb.append("{\"result\":").append(b ? "1" : "0").append("}");
 
 			} else return;
 
@@ -109,7 +109,6 @@ public class DevelopmentServer extends HttpServlet {
 	}
 
 	static private Sites sites;
-	static private Database db;
 
 	@Override
 	public void init() throws ServletException
@@ -117,7 +116,6 @@ public class DevelopmentServer extends HttpServlet {
 		super.init();
 
 		sites = Sites.getDefault(true);
-		db = new Database();
 	}
 
 }

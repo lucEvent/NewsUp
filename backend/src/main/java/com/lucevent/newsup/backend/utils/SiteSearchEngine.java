@@ -1,6 +1,7 @@
 package com.lucevent.newsup.backend.utils;
 
 import com.lucevent.newsup.backend.Data;
+import com.lucevent.newsup.backend.db.RequestedSite;
 import com.lucevent.newsup.data.util.SiteCategory;
 import com.lucevent.newsup.data.util.SiteCountry;
 import com.lucevent.newsup.data.util.SiteLanguage;
@@ -12,6 +13,8 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -37,11 +40,11 @@ public class SiteSearchEngine {
 			String query_url = "https://feedly.com/v3/search/feeds?q=" + URLEncoder.encode(request, "utf-8") +
 					"&n=8&fullTerm=false&organic=true&promoted=true&locale=es-ES&useV2=true&ck="
 					+ System.currentTimeMillis() + "&ct=feedly.desktop&cv=31.0.228";
-			System.out.println(query_url);
 			results = new JSONObject(getUrl(query_url).toString());
 		} catch (Exception e) {
-			e.printStackTrace();
-			return new Response(UserSite.ERROR_IN_FEEDLY_QUERY, "{\"error\":\"ERROR_IN_FEEDLY_QUERY e.msg:" + e.getMessage() + "\"}");
+			StringWriter writer = new StringWriter();
+			e.printStackTrace(new PrintWriter(writer));
+			return new Response(UserSite.ERROR_IN_FEEDLY_QUERY, "{\"error\":\"ERROR_IN_FEEDLY_QUERY exception:" + writer.toString() + "\"}");
 		}
 
 		StringBuilder sb = new StringBuilder("\"results\":[");
@@ -52,32 +55,37 @@ public class SiteSearchEngine {
 			try {
 				String name = new String(json.getString("title").getBytes(), "utf-8");
 				String site_url = json.getString("website");
-				System.out.println(site_url);
 				String rss_url = json.getString("feedId").substring(5);
 				String icon_url =
 						json.has("visualUrl") ?
 								json.getString("visualUrl") :
 								"";
-				int info = parseInfo(json.getString("language"), json.getJSONArray("deliciousTags"));
-				int color =
+				long info = (long) parseInfo(json.getString("language"), json.getJSONArray("deliciousTags"));
+				long color =
 						json.has("coverColor") ?
-								Integer.parseInt(json.getString("coverColor"), 16) :
-								-1;
+								(long) Integer.parseInt(json.getString("coverColor"), 16) :
+								-1L;
 
-				RequestedSite site = Data.requestedSites.createSite(request, name, site_url, rss_url, icon_url, info, color);
+				RequestedSite site = RequestedSite.get(site_url);
+				if (site == null) {
+					site = new RequestedSite(request, name, site_url, rss_url, icon_url, info, color);
+					Data.requestedSites.add(site);
+				} else {
+					site.countRequest();
+				}
 
 				if (needsComma)
 					sb.append(",");
 				else
 					needsComma = true;
 
-				sb.append("{\"code\":").append(site.code)
-						.append(",\"name\":\"").append(site.name)
-						.append("\", \"url\":\"").append(site.url)
-						.append("\", \"rss\":\"").append(site.rss_url)
-						.append("\", \"icon\":\"").append(site.icon_url)
-						.append("\", \"info\":\"").append(site.info)
-						.append("\", \"color\":").append(site.color)
+				sb.append("{\"code\":").append(site.getCode())
+						.append(",\"name\":\"").append(site.getName())
+						.append("\", \"url\":\"").append(site.getUrl())
+						.append("\", \"rss\":\"").append(site.getRssUrl())
+						.append("\", \"icon\":\"").append(site.getIconUrl())
+						.append("\", \"info\":\"").append(site.getInfo())
+						.append("\", \"color\":").append(site.getColor())
 						.append("}");
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -173,7 +181,6 @@ public class SiteSearchEngine {
 		int cat = SiteCategory.NEWS;
 		for (int i = 0; i < tags.length(); i++) {
 			String tag = new String(tags.getString(i).getBytes(), "UTF-8");
-			System.out.println("tag:" + tag);
 			switch (tag) {
 				case "fashion":
 				case "moda":

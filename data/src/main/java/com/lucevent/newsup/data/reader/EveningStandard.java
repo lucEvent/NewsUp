@@ -101,7 +101,11 @@ public class EveningStandard extends com.lucevent.newsup.data.util.NewsReader {
 
 				p.tagName("p");
 				p.removeAttr("href");
-				p.html("<b>" + Date.getAge(Long.parseLong(stime)) + "</b>");
+				try {
+					p.html("<b>" + Date.getAge(Long.parseLong(stime)) + "</b>");
+				} catch (NumberFormatException e) {
+					p.html("");
+				}
 			}
 
 			livelist.select(".liveblog-content").tagName("p");

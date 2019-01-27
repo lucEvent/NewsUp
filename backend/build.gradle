@@ -3,7 +3,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.google.appengine:gradle-appengine-plugin:1.9.56'
+        classpath 'com.google.appengine:gradle-appengine-plugin:1.9.59'
     }
 }
 
@@ -15,15 +15,10 @@ apply plugin: 'java'
 apply plugin: 'war'
 apply plugin: 'appengine'
 
-sourceCompatibility = JavaVersion.VERSION_1_7
-targetCompatibility = JavaVersion.VERSION_1_7
-
 dependencies {
-    appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.58'
-    compile 'com.google.appengine:appengine-endpoints:1.9.58'
+    appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.71'
+    compile 'com.google.appengine:appengine-endpoints:1.9.71'
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.google.guava:guava:22.0-android'
-    compile 'com.googlecode.objectify:objectify:5.1.17' //works with ObjectifyFilter in web.xml
     compile 'javax.servlet:servlet-api:3.0-alpha-1'
     compile project(':data')
 }
