@@ -9,12 +9,12 @@ import java.util.List;
 
 public class SiteStatus extends DataStoreEntity {
 
-	public static final int STATUS_WORKING = 0;
-	public static final int STATUS_NOT_WORKING = 1;
-	public static final int STATUS_UNDER_REVISION = 2;
-	public static final int STATUS_REMOVED = 3;
-	public static final int STATUS_ON_DEVELOPMENT = 4;
-	public static final int STATUS_SCHEDULED = 5;
+	public static final long STATUS_WORKING = 0;
+	public static final long STATUS_NOT_WORKING = 1;
+	public static final long STATUS_UNDER_REVISION = 2;
+	public static final long STATUS_REMOVED = 3;
+	public static final long STATUS_ON_DEVELOPMENT = 4;
+	public static final long STATUS_SCHEDULED = 5;
 
 	private static final String KIND = "SiteStatus";
 
@@ -42,11 +42,11 @@ public class SiteStatus extends DataStoreEntity {
 		e.setUnindexedProperty(NAME, name);
 		e.setUnindexedProperty(INFO, info);
 		e.setUnindexedProperty(STATUS, STATUS_SCHEDULED);
-		e.setUnindexedProperty(LAST_CHECK_TIME, 0);
-		e.setUnindexedProperty(LAST_CHECK_DURATION, 0);
-		e.setUnindexedProperty(LAST_CHECK_ROUNDS, 0);
-		e.setUnindexedProperty(CURRENT_NUM_NEWS, 0);
-		e.setUnindexedProperty(CURRENT_NUM_NEWS_WITHOUT_CONTENT, 0);
+		e.setUnindexedProperty(LAST_CHECK_TIME, 0L);
+		e.setUnindexedProperty(LAST_CHECK_DURATION, 0L);
+		e.setUnindexedProperty(LAST_CHECK_ROUNDS, 0L);
+		e.setUnindexedProperty(CURRENT_NUM_NEWS, 0L);
+		e.setUnindexedProperty(CURRENT_NUM_NEWS_WITHOUT_CONTENT, 0L);
 		return new SiteStatus(e);
 	}
 

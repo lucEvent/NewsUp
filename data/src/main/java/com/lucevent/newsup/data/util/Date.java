@@ -40,10 +40,15 @@ public class Date {
 		String[] items = date.split(" ");
 		if (items.length == 1) {
 
-			if (date.length() == 22) {
+			if (date.length() == 10) {
+				// 2019-01-29
+				temp = date + " 00:00:00";
+				zoneOffset = 0;
+
+			} else if (date.length() == 22) {
 				// 2015-10-08T16:29+02:00
 				temp = date.substring(0, 10) + " " + date.substring(11, 16) + ":00";
-				zoneOffset = estimateZoneOffset(date.substring(16));
+				zoneOffset = 0;
 			} else {
 				// 2015-09-03T17:31:08+02:00
 				temp = date.substring(0, 10) + " " + date.substring(11, 19);

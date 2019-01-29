@@ -38,7 +38,7 @@ public class TheNewYorkTimes extends com.lucevent.newsup.data.util.NewsReader {
 	protected void readNewsContent(Document doc, News news)
 	{
 		doc.select("[class^='RelatedCoverage']").remove();
-		for (Element fig : doc.select("figure[itemid]:has(div[class^='LazyImage']"))
+		for (Element fig : doc.select("figure[itemid]:has(div[class^='LazyImage'])"))
 			fig.select("div[class^='LazyImage']").first().attr("src", fig.attr("itemid")).tagName("img");
 
 		Elements article = doc.select("article").select("header img[class^='Image-i'],header figcaption,.StoryBodyCompanionColumn > div,[class^='styles-youtubeIframe'],figcaption[class^='media-caption'],[itemprop='associatedMedia'] img,[itemprop='associatedMedia'] figcaption");

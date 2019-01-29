@@ -85,7 +85,7 @@ public class PCWorld extends com.lucevent.newsup.data.util.NewsReader {
 			}
 
 		}
-		article.select("[style]:not(.instagram-media,.instagram-media *").removeAttr("style");
+		article.select("[style]:not(.instagram-media,.instagram-media *)").removeAttr("style");
 
 		news.content = finalFormat(article, true);
 	}

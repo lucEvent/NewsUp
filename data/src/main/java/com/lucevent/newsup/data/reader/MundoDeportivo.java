@@ -57,7 +57,7 @@ public class MundoDeportivo extends com.lucevent.newsup.data.util.NewsReader {
 			article = doc.select(".story-leaf-figure,.story-leaf-body-video,.story-leaf-body .story-leaf-txt-p,.live-scribble");
 			article.select("script,.story-leaf-relatednews").remove();
 
-			for (Element e : article.select(".twitter-tweet > a[href*='script'")) {
+			for (Element e : article.select(".twitter-tweet > a[href*='script']")) {
 				Element p = e.parent().parent();
 				p.html(e.attr("href"));
 				p.select("script").remove();

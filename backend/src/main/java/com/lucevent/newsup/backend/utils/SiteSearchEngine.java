@@ -39,7 +39,7 @@ public class SiteSearchEngine {
 		try {
 			String query_url = "https://feedly.com/v3/search/feeds?q=" + URLEncoder.encode(request, "utf-8") +
 					"&n=8&fullTerm=false&organic=true&promoted=true&locale=es-ES&useV2=true&ck="
-					+ System.currentTimeMillis() + "&ct=feedly.desktop&cv=31.0.228";
+					+ System.currentTimeMillis() + "&ct=feedly.desktop&cv=31.0.251";
 			results = new JSONObject(getUrl(query_url).toString());
 		} catch (Exception e) {
 			StringWriter writer = new StringWriter();

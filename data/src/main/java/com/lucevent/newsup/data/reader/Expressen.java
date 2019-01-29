@@ -55,7 +55,7 @@ public class Expressen extends com.lucevent.newsup.data.util.NewsReader {
 
 		}
 
-		article.select("img[src$='.svg'").remove();
+		article.select("img[src$='.svg']").remove();
 		cleanSources(widgets);
 		cleanSources(article);
 
