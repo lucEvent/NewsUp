@@ -1,9 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
-
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -32,7 +29,7 @@ public class Mashable extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		Elements article = doc.select(".article-image,.article-content");
 
@@ -86,7 +83,7 @@ public class Mashable extends com.lucevent.newsup.data.util.NewsReader {
 		article.select("script").remove();
 		article.select("[data-channel]").removeAttr("data-channel");
 
-		news.content = finalFormat(article, true);
+		return finalFormat(article, true);
 	}
 
 }

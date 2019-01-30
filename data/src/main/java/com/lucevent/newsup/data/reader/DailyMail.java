@@ -1,7 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
-
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -24,14 +22,13 @@ public class DailyMail extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(Document doc, String news_url)
 	{
-		if (news.link.contains("/video/")) {
+		if (news_url.contains("/video/")) {
 			Elements article = doc.select(".vjs-video-container,.video-single");
 			article.select("h2").remove();
 			cleanAttributes(article.select("video"), "controls");
-			news.content = finalFormat(article, false);
-			return;
+			return finalFormat(article, false);
 		}
 		Elements article = doc.select("article");
 		article.select("script,h1,.byline,.social,.sjs-share-container,.more,.adHolder,#external-source-links,noscript,[data-swipe-article=false],.fff-m-inline,.lc-social,.lc-live-update,.poll,.lc-icon,[style='display:none'],link,.season_at_glance,.see-more").remove();
@@ -46,7 +43,7 @@ public class DailyMail extends com.lucevent.newsup.data.util.NewsReader {
 		article.select(".mol-para-with-font").removeAttr("class");
 		cleanAttributes(article.select("video"), "controls");
 
-		news.content = finalFormat(article, false);
+		return finalFormat(article, false);
 	}
 
 }

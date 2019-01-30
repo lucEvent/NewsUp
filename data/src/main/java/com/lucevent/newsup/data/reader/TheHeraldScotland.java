@@ -1,8 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
-
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.Elements;
@@ -25,7 +22,7 @@ public class TheHeraldScotland extends com.lucevent.newsup.data.util.NewsReader 
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		Elements article = doc.select("#BlockArticleContent .article-hero,#BlockArticleContent .article-body");
 		article.select("script,.clearfix,.advert-container,#related-articles,link").remove();
@@ -65,7 +62,7 @@ public class TheHeraldScotland extends com.lucevent.newsup.data.util.NewsReader 
 
 		cleanAttributes(article.select("img[src]"), "src");
 
-		news.content = finalFormat(article, false);
+		return finalFormat(article, false);
 	}
 
 }

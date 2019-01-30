@@ -321,12 +321,12 @@ public class DBManager {
 		return result;
 	}
 
-	public boolean contains(News news)
+	public boolean hasNews(int news_id)
 	{
 		boolean r;
 		synchronized (this) {
 			SQLiteDatabase database = db.getReadableDatabase();
-			Cursor cursor = database.query(DBNews.db, DBNews.cols, Database.id + "=" + news.id, null, null, null, null);
+			Cursor cursor = database.query(DBNews.db, DBNews.cols, Database.id + "=" + news_id, null, null, null, null);
 
 			r = cursor.moveToFirst();
 

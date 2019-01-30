@@ -37,7 +37,7 @@ public class Expressen extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		Elements widgets, preamble, article;
 
@@ -79,7 +79,7 @@ public class Expressen extends com.lucevent.newsup.data.util.NewsReader {
 		widgets.select("[style]").removeAttr("style");
 		article.select("[style]").removeAttr("style");
 
-		news.content = finalFormat(widgets, true)
+		return finalFormat(widgets, true)
 				+ "<b>" + finalFormat(preamble, false) + "</b><br>"
 				+ finalFormat(article, false).replace("<p>&nbsp;</p>", "");
 	}

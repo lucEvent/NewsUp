@@ -1,7 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
-import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -42,7 +41,7 @@ public class Discover extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		if (doc.baseUri().contains("/galleries/")) {
 			Elements article = doc.select(".gallery");
@@ -53,8 +52,7 @@ public class Discover extends com.lucevent.newsup.data.util.NewsReader {
 			article.select("[style]").removeAttr("style");
 			article.select(".caption,.credit").tagName("figcaption");
 
-			news.content = finalFormat(description, true) + finalFormat(gallery, true);
-			return;
+			return finalFormat(description, true) + finalFormat(gallery, true);
 		}
 
 		Elements article = doc.select(".entry > p,.entry img:not(.entry > p img,.wp-smiley),.entry > blockquote,.entry h4");
@@ -71,7 +69,7 @@ public class Discover extends com.lucevent.newsup.data.util.NewsReader {
 
 		cleanAttributes(article.select("img"), "src");
 
-		news.content = finalFormat(article, true).replace("<p>&nbsp;</p>", "");
+		return finalFormat(article, true).replace("<p>&nbsp;</p>", "");
 	}
 
 }

@@ -1,8 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
-
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -31,10 +28,10 @@ public class ElEconomista extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		Elements article;
-		if (news.link.contains("/ecomotor/")) {
+		if (news_url.contains("/ecomotor/")) {
 			article = doc.select(".int-noti article");
 		} else {
 
@@ -49,7 +46,7 @@ public class ElEconomista extends com.lucevent.newsup.data.util.NewsReader {
 
 						if (article.isEmpty()) {
 							// TODO: 27/10/2018
-							return;
+							return null;
 						}
 					}
 				}
@@ -67,7 +64,7 @@ public class ElEconomista extends com.lucevent.newsup.data.util.NewsReader {
 		cleanAttributes(article.select("figure,[onclick]"));
 		cleanAttributes(article.select("img[itemtype]"), "src");
 
-		news.content = finalFormat(article, true);
+		return finalFormat(article, true);
 	}
 
 }

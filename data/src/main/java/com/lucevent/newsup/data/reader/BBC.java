@@ -1,7 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
-import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -31,7 +30,7 @@ public class BBC extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(Document doc, String news_url)
 	{
 		Elements article = doc.select("[property='articleBody']");
 
@@ -52,7 +51,7 @@ public class BBC extends com.lucevent.newsup.data.util.NewsReader {
 							article = doc.select(".gel-body-copy");
 							if (article.isEmpty()) {
 								//todo
-								return;
+								return null;
 							}
 
 						} else {
@@ -92,8 +91,7 @@ public class BBC extends com.lucevent.newsup.data.util.NewsReader {
 							article.select("[class]").removeAttr("class");
 							article.select("[data-reactid]").removeAttr("data-reactid");
 
-							news.content = finalFormat(article, false);
-							return;
+							return finalFormat(article, false);
 						}
 					} else {
 
@@ -113,8 +111,7 @@ public class BBC extends com.lucevent.newsup.data.util.NewsReader {
 									.removeAttr("class");
 						}
 
-						news.content = finalFormat(article, false);
-						return;
+						return finalFormat(article, false);
 					}
 				} else {
 					article.select(".related_stories,.related_topics,.pullOut").remove();
@@ -157,6 +154,6 @@ public class BBC extends com.lucevent.newsup.data.util.NewsReader {
 
 		article.select("script,.mpu-ad,.media-with-caption,.media-player-wrapper,ul:has(a)").remove();
 
-		news.content = finalFormat(article, true);
+		return finalFormat(article, true);
 	}
 }

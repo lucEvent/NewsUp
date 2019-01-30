@@ -1,7 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
-
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -31,7 +29,7 @@ public class ElMundo extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		Elements article = doc.select("div[itemprop='articleBody']:not(#tamano div[itemprop='articleBody']),#tamano");
 		article.select("script,aside,footer,link,time,.summary-lead,br,.pie-foto,.publicidad").remove();
@@ -40,7 +38,9 @@ public class ElMundo extends com.lucevent.newsup.data.util.NewsReader {
 		article.select("[style]").removeAttr("style");
 
 		if (!article.isEmpty())
-			news.content = finalFormat(article, false);
+			return finalFormat(article, false);
+
+		return null;
 	}
 
 }

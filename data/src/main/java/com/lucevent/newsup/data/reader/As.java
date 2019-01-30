@@ -59,10 +59,10 @@ public class As extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		Elements article;
-		if (news.link.contains("video")) {
+		if (news_url.contains("video")) {
 			article = doc.select(".item-multimedia script");
 			if (!article.isEmpty()) {
 				String content = article.html();
@@ -72,8 +72,7 @@ public class As extends com.lucevent.newsup.data.util.NewsReader {
 					int vEnd = content.indexOf(".mp4", vStart);
 					String videoURL = content.substring(vStart + 39, vEnd + 4);
 
-					news.content = insertIframe("http://as.com" + videoURL) + news.description;
-					return;
+					return insertIframe("http://as.com" + videoURL);
 				}
 			}
 		}
@@ -84,7 +83,7 @@ public class As extends com.lucevent.newsup.data.util.NewsReader {
 			article.select("script,section,.noticias-rel,.cont-art-tags,.comentarios,.no-visible").remove();
 			article.select(".escudo-equipo img").attr("style", "width:10%");
 
-			news.content = finalFormat(article, true);
+			return finalFormat(article, true);
 
 		} else {
 			article = doc.select("#contenedorfotos");
@@ -99,7 +98,7 @@ public class As extends com.lucevent.newsup.data.util.NewsReader {
 				}
 				article.select("[itemprop='headline']").tagName("p").select("h2,span").remove();
 
-				news.content = finalFormat(article, true);
+				return finalFormat(article, true);
 			} else {
 				article = doc.select("#contenido-interior > p,.entry-content > p,.floatFix > p,.floatFix > figure");
 				if (article.isEmpty()) {
@@ -112,7 +111,7 @@ public class As extends com.lucevent.newsup.data.util.NewsReader {
 							article = doc.select(".post");
 							if (article.isEmpty()) {
 								// No content found
-								return;
+								return null;
 							} else {
 								article.select(".post-info,.post-ftr,#comments,.comments,.redes,#comment-form,h2,a[rel='prev'],a[rel='next'],a[rel='author'],script,aside").remove();
 							}
@@ -124,7 +123,7 @@ public class As extends com.lucevent.newsup.data.util.NewsReader {
 				article.select("noscript,.social-bar,.entry-footer").remove();
 				article.select("[class]").removeAttr("class");
 
-				news.content = finalFormat(article, false);
+				return finalFormat(article, false);
 			}
 		}
 	}

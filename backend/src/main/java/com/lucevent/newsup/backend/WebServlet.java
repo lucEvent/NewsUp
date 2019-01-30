@@ -3,6 +3,7 @@ package com.lucevent.newsup.backend;
 import com.lucevent.newsup.backend.utils.BackendParser;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
+import com.lucevent.newsup.data.util.NewsMap;
 import com.lucevent.newsup.data.util.Sections;
 import com.lucevent.newsup.data.util.Site;
 
@@ -15,11 +16,14 @@ import javax.servlet.http.HttpServletResponse;
 
 public class WebServlet extends HttpServlet {
 
+	private static NewsMap mNewsPool;
+
 	@Override
 	public void init() throws ServletException
 	{
 		super.init();
 		new Data();
+		mNewsPool = new NewsMap();
 	}
 
 	@Override
@@ -92,22 +96,27 @@ public class WebServlet extends HttpServlet {
 				section_codes[i] = sections.get(section_index).code;
 		}
 
-		NewsArray news = site.readNewsHeaders(section_codes);
-		site.news.addAll(news);
+		NewsArray res = site.readNewsHeaders(section_codes);
+		mNewsPool.addAll(res);
 
 		resp.setContentType("json");
-		resp.getWriter().println(BackendParser.json(news));
+		resp.getWriter().println(
+				BackendParser.json(res)
+		);
 	}
 
 	private void resp_content(Site site, int news_id, HttpServletResponse resp) throws IOException
 	{
-		News prey = site.news.get(news_id);
-		if (prey != null) {
+		News n = mNewsPool.get(news_id);
+		if (n != null) {
 
-			if (prey.content.isEmpty())
-				site.readNewsContent(prey);
+			if (n.content.isEmpty()) {
+				String content = site.readNewsContent(n.link);
+				if (content != null)
+					n.content = content;
+			}
 
-			resp.getWriter().print(site.getStyle() + prey.content);
+			resp.getWriter().print(site.getStyle() + n.content);
 		}
 	}
 

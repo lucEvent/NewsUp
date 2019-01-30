@@ -1,9 +1,7 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
-import com.lucevent.newsup.data.util.News;
 
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -49,9 +47,9 @@ public class Elle extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
-		if (news.link.contains("/pasarelas/")) {
+		if (news_url.contains("/pasarelas/")) {
 			Elements slides = doc.select(".slide-container");
 			slides = slides.select(".slide-media img,.image-credit,.slideshow-slide-hed");
 			slides.select(".slideshow-slide-hed").tagName("p");
@@ -61,8 +59,7 @@ public class Elle extends com.lucevent.newsup.data.util.NewsReader {
 				cleanAttributes(img);
 				img.attr("src", src);
 			}
-			news.content = finalFormat(slides, true);
-			return;
+			return finalFormat(slides, true);
 		}
 
 		Elements article = doc.select(".standard-body");
@@ -75,7 +72,7 @@ public class Elle extends com.lucevent.newsup.data.util.NewsReader {
 					article = doc.select(".slideshow-desktop-dek,.slide-container");
 					if (article.isEmpty()) {
 						// No content found
-						return;
+						return null;
 					} else {
 						article = article.select(".slideshow-desktop-dek,.slide-media img,.image-credit,.slideshow-slide-dek");
 						article.select(".image-credit").tagName("figcaption");
@@ -121,7 +118,7 @@ public class Elle extends com.lucevent.newsup.data.util.NewsReader {
 			e.removeAttr("class");
 		}
 
-		news.content = finalFormat(article, true);
+		return finalFormat(article, true);
 	}
 
 }

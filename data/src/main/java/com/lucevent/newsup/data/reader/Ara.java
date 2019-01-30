@@ -1,7 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
-
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -30,9 +28,9 @@ public class Ara extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(Document doc, String news_url)
 	{
-		if (news.link.contains("/fotografies/")) {
+		if (news_url.contains("/fotografies/")) {
 			Elements article = doc.select(".gallery-view");
 			article.select("#slide_0,.slide_ender").remove();
 
@@ -44,8 +42,7 @@ public class Ara extends com.lucevent.newsup.data.util.NewsReader {
 
 			article.html(article.select("img,figcaption").outerHtml());
 
-			news.content = finalFormat(article, false);
-			return;
+			return finalFormat(article, false);
 		}
 
 		Elements article = doc.select(".inset-main figure,.mce-body");
@@ -59,7 +56,7 @@ public class Ara extends com.lucevent.newsup.data.util.NewsReader {
 
 		cleanAttributes(article.select("figure a").tagName("figcaption"));
 
-		news.content = finalFormat(article, true);
+		return finalFormat(article, true);
 	}
 
 }

@@ -1,7 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
-
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -23,7 +21,7 @@ public class RollingStone extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		Elements article = doc.select("article .c-picture__frame,.c-content");
 		article.select("script, q.c-picture__badge,.admz,.l-article-content__pull").remove();
@@ -36,7 +34,7 @@ public class RollingStone extends com.lucevent.newsup.data.util.NewsReader {
 
 		cleanAttributes(article.select("img"), "src");
 
-		news.content = finalFormat(article, false);
+		return finalFormat(article, false);
 	}
 
 }

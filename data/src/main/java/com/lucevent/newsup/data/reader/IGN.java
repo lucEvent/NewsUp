@@ -1,7 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
-import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -46,9 +45,9 @@ public class IGN extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(Document doc, String news_url)
 	{
-		if (news.link.contains("/feeds.ign.")) {
+		if (news_url.contains("/feeds.ign.")) {
 			Elements article = doc.select(".page-content");
 			article.select("script,.mob-article,.accentDivider,.theater-ui,.theater-social,.recirc-module").remove();
 			article.select(".wp-caption-text").tagName("figcaption");
@@ -69,16 +68,14 @@ public class IGN extends com.lucevent.newsup.data.util.NewsReader {
 			for (Element slides : article.select(".image-gallery-widget"))
 				slides.html(slides.select(".fs-album-title,.fs-caption,.fullscreen-image").outerHtml());
 
-			news.content = finalFormat(article, false);
-			return;
-		} else if (news.link.contains("/trailer/") || news.link.contains("/video/") || news.link.contains("/videointerview/")) {
+			return finalFormat(article, false);
+		} else if (news_url.contains("/trailer/") || news_url.contains("/video/") || news_url.contains("/videointerview/")) {
 
 			Elements video = doc.select("iframe.vplayer");
 			fixIframes(video);
 
-			news.content = video.outerHtml();
-			return;
-		} else if (news.link.contains("/gallery/")) {
+			return video.outerHtml();
+		} else if (news_url.contains("/gallery/")) {
 			Elements slides = doc.select(".swiper-slide img.swiper-lazy");
 			for (Element s : slides) {
 				String src = s.attr("data-src");
@@ -86,8 +83,7 @@ public class IGN extends com.lucevent.newsup.data.util.NewsReader {
 				s.attr("src", src);
 			}
 
-			news.content = slides.outerHtml();
-			return;
+			return slides.outerHtml();
 		}
 
 		Elements article = doc.select(".articleBody");
@@ -102,7 +98,7 @@ public class IGN extends com.lucevent.newsup.data.util.NewsReader {
 		fixIframes(article.select("iframe[src]"));
 		cleanAttributes(article.select("img[src]"), "src");
 
-		news.content = finalFormat(article, false);
+		return finalFormat(article, false);
 	}
 
 	private void fixIframes(Elements iframes)

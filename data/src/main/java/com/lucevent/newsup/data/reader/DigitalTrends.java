@@ -1,7 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
-
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -30,7 +28,7 @@ public class DigitalTrends extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		Elements header = doc.select(".m-header-media").select("img,iframe");
 		Elements article = doc.select("article[itemprop='articleBody']");
@@ -77,7 +75,7 @@ public class DigitalTrends extends com.lucevent.newsup.data.util.NewsReader {
 		header.select("[style]").removeAttr("style");
 		article.select("[style]:not(.instagram-media,.instagram-media *)").removeAttr("style");
 
-		news.content = finalFormat(header, true) + finalFormat(article, true);
+		return finalFormat(header, true) + finalFormat(article, true);
 	}
 
 }

@@ -1,8 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
-
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -24,7 +21,7 @@ public class Iltalehti extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		Elements article = doc.select(".article__description,.article-body");
 
@@ -51,8 +48,9 @@ public class Iltalehti extends com.lucevent.newsup.data.util.NewsReader {
 					iframe.parent().remove();
 			}
 
-			news.content = finalFormat(article, true);
+			return finalFormat(article, true);
 		}
+		return null;
 	}
 
 }

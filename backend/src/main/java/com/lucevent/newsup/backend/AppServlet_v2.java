@@ -6,7 +6,6 @@ import com.lucevent.newsup.backend.utils.Alerts;
 import com.lucevent.newsup.backend.utils.BackendParser;
 import com.lucevent.newsup.backend.utils.Reports;
 import com.lucevent.newsup.backend.utils.SiteSearchEngine;
-import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.data.util.UserSite;
@@ -181,33 +180,18 @@ public class AppServlet_v2 extends HttpServlet {
 		for (int i = 0; i < section_codes.length; i++)
 			section_codes[i] = Integer.parseInt(parts[i + 1]);
 
-		NewsArray news = site.readNewsHeaders(section_codes);
-		site.news.addAll(news);
-
-		return news;
+		return site.readNewsHeaders(section_codes);
 	}
 
-	private void resp_content(int site_code, String link, HttpServletResponse resp) throws IOException
+	private void resp_content(int site_code, String news_url, HttpServletResponse resp) throws IOException
 	{
 		Site site = Data.getSite(site_code);
 		if (site == null)
 			return;
 
-		int id = link.hashCode();
-
-		News news = site.news.get(id);
-		if (news == null) {
-			news = new News(id, "", link, "", -1, "", null, -1, -1, -1);
-			news.content = "";
-		}
-		if (news.content.isEmpty())
-			site.readNewsContent(news);
-
-		if (!news.content.isEmpty()) {
-			resp.getWriter().print(news.content);
-
-			site.news.put(id, news);
-		}
+		String content = site.readNewsContent(news_url);
+		if (content != null && !content.isEmpty())
+			resp.getWriter().print(content);
 	}
 
 	private static final long MAX_EVENT_TIME_ON = 12 * 60 * 60 * 1000; // 1/2 Day (ms)

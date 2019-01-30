@@ -36,7 +36,7 @@ public class DailyExpress extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(Document doc, String news_url)
 	{
 		Elements article = doc.select("#singleArticle>header h3,#singleArticle [data-type='article-body']");
 		article.select("script,.photo-caption,.clear,.external-gallery").remove();
@@ -63,7 +63,7 @@ public class DailyExpress extends com.lucevent.newsup.data.util.NewsReader {
 
 		article.select(".newsCaption").tagName("figcaption");
 
-		news.content = finalFormat(article, true);
+		return finalFormat(article, true);
 	}
 
 }

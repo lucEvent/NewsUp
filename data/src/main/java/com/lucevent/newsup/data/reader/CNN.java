@@ -74,7 +74,7 @@ public class CNN extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		Elements article;
 
@@ -155,7 +155,7 @@ public class CNN extends com.lucevent.newsup.data.util.NewsReader {
 		repairLinks(article, "poster");
 		cleanAttributes(article.select("img[src]"), "src");
 
-		news.content = finalFormat(article, false);
+		return finalFormat(article, false);
 	}
 
 }

@@ -4,7 +4,6 @@ import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
 import com.lucevent.newsup.data.util.Tags;
 
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -106,12 +105,12 @@ public class PokemonGo extends com.lucevent.newsup.data.util.Reader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		Elements article = doc.select(".grid__item > div.grid__item--10-cols--gt-md");
 		article.select("iframe").attr("frameborder", "0");
 
-		news.content = finalFormat(article, true);
+		return finalFormat(article, true);
 	}
 
 }

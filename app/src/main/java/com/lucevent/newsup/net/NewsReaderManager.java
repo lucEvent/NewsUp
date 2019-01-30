@@ -119,7 +119,7 @@ public class NewsReaderManager {
 				NewsArray news = readHeaders(site, section_codes);
 				if (news != null && !news.isEmpty()) {
 					for (News n : news) {
-						if (!mDB.contains(n)) {
+						if (!mDB.hasNews(n.id)) {
 							if (n.content == null || n.content.isEmpty())
 								readContent(server++ % NewsReader.NUM_SERVERS, site, n);
 
@@ -163,7 +163,7 @@ public class NewsReaderManager {
 			NewsArray news = newsReader.readEventHeaders(eventCode);
 			if (news != null) {
 				for (News n : news) {
-					if (!mDB.contains(n)) {
+					if (!mDB.hasNews(n.id)) {
 						if (n.content == null || n.content.isEmpty())
 							readContent(server++ % NewsReader.NUM_SERVERS, AppData.getSiteByCode(n.site_code), n);
 
@@ -280,14 +280,6 @@ public class NewsReaderManager {
 						if (uiCallback != null)
 							uiCallback.obtainMessage(AppCode.NEWS_COLLECTION, news).sendToTarget();
 
-						if (petition instanceof EventNewsPetition && petition.site == null) {
-
-							for (Source s : ((EventNewsPetition) petition).event.sources)
-								mDB.getNewsOf(s.site);
-
-						} else
-							mDB.getNewsOf(petition.site);
-
 						if (petition.site instanceof UserSite)
 							continue;
 
@@ -328,18 +320,13 @@ public class NewsReaderManager {
 
 				Site site = AppData.getSiteByCode(news.site_code);
 
-				NewsMap history = mDB.getNewsOf(site);
-				if (!history.containsKey(news.id)) {
+				if (!mDB.hasNews(news.id)) {
 
 					if (news.content.isEmpty())
 						readContent((int) (Thread.currentThread().getId()) % NewsReader.NUM_SERVERS, site, news);
 
 					if (!news.content.isEmpty())
 						mDB.save(news);
-
-					synchronized (site.news) {
-						site.news.add(news);
-					}
 				}
 			}
 		}
@@ -431,7 +418,10 @@ public class NewsReaderManager {
 
 		if (news.content.isEmpty()) {
 			try {
-				site.readNewsContent(news);
+				String content = site.readNewsContent(news.link);
+
+				if (content != null)
+					news.content = content;
 			} catch (Exception e) {
 				AppSettings.printerror("Error reading content (in device) of " + news.link, e);
 			}
@@ -443,7 +433,9 @@ public class NewsReaderManager {
 
 	public void readNow(Site site, News news)
 	{
-		site.readNewsContent(news);
+		String content = site.readNewsContent(news.link);
+		if (content != null)
+			news.content = content;
 
 		if (!news.content.isEmpty()) {
 			if (news.imgSrc == null)

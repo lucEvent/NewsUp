@@ -6,7 +6,6 @@ import com.lucevent.newsup.backend.utils.Reports;
 import com.lucevent.newsup.backend.utils.RequestedSites;
 import com.lucevent.newsup.data.Sites;
 import com.lucevent.newsup.data.util.Date;
-import com.lucevent.newsup.data.util.NewsMap;
 import com.lucevent.newsup.data.util.Site;
 import com.lucevent.newsup.data.util.UserSite;
 
@@ -35,8 +34,6 @@ public class Data {
 			sites.add(new Site(885, "The Geek Hammer", 0, "", 0, 0, 0, com.lucevent.newsup.data.util.Sections.class, com.lucevent.newsup.data.reader.MetroSV.class));
 			sites.add(new Site(1800, "Full M\u00FAsculo", 0, "", 0, 0, 0, com.lucevent.newsup.data.util.Sections.class, com.lucevent.newsup.data.reader.MetroSV.class));
 			sites.add(new Site(1300, "Meristation", 0, "", 0, 0, 0, com.lucevent.newsup.data.util.Sections.class, com.lucevent.newsup.data.reader.MetroSV.class));
-			for (Site s : sites)
-				s.news = new NewsMap();
 		}
 
 		if (stats == null)
@@ -55,7 +52,6 @@ public class Data {
 		RequestedSite rs = getRequestedSite(code);
 		if (rs != null) {
 			Site s = new UserSite((int) rs.getCode(), rs.getName(), (int) rs.getColor(), rs.getUrl(), (int) rs.getInfo(), rs.getRssUrl(), rs.getIconUrl());
-			s.news = new NewsMap();
 			sites.add(s);
 			return s;
 		}

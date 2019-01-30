@@ -1,7 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
-
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -34,13 +32,13 @@ public class Marca extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		Elements article = doc.select(".news-item");
 
 		if (article.isEmpty()) {
 			// ARTICLE EMPTY!!!!
-			return;
+			return null;
 		}
 
 		article.select("script,.kicker,.content-ad,.section-title-group,.js-headline,.js-headlineb,.subtitle-items,.sharing-tools,.ad-item,.related-tags,.comments-btn,.aside-comments,.content,[itemprop='author'],.ue-scoreboard-ad-scoreboard").remove();
@@ -52,7 +50,7 @@ public class Marca extends com.lucevent.newsup.data.util.NewsReader {
 
 		article.select("[style]:not(.instagram-media,.instagram-media *)").removeAttr("style");
 
-		news.content = finalFormat(article, true);
+		return finalFormat(article, true);
 	}
 
 }

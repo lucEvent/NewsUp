@@ -1,7 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
-
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
@@ -23,7 +21,7 @@ public class SportsIllustrated extends com.lucevent.newsup.data.util.NewsReader 
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(Document doc, String news_url)
 	{
 		Elements article = doc.select(".lead-image .lazy-image,.article-content .media-video,#article-body");
 		article.select("script,link,.js-inner-container,.image-wrap-container,.ad-container,.ad-sticky-container,.inline-article,.video,wbr,.riddle-container").remove();
@@ -33,7 +31,7 @@ public class SportsIllustrated extends com.lucevent.newsup.data.util.NewsReader 
 		article.select("[data-label]").removeAttr("data-label");
 		article.select("img[style],iframe[style]").removeAttr("style");
 
-		news.content = finalFormat(article, true);
+		return finalFormat(article, true);
 	}
 
 	@Override

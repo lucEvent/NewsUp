@@ -42,7 +42,7 @@ public class Make extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(Document doc, String news_url)
 	{
 		Elements article = doc.select("noscript .story-hero-image,.article-body");
 		article.select("noscript,script,.ctx-clearfix,.ctx-article-root,.ctx-sidebar-container").remove();
@@ -64,7 +64,7 @@ public class Make extends com.lucevent.newsup.data.util.NewsReader {
 
 		cleanAttributes(article.select("video"), "controls");
 
-		news.content = finalFormat(article, true);
+		return finalFormat(article, true);
 	}
 
 	@Override

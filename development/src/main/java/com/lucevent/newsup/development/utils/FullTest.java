@@ -203,7 +203,9 @@ public class FullTest {
 //                            } catch (InterruptedException ex) {
 //                                System.out.println("InterruptedException: " + ex.toString());
 //                            }
-						site.readNewsContent(N);
+						String content = site.readNewsContent(N.link);
+						if (content != null)
+							N.content = content;
 					}
 					for (int t = 0; t < tests.length; t++) {
 						Test test = tests[t];

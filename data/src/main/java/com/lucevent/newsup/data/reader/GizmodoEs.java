@@ -6,7 +6,6 @@ import com.lucevent.newsup.data.util.News;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -58,7 +57,7 @@ public class GizmodoEs extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		Elements article = doc.select(".post-content");
 		article.select(".referenced-wide,.js_ad-dynamic,[class^='ad-'],.related-module,.inset--story").remove();
@@ -119,7 +118,7 @@ public class GizmodoEs extends com.lucevent.newsup.data.util.NewsReader {
 
 		article.select("[style]").removeAttr("style");
 
-		news.content = finalFormat(article, false);
+		return finalFormat(article, false);
 	}
 
 

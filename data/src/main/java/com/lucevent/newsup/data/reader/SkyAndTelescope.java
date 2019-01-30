@@ -1,8 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
-
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -36,10 +33,10 @@ public class SkyAndTelescope extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		Elements article;
-		if (news.link.contains("/astronomy-events/"))
+		if (news_url.contains("/astronomy-events/"))
 			article = doc.select(".tribe-events-schedule,.tribe_events");
 		else
 			article = doc.select(".entry-content");
@@ -50,7 +47,7 @@ public class SkyAndTelescope extends com.lucevent.newsup.data.util.NewsReader {
 		cleanAttributes(article.select("img[src]"), "src");
 		article.select(".wp-caption-text").tagName("figcaption");
 
-		news.content = finalFormat(article, false);
+		return finalFormat(article, false);
 	}
 
 }

@@ -1,7 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
-
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -48,7 +46,7 @@ public class ElAndroideLibre extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(Document doc, String news_url)
 	{
 		Elements article = doc.select("#singlePostHeaderImgBox,.article-body__content");
 		article.select("script,a:has(.blockquoteLink),.zioamz,.blockquoteRelated").remove();
@@ -64,7 +62,7 @@ public class ElAndroideLibre extends com.lucevent.newsup.data.util.NewsReader {
 		cleanAttributes(article.select("img[src]"), "src");
 		article.select("img+em").tagName("figcaption");
 
-		news.content = finalFormat(article, false);
+		return finalFormat(article, false);
 	}
 
 }

@@ -1,7 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
-
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -30,17 +28,16 @@ public class IGNEs extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(Document doc, String news_url)
 	{
-		if (news.link.contains("/trailer/") || news.link.contains("/video/") || news.link.contains("/videointerview/")) {
+		if (news_url.contains("/trailer/") || news_url.contains("/video/") || news_url.contains("/videointerview/")) {
 
 			Elements video = doc.select("iframe.vplayer");
 			fixIframes(video);
 
-			news.content = video.outerHtml();
-			return;
+			return video.outerHtml();
 
-		} else if (news.link.contains("/gallery/")) {
+		} else if (news_url.contains("/gallery/")) {
 
 			Elements slides = doc.select(".swiper-slide img.swiper-lazy");
 			for (Element s : slides) {
@@ -48,8 +45,7 @@ public class IGNEs extends com.lucevent.newsup.data.util.NewsReader {
 				cleanAttributes(s);
 				s.attr("src", src);
 			}
-			news.content = slides.outerHtml();
-			return;
+			return slides.outerHtml();
 		}
 
 		Elements article = doc.select(".articleBody");
@@ -58,7 +54,7 @@ public class IGNEs extends com.lucevent.newsup.data.util.NewsReader {
 		fixIframes(article.select("iframe[src]"));
 		cleanAttributes(article.select("img[src]"), "src");
 
-		news.content = finalFormat(article, false);
+		return finalFormat(article, false);
 	}
 
 	private void fixIframes(Elements iframes)

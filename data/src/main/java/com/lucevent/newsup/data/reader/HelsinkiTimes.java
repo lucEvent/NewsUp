@@ -33,14 +33,14 @@ public class HelsinkiTimes extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		Elements article = doc.select(".article-content-main");
 		article.select("script,.infobox").remove();
 
 		article.select("[style]").removeAttr("style");
 
-		news.content = finalFormat(article, true);
+		return finalFormat(article, true);
 	}
 
 }

@@ -1,7 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
-import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -34,7 +33,7 @@ public class ElImparcial extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(Document doc, String news_url)
 	{
 		Elements article = doc.select(".nota-title-foto [itemprop='image'],[itemprop='articleBody']");
 		article.select(".nota-tags,.rs_skip,script").remove();
@@ -45,7 +44,7 @@ public class ElImparcial extends com.lucevent.newsup.data.util.NewsReader {
 
 		cleanAttributes(article.select("img"), "src");
 
-		news.content = finalFormat(article, true);
+		return finalFormat(article, true);
 	}
 
 }

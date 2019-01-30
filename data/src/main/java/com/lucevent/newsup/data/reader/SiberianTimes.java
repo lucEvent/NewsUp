@@ -1,8 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
-
-import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 public class SiberianTimes extends com.lucevent.newsup.data.util.NewsReader {
@@ -23,10 +20,10 @@ public class SiberianTimes extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		Elements article = doc.select(".topListItems");
-		news.content = finalFormat(article, false);
+		return finalFormat(article, false);
 	}
 
 }

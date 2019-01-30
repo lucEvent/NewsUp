@@ -13,8 +13,6 @@ public class Site {
 
 	private int num_readings;
 
-	public NewsMap news;
-
 	private Class readerClass;
 	protected Reader reader;
 
@@ -95,9 +93,9 @@ public class Site {
 		return res;
 	}
 
-	public void readNewsContent(News news)
+	public String readNewsContent(String news_url)
 	{
-		getReader().readContent(news);
+		return getReader().readContent(news_url);
 	}
 
 	public double getColorDarkness()

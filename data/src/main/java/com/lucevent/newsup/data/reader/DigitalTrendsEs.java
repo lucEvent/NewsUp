@@ -1,7 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
-
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -31,7 +29,7 @@ public class DigitalTrendsEs extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(Document doc, String news_url)
 	{
 		Elements article = doc.select("[itemprop='articleBody']");
 		article.select("script,[itemprop='publisher'],[itemprop='image'],.h-nonessential,.m-editors-rec").remove();
@@ -46,7 +44,7 @@ public class DigitalTrendsEs extends com.lucevent.newsup.data.util.NewsReader {
 		cleanAttributes(article.select("figure"));
 		article.select(".m-our-take").tagName("h5");
 
-		news.content = finalFormat(article, false);
+		return finalFormat(article, false);
 	}
 
 }

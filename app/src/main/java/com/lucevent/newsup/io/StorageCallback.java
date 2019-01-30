@@ -11,9 +11,7 @@ public interface StorageCallback {
 
 	void save(DownloadData downloadData);
 
-	boolean contains(News news);
-
-	NewsMap getNewsOf(Site site);
+	boolean hasNews(int news_id);
 
 	NewsMap getNewsOf(Site site, int[] sections);
 

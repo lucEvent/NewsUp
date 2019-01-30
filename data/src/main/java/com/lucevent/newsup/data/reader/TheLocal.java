@@ -1,7 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Date;
-import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -30,7 +29,7 @@ public class TheLocal extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		Elements article = doc.select("#article-photo,#article-description,#article-body");
 		article.select("script,.ad_container").remove();
@@ -56,7 +55,7 @@ public class TheLocal extends com.lucevent.newsup.data.util.NewsReader {
 			}
 		}
 
-		news.content = finalFormat(article, true);
+		return finalFormat(article, true);
 	}
 
 }

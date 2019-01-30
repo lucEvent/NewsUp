@@ -1,7 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
-
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -27,9 +25,9 @@ public class ElPais extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
-		if (news.link.contains("/album/") || news.link.contains("/fotorrelato/")) {
+		if (news_url.contains("/album/") || news_url.contains("/fotorrelato/")) {
 			Elements article = doc.select("#contenedor_fotos li");
 
 			for (Element img : article.select("img[data-src]")) {
@@ -45,20 +43,18 @@ public class ElPais extends com.lucevent.newsup.data.util.NewsReader {
 				cap.select(".foto-firma").tagName("figcaption");
 			}
 
-			news.content = finalFormat(article, false);
-			return;
+			return finalFormat(article, false);
 		}
-		if (news.link.contains("/media/"))
-			return;
-		if (news.link.contains("blogs.elpais.com")) {
+		if (news_url.contains("/media/"))
+			return null;
+		if (news_url.contains("blogs.elpais.com")) {
 			Elements article = doc.select(".entry-body");
 			article.select("script,.txt-comentarios,.entry-footer").remove();
 			article.select("[style]").removeAttr("style");
 			article.select(".asset-img-link ~ span").tagName("figcaption");
 			cleanAttributes(article.select("img[src]"), "src");
 
-			news.content = finalFormat(article, false);
-			return;
+			return finalFormat(article, false);
 		}
 		if (doc.baseUri().contains("motor.elpais.com")) {
 			Elements article = doc.select(".articulo-grande picture img,.wp-caption-text__grande,.entry-content");
@@ -67,8 +63,7 @@ public class ElPais extends com.lucevent.newsup.data.util.NewsReader {
 			article.select(".wp-caption-text").tagName("figcaption");
 			cleanAttributes(article.select("img[src]"), "src");
 
-			news.content = finalFormat(article, true);
-			return;
+			return finalFormat(article, true);
 		}
 
 		Elements article = doc.select(".articulo-apertura>figure,#articulo_contenedor>[itemprop='image'],#cuerpo_noticia");
@@ -108,7 +103,7 @@ public class ElPais extends com.lucevent.newsup.data.util.NewsReader {
 		article.select("a[title]").removeAttr("title");
 		article.select("[itemtype]").removeAttr("itemtype");
 
-		news.content = finalFormat(article, false);
+		return finalFormat(article, false);
 	}
 
 }

@@ -1,7 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,7 +41,7 @@ public class TheTelegraph extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		Elements article = doc.select(".article__content");
 
@@ -96,14 +94,13 @@ public class TheTelegraph extends com.lucevent.newsup.data.util.NewsReader {
 					//System.out.println("JSON exception:" + e.getMessage());
 				}
 
-				news.content = sb.toString();
-				return;
+				return sb.toString();
 			}
 		} else {
 			article = article.select("header img:not(.videoPlayer img),header .videoPlayer,[itemprop='articleBody']");
 		}
 
-		if (news.link.contains("/travel/destinations/")) {
+		if (news_url.contains("/travel/destinations/")) {
 			article.select(".snippetReference,.travelProductListing").remove();
 
 			article.select("ul").tagName("blockquote");
@@ -146,7 +143,7 @@ public class TheTelegraph extends com.lucevent.newsup.data.util.NewsReader {
 		article.select("q,tmg-travel-availability").tagName("div");
 		article.select("strike").tagName("s");
 
-		news.content = finalFormat(article, true);
+		return finalFormat(article, true);
 	}
 
 }

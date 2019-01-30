@@ -1,8 +1,8 @@
 package com.lucevent.newsup.development;
 
 import com.lucevent.newsup.data.Sites;
-import com.lucevent.newsup.data.reader.*;
-import com.lucevent.newsup.data.section.*;
+import com.lucevent.newsup.data.reader.ElImparcial;
+import com.lucevent.newsup.data.section.ElImparcialSections;
 import com.lucevent.newsup.data.util.Date;
 import com.lucevent.newsup.data.util.News;
 import com.lucevent.newsup.data.util.NewsArray;
@@ -90,7 +90,6 @@ public class Main {
 //		s = new Site(0, "EveningStandard", 0, "", 0, 0, 0, EveningStandardSections.class, EveningStandard.class);
 //		s = new Site(0, "DailyMirror", 0, "", 0, 0, 0, DailyMirrorSections.class, DailyMirror.class);
 // [May]
-//		s = new Site(0, "TheNewYorkTimes", 0, "", 0, 0, 0, TheNewYorkTimesSections.class, TheNewYorkTimes.class);
 //		s = new Site(0, "TheTelegraph", 0, "", 0, 0, 0, TheTelegraphSections.class, TheTelegraph.class);
 // [June]
 //		s = new Site(0, "Nintenderos", 0, "", 0, 0, 0, NintenderosSections.class, Nintenderos.class);
@@ -106,7 +105,6 @@ public class Main {
 //		s = new Site(0, "CataloniaToday", 0, "", 0, 0, 0, CataloniaTodaySections.class, CataloniaToday.class);
 //		s = new Site(0, "L'Esportiu", 0, "", 0, 0, 0, LEsportiuSections.class, LEsportiu.class);
 //		s = new Site(0, "MetroCoUK", 0, "", 0, 0, 0, MetroCoUKSections.class, MetroCoUK.class);
-//		s = new Site(0, "MundoDeportivo", 0, "", 0, 0, 0, MundoDeportivoSections.class, MundoDeportivo.class);
 //		s = new Site(0, "Publico", 0, "", 0, 0, 0, PublicoSections.class, Publico.class);
 // [September]
 //		s = new Site(0, "TheNewYorkTimes", 0, "", 0, 0, 0, TheNewYorkTimesSections.class, TheNewYorkTimes.class);
@@ -119,7 +117,6 @@ public class Main {
 //		s = new Site(0, "Codigo Nuevo", 0, "", 0, 0, 0, CodigoNuevoSections.class, CodigoNuevo.class);
 //		s = new Site(0, "ElPeriodicoCa", 0, "", 0, 0, 0, ElPeriodicoCaSections.class, ElPeriodicoCa.class);
 //		s = new Site(0, "ElPeriodicoEs", 0, "", 0, 0, 0, ElPeriodicoEsSections.class, ElPeriodicoEs.class);
-//		s = new Site(0, "Expressen", 0, "", 0, 0, 0, ExpressenSections.class, Expressen.class);
 //		s = new Site(510, "HuffingtonPostUK", 0, "", 0, 0, 0, HuffingtonPostUKSections.class, HuffingtonPostUK.class);
 //		s = new Site(0, "The Conversation Australia", 0, "", 0, 0, 0, TheConversationAustraliaSections.class, TheConversation.class);
 //		s = new Site(0, "The Conversation US", 0, "", 0, 0, 0, TheConversationUSSections.class, TheConversation.class);
@@ -192,7 +189,6 @@ public class Main {
 //		s = new Site(0, "DailyExpress", 0, "", 0, 0, 0, DailyExpressSections.class, DailyExpress.class);
 //		s = new Site(0, "DailyMail", 0, "", 0, 0, 0, DailyMailSections.class, DailyMail.class);
 //		s = new Site(0, "Medium", 0, "", 0, 0, 0, MediumSections.class, Medium.class);
-//		s = new Site(0, "PC World", 0, "", 0, 0, 0, PCWorldSections.class, PCWorld.class);
 //		s = new Site(0, "LaVanguardia", 0, "", 0, 0, 0, LaVanguardiaSections.class, LaVanguardia.class);
 //		s = new Site(545, "The Sun", 0, "", 0, 0, 0, TheSunSections.class, TheSun.class);
 //		s = new Site(0, "Nació Digital", 0, "", 0, 0, 0, NacioDigitalSections.class, NacioDigital.class);
@@ -205,11 +201,17 @@ public class Main {
 //		s = new Site(0, "iFixit", 0, "", 0, 0, 0, iFixitSections.class, iFixit.class);
 //		s = new Site(0, "TheCanary", 0, "", 0, 0, 0, TheCanarySections.class, TheCanary.class);
 //		s = new Site(0, "Göteborgs-Posten", 0, "", 0, 0, 0, GoteborgsPostenSections.class, GoteborgsPosten.class);
+//[January]
+//		s = new Site(0, "TheNewYorkTimes", 0, "", 0, 0, 0, TheNewYorkTimesSections.class, TheNewYorkTimes.class);
+//		s = new Site(0, "MundoDeportivo", 0, "", 0, 0, 0, MundoDeportivoSections.class, MundoDeportivo.class);
+//		s = new Site(0, "PC World", 0, "", 0, 0, 0, PCWorldSections.class, PCWorld.class);
+//		s = new Site(0, "Expressen", 0, "", 0, 0, 0, ExpressenSections.class, Expressen.class);
+
 		/*
 		 */
 		// TITLES, NEWS, DATES, TAGS, FULL_TEST, SECTIONS_TEST, COUNT_NEWS
 		// EXTRACT_CONTENT, DOWNLOAD_ERRORS, GOOGLE_PLAY_SITES_TEXT
-		Process p = Process.TAGS;
+		Process p = Process.FULL_TEST;
 		int[] sections = new int[]{0};
 		int position = 0;
 		int lenght = -1;
@@ -384,7 +386,10 @@ public class Main {
 				if (queryServer) {
 					server.readNewsContent(4, N);
 				} else {
-					s.readNewsContent(N);
+					String content = s.readNewsContent(N.link);
+
+					if (content != null)
+						N.content = content;
 				}
 			}
 			if (copyToFile) {

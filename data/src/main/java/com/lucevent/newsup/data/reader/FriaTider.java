@@ -1,7 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
-
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
@@ -23,7 +21,7 @@ public class FriaTider extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+	protected String readNewsContent(Document doc, String news_url)
 	{
 		Elements article = doc.select(".field-items,.standfirst");
 		article.select("script,.bargraph").remove();
@@ -32,7 +30,9 @@ public class FriaTider extends com.lucevent.newsup.data.util.NewsReader {
 
 		article.select("#bargraph").attr("style", "height:400px;");
 		if (!article.isEmpty())
-			news.content = finalFormat(article, false);
+			return finalFormat(article, false);
+
+		return null;
 	}
 
 	@Override

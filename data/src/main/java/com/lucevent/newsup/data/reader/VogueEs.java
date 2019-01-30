@@ -1,11 +1,8 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -39,9 +36,9 @@ public class VogueEs extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
-		if (news.link.contains("/galerias/")) {
+		if (news_url.contains("/galerias/")) {
 
 			String gallery_json = "";
 			for (Element sc : doc.select("script")) {
@@ -78,8 +75,7 @@ public class VogueEs extends com.lucevent.newsup.data.util.NewsReader {
 			article.getElementsByTag("o:p").remove();
 			article.select("[style]").removeAttr("style");
 
-			news.content = finalFormat(article, false);
-			return;
+			return finalFormat(article, false);
 		}
 		doc.getElementsByTag("o:p").remove();
 		Elements article = doc.select(".article_subtitle,.article_content");
@@ -96,7 +92,7 @@ public class VogueEs extends com.lucevent.newsup.data.util.NewsReader {
 
 		article.select(".full_image_block .info").tagName("figcaption");
 
-		news.content = finalFormat(article, true);
+		return finalFormat(article, true);
 	}
 
 }

@@ -59,7 +59,7 @@ public class Test {
 //                                Thread.sleep(500);
 //                            } catch (InterruptedException ignored) {
 //                            }
-							site.readNewsContent(N);
+							site.readNewsContent(N.link);
 						}
 					}
 					int[] partialValues = evaluator.evaluate(news);

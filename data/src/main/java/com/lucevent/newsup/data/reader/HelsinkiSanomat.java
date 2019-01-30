@@ -1,7 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
-
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -23,14 +21,14 @@ public class HelsinkiSanomat extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		Elements image = doc.select(".article-main-image noscript img");
 		Elements article = doc.select("[itemprop='articleBody']");
 
-		if (article.isEmpty()) {
-			return;
-		}
+		if (article.isEmpty())
+			return null;
+
 		article.select(".hidden,script,[itemprop='video'],.article-ad-block").remove();
 
 		for (Element f : article.select("figure:has(img)")) {
@@ -44,7 +42,7 @@ public class HelsinkiSanomat extends com.lucevent.newsup.data.util.NewsReader {
 		article.select(".votsikko").tagName("h4");
 		article.select("[style]").removeAttr("style");
 
-		news.content = finalFormat(image, true) +
+		return finalFormat(image, true) +
 				"<p>" + finalFormat(article, true).replace("<br>", "</p><p>") + "</p>";
 	}
 

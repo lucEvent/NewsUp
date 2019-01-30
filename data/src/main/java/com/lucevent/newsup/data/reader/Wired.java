@@ -1,7 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
-
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
@@ -42,7 +40,7 @@ public class Wired extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(Document doc, String news_url)
 	{
 		Elements article = doc.select("main .article-lede-component__photo,.article-body-component");
 
@@ -58,7 +56,7 @@ public class Wired extends com.lucevent.newsup.data.util.NewsReader {
 		cleanAttributes(article.select("img[src]"), "src");
 		cleanAttributes(article.select("div[data-url]"));
 
-		news.content = finalFormat(article, false);
+		return finalFormat(article, false);
 	}
 
 }

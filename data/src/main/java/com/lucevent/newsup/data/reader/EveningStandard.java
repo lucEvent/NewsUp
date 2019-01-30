@@ -2,7 +2,6 @@ package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Date;
 import com.lucevent.newsup.data.util.Enclosure;
-import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -39,7 +38,7 @@ public class EveningStandard extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(Document doc, String news_url)
 	{
 		Elements article = doc.select(".hero-wrapper-inner,.body-content");
 		article.select("script,.ad-wrapper,.inline-readmore,i-amphtml-sizer,.inline-gallery,.inline-related").remove();
@@ -117,7 +116,7 @@ public class EveningStandard extends com.lucevent.newsup.data.util.NewsReader {
 		if (fp != null)
 			fp.html("<b>" + fp.html() + "</b>");
 
-		news.content = finalFormat(article, false);
+		return finalFormat(article, false);
 	}
 
 }

@@ -51,7 +51,7 @@ public class Aftonbladet extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		Elements article = doc.select("main > div");
 		article.select("[data-component-key='streamer'],[data-test-id='headline'],[data-test-id='label'],[id^='abAdArea']").remove();
@@ -121,7 +121,7 @@ public class Aftonbladet extends com.lucevent.newsup.data.util.NewsReader {
 			article.select("._1W-u7").remove();
 		// end videos
 
-		news.content = finalFormat(article, false);
+		return finalFormat(article, false);
 	}
 
 }

@@ -54,13 +54,13 @@ public class ElJueves extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		doc.select("script").remove();
 
 		Elements main = doc.select("#main");
 
-		String tag = findSubstringBetween(news.link, "www.eljueves.es/", "/", false);
+		String tag = findSubstringBetween(news_url, "www.eljueves.es/", "/", false);
 		Elements article;
 		switch (tag) {
 			case "news":
@@ -106,7 +106,7 @@ public class ElJueves extends com.lucevent.newsup.data.util.NewsReader {
 				article = main.select("article").get(0).select("#detail");
 				break;
 			default:
-				return;
+				return null;
 		}
 
 		Elements images = article.select("img");
@@ -118,7 +118,7 @@ public class ElJueves extends com.lucevent.newsup.data.util.NewsReader {
 			img.attr("src", src);
 		}
 
-		news.content = finalFormat(article, true);
+		return finalFormat(article, true);
 	}
 
 }

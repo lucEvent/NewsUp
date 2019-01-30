@@ -49,7 +49,7 @@ public class Medium extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		Elements e = doc.select("main section .section-content,.story-view__body");
 		e.select("script,.graf--title,.story-view__tags,.story-view__data").remove();
@@ -61,7 +61,7 @@ public class Medium extends com.lucevent.newsup.data.util.NewsReader {
 
 		e.select(".section-inner,.graf,.progressiveMedia-noscript").removeAttr("class");
 
-		news.content = finalFormat(e, false);
+		return finalFormat(e, false);
 	}
 
 	@Override

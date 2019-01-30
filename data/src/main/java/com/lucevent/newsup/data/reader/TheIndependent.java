@@ -1,8 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
-
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -24,7 +21,7 @@ public class TheIndependent extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		Elements article = doc.select(".sub-headline,.hero-wrapper-inner,.body-content");
 		article.select("script,.ad-wrapper,i-amphtml-sizer,.i-gallery,.persistent-player-headline,.video-popout-close-container,.inline-readmore,.inline-related,button").remove();
@@ -45,7 +42,7 @@ public class TheIndependent extends com.lucevent.newsup.data.util.NewsReader {
 
 		article.select("iframe").html("");
 
-		news.content = finalFormat(article, true);
+		return finalFormat(article, true);
 	}
 
 }

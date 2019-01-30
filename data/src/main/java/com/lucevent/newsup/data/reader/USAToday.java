@@ -1,7 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -36,9 +34,9 @@ public class USAToday extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
-		if (news.link.contains("/videos/")) {
+		if (news_url.contains("/videos/")) {
 
 			StringBuilder sb = new StringBuilder();
 			Elements videos = doc.select(".video-player:has(script)");
@@ -55,10 +53,9 @@ public class USAToday extends com.lucevent.newsup.data.util.NewsReader {
 						sb.append("<p>").append(dscr).append("</p>");
 				}
 			}
-			news.content = sb.toString();
-			return;
+			return sb.toString();
 		}
-		if (news.link.contains("/picture-gallery/")) {
+		if (news_url.contains("/picture-gallery/")) {
 
 			StringBuilder sb = new StringBuilder();
 			for (Element slide : doc.select("media-gallery-vertical slide")) {
@@ -72,27 +69,22 @@ public class USAToday extends com.lucevent.newsup.data.util.NewsReader {
 						.append("</figcaption><br>");
 			}
 
-			news.content = sb.toString();
-			return;
+			return sb.toString();
 		}
-		if (news.link.contains("azcentral.com")) {
-			readContentAzCentral(doc, news);
-			return;
-		}
-		if (doc.baseUri().contains("reviewed.com")) {
-			readContentReviewed(doc, news);
-			return;
-		}
-		if (news.link.contains("10best.com")) {
-			readContent10best(doc, news);
-			return;
-		}
-		if (news.link.contains(".cincinnati.com")) {
-			readContentCincinnati(doc, news);
-			return;
-		}
-		if (news.link.contains("/interactives/") || news.link.startsWith("https://itunes.apple.com") || news.link.startsWith("https://www.facebook.com"))
-			return;
+		if (news_url.contains("azcentral.com"))
+			return readContentAzCentral(doc);
+
+		if (doc.baseUri().contains("reviewed.com"))
+			return readContentReviewed(doc);
+
+		if (news_url.contains("10best.com"))
+			return readContent10best(doc);
+
+		if (news_url.contains(".cincinnati.com"))
+			return readContentCincinnati(doc);
+
+		if (news_url.contains("/interactives/") || news_url.startsWith("https://itunes.apple.com") || news_url.startsWith("https://www.facebook.com"))
+			return null;
 
 		Elements article = doc.select("article.story");
 
@@ -163,10 +155,10 @@ public class USAToday extends com.lucevent.newsup.data.util.NewsReader {
 		article.select("video-wrap").tagName("div");
 		article.select("[style]").removeAttr("style");
 
-		news.content = finalFormat(article, false);
+		return finalFormat(article, false);
 	}
 
-	private void readContentAzCentral(Document doc, News news)
+	private String readContentAzCentral(Document doc)
 	{
 		Elements article = doc.select("article.story").select(".story-image,.long-caption,.story-body");
 		article.select("script,.ad,.story-tools,.byline-container,.timestamp-footnote,#story-share-").remove();
@@ -174,10 +166,10 @@ public class USAToday extends com.lucevent.newsup.data.util.NewsReader {
 		article.select(".caption-text").tagName("figcaption");
 		article.select("[class='body-text']").removeAttr("class");
 
-		news.content = finalFormat(article, true);
+		return finalFormat(article, true);
 	}
 
-	private void readContentCincinnati(Document doc, News news)
+	private String readContentCincinnati(Document doc)
 	{
 		Elements article = doc.select("article .story-body");
 		article.select("script,.ad,.gallery-nav,.story-tools,.byline-container,.short-caption,.exclude-from-newsgate,.carousel,.share,.story-share").remove();
@@ -185,10 +177,10 @@ public class USAToday extends com.lucevent.newsup.data.util.NewsReader {
 		article.select(".caption-text,.caption-credit").tagName("figcaption");
 		article.select("[class='body-text']").removeAttr("class");
 
-		news.content = finalFormat(article, true);
+		return finalFormat(article, true);
 	}
 
-	private void readContentReviewed(Document doc, News news)
+	private String readContentReviewed(Document doc)
 	{
 		Elements article = doc.select("#video-preview,.heropic,[itemprop='articleBody'] .page_section");
 		article.select(".callout,.credit,.disclaimer,.brightcove").remove();
@@ -197,16 +189,16 @@ public class USAToday extends com.lucevent.newsup.data.util.NewsReader {
 			if (e.text().contains("Related Video"))
 				e.remove();
 
-		news.content = finalFormat(article, false);
+		return finalFormat(article, false);
 	}
 
-	private void readContent10best(Document doc, News news)
+	private String readContent10best(Document doc)
 	{
 		Elements article = doc.select(".subheader-article,[itemprop='articleBody']");
 		article.select("script,.row,#last,#next-box").remove();
 		article.select(".photo-credit").tagName("figcaption");
 
-		news.content = finalFormat(article, false);
+		return finalFormat(article, false);
 	}
 
 	@Override

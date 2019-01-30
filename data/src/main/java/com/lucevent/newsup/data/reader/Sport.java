@@ -38,12 +38,12 @@ public class Sport extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(Document doc, String news_url)
 	{
 		Elements articles = doc.select("div.middle");
 
 		if (articles.isEmpty())
-			return;
+			return null;
 
 		Element article = articles.first();
 		article.select("script,.sp-add,.box-left-55,.sp-socialbox,.relations,.player-zeta,ul.options,ul.list").remove();
@@ -60,7 +60,7 @@ public class Sport extends com.lucevent.newsup.data.util.NewsReader {
 		}
 		article.select("img").removeAttr("alt").removeAttr("title");
 
-		news.content = finalFormat(article, false);
+		return finalFormat(article, false);
 	}
 
 }

@@ -163,15 +163,16 @@ public abstract class NewsReader extends Reader {
 	{
 		org.jsoup.nodes.Document doc = getDocument(news.link);
 		if (doc != null) {
-			readNewsContent(doc, news);
+			readNewsContent(doc, news.link);
 		}
 		return news;
 	}
 
 	@Override
-	protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		//To implement by Subclasses in case they need
+		return null;
 	}
 
 	protected String parseTitle(Element prop)

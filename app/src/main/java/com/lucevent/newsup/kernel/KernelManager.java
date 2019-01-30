@@ -89,9 +89,6 @@ public class KernelManager implements StorageCallback {
 	{
 		sdmanager.wipeData();
 		dbmanager.wipeData();
-		for (Site s : AppData.getSites())
-			if (s.news != null)
-				s.news.clear();
 	}
 
 	public static void cleanGlideCache()
@@ -159,23 +156,9 @@ public class KernelManager implements StorageCallback {
 	}
 
 	@Override
-	public boolean contains(News news)
+	public boolean hasNews(int news_id)
 	{
-		return dbmanager.contains(news);
-	}
-
-	@Override
-	public NewsMap getNewsOf(Site site)
-	{
-		if (site.news == null) {
-			try {
-				site.news = dbmanager.readNews(site);
-			} catch (Exception e) {
-				dbmanager = new DBManager(context);
-				return getNewsOf(site);
-			}
-		}
-		return site.news;
+		return dbmanager.hasNews(news_id);
 	}
 
 	@Override

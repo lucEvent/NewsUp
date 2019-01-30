@@ -1,7 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
-
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -28,13 +26,9 @@ public class GoteborgsPosten extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(Document doc, String news_url)
 	{
-//		HardDrive.copyToDeb(doc,true);
-
 		Elements article = doc.select(".c-article__head figure,.c-article__body__content");
-//		Elements article = doc.select(".article__head .img-container,.article__preamble,.article__body__richtext,.article__body__facts");
-//		article.select("script,.article__category,.wp_rp_wrap,.partner").remove();
 
 		Elements preamble = article.select(".article__preamble");
 		if (!preamble.isEmpty()) {
@@ -59,7 +53,7 @@ public class GoteborgsPosten extends com.lucevent.newsup.data.util.NewsReader {
 
 		cleanAttributes(article.select("img"), "src");
 
-		news.content = finalFormat(article, true);
+		return finalFormat(article, true);
 	}
 
 	@Override

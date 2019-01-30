@@ -1,8 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
-
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -30,7 +27,7 @@ public class LEsportiu extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		Elements article = doc.select("article").select("header .subtitol,.bxslider img,.bxslider .caption,#article-content,.article-fitxes");
 		article.select("script").remove();
@@ -44,7 +41,7 @@ public class LEsportiu extends com.lucevent.newsup.data.util.NewsReader {
 		article.select(".article-fitxes,.frase").tagName("blockquote");
 		article.select(".formatperfil,.formatpre").tagName("h4");
 
-		news.content = finalFormat(article, true);
+		return finalFormat(article, true);
 	}
 
 }

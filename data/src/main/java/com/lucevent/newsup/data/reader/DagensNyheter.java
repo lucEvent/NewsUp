@@ -1,7 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
-
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -29,7 +27,7 @@ public class DagensNyheter extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		Elements article = doc.select(".article__img,.article__content");
 		if (article.isEmpty()) {
@@ -53,7 +51,7 @@ public class DagensNyheter extends com.lucevent.newsup.data.util.NewsReader {
 		article.select("div[style]").removeAttr("style");
 		cleanAttributes(article.select("img[src]"), "src");
 
-		news.content = finalFormat(article, false);
+		return finalFormat(article, false);
 	}
 
 }

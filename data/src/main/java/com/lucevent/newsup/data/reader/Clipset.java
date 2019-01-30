@@ -35,7 +35,7 @@ public class Clipset extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(Document doc, String news_url)
 	{
 		Elements article = doc.select("article").select(".video-destacado,.imagen-destacada,.subtitular,.contenido-post");
 		doc.select(".wp-embedded-content,script").remove();
@@ -45,7 +45,7 @@ public class Clipset extends com.lucevent.newsup.data.util.NewsReader {
 
 		cleanAttributes(doc.select("img"), "src");
 
-		news.content = finalFormat(article, true);
+		return finalFormat(article, true);
 	}
 
 }

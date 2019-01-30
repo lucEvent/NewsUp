@@ -3,7 +3,6 @@ package com.lucevent.newsup.data.reader;
 import com.lucevent.newsup.data.util.Enclosures;
 import com.lucevent.newsup.data.util.News;
 
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.parser.Parser;
 import org.jsoup.parser.XmlTreeBuilder;
@@ -63,26 +62,29 @@ public class Vandal extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
-		if (news.link.contains("VideosVandalOnline")) {
+		if (news_url.contains("VideosVandalOnline")) {
 			Elements video = doc.select("meta[property='og:video']");
 
 			String link = video.first().attr("content");
 
-			news.content = insertIframe(link);
+			String content = insertIframe(link);
 
 			Elements dscr = doc.select("meta[name='description']");
 			if (!dscr.isEmpty())
-				news.content += "<p>" + dscr.first().attr("content") + "</p>";
+				content += "<p>" + dscr.first().attr("content") + "</p>";
 
-		} else if (news.link.contains("BlogsVandalOnline")) {
+			return content;
+
+		} else if (news_url.contains("BlogsVandalOnline")) {
 			Elements e = doc.select(".contenidoprincipal [class='tn mt10']");
 			doc.select("[style]").removeAttr("style");
 			doc.select("[onclick]").removeAttr("onclick");
 			cleanAttributes(e.select("img"), "src");
-			news.content = finalFormat(e, true);
+			return finalFormat(e, true);
 		}
+		return null;
 	}
 
 	@Override

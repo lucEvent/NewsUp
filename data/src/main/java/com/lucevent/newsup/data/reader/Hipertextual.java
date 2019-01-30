@@ -36,13 +36,13 @@ public class Hipertextual extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(Document doc, String news_url)
 	{
 		Elements article = doc.select("main");
 
 		if (article.isEmpty()) {
 			// ARTICLE EMPTY!!!!
-			return;
+			return null;
 		}
 
 		article = article.select(".headlineSingle__lead,.articleHead,.historia");
@@ -60,7 +60,7 @@ public class Hipertextual extends com.lucevent.newsup.data.util.NewsReader {
 			e.attr("src", src);
 		}
 
-		news.content = finalFormat(article, true);
+		return finalFormat(article, true);
 	}
 
 	@Override

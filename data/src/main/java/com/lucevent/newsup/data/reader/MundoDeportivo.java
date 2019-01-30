@@ -1,7 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
-import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -49,7 +48,7 @@ public class MundoDeportivo extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		Elements article = doc.select("article.gallery-leaf");
 
@@ -72,7 +71,7 @@ public class MundoDeportivo extends com.lucevent.newsup.data.util.NewsReader {
 		cleanAttributes(article.select("figure"));
 		cleanAttributes(article.select("img"), "src");
 
-		news.content = finalFormat(article, true);
+		return finalFormat(article, true);
 	}
 
 }

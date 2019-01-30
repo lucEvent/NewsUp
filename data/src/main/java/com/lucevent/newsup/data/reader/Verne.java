@@ -1,8 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
-
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -26,7 +23,7 @@ public class Verne extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		Elements article = doc.select("[itemprop='articleBody']");
 		article.select(".pie_video,.nota_pie,script[src*='twitter'],script[src*='instagram'],script[src*='playbuzz'],.cont-art-tags,.buscador-contenedor").remove();
@@ -62,7 +59,7 @@ public class Verne extends com.lucevent.newsup.data.util.NewsReader {
 		cleanAttributes(article.select("img[src]"), "src");
 		article.select("script").remove();
 
-		news.content = finalFormat(article, false);
+		return finalFormat(article, false);
 	}
 
 }

@@ -3,7 +3,6 @@ package com.lucevent.newsup.data.reader;
 import com.lucevent.newsup.data.util.Enclosures;
 import com.lucevent.newsup.data.util.News;
 
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -40,7 +39,7 @@ public class TeknikensVarld extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		Elements article = doc.select(".entry-content");
 		doc.select("script,.-teaser-as-list,.desktop-ad,.mobile-ad").remove();
@@ -55,7 +54,7 @@ public class TeknikensVarld extends com.lucevent.newsup.data.util.NewsReader {
 
 		cleanAttributes(doc.select("img"), "src");
 
-		news.content = finalFormat(article, false);
+		return finalFormat(article, false);
 	}
 
 }

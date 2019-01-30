@@ -4,7 +4,6 @@ import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.Enclosures;
 import com.lucevent.newsup.data.util.News;
 
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class Yle extends com.lucevent.newsup.data.util.NewsReader {
@@ -53,12 +52,14 @@ public class Yle extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		org.jsoup.select.Elements article = doc.select(".text");
 
 		if (!article.isEmpty())
-			news.content = finalFormat(article, false);
+			return finalFormat(article, false);
+
+		return null;
 	}
 
 }

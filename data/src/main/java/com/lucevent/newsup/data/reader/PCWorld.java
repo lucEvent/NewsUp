@@ -1,8 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
-
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -36,10 +33,10 @@ public class PCWorld extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
-		if (news.link.contains("pcworld.com/video"))
-			return;
+		if (news_url.contains("pcworld.com/video"))
+			return null;
 
 		Elements article = doc.select("article");
 
@@ -87,7 +84,7 @@ public class PCWorld extends com.lucevent.newsup.data.util.NewsReader {
 		}
 		article.select("[style]:not(.instagram-media,.instagram-media *)").removeAttr("style");
 
-		news.content = finalFormat(article, true);
+		return finalFormat(article, true);
 	}
 
 }

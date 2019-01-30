@@ -1,7 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
-
 public class EuropaPress extends com.lucevent.newsup.data.util.NewsReader {
 
 	/**
@@ -24,19 +22,19 @@ public class EuropaPress extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		org.jsoup.select.Elements img = doc.select(".schema_foto img:not([itemprop='articleBody'] .schema_foto img)");
 		org.jsoup.select.Elements e = doc.select("[itemprop='articleBody']");
 
 		if (e.isEmpty())
-			return;
+			return null;
 
 		e.select(".FechaPublicacionNoticia,.captionv2,script,.related-content-no-image,.related-content,button,#intextsmartclip,[itemprop='description']").remove();
 		e.select("[onclick]").removeAttr("onclick");
 		e.select("[style]:not(.instagram-media,.instagram-media *)").removeAttr("style");
 
-		news.content = (finalFormat(img, true) + finalFormat(e, true))
+		return (finalFormat(img, true) + finalFormat(e, true))
 				.replace("Cargando el vídeo....", "");
 	}
 

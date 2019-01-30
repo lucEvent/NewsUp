@@ -1,7 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
-
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -29,7 +27,7 @@ public class SvenskaDagbladet extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		Elements e = doc.select(".Deck,.Body");
 		e.select("script,.Body-ad,.AdPositionData,.Body-pull,.Quote,.ExternalLink,.Ad,.ThumbnailList,.paywall-loader,a[href='/premium'],.Figure-expandIcon,.scrbbl-embed,[data-loader-url]").remove();
@@ -37,7 +35,7 @@ public class SvenskaDagbladet extends com.lucevent.newsup.data.util.NewsReader {
 
 		cleanAttributes(e.select("img[srcset]"), "srcset");
 
-		news.content = finalFormat(e, true);
+		return finalFormat(e, true);
 	}
 
 }

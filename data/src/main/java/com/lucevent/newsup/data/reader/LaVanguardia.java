@@ -1,7 +1,6 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
-import com.lucevent.newsup.data.util.News;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -50,12 +49,12 @@ public class LaVanguardia extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(org.jsoup.nodes.Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		Elements article = doc.select("#single-player,.story-leaf-body-video:not([itemprop='articleBody'] .story-leaf-body-video),[itemprop='articleBody']");
 
 		if (article.isEmpty()) {
-			return;
+			return null;
 		} else if (!article.select(".multimedia-leaf-txt").isEmpty()) {
 			Elements imgs = doc.select("#multimedia-gallery-leaf img");
 			Elements txts = doc.select(".multimedia-leaf-txt p");
@@ -69,8 +68,7 @@ public class LaVanguardia extends com.lucevent.newsup.data.util.NewsReader {
 				gallery.add(imgs.get(i));
 				gallery.add(txts.get(i));
 			}
-			news.content = finalFormat(gallery, true);
-			return;
+			return finalFormat(gallery, true);
 		}
 		article.select("script,.tpl-related-inside-story,.hidden,.button-login-premium,ins,.html-books-header,.poll-leaf-body-header,.poll-leaf-body").remove();
 
@@ -113,7 +111,7 @@ public class LaVanguardia extends com.lucevent.newsup.data.util.NewsReader {
 
 		cleanAttributes(article.select("img"), "src");
 
-		news.content = finalFormat(article, true);
+		return finalFormat(article, true);
 	}
 
 }

@@ -1,9 +1,7 @@
 package com.lucevent.newsup.data.reader;
 
 import com.lucevent.newsup.data.util.Enclosure;
-import com.lucevent.newsup.data.util.News;
 
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -39,12 +37,12 @@ public class TheGuardian extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		Elements article = doc.select("article");
 		article.select(".mobile-only").remove();
 
-		if (news.link.contains("/gallery/")) {
+		if (news_url.contains("/gallery/")) {
 			article = article.select(".content__standfirst,.gallery__caption,.gallery__img-container");
 			article.select("br").remove();
 
@@ -54,7 +52,7 @@ public class TheGuardian extends com.lucevent.newsup.data.util.NewsReader {
 				imgBox.html(imgBox.select("picture").outerHtml());
 			}
 
-		} else if (news.link.contains("/live/")) {
+		} else if (news_url.contains("/live/")) {
 			article = article.select("ul.timeline,.block--content");
 			article.select(".block-time,.block-share,.block-share--liveblog-mobile,.share-modal").remove();
 
@@ -66,7 +64,7 @@ public class TheGuardian extends com.lucevent.newsup.data.util.NewsReader {
 			article = article.select(".media-primary picture,.media-primary video,.media-primary iframe,.media-primary figcaption,.content__article-body");
 
 			if (article.isEmpty())
-				return;
+				return null;
 
 		}
 		article.select("script,aside,.inline-icon,[style='display: none;']").remove();
@@ -86,7 +84,7 @@ public class TheGuardian extends com.lucevent.newsup.data.util.NewsReader {
 			fig.html(figContent.outerHtml());
 		}
 
-		news.content = finalFormat(article, true);
+		return finalFormat(article, true);
 	}
 
 }

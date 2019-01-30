@@ -20,16 +20,13 @@ public abstract class Reader {
 
 	public abstract NewsArray readRssHeader(String rss_link, int site_code, int section_code);
 
-	public final News readContent(News news)
+	public final String readContent(String news_url)
 	{
-		org.jsoup.nodes.Document doc = getDocument(news.link);
-		if (doc != null) {
-			readNewsContent(doc, news);
-		}
-		return news;
+		org.jsoup.nodes.Document doc = getDocument(news_url);
+		return doc == null ? null : readNewsContent(doc, news_url);
 	}
 
-	protected abstract void readNewsContent(org.jsoup.nodes.Document doc, News news);
+	protected abstract String readNewsContent(org.jsoup.nodes.Document doc, String news_url);
 
 	protected final org.jsoup.nodes.Element jsoupParse(org.jsoup.nodes.Element prop)
 	{

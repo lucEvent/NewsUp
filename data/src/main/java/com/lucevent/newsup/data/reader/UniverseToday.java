@@ -1,7 +1,5 @@
 package com.lucevent.newsup.data.reader;
 
-import com.lucevent.newsup.data.util.News;
-
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -44,7 +42,7 @@ public class UniverseToday extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(Document doc, String news_url)
 	{
 		Elements article = doc.select(".entry-content");
 		article.select("script,.unive-in-content,.sharedaddy").remove();
@@ -52,7 +50,7 @@ public class UniverseToday extends com.lucevent.newsup.data.util.NewsReader {
 		cleanAttributes(article.select("figure"));
 		article.select("[style]").removeAttr("style");
 
-		news.content = finalFormat(article, false);
+		return finalFormat(article, false);
 	}
 
 }

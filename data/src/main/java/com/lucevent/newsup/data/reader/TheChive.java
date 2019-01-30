@@ -4,7 +4,6 @@ import com.lucevent.newsup.data.util.Enclosure;
 import com.lucevent.newsup.data.util.Enclosures;
 import com.lucevent.newsup.data.util.News;
 
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -100,7 +99,7 @@ public class TheChive extends com.lucevent.newsup.data.util.NewsReader {
 	}
 
 	@Override
-	protected void readNewsContent(Document doc, News news)
+	protected String readNewsContent(org.jsoup.nodes.Document doc, String news_url)
 	{
 		Elements article = doc.select("[itemprop='articleBody']");
 
@@ -123,7 +122,7 @@ public class TheChive extends com.lucevent.newsup.data.util.NewsReader {
 		wpcomwidget(article.select("form"));
 		article.select("form").remove();
 
-		news.content = finalFormat(article, false);
+		return finalFormat(article, false);
 	}
 
 }
